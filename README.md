@@ -10,7 +10,7 @@ npm install --peer-legacy-deps
 
 
 ### 2. Run Development Server
-First, run the development server:
+Second, run the development server:
 
 ```bash
 npm run dev
@@ -30,7 +30,7 @@ npm install
 
 
 ### 2. Run Development Server
-First, run the development server:
+Second, run the development server:
 
 ```bash
 npm run start:dev

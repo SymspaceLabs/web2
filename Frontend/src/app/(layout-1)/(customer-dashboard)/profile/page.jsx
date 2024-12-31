@@ -43,7 +43,7 @@ export default function Profile() {
 
   useEffect(() => {
     if (isAuthenticated === false) {
-      router.push("/login");
+      router.push("/signin");
     }
   }, [isAuthenticated, router]);
 

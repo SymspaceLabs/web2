@@ -14,6 +14,7 @@ import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 
 @Injectable()
 export class ProductsService {
@@ -24,6 +25,8 @@ export class ProductsService {
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
     @InjectRepository(ProductImage) private productImageRepository: Repository<ProductImage>,
+    @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
+
     // @InjectRepository(ProductVariantEntity)
     // private productVariantEntityRepository: Repository<ProductVariantEntity>,
     // @InjectRepository(ProductVariantPropertyEntity)
@@ -33,7 +36,7 @@ export class ProductsService {
   ) {}
 
     async create(createProductDto: CreateProductDto): Promise<Product> {
-      const { images, company, name, colors, model, sizes, ...productData } = createProductDto;
+      const { images, company, name, colors, model, sizes, subcategoryItem: subcategoryItemId, ...productData } = createProductDto;
     
       if (!Array.isArray(images)) {
         throw new TypeError('images must be an array');
@@ -51,6 +54,16 @@ export class ProductsService {
       if (!companyEntity) {
         throw new NotFoundException(`Company with name ${company} not found`);
       }
+
+      // Find the subcategoryItem
+      const subcategoryItem = await this.subcategoryItemRepository.findOne({
+        where: { id: subcategoryItemId },
+        relations: ['subcategory', 'subcategory.category'], // Ensure nested relations are loaded
+      });
+
+      if (!subcategoryItem) {
+        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
+      }
     
       const slug = `${companyEntity.businessName.toLowerCase().replace(/\s+/g, '-')}-${name.toLowerCase().replace(/\s+/g, '-')}`;
     
@@ -59,6 +72,7 @@ export class ProductsService {
         name,
         company: companyEntity,
         slug,
+        subcategoryItem,
       });
     
       // Process images
@@ -111,7 +125,7 @@ export class ProductsService {
     async findBySlug(slug: string): Promise<Product> {
       const product = await this.productRepository.findOne({
         where: { slug },
-        relations: ['company', 'images', 'colors', 'sizes'],
+        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
       });
 
       if (!product) {
@@ -122,190 +136,187 @@ export class ProductsService {
     }
   
   
+  async findOne(productId: string): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+      relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
+    });
   
-  // async create(createProductDto: CreateProductDto) {
-  //   let threedModelName = '';
-  //   for (const file of createProductDto.images) {
-  //     console.log(file);
-  //     const mimeType = file.mimetype;
-
-  //     // Check and split GLB file with images
-  //     if (
-  //       mimeType === 'model/gltf-binary' ||
-  //       file.originalname.endsWith('.glb')
-  //     ) {
-  //       // Process to threedmodel file type
-  //       const timestamp = Date.now(); // Get current timestamp
-  //       const randomString = uuidv4(); // Generate a random string
-  //       const dfilename = `${timestamp}-${randomString}-${file.originalname}`;
-
-  //       // Upload the 3D model file
-  //       threedModelName = dfilename;
-  //       await this.minioService.uploadFile(file.buffer, dfilename);
-  //     } else {
-  //       const timestamp = Date.now(); // Get current timestamp
-  //       const randomString = uuidv4(); // Generate a random string
-  //       const filename = `${timestamp}-${randomString}-${file.originalname}`;
-
-  //       // Upload the image file
-  //       await this.minioService.uploadFile(file.buffer, filename);
-
-  //       // Create a new image object
-  //       const prodImageNew = {
-  //         imageUrl: filename,
-  //         createdAt: new Date(),
-  //       };
-
-  //       // Add the new image object to the product images array
-  //       this.productImages.push(prodImageNew);
-  //     }
-  //   }
-
-  //   const newProductInsert = this.productRepository.create({
-  //     name: createProductDto.name,
-  //     images: this.productImages,
-  //     createdAt: new Date(),
-  //     category: 'Fashion',
-  //     productFitting: createProductDto.productFitting,
-  //     threeDModel: threedModelName,
-  //   });
-  //   // await this.productRepository.save(newProductInsert);
-  //   const savedProduct = await this.productRepository.save(newProductInsert);
-
-  //   console.log(Array.isArray(createProductDto.variants));
-  //   // console.log(createProductDto.variants.length);
-  //   let variantsNew;
-  //   try {
-  //     variantsNew = JSON.parse(createProductDto.variantsJson);
-  //     console.log(variantsNew);
-  //   } catch (error) {
-  //     // throw new Error('Invalid JSON format for variants');
-  //     console.log(error);
-  //   }
-  //   // console.log(variantsNew);
-  //   if (Array.isArray(variantsNew)) {
-  //     const variants = variantsNew.map((variantDto) => {
-  //       const properties = variantDto.properties.map((prop) => ({
-  //         key: prop.key,
-  //         value: prop.value,
-  //         product: savedProduct,
-  //       }));
-
-  //       const prices = variantDto.prices.map((priceDto) => ({
-  //         amount: priceDto.amount,
-  //         product: savedProduct,
-  //       }));
-
-  //       return this.productVariantEntityRepository.create({
-  //         product: savedProduct,
-  //         properties,
-  //         prices,
-  //       });
-  //     });
-
-  //     await this.productVariantEntityRepository.save(variants);
-
-  //     // If properties and prices are separate entities, save them as well
-  //     for (const variant of variants) {
-  //       await this.productVariantPropertyEntityRepository.save(
-  //         variant.properties,
-  //       );
-  //       await this.priceEntityRepository.save(variant.prices);
-  //     }
-  //   }
-  //   // Create and insert variants
-
-  //   return savedProduct;
-  //   // return newProductInsert;
-  // }
-
-  // async findNewArrival() {
-  //   return this.productRepository
-  //     .createQueryBuilder('product')
-  //     .leftJoinAndSelect('product.variants', 'variant')
-  //     .leftJoinAndSelect('variant.properties', 'variantProperty')
-  //     .leftJoinAndSelect('variant.prices', 'price')
-  //     .orderBy('product.createdAt', 'DESC')
-  //     .limit(4)
-  //     .getMany();
-  //   // const queryBuilder = this.productRepository.createQueryBuilder('product');
-  //   // return queryBuilder.getMany();
-  // }
-
-  // async findProductBySlug(slug: string): Promise<Product> {    
-  //   const product = await this.productRepository.findOneBy({ slug });
-  //   if (!product) {
-  //     throw new NotFoundException(`Product with slug ${slug} not found`);
-  //   }
-  //   return product;
-  // }
-
-  // async findAll() {
-  //   return this.productRepository
-  //     .createQueryBuilder('product')
-  //     .leftJoinAndSelect('product.variants', 'variant')
-  //     .leftJoinAndSelect('variant.properties', 'variantProperty')
-  //     .leftJoinAndSelect('variant.prices', 'price')
-  //     .getMany();
-  //   // const queryBuilder = this.productRepository.createQueryBuilder('product');
-  //   // return queryBuilder.getMany();
-  // }
-
-  async findOne(id: string) {
-    const product = await this.productRepository.findOneById(id);
     if (!product) {
-      throw new NotFoundException(`Product with ID ${id} not found`);
+      throw new NotFoundException(`Product with ID ${productId} not found`);
     }
+  
     return product;
   }
 
   async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
-    // Find the product by ID (without its related images initially)
+    const {
+      images,
+      company,
+      name,
+      colors,
+      model,
+      sizes,
+      subcategoryItem: subcategoryItemId,
+      ...productData
+    } = updateProductDto;
+  
+    // Find the existing product by ID
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: ['company'], // No need to fetch images yet
+      relations: ['company', 'images', 'colors', 'model', 'sizes', 'subcategoryItem'],
     });
   
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
     }
   
-    // Handle `images` separately (delete existing ones and add new ones)
-    if (updateProductDto.images) {
-      // 1. Delete all the existing images related to this product
-      const existingImages = product.images;
-      if (existingImages && existingImages.length > 0) {
-        await this.productImageRepository.remove(existingImages);
+    // Update company if provided
+    if (company) {
+      const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+      if (!companyEntity) {
+        throw new NotFoundException(`Company with ID ${company} not found`);
       }
-  
-      // 2. Create new images, passing the actual product object
-      const newImages = updateProductDto.images.map((url) => {
-        const image = this.productImageRepository.create({
-          url,
-          altText: '', // Optionally set altText if needed
-          product, // Pass the full product object, not just the ID
-        });
-        return image;
-      });
-  
-      // 3. Save the new images to the database
-      await this.productImageRepository.save(newImages);
-  
-      // Associate the new images with the product
-      product.images = newImages;
+      product.company = companyEntity;
     }
   
-    // Omit `company` and `images` from `updateProductDto` to prevent type conflicts
-    const { company, images, sizes, ...otherUpdates } = updateProductDto;
+    // Update subcategory item if provided
+    if (subcategoryItemId) {
+      const subcategoryItem = await this.subcategoryItemRepository.findOne({
+        where: { id: subcategoryItemId },
+        relations: ['subcategory', 'subcategory.category'],
+      });
   
-    // Merge the remaining updates (excluding images and company)
-    const updatedProduct = this.productRepository.merge(product, otherUpdates);
+      if (!subcategoryItem) {
+        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
+      }
+      product.subcategoryItem = subcategoryItem;
+    }
   
-    // Save and return the updated product
-    return await this.productRepository.save(updatedProduct);
+    // Update slug if name or company changes
+    if (name || company) {
+      const updatedCompany = product.company || (await this.companiesRepository.findOne({ where: { id: company } }));
+      product.slug = `${updatedCompany.businessName.toLowerCase().replace(/\s+/g, '-')}-${(name || product.name).toLowerCase().replace(/\s+/g, '-')}`;
+    }
+  
+    // Update name
+    if (name) {
+      product.name = name;
+    }
+  
+    // Update product data
+    Object.assign(product, productData);
+  
+    // Update images
+    if (images) {
+      if (!Array.isArray(images)) {
+        throw new TypeError('images must be an array');
+      }
+      product.images = images.map((imageUrl) => {
+        const productImage = new ProductImage();
+        productImage.url = imageUrl;
+        return productImage;
+      });
+    }
+  
+    // Update colors
+    if (colors) {
+      product.colors = colors.map((color) => {
+        const productColor = new ProductColor();
+        productColor.name = color.name;
+        productColor.code = color.code;
+        return productColor;
+      });
+    }
+  
+    // Update 3D model
+    if (model) {
+      const productModel = new Product3DModel();
+      productModel.name = model.name;
+      productModel.filePath = model.filePath;
+      productModel.format = model.format;
+      product.model = productModel;
+    }
+  
+    // Update sizes
+    if (sizes) {
+      product.sizes = sizes.map((size) => {
+        const productSize = new ProductSize();
+        productSize.size = size;
+        return productSize;
+      });
+    }
+  
+    // Save the updated product
+    return await this.productRepository.save(product);
   }
   
   
+
+  // async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  //   const product = await this.productRepository.findOne({
+  //     where: { id },
+  //     relations: ['company', 'subcategoryItem', 'images'],
+  //   });
+  
+  //   if (!product) {
+  //     throw new NotFoundException(`Product with ID ${id} not found`);
+  //   }
+  
+  //   const { company: companyId, subcategoryItem: subcategoryItemId, images, ...otherUpdates } = updateProductDto;
+  
+  //   // Resolve `company` relation
+  //   if (companyId) {
+  //     const company = await this.companyRepository.findOne({
+  //       where: { id: companyId },
+  //     });
+  
+  //     if (!company) {
+  //       throw new NotFoundException(`Company with ID ${companyId} not found`);
+  //     }
+  
+  //     product.company = company;
+  //   }
+  
+  //   // Resolve `subcategoryItem` relation
+  //   if (subcategoryItemId) {
+  //     const subcategoryItem = await this.subcategoryItemRepository.findOne({
+  //       where: { id: subcategoryItemId },
+  //     });
+  
+  //     if (!subcategoryItem) {
+  //       throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
+  //     }
+  
+  //     product.subcategoryItem = subcategoryItem;
+  //   }
+  
+  //   // Handle images
+  //   if (images) {
+  //     if (product.images?.length > 0) {
+  //       await this.productImageRepository.remove(product.images);
+  //     }
+  
+  //     const newImages = images.map((url) =>
+  //       this.productImageRepository.create({
+  //         url,
+  //         altText: '',
+  //         product,
+  //       }),
+  //     );
+  
+  //     await this.productImageRepository.save(newImages);
+  //     product.images = newImages;
+  //   }
+  
+  //   // Merge scalar fields into the product entity
+  //   const updatedProduct = this.productRepository.merge(product, otherUpdates);
+  
+  //   // Save the updated product
+  //   return await this.productRepository.save(updatedProduct);
+  // }
+  
+
   async remove(id: string): Promise<{ message: string; product: Product }> {
     const product = await this.productRepository.findOne({ where: { id } });
     if (!product) {

@@ -11,7 +11,7 @@ cd Frontend
 ### 2. Installation
 Second, install the dependencies:
 ```bash
-npm install --peer-legacy-deps
+npm install --legacy-peer-deps
 ```
 
 

@@ -6,7 +6,7 @@ import GadgetTwoPageView from "../../../../pages-sections/articles/page-view";
 //   description: `Symspace is an E-commerce website.`,
 //   authors: [{
 //     name: "UI-LIB",
-//     url: "https://ui-lib.com"
+//     url: "https://symspacelabs.com"
 //   }],
 //   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 // };

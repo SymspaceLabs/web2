@@ -12,7 +12,7 @@
  * - Password visibility toggle
  * - Form validation with detailed error messages
  * - Snackbar notifications for success or failure
- * - Redirect to login upon successful password reset
+ * - Redirect to signin upon successful password reset
  */
 
 
@@ -98,11 +98,11 @@ const ResetPassword = () => {
         setSnackbarOpen(true);
         setSnackbarSeverity("success");
         setSnackbarMessage(data.message);
-        router.push("/login");
+        router.push("/signin");
         
       }
     } catch (error) {
-      console.error('Error during Login:', error);
+      console.error('Error during Signin:', error);
     }
   };
 

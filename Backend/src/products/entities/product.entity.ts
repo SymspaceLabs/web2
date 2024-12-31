@@ -6,6 +6,7 @@ import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 
 
 export enum ProductStatus {
@@ -30,8 +31,11 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   price: number;
 
-  @Column()
-  category: string;
+  // @Column()
+  // category: string;
+
+  @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products)
+  subcategoryItem: SubcategoryItem;
 
   @ManyToOne(() => Company, (company) => company.products, {
     onDelete: 'CASCADE',

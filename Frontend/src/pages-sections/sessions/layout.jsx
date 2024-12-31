@@ -4,20 +4,15 @@ import { Fragment, useCallback, useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "../../components/BazaarImage";
 import { usePathname } from "next/navigation";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
+import { Button, Box, Divider } from "@mui/material";
 import BoxLink from "./components/box-link";
 import LogoWithTitle from "./components/logo-title";
 import LoginBottom from "./components/login-bottom";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
-import Header from "../../components/header";
 import { Span } from "../../components/Typography";
-import Sticky from "../../components/sticky";
 import { Wrapper, mainContainerStyle, blurredOverlayStyle1, blurredOverlayStyle2, wrapperStyle, registerButtonStyle, dividerTextStyle } from "./styles";
 import NavigationList from "../../components/navbar/nav-list/nav-list";
 import { FlexRowCenter } from "../../components/flex-box"; // ==============================================================
-import { Typography } from "@mui/material";
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();
@@ -27,7 +22,7 @@ export default function AuthLayout({ children }) {
   const toggleIsFixed = useCallback((fixed) => setIsFixed(fixed), []);
   const HEADER_SLOT = <div><NavigationList /></div>;
 
-  if (pathname === "/login") {
+  if (pathname === "/signin") {
     BOTTOM_CONTENT = (
       <>
         <SocialButtons />
@@ -51,7 +46,7 @@ export default function AuthLayout({ children }) {
             Create a business profile
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", gap: 1, pt: 2, pb: 5 }}>
-            Already have an account? <BoxLink title="Sign in" href="/login" />
+            Already have an account? <BoxLink title="Sign in" href="/signin" />
           </Box>
         </Fragment>
       </>
@@ -63,7 +58,7 @@ export default function AuthLayout({ children }) {
     BOTTOM_CONTENT = (
       <FlexRowCenter sx={{ fontFamily: 'Helvetica', color: '#fff', flexDirection: 'column' }} gap={1} mt={3}>
         <Box sx={{ pt: 2, pb: 5 }}>
-          Already have an account? <BoxLink title="Sign in" href="/login" />
+          Already have an account? <BoxLink title="Sign in" href="/signin" />
         </Box>
       </FlexRowCenter>
     );
@@ -94,7 +89,7 @@ export default function AuthLayout({ children }) {
   };
 
   const blurredOverlayStyle = useMemo(() => {
-    return pathname === "/login" ? blurredOverlayStyle1 : blurredOverlayStyle2;
+    return pathname === "/signin" ? blurredOverlayStyle1 : blurredOverlayStyle2;
   }, [pathname]);
 
   return (

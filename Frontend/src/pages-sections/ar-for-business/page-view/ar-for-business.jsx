@@ -1,12 +1,5 @@
 "use client"
 
-import Section1 from "../section-1";
-import Section2 from "../section-2";
-import Section3 from "../section-3";
-import Section4 from "../section-4";
-import Section5 from "../section-5";
-import Section6 from "../section-6";
-
 /**
  * ArForBusinessPageView Component
  *
@@ -23,6 +16,12 @@ import Section6 from "../section-6";
  * @returns {JSX.Element} Rendered "AR for Business" page view
  */
 
+import Section1 from "../section-1";
+import Section2 from "../section-2";
+import Section3 from "../section-3";
+import Section4 from "../section-4";
+import Section5 from "../section-5";
+import Section6 from "../section-6";
 
 export default async function ArForBusinessPageView() {
   return (

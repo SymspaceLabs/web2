@@ -45,7 +45,7 @@ export default function DialogDrawer(props) {
         onClose={() => setSnackbarOpen(false)}
       >
         <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Login Successful!
+          Signin Successful!
         </Alert>
       </Snackbar>
     </Fragment>

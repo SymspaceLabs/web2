@@ -26,13 +26,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // const login = () => {
-  //   if (!isAuthenticated) {
-  //     // Redirect to Google login URL
-  //     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google-login`;
-  //   }
-  // };
-
   const logout = async () => {
     try {
       await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout`, {
@@ -45,7 +38,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('user');
       localStorage.removeItem('token');
       localStorage.removeItem('onboardingDialogClosed');
-      // window.location.href = "/"; // Redirect to homepage after logout
       router.push("/"); // Redirect using Next.js router
     } catch (error) {
       console.error("Logout failed:", error);

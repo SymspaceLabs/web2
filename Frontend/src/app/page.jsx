@@ -6,7 +6,7 @@ export const metadata = {
   description: `Symspacelabs is an E-commerce website. Build SEO friendly Online store, delivery app and Multi vendor store`,
   authors: [{
     name: "UI-LIB",
-    url: "https://ui-lib.com"
+    url: "https://symspacelabs.com"
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };

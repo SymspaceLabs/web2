@@ -18,30 +18,21 @@ const navbarNavigation = [
     megaMenuWithSub: false,
     child: [
       {
-        title: "3D Product Creation",
-        url: "/medical"
-      }, {
-        title: "3D Product Ad Studio",
-        url: "/gift-shop"
-      }, {
         title: "AR App Simulation",
         child: [{
           title: "Features",
           url: "/market-2"
         }, {
-          title: "User Testimonial",
+          title: "User Testimonials",
           url: "/market-2"
         }, {
           title: "Incentive programs",
           url: "/market-2"
         }]
       }, {
-        title: "Sym-AI Technology",
+        title: "Staging Furniture",
         url: "/furniture-1"
-      }, {
-        title: "AR Advertising",
-        url: "/furniture-2"
-      } 
+      }
     ]
   }, 
 
@@ -80,9 +71,6 @@ const navbarNavigation = [
         url: "/gift-shop"
       }, {
         title: "Blog & Insights",
-        url: "/furniture-1"
-      }, {
-        title: "Whitepapers & Research",
         url: "/furniture-1"
       }, {
         title: "Press Releases",
@@ -129,8 +117,7 @@ const navbarNavigation = [
         url: "/furniture-1"
       }
     ]
-  }, 
-
+  }
 ];
 export default navbarNavigation;
 
@@ -240,8 +227,8 @@ const megaMenus = [
 }, {
   title: "Authentication",
   child: [{
-    title: "Login",
-    url: "/login"
+    title: "Signin",
+    url: "/signin"
   }, {
     title: "Register",
     url: "/register"

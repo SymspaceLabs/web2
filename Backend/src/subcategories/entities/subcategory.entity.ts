@@ -19,7 +19,9 @@ export class Subcategory {
   @Column()
   categoryId: string;
 
-  @ManyToOne(() => Category, (category) => category.subcategories)
+  @ManyToOne(() => Category, (category) => category.subcategories, {
+    eager: true, // Automatically fetch related category
+  })
   category: Category;
 
   @OneToMany(

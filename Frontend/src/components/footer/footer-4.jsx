@@ -50,7 +50,7 @@ export default function Footer4() {
               70 Washington Square South, New York, NY 10012, United States
             </Paragraph>
 
-            <Paragraph py={0.6}>Email: uilib.help@gmail.com</Paragraph>
+            <Paragraph py={0.6}>Email: contacts@symspacelabs.com</Paragraph>
 
             <Paragraph py={0.6} mb={2}>
               Phone: +1 1123 456 780
@@ -58,16 +58,12 @@ export default function Footer4() {
           </Grid>
         </Grid>
 
-        <Box component={Divider} mt={{
-        md: 8,
-        xs: 3
-      }} />
+        <Box component={Divider} mt={{ md: 8, xs: 3 }} />
 
-        <FlexBetween pt={2} pb={{
-        sm: 10,
-        md: 2
-      }}>
-          <Paragraph>© 2023 By UI Lib. All rights reserved.</Paragraph>
+        <FlexBetween pt={2} pb={{ sm: 10, md: 2 }}>
+          <Paragraph sx={{ color:'white'}}>
+            © {new Date().getFullYear()} Symspacelabs. All rights reserved.
+          </Paragraph>
           <SocialLinks variant="dark" />
         </FlexBetween>
       </Container>

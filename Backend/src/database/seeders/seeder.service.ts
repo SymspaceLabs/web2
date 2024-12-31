@@ -24,29 +24,46 @@ export class SeederService {
   async seed() {
     await this.clear();
 
-    //SEED CATEGORIES
-    for (const categoryData of categoriesSeedData) {
-      const category = this.categoryRepository.create({
-        name: categoryData.name,
-      });
-      await this.categoryRepository.save(category);
-
-      for (const subcategoryData of categoryData.subcategories) {
-        const subcategory = this.subcategoryRepository.create({
-          name: subcategoryData.name,
-          category,
-        });
-        await this.subcategoryRepository.save(subcategory);
-
-        for (const subcategoryItemData of subcategoryData.subcategoryItems) {
-          const subcategoryItem = this.subcategoryItemRepository.create({
-            name: subcategoryItemData.name,
-            subcategory,
+        // SEED CATEGORIES
+        for (const categoryData of categoriesSeedData) {
+          const existingCategory = await this.categoryRepository.findOne({ where: { id: categoryData.id } });
+    
+          const category = this.categoryRepository.create({
+            id: categoryData.id, // Use hardcoded id
+            name: categoryData.name,
           });
-          await this.subcategoryItemRepository.save(subcategoryItem);
+    
+          // Save or update the category
+          await this.categoryRepository.save(category);
+    
+          for (const subcategoryData of categoryData.subcategories) {
+            const existingSubcategory = await this.subcategoryRepository.findOne({ where: { id: subcategoryData.id } });
+    
+            const subcategory = this.subcategoryRepository.create({
+              id: subcategoryData.id, // Use hardcoded id
+              name: subcategoryData.name,
+              category,
+            });
+    
+            // Save or update the subcategory
+            await this.subcategoryRepository.save(subcategory);
+    
+            for (const subcategoryItemData of subcategoryData.subcategoryItems) {
+              const existingSubcategoryItem = await this.subcategoryItemRepository.findOne({
+                where: { id: subcategoryItemData.id },
+              });
+    
+              const subcategoryItem = this.subcategoryItemRepository.create({
+                id: subcategoryItemData.id, // Use hardcoded id
+                name: subcategoryItemData.name,
+                subcategory,
+              });
+    
+              // Save or update the subcategory item
+              await this.subcategoryItemRepository.save(subcategoryItem);
+            }
+          }
         }
-      }
-    }
 
     //SEED BLOGS
     for (const blog of blogSeedData) {

@@ -34,7 +34,7 @@ export class MinioService {
     await this.minioClient.setBucketPolicy(this.bucketName, JSON.stringify(policy));
   }
 
-  async uploadFile(filename: string, file: Express.Multer.File): Promise<string> {
+  async uploadFile(filename: string, file: any): Promise<string> {
     const fileStream = Readable.from(file.buffer);
     
     // Ensure the bucket exists

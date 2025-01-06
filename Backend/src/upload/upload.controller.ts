@@ -8,7 +8,7 @@ export class UploadController {
 
   @Post('image')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+  async uploadImage(@UploadedFile() file: any) {
     try {
       const filename = `${Date.now()}-${file.originalname}`;
       const fileUrl = await this.minioService.uploadFile(filename, file);

@@ -89,7 +89,7 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
       >
         {!isAuthenticated ? (
           <>
-            <MenuItem onClick={handleLoginRoute} sx={styles.text}>Signin</MenuItem>
+            <MenuItem onClick={handleLoginRoute} sx={styles.text}>Sign in</MenuItem>
             <MenuItem onClick={handleSignUp} sx={styles.text}>Sign up</MenuItem>
           </>
         ) : (

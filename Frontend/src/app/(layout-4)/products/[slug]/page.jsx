@@ -1,7 +1,3 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-import { notFound } from "next/navigation";
 import { ProductDetailsPageView } from "../../../../pages-sections/product-details/page-view";
 
 /**
@@ -16,50 +12,18 @@ import { ProductDetailsPageView } from "../../../../pages-sections/product-detai
  * 
  * @component
  */
-export default function ProductDetails({ params: paramsPromise }) {
-  // State to store the fetched product details
-  const [product, setProduct] = useState(null);
 
-  // State to handle errors during the fetch process
-  const [error, setError] = useState(false);
+export const metadata = {
+  title: "Product Details",
+  description: `Symspace is an E-commerce website.`,
+  authors: [{
+    name: "UI-LIB",
+    url: "https://symspacelabs.com"
+  }],
+  keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
+};
 
-  useEffect(() => {
-    /**
-     * Fetches the product details from the backend using the slug from the route params.
-     */
-    const fetchProduct = async () => {
-      try {
-        const params = await paramsPromise; // Resolve the params promise to get the slug
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${params.slug}`);
+export default function ProductDetails({ params }) {
 
-        // If the response is not OK, set error state
-        if (!response.ok) {
-          setError(true);
-          return;
-        }
-
-        // Parse and store the product data
-        const data = await response.json();
-        setProduct(data);
-      } catch (error) {
-        // Set error state if an exception occurs
-        setError(true);
-      }
-    };
-
-    fetchProduct();
-  }, [paramsPromise]); // Run when paramsPromise changes
-
-  // If an error occurred, navigate to the "not found" page
-  if (error) {
-    notFound();
-    return null;
-  }
-
-  return (
-    <>
-      {/* Render the ProductDetailsPageView component if product data is available */}
-      {product && <ProductDetailsPageView product={product} />}
-    </>
-  );
+  return <ProductDetailsPageView slug={params.slug} />
 }

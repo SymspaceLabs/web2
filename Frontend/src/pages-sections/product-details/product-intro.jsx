@@ -14,15 +14,14 @@
 
 
 import Link from "next/link";
-import { useState, Fragment, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Fragment } from "react";
 
-import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, Accordion, AccordionSummary, AccordionDetails, IconButton, Divider } from '@mui/material';
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
 import useCart from "../../hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 
 import LazyImage from "../../components/LazyImage";
-import { H1, H2, H3, H6, Paragraph } from "../../components/Typography";
+import { H1, H2, H3, H6 } from "../../components/Typography";
 import { FlexBox, FlexRowCenter } from "../../components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
 import { currency } from "../../lib"; // DUMMY DATA
 
@@ -31,12 +30,12 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import Clear from "@mui/icons-material/Clear"; // LOCAL CUSTOM COMPONENTS
 
 import HandBagCanvas from "../../components/HandBagCanvas";
-import styles from "./styles"; // import styles
 import SymAccordion from "./components/SymAccordion"
 import DynamicCanvas from "@/components/DynamicCanvas";
+import { DrawerRight } from "@/components/drawer";
+
 // ================================================================
 export default function ProductIntro({ product }) {
   const {
@@ -379,63 +378,29 @@ export default function ProductIntro({ product }) {
          
         </Grid>
       </Grid>
-      <Fragment>
-        <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav} sx={{ zIndex: 9999 }}>
-          <MiniCart toggleSidenav={toggleSidenav} />
-        </Drawer> 
-      </Fragment>
+      <Box sx={{ background:'transparent' }}>
+      <Drawer
+        open={sidenavOpen}
+        anchor="right"
+        onClose={toggleSidenav}
+        sx={{
+          zIndex: 1200, // Default z-index of the Drawer
+          overflow: 'visible', // Ensure the dropdown isn't clipped      
+          '& .MuiPaper-root': {
+            background: 'linear-gradient(117.54deg,rgba(255, 255, 255, 0.95) -19.85%,rgba(245, 245, 245, 0.6) 4.2%,rgba(240, 240, 240, 0.5) 13.88%,rgba(230, 230, 230, 0.4) 27.98%,rgba(225, 225, 225, 0.35) 37.8%,rgba(220, 220, 220, 0.3) 44.38%,rgba(215, 215, 215, 0.25) 50.54%,rgba(210, 210, 210, 0.2) 60.21%)',
+            backdropFilter: 'blur(5px)',
+            borderRadius:'15px'
+          },
+        }}
+      >
+        <DrawerRight
+          toggleSidenav={toggleSidenav}
+          headerTitle="personalized sizing"
+        />
+      </Drawer>
+
+      </Box>
     </>
     
   );
 }
-
-function MiniCart({ toggleSidenav }) {
-  const { push } = useRouter();
-
-  const handleNavigate = useCallback(
-    async (path) => {
-      await push(path); // Wait for navigation to complete
-      toggleSidenav();  // Close sidenav after navigation
-    },
-    [push, toggleSidenav]
-  );
-
-  return (
-    <Box width="100%" minWidth={380}>
-      {/* HEADING SECTION */}
-      <FlexBox justifyContent="space-between" mx={3} height={74}>
-        <FlexBox gap={1} alignItems="center" color="secondary.main">
-          <Paragraph lineHeight={0} fontWeight={600}>
-            Size guide
-          </Paragraph>
-        </FlexBox>
-
-        <IconButton onClick={toggleSidenav}>
-          <Clear />
-        </IconButton>
-      </FlexBox>
-
-      <Divider />
-
-      <Box height="calc(100vh - 75px)">
-        <FlexBox
-          alignItems="center"
-          flexDirection="column"
-          justifyContent="center"
-          height="calc(100% - 74px)"
-        >
-          <LazyImage
-            alt="Size Guide"
-            width={200}
-            height={200}
-            src="/assets/images/sizeGuide.png"
-            sx={{ objectFit: 'contain' }}
-          />
-        </FlexBox>
-      </Box> 
-    </Box>
-  );
-}
-
-// const colors = ['#000', '#686868', '#0C3779', '#E1B000', '#E8E8E8'];
-// const sizes = ['S', 'M', 'L', 'XL'];

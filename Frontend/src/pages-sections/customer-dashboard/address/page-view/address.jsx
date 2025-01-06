@@ -17,20 +17,16 @@ export default function AddressPageView({
     setAllAddress(allAddress.filter(item => item.id !== id));
   };
 
-  return <Fragment>
-      {
-      /* TITLE HEADER AREA */
-    }
+  return (
+    <Fragment>
+      {/* TITLE HEADER AREA */}
       <DashboardHeader Icon={Place} href="/address" title="My Addresses" buttonText="Add New Address" />
 
-      {
-      /* ALL ADDRESS LIST AREA */
-    }
+      {/* ALL ADDRESS LIST AREA */}
       {allAddress.map(address => <AddressListItem key={address.id} address={address} handleDelete={handleAddressDelete} />)}
 
-      {
-      /* PAGINATION AREA */
-    }
+      {/* PAGINATION AREA */}
       <Pagination count={5} onChange={data => console.log(data)} />
-    </Fragment>;
+    </Fragment>
+  );
 }

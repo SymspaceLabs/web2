@@ -1,28 +1,78 @@
 "use client";
 
-import { Fragment } from "react";
 import PersonOutlined from "@mui/icons-material/PersonOutlined"; // Local CUSTOM COMPONENT
 import UserInfo from "../user-info";
 import UserAnalytics from "../user-analytics";
 import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
 import { Box } from "@mui/material";
-import Measurements from "../measurements";
-import Preferences from "../preferences";
+import Preferences from "../../preferences/preferences";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import Measurements from "../../measurements/measurements";
 
 // ============================================================
-export default function ProfilePageView({user}) {
+export default function ProfilePageView() {
+  const { isAuthenticated, user } = useAuth();
+  const router = useRouter();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.id) {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            setUserData(data)
+          } else {
+            console.error("Failed to fetch user data:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+    };
+
+    if (user?.id) {
+      fetchUserData();
+    }
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (isAuthenticated === false) {
+      router.push("/signin");
+    }
+  }, [isAuthenticated, router]);
+
+  if (isAuthenticated === undefined || user === undefined) {
+    return <div>Loading...</div>;
+  }
+
+  if (!userData) {
+    return <div>Loading...</div>;
+  }
   return (
     <Box sx={boxStyle}>
       <DashboardHeader 
         Icon={PersonOutlined} 
         title="My Profile" 
         buttonText="Edit Profile" 
-        href={`/profile/${user.id}`}
+        href={`/profile/${userData.id}`}
       />
-      <UserAnalytics user={user} />
-      <UserInfo user={user} />
-      <Measurements measurement={user.measurement} />
-      <Preferences user={user} />
+      <UserAnalytics user={userData} />
+      <UserInfo user={userData} />
+      <Measurements isEdit={false} />
+      <Preferences isEdit={false}  />
     </Box>
 
   )

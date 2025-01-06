@@ -1,6 +1,8 @@
 // src/onboarding/dto/create-onboarding.dto.ts
 import { Type } from 'class-transformer';
-import { IsNumber, IsDateString, IsOptional, IsString, IsDate } from 'class-validator';
+import { IsNumber, IsOptional, IsString, IsDate, ValidateNested } from 'class-validator';
+import { CreatePreferencesDto } from 'src/preferences/dto/create-preference.dto';
+import { CreateMeasurementDto } from 'src/measurements/dto/create-measurement.dto';
 
 export class CreateOnboardingDto {
   @IsString()
@@ -17,6 +19,12 @@ export class CreateOnboardingDto {
   @IsDate()
   dob?: Date;
 
-//   @IsOptional()
-//   preferences?: Record<string, any>;
+  @ValidateNested()
+  @Type(() => CreateMeasurementDto)
+  measurement: CreateMeasurementDto;
+
+  @ValidateNested()
+  @Type(() => CreatePreferencesDto)
+  preference: CreatePreferencesDto;
+
 }

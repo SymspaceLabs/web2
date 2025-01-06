@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 import { Measurement } from 'src/measurements/entities/measurement.entity';
+import { Preference } from 'src/preferences/entities/preference.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -56,6 +57,9 @@ export class User {
 
   @OneToOne(() => Measurement, (measurement) => measurement.user, { cascade: true })
   measurement: Measurement;
+
+  @OneToOne(() => Preference, (preference) => preference.user, { cascade: true })
+  preference: Preference;
 
   @Column({ default: false })
   isOnboardingFormFilled: boolean;

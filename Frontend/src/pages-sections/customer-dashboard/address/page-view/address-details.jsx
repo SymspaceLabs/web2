@@ -11,20 +11,15 @@ import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
 export default function AddressDetailsPageView({
   address
 }) {
-  return <Fragment>
-      {
-      /* TITLE HEADER AREA */
-    }
+  return (
+    <Fragment>
+      {/* TITLE HEADER AREA */}
       <DashboardHeader Icon={Place} href="/address" title="Edit Address" buttonText="Back to Address" />
 
-      {
-      /* FORM AREA */
-    }
-      <Card sx={{
-      p: 3,
-      pt: 4
-    }}>
+      {/* FORM AREA */}
+      <Card sx={{ p: 3, pt: 4 }}>
         <AddressForm address={address} />
       </Card>
-    </Fragment>;
+    </Fragment>
+  );
 }

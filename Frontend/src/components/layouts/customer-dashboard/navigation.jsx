@@ -68,11 +68,16 @@ const MENUS = [{
     Icon: Person,
     count: 3
   }, {
-    href: "/mesurements",
-    title: "Mesurements",
+    href: "/measurements",
+    title: "Measurements",
     Icon: Person,
     count: 3
   }, {
+    href: "/preferences",
+    title: "Preferences",
+    Icon: Person,
+    count: 3
+  },{
     href: "/address",
     title: "Addresses",
     Icon: Place,

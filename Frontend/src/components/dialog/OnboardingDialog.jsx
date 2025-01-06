@@ -64,14 +64,14 @@ const OnboardingDialog = ({ open, onClose, user }) => {
     
             // Handle success and failure responses
             if (response.status === 201) {
-                alert("Onboarding successfully created!");
+                // alert("Onboarding successfully created!");
                 onClose(); // Close the dialog
             } else {
                 alert("Failed to create onboarding. Please try again.");
             }
         } catch (error) {
             console.error("Error creating onboarding:", error);
-            alert("An error occurred while creating onboarding.");
+            // alert("An error occurred while creating onboarding.");
         } finally {
             setLoading(false); // Reset loading state
         }
@@ -121,7 +121,7 @@ const OnboardingDialog = ({ open, onClose, user }) => {
         </DialogTitle>
 
         <DialogContent sx={{p: isMobile ? 0: '10px'}}>
-            <Box sx={{ padding: 1, background: 'transparent',}}>
+            <Box sx={{ padding: 1, background: 'transparent' }}>
                 <Measurements
                     setUseMetric={setUseMetric}
                     useMetric={useMetric}
@@ -139,7 +139,6 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                     setDob={setDob}
                     isMobile={isMobile}
                 />
-
             </Box>
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "space-between", padding: isMobile? 2 : "35px" }}>

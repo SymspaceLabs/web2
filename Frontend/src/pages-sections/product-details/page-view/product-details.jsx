@@ -1,18 +1,5 @@
 "use client"
 
-// Material-UI components
-import Container from "@mui/material/Container";
-import { Box } from "@mui/material";
-import { styled, keyframes } from '@mui/material/styles';
-
-// Local custom components
-import ProductTabs from "../product-tabs";
-import ProductIntro from "../product-intro";
-// import AvailableShops from "../available-shops";
-// import RelatedProducts from "../related-products";
-// import FrequentlyBought from "../frequently-bought";
-// import Section5 from "../section-5";
-
 /**
  * `ProductDetailsPageView` is a React functional component that serves as the 
  * main container for displaying detailed information about a product.
@@ -28,6 +15,22 @@ import ProductIntro from "../product-intro";
  * 
  * This component is designed with Material-UI for responsive styling.
  */
+
+// Material-UI components
+import Container from "@mui/material/Container";
+import { Box } from "@mui/material";
+import { styled, keyframes } from '@mui/material/styles';
+import React, { useEffect, useState } from "react";
+
+// Local custom components
+import ProductTabs from "../product-tabs";
+import ProductIntro from "../product-intro";
+// import AvailableShops from "../available-shops";
+// import RelatedProducts from "../related-products";
+// import FrequentlyBought from "../frequently-bought";
+// import Section5 from "../section-5";
+
+
 const blob = keyframes`
   0% {
     transform: translate(0px, 0px) scale(1);
@@ -54,7 +57,37 @@ const BlobBox = styled(Box)(({ theme }) => ({
   animation: `${blob} 7s infinite`,
 }));
 
-export default function ProductDetailsPageView(props) {
+
+
+export default function ProductDetailsPageView({slug}) {
+
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch product data");
+        }
+        const data = await response.json();
+        setProduct(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchProduct();
+  }, [slug]);
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     // Main container for the product details page
     <Box
@@ -89,7 +122,7 @@ export default function ProductDetailsPageView(props) {
         />
 
         {/* Product introduction section */}
-        <ProductIntro product={props.product} />
+        <ProductIntro product={product} />
 
         {/* Tabs section for detailed product information */}
         <ProductTabs />

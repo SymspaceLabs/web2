@@ -11,13 +11,8 @@ async function bootstrap() {
   const seeder = app.get(SeederService);
   await seeder.seed();
 
-  // app.enableCors({
-  //   origin: process.env.FRONTEND_URL,
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  //   credentials: true,
-  // });
   app.enableCors({
-    origin: 'http://localhost:3001',
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

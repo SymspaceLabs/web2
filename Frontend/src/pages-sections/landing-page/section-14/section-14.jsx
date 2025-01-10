@@ -1,39 +1,169 @@
-/**
- * Section14 Component - Displays a promotional section offering a discount with an image background.
- * It includes a heading, a short description, and a subscription input field for capturing user emails.
- * 
- * @returns {JSX.Element} Rendered Section14 component.
- */
+"use client"
 
-import Container from "@mui/material/Container"; // GLOBAL CUSTOM COMPONENTS
-import LazyImage from "../../../components/LazyImage"; // LOCAL CUSTOM COMPONENT
-import { H2, Paragraph } from "../../../components/Typography"; // LOCAL CUSTOM COMPONENT
-import SubscribeInput from "../../../components/subscribe-input"; // STYLED COMPONENT
-import { RootStyle } from "./styles"; // IMPORT STYLES
-import bgImage from "../../../../public/assets/images/banners/banner-37.jpg"; // IMPORT IMAGE
+import React, { useState } from "react";
+import Container from "@mui/material/Container"; 
+import LazyImage from "../../../components/LazyImage"; 
+import { Paragraph } from "../../../components/Typography"; 
+import { RootStyle } from "./styles"; 
+import bgImage from "../../../../public/assets/images/banners/banner-55.png"; 
+import { Box, Typography, Button, TextField } from "@mui/material";
 
 export default function Section14() {
+  const [showInput, setShowInput] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const handleBetaAccessClick = () => {
+    setShowInput(true);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleEmailSubmit = () => {
+    if (email) {
+      setIsSubmitted(true);
+      setEmail(''); // Clear the input field
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setShowInput(false);
+      }, 3000);
+    }
+  };
+
   return (
     <Container sx={{ py: 10 }}>
-      {/* Root Style Wrapper for layout */}
       <RootStyle>
-        {/* Lazy loading the background image */}
         <LazyImage src={bgImage} alt="offer" />
 
         <div className="content">
-          {/* Promotional Title */}
-          <H2 mt={3} mb={1} lineHeight={1.2} fontSize={{ sm: 36, xs: 30 }}>
-            GET $20 OFF YOUR <br />
-            FIRST ORDER
-          </H2>
+          <Typography
+            sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}
+            mt={3}
+            mb={1}
+            lineHeight={1.2}
+            fontSize={{ sm: 40, xs: 30 }}
+          >
+            stay up to date
+          </Typography>
 
-          {/* Promotional Subtitle */}
-          <Paragraph mb={3} lineHeight={1.2} fontSize={{ sm: 16, xs: 14 }}>
-            On your next purchase
+          <Paragraph mb={3} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
+            Get updates on new partnered brands, products, <br /> and technology.
           </Paragraph>
 
-          {/* Subscribe Input for capturing email */}
-          <SubscribeInput fullWidth />
+          {!showInput && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBetaAccessClick}
+              sx={{
+                gap: 2,
+                color: "#fff",
+                borderRadius: "50px",
+                py: 2,
+                px: 4,
+                mt: 8,
+                background:
+                  "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Elemental End",
+                  textTransform: "lowercase",
+                  fontSize: 12,
+                }}
+              >
+                Beta Access
+              </Typography>
+              <Box
+                sx={{
+                  width: "35px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <LazyImage
+                  alt="furniture shop"
+                  width={25}
+                  height={25}
+                  src="/assets/images/sparkler.png"
+                />
+              </Box>
+            </Button>
+          )}
+
+          {showInput && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "2rem",
+                width: "100%",
+                maxWidth: "400px",
+                position: "relative",
+                animation: "fadeIn 0.5s ease-in-out",
+                "@keyframes fadeIn": {
+                  from: { opacity: 0, transform: "translateY(-20px)" },
+                  to: { opacity: 1, transform: "translateY(0)" },
+                },
+              }}
+            >
+              <TextField
+                variant="outlined"
+                placeholder={
+                  isSubmitted ? "Email has been received!" : "Enter your email"
+                }
+                value={email}
+                onChange={handleEmailChange}
+                sx={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  background:
+                    "linear-gradient(90.77deg, #474747 0%, #1D1D1D 63%)",
+                  borderRadius: "50px",
+                  paddingRight: "70px",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                  },
+                  input: {
+                    color: "#fff",
+                    padding: "20px 30px",
+                  },
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={handleEmailSubmit}
+                sx={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: isSubmitted
+                    ? "#fff"
+                    : "linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)",
+                  border: "1px solid #FFFFFF",
+                  borderRadius: "50px",
+                  color: isSubmitted ? "#000" : "#fff",
+                  padding: "6px 12px",
+                  fontFamily: "Elemental End",
+                  textTransform: "lowercase",
+                  "&:hover": {
+                    background: isSubmitted
+                      ? "#f0f0f0"
+                      : "linear-gradient(97.04deg, #888888 0%, #2D2D2D 100%)",
+                  },
+                }}
+              >
+                {isSubmitted ? "✔️" : "Submit"}
+              </Button>
+            </Box>
+          )}
         </div>
       </RootStyle>
     </Container>

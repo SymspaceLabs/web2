@@ -16,8 +16,6 @@
  * experience by offering convenience and confidence to users.
  */
 
-'use client'; // Indicates that this component uses React's client-side rendering.
-
 import React from 'react';
 import { Container, Box } from '@mui/material'; // Import Material-UI components.
 import LazyImage from '../../../components/LazyImage'; // Custom lazy-loading image component.

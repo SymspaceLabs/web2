@@ -1,3 +1,4 @@
+"use client"
 /**
  * Section5 Component
  *
@@ -13,8 +14,6 @@
  * - This component can be integrated into an e-commerce landing page to highlight trending products.
  * - Products data can be dynamically fetched and passed as props to the `Content` component.
  */
-
-"use client"; // Indicates client-side rendering for this Next.js component.
 
 import Link from "next/link"; // Used for navigation.
 import Container from "@mui/material/Container"; // Material-UI layout component.

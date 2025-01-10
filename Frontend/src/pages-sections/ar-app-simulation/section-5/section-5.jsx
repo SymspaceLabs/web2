@@ -1,10 +1,4 @@
 "use client"
-/**
- * Section13 Component - Displays a testimonial section with a heading, description, 
- * and a list of testimonials. Each testimonial is rendered in a card format.
- * 
- * @returns {JSX.Element} Rendered Section13 component.
- */
 
 import { Box, Typography } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
@@ -35,7 +29,7 @@ const MarqueeWrapper = styled(Box)({
   },
 });
 
-export default async function Section13() {
+export default function Section5() {
   return (
     <Box sx={{ width: "100%", display:'flex', flexDirection:'column', alignItems:'center', py: 4, background:'#fff' }}>
       <Box sx={{ width: "100%", maxWidth:'1200px', p:2}}>
@@ -58,10 +52,6 @@ export default async function Section13() {
   );
 }
 
-/**
- * Hardcoded List of Testimonials - Each testimonial contains a rating, comment, and user details.
- * This list is used to populate the testimonial cards.
- */
 const testimonials = [
   {
     rating: 5,

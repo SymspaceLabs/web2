@@ -1,6 +1,3 @@
-import { Box, Grid, Container } from '@mui/material'; // Importing Material-UI components for layout and styling
-import { Card1, Card2, Card3 } from './cards'; // Importing custom card components
-
 /**
  * Section7 Component
  * 
@@ -10,6 +7,9 @@ import { Card1, Card2, Card3 } from './cards'; // Importing custom card componen
  * 
  * The layout adjusts according to screen size, making the section mobile-friendly.
  */
+
+import { Box, Grid, Container } from '@mui/material'; // Importing Material-UI components for layout and styling
+import { Card1, Card2, Card3 } from './cards'; // Importing custom card components
 
 export default function Section7() {
   return (

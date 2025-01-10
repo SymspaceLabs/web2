@@ -5,7 +5,7 @@ export const RootStyle = styled("div")(({
   theme
 }) => ({
   minHeight: 300,
-  borderRadius: 12,
+  borderRadius: '50px',
   display: "flex",
   overflow: "hidden",
   position: "relative",
@@ -14,7 +14,7 @@ export const RootStyle = styled("div")(({
   },
   ".content": {
     top: "40%",
-    right: "15%",
+    left: "10%",
     position: "absolute",
     transform: "translateY(-40%)",
     [theme.breakpoints.down("sm")]: {

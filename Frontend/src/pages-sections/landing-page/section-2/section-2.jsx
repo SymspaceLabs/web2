@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Section2 Component
  *

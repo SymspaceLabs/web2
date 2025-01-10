@@ -20,14 +20,14 @@ const navbarNavigation = [
       {
         title: "AR App Simulation",
         child: [{
+          title: "Application",
+          url: "/ar-app-simulation"
+        },{
           title: "Features",
-          url: "/market-2"
+          url: "/ar-app-simulation"
         }, {
           title: "User Testimonials",
-          url: "/market-2"
-        }, {
-          title: "Incentive programs",
-          url: "/market-2"
+          url: "/ar-app-simulation"
         }]
       }, {
         title: "Staging Furniture",

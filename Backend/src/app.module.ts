@@ -26,6 +26,7 @@ import { ProductSizesModule } from './product-sizes/product-sizes.module';
 import { MeasurementsModule } from './measurements/measurements.module';
 import { OnboardingModule } from './onboarding/onboarding.module';
 import { PreferencesModule } from './preferences/preferences.module';
+import { PotentialUsersModule } from './potential-users/potential-users.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { PreferencesModule } from './preferences/preferences.module';
     MeasurementsModule,
     OnboardingModule,
     PreferencesModule,
+    PotentialUsersModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

@@ -47,7 +47,7 @@ export default function Section2() {
               flexDirection: { xs: "column", sm: "row" },
               justifyContent: "center",
               alignItems: "center",
-              mt: "25px",
+              mt: "50px",
               gap: 2,
             }}
           >
@@ -100,7 +100,7 @@ export default function Section2() {
                     }}
                   />
                 </Parallax>
-                <Parallax translateY={[-30, 30]}>
+                <Parallax translateY={[-15, 30]}>
                   <Image
                     alt="model"
                     width={250}

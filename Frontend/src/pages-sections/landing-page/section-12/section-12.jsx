@@ -142,7 +142,7 @@ export default function Section12() {
                   }}
                 >
                   <LazyImage
-                    alt={product.title}
+                    alt="product images"
                     width={380}
                     height={379}
                     src={product.images?.[0]?.url || "/placeholder.png"} // Fallback to placeholder if image is missing

@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react';
 import { FlexBox } from "@/components/flex-box";
 import { H6, Paragraph } from "@/components/Typography";

@@ -14,7 +14,9 @@ export default function ProfileEditPageView() {
         title="Edit Profile"
         buttonText="Back to Profile"
       />
-      <Profile isEdit={true}  />
+      <Box p="15px">
+        <Profile isEdit={true} />
+      </Box>
     </Box>
   );
 }

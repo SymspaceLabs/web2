@@ -36,6 +36,8 @@ export class MeasurementsService {
       where: { user: { id: userId } },
     });
 
+    let data;
+
     if (existingMeasurement) {
       // Update the existing measurement
       const updatedMeasurement = await this.measurementRepository.save({
@@ -46,7 +48,7 @@ export class MeasurementsService {
         waist,
         isMetric,
       });
-      return updatedMeasurement;
+      data = updatedMeasurement;
     } else {
       // Create a new measurement
       const newMeasurement = this.measurementRepository.create({
@@ -57,8 +59,13 @@ export class MeasurementsService {
         isMetric,
         user,
       });
-      return await this.measurementRepository.save(newMeasurement);
+      data =  await this.measurementRepository.save(newMeasurement);
     }
+
+    return {
+      measurement: data,
+      message: 'Measurement information updated successfully',
+    };
   }
 
   // Get all measurements
@@ -101,7 +108,12 @@ export class MeasurementsService {
       throw new Error('Measurement not found');
     }
 
-    return await this.measurementRepository.save(measurement);
+    const data = await this.measurementRepository.save(measurement);
+
+    return {
+      measurement: data,
+      message: 'Measurement information updated successfully',
+    };
   }
 
   // Remove a measurement by id

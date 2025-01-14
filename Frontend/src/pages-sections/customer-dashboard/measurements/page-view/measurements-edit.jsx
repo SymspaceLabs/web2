@@ -11,18 +11,20 @@ export default function MeasurementEditPageView() {
     <Box sx={boxStyle}>
       <DashboardHeader 
         Icon={PersonOutlined} 
-        title="Measurements" 
-        isEdit={true}
+        title="Measurement" 
         buttonText="Edit" 
-        href={`/profile/`}
+        href={`/measurements/edit`}
       />
-      <Measurements isEdit={true} />
+      <Box p="15px">
+        <Measurements isEdit={true} />
+      </Box>
     </Box>
+
   )
 }
 
 const boxStyle = { 
-  padding:'15px',
+  paddingBottom:'15px',
   borderRadius:'15px',
   background: 'linear-gradient(176.84deg, #B7B7B9 -3.62%, #777777 109.48%)',
   boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',

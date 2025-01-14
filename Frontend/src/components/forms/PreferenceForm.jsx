@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TitleCard } from '../dialog/components';
-import MultiSelectDropdown from "@/components/MultiSelectDropdown";
+import SymMultiSelectDropdown from "@/components/custom-inputs/SymMultiSelectDropdown";
 import cardStyle from "@/pages-sections/customer-dashboard/preferences/styles";
 import { FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Box, Typography } from "@mui/material";
-
 
 const PreferenceForm = ({
     gender,
@@ -124,14 +123,14 @@ const PreferenceForm = ({
         
         {/* ROW 1 */}
         <Box sx={cardStyle(downMd)}>          
-          <MultiSelectDropdown
+          <SymMultiSelectDropdown
             title="Style"
             selectedValue={styles}
             handleChange={handleStylesChange}
             options={styleOptions}
             isEdit={isEdit}
           />
-          <MultiSelectDropdown
+          <SymMultiSelectDropdown
             title="Preferred Fit"
             selectedValue={fits}
             handleChange={handleFitChange}
@@ -139,7 +138,7 @@ const PreferenceForm = ({
             isEdit={isEdit}
           />
           {!sidebar &&
-            <MultiSelectDropdown
+            <SymMultiSelectDropdown
               title="Preferred Brands"
               selectedValue={brands}
               handleChange={handleBrandsChange}
@@ -148,7 +147,7 @@ const PreferenceForm = ({
               isColor={true}
             />
           }
-          <MultiSelectDropdown
+          <SymMultiSelectDropdown
             title="Preferred Colors"
             selectedValue={colors}
             handleChange={handleColorsChange}
@@ -160,21 +159,21 @@ const PreferenceForm = ({
 
         {/* ROW 2 */}
         <Box sx={cardStyle(downMd)}>
-            <MultiSelectDropdown
+            <SymMultiSelectDropdown
               title="Tops"
               selectedValue={tops}
               handleChange={handleTopSizeChange}
               options={["S", "M", "L"]}
               isEdit={isEdit}
             />
-            <MultiSelectDropdown
+            <SymMultiSelectDropdown
               title="Bottoms"
               selectedValue={bottoms}
               handleChange={handleBottomSizeChange}
               options={["S", "M", "L"]}
               isEdit={isEdit}
             />
-            <MultiSelectDropdown
+            <SymMultiSelectDropdown
               title="Outerwear"
               selectedValue={outerwears}
               handleChange={handleOuterwearSizeChange}
@@ -182,17 +181,15 @@ const PreferenceForm = ({
               isEdit={isEdit}
             />
             {!sidebar &&
-              <MultiSelectDropdown
+              <SymMultiSelectDropdown
                 title="Accessories"
                 selectedValue={accessories}
                 handleChange={handleAccessoriesChange}
                 options={["S", "M", "L"]}
                 isEdit={isEdit}
-                isColor={true}
               />
             }
         </Box>
-
     </Box>
   )
 }
@@ -219,42 +216,42 @@ const colorOptions = [
     { id: 'dkfdhla', label: "Blue", value: "#00F" },
 ];
     
-  const fitTypeOptions = [
-    "True to Size",
-    "Runs Small",
-    "Runs Big"
-  ];
+const fitTypeOptions = [
+  "True to Size",
+  "Runs Small",
+  "Runs Big"
+];
   
   
-  const styleOptions = [
-      "Adaptive Clothing",
-      "All Leather",
-      "Athleisure",
-      "Basic Essentials",
-      "Bohemian",
-      "Business Casual",
-      "Casual Chic",
-      "Casual Date Night",
-      "Eco-Friendly",
-      "Edgy Style",
-      "Formalwear",
-      "Gothic",
-      "High Fashion",
-      "Intimates",
-      "Loungewear",
-      "Maternity",
-      "Minimalist",
-      "Monochrome",
-      "Plus Size",
-      "Preppy",
-      "Prosthetic-Friendly Designs",
-      "Spring Fits",
-      "Streetwear",
-      "Summer Fits",
-      "Vacation Fits",
-      "Vintage",
-      "Wedding",
-      "Wheelchair-Friendly Fashion",
-      "Winter Fits",
-      "Y2K",
-  ];
+const styleOptions = [
+    "Adaptive Clothing",
+    "All Leather",
+    "Athleisure",
+    "Basic Essentials",
+    "Bohemian",
+    "Business Casual",
+    "Casual Chic",
+    "Casual Date Night",
+    "Eco-Friendly",
+    "Edgy Style",
+    "Formalwear",
+    "Gothic",
+    "High Fashion",
+    "Intimates",
+    "Loungewear",
+    "Maternity",
+    "Minimalist",
+    "Monochrome",
+    "Plus Size",
+    "Preppy",
+    "Prosthetic-Friendly Designs",
+    "Spring Fits",
+    "Streetwear",
+    "Summer Fits",
+    "Vacation Fits",
+    "Vintage",
+    "Wedding",
+    "Wheelchair-Friendly Fashion",
+    "Winter Fits",
+    "Y2K",
+];

@@ -54,8 +54,7 @@ export class UsersController {
     return this.userService.changeEmail(userId, changeEmailDto);
   }
 
-  @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @Post(':id')
   async updateUser(
     @Param('id') id: string,
     @Body() updates: Partial<User>,

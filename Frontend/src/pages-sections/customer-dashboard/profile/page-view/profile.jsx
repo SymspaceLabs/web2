@@ -67,7 +67,7 @@ export default function ProfilePageView() {
         Icon={PersonOutlined} 
         title="My Profile" 
         buttonText="Edit Profile" 
-        href={`/profile/${userData.id}`}
+        href={`/profile/edit`}
       />
       <UserAnalytics user={userData} />
       <UserInfo user={userData} />

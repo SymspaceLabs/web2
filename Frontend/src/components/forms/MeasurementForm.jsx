@@ -120,6 +120,8 @@ function MeasurementForm ({
                 </Box>
             </FlexBox>
         </FlexBox>
+
+        {/* FORM */}
         <FlexBox justifyContent={isMobile ? 'center' : 'space-between'}
             flexDirection={isMobile ? 'column' : 'row'}
             gap={isMobile ? 2 : 3}

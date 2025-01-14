@@ -37,8 +37,8 @@ import Section14 from "../section-14";
 
 
 export default function LandingPageView() {
-  return <div className="bg-white">
-
+  return (
+    <div className="bg-white">
       <Section1 />   {/* Hero section */}
       <Section2 />   {/* Future of Retail */}
       <Section3 />   {/* Application */}
@@ -53,6 +53,6 @@ export default function LandingPageView() {
       <Section12 />  {/* Products */}
       <Section13 />  {/* Testimonial */}
       <Section14 />  {/* Banner */}
-      
-    </div>;
+    </div>
+  )
 }

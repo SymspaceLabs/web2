@@ -44,6 +44,8 @@ export class PreferencesService {
       where: { user: { id: userId } },
     });
 
+    let data;
+
     if (existingPreference) {
       // Update the existing preferences
       const updatedPreference = await this.preferenceRepository.save({
@@ -58,7 +60,7 @@ export class PreferencesService {
         brands,
         gender,
       });
-      return updatedPreference;
+      data = updatedPreference;
     } else {
       // Create a new preference
       const newPreference = this.preferenceRepository.create({
@@ -73,27 +75,32 @@ export class PreferencesService {
         gender,
         user,
       });
-      return await this.preferenceRepository.save(newPreference);
+      data =  await this.preferenceRepository.save(newPreference);
     }
+
+    return {
+      preference: data,
+      message: 'Preference information updated successfully',
+    };
   }
 
-    // Get a single measurement by id
-    async findOneByUserId(userId: string) {
-      // Find the user by ID
-      const user = await this.usersRepository.findOne({
-        where: { id: userId },
-      });
-    
-      if (!user) {
-        throw new Error('User not found');
-      }
+  // Get a single measurement by id
+  async findOneByUserId(userId: string) {
+    // Find the user by ID
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
   
-      // Find the measurement associated with the user
-      return await this.preferenceRepository.findOne({
-        where: { user: { id: userId } },
-      });
-  
+    if (!user) {
+      throw new Error('User not found');
     }
+
+    // Find the measurement associated with the user
+    return await this.preferenceRepository.findOne({
+      where: { user: { id: userId } },
+    });
+
+  }
 
 
   findAll() {

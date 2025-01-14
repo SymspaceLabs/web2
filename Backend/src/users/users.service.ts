@@ -129,6 +129,12 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
+    //CONVERTS TO PROPER DATE
+    if (updates.dob) {
+      updates.dob = new Date(updates.dob);
+    }
+    
+
     // Apply the updates to the user entity
     Object.assign(user, updates);
 

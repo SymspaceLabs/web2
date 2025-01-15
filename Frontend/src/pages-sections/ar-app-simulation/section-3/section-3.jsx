@@ -1,10 +1,12 @@
 "use client"
 
 import React, { useState } from 'react';
-import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card } from '@mui/material';
+import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card, useMediaQuery } from '@mui/material';
 import Image from 'next/image';
 
 export default function Section3() {
+      const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
+  
   const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
   const [fade, setFade] = useState(true);
 
@@ -17,10 +19,10 @@ export default function Section3() {
   };
 
   return (
-    <Box sx={{ py: 20, background:'#fff' }}>
+    <Box sx={{ py: {xs:2, sm:20}, background:'#fff' }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography
-          fontSize={{ xs: 28, sm: 40 }}
+          fontSize={{ xs: 20, sm: 40 }}
           fontFamily="Elemental End"
           textTransform="lowercase"
           textAlign="center"
@@ -36,6 +38,15 @@ export default function Section3() {
             position: 'relative',
             maxWidth: '1200px',
             width: '100%',
+            boxShadow: `
+              inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
+              inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
+              inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
+              inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
+              inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
+            `,
+            backdropFilter: 'blur(10.0285px)',
+            background: 'rgba(255, 255, 255, 0.35)',
           }}
         >
           <Grid container spacing={4}>
@@ -61,6 +72,7 @@ export default function Section3() {
                     }}
                   >
                     <ListItemText
+                      // fontSize={ xs:5, sm:18 }
                       primary={benefit.title}
                       sx={{
                         '& .MuiListItemText-primary': {
@@ -76,11 +88,13 @@ export default function Section3() {
 
             {/* Right: Content */}
             <Grid item xs={12} md={7}>
-              <Box sx={{ pr: 10, py: 5, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', minHeight: '200px',}}>
-                <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase">
+              <Box sx={{ pr: { xs:2, sm:10 }, pl: { xs:2, sm:0 }, pt: { xs:0, sm:5 }, pb: { xs:10, sm:0 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', minHeight: '200px',}}>
+                <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase" >
                   {activeBenefit.header}
                 </Typography>
-                <Typography variant="h6">{activeBenefit.content}</Typography>
+                <Typography variant="h6" sx={{ fontSize:{ xs:12, sm:18 }}}>
+                  {activeBenefit.content}
+                </Typography>
               </Box>
             </Grid>
           </Grid>
@@ -90,10 +104,10 @@ export default function Section3() {
         <Box
           sx={{
             position: 'absolute',
-            bottom: -120,
-            right: { xs: '20%', md: '10%' },
-            width: 280,
-            height: 280,
+            bottom: { xs: -100, sm: -150 },
+            right: { xs: '50%', md: '10%' },
+            width: { xs: 150, sm: 280 },
+            height: { xs: 150, sm: 280 },
             borderRadius: '50%',
             overflow: 'hidden',
             boxShadow:
@@ -118,8 +132,8 @@ export default function Section3() {
             <Image
               src={activeBenefit.image}
               alt={activeBenefit.title}
-              width={200}
-              height={200}
+              width={downMd? 100: 200}
+              height={downMd? 100: 200}
               style={{
                 objectFit: 'contain',
               }}

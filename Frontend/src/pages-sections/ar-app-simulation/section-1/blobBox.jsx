@@ -20,15 +20,19 @@ const blob = keyframes`
 
 const BlobBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  width: '50vw', // Use a percentage or viewport width
+  width: '50vw',
   height: '50vw',
-  maxWidth: '500px', // Limit size on larger screens
+  maxWidth: '500px',
   maxHeight: '500px',
   borderRadius: '50%',
-  filter: 'blur(150px)',
-  opacity: 0.9,
+  filter: 'blur(125px)',
+  opacity: 1,
   backgroundColor: '#0366FE',
   animation: `${blob} 7s infinite`,
+  [theme.breakpoints.down('sm')]: {
+    width: '80vw',
+    height: '80vw',
+  },
 }));
 
 export default BlobBox;

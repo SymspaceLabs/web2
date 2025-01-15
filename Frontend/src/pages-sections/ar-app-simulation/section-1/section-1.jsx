@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Button, useTheme, TextField, Snackbar, Alert } from '@mui/material';
-import BlobBox from '../blobBox';
+import BlobBox from './blobBox';
 import { section1Styles } from './styles';
 import LazyImage from '@/components/LazyImage';
 
@@ -26,23 +26,6 @@ export default function Section1() {
     setEmail(event.target.value);
     setError(''); // Reset error on new input
   };
-
-  // const handleEmailSubmit = () => {
-  //   setError(''); // Reset error state before validation
-  //   if (!isValidEmail(email.trim())) {
-  //     setError('Please enter a valid email address.');
-  //     return;
-  //   }
-
-  //   setIsSubmitted(true);
-  //   setEmail(''); // Clear the input field
-
-  //   // Optionally hide the input
-  //   setTimeout(() => {
-  //     setIsSubmitted(false);
-  //     setShowEmailInput(false);
-  //   }, 3000); // Reset the button after 3 seconds
-  // };
 
   const handleEmailSubmit = async () => {
     setError(""); // Reset error state before validation
@@ -99,32 +82,17 @@ export default function Section1() {
   }, []);
 
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        minHeight: '80vh',
-        backgroundColor: '#fff',
-      }}
-    >
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', minHeight: '80vh'}}>
       {/* Decorative Blob centered as background */}
       <BlobBox />
 
       {/* Content Section */}
-      <Box
-        sx={{
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        
         {/* Headline */}
-        <Typography sx={styles.title}>SYMSPACE</Typography>
+        <Typography sx={styles.title}>
+          SYMSPACE
+        </Typography>
 
         {/* Promotional Offer */}
         <Typography
@@ -154,12 +122,13 @@ export default function Section1() {
             alignItems: 'center',
             gap: '1.5rem',
             marginTop: '2rem',
+            width:'100%'
           }}
         >
           <Box
             component="div"
             onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer' }}
+            sx={{ cursor: 'pointer', width: { xs: '30%', sm: 'auto' } }}
           >
             <LazyImage
               alt="App Store"
@@ -171,7 +140,7 @@ export default function Section1() {
           <Box
             component="div"
             onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer' }}
+            sx={{ cursor: 'pointer', width: { xs: '35%', sm: 'auto' }  }}
           >
             <LazyImage
               alt="Play Store"

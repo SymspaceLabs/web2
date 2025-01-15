@@ -19,8 +19,9 @@ const SymMultiSelectDropdown = ({
         <FlexBox
             flexDirection="column"
             sx={{
-                flex: "1 1 calc(25% - 16px)",
-                maxWidth: "calc(25% - 16px)",
+                // flex: "1 1 calc(25% - 16px)",
+                // maxWidth: "calc(25% - 16px)",
+                flex:1,
                 minWidth: "100px",
                 padding: 0,
                 margin: 0,

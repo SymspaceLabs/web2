@@ -1,22 +1,29 @@
-import { useState } from "react";
 import { Card } from "@mui/material";
 import PreferenceForm from "@/components/forms/PreferenceForm";
 
-const Preferences = ({isMobile}) => {
-    const [gender, setGender] = useState();
-
-    const [style, setStyle] = useState("");
-    const [fit, setFit] = useState("");
-    const [color, setColor] = useState("");
-    const [sizeTops, setSizeTops] = useState("");
-    const [sizeBottoms, setSizeBottoms] = useState("");
-    const [sizeOuterwear, setSizeOuterwear] = useState("");
-
-    const [selectedStyles, setSelectedStyles] = useState([]);
-    const [selectedFitType, setSelectedFitType] = useState([]);
-    const [selectedBrands, setSelectedBrands] = useState([]);
-    const [selectedColors, setSelectedColors] = useState([]);
-
+const Preferences = ({
+  gender,
+  setGender,
+  styles,
+  setStyles,
+  fits,
+  setFits,
+  colors,
+  setColors,
+  brands,
+  setBrands,
+  tops,
+  setTops,
+  bottoms,
+  setBottoms,
+  outerwears,
+  setOuterwears,
+  accessories,
+  setAccessories,
+  isMobile,
+  isEdit,
+  sidebar=false,
+}) => {
 
     return (
       <Card
@@ -33,31 +40,28 @@ const Preferences = ({isMobile}) => {
           backdropFilter: "blur(12px)",
         }}
       >
-
         <PreferenceForm
           gender={gender}
-          style={style}
-          fit={fit}
-          color={color}
-          sizeTops={sizeTops}
-          sizeBottoms={sizeBottoms}
-          sizeOuterwear={sizeOuterwear}
-          selectedStyles={selectedStyles}
-          selectedFitType={selectedFitType}
-          selectedBrands={selectedBrands}
-          selectedColors={selectedColors}
           setGender={setGender}
-          setStyle={setStyle}
-          setFit={setFit}
-          setColor={setColor}
-          setSizeTops={setSizeTops}
-          setSizeBottoms={setSizeBottoms}
-          setSizeOuterwear={setSizeOuterwear}
-          setSelectedStyles={setSelectedStyles}
-          setSelectedFitType={setSelectedFitType}
-          setSelectedBrands={setSelectedBrands}
-          setSelectedColors={setSelectedColors}
+          styles={styles}
+          setStyles={setStyles}
+          setFits={setFits}
+          fits={fits}
+          colors={colors}
+          setColors={setColors}
+          brands={brands}
+          setBrands={setBrands}
+          tops={tops}
+          setTops={setTops}
+          bottoms={bottoms}
+          setBottoms={setBottoms}
+          outerwears={outerwears}
+          setOuterwears={setOuterwears}
+          accessories={accessories}
+          setAccessories={setAccessories}
+          sidebar={true}
           isMobile={isMobile}
+          isEdit={true}
         />
       </Card>
     );

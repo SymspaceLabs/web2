@@ -7,23 +7,25 @@ import { MeasurementForm, PreferenceForm } from "../forms";
 import { H6 } from "../Typography";
 import Link from "next/link";
 import axios from "axios";
+import { useSnackbar } from "@/contexts/SnackbarContext";
 
 const DrawerRight = ({ toggleSidenav, headerTitle }) => {
   const { isAuthenticated, user } = useAuth();
   const { push } = useRouter();
+  const { showSnackbar } = useSnackbar();
+  
   const isMobile = useMediaQuery('(max-width:600px)');
-  const [gender, setGender] = useState();
 
+  {/* Preferences */}
+  const [gender, setGender] = useState();
   const [styles, setStyles] = useState([]);
   const [fits, setFits] = useState([]);
   const [colors, setColors] = useState([]);
   const [brands, setBrands] = useState([]);
-
   const [tops, setTops] = useState([]);
   const [bottoms, setBottoms] = useState([]);
   const [outerwears, setOuterwears] = useState([]);
   const [accessories, setAccessories] = useState([]);
-
 
   const [isMetric, setIsMetric] = useState(true);
   const [height, setHeight] = useState(
@@ -77,7 +79,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
       );
       // Handle success and failure responses
       if (response.status === 201) {
-        // alert("Onboarding successfully created!");
+        showSnackbar("Info updated successfully", "success");
         // onClose(); // Close the dialog
       } else {
         // alert("Failed to create onboarding. Please try again.");

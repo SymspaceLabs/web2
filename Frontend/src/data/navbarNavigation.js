@@ -24,10 +24,10 @@ const navbarNavigation = [
           url: "/ar-app-simulation"
         },{
           title: "Features",
-          url: "/ar-app-simulation"
+          url: "/ar-app-simulation#features"
         }, {
           title: "User Testimonials",
-          url: "/ar-app-simulation"
+          url: "/ar-app-simulation#user_testimonials"
         }]
       }, {
         title: "Staging Furniture",

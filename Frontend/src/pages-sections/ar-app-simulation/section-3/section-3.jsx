@@ -1,12 +1,11 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card, useMediaQuery } from '@mui/material';
 import Image from 'next/image';
 
 export default function Section3() {
-      const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
-  
+  const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
   const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
   const [fade, setFade] = useState(true);
 
@@ -18,8 +17,16 @@ export default function Section3() {
     }, 300); // Match the duration of the fade-out effect
   };
 
+  useEffect(() => {
+    const hash = window.location.hash; // Get the current hash from the URL
+    if (hash && document.querySelector(hash)) {
+      // Scroll to the element with the corresponding id
+      document.querySelector(hash).scrollIntoView({ behavior: "smooth" });
+    }
+  }, []); // Run once when the component is mounted
+
   return (
-    <Box sx={{ py: {xs:2, sm:20}, background:'#fff' }}>
+    <Box id="features" sx={{ py: { xs: 2, sm: 20 }, background: '#fff' }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography
           fontSize={{ xs: 20, sm: 40 }}
@@ -59,7 +66,7 @@ export default function Section3() {
                     button
                     onMouseEnter={() => handleBenefitChange(benefit)}
                     sx={{
-                      py:2,
+                      py: 2,
                       cursor: 'pointer',
                       background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
                       boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
@@ -72,7 +79,6 @@ export default function Section3() {
                     }}
                   >
                     <ListItemText
-                      // fontSize={ xs:5, sm:18 }
                       primary={benefit.title}
                       sx={{
                         '& .MuiListItemText-primary': {
@@ -88,58 +94,29 @@ export default function Section3() {
 
             {/* Right: Content */}
             <Grid item xs={12} md={7}>
-              <Box sx={{ pr: { xs:2, sm:10 }, pl: { xs:2, sm:0 }, pt: { xs:0, sm:5 }, pb: { xs:10, sm:0 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '5px', minHeight: '200px',}}>
-                <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase" >
+              <Box
+                sx={{
+                  pr: { xs: 2, sm: 10 },
+                  pl: { xs: 2, sm: 0 },
+                  pt: { xs: 0, sm: 5 },
+                  pb: { xs: 10, sm: 0 },
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: '5px',
+                  minHeight: '200px',
+                }}
+              >
+                <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase">
                   {activeBenefit.header}
                 </Typography>
-                <Typography variant="h6" sx={{ fontSize:{ xs:12, sm:18 }}}>
+                <Typography variant="h6" sx={{ fontSize: { xs: 12, sm: 18 } }}>
                   {activeBenefit.content}
                 </Typography>
               </Box>
             </Grid>
           </Grid>
         </Card>
-
-        {/* Circle */}
-        <Box
-          sx={{
-            position: 'absolute',
-            bottom: { xs: -100, sm: -150 },
-            right: { xs: '50%', md: '10%' },
-            width: { xs: 150, sm: 280 },
-            height: { xs: 150, sm: 280 },
-            borderRadius: '50%',
-            overflow: 'hidden',
-            boxShadow:
-              '12.8px 57.6px 83.2px rgba(3, 102, 254, 0.1), inset 0px 1.6px 3.2px rgba(0, 0, 0, 0.04), inset -1.6px -6.4px 6.4px rgba(0, 0, 0, 0.06), inset 1.6px 6.4px 6.4px #FFFFFF',
-            backdropFilter: 'blur(5px)',
-            zIndex: 10,
-            transition: 'opacity 0.1s ease',
-            opacity: fade ? 1 : 0,
-          }}
-        >
-          <Box
-            sx={{
-              width: '100%',
-              height: '100%',
-              padding: '20px',
-              boxSizing: 'border-box',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Image
-              src={activeBenefit.image}
-              alt={activeBenefit.title}
-              width={downMd? 100: 200}
-              height={downMd? 100: 200}
-              style={{
-                objectFit: 'contain',
-              }}
-            />
-          </Box>
-        </Box>
       </Container>
     </Box>
   );

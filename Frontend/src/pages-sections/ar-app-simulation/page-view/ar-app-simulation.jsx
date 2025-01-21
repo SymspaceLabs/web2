@@ -21,7 +21,7 @@ export default async function ArAppSimulationPageView() {
         <Section2 /> {/* 3 MOBILE SCREENS */}
         <Section3 /> {/* BENEFITS */}
         <Section4 /> {/* BANNER */}
-        <Section5 /> {/* MARQUEE */}
+        <Section5 /> {/* TESTIMONIAL MARQUEE */}
       </Box>
     </Box>
   );

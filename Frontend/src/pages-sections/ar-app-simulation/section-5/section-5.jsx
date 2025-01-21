@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
 import { Box, Typography } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
+import { useEffect, useRef } from "react";
 import TestimonialCard from "@/components/cards/TestimonialCard";
 
 const marqueeAnimation = keyframes`
@@ -30,13 +31,36 @@ const MarqueeWrapper = styled(Box)({
 });
 
 export default function Section5() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (window.location.hash === "#user_testimonials") {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
   return (
-    <Box sx={{ width: "100%", display:'flex', flexDirection:'column', alignItems:'center', py: 4, background:'#fff' }}>
-      <Box sx={{ width: "100%", maxWidth:'1200px', p:2}}>
+    <Box
+      ref={sectionRef}
+      sx={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        py: 4,
+        background: "#fff",
+      }}
+    >
+      <Box sx={{ width: "100%", maxWidth: "1200px", p: 2 }}>
         <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#434167" }}>
           What everyone is saying
         </Typography>
-        <Typography sx={{ pb: "25px" }} fontSize={{ xs: 28, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase">
+        <Typography
+          sx={{ pb: "25px" }}
+          fontSize={{ xs: 28, sm: 40 }}
+          fontFamily="Elemental End"
+          textTransform="lowercase"
+        >
           trusted by users globally
         </Typography>
       </Box>

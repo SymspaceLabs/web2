@@ -84,68 +84,25 @@ export default function Section1() {
   }, []);
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', minHeight: '80vh' }}>
-      {/* Decorative Blob centered as background */}
-      <BlobBox />
-
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', py:{ xs:10, sm:30 } }}>
       {/* Content Section */}
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Headline */}
-        <Typography sx={styles.title}>
-          SYMSPACE
+        <Typography sx={{ fontFamily: 'Elemental End', color: '#fff', fontSize: { xs: 20, sm: 35, md: 60 } }}>
+          Shaping  the  future  of<br /> accessible  ar  Commerce
         </Typography>
 
         {/* Promotional Offer */}
-        <Typography sx={{ fontSize: '16px', marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica' }}>
-          Revolutionizing the shopping experience through Augmented Reality + Artificial Intelligence
+        <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px', md: '1500px' } }}>
+          Empowering Inclusion, Sustainability, and Innovation through Augmented Reality + Artificial Intelligence
         </Typography>
 
         {/* Button group */}
         <Box sx={styles.buttonGroup}>
           <Button sx={styles.filledButton} onClick={() => router.push('/register-partner')}>
-            Join as Business
+            Get Involved
           </Button>
-          <Button sx={styles.outlinedButton} onClick={handleShowEmailInput}>
-            Join the Waitlist
-          </Button>
-        </Box>
-
-        {/* Images Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '1.5rem',
-            marginTop: '2rem',
-            width:'100%'
-          }}
-        >
-          <Box
-            component="div"
-            onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer', width: { xs: '30%', sm: 'auto' } }}
-          >
-            <LazyImage
-              alt="App Store"
-              width={292}
-              height={195}
-              src="/assets/images/app-download/app-store.png"
-            />
-          </Box>
-          <Box
-            component="div"
-            onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer', width: { xs: '35%', sm: 'auto' }  }}
-          >
-            <LazyImage
-              alt="Play Store"
-              width={292}
-              height={195}
-              src="/assets/images/app-download/play-store.png"
-            />
-          </Box>
         </Box>
 
         {/* Email Input with Animation */}

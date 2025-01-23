@@ -45,7 +45,8 @@ export const styles = {
       color: '#fff',
       fontSize: { xs: 14, sm: 18 },
       px: { xs: 2, sm: 0 },
-      textAlign: 'left',
+      textAlign: 'justify',
+      lineHeight: '30px'
     },
     buttonContainer: {
       width: '100%',

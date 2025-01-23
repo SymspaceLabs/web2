@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import GlobalImpactPageView from "@/pages-sections/global-impact/page-view";
 
 export const metadata = {
   title: "Global Impact",
@@ -9,12 +9,6 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function GadgetShopTwo() {
-  return (
-    <div className="bg-white">
-      <Box sx={{ p:5, minHeight:'250px'}}>
-
-      </Box>
-    </div>
-  );
+export default function GlobalImpact() {
+  return <GlobalImpactPageView />;
 }

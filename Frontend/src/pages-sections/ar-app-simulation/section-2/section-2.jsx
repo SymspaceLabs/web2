@@ -9,7 +9,7 @@ export default function Section2() {
 
   return (
     <ParallaxProvider>
-      <Box sx={{ background: "#fff" }}>
+      <Box >
         <Container
           sx={{
             display: "flex",
@@ -25,7 +25,7 @@ export default function Section2() {
             textTransform="lowercase"
             textAlign="center"
           >
-            revolutionizing shopping
+            revolutionizing&nbsp;&nbsp;shopping 
           </Typography>
           <Typography
             sx={{
@@ -47,7 +47,7 @@ export default function Section2() {
               flexDirection: { xs: "column", sm: "row" },
               justifyContent: "center",
               alignItems: "center",
-              mt: "50px",
+              mt: "150px",
               gap: 2,
             }}
           >

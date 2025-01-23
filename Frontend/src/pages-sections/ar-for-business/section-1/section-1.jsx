@@ -18,35 +18,20 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Grid, useTheme } from '@mui/material';
 import { section1Styles } from './styles'; // Import custom styles
-import BlobBox from '../blobBox'; // Decorative component for visual enhancement
+import BlobBox from './blobBox'; // Decorative component for visual enhancement
 
 export default function Section1() {
   const theme = useTheme(); // Access the current theme for dynamic styling
   const styles = section1Styles(theme); // Generate styles based on the theme
 
   return (
-    <Grid sx={styles.rootGrid}>
-      {/* Main container for the section */}
-      <Container sx={styles.container}>
-        {/* Decorative blob element positioned at the top-right */}
-        <BlobBox
-          sx={{
-            top: '10rem',
-            right: '15rem',
-            backgroundColor: '#0366FE',
-          }}
-        />
-
+    <Box>
+      <Container>
         {/* Content box containing text and buttons */}
-        <Box sx={styles.contentBox}>
+        <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }}>
           <Grid container spacing={4} alignItems="center">
             {/* Left column: Text content */}
-            <Grid
-              item
-              xs={12}
-              md={6}
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            >
+            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
               {/* Headline */}
               <Typography sx={styles.title}>
                 sell more <br /> with SYMSPACE
@@ -72,6 +57,6 @@ export default function Section1() {
           </Grid>
         </Box>
       </Container>
-    </Grid>
+    </Box>
   );
 }

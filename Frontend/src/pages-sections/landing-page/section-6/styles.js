@@ -26,6 +26,7 @@ export const sectionStyles = {
       fontFamily: 'Helvetica',
       color: '#fff',
       fontSize: 18,
+      lineHeight: '30px'
     },
     buttonContainer: {
       display: 'flex',

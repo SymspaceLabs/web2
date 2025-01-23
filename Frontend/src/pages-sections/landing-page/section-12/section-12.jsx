@@ -104,20 +104,25 @@ export default function Section12() {
       <Container sx={{ position: "relative", }}>
         <Box sx={{ zIndex: 2, position: 'relative', }} py={4} textAlign="center">
           <Box mb={4} overflow="hidden">
-            <Tabs
-              textColor="inherit"
-              indicatorColor="primary"
-              value={activeTab}
-              onChange={handleChange} // Triggered when a tab is selected
-              key={activeTab} // Ensure the component re-renders when the tab changes
+            <Tabs value={activeTab} onChange={handleChange}
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "#FFF", // Indicator color
+                },
+              }}
             >
-              {/* Render tab buttons dynamically based on categories */}
               {categories.map((item) => (
-                <Tab
-                  key={item.slug}
-                  label={item.title}
-                  value={item.slug}
-                  sx={{ textTransform: "none", color: "#fff" }}
+                <Tab key={item.slug} label={item.title} value={item.slug}
+                  sx={{ 
+                    textTransform: "none", 
+                    fontFamily: "Helvetica", 
+                    fontWeight: 600,
+                    fontSize: 16,
+                    color: "#BDBDBD",
+                    "&.Mui-selected": {
+                      color: "#FFFFFF",
+                    },
+                  }}
                 />
               ))}
             </Tabs>

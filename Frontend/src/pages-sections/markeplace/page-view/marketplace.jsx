@@ -73,7 +73,6 @@ export default async function MarketplacePageView() {
       <Section7 /> {/* CATALOGUE */}
       <Section8 /> {/* BENTO */}
       <Section9 /> {/* 3D Animation */}
-      {/* Uncomment Section10 if needed */}
       {/* <Section10 /> */} {/* 3D Animation */}
     </div>
   );

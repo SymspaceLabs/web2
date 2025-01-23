@@ -15,7 +15,7 @@
  *
  * @returns {JSX.Element} Rendered "AR for Business" page view
  */
-
+import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -25,13 +25,52 @@ import Section6 from "../section-6";
 
 export default async function ArForBusinessPageView() {
   return (
-    <div className="bg-white">
-      <Section1 /> {/* HERO  */}
-      <Section2 /> {/* COMPANY */}
-      <Section3 /> {/* STATS */}
-      <Section4 /> {/* BENEFITS */}
-      <Section5 /> {/* PRICING */}
-      <Section6 /> {/* BANNER */}
-    </div>
+    <Box sx={{ position:'relative', overflow:'hidden', backgroundColor: '#fff' }}>
+      {/* GRADIENT CIRCLES */}
+      <BlobBox top='5%' right={0} color="#000" width="20vw" />
+      <BlobBox top='1%' right={-150} />
+      <BlobBox top='0.5%' left={-250} color="#933FFE"/>
+      <BlobBox top='15%' right={-50} color="#933FFE" width="15vw"/>
+      <BlobBox top='15%' left={-200} width="15vw" />
+      <BlobBox top='28%' left={650} width="20vw" />
+      <BlobBox top='30%' left={300} width="20vw" color="#933FFE"/>
+      <BlobBox top='40%' right={100} width="60vw" />
+      <BlobBox top='60%' left={850} color="#933FFE"/>
+      <BlobBox top='80%' left={30} width="80vw" />
+      <BlobBox top='80%' right={-50} width="80vw" color="#933FFE" />
+
+
+      {/* CONTENT */}
+      <Box>
+        <Section1 /> {/* HERO  */}
+        <Section2 /> {/* COMPANY */}
+        <Section3 /> {/* STATS */}
+        <Section4 /> {/* BENEFITS */}
+        <Section5 /> {/* PRICING */}
+        <Section6 /> {/* BANNER */}
+      </Box>
+    </Box>
   );
+}
+
+const BlobBox = ({top=null, right=null, bottom=null, left=null, color="#0366FE", width='40vw'}) => {
+  return(
+    <Box
+      sx={{
+        position: 'absolute',
+        top: top,
+        right: right,
+        bottom: bottom,
+        left: left,
+        width: width,
+        height: width,
+        maxWidth: '500px',
+        maxHeight: '500px',
+        borderRadius: '50%',
+        filter: 'blur(150px)',
+        opacity: 0.5,
+        backgroundColor: color,
+      }}
+    />
+  )
 }

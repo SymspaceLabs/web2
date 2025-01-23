@@ -14,25 +14,13 @@
  * - Mobile-responsive typography and layout.
  */
 
-import { useTheme } from '@mui/material';
 import { Box, Container, Typography, Grid } from '@mui/material';
-import { section1Styles } from './styles';
 import BlogCard from './blog-card';
-import BlobBox from '../blobBox';
 
 export default function Section4() {
-  const theme = useTheme();
-  const styles = section1Styles(theme);
-
   return (
     <Box>
-      <Container sx={{ position: 'relative' }}>
-        {/* Animated blob elements for visual effects */}
-        <BlobBox sx={{ top: '15rem', right: '65rem', backgroundColor: '#0366FE' }} />
-        <BlobBox sx={{ top: '75rem', right: '20rem', backgroundColor: '#933FFE', animationDelay: '4s', opacity: 0.7 }} />
-        <BlobBox sx={{ top: '120rem', right: '65rem', backgroundColor: '#0366FE' }} />
-        <BlobBox sx={{ top: '170rem', right: '25rem', backgroundColor: '#933FFE', animationDelay: '4s', opacity: 0.7 }} />
-
+      <Container>
         {/* Section header */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography
@@ -55,7 +43,7 @@ export default function Section4() {
 
         {/* Render rows of content */}
         {Array.from({ length: 4 }).map((_, index) => (
-          <Box sx={styles.contentBox} key={index}>
+          <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }} key={index}>
             <Grid container spacing={4} alignItems="center">
               {/* Alternate the layout of BlogCard and video per row */}
               {index % 2 === 0 ? (
@@ -68,7 +56,7 @@ export default function Section4() {
                     />
                   </Grid>
                   <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
-                    <Box sx={styles.videoContainer}>
+                    <Box sx={{ textAlign: 'center', zIndex: 2, position: 'relative' }}>
                       <video
                         width="50%"
                         height="auto"
@@ -85,7 +73,7 @@ export default function Section4() {
               ) : (
                 <>
                   <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
-                    <Box sx={styles.videoContainer}>
+                    <Box sx={{ textAlign: 'center', zIndex: 2, position: 'relative' }}>
                       <video
                         width="50%"
                         height="auto"

@@ -14,7 +14,7 @@ import LazyImage from "../../../components/LazyImage"; // Importing a lazy-loadi
 export default function Section8() {
   return (
     // Main grid container with a light background and vertical padding
-    <Grid sx={{ background: '#EDEDED', py: 10, position: 'relative' }}>
+    <Grid sx={{ background: '#EDEDED', py: 8, position: 'relative' }}>
       {/* Floating image positioned to the left of the section */}
       <FloatingImage1 />
 
@@ -23,7 +23,6 @@ export default function Section8() {
         <Box
           sx={{
             textAlign: 'center',
-            py: 8,
             display: 'flex',
             flexDirection: 'column',
             gap: 5,
@@ -50,6 +49,7 @@ export default function Section8() {
               fontSize: 18,
               textAlign: 'justify',
               maxWidth: 900,
+              lineHeight: '30px'
             }}
           >
             Symspace's Generative AI 3D modeling SaaS serves as a collaborative

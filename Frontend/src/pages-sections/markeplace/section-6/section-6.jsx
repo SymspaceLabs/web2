@@ -152,7 +152,7 @@ export default function Section6() {
                 <TextField
                   variant="outlined"
                   placeholder={
-                    isSubmitted ? "Email has been received!" : "Enter your email"
+                    isSubmitted ? "Successfully subscribed!" : "Enter your email"
                   }
                   value={email}
                   onChange={handleEmailChange}

@@ -1,8 +1,23 @@
+import { fontSize } from "@/theme/typography";
+
 export const section1Styles = (theme) => ({
+  rootGrid: {
+    position: 'relative',
+    background: '#fff',
+    overflow: 'hidden',
+  },
+  container: {
+    position: 'relative',
+  },
+  contentBox: {
+    flexGrow: 1,
+    py: 8,
+    zIndex: 2,
+  },
   title: {
     fontFamily: 'Elemental End',
-    color: '#4E4E4E',
-    fontSize: { xs: 24, sm: 30, md: 40, lg: 50, xl: 60 },
+    color: '#fff',
+    fontSize: { xs: 50, sm: 50, md: 60 },
   },
   description: {
     fontFamily: 'Helvetica',
@@ -19,18 +34,38 @@ export const section1Styles = (theme) => ({
       gap: '10px',
     },
   },
-  outlinedButton: {
-    background: '#000',
+  filledButton: {
     fontFamily: 'Elemental End',
-    textTransform: 'lowercase',
+    textTransform:'lowercase',
+    fontSize:'16px',
+    background: '#000',
     color: '#fff',
     borderRadius: '50px',
+    border:'2px solid transparent',
     py: 2,
     px: 7.5,
     transition: 'all 0.3s ease-in-out', // Smooth transition effect
     ':hover': {
-      background: '#fff',
-      color: '#000',
+      background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
+      color: '#fff',
+      border:'2px solid white'
+    },
+  },  
+  outlinedButton: {
+    fontSize:'16px',
+    background: 'transparent',
+    fontFamily: 'Elemental End',
+    textTransform:'lowercase',
+    color: '#000',
+    borderRadius: '50px',
+    border:'2px solid black',
+    py: 2,
+    px: 7.5,
+    transition: 'all 0.3s ease-in-out', // Smooth transition effect
+    ':hover': {
+      background: 'linear-gradient(93.04deg, #696969 0%, #000000 100%)',
+      color: '#fff',
+      border:'2px solid white'
     },
   },    
   buttonText: {

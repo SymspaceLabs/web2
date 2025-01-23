@@ -18,7 +18,6 @@ import { useState } from "react";
 import { Box, Container, Typography, Grid } from "@mui/material";
 import PlanCard from "./PlanCard"; // Displays individual pricing plans.
 import PlanToggle from "./PlanToggle"; // Provides a toggle button to switch billing cycles.
-import BlobBox from "../blobBox"; // Adds animated background elements.
 
 export default function Section5() {
   const [billingCycle, setBillingCycle] = useState("monthly"); // State to track the selected billing cycle.
@@ -88,10 +87,7 @@ export default function Section5() {
 
   return (
     <Box sx={{ py: 8 }}>
-      <Container sx={{ position: "relative" }}>
-        {/* Animated background elements */}
-        <BlobBox sx={{ top: "10rem", right: "80rem", backgroundColor: "#0366FE" }} />
-        <BlobBox sx={{ top: "30rem", right: "0rem", backgroundColor: "#933FFE", animationDelay: "4s", opacity: 0.7 }} />
+      <Container>
 
         {/* Header Section */}
         <Box

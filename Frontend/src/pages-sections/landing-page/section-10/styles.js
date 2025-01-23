@@ -21,8 +21,9 @@ export const styles = {
     description: {
       maxWidth: 1200,
       fontFamily: 'Helvetica',
-      color: '#fff',
+      color: '#909090',
       fontSize: 18,
+      lineHeight: '30px'
     },
     buttonContainer: {
       width: '100%',

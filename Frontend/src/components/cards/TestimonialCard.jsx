@@ -32,23 +32,16 @@ const TestimonialCard = ({ testimonial }) => {
 
     return (
         <TestimonialWrapper>
-          <Typography
-            sx={{
-              wordWrap: "break-word", // Ensures long words break to the next line
-              overflowWrap: "break-word", // Adds additional compatibility for wrapping
-              whiteSpace: "normal", // Ensures text wraps instead of staying in one line
-            }}
-          >
+          <Typography fontFamily="Helvetica" fontSize={16} sx={{ wordWrap: "break-word", overflowWrap: "break-word", whiteSpace: "normal" }}>
             {comment}
           </Typography>
           <FlexBox gap={2} alignItems="center">
             <ImageWrapper>
               <LazyImage src={user.avatar} width={50} height={50} alt="User" />
             </ImageWrapper>
-            <div>
-              <H6 fontSize={18}>{user.name}</H6>
-              <Paragraph color="grey.600">{user.designation}</Paragraph>
-            </div>
+            <Typography fontFamily="Helvetica" fontSize={18}>
+              {user.name}
+            </Typography>
           </FlexBox>
         </TestimonialWrapper>
       );

@@ -87,7 +87,7 @@ export default function Section4() {
             textTransform="lowercase"
             textAlign="center"
           >
-            personalized experience
+            personalized&nbsp;&nbsp;experience
           </Typography>
           <Typography
             sx={{
@@ -106,7 +106,7 @@ export default function Section4() {
           </Typography>
         </Box>
 
-        <Button
+        {/* <Button
           sx={{
             boxSizing: "border-box",
             py: 2,
@@ -126,7 +126,7 @@ export default function Section4() {
           }}
         >
           Brands
-        </Button>
+        </Button> */}
 
         {/* TITLE & SUBTITLE 2 */}
         <Box>
@@ -136,7 +136,7 @@ export default function Section4() {
             textTransform="lowercase"
             textAlign="center"
           >
-            easily manage products
+            easily&nbsp;&nbsp;manage&nbsp;&nbsp;products
           </Typography>
           <Typography
             sx={{

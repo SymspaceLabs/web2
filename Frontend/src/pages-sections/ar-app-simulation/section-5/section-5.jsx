@@ -61,7 +61,7 @@ export default function Section5() {
           fontFamily="Elemental End"
           textTransform="lowercase"
         >
-          trusted by users globally
+          trusted&nbsp;&nbsp;by&nbsp;&nbsp;users&nbsp;&nbsp;globally
         </Typography>
       </Box>
 

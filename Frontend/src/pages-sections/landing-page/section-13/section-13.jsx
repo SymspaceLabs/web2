@@ -11,7 +11,7 @@ import MarqueeeSlider from "./MarqueeeSlider";
 export default async function Section13() {
   return (
     <Box sx={{ width: "100%", display:'flex', flexDirection:'column', alignItems:'center', py: 4, background:'#fff' }}>
-      <Box sx={{ width: "100%", maxWidth:'1200px', p:2}}>
+      <Box sx={{ width: "100%", maxWidth:'1600px', p:2}}>
         <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#434167" }}>
           What everyone is saying
         </Typography>

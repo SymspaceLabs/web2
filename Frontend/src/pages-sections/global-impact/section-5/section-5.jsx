@@ -51,7 +51,7 @@ const companies = [
   "/assets/images/companies/6.png",
 ];
 
-export default function Section2() {
+export default function Section5() {
   return (
     <Box sx={{ py: 3 }}>
       {/* Container for the section */}

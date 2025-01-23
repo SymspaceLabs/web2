@@ -290,10 +290,10 @@ export const Card3 = () => {
                 fontWeight: 700,
                 lineHeight: { xs: 1, sm: 1.5 },
                 wordWrap: 'break-word',
+                maxWidth:'1200px'
               }}
             >
-              The new 15‑inch MacBook Air makes room for more of what you love with a
-              spacious Liquid Retina display.
+              We are committed to breaking down barriers in digital commerce by empowering underserved communities through Augmented Reality. We strive to be AR platform that priorities accessibility, ensuring individuals with disabilities, seniors, veterans, and expectant mothers have seamless access to immersive shopping experiences. Our platform is  redefining inclusivity in online retail. Our mission is to create a world where technology adapts to the needs of every user, making digital experiences more convenient, confident, and comfortable.
             </Typography>
           </Box>
   

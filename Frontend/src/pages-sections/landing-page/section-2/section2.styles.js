@@ -42,6 +42,7 @@ export const DescriptionText = styled(Typography)(({ theme }) => ({
   fontSize: 18,
   textAlign: 'justify',
   maxWidth: 900,
+  lineHeight: '30px'
 }));
 
 export const PartnerButton = styled(Button)(({ theme }) => ({

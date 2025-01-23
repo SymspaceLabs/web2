@@ -12,8 +12,8 @@ export const Wrapper = styled("div")(({
   }
 }));
 export const ImageWrapper = styled("div")({
-  width: 50,
-  height: 50,
+  width: 75,
+  height: 75,
   flexShrink: 0,
   display: "flex",
   overflow: "hidden",

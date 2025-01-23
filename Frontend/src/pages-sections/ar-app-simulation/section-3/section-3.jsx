@@ -26,7 +26,7 @@ export default function Section3() {
   }, []); // Run once when the component is mounted
 
   return (
-    <Box id="features" sx={{ py: { xs: 2, sm: 20 }, background: '#fff' }}>
+    <Box id="features" sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography
           fontSize={{ xs: 20, sm: 40 }}
@@ -35,7 +35,7 @@ export default function Section3() {
           textAlign="center"
           mb={4}
         >
-          an app that redefines <br /> ar shopping
+          an&nbsp;&nbsp;app&nbsp;&nbsp;that&nbsp;&nbsp;redefines <br /> ar&nbsp;&nbsp;shopping
         </Typography>
 
         <Card
@@ -117,6 +117,47 @@ export default function Section3() {
             </Grid>
           </Grid>
         </Card>
+
+        {/* Circle */}
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: { xs: -100, sm: -150 },
+            right: { xs: '50%', md: '10%' },
+            width: { xs: 150, sm: 280 },
+            height: { xs: 150, sm: 280 },
+            borderRadius: '50%',
+            overflow: 'hidden',
+            boxShadow:
+              '12.8px 57.6px 83.2px rgba(3, 102, 254, 0.1), inset 0px 1.6px 3.2px rgba(0, 0, 0, 0.04), inset -1.6px -6.4px 6.4px rgba(0, 0, 0, 0.06), inset 1.6px 6.4px 6.4px #FFFFFF',
+            backdropFilter: 'blur(5px)',
+            zIndex: 10,
+            transition: 'opacity 0.1s ease',
+            opacity: fade ? 1 : 0,
+          }}
+        >
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              padding: '20px',
+              boxSizing: 'border-box',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Image
+              src={activeBenefit.image}
+              alt={activeBenefit.title}
+              width={downMd? 100: 200}
+              height={downMd? 100: 200}
+              style={{
+                objectFit: 'contain',
+              }}
+            />
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

@@ -65,10 +65,6 @@ export default function Section1() {
     setShowEmailInput(true);
   };
 
-  const handleImageClick = () => {
-    handleShowEmailInput();
-  };
-
   // Click outside to hide email input
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,8 +79,9 @@ export default function Section1() {
     };
   }, []);
 
+
   return (
-    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', py:{ xs:10, sm:30 } }}>
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', py:{ xs:10, sm:25 } }}>
       {/* Content Section */}
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
@@ -99,11 +96,13 @@ export default function Section1() {
         </Typography>
 
         {/* Button group */}
-        <Box sx={styles.buttonGroup}>
-          <Button sx={styles.filledButton} onClick={() => router.push('/register-partner')}>
-            Get Involved
-          </Button>
-        </Box>
+        {!showEmailInput &&
+          <Box sx={styles.buttonGroup}>
+            <Button sx={styles.filledButton} onClick={handleShowEmailInput}>
+              Get Involved
+            </Button>
+          </Box>
+        }
 
         {/* Email Input with Animation */}
         {showEmailInput && (

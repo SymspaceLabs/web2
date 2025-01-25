@@ -1,3 +1,20 @@
+import { keyframes } from '@mui/material/styles';
+
+const blob = keyframes`
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+`;
+
 export const styles = {
     gridContainer: {
       position: 'relative',
@@ -17,6 +34,7 @@ export const styles = {
       zIndex: 1,
       opacity: 0.3,
       filter: 'blur(80px)',
+      animation: `${blob} 7s infinite`,
     },
     contentBox: {
       position: 'relative',

@@ -18,22 +18,23 @@ const blob = keyframes`
   }
 `;
 
-export const BlobBox2 = styled(Box)(({ theme }) => ({
+const BlobBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
-  top: '15%', // Position at 15% from the top
-  left: '30%', // Center horizontally
-  transform: 'translateX(-50%)', // Correct horizontal alignment
+  top: '50%',
   width: '50vw',
   height: '50vw',
   maxWidth: '500px',
   maxHeight: '500px',
   borderRadius: '50%',
   filter: 'blur(125px)',
+  opacity: 1,
   backgroundColor: '#0366FE',
-  zIndex: 0,
   animation: `${blob} 7s infinite`,
+  zIndex:0,
   [theme.breakpoints.down('sm')]: {
     width: '80vw',
     height: '80vw',
   },
 }));
+
+export default BlobBox;

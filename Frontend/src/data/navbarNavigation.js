@@ -37,24 +37,24 @@ const navbarNavigation = [
   }, 
 
   // GLOBAL IMPACT
-  {
-    title: "Global Impact",
-    // url: '/global-impact',
-    megaMenu: false,
-    megaMenuWithSub: false,
-    child: [
-      {
-        title: "Accessibility in AR",
-        url: "/medical"
-      }, {
-        title: "Environmental Responsibility",
-        url: "/gift-shop"
-      }, {
-        title: "Community Partnerships",
-        url: "/furniture-1"
-      }
-    ]
-  }, 
+  // {
+  //   title: "Global Impact",
+  //   // url: '/global-impact',
+  //   megaMenu: false,
+  //   megaMenuWithSub: false,
+  //   child: [
+  //     {
+  //       title: "Accessibility in AR",
+  //       url: "/medical"
+  //     }, {
+  //       title: "Environmental Responsibility",
+  //       url: "/gift-shop"
+  //     }, {
+  //       title: "Community Partnerships",
+  //       url: "/furniture-1"
+  //     }
+  //   ]
+  // }, 
 
   // RESOURCES
   {
@@ -112,6 +112,9 @@ const navbarNavigation = [
       }, {
         title: "Leadership Team",
         url: "/gift-shop"
+      }, {
+        title: "Global Impact",
+        url: "/global-impact"
       }, {
         title: "Careers",
         url: "/furniture-1"

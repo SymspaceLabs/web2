@@ -8,7 +8,7 @@ import { BlobBox2 } from "./blobBox2";
 import { BlobBox } from "./blobBox";
 import Section6 from "../section-6";
 
-export default async function GlobalImpactPageView() {
+export default async function CareersPageView() {
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
       
@@ -22,11 +22,11 @@ export default async function GlobalImpactPageView() {
       {/* CONTENT */}
       <Box sx={{ zIndex:1 }}>
         <Section1 />  {/* HERO  */}
-        <Section2 />  {/* 3 GLASS CARDS */}
-        <Section3 />  {/* BENEFITS */}
-        <Section4 /> 
-        <Section5 />  {/* COMPANIES */}
-        <Section6 />  {/* BANNER */}
+        {/* <Section2 />  {/* 3 GLASS CARDS */}
+        {/* <Section3 />  {/* BENEFITS */}
+        {/* <Section4 />  {/* VIDEOS */}
+        {/* <Section5 />  {/* COMPANIES */}
+        {/* <Section6 />  {/* BANNER */}
       </Box>
     </Box>
   );

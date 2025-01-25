@@ -1,7 +1,6 @@
 import { Box, Typography, Button, Grid, Container, Hidden } from '@mui/material';
 import LazyImage from "../../../components/LazyImage"; // LOCAL CUSTOM COMPONENTS
 
-
 export const Card1 = () => {
     return (
       <Box

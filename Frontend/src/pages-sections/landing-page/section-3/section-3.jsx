@@ -1,3 +1,4 @@
+"use client"
 /**
  * Section3 Component
  *

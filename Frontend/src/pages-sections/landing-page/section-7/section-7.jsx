@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Section7 Component
  * 
@@ -8,13 +10,43 @@
  * The layout adjusts according to screen size, making the section mobile-friendly.
  */
 
-import { Box, Grid, Container } from '@mui/material'; // Importing Material-UI components for layout and styling
+import { Box, Grid, Container, keyframes } from '@mui/material'; // Importing Material-UI components for layout and styling
 import { Card1, Card2, Card3 } from './cards'; // Importing custom card components
 
 export default function Section7() {
+  const blob = keyframes`
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  `;
+
   return (
     // Main grid layout with a dark background and padding
-    <Grid sx={{ background: '#1F1F1F', pt: 10, pb: 20, height: '100%' }}>
+    <Grid sx={{ background: '#1F1F1F', pt: 10, pb: 20, height: '100%', position: 'relative' }}>
+      <Box 
+        sx={{
+          position: 'absolute',
+          top: '80%',
+          left: '10%',
+          width: { xs: '300px', sm: '400px', md: '500px' },
+          height: { xs: '300px', sm: '400px', md: '500px' },
+          background: '#FFF',
+          borderRadius: '50%',
+          zIndex: 1,
+          opacity: 0.3,
+          filter: 'blur(80px)',
+          animation: `${blob} 7s infinite`,
+        }}
+      />
       <Container sx={{ height: '100%' }}>
         {/* Nested grid layout for card arrangement */}
         <Grid container alignItems="stretch" spacing={2} sx={{ height: '100%' }}>

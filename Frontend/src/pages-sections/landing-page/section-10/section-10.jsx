@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Section10 Component
  *
@@ -12,13 +14,43 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { styles } from './styles'; // Import external styles for consistency
+import { keyframes } from '@mui/material/styles';
+
+const blob = keyframes`
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+`;
 
 export default function Section10() {
   // Blob styling for the floating background element
   const blob1 = {
     position: 'absolute', // Ensures the blob stays in a fixed position
-    top: 150, // Adjust vertical positioning
+    top: 300, // Adjust vertical positioning
     left: 50, // Adjust horizontal positioning
+    width: '450px',
+    height: '450px',
+    background: '#FFFFFF', // White color for the blob
+    borderRadius: '50%', // Ensures a circular shape
+    zIndex: 0, // Places the blob behind the main content
+    opacity: 0.3, // Makes the blob semi-transparent
+    filter: 'blur(80px)', // Adds a blurred effect for aesthetic appeal
+    animation: `${blob} 7s infinite`,
+  };
+
+  const blob2 = {
+    position: 'absolute', // Ensures the blob stays in a fixed position
+    top: 50, // Adjust vertical positioning
+    right: 50, // Adjust horizontal positioning
     width: '250px',
     height: '250px',
     background: '#FFFFFF', // White color for the blob
@@ -26,6 +58,7 @@ export default function Section10() {
     zIndex: 0, // Places the blob behind the main content
     opacity: 0.3, // Makes the blob semi-transparent
     filter: 'blur(80px)', // Adds a blurred effect for aesthetic appeal
+    animation: `${blob} 7s infinite`,
   };
 
   return (
@@ -34,6 +67,7 @@ export default function Section10() {
       {/* Background blob element for a decorative effect */}
       <Container sx={{ position: 'relative' }}>
         <Box sx={blob1} /> {/* Floating blurred blob */}
+        <Box sx={blob2} /> {/* Floating blurred blob */}
 
         {/* Main content container */}
         <Box sx={styles.container}>

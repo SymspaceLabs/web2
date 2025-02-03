@@ -1,14 +1,6 @@
 "use client";
 
-
-/**
- * Section12 Component
- * 
- * This component is responsible for displaying a section of products categorized into three tabs:
- * "New Arrival", "Best Seller", and "Featured Products". It fetches the product data from an API
- * and renders them with images, titles, categories, and discounted prices. The section also includes
- * floating background blobs for design aesthetics.
- */
+// section-12.jsx
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -18,9 +10,11 @@ import { FlexBox } from "../../../components/flex-box";
 import LazyImage from "../../../components/LazyImage";
 import { calculateDiscount, currency } from "../../../lib";
 
-export default async function Section12() {
-  const theme = useTheme();  // Get theme settings from Material UI
-  const [activeTab, setActiveTab] = useState("newArrival"); // State to track the active tab
+export default function Section12() {
+  const theme = useTheme();
+  const [activeTab, setActiveTab] = useState("newArrival");
+  const [products, setProducts] = useState([]); // State for storing products
+  const [loading, setLoading] = useState(true); // Loading state
 
   // Categories for the tabs
   const categories = [
@@ -29,19 +23,23 @@ export default async function Section12() {
     { id: 3, title: "Featured Products", slug: "featured" },
   ];
 
-  /**
-   * Fetches product data from the API and sets the products state.
-   * This function is called when the component mounts (useEffect).
-   */
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
-  const products = await response.json();
+    fetchProducts();
+  }, []); // Empty dependency array ensures it runs only once on mount
 
-  /**
-   * Handles tab change, updating the active tab state.
-   * @param {object} event - The event object.
-   * @param {string} newValue - The new active tab value.
-   */
+
   const handleChange = (event, newValue) => {
     setActiveTab(newValue); // Update active tab
   };

@@ -5,9 +5,9 @@ import FlexBox from "../../../components/flex-box/flex-box";
 import LazyImage from "../../../components/LazyImage";
 import Link from "next/link";
 import { calculateDiscount, currency } from "../../../lib"; // STYLED COMPONENTS
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import api from "../../../utils/__api__/furniture-2";
+// import api from "../../../utils/__api__/furniture-2";
 export default async function Section7() {
   // const services = await api.getServices();
   const [products, setProducts] = useState(data);

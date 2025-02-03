@@ -6,9 +6,11 @@ import LazyImage from "../../../components/LazyImage";
 import { Paragraph } from "../../../components/Typography"; 
 import { RootStyle } from "./styles"; 
 import bgImage from "../../../../public/assets/images/banners/banner-55.png"; 
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Box, Typography, Button, TextField, useMediaQuery } from "@mui/material";
 
 export default function Section6() {
+  const isMobile = useMediaQuery('(max-width:600px)');
+  
   const [showInput, setShowInput] = useState(false);
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -81,6 +83,7 @@ export default function Section6() {
 
           {!showInput && (
             <Button
+              fullWidth= { isMobile? true : false } 
               variant="contained"
               color="primary"
               onClick={handleBetaAccessClick}
@@ -90,7 +93,7 @@ export default function Section6() {
                 borderRadius: "50px",
                 py: 2,
                 px: 4,
-                mt: 4,
+                mt: { xs:0, sm:4 },
                 background:
                   "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
               }}

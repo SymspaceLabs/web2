@@ -59,10 +59,13 @@ export class BlogsService {
     return this.blogRepository.findOne({ where: { id } });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string) {
     const result = await this.blogRepository.delete(id);
+
     if (result.affected === 0) {
       throw new HttpException('Blog not found', HttpStatus.NOT_FOUND);
+    }else {
+      return { status: 'success', message: `Blog with id ${id} deleted.` };
     }
   }
 }

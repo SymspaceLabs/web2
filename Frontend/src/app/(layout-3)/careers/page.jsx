@@ -1,7 +1,7 @@
 import CareersPageView from "@/pages-sections/careers/page-view";
 
 export const metadata = {
-  title: "Global Impact",
+  title: "Careers",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

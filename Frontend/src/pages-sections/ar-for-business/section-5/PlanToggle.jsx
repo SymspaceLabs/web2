@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 
-function PlanToggle({ onChange }) {
-  const [selected, setSelected] = useState("monthly");
+function PlanToggle({ onChange, value }) {
+  const [selected, setSelected] = useState(value);
 
   const handleToggle = (value) => {
     setSelected(value);
@@ -49,7 +49,7 @@ function PlanToggle({ onChange }) {
           sx={{
             position: "absolute",
             top: 0,
-            left: selected === "monthly" ? 0 : "50%",
+            left: selected === "yearly" ? 0 : "50%",
             width: "50%",
             height: "100%",
             backgroundColor: "#2563EB",
@@ -69,13 +69,13 @@ function PlanToggle({ onChange }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            color: selected === "monthly" ? "#fff" : "#000",
-            fontWeight: selected === "monthly" ? "bold" : "normal",
+            color: selected === "yearly" ? "#fff" : "#000",
+            fontWeight: selected === "yearly" ? "bold" : "normal",
             padding: "10px 0",
           }}
-          onClick={() => handleToggle("monthly")}
+          onClick={() => handleToggle("yearly")}
         >
-          Monthly
+          Yearly
         </Box>
         <Box
           sx={{
@@ -87,13 +87,13 @@ function PlanToggle({ onChange }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            color: selected === "yearly" ? "#fff" : "#000",
-            fontWeight: selected === "yearly" ? "bold" : "normal",
+            color: selected === "monthly" ? "#fff" : "#000",
+            fontWeight: selected === "monthly" ? "bold" : "normal",
             padding: "10px 0",
           }}
-          onClick={() => handleToggle("yearly")}
+          onClick={() => handleToggle("monthly")}
         >
-          Yearly
+          Monthly
         </Box>
       </Box>
     </Box>

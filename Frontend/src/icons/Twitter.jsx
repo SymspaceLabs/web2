@@ -1,7 +1,10 @@
 "use client";
 
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
-const Twitter = createSvgIcon(<svg fill="currentcolor" viewBox="0 0 10 14">
-    <path fillRule="evenodd" clipRule="evenodd" d="M1.55556 0C2.41466 0 3.11111 0.696446 3.11111 1.55556V3.88889H7.77778C8.63689 3.88889 9.33333 4.58533 9.33333 5.44444C9.33333 6.30355 8.63689 7 7.77778 7H3.11111V8.55556C3.11111 9.84422 4.15578 10.8889 5.44444 10.8889H7.77778C8.63689 10.8889 9.33333 11.5853 9.33333 12.4444C9.33333 13.3036 8.63689 14 7.77778 14H5.44444C2.43756 14 0 11.5624 0 8.55556V1.55556C0 0.696446 0.696446 0 1.55556 0Z" fill="currentcolor" />
-  </svg>, "Twitter");
+const Twitter = createSvgIcon(
+  <svg fill="currentcolor" viewBox="0 0 24 24">
+    <path d="M18.75 0H21L14.25 9L22 24H15.75L10.75 14.75L4.5 24H2.5L10 13.5L2 0H8.5L13.1 8.5L18.75 0ZM17.5 21.5H18.75L7.5 2H6L17.5 21.5Z" />
+  </svg>,
+  "Twitter"
+);
 export default Twitter;

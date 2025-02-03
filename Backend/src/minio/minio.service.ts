@@ -54,10 +54,8 @@ export class MinioService {
   
     // Construct the URL (assuming bucket is public)
     const protocol = this.configService.get<boolean>('MINIO_USE_SSL') ? 'https' : 'http';
-    const fileUrl = `${protocol}://${this.configService.get<string>('MINIO_ENDPOINT')}:${this.configService.get<number>('MINIO_PORT')}/${this.bucketName}/${filename}`;
+    const fileUrl = `http://${this.configService.get<string>('MINIO_ENDPOINT')}:${this.configService.get<number>('MINIO_PORT')}/${this.bucketName}/${filename}`;
   
     return fileUrl;
   }
-  
-  
 }

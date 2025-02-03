@@ -18,10 +18,9 @@ import { FlexBox } from "../../../components/flex-box";
 import LazyImage from "../../../components/LazyImage";
 import { calculateDiscount, currency } from "../../../lib";
 
-export default function Section12() {
+export default async function Section12() {
   const theme = useTheme();  // Get theme settings from Material UI
   const [activeTab, setActiveTab] = useState("newArrival"); // State to track the active tab
-  const [products, setProducts] = useState([]); // State to hold the products data
 
   // Categories for the tabs
   const categories = [
@@ -34,25 +33,9 @@ export default function Section12() {
    * Fetches product data from the API and sets the products state.
    * This function is called when the component mounts (useEffect).
    */
-  const getAllProducts = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`, // API URL from environment variables
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setProducts(data); // Set fetched data into products state
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error); // Handle any errors
-    }
-  };
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
+  const products = await response.json();
 
   /**
    * Handles tab change, updating the active tab state.
@@ -92,11 +75,6 @@ export default function Section12() {
       display: 'none', // Hide blob2 on small screens
     },
   };
-
-  // Fetch product data when the component mounts
-  useEffect(() => {
-    getAllProducts();
-  }, []);
 
   return (
     <Box sx={{width: "100%", background: "#1F1F1F", py:25 }}>

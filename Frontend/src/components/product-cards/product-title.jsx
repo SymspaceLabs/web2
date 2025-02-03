@@ -1,14 +1,16 @@
 import Link from "next/link";
-import { H3 } from "../../components/Typography"; // ==============================================================
+import { H3 } from "@/components/Typography"; // ==============================================================
 
 // ==============================================================
 export default function ProductTitle({
-  title,
+  name,
   slug
 }) {
-  return <Link href={`/products/${slug}`}>
-      <H3 mb={1} ellipsis title={title} fontSize={14} fontWeight={600} className="title" color="text.secondary">
-        {title}
+  return (
+    <Link href={`/products/${slug}`}>
+      <H3 mb={1} ellipsis title={name} fontSize={14} fontWeight={600} fontFamily="Helvetica" className="title" color="#fff">
+        {name}
       </H3>
-    </Link>;
+    </Link>
+  );
 }

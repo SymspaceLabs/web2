@@ -121,7 +121,7 @@ const LoginPageView = ({ closeDialog }) => {
           value={values.email}
           onChange={handleChange}
           label="Email or Phone Number"
-          placeholder="example@mail.com"
+          placeholder="Email"
           error={!!touched.email && !!errors.email}
           helperText={touched.email && errors.email}
         />
@@ -153,12 +153,12 @@ const LoginPageView = ({ closeDialog }) => {
             name="agreement"
             sx={{ margin: 0 }}
             onChange={handleChange}
-            control={<Checkbox size="small" color="secondary" />}
-            label={<Span>Remember me</Span>}
+            control={<Checkbox size="small" color="secondary" sx={{ color:'#fff' }} />}
+            label={<Span sx={{ color:'#fff' }}>Remember me</Span>}
           />
           {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
           <Link href="/forgot-password" passHref>
-            <Span sx={{ textDecoration: 'underline', cursor: 'pointer' }}>Forgot your password?</Span>
+            <Span sx={{ textDecoration: 'underline', cursor: 'pointer', color:'#fff' }}>Forgot your password?</Span>
           </Link>
         </FlexBox>
 

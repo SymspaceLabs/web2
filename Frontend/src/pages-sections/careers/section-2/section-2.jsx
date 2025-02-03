@@ -1,130 +1,60 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { Box, Container, Typography, Grid, useMediaQuery, Card, CardContent } from "@mui/material";
+import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 
 export default function Section2() {
-  const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screens
+
+  const rows = [
+    { 
+      title: "innovation",
+      description: "The future of shopping is immersive. We push the boundaries of AI-driven 3D modeling and AR to create smarter, more intuitive experiences for consumers and brands."
+    },
+    { 
+      title: "inclusion", 
+      description: "Technology works best when it works for everyone. We prioritize accessibility-first design, ensuring individuals of all abilities, backgrounds, and circumstances can fully engage with AR commerce."
+    },
+    { 
+      title: "sustainability",
+      description: "Reducing waste starts with better technology. Our virtual try-ons, digital staging, and AI-powered modeling help brands cut down on returns, overproduction, and environmental impact."
+    },
+    { 
+      title: "empowerment",
+      description: "Convenience should never be a barrier. Whether it’s homebound shoppers, expectant mothers, or veterans, we develop tools that enhance independence and confidence in every purchase."
+    },
+    { 
+      title: "impact", 
+      description: "We don’t just build AR experiences—we create solutions that bridge gaps, remove limitations, and set new standards for inclusive digital commerce." 
+    },
+  ];
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-      <Container>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:4 }}>
+      <Box sx={{ width:'100%' }}>
+        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+          Our Core Values
+        </Typography>
         <Grid container spacing={3}>
-          {blogs.map(blog => (
-            <Grid item xs={12} sm={6} md={4} lg={4} key={blog.id}>
-              <BlogCard date={blog.createdAt} title={blog.count} subTitle={blog.subTitle} />
-            </Grid>
-          ))}
+          <Grid item xs={12}>
+            <TableContainer>
+              <Divider />
+              <Table>
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <TableRow key={index}>
+                      <TableCell sx={{ p:4, fontFamily: 'Elemental End', fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
+                        {row.title}
+                      </TableCell>
+                      <TableCell sx={{ p:4, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, }}>
+                        {row.description}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
-      </Container>
-    </Box>
-  );
-}
-
-const blogs = [
-  {
-    id: "1",
-    count: 68,
-    subTitle: "Pregnant Women Prefer Online Shopping for Convenience",
-  }, {
-    id: "2",
-    count: 66,
-    subTitle: "Shoppers are Interested in Using AR for Shopping Assistance",
-  }, {
-    id: "3",
-    count: 50,
-    subTitle: "Persons with Disabilities Shop Online for Physical Products at least Once a Week",
-  }
-];
-
-function BlogCard({ title, subTitle }) {
-  const [count, setCount] = useState(0); // Current count for the animation
-  const [isVisible, setIsVisible] = useState(false); // Tracks if the card is visible in the viewport
-  const cardRef = useRef(null); // Reference for the card element to observe
-
-  useEffect(() => {
-    // Observer callback to check if the card is in the viewport
-    const handleIntersection = (entries) => {
-      const entry = entries[0];
-      if (entry.isIntersecting) {
-        setIsVisible(true); // Mark the card as visible
-        observer.disconnect(); // Stop observing once visible to optimize performance
-      }
-    };
-
-    // Create an IntersectionObserver instance with the callback
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5, // Trigger when 50% of the card is visible
-    });
-
-    if (cardRef.current) {
-      observer.observe(cardRef.current); // Start observing the card element
-    }
-
-    return () => observer.disconnect(); // Cleanup observer when the component unmounts
-  }, []);
-
-  useEffect(() => {
-    // Only start the counting animation if the card is visible
-    if (!isVisible) return;
-
-    let start = 0;
-    const end = parseInt(title, 10); // Parse the target count value from the title prop
-    const duration = 2000; // Total duration of the animation in milliseconds
-    const incrementTime = 10; // Time interval for each increment step
-    const incrementValue = Math.ceil(end / (duration / incrementTime)); // Increment value per step
-
-    // Timer to increment the count
-    const timer = setInterval(() => {
-      start += incrementValue; // Increment the count
-      if (start >= end) {
-        start = end; // Ensure the final count matches the target
-        clearInterval(timer); // Stop the timer once the count reaches the target
-      }
-      setCount(start); // Update the count state
-    }, incrementTime);
-
-    return () => clearInterval(timer); // Cleanup timer when the effect re-runs or the component unmounts
-  }, [isVisible, title]);
-
-  return (
-    <Box
-      ref={cardRef}
-      sx={{
-        p: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '400px',
-        background: "linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)",
-        boxShadow: "0px 1px 24px -1px rgba(0, 0, 0, 0.18)",
-        backdropFilter: "blur(10px)",
-        borderRadius: "30px"
-      }}
-    >
-      <Typography
-        sx={{
-          fontFamily: 'Elemental End',
-          textTransform: 'lowercase',
-          fontSize: 96,
-          color: '#fff',
-          textAlign: 'center',
-        }}
-      >
-        {count}%
-      </Typography>
-      {/* Subtitle for additional context */}
-      <Typography
-        sx={{
-          fontFamily: 'Helvetica',
-          fontSize: 24,
-          color: '#fff',
-          textAlign: 'center',
-        }}
-      >
-        {subTitle}
-      </Typography>
-    </Box>
+      </Box>
+    </Container>
   );
 }

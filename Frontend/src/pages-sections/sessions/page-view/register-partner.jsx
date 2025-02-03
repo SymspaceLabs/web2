@@ -145,7 +145,7 @@ const RegisterPageView = () => {
           <Typography sx={{ width:'fit-content', fontFamily: 'Helvetica', fontSize: 16, color:'#fff' }}>
             Business Email
           </Typography>
-          <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email" placeholder="example@mail.com" error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+          <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email" placeholder="Email" error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
         </Box>
 
 
@@ -154,13 +154,13 @@ const RegisterPageView = () => {
             <Typography sx={{  width:'fit-content', fontFamily: 'Helvetica', fontSize: 16, color:'#fff'  }}>
               First name
             </Typography>
-            <BazaarTextField mb={1.5} fullWidth name="firstName" size="small" label="First Name" variant="outlined" onBlur={handleBlur} value={values.firstName} onChange={handleChange} placeholder="John" error={!!touched.firstName && !!errors.firstName} helperText={touched.firstName && errors.firstName} />
+            <BazaarTextField mb={1.5} fullWidth name="firstName" size="small" label="First Name" variant="outlined" onBlur={handleBlur} value={values.firstName} onChange={handleChange} placeholder="First Name" error={!!touched.firstName && !!errors.firstName} helperText={touched.firstName && errors.firstName} />
           </Box>
           <Box sx={{display:'flex', flex: 'auto', gap:1, flexDirection:'column' }}>
             <Typography sx={{  width:'fit-content', fontFamily: 'Helvetica', fontSize: 16, color:'#fff'  }}>
             Last name
             </Typography>
-            <BazaarTextField mb={1.5} fullWidth name="lastName" size="small" label="Last Name" variant="outlined" onBlur={handleBlur} value={values.lastName} onChange={handleChange} placeholder="Doe" error={!!touched.lastName && !!errors.lastName} helperText={touched.lastName && errors.lastName} />
+            <BazaarTextField mb={1.5} fullWidth name="lastName" size="small" label="Last Name" variant="outlined" onBlur={handleBlur} value={values.lastName} onChange={handleChange} placeholder="Last Name" error={!!touched.lastName && !!errors.lastName} helperText={touched.lastName && errors.lastName} />
           </Box>
         </Box>
 

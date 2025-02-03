@@ -139,7 +139,7 @@ const ForgotPasswordPage = () => {
               value={values.email}
               onChange={handleChange}
               label="Email or Phone Number"
-              placeholder="example@mail.com"
+              placeholder="Email"
               error={!!touched.email && !!errors.email}
               helperText={touched.email && errors.email}
             />

@@ -2,11 +2,8 @@ import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
-import Section4 from "../section-4";
-import Section5 from "../section-5";
 import { BlobBox2 } from "./blobBox2";
 import { BlobBox } from "./blobBox";
-import Section6 from "../section-6";
 
 export default async function CareersPageView() {
   return (
@@ -20,13 +17,10 @@ export default async function CareersPageView() {
       <BlobBox top='65%' right={-150} /> */}
 
       {/* CONTENT */}
-      <Box sx={{ zIndex:1 }}>
+      <Box sx={{ zIndex:1, width:'100%' }}>
         <Section1 />  {/* HERO  */}
-        {/* <Section2 />  {/* 3 GLASS CARDS */}
-        {/* <Section3 />  {/* BENEFITS */}
-        {/* <Section4 />  {/* VIDEOS */}
-        {/* <Section5 />  {/* COMPANIES */}
-        {/* <Section6 />  {/* BANNER */}
+        <Section2 />  {/* CORE VALUES */}
+        <Section3 />  {/* OPEN ROLES */}
       </Box>
     </Box>
   );

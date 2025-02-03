@@ -57,6 +57,9 @@ export default function PlanCard({ plan }) {
             /{plan.basis}
           </Typography>
         </Typography>
+        <Typography>
+          {plan.title!=="Starter" ? "+ $"+`${plan.credit} `+ "Each Additional Credit" : <>&nbsp;</> }
+        </Typography>
         <Button
           sx={{
             my: 5,

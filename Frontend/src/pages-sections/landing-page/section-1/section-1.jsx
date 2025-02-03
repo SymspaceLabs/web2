@@ -55,14 +55,13 @@ export default function Section1() {
         <Box sx={styles.contentBox}>
           <Grid container spacing={4} alignItems="center">
             {/* Left content: Hero text and buttons */}
-            <Grid
-              item
-              xs={12}
-              md={6}
-              sx={{ display: 'flex', flexDirection: 'column', ...fadeInUpAnimation }}
-            >
-              <Typography sx={styles.heading}>AI Powered AR Commerce</Typography>
-              <Typography sx={styles.title}>SYMSPACE</Typography>
+            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', ...fadeInUpAnimation }}>
+              <Typography sx={styles.heading}>
+                AI Powered AR Commerce
+                </Typography>
+              <Typography sx={styles.title}>
+                SYMSPACE
+              </Typography>
               <Typography sx={styles.description}>
                 Revolutionize your shopping experience through Augmented Reality.
               </Typography>

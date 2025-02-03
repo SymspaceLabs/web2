@@ -1,32 +1,39 @@
+import { FlexBox } from "../flex-box";
 import { Small } from "../Typography";
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 
 const SymTextField = ({
     title,
     value,
     onChange,
-    isEdit=true
+    multiline = false,
+    rows = 4,  // Default number of rows
+    isEdit = true,
+    placeholder=""
 }) => {
   return (
-    <>
-        <Small color="white" textAlign="left">
+    <FlexBox flexDirection="column" flex={1}>
+        <Small color="white" mb={0.5}>
             {title}
         </Small>
         <TextField
             value={value}
             onChange={onChange}
             disabled={!isEdit}
+            multiline={multiline}
+            placeholder={placeholder}
+            rows={multiline ? rows : 1}
             InputProps={{
-            style: { color: '#fff' },
-        }}
+                style: { color: '#fff' },
+            }}
             sx={{
                 background: '#000',
                 borderRadius: '5px',
                 color: '#fff',
             }}
         />
-    </>
+    </FlexBox>
   )
 }
 
-export default SymTextField
+export default SymTextField;

@@ -117,7 +117,7 @@ const navbarNavigation = [
         url: "/global-impact"
       }, {
         title: "Careers",
-        url: "/furniture-1"
+        url: "/careers"
       }
     ]
   }

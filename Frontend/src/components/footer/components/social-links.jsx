@@ -14,13 +14,13 @@ const StyledIconButton = styled(IconButton, {
   theme
 }) => ({
   margin: 4,
-  fontSize: 12,
+  fontSize: 16,
   padding: "10px",
   ...(variant === "light" && {
-    backgroundColor: "rgba(0,0,0,0.2)"
+    // backgroundColor: "rgba(0,0,0,0.2)"
   }),
   ...(variant === "dark" && {
-    backgroundColor: theme.palette.grey[700],
+    // backgroundColor: theme.palette.grey[700],
     ":hover": {
       backgroundColor: theme.palette.grey[800]
     }
@@ -32,7 +32,8 @@ const StyledIconButton = styled(IconButton, {
 
 // ==============================================================
 export default function SocialLinks({
-  variant = "light"
+  variant = "light",
+  noBg= false
 }) {
   return <FlexBox className="flex" mx={-0.625}>
       {SOCIAL_ICON_LINKS.map(({

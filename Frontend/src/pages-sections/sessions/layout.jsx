@@ -65,6 +65,17 @@ export default function AuthLayout({ children }) {
     TITLE = <LogoWithTitle title="Simulate Reality Together" subTitle="Create an account using your email" />;
   }
 
+  if (pathname === "/register-applicant") {
+    BOTTOM_CONTENT = (
+      <FlexRowCenter sx={{ fontFamily: 'Helvetica', color: '#fff', flexDirection: 'column' }} gap={1} mt={3}>
+        <Box sx={{ pt: 2, pb: 5 }}>
+          Already have an account? <BoxLink title="Sign in" href="/signin" />
+        </Box>
+      </FlexRowCenter>
+    );
+    TITLE = <LogoWithTitle title="Get started" subTitle="Fill out the form and attach your resume so we can contact you. At Symspace, you can be sure about making positive change." />;
+  }
+
   if (pathname === "/verify-email") {
       BOTTOM_CONTENT = null;
       TITLE = null;

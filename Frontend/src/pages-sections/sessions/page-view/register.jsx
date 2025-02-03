@@ -152,7 +152,7 @@ const RegisterPageView = () => {
             <Typography sx={{ width:'fit-content', fontFamily: 'Helvetica', fontSize: 16, color:'#fff' }}>
               Email
             </Typography>
-            <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email" placeholder="example@mail.com" error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+            <BazaarTextField mb={1.5} fullWidth name="email" size="small" type="email" variant="outlined" onBlur={handleBlur} value={values.email} onChange={handleChange} label="Email" placeholder="Email" error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
           </Box>
           <Box
             sx={{
@@ -177,7 +177,7 @@ const RegisterPageView = () => {
                 onBlur={handleBlur}
                 value={values.firstName}
                 onChange={handleChange}
-                placeholder="John"
+                placeholder="First Name"
                 error={!!touched.firstName && !!errors.firstName}
                 helperText={touched.firstName && errors.firstName}
               />
@@ -196,7 +196,7 @@ const RegisterPageView = () => {
                 onBlur={handleBlur}
                 value={values.lastName}
                 onChange={handleChange}
-                placeholder="Doe"
+                placeholder="Last Name"
                 error={!!touched.lastName && !!errors.lastName}
                 helperText={touched.lastName && errors.lastName}
               />

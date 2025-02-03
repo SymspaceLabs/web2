@@ -1,7 +1,7 @@
 // PAGE VIEW COMPONENT
 import { ProductSearchPageView } from "../../../../../pages-sections/product-details/page-view";
 export const metadata = {
-  title: "Product Search - Bazaar Next.js E-commerce Template",
+  title: "Product Search - Symspace E-commerce",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",
@@ -12,5 +12,5 @@ export const metadata = {
 export default async function ProductSearch({
   params
 }) {
-  return <ProductSearchPageView />;
+  return <ProductSearchPageView slug={params.slug} />;
 }

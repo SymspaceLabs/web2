@@ -1,168 +1,199 @@
-"use client";
+"use client"
 
-import React, { useState } from 'react';
-import { Box, Container, Typography, Card } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Container, Grid, Checkbox, ListItemText, InputAdornment, Typography, Divider, TextField, MenuItem, Select, useMediaQuery, FormControl } from '@mui/material';
+import styled from "@mui/material/styles/styled";
 import { FlexBox } from '@/components/flex-box';
+import { useRouter } from 'next/navigation';
+import SearchIcon from '@mui/icons-material/Search';
+import FmdGoodIcon from '@mui/icons-material/FmdGood';
+import EastIcon from '@mui/icons-material/East';
 
 export default function Section3() {
-  const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [allLocations, setAllLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
 
-  const handleBenefitChange = (benefit) => {
-    setActiveBenefit(benefit); 
-  };
+  useEffect(() => {
+    const fetchJobs = async () => {
+      let locationFilter = "";
+  
+      // Check if selectedLocation is empty or contains "All Locations" (handle remote scenario)
+      if (selectedLocation.length > 0 && !selectedLocation.includes("All Locations")) {
+        locationFilter = `&location=${encodeURIComponent(selectedLocation.join("|"))}`;
+      } else {
+        // Ensure that if no location is selected or "All Locations" is selected, fetches all jobs
+        locationFilter = ""; // No filter
+      }
+  
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/jobs?search=${encodeURIComponent(searchQuery)}${locationFilter}`
+      );
+  
+      const jobsData = await response.json();
+      setJobs(jobsData);
+      setFilteredJobs(jobsData);
+    };
+  
+    fetchJobs();
+  }, [searchQuery, selectedLocation]);
+  
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/jobs`);
+      const jobs = await response.json();
+    
+      // Extract unique locations using Set
+      const uniqueLocations = [...new Set(jobs.map((job) => job.location))];
+    
+      setAllLocations(uniqueLocations); // Update state with unique locations
+    };
+    fetchLocations(); // Run fetchLocations only once when the component mounts
+  }, []); // Empty dependency array ensures this runs only once
+  
 
   return (
     <Box sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography fontSize={{ xs: 20, sm: 40 }}
-          fontFamily="Elemental End"
-          textTransform="lowercase"
-          textAlign="center"
-          mb={4}
-          color="#fff"
-        >
-          breaking barriers
-        </Typography>
-        <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px' }, textAlign:'center', lineHeight:'20px' }}>
-          We are a more inclusive platform revolutionizing the way many people shop. Our technology assists everyone regardless of their age, gender, or disability. We believe technology should work for everyone, not just some, that’s why we’re perfecting a whole new approach. Where innovation meets accessibility—so no one is left behind.
-        </Typography>
+        <FlexBox flexDirection={isMobile? 'column': 'row'} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2}>
+          <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+            open roles
+          </Typography>
+          <FlexBox gap={2} flexDirection={isMobile? 'column': 'row'}>
+            <TextField
+              variant="outlined"
+              placeholder="Job title, skill, keyword"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start" sx={{ paddingLeft: 1 }}>
+                    <SearchIcon style={{ color: '#000', fontSize: 22 }} />
+                  </InputAdornment>
+                ),
+                style: { 
+                  color: '#000',
+                  background:"#fff",
+                  borderRadius:'25px',
+                  padding:5
+                },
+              }}
+            />
+            <FormControl sx={{ minWidth: 150, maxHeight:'47px', background: '#fff', borderRadius: '25px', position: 'relative' }}>
+              <FmdGoodIcon
+                style={{
+                  position: 'absolute',
+                  left: '15px', // Position to the left of the input
+                  top: '50%', // Vertically center the icon
+                  transform: 'translateY(-50%)',
+                  color: '#000',
+                  fontSize: 22,
+                  zIndex: 1, // Ensure the icon stays on top
+                }}
+              />
+              <Select
+                multiple
+                value={selectedLocation}
+                onChange={(e) => {
+                  const newSelection = e.target.value;
+                  if (newSelection.includes("All Locations")) {
+                    setSelectedLocation([]); // Clear all selections
+                  } else {
+                    setSelectedLocation(newSelection);
+                  }
+                }}
+                displayEmpty
+                sx={{
+                  maxHeight: "47px",
+                  minWidth: "250px",
+                  borderRadius: "25px",
+                  paddingLeft: "35px",
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "25px",
+                  },
+                }}
+                renderValue={(selected) =>
+                  selected.length ? selected.join(", ") : "All Locations"
+                }
+              >
+                <MenuItem value="All Locations">
+                  <Checkbox checked={selectedLocation.length === 0} />
+                  <ListItemText primary="All Locations" />
+                </MenuItem>
+                {allLocations.map((location, index) => (
+                  <MenuItem key={index} value={location}>
+                    <Checkbox checked={selectedLocation.includes(location)} />
+                    <ListItemText primary={location} />
+                  </MenuItem>
+                ))}
+              </Select>
 
-        <FlexBox flexDirection="column" width="100%">
-          <FlexBox
-            justifyContent="center"
-            gap={3}
-            width="100%"
-            sx={{
-              flexDirection: { xs: "column", sm: "row" }, // Column for mobile (xs), row for larger screens
-              gap: { xs: 2, sm: 3 }, // Smaller gap for mobile
-            }}
-          >
-            {benefits.slice(0, 3).map((benefit) => (
-              <Box
-                sx={textBubbleStyle}
-                onMouseEnter={() => handleBenefitChange(benefit)}
-              >
-                {benefit.title}
-              </Box>
-            ))}
-          </FlexBox>
-          <FlexBox
-            justifyContent="center"
-            gap={3}
-            width="100%"
-            sx={{
-              flexDirection: { xs: "column", sm: "row" }, // Same responsive behavior
-              gap: { xs: 2, sm: 3 },
-            }}
-          >
-            {benefits.slice(3, 6).map((benefit) => (
-              <Box
-                sx={textBubbleStyle}
-                onMouseEnter={() => handleBenefitChange(benefit)}
-              >
-                {benefit.title}
-              </Box>
-            ))}
+            </FormControl>
           </FlexBox>
         </FlexBox>
 
-
-        <Card sx={cardStyle}>
-          <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase" color="#fff" sx={{ fontSize: { xs: 20, sm: 32 } }}>
-            {activeBenefit.header}
-          </Typography>
-          <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>
-            {activeBenefit.content}
-          </Typography>
-          <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>
-            •&nbsp;&nbsp;{activeBenefit.bullet}
-          </Typography>
-        </Card>
-
+        <Grid container spacing={3}>
+          {filteredJobs.map((job, index) => (
+            <Grid item key={index} xs={12} sm={4}>
+              <JobCard key={index} job={job} />
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   );
 }
 
-const benefits = [
-  { 
-    title: 'personalized ar shopping experience',
-    header: 'try before You buy',
-    content: 'Shopping online should feel as real and personal as shopping in-store. Symspace transforms e-commerce with AI-powered AR, allowing users to try before they buy—whether it’s clothing, furniture, or home decor—by placing products directly into their environment. Our platform also provides sizing recommendations by cross referencing personal measurements, product details, and customer reviews',
-    bullet: '81% of consumers prefer brands that offer personalized shopping experiences'
-  },
-  { 
-    title: 'real-time ar product Sizing',
-    header: 'No More guessing, No More returns',
-    content: 'Size matters—especially in online shopping. Our real-time AR product sizing eliminates uncertainty by allowing customers to see exact product dimensions in their homes before making a purchase, leading to fewer returns and greater confidence',
-    bullet: 'Online returns cost retailers $305 billion annually, with sizing issues as the leading cause'
-  },
-  { 
-    title: 'advanced ar functionality',
-    header: 'Next-Level ar: Smarter, faster, More accessible',
-    content: "Symspace is setting the standard for AR shopping with true-to-size 3D products, environment scanning, and AI-powered recommendations. Our accessibility-first approach makes online shopping more inclusive, intuitive, and futuristic",
-    bullet: '85% of people with disabilities use the internet, yet most accessibility tools lack Augmented Reality'
-  },
-  { 
-    title: 'rewards program incentives',
-    header: 'earn rewards for Shopping in ar',
-    content: "Symspace turns shopping into a rewarding experience with an engaging rewards system. Users earn points for trying AR products, making purchases, and sharing experiences, which can be leveraged for discounts towards their total orders. Creating a loyalty-driven ecosystem that benefits both brands and consumers",
-    bullet: '68% of online shoppers say rewards programs influence their purchasing decisions'
-  },
-  { 
-    title: 'accessibility awareness',
-    header: 'ar-Commerce accessible for everyone',
-    content: "Underserved communities deserve better shopping experiences. Symspace prioritizes accessibility by ensuring that seniors, persons with disabilities, veterans, and expectant mothers can shop with confidence—no barriers, no limitations",
-    bullet: 'The global disability community controls $490 billion in disposable income, yet only a minority of websites and marketplaces prioritize accessibility'
-  },
-  { 
-    title: 'community support + engagement',
-    header: 'Community-driven ar Marketplace',
-    content: "Symspace isn’t just a platform—it’s a movement for inclusive digital shopping. We partner with organizations advocating for disabilities, aging populations, and maternal health, ensuring our technology serves those who need it most",
-    bullet: 'Information Technology & Innovation Foundation highlighted that AR/VR technologies can serve as assistive tools, making physical environments more accessible for individuals with disabilities'
-  },
-];
-
-const cardStyle = {
-  filter: 'drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.25))',
-  borderRadius: '50px',
-  position: 'relative',
-  width: '100%',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
+const CardWrapper = styled(Box)(({ theme }) => ({
+  background: 'rgba(255, 255, 255, 0.35)',
+  boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
+              inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
+              inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
+              inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
+              inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
   backdropFilter: 'blur(10.0285px)',
-  background: 'rgba(255, 255, 255, 0.35)',
-  p:{ xs:5, sm:10 },
-  display:'flex',
-  flexDirection:'column',
-  gap:'10px',
-  mt:5,
-  width:{ xs:'100%', sm:'75%' }
-}
-
-const textBubbleStyle = {
-  py: 2,
-  cursor: 'pointer',
-  mb: 2,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  '&:hover': {
-    background: 'rgba(3, 102, 254, 0.6)',
+  borderRadius: "40px",
+  padding: "35px",
+  width: "100%",
+  height: "auto",
+  flexShrink: 0,
+  display: "flex",
+  flexDirection: "column",
+  overflow: "hidden",
+  cursor: "pointer", // Default pointer cursor
+  transition: "transform 0.2s ease, box-shadow 0.2s ease", // Smooth transitions
+  "&:hover": {
+    boxShadow: `0px 4px 10px rgba(0, 0, 0, 0.25)`, // Add an outer shadow on hover
+    cursor: "pointer", // Ensure pointer cursor on hover
   },
-  background: 'rgba(255, 255, 255, 0.35)',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  borderRadius: '80px',
-  px:3,
-  color: '#fff'
-}
+  [theme.breakpoints.up("sm")]: {
+    height: "200px",
+  },
+}));
+
+const JobCard = ({ job }) => {
+  const router = useRouter(); // Initialize the router
+
+  const handleCardClick = () => {
+    router.push(`/careers/${job.id}`); // Navigate to the job details page
+  };
+
+  return (
+    <CardWrapper onClick={handleCardClick}> {/* Attach click handler */}
+      <Typography textTransform="uppercase" color="#fff" fontFamily="Helvetica" fontSize={16} sx={{ py: 1 }}>
+        {job.location}
+      </Typography>
+      <Divider />
+      <Typography color="#fff" fontFamily="Elemental End" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+        {job.title}
+      </Typography>
+      <FlexBox justifyContent="flex-end">
+        <EastIcon sx={{ color:'#fff' }} />
+      </FlexBox>
+    </CardWrapper>
+  );
+};

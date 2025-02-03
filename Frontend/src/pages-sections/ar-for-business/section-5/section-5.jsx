@@ -20,7 +20,7 @@ import PlanCard from "./PlanCard"; // Displays individual pricing plans.
 import PlanToggle from "./PlanToggle"; // Provides a toggle button to switch billing cycles.
 
 export default function Section5() {
-  const [billingCycle, setBillingCycle] = useState("monthly"); // State to track the selected billing cycle.
+  const [billingCycle, setBillingCycle] = useState("yearly"); // State to track the selected billing cycle.
 
   // Array of pricing plans with features, dynamically updating based on billing cycle.
   const plans = [
@@ -29,6 +29,7 @@ export default function Section5() {
       subTitle: "No Commitment",
       price: billingCycle === "monthly" ? "$20" : "$200",
       basis: billingCycle === "monthly" ? "month" : "year",
+      credit:0,
       features: [
         "One 3D Product Render",
         "Unlimited Product Variants",
@@ -39,8 +40,9 @@ export default function Section5() {
     {
       title: "Standard",
       subTitle: "Most popular",
-      price: billingCycle === "monthly" ? "$20" : "$200",
+      price: billingCycle === "monthly" ? "$150" : "$1,700",
       basis: billingCycle === "monthly" ? "month" : "year",
+      credit:18,
       features: [
         "10 3D Product Renders",
         "Unlimited Product Variants",
@@ -52,9 +54,10 @@ export default function Section5() {
     {
       title: "Plus",
       subTitle: "No Commitment",
-      price: billingCycle === "monthly" ? "$30" : "$300",
+      price: billingCycle === "monthly" ? "$300" : "$3,400",
       basis: billingCycle === "monthly" ? "month" : "year",
-      isPopular: true, // Highlighted as the popular plan.
+      isPopular: true,
+      credit:15,
       features: [
         "20 3D Product Renders",
         "Unlimited Product Variants",
@@ -67,8 +70,9 @@ export default function Section5() {
     {
       title: "Premium",
       subTitle: "No Commitment",
-      price: billingCycle === "monthly" ? "$30" : "$300",
+      price: billingCycle === "monthly" ? "$800" : "$9,200",
       basis: billingCycle === "monthly" ? "month" : "year",
+      credit:12,
       features: [
         "60 3D Product Renders",
         "Unlimited Product Variants",
@@ -120,14 +124,17 @@ export default function Section5() {
           </Box>
 
           {/* Toggle Button */}
-          <PlanToggle onChange={handleBillingCycleChange} />
+          <PlanToggle
+            onChange={handleBillingCycleChange}
+            value={billingCycle}
+          />
         </Box>
 
         {/* Plans Section */}
         <Grid container spacing={4} justifyContent="center">
           {plans.map((plan) => (
             <Grid item xs={12} sm={6} md={3} key={plan.title}>
-              <PlanCard plan={plan} /> {/* Render individual plan details */}
+              <PlanCard plan={plan} />
             </Grid>
           ))}
         </Grid>

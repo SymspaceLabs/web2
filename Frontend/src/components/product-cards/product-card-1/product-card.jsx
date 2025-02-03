@@ -22,7 +22,7 @@ import { ImageWrapper, ContentWrapper, StyledBazaarCard } from "./styles"; // ==
 export default function ProductCard1({
   id,
   slug,
-  title,
+  name,
   price,
   imgUrl,
   rating = 5,
@@ -46,7 +46,7 @@ export default function ProductCard1({
       slug,
       price,
       imgUrl,
-      name: title,
+      name: name,
       qty: (cartItem?.qty || 0) + 1
     };
     handleCartAmountChange(product);
@@ -58,72 +58,55 @@ export default function ProductCard1({
       slug,
       price,
       imgUrl,
-      name: title,
+      name: name,
       qty: (cartItem?.qty || 0) - 1
     };
     handleCartAmountChange(product, "remove");
   };
 
-  return <StyledBazaarCard hoverEffect={hoverEffect}>
+  return (
+    <StyledBazaarCard hoverEffect={hoverEffect}>
       <ImageWrapper>
-        {
-        /* DISCOUNT PERCENT CHIP IF AVAILABLE */
-      }
+        
+        {/* DISCOUNT PERCENT CHIP IF AVAILABLE */}
         <DiscountChip discount={discount} />
 
-        {
-        /* HOVER ACTION ICONS */
-      }
+        {/* HOVER ACTION ICONS */}
         <HoverActions isFavorite={isFavorite} toggleView={toggleDialog} toggleFavorite={toggleFavorite} />
 
-        {
-        /* PRODUCT IMAGE / THUMBNAIL */
-      }
+        {/* PRODUCT IMAGE / THUMBNAIL */}
         <Link href={`/products/${slug}`}>
-          <LazyImage priority src={imgUrl} width={500} height={500} alt={title} />
+          <LazyImage priority src={imgUrl} width={500} height={500} alt={name} />
         </Link>
       </ImageWrapper>
 
-      {
-      /* PRODUCT VIEW DIALOG BOX */
-    }
-      <ProductViewDialog openDialog={openModal} handleCloseDialog={toggleDialog} product={{
-      title,
-      price,
-      id,
-      slug,
-      imgGroup: [imgUrl, imgUrl]
-    }} />
+      {/* PRODUCT VIEW DIALOG BOX */}
+      <ProductViewDialog 
+        openDialog={openModal} 
+        handleCloseDialog={toggleDialog} 
+        product={{ name, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+      />
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          {
-          /* PRODUCT NAME / TITLE */
-        }
-          <ProductTitle title={title} slug={slug} />
+          {/* PRODUCT NAME / TITLE */}
+          <ProductTitle name={name} slug={slug} />
 
-          {
-          /* PRODUCT RATINGS IF AVAILABLE */
-        }
+          {/* PRODUCT RATINGS IF AVAILABLE */}
           {!hideRating ? <Rating size="small" value={rating} color="warn" readOnly /> : null}
 
-          {
-          /* PRODUCT SIZE IF AVAILABLE */
-        }
+          {/* PRODUCT SIZE IF AVAILABLE */}
           {showProductSize ? <Span color="grey.600" mb={1} display="block">
               Liter
             </Span> : null}
 
-          {
-          /* PRODUCT PRICE WITH DISCOUNT */
-        }
+          {/* PRODUCT PRICE WITH DISCOUNT */}
           <ProductPrice discount={discount} price={price} />
         </Box>
 
-        {
-        /* PRODUCT QUANTITY HANDLER BUTTONS */
-      }
+        {/* PRODUCT QUANTITY HANDLER BUTTONS */}
         <QuantityButtons quantity={cartItem?.qty || 0} handleIncrement={handleIncrementQuantity} handleDecrement={handleDecrementQuantity} />
       </ContentWrapper>
-    </StyledBazaarCard>;
+    </StyledBazaarCard>
+  );
 }

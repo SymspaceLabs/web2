@@ -8,7 +8,7 @@ import { BlobBox } from "./blobBox";
 import { useState } from "react";
 
 export default async function ContactUsPageView() {
-  const [isSubmitted, setIsSubmitted] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>

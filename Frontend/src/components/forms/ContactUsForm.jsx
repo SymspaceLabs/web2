@@ -52,7 +52,9 @@ function ContactUsForm ({
                     'Book a Demo',
                     'Getting Started',
                     'Help with Symspace Platform',
-                    'Careers'
+                    'Investor Relations',
+                    'Careers',
+                    'Other'
                 ]}
             />
             <SymTextField title="Message" value={message} placeholder="Enter your message here" onChange={handleMessageChange} multiline={true} />

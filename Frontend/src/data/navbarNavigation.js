@@ -57,27 +57,27 @@ const navbarNavigation = [
   // }, 
 
   // RESOURCES
-  {
-    title: "Resources",
-    // url: '/global-impact',
-    megaMenu: false,
-    megaMenuWithSub: false,
-    child: [
-      {
-        title: "How It Works",
-        url: "/medical"
-      }, {
-        title: "Case Studies",
-        url: "/gift-shop"
-      }, {
-        title: "Blog & Insights",
-        url: "/furniture-1"
-      }, {
-        title: "Press Releases",
-        url: "/furniture-1"
-      }
-    ]
-  }, 
+  // {
+  //   title: "Resources",
+  //   // url: '/global-impact',
+  //   megaMenu: false,
+  //   megaMenuWithSub: false,
+  //   child: [
+  //     {
+  //       title: "How It Works",
+  //       url: "/medical"
+  //     }, {
+  //       title: "Case Studies",
+  //       url: "/gift-shop"
+  //     }, {
+  //       title: "Blog & Insights",
+  //       url: "/furniture-1"
+  //     }, {
+  //       title: "Press Releases",
+  //       url: "/articles"
+  //     }
+  //   ]
+  // }, 
 
   // PARTNER
   {
@@ -92,10 +92,11 @@ const navbarNavigation = [
       }, {
         title: "Pricing & Packages",
         url: "/gift-shop"
-      }, {
-        title: "Onboarding",
-        url: "/furniture-1"
-      }
+      },
+      // {
+      //   title: "Onboarding",
+      //   url: "/furniture-1"
+      // }
     ]
   }, 
 
@@ -107,17 +108,17 @@ const navbarNavigation = [
     megaMenuWithSub: false,
     child: [
       {
-        title: "Our Story & Mission",
-        url: "/medical"
-      }, {
         title: "Leadership Team",
-        url: "/gift-shop"
+        url: "/about-us#team"
       }, {
         title: "Global Impact",
         url: "/global-impact"
       }, {
+        title: "Contact Us",
+        url: "/contact-us"
+      }, {
         title: "Careers",
-        url: "/careers"
+        url: "/about-us#careers"
       }
     ]
   }

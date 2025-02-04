@@ -13,8 +13,29 @@ import EastIcon from '@mui/icons-material/East';
 
 export default async function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/jobs`);
-  const jobs = await response.json();
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/jobs`);
+        if (!response.ok) throw new Error("Failed to fetch jobs");
+        const data = await response.json();
+        setJobs(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  if (loading) return <Typography color="#fff">Loading...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
   
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>

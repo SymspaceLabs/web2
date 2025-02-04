@@ -28,23 +28,26 @@ import { Span } from "../../../components/Typography";
 import { FlexBox } from "../../../components/flex-box";
 import BazaarTextField from "../../../components/BazaarTextField";
 import { Box, Typography, Button } from '@mui/material';
-import RegisterApplicantForm from "@/components/forms/JobForm";
+import JobForm from "@/components/forms/JobForm";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 const RegisterApplicantPageView = () => {
 
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
-  const [linkedin, setLinkedin] = useState('');
-  const [role, setRole] = useState('');
-  const [comments, setComments] = useState('');
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [isChecked, setIsChecked] = useState(false);
-  const [isValid, setIsValid] = useState(true);
-  const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useAuth();
+  
+    const [loading, setLoading] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [linkedInUrl, setLinkedInUrl] = useState('');
+    const [role, setRole] = useState('');
+    const [comments, setComments] = useState('');
+    const [uploadedFile, setUploadedFile] = useState('');
+    const [isChecked, setIsChecked] = useState(false);
+    const [isValid, setIsValid] = useState(true);
 
 
   const buttonStyles = useMemo(() => ({
@@ -68,56 +71,56 @@ const RegisterApplicantPageView = () => {
   }), [isValid]);
 
   const handleSubmit = async () => {
-    setLoading(true);
+  //   setLoading(true);
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/contact-us`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          topic,
-          message
-        }),
-      });
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/contact-us`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         firstName,
+  //         lastName,
+  //         email,
+  //         topic,
+  //         message
+  //       }),
+  //     });
 
-      const data = await response.json();
-      if (response.ok) {
-        showSnackbar("Your enquiry has been received!", "success");
-        clearForm();
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       showSnackbar("Your enquiry has been received!", "success");
+  //       clearForm();
 
-      } else {
-        showSnackbar(data.message, "error");
-      }
-    } catch (error) {
-      showSnackbar('Network error. Please try again.', "error");
-    }
+  //     } else {
+  //       showSnackbar(data.message, "error");
+  //     }
+  //   } catch (error) {
+  //     showSnackbar('Network error. Please try again.', "error");
+  //   }
 
-    setLoading(false);
+  //   setLoading(false);
   };
 
-  useEffect(() => {
-    setIsValid(
-        firstName && 
-        lastName && 
-        email && 
-        password &&
-        repeatPassword &&
-        linkedin &&
-        role &&
-        comments &&
-        isChecked
-    );
-  }, [firstName, lastName, email, password, repeatPassword, linkedin, role, comments, isChecked]);
+  // useEffect(() => {
+  //   setIsValid(
+  //       firstName && 
+  //       lastName && 
+  //       email && 
+  //       password &&
+  //       repeatPassword &&
+  //       linkedin &&
+  //       role &&
+  //       comments &&
+  //       isChecked
+  //   );
+  // }, [firstName, lastName, email, password, repeatPassword, linkedin, role, comments, isChecked]);
 
 
 
   return (
     <Box>
-      <RegisterApplicantForm
+      <JobForm
         email={email}
         setEmail={setEmail}
         firstName={firstName}
@@ -128,8 +131,8 @@ const RegisterApplicantPageView = () => {
         setPassword={setPassword}
         repeatPassword={repeatPassword}
         setRepeatPassword={setRepeatPassword}
-        linkedin={linkedin}
-        setLinkedin={setLinkedin}
+        linkedInUrl={linkedInUrl}
+        setLinkedInUrl={setLinkedInUrl}
         role={role}
         setRole={setRole}
         comments={comments}
@@ -138,6 +141,7 @@ const RegisterApplicantPageView = () => {
         setUploadedFile={setUploadedFile}
         isChecked={isChecked}
         setIsChecked={setIsChecked}
+        isAuthenticated={isAuthenticated}
       />
       <Button 
         sx={buttonStyles} 

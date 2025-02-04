@@ -29,6 +29,7 @@ const SymDropdown = ({
                     ".MuiSelect-select": {
                         paddingTop: '4px',
                         paddingBottom: '4px',
+                        minHeight:'30px'
                     },
                     "& .MuiPopover-root": {
                         zIndex: 1400,

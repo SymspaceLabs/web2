@@ -29,6 +29,8 @@ import { PreferencesModule } from './preferences/preferences.module';
 import { PotentialUsersModule } from './potential-users/potential-users.module';
 import { JobsModule } from './jobs/jobs.module';
 import { ContactUsModule } from './contact-us/contact-us.module';
+import { JobApplicationsModule } from './job-applications/job-applications.module';
+import { ResumesModule } from './resumes/resumes.module';
 
 @Module({
   imports: [
@@ -74,6 +76,8 @@ import { ContactUsModule } from './contact-us/contact-us.module';
     PotentialUsersModule,
     JobsModule,
     ContactUsModule,
+    JobApplicationsModule,
+    ResumesModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

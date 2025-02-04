@@ -27,10 +27,8 @@ const SymDropdown = ({
                     color: value=""? "rgba(255, 255, 255, 0.1)": "#fff",
                     width: "100%",
                     ".MuiSelect-select": {
-                        paddingTop: '8px',
-                        paddingRight: '32px', // Add space for the dropdown icon
-                        paddingBottom: '8px',
-                        paddingLeft: '10px',
+                        paddingTop: '4px',
+                        paddingBottom: '4px',
                     },
                     "& .MuiPopover-root": {
                         zIndex: 1400,

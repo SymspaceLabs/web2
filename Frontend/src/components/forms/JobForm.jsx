@@ -1,12 +1,10 @@
-import React, { useRef } from "react";
 import { FlexBox } from '../flex-box';
-import { SymTextField } from '@/components/custom-inputs';
+import { SymTextField, SymMultiFileUploader } from '@/components/custom-inputs';
 import SymDropdown from '@/components/custom-inputs/SymDropdown';
 import SymCheckbox from '@/components/custom-inputs/SymCheckbox';
 import { Span } from '../Typography';
 import BoxLink from '@/pages-sections/sessions/components/box-link';
-import { useMediaQuery, Typography } from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useMediaQuery } from '@mui/material';
 
 function JobForm ({
     email,
@@ -19,8 +17,8 @@ function JobForm ({
     setPassword,
     repeatPassword,
     setRepeatPassword,
-    linkedin,
-    setLinkedin,
+    linkedInUrl,
+    setLinkedInUrl,
     role,
     setRole,
     comments,
@@ -28,7 +26,8 @@ function JobForm ({
     uploadedFile,
     setUploadedFile,
     isChecked,
-    setIsChecked
+    setIsChecked,
+    isAuthenticated
 }) {
     const isMobile = useMediaQuery('(max-width:600px)');
     
@@ -37,20 +36,11 @@ function JobForm ({
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handlePasswordChange = (event) => setPassword(event.target.value);
     const handleRepeatPasswordChange = (event) => setRepeatPassword(event.target.value);
-    const handleLinkedinChange = (event) => setLinkedin(event.target.value);
+    const handleLinkedInChange = (event) => setLinkedInUrl(event.target.value);
     const handleRoleChange = (event) => setRole(event.target.value);
     const handleCommentsChange = (event) => setComments(event.target.value);
     const handleAgreementChange = (event) => setIsChecked(event.target.checked);
-    const handleFileChange = (event) => setUploadedFile(event.target.files[0]);
-
-    const fileInputRef = useRef(null);
-    const handleUploadClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // Trigger file input click
-        }
-    };
-
-    
+      
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             {/* ROW 1 */}
@@ -63,50 +53,59 @@ function JobForm ({
             </FlexBox>
 
             {/* ROW 3 */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
-                <SymTextField title="Password" value={password} placeholder="******" onChange={handlePasswordChange} />
-                <SymTextField title="Repeat password" value={repeatPassword} placeholder="******" onChange={handleRepeatPasswordChange} />
-            </FlexBox>
-
+            {!isAuthenticated &&
+                <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+                    <SymTextField title="Password" value={password} placeholder="******" onChange={handlePasswordChange} />
+                    <SymTextField title="Repeat password" value={repeatPassword} placeholder="******" onChange={handleRepeatPasswordChange} />
+                </FlexBox>
+            }
+            
             {/* ROW 4 */}
             <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
-                <SymTextField title="Linkedin" value={linkedin} placeholder="Linkedin URL" onChange={handleLinkedinChange} />
-                <SymDropdown title="Role" value={role} onChange={handleRoleChange} options={roleOptions} />
+                <SymTextField title="LinkedIn" value={linkedInUrl} placeholder="Linkedin URL" onChange={handleLinkedInChange} />
+                <SymDropdown title="Role" value={role} onChange={handleRoleChange} options={[role]} isEdit={true} />
             </FlexBox>
 
             
             <SymTextField title="Comment" value={comments} placeholder="Enter Comment here" onChange={handleCommentsChange} multiline={true} />
 
             {/* File Upload Field */}
-            <FlexBox flexDirection="column" gap={1}>
-                <label style={{ color: "#fff", fontWeight: "bold" }}>Upload Resume</label>
-                <input type="file" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+            <SymMultiFileUploader
+                title="Upload Resume"
+                setUploadedFile={setUploadedFile}
+                uploadedFile={uploadedFile}
+            />
 
-                {/*Click here to upload*/}
-                <FlexBox justifyContent="center" gap={1} sx={{ background: '#000', width: '100%', p: 2, borderRadius: '5px', cursor: 'pointer' }} onClick={handleUploadClick}>
-                    <CloudUploadIcon style={{ color: '#fff', fontSize: 22 }} />
-                    <Typography fontFamily='Elemental End' color="#fff" height={10}>
-                        Upload files
-                    </Typography>
-                </FlexBox>
-                {uploadedFile && <Span>{uploadedFile.name}</Span>}
-            </FlexBox>
-
-            <SymCheckbox onChange={handleAgreementChange} checked={isChecked} content={<Span display={{ color:'#fff', sm: "inline-block" }}>By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.</Span>} />
+            <SymCheckbox onChange={handleAgreementChange} checked={isChecked} content={<Span display={{ color:'#fff', sm: "inline-block" }}>
+                By clicking Submit, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.</Span>}
+            />
         </FlexBox>
     );
 }
 
 export default JobForm;
 
-const roleOptions = [
-    '3D Product Creation',
-    'AR Marketplace',
-    'Staging Homes/Rentals',
-    'Plans and Pricing Information',
-    'FAQs',
-    'Book a Demo',
-    'Getting Started',
-    'Help with Symspace Platform',
-    'Careers'
-]
+// const roleOptions = [
+//     '3D Product Creation',
+//     'AR Marketplace',
+//     'Staging Homes/Rentals',
+//     'Plans and Pricing Information',
+//     'FAQs',
+//     'Book a Demo',
+//     'Getting Started',
+//     'Help with Symspace Platform',
+//     'Careers'
+// ]
+
+const fileCardStyle = {
+    width: '100%',
+    p: 1, 
+    borderRadius: '8px',
+    boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
+    fontFamily: 'Elemental End',
+    background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
+    color: '#fff',
+    fontSize:'20px',
+    fontWeight:400,
+    border:'1px solid #FFF'
+}

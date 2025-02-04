@@ -7,13 +7,11 @@ import Section2 from "../section-2";
 import Section3 from "../section-3";
 import { BlobBox2 } from "./blobBox2";
 import { BlobBox } from "./blobBox";
-import DialogDrawer from "@/components/header/components/dialog-drawer";
 import JobApplicationDialog from "@/components/dialog/JobApplicationDialog";
 
 export default function CareerDetailsPageView({ jobId }) {
   const [job, setJob] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -25,11 +23,10 @@ export default function CareerDetailsPageView({ jobId }) {
         console.error("Error fetching job data:", error);
       }
     };
-
     fetchJob();
   }, [jobId]);
 
-  const toggleDialog = () => setShowPopup((state) => !state);
+  const toggleDialog = () => setDialogOpen((state) => !state);
 
   if (!job) return <p>Loading...</p>;
 
@@ -51,10 +48,10 @@ export default function CareerDetailsPageView({ jobId }) {
       </Box>
 
       {/* Dialog */}
-      {showPopup && (
+      {dialogOpen && (
         <JobApplicationDialog
-          open={showPopup}
-          onClose={() => setShowPopup(false)}
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
           job={job}
         />
       )}

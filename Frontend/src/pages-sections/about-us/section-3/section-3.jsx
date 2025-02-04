@@ -32,7 +32,7 @@ export default function Section3() {
 
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:2 }}>
-      <Box sx={{ width:'100%', maxWidth:'1300px' }}>
+      <Box sx={{ width:'100%', maxWidth:'1400px' }}>
         <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
           backed  by  industry  leaders
         </Typography>

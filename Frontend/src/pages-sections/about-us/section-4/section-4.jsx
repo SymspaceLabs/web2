@@ -2,7 +2,7 @@
 
 import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 
-export default function Section2() {
+export default function Section4() {
 
   const rows = [
     { 
@@ -28,9 +28,9 @@ export default function Section2() {
   ];
 
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:4 }}>
-      <Box sx={{ width:'100%', maxWidth:'1300px' }}>
-        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{sm:10} }}>
+      <Box sx={{ width:'100%', maxWidth:'1400px' }}>
+        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
           Our Core Values
         </Typography>
         <Grid container spacing={3}>
@@ -41,10 +41,10 @@ export default function Section2() {
                 <TableBody>
                   {rows.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell sx={{ p:4, fontFamily: 'Elemental End', fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
+                      <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Elemental End', fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
                         {row.title}
                       </TableCell>
-                      <TableCell sx={{ p:4, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, }}>
+                      <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, textAlign:'justify' }}>
                         {row.description}
                       </TableCell>
                     </TableRow>

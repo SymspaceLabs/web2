@@ -29,7 +29,7 @@ export default function Section2() {
 
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
-      <Box sx={{ width:'100%', maxWidth:'1300px' }}>
+      <Box sx={{ width:'100%', maxWidth:'1400px' }}>
         <Typography sx={{ borderBottom:'1px solid white', py:1, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
           our  Mission
         </Typography>

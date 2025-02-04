@@ -30,7 +30,7 @@ export default function Section2() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:4 }}>
       <Box sx={{ width:'100%' }}>
-        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
           Our Core Values
         </Typography>
         <Grid container spacing={3}>
@@ -44,7 +44,7 @@ export default function Section2() {
                       <TableCell sx={{ p:4, fontFamily: 'Elemental End', fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
                         {row.title}
                       </TableCell>
-                      <TableCell sx={{ p:4, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, }}>
+                      <TableCell sx={{ p:4, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, textAlign:'justify' }}>
                         {row.description}
                       </TableCell>
                     </TableRow>

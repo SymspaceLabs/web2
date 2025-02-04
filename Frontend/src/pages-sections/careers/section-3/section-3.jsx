@@ -156,7 +156,7 @@ const CardWrapper = styled(Box)(({ theme }) => ({
               inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
               inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
   backdropFilter: 'blur(10.0285px)',
-  borderRadius: "40px",
+  borderRadius: "30px",
   padding: "35px",
   width: "100%",
   height: "auto",

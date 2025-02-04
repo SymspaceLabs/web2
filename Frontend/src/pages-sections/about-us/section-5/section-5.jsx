@@ -17,24 +17,23 @@ export default function Section5() {
 
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
-      <Box sx={{ width:'100%', maxWidth:'1300px' }}>
-        
-        <FlexBetween mt={10} mb={5}>
-        {/* Section title */}
-        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
-          our  leadership  team
-        </Typography>
+      <Box sx={{ width:'100%', maxWidth:'1400px' }}>
+        <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
+          {/* Section title */}
+          <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff' }}>
+            our  leadership  team
+          </Typography>
 
-        {/* Navigation buttons for the carousel */}
-        <div>
-          <IconButton onClick={handlePrev}>
-            <ArrowBackIosIcon fontSize="large" sx={{ color:"#fff" }}  />
-          </IconButton>
-          <IconButton onClick={handleNext}>
-            <ArrowForwardIosIcon fontSize="large" sx={{ color:"#fff" }} />
-          </IconButton>
-        </div>
-      </FlexBetween>
+          {/* Navigation buttons for the carousel */}
+          <FlexBox justifyContent="space-between" maxWidth="90px" >
+            <IconButton onClick={handlePrev}>
+              <ArrowBackIosIcon fontSize="large" sx={{ color:"#fff" }}  />
+            </IconButton>
+            <IconButton onClick={handleNext}>
+              <ArrowForwardIosIcon fontSize="large" sx={{ color:"#fff" }} />
+            </IconButton>
+          </FlexBox>
+        </FlexBox>
 
         {/* Carousel displaying staffs */}
         <Carousel spaceBetween={20} ref={carouselRef} slidesToShow={4} responsive={responsive} arrows={false}>

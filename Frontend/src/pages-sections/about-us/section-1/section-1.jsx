@@ -25,7 +25,7 @@ export default function Section1() {
 
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
-      <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1300px' }}>
+      <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1400px' }}>
         <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 45 }, color: '#fff' }}>
           simulating  reality  with  technology that  brings  spaces  to  life
         </Typography>

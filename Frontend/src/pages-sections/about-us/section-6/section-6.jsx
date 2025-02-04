@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { FlexBox } from '@/components/flex-box';
 import EastIcon from '@mui/icons-material/East';
 
-export default async function Section6() {
+export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);

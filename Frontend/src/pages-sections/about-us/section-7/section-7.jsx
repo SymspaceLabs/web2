@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
@@ -11,10 +12,23 @@ import { useRouter } from 'next/navigation';
 import LazyImage from "@/components/LazyImage";
 import { FlexBox } from '@/components/flex-box';
 
-export default async function Section6() {
+export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blogs`);
-  const blogs = await response.json();
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blogs`);
+        const data = await response.json();
+        setBlogs(data);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
   
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', pb:4 }}>
@@ -77,7 +91,7 @@ const BlogCard = ({ blog }) => {
   const router = useRouter(); // Initialize the router
 
   const handleCardClick = () => {
-    router.push(`/careers/${blog.id}`); // Navigate to the blog details page
+    router.push(`/articles/${blog.slug}`); // Navigate to the blog details page
   };
 
   return (

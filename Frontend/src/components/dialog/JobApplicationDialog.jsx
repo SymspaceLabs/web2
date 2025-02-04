@@ -114,14 +114,12 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
             firstName && 
             lastName && 
             email && 
-            password &&
-            repeatPassword &&
             linkedInUrl &&
             role &&
             comments &&
             isChecked
         );
-    }, [firstName, lastName, email, password, repeatPassword, linkedInUrl, role, comments, isChecked]);
+    }, [firstName, lastName, email, linkedInUrl, role, comments, isChecked]);
     
       
     return (

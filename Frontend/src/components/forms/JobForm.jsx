@@ -63,7 +63,7 @@ function JobForm ({
             {/* ROW 4 */}
             <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
                 <SymTextField title="LinkedIn" value={linkedInUrl} placeholder="Linkedin URL" onChange={handleLinkedInChange} />
-                <SymDropdown title="Role" value={role} onChange={handleRoleChange} options={[role]} isEdit={true} />
+                <SymDropdown title="Role" value={role} onChange={handleRoleChange} options={["hell","sdasfds"]} isEdit={true} />
             </FlexBox>
 
             
@@ -84,18 +84,6 @@ function JobForm ({
 }
 
 export default JobForm;
-
-// const roleOptions = [
-//     '3D Product Creation',
-//     'AR Marketplace',
-//     'Staging Homes/Rentals',
-//     'Plans and Pricing Information',
-//     'FAQs',
-//     'Book a Demo',
-//     'Getting Started',
-//     'Help with Symspace Platform',
-//     'Careers'
-// ]
 
 const fileCardStyle = {
     width: '100%',

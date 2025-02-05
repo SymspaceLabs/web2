@@ -26,11 +26,8 @@ const SymDropdown = ({
                     borderRadius: "5px",
                     color: value=""? "rgba(255, 255, 255, 0.1)": "#fff",
                     width: "100%",
-                    ".MuiSelect-select": {
-                        paddingTop: '4px',
-                        paddingBottom: '4px',
-                        minHeight:'30px'
-                    },
+                    height:'37px',
+                    paddingTop: '0px',
                     "& .MuiPopover-root": {
                         zIndex: 1400,
                     },
@@ -38,7 +35,7 @@ const SymDropdown = ({
                         zIndex: 1400,
                     },
                     "& .MuiSvgIcon-root": {
-                        color: "#fff", // <-- This sets the dropdown icon to white
+                        color: "#fff",
                     }
                 }}
                 IconComponent={ArrowDropDownIcon}

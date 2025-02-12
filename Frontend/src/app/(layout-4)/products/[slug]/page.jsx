@@ -23,7 +23,7 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default function ProductDetails() {
+export default function ProductDetails({params}) {
 
-  return <ProductDetailsPageView />
+  return <ProductDetailsPageView slug={params.slug} />
 }

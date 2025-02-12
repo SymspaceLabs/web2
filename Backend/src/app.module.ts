@@ -31,6 +31,7 @@ import { JobsModule } from './jobs/jobs.module';
 import { ContactUsModule } from './contact-us/contact-us.module';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
 import { ResumesModule } from './resumes/resumes.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { ResumesModule } from './resumes/resumes.module';
     ContactUsModule,
     JobApplicationsModule,
     ResumesModule,
+    UploadModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

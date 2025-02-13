@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react';
 
 export default function UploadModel() {
@@ -11,9 +13,9 @@ export default function UploadModel() {
     if (!file) return alert('Please select a file.');
 
     const formData = new FormData();
-    formData.append('model', file);
+    formData.append('file', file);
 
-    const response = await fetch('/api/upload', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload`, {
       method: 'POST',
       body: formData,
     });

@@ -5,7 +5,7 @@ import { Box, Typography, Button, Grid } from '@mui/material';
 
 // Styled components for Section2
 export const StyledGrid = styled(Grid)(({ theme }) => ({
-  background: '#EDEDED',
+  background: '#1F1F1F',
   paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(10),
   position: 'relative',
@@ -24,20 +24,14 @@ export const SectionBox = styled(Box)(({ theme }) => ({
 }));
 
 export const TitleText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Helvetica',
-  color: '#4E4E4E',
+  fontFamily: 'Elemental End',
+  color: '#FFF',
   fontSize: '48px',
-  fontWeight: 'bold',
   [theme.breakpoints.up('md')]: {
     fontSize: 72
   },
 }));
 
-export const DescriptionText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Helvetica',
-  color: '#909090',
-  fontSize: 18,
-}));
 
 export const ShopButton = styled(Button)(({ theme }) => ({
   fontFamily: 'Elemental End',

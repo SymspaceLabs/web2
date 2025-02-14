@@ -16,10 +16,6 @@ const blob = keyframes`
 `;
 
 export const styles = {
-    gridContainer: {
-      position: 'relative',
-      background: '#1F1F1F',
-    },
     container: {
       position: 'relative',
     },
@@ -47,42 +43,22 @@ export const styles = {
       alignItems: 'flex-start',
       justifyContent: 'center',
     },
-    titleText: {
-      width: '100%',
-      maxWidth: 1200,
-      fontFamily: 'Helvetica',
-      color: '#fff',
-      fontSize: { xs: 48, sm: 48, md: 72 },
-      px: { xs: 2, sm: 0 },
-      fontWeight: 'bold',
-      textAlign: 'left',
-    },
-    descriptionText: {
-      maxWidth: 1200,
-      fontFamily: 'Helvetica',
-      color: '#fff',
-      fontSize: { xs: 14, sm: 18 },
-      px: { xs: 2, sm: 0 },
-      textAlign: 'justify',
-      lineHeight: '30px'
-    },
     buttonContainer: {
-      width: '100%',
-      maxWidth: 1200,
+      mt:10,
       display: 'flex',
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-end',
     },
     learnMoreButton: {
       fontFamily: 'Elemental End',
       textTransform: 'lowercase',
-      color: '#fff',
+      color: '#000',
       borderRadius: '50px',
       py: 2,
       px: 7.5,
       transition: 'all 0.3s ease-in-out',
       '&:hover': {
-        background: '#fff',
-        color: '#000',
+        background: '#000',
+        color: '#fff',
       },
     },
     

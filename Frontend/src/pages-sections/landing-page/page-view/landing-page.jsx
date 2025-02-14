@@ -41,12 +41,13 @@ export default function LandingPageView() {
     <div className="bg-white">
       <Section1 />   {/* Hero section */}
       <Section2 />   {/* Future of Retail */}
-      <Section3 />   {/* Application */}
-      <Section4 />   {/* Convenient & Comfortable */}
       <Section5 />   {/* Carousal section */}
+      <Section4 />   {/* Convenient & Comfortable */}
+      <Section3 />   {/* Application */}
       <Section6 />   {/* Realistic 3D Products */}
       <Section7 />   {/* Bento Box section */}
-      <Section8 />   {/* SYM AI */}
+
+      <Section8 />   {/* 3D SIMULATION */}
       <Section9 />   {/* 3D Model */}
       <Section10 />  {/* Our Focus */}
       <Section11 />  {/* Statistics */}

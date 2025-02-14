@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Section4 Component
  *
@@ -17,40 +19,39 @@
  */
 
 import React from 'react';
-import { Container, Box } from '@mui/material'; // Import Material-UI components.
-import LazyImage from '../../../components/LazyImage'; // Custom lazy-loading image component.
-import {
-  StyledGrid,
-  SectionBox,
-  TitleText,
-  DescriptionText,
-  ShopButton,
-  FloatingImage1,
-  FloatingImage2,
-} from './section4.styles'; // Import custom styled components.
+import { Container, Typography, Button, Box } from '@mui/material'; // Import Material-UI components.
+import { StyledGrid, SectionBox, TitleText } from './section4.styles'; // Import custom styled components.
+import { useRouter } from "next/navigation";
 
 export default function Section4() {
+
+  const router = useRouter();
+  
+  const handleClick = () => {
+    router.push('/register-partner');
+  };
+
   return (
     <StyledGrid>
       {/* Floating image on the left side */}
-      <FloatingImage1>
+      {/* <FloatingImage1>
         <LazyImage
           width={500}
           height={500}
           src="/assets/images/iphone2.png"
           alt="iphone"
         />
-      </FloatingImage1>
+      </FloatingImage1> */}
 
       {/* Floating image on the right side */}
-      <FloatingImage2>
+      {/* <FloatingImage2>
         <LazyImage
           width={400}
           height={400}
           src="/assets/images/rayBand.png"
           alt="rayBand"
         />
-      </FloatingImage2>
+      </FloatingImage2> */}
 
       <Container>
         {/* Content section including title, description, and call-to-action button */}
@@ -61,19 +62,34 @@ export default function Section4() {
           </TitleText>
 
           {/* Section description */}
-          <DescriptionText>
-            Explore products from the comfort of your home to conveniently and
-            confidently shop through Augmented Reality.
-          </DescriptionText>
+          <Typography sx={{  fontFamily: 'Helvetica', color: '#FFF', fontSize: 18, textAlign:'center', lineHeight:2 }}>
+            Explore products from the comfort of your home to conveniently and confidently shop through Augmented Reality.<br/>
+            Receive sizing recommendations and use our advanced AR application to augment products in real-time.
+          </Typography>
 
           {/* Call-to-action "Shop" button */}
           <Box>
-            <ShopButton>
+            <Button sx={buttonStyle} onClick={handleClick}>
               Shop
-            </ShopButton>
+            </Button>
           </Box>
         </SectionBox>
       </Container>
     </StyledGrid>
   );
 }
+
+const buttonStyle = {
+  border: '2px solid white',
+  color: '#fff',
+  background: 'transparent',
+  borderRadius: '50px',
+  py: 2,
+  px: 8,
+  fontFamily: 'Elemental End',
+  textTransform: 'lowercase',
+  ':hover': {
+    background: '#fff',
+    color: '#000',
+  },
+};

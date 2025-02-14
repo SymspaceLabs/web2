@@ -21,6 +21,7 @@ import useCarousel from "./useCarousel"; // Custom hook for carousel functionali
 import { Carousel } from "../../../components/carousel"; // Custom carousel component.
 import { FlexBetween } from "../../../components/flex-box"; // Custom layout utility.
 import { H3, Paragraph } from "../../../components/Typography"; // Custom typography components.
+import { Typography } from "@mui/material";
 
 // ==============================================================
 export default function Content({ products }) {
@@ -31,17 +32,9 @@ export default function Content({ products }) {
     <Container sx={{ py: 10 }}>
       {/* Header with title, description, and carousel navigation buttons */}
       <FlexBetween mt={10} mb={5}>
-        <div>
-          {/* Section title */}
-          <H3 fontSize={{ fontFamily: "Helvetica", sm: 30, xs: 27 }}>
-            Augmented Reality Marketplaces
-          </H3>
-
-          {/* Section description */}
-          <Paragraph color="grey.600" fontSize={{ sm: 16, xs: 14 }}>
-            There are many variations passages
-          </Paragraph>
-        </div>
+        <Typography sx={{ fontFamily: "Elemental End", textTransform:'lowercase', fontSize:{ xs: 20, sm: 24 } }}>
+          Augmented Reality Marketplaces
+        </Typography>
 
         {/* Navigation buttons for the carousel */}
         <div>

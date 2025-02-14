@@ -53,6 +53,38 @@ export const section1Styles = (theme) => ({
       display: 'none',  // Hide on small screens (mobile)
     },
   },
+  blob3: {
+    position: 'absolute',
+    top: -150,
+    left: -150,
+    width: '500px',
+    height: '500px',
+    background: '#0366FE',
+    borderRadius: '50%',
+    zIndex: 1,
+    opacity: 0.5,
+    filter: 'blur(75px)',
+    animation: `${blob} 7s infinite`,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',  // Hide on small screens (mobile)
+    },
+  },
+  blob4: {
+    position: 'absolute',
+    top: -150,
+    left: 150,
+    width: '500px',
+    height: '500px',
+    background: '#fff',
+    borderRadius: '50%',
+    zIndex: 1,
+    opacity: 0.4,
+    filter: 'blur(100px)',
+    animation: `${blob} 7s infinite`,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',  // Hide on small screens (mobile)
+    },
+  },
   contentBox: {
     flexGrow: 1,
     py: 8,
@@ -60,7 +92,7 @@ export const section1Styles = (theme) => ({
   },
   heading: {
     fontFamily: 'Helvetica',
-    color: '#797979',
+    color: 'rgba(255,255,255,0.5)',
     fontSize: 28,
     fontWeight: 'bold',
   },
@@ -72,7 +104,7 @@ export const section1Styles = (theme) => ({
   },
   description: {
     fontFamily: 'Helvetica',
-    color: '#797979',
+    color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -91,6 +123,7 @@ export const section1Styles = (theme) => ({
     textTransform: 'lowercase',
     color: '#fff',
     borderRadius: '50px',
+    border:'2px solid white',
     py: 2,
     px: 7.5,
     transition: 'all 0.3s ease-in-out', // Smooth transition effect
@@ -104,6 +137,7 @@ export const section1Styles = (theme) => ({
     fontFamily: 'Helvetica',
     color: '#fff',
     borderRadius: '50px',
+    border: '2px solid white',
     py: 2,
     background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
     minWidth: '300px',

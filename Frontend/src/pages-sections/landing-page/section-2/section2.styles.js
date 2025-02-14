@@ -3,14 +3,6 @@
 import { styled } from '@mui/material/styles';
 import { Box, Typography, Button, Grid } from '@mui/material';
 
-// Styled components for Section2
-export const StyledGrid = styled(Grid)(({ theme }) => ({
-  background: '#EDEDED',
-  paddingTop: theme.spacing(10),
-  paddingBottom: theme.spacing(10),
-  position: 'relative',
-}));
-
 export const SectionBox = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   paddingTop: 0,
@@ -26,41 +18,24 @@ export const SectionBox = styled(Box)(({ theme }) => ({
 }));
 
 export const TitleText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Helvetica',
-  color: '#4E4E4E',
-  fontSize: '48px', // Default font size
-  fontWeight: 'bold',
+  fontFamily: 'Elemental End',
+  textTransform:'lowercase',
+  color: '#FFF',
+  fontSize: '48px',
   [theme.breakpoints.up('sm')]: {
-    fontSize: '72px', // Larger font size on medium and up screens
+    fontSize: '72px',
   },
 }));
 
 
 export const DescriptionText = styled(Typography)(({ theme }) => ({
   fontFamily: 'Helvetica',
-  color: '#909090',
+  color: '#fff',
   fontSize: 18,
   textAlign: 'justify',
-  maxWidth: 900,
-  lineHeight: '30px'
-}));
+  maxWidth: 1340,
+  lineHeight: 2,
 
-export const PartnerButton = styled(Button)(({ theme }) => ({
-  color: '#fff',
-  backgroundColor: '#000',
-  borderRadius: '50px',
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  paddingLeft: theme.spacing(7.5),
-  paddingRight: theme.spacing(7.5),
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  border:'1px solid transparent',
-  ':hover': {
-    background: '#fff',
-    color: '#000',
-    border:'1px solid black',
-  },
 }));
 
 // Styled components for Floating Images

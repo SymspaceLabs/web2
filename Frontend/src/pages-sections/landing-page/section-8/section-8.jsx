@@ -38,7 +38,7 @@ export default function Section8() {
               fontWeight: 'bold',
             }}
           >
-            SYM-AI
+            3d simulation
           </Typography>
 
           {/* Description of the platform */}

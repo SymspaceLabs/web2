@@ -75,7 +75,7 @@ export default function Section12() {
 
   return (
     <Box sx={{ width: "100%", background: "#1F1F1F", py: 25 }}>
-      <Container sx={{ position: "relative" }}>
+      <Container>
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 50 }}

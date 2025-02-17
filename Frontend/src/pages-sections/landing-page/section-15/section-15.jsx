@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { motion } from "framer-motion";
 
 export default function Section15() {
   const [expanded, setExpanded] = useState(false);
@@ -24,45 +25,51 @@ export default function Section15() {
     borderRadius: "15px",
     color: "#fff",
     marginBottom: "15px",
-    padding: '10px'
+    padding: "10px",
   };
 
   return (
     <Box sx={{ width: "100%", background: "#1F1F1F", py: 25 }}>
-      <Container sx={{ position: "relative" }}>
-        <Typography fontFamily='Elemental End' textTransform='lowercase' color="#fff" fontSize={50} mb={4}>
-          FAQs
-        </Typography>
+      <motion.div
+        component={Box} // Makes motion.div behave like a Box
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
+      >
+        <Container>
+          <Typography fontFamily="Elemental End" textTransform="lowercase" color="#fff" fontSize={50} mb={4}>
+            FAQs
+          </Typography>
 
-        {faqs.map((faq, index) => (
-          <Accordion
-            key={index}
-            expanded={expanded === index}
-            onChange={handleChange(index)}
-            sx={{
-              ...accordionStyles,
-              "&:first-of-type": { borderRadius: "15px !important" },
-              "&:last-of-type": { borderRadius: "15px !important" },
-            }}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />}
-              sx={{
-                borderBottom: "none !important", // Remove default border-bottom
-              }}
-            >
-              <Typography color="#fff" fontFamily='Elemental End' textTransform='lowercase' fontSize={18}>
-                {faq.question}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant="body1" sx={{ color: "#fff" }}>{faq.answer}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-
-
-      </Container>
+          {faqs.map((faq, index) => (
+            <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
+              <Accordion
+                key={index}
+                expanded={expanded === index}
+                onChange={handleChange(index)}
+                sx={{
+                  ...accordionStyles,
+                  "&:first-of-type": { borderRadius: "15px !important" },
+                  "&:last-of-type": { borderRadius: "15px !important" },
+                }}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
+                  <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" fontSize={18}>
+                    {faq.question}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="body1" sx={{ color: "#fff" }}>
+                    {faq.answer}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </motion.div>
+          ))}
+        </Container>
+      </motion.div>
     </Box>
   );
 }

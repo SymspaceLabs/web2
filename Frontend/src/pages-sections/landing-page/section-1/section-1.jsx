@@ -16,6 +16,33 @@ export default function Section1() {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && !hasAnimatedRef.current) {
+          setFadeIn(true);
+          hasAnimatedRef.current = true; // Ensures it never triggers again
+        }
+      },
+      { threshold: 0.6 }
+    );
+  
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+  
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+  
+
+
   // threshold - adjust threshold as needed
   const options = { root: null, rootMargin: '0px', threshold: 0.6 };
 

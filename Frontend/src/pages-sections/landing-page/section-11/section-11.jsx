@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Grid } from '@mui/material';
 import { Box, Card, CardContent, Typography, Button } from '@mui/material';
+import { motion } from 'framer-motion';
 
 /**
  * Section11 Component
@@ -22,26 +23,41 @@ export default function Section11() {
     { number: '98', description: (<>98% of Americans who used AR<br/>while shopping found it helpful</>) },
   ];
 
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
+  };
+
   return (
     // Main grid container with background and padding
     <Grid sx={{ background: '#1F1F1F', py: 10 }}>
       <Container>
-        <Grid container spacing={3}>
-          {/* Map over the cardsData1 array and render CustomCard1 for each entry */}
-          {cardsData1.slice(0, 3).map((card, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <CustomCard1 number={card.number} description={card.description} />
-            </Grid>
-          ))}
-          
-          {/* Static Cards for CustomCard2 and CustomCard3 */}
-          <Grid item xs={12} sm={6} md={6}>
-            <CustomCard2 />
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <Grid container spacing={3}>
+            {/* Map over the cardsData1 array and render CustomCard1 for each entry */}
+            {cardsData1.slice(0, 3).map((card, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <motion.div variants={fadeInVariants}>
+                  <CustomCard1 number={card.number} description={card.description} />
+                </motion.div>
+              </Grid>
+            ))}
+            
+            <motion.div variants={fadeInVariants} style={{ width: '100%' }}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6} md={6}>
+                  <CustomCard2 />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <motion.div variants={fadeInVariants}>
+                    <CustomCard3 />
+                  </motion.div>
+                </Grid>
+              </Grid>
+            </motion.div>
+
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            <CustomCard3 />
-          </Grid>
-        </Grid>
+        </motion.div>
       </Container>
     </Grid>
   );
@@ -130,8 +146,8 @@ export const CustomCard1 = ({ number, description }) => {
  */
 export const CustomCard2 = () => {
   return (
-    <Card sx={{ minWidth: 275, mb: 2, borderRadius: '50px', display: 'flex', flexDirection: 'column', height: '100%', '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)', } }}>
-      <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '30px', pt: 5, px:5,  }}>
+    <Card sx={{ borderRadius: '50px', display: 'flex', flexDirection: 'column', height: '100%', '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)'} }}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '30px', pt: 5, px:5 }}>
         <Typography variant="h1" component="div" sx={{ fontFamily: 'Helvetica', color: '#000', fontSize: 72, fontWeight: 'bold' }}>
           AR Visuals
         </Typography>
@@ -139,7 +155,6 @@ export const CustomCard2 = () => {
           We create unique AR experiences for our clients. Share your vision and we will bring any idea into reality for your communities. AR Visuals provide businesses and consumers with an immersive medium for marketing. Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
         </Typography>
         
-        {/* Contact Us button */}
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button className="fadeInBtn" sx={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.3s ease',
               width: '25%',

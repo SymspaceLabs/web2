@@ -12,24 +12,26 @@ export const styles = {
     title: {
       width: '100%',
       maxWidth: 1200,
-      fontFamily: 'Helvetica',
+      fontFamily: 'Elemental End',
+      textTransform:'lowercase',
       color: '#fff',
       fontSize: 72,
-      fontWeight: 'bold',
       textAlign: 'left',
     },
     description: {
       maxWidth: 1200,
       fontFamily: 'Helvetica',
-      color: '#909090',
+      color: '#FFF',
       fontSize: 18,
-      lineHeight: '30px'
+      lineHeight: 2,
+      textAlign: 'justify'
     },
     buttonContainer: {
       width: '100%',
       maxWidth: 1200,
     },
     button: {
+      fontWeight:400,
       fontFamily: 'Elemental End',
       textTransform: 'lowercase',
       color: '#fff',

@@ -1,0 +1,194 @@
+{
+    "asset": {
+        "version": "2.0",
+        "generator": "Open Asset Import Library (assimp v5.4.0)"
+    },
+    "extensionsUsed": [
+        "KHR_materials_volume",
+        "FB_ngon_encoding"
+    ],
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 12422,
+            "type": "VEC3",
+            "max": [
+                347.217529296875,
+                90.15576934814453,
+                -1011.4729614257813
+            ],
+            "min": [
+                -346.9946594238281,
+                -210.50453186035156,
+                -1681.9959716796875
+            ]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 12422,
+            "type": "VEC3",
+            "max": [
+                0.9997368454933167,
+                0.9999942779541016,
+                0.9683451652526855
+            ],
+            "min": [
+                -0.9998807907104492,
+                -0.999972939491272,
+                -0.9787045121192932
+            ]
+        },
+        {
+            "bufferView": 2,
+            "byteOffset": 0,
+            "componentType": 5126,
+            "count": 12422,
+            "type": "VEC2",
+            "max": [
+                0.9777780175209045,
+                0.983227014541626
+            ],
+            "min": [
+                0.02907799929380417,
+                0.035893023014068604
+            ]
+        },
+        {
+            "bufferView": 3,
+            "byteOffset": 0,
+            "componentType": 5125,
+            "count": 72480,
+            "type": "SCALAR",
+            "max": [
+                12421
+            ],
+            "min": [
+                0
+            ]
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 687424,
+            "uri": "waveworld spaceman grey regular shirt_0.bin"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 149064,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 149064,
+            "byteLength": 149064,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 298128,
+            "byteLength": 99376,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 397504,
+            "byteLength": 289920,
+            "target": 34963
+        }
+    ],
+    "images": [
+        {
+            "uri": "textures/image_0.png"
+        }
+    ],
+    "materials": [
+        {
+            "name": "FABRIC_1_FRONT_359704.003",
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 0
+                },
+                "metallicFactor": 0.0,
+                "roughnessFactor": 0.8304027318954468
+            },
+            "doubleSided": true
+        }
+    ],
+    "meshes": [
+        {
+            "name": "meshes[0]",
+            "primitives": [
+                {
+                    "mode": 4,
+                    "material": 0,
+                    "indices": 3,
+                    "attributes": {
+                        "POSITION": 0,
+                        "NORMAL": 1,
+                        "TEXCOORD_0": 2
+                    }
+                }
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "name": "waveworld spaceman grey regular shirt",
+            "children": [
+                1
+            ]
+        },
+        {
+            "name": "grey_spaceman",
+            "matrix": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                -1.3435885648505064e-7,
+                1.0000001192092896,
+                0.0,
+                0.0,
+                -1.0000001192092896,
+                -1.3435885648505064e-7,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "mesh": 0,
+            "extras": {
+                "name": "grey_spaceman"
+            }
+        }
+    ],
+    "samplers": [
+        {
+            "magFilter": 9729,
+            "minFilter": 9987
+        }
+    ],
+    "scenes": [
+        {
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "textures": [
+        {
+            "source": 0,
+            "sampler": 0
+        }
+    ],
+    "scene": 0
+}

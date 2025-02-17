@@ -34,6 +34,7 @@ import Section11 from "../section-11";
 import Section12 from "../section-12";
 import Section13 from "../section-13";
 import Section14 from "../section-14";
+import Section15 from "../section-15";
 
 
 export default function LandingPageView() {
@@ -52,6 +53,7 @@ export default function LandingPageView() {
       <Section10 />  {/* Our Focus */}
       <Section11 />  {/* Statistics */}
       <Section12 />  {/* Products */}
+      <Section15 />  {/* FAQs */}
       <Section13 />  {/* Testimonial */}
       <Section14 />  {/* Banner */}
     </div>

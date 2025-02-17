@@ -54,13 +54,11 @@ export const Card1 = () => {
         >
           <Typography
             sx={{
-              lineHeight: 1,
               alignSelf: 'stretch',
-              color: 'black',
-              fontSize: { xs: 20, sm: 32, md: 40, lg: 40, xl: 40 },
-              fontFamily: 'Helvetica',
-              fontWeight: 700,
-              wordWrap: 'break-word',
+              color: '#000',
+              fontSize: { xs: 12, sm: 18, md: 24 },
+              fontFamily: 'Elemental End',
+              textTransform:'lowercase',
             }}
           >
             Environmental Impact

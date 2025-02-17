@@ -20,78 +20,89 @@ import ArrowForward from "@mui/icons-material/ArrowForward"; // Material-UI forw
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import { Carousel } from "../../../components/carousel"; // Custom carousel component.
 import { FlexBetween } from "../../../components/flex-box"; // Custom layout utility.
-import { H3, Paragraph } from "../../../components/Typography"; // Custom typography components.
 import { Typography } from "@mui/material";
+import { motion } from "framer-motion"; // Import Framer Motion
+
+// Fade-in animation variants
+const fadeIn = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
 
 // ==============================================================
+
 export default function Content({ products }) {
   // Extract carousel-related functionality from the custom hook.
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
 
   return (
     <Container sx={{ py: 10 }}>
-      {/* Header with title, description, and carousel navigation buttons */}
-      <FlexBetween mt={10} mb={5}>
-        <Typography sx={{ fontFamily: "Elemental End", textTransform:'lowercase', fontSize:{ xs: 20, sm: 24 } }}>
-          Augmented Reality Marketplaces
-        </Typography>
+      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+        {/* Header with title, description, and carousel navigation buttons */}
+        <FlexBetween mt={10} mb={5}>
+          <Typography sx={{ fontFamily: "Elemental End", textTransform: "lowercase", fontSize: { xs: 20, sm: 24 } }}>
+            Augmented Reality Marketplaces
+          </Typography>
 
-        {/* Navigation buttons for the carousel */}
-        <div>
-          <IconButton onClick={handlePrev}>
-            <ArrowBack fontSize="small" />
-          </IconButton>
-          <IconButton
-            onClick={handleNext}
-            sx={{
-              backgroundColor: "white",
-              boxShadow: 2,
-              ml: 0.5,
-            }}
-          >
-            <ArrowForward fontSize="small" />
-          </IconButton>
-        </div>
-      </FlexBetween>
-
-      {/* Carousel displaying products */}
-      <Carousel ref={carouselRef} slidesToShow={6} responsive={responsive} arrows={false}>
-        {products.map((product) => (
-          <Link href={`/products/search/${product.slug}`} key={product.id}>
-            {/* Product card */}
-            <FlexBox
+          {/* Navigation buttons for the carousel */}
+          <div>
+            <IconButton onClick={handlePrev}>
+              <ArrowBack fontSize="small" />
+            </IconButton>
+            <IconButton
+              onClick={handleNext}
               sx={{
-                py: 5,
-                bgcolor: "#353535",
-                borderRadius: 3,
-                alignItems: "center",
-                flexDirection: "column",
-                justifyContent: "center",
-                height: "calc(100% - 74px)",
+                backgroundColor: "white",
+                boxShadow: 2,
+                ml: 0.5,
               }}
             >
-              {/* Product image */}
-              <LazyImage
-                alt={product.title}
-                width={10}
-                height={10}
-                sx={{ width: "40px", height: "40px" }}
-                src={product.thumbnail}
-              />
-              {/* Product title */}
-              <H6
-                sx={{
-                  fontFamily: "Elemental End",
-                  textTransform: "lowercase",
-                  color: "#fff",
-                }}
-              >
-                {product.title}
-              </H6>
-            </FlexBox>
-          </Link>
-        ))}
-      </Carousel>
+              <ArrowForward fontSize="small" />
+            </IconButton>
+          </div>
+        </FlexBetween>
+
+        {/* Carousel displaying products */}
+        <Carousel ref={carouselRef} slidesToShow={6} responsive={responsive} arrows={false}>
+          {products.map((product) => (
+            <motion.div key={product.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+              <Link href={`/products/search/${product.slug}`}>
+                {/* Product card */}
+                <FlexBox
+                  sx={{
+                    py: 5,
+                    bgcolor: "#353535",
+                    borderRadius: 3,
+                    alignItems: "center",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    height: "calc(100% - 74px)",
+                  }}
+                >
+                  {/* Product image */}
+                  <LazyImage
+                    alt={product.title}
+                    width={10}
+                    height={10}
+                    sx={{ width: "40px", height: "40px" }}
+                    src={product.thumbnail}
+                  />
+                  {/* Product title */}
+                  <H6
+                    sx={{
+                      fontFamily: "Elemental End",
+                      textTransform: "lowercase",
+                      color: "#fff",
+                    }}
+                  >
+                    {product.title}
+                  </H6>
+                </FlexBox>
+              </Link>
+            </motion.div>
+          ))}
+        </Carousel>
+      </motion.div>
     </Container>
   );
 }

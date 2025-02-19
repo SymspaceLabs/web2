@@ -4,6 +4,7 @@ import SymMultiSelectDropdown from "./SymMultiSelectDropdown";
 import SymMultiFileUploader from "./SymMultiFileUploader";
 import SymDropdown from "./SymDropdown";
 import SymCheckbox from "./SymCheckbox";
+import SymPasswordInput from "./SymPasswordInput";
 
 export { 
     SymTextField, 
@@ -11,5 +12,6 @@ export {
     SymMultiSelectDropdown,
     SymMultiFileUploader,
     SymDropdown,
-    SymCheckbox
+    SymCheckbox,
+    SymPasswordInput
 }

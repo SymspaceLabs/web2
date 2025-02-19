@@ -1,4 +1,5 @@
 import { RegisterPageView } from "../../../pages-sections/sessions/page-view";
+
 export const metadata = {
   title: "Register",
   description: `Symspace is an E-commerce website.`,
@@ -8,6 +9,7 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
+
 export default function Register() {
   return <RegisterPageView />;
 }

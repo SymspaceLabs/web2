@@ -7,7 +7,7 @@ const navbarNavigation = [
     url: '/marketplace',
     child: categoriesMegaMenu,
     megaMenu: false,
-    megaMenuWithSub: true,
+    megaMenuWithSub: false,
   },
 
   // AR FOR BUSINESS

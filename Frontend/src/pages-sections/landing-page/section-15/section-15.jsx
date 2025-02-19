@@ -26,10 +26,16 @@ export default function Section15() {
     color: "#fff",
     marginBottom: "15px",
     padding: "10px",
+    position: "relative",
+    border: "2px solid linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%)", // Base transparent border
+    borderRadius: "15px",
+    backgroundClip: "padding-box", // Ensures inner content is not affected
+    "&:first-of-type": { borderRadius: "15px !important" },
+    "&:last-of-type": { borderRadius: "15px !important" }
   };
 
   return (
-    <Box sx={{ width: "100%", background: "#1F1F1F", py: 25 }}>
+    <Box sx={{ width: "100%", background: "#1F1F1F", py: 10 }}>
       <motion.div
         component={Box} // Makes motion.div behave like a Box
         initial={{ opacity: 0, y: 30 }}
@@ -45,29 +51,27 @@ export default function Section15() {
 
           {faqs.map((faq, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
-              <Accordion
-                key={index}
-                expanded={expanded === index}
-                onChange={handleChange(index)}
-                sx={{
-                  ...accordionStyles,
-                  "&:first-of-type": { borderRadius: "15px !important" },
-                  "&:last-of-type": { borderRadius: "15px !important" },
-                }}
-              >
-                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                  <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" fontSize={18}>
-                    {faq.question}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography variant="body1" sx={{ color: "#fff" }}>
-                    {faq.answer}
-                  </Typography>
-                </AccordionDetails>
-              </Accordion>
+              <Box sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}> {/* Ensures spacing remains consistent */}
+                <Accordion
+                  expanded={expanded === index}
+                  onChange={handleChange(index)}
+                  sx={accordionStyles}
+                >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
+                    <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" fontSize={18}>
+                      {faq.question}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body1" sx={{ color: "#fff" }}>
+                      {faq.answer}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
             </motion.div>
           ))}
+
         </Container>
       </motion.div>
     </Box>

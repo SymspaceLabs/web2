@@ -32,7 +32,7 @@ export default function Section3() {
                 animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }} 
                 transition={{ duration: 1, ease: "easeInOut" }}
               >
-                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 48, sm: 48, md: 72 }, px: { xs: 2, sm: 0 }, }}>
+                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 30, sm: 64 }, px: { xs: 2, sm: 0 }, }}>
                   Application
                 </Typography>
 

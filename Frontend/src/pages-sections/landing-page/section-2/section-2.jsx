@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Container, Box } from '@mui/material';
+import { Button, Container, Box, Typography } from '@mui/material';
 import { SectionBox, TitleText, DescriptionText } from './section2.styles';
 import { motion, useScroll } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -63,18 +63,12 @@ export default function Section2() {
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <SectionBox>
-            <TitleText>Future of Retail</TitleText>
-            <DescriptionText>
-              In the rapidly advancing era of XR hardware, Symspace is at the
-              forefront of empowering brands for the future. By creating highly
-              accurate, detailed, realistic 3D models, we enable seamless
-              integration into the upcoming AR ecosystem. We imagine a world where
-              individuals can effortlessly explore and purchase products remotely
-              by immersing themselves in digital and virtual experiences. With
-              Symspace, brands are prepared to spearhead the AR revolution and
-              redefine the shopping experience. Embrace the future and shape the
-              landscape of retail with us.
-            </DescriptionText>
+            <Typography sx={{fontFamily: 'Elemental End', textTransform:'lowercase', color: '#FFF', fontSize:  { xs: 30, sm: 64 }, }}>
+              Future of Retail
+            </Typography>
+            <Typography sx={{fontFamily: 'Helvetica', color: '#fff', fontSize: { xs:15, sm:18 }, textAlign: 'justify', maxWidth: 1340, lineHeight: { xs:1.5, sm:2 } }}>
+              In the rapidly growing XR industry, Symspace is at the forefront of empowering brands for the future. By creating highly accurate, detailed, realistic 3D models, we help brands prepare for the AR revolution when XR hardware becomes more accessible and affordable. We imagine a world where individuals can effortlessly explore and purchase products remotely by immersing themselves in virtual experiences. We aim to become the standard for XR accessibility by prioritizing and empowering those unable to travel our convenient AR solution. With Symspace, consumers can shop from home, receive sizing recommendations, and feel confident in their purchases. Embrace the future and simulate the retail space with us.
+            </Typography>
             <Button sx={buttonStyle} onClick={handleClick}>
               partner sign up
             </Button>

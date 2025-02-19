@@ -16,18 +16,6 @@ export const sectionStyles = {
       justifyContent: 'start',
       gap: 4,
     },
-    title: {
-      fontFamily: 'Elemental End',
-      textTransform:'lowercase',
-      color: '#fff',
-      fontSize: { xs: 48, sm: 48, md: 72 },
-    },
-    description: {
-      fontFamily: 'Helvetica',
-      color: '#fff',
-      fontSize: 18,
-      lineHeight: 2
-    },
     buttonContainer: {
       display: 'flex',
       pt: 5,

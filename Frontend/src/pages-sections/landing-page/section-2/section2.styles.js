@@ -17,16 +17,6 @@ export const SectionBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const TitleText = styled(Typography)(({ theme }) => ({
-  fontFamily: 'Elemental End',
-  textTransform:'lowercase',
-  color: '#FFF',
-  fontSize: '48px',
-  [theme.breakpoints.up('sm')]: {
-    fontSize: '72px',
-  },
-}));
-
 
 export const DescriptionText = styled(Typography)(({ theme }) => ({
   fontFamily: 'Helvetica',

@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { Box, Grid, Container, keyframes } from "@mui/material";
 import { Card1, Card2, Card3 } from "./cards";
 import { motion, useInView } from "framer-motion";
+import { FlexBox } from "@/components/flex-box";
 
 export default function Section7() {
   const blob = keyframes`
@@ -58,22 +59,23 @@ export default function Section7() {
               </motion.div>
 
               {/* Card 2 - Website & App Integration */}
-              <Box sx={{ width: "100%", display: { xs: "block", md: "flex" }, justifyContent: "flex-start", alignItems: "flex-start", gap: "10px", mt: { xs: 2, md: 0 } }}>
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                  <Card2 imageUrl="/assets/images/card/cursor.png" headerText="Website Integration" subHeaderText="Computational audio. Listen, it's powerful" bg="#EDEDED" />
+              <FlexBox sx={{ width: "100%", flexDirection: { xs: "column", lg: "row" }, gap: 2, justifyContent: "space-between", alignItems: "stretch", mt: { xs: 2, md: 0 }}}>
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ flex: 1 }}>
+                  <Card2 imageUrl="/assets/images/card/cursor.png" headerText="Website Integration" subHeaderText="Enhance your customers experience" bg="#D5D5D5" />
                 </motion.div>
 
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                  <Card2 imageUrl="/assets/images/card/mobile.png" headerText="Application Integration" subHeaderText="An immersive way to experience entertainment" bg="#353535" textColor="#fff" />
+                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ flex: 1 }}>
+                  <Card2 imageUrl="/assets/images/card/mobile.png" headerText="Application Integration" subHeaderText="An immersive way to shop conveniently" bg="#353535" textColor="#fff" />
                 </motion.div>
-              </Box>
+              </FlexBox>
+
             </Box>
           </Grid>
 
           {/* Right column */}
           <Grid item xs={12} sm={12} md={6}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "#fff", borderRadius: "50px", justifyContent: "center" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "#D5D5D5", borderRadius: "50px", justifyContent: "center" }}>
               <Card3 />
             </Box>
           </motion.div>

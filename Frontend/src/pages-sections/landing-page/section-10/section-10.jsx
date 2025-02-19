@@ -4,14 +4,6 @@ import React, { useRef, useState, useEffect } from "react";
 import { Box, Container, Typography, Button, Grid } from "@mui/material";
 import { motion, useInView } from "framer-motion";
 import { styles } from "./styles";
-import { keyframes } from "@mui/material/styles";
-
-const blob = keyframes`
-  0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-  100% { transform: translate(0px, 0px) scale(1); }
-`;
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -33,41 +25,9 @@ export default function Section10() {
     }
   }, [isInView, hasAnimated]);
 
-  const blob1 = {
-    position: "absolute",
-    top: 300,
-    left: 50,
-    width: "450px",
-    height: "450px",
-    background: "#FFFFFF",
-    borderRadius: "50%",
-    zIndex: 0,
-    opacity: 0.3,
-    filter: "blur(80px)",
-    animation: `${blob} 7s infinite`,
-  };
-
-  const blob2 = {
-    position: "absolute",
-    top: 50,
-    right: 50,
-    width: "250px",
-    height: "250px",
-    background: "#FFFFFF",
-    borderRadius: "50%",
-    zIndex: 0,
-    opacity: 0.3,
-    filter: "blur(80px)",
-    animation: `${blob} 7s infinite`,
-  };
-
   return (
-    <Grid sx={{ ...styles.sectionBackground, position: "relative", overflow: "hidden" }}>
-      <Container sx={{ position: "relative" }}>
-        <Box sx={blob1} />
-        <Box sx={blob2} />
-
-        {/* This div will fade in only once when scrolled into view */}
+    <Grid sx={{ background: '#1F1F1F' }}>
+      <Container>
         <motion.div 
           ref={sectionRef} 
           initial="hidden" 
@@ -75,7 +35,9 @@ export default function Section10() {
           variants={fadeInVariants}
         >
           <Box sx={styles.container}>
-            <Typography sx={styles.title}>Our Focus</Typography>
+            <Typography fontFamily='Elemental End' textTransform='lowercase' color='#FFF' sx={{fontSize: { xs:30, sm:64 } }} textAlign='left' width="100%" maxWidth="1200px">
+              Our Focus
+            </Typography>
             <Typography sx={styles.description}>
               We empower individuals with Augmented Reality, while equipping brands with resources to showcase their products in unimaginable ways. Our goal is to revolutionize the end-to-end e-commerce process by creating 3D assets of retail products and enabling consumers to augment these products with enhanced AR functionalities. We offer a sustainable solution that delivers immersive, hyper-realistic, and seamless 3D models coupled with unparalleled AR experiences. Through cutting-edge technologies such as artificial intelligence and augmented reality, we are positioned to transform mere imagination into tangible simulations of reality.
             </Typography>

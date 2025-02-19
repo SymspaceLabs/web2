@@ -18,6 +18,39 @@ export default function Section1() {
 
   const hasAnimatedRef = useRef(false);
 
+  // Refs for each section
+  const section1Ref = useRef(null);
+  const section2Ref = useRef(null);
+  const section3Ref = useRef(null);
+
+  // State for each section
+  const [fadeIn1, setFadeIn1] = useState(false);
+  const [fadeIn2, setFadeIn2] = useState(false);
+  const [fadeIn3, setFadeIn3] = useState(false);
+
+    // Observer function
+    const observeSection = (ref, setFadeIn) => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            setFadeIn(true);
+          }
+        },
+        { threshold: 0.6 }
+      );
+  
+      if (ref.current) observer.observe(ref.current);
+  
+      return () => {
+        if (ref.current) observer.unobserve(ref.current);
+      };
+    };
+
+  // Observe all sections
+  useEffect(() => observeSection(section1Ref, setFadeIn1), []);
+  useEffect(() => observeSection(section2Ref, setFadeIn2), []);
+  useEffect(() => observeSection(section3Ref, setFadeIn3), []);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -48,41 +81,21 @@ export default function Section1() {
 
   // Handle video play/pause based on intersection with the viewport
   useEffect(() => {
-    const handleIntersection = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          if (videoRef.current && !isPlaying) {
-            videoRef.current
-              .play()
-              .then(() => {
-                setIsPlaying(true);
-              })
-              .catch((error) => {
-                console.error('Autoplay was prevented:', error);
-              });
-          }
-        } else {
-          if (videoRef.current && isPlaying) {
-            videoRef.current.pause();
-            setIsPlaying(false);
-          }
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, options);
-    const videoElement = videoRef.current;
-
-    if (videoElement) {
-      observer.observe(videoElement);
-    }
-
-    return () => {
-      if (videoElement) {
-        observer.unobserve(videoElement);
+    if (videoRef.current) {
+      const playPromise = videoRef.current.play();
+      
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setIsPlaying(true);
+          })
+          .catch((error) => {
+            console.error("Autoplay was prevented:", error);
+          });
       }
-    };
-  }, [isPlaying]);
+    }
+  }, []);
+  
   
   useEffect(() => {
     setFadeIn(true);
@@ -96,135 +109,124 @@ export default function Section1() {
   const scale = useTransform(scrollYProgress, [0, 0.1, 0.2, 0.4, 0.6], [0.9, 0.92, 0.94, 0.96, 1]);
 
   return (
-    <Grid ref={containerRef} sx={styles.rootGrid}>
-      <Container sx={styles.container}>
-        {/* Decorative blobs */}
-        <Box sx={{ ...styles.blob1, zIndex: 1 }} />
-        <Box sx={{ ...styles.blob2, zIndex: 1 }} />
-        <Box sx={{ ...styles.blob3, zIndex: 2 }} />
-        <Box sx={{ ...styles.blob4, zIndex: 1 }} />
+    <Box sx={{ position: 'relative', background: '#1F1F1F', overflow: 'hidden' }}>
+      {/* Section 1 */}
+      <Grid ref={section1Ref}>
+        <Container sx={styles.container}>
+          {/* Decorative blobs */}
+          <Box sx={{ ...styles.blob1, zIndex: 1 }} />
+          <Box sx={{ ...styles.blob2, zIndex: 1 }} />
+          <Box sx={{ ...styles.blob3, zIndex: 2 }} />
+          <Box sx={{ ...styles.blob4, zIndex: 1 }} />
 
-        <Box sx={styles.contentBox}>
-          <Grid container spacing={4} alignItems="center">
-            {/* Left content */}
-            <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <Typography sx={styles.heading}>AI Powered AR Commerce</Typography>
-                <Typography sx={styles.title}>SYMSPACE</Typography>
-                <Typography sx={styles.description}>
-                  Revolutionize your shopping experience through Augmented Reality.
-                </Typography>
-                <Box sx={styles.buttonGroup}>
-                  <Button variant="contained" sx={styles.containedButton}>
-                    <Typography sx={styles.buttonText}>Get Started</Typography>
-                    <Box sx={styles.imageBox}>
-                      <LazyImage alt="furniture shop" width={25} height={25} src="/assets/images/sparkler.png" />
-                    </Box>
-                  </Button>
-                  <Button sx={styles.outlinedButton}>Shop Now</Button>
-                </Box>
-              </motion.div>
+          <Box sx={styles.contentBox}>
+            <Grid container spacing={4} alignItems="center">
+              {/* Left content */}
+              <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                >
+                  <Typography sx={styles.heading}>AI Powered AR Commerce</Typography>
+                  <Typography sx={styles.title}>SYMSPACE</Typography>
+                  <Typography sx={styles.description}>
+                    Revolutionize your shopping experience through Augmented Reality.
+                  </Typography>
+                  <Box sx={styles.buttonGroup}>
+                    <Button variant="contained" sx={styles.containedButton}>
+                      <Typography sx={styles.buttonText}>Get Started</Typography>
+                      <Box sx={styles.imageBox}>
+                        <LazyImage alt="furniture shop" width={25} height={25} src="/assets/images/sparkler.png" />
+                      </Box>
+                    </Button>
+                    <Button sx={styles.outlinedButton}>Shop Now</Button>
+                  </Box>
+                </motion.div>
+              </Grid>
+
+              {/* Right content: Promotional video */}
+              <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                >
+                  <Box sx={styles.videoContainer}>
+                    <video
+                      width="50%"
+                      height="auto"
+                      autoPlay
+                      loop
+                      muted
+                      src="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/648a8e1d8d146c19eb799200_Prosthetic_CMP_black_trimeed-transcode.mp4"
+                      poster="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/648a8e1d8d146c19eb799200_Prosthetic_CMP_black_trimeed-poster-00001.jpg"
+                      style={{ position: "relative", zIndex: 2 }}
+                    />
+                  </Box>
+                </motion.div>
+              </Grid>
             </Grid>
+          </Box>
+        </Container>
+      </Grid>
 
-            {/* Right content: Promotional video */}
-            <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <Box sx={styles.videoContainer}>
-                  <video
-                    width="50%"
-                    height="auto"
-                    autoPlay
-                    loop
-                    muted
-                    src="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/648a8e1d8d146c19eb799200_Prosthetic_CMP_black_trimeed-transcode.mp4"
-                    poster="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/648a8e1d8d146c19eb799200_Prosthetic_CMP_black_trimeed-poster-00001.jpg"
-                    style={{ position: "relative", zIndex: 2 }}
-                  />
-                </Box>
-              </motion.div>
-            </Grid>
-          </Grid>
-          <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              delay: 0.5
-            }}
-            style={{ scale }}
-          >
-            <GraphicsCard sx={{ border: '5px solid', borderColor: 'grey.300' }}>
-              <video
-                playsInline
-                ref={videoRef}
-                width="100%"
-                height="100%"
-                style={{ display: 'flex', objectFit: 'cover' }}
-                preload="metadata"
-                autoPlay={false}
-                loop={true}
-                muted={true}
-                poster='/assets/videos/landing-page/reimagining-shopping.mp4'
-              >
-                <source src='/assets/videos/landing-page/reimagining-shopping.mp4' type="video/mp4" />
-              </video>
-            </GraphicsCard>
-          </motion.div>
-        </Box>
-
-        <FlexBox flexDirection="column" width="100%">
-          <motion.div initial={{ opacity: 0, y: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              delay: 0.5
-            }}
-            style={{ scale }}
-          >
-            <FlexBox justifyContent="center" gap={3} width="100%" sx={{ flexDirection: { xs: "column", sm: "row" }, gap: { xs: 2, sm: 3 } }}>
-              {benefits.slice(0, 4).map((benefit,index) => (
-                <Box key={index} sx={textBubbleStyle}>
-                  {benefit}
-                </Box>
-              ))}
-            </FlexBox>
-          </motion.div>
-          
-          <motion.div initial={{ opacity: 0, y: 0 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 0.5,
-              delay: 0.5
-            }}
-            style={{ scale }}
-          >
-            <FlexBox
-              justifyContent="center"
-              gap={3}
+      {/* Section 2 */}
+      <Container sx={{ py: 5 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        >
+          <GraphicsCard sx={{ border: '5px solid', borderColor: 'grey.300', maxWidth: "1400px", mx: "auto" }}>
+            <video
+              playsInline
               width="100%"
-              sx={{
-                flexDirection: { xs: "column", sm: "row" }, // Same responsive behavior
-                gap: { xs: 2, sm: 3 },
-              }}
+              height="100%"
+              style={{ display: 'flex', objectFit: 'cover' }}
+              preload="metadata"
+              autoPlay
+              loop
+              muted
+              poster='/assets/videos/landing-page/reimagining-shopping.mp4'
             >
-              {benefits.slice(4, 8).map((benefit, index) => (
-                <Box  key={index} sx={textBubbleStyle}>
-                  {benefit}
-                </Box>
-              ))}
-            </FlexBox>
-          </motion.div>
-        </FlexBox>
+              <source src='/assets/videos/landing-page/reimagining-shopping.mp4' type="video/mp4" />
+            </video>
+          </GraphicsCard>
+        </motion.div>
       </Container>
-    </Grid>
+
+      {/* Section 3 */}
+      <FlexBox flexDirection="column" width="100%" sx={{ py:5 }} ref={section3Ref}>
+        <motion.div 
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        >
+          <FlexBox justifyContent="center" gap={3} width="100%" sx={{ flexDirection: { xs: "column", sm: "row" }, gap: { xs: 2, sm: 3 }, p:2 }}>
+            {benefits.slice(0, 4).map((benefit,index) => (
+              <Box key={index} sx={textBubbleStyle}>
+                {benefit}
+              </Box>
+            ))}
+          </FlexBox>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: fadeIn ? 1 : 0, y: fadeIn ? 0 : 30 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        >
+          <FlexBox justifyContent="center" gap={3} width="100%" sx={{ flexDirection: { xs: "column", sm: "row" }, gap: { xs: 2, sm: 3 }, p:2 }}>
+            {benefits.slice(4, 8).map((benefit, index) => (
+              <Box  key={index} sx={textBubbleStyle}>
+                {benefit}
+              </Box>
+            ))}
+          </FlexBox>
+        </motion.div>
+      </FlexBox>
+    </Box>
   );
 }
 
@@ -280,13 +282,9 @@ const benefits = [
 
 const textBubbleStyle = {
   py: 2,
-  cursor: 'pointer',
   mb: 2,
   fontFamily: 'Elemental End',
   textTransform: 'lowercase',
-  '&:hover': {
-    background: 'rgba(3, 102, 254, 0.6)',
-  },
   background: 'rgba(255, 255, 255, 0.35)',
   boxShadow: `
     inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),

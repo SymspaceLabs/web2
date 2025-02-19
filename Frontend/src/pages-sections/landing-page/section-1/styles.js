@@ -16,11 +16,6 @@ const blob = keyframes`
 `;
 
 export const section1Styles = (theme) => ({
-  rootGrid: {
-    position: 'relative',
-    background: '#1F1F1F',
-    overflow: 'hidden',
-  },
   container: {
     position: 'relative',
   },
@@ -93,7 +88,7 @@ export const section1Styles = (theme) => ({
   heading: {
     fontFamily: 'Helvetica',
     color: 'rgba(255,255,255,0.5)',
-    fontSize: 28,
+    fontSize: {xs:18, sm:28},
     fontWeight: 'bold',
   },
   title: {
@@ -105,7 +100,7 @@ export const section1Styles = (theme) => ({
   description: {
     fontFamily: 'Helvetica',
     color: '#fff',
-    fontSize: 20,
+    fontSize: {xs:16, sm:20},
     fontWeight: 'bold',
   },
   buttonGroup: {
@@ -119,33 +114,41 @@ export const section1Styles = (theme) => ({
     },
   },
   outlinedButton: {
+    fontWeight: 500,
+    minWidth: 250,
     fontFamily: 'Elemental End',
     textTransform: 'lowercase',
     color: '#fff',
     borderRadius: '50px',
-    border:'2px solid white',
+    border: '2px solid white',
     py: 2,
     px: 7.5,
+    fontSize: 16,
     transition: 'all 0.3s ease-in-out', // Smooth transition effect
     ':hover': {
-      background: '#fff',
+      background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
       color: '#000',
     },
   }, 
   containedButton: {
     gap: 2,
-    fontFamily: 'Helvetica',
     color: '#fff',
     borderRadius: '50px',
     border: '2px solid white',
     py: 2,
     background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
-    minWidth: '300px',
+    minWidth: '250px',
+    transition: 'all 0.3s ease-in-out',
+    ':hover' : {
+      boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.25)',
+      border: '2px solid rgba(255, 255, 255, 0.5)',
+    },
   },
   buttonText: {
     fontFamily: 'Elemental End',
     textTransform: 'lowercase',
     fontSize: 16,
+    fontWeight: 500,
   },
   imageBox: {
     width: '35px',

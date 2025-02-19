@@ -1,13 +1,14 @@
 import { Box, Typography, Button, Grid, Container, Hidden } from '@mui/material';
 import LazyImage from "../../../components/LazyImage"; // LOCAL CUSTOM COMPONENTS
+import { FlexBox } from '@/components/flex-box';
 
 export const Card1 = () => {
     return (
       <Box
         sx={{
-          pt: 5.5,
-          pb: 5.5,
-          px: 4,
+          pt: {xs:1, sm:5.5},
+          pb: {xs:1, sm:5.5},
+          pl: 4,
           pr: 6,
           width: '100%',
           height: '100%',
@@ -20,6 +21,7 @@ export const Card1 = () => {
           position: 'relative',
           overflow: 'hidden',
           '&:hover .fadeInBtn': {
+            display: 'flex', // Make it appear
             opacity: 1,
             transform: 'translateY(0)',
           },
@@ -32,8 +34,12 @@ export const Card1 = () => {
         <Box sx={{ p: 0 }}>
           <LazyImage
             alt="Image"
-            width={150}
-            height={150}
+            width={175}
+            height={175}
+            sx={{
+              width: { xs: 80, sm: 175 }, // Adjust sizes for different screen sizes
+              height: { xs: 80, sm: 175 }
+            }}
             src="/assets/images/card/tree.png"
           />
         </Box>
@@ -47,7 +53,7 @@ export const Card1 = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'flex-end',
-            gap: 2,
+            gap:{ xs: 1, sm: 2 },
             transition: 'transform 0.3s ease', // Smooth transition for header movement
             transform: 'translateY(0)', // Default position
           }}
@@ -56,7 +62,7 @@ export const Card1 = () => {
             sx={{
               alignSelf: 'stretch',
               color: '#000',
-              fontSize: { xs: 12, sm: 18, md: 24 },
+              fontSize: { xs: 15, sm: 25 },
               fontFamily: 'Elemental End',
               textTransform:'lowercase',
             }}
@@ -67,20 +73,21 @@ export const Card1 = () => {
             sx={{
               alignSelf: 'stretch',
               color: '#909090',
-              fontSize: { xs: 12, sm: 12, md: 14 },
+              fontSize: { xs: 12, sm: 16 },
               fontFamily: 'Helvetica',
               fontWeight: 700,
               lineHeight: { xs: 1, sm: 1.5 },
               wordWrap: 'break-word',
             }}
           >
-            Incredibly powerful CPUs, GPUs, and an SSD with integrated I/O will redefine your PlayStation experience.
+            Our technology addresses the implications shopping has on our environment
           </Typography>
           <Box sx={{ width: '100%' }}>
             <Button
               className="fadeInBtn"
               sx={{
-                opacity: 0,
+                display: 'none', // Hide it completely when not hovered
+                opacity: 0, 
                 transform: 'translateY(20px)',
                 transition: 'all 0.3s ease',
                 width: '75%',
@@ -91,14 +98,15 @@ export const Card1 = () => {
                 alignItems: 'center',
               }}
             >
+
               <Typography
                 sx={{
                   textAlign: 'center',
                   color: 'black',
-                  fontSize: 16,
+                  fontSize: {xs:12, sm:16},
                   fontFamily: 'Elemental End',
                   textTransform: 'lowercase',
-                  fontWeight: 700,
+                  fontWeight: 500,
                 }}
               >
                 Learn More
@@ -111,229 +119,244 @@ export const Card1 = () => {
 }
   
 export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000" }) => {
-    return (
-      <Box sx={{ width: '100%', pt: 5.5, pb: 5.5, px: 4, pr: 6,
-        height: '100%',
-        bgcolor: bg,
+  return (
+    <Box sx={{ 
+      flex:1,
+      width: '100%', 
+      py: { xs:1, sm:5.5 }, 
+      pr: 2,
+      height: '100%',
+      bgcolor: bg,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 3,
+      borderRadius: '50px',
+      mb: { xs: 2, md: 0 },
+      position: 'relative',
+      overflow: 'hidden',
+      '&:hover .fadeInBtn': {
+        display: 'flex', // Show button on hover
+        opacity: 1, 
+        transform: 'translateY(0)',
+      },
+      '&:hover .headerBox': {
+        transform: 'translateY(-10%)',
+      },
+      transition: 'all 1s ease',
+    }}
+  >
+    <Box sx={{ p: 0 }}>
+      <LazyImage
+        alt="Image"
+        width={100}
+        height={100}
+        sx={{
+          width: { xs: 80, sm: 100 },
+          height: { xs: 80, sm: 100 }
+        }}
+        src={imageUrl}
+      />
+    </Box>
+
+    <Box
+      className="headerBox"
+      sx={{
+        height: 143,
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 3,
-        borderRadius: '50px',
-        mb: { xs: 2, md: 0 },
-        position: 'relative',
-        overflow: 'hidden',
-        '&:hover .fadeInBtn': {
-          opacity: 1, // Make button visible on hover
-          transform: 'translateY(0)', // Button comes up smoothly
-        },
-        '&:hover .headerBox': {
-          transform: 'translateY(-10%)', // Move header box to top on hover
-        },
-        transition: 'all 0.3s ease', // Smooth transition for hover effect
+        gap: 1,
+        transition: 'transform 0.3s ease',
+        transform: 'translateY(0)',
       }}
     >
-      <Box sx={{ p: 0 }}>
-        <LazyImage
-          alt="Image"
-          width={94}
-          height={94}
-          src={imageUrl}
-        />
-      </Box>
-  
-      {/* Header Box for title and subtitle */}
-      <Box
-        className="headerBox"
+      <Typography
         sx={{
-          height: 143,
-          display: 'flex',
-          flexDirection: 'column',
+          lineHeight: 1,
+          alignSelf: 'stretch',
+          color: textColor,
+          fontSize: { xs: 20, md: 25 },
+          fontFamily: 'Elemental End',
+          textTransform: 'lowercase',
+          wordWrap: 'break-word',
+          fontWeight: 500
+        }}
+      >
+        {headerText}
+      </Typography>
+      <Typography
+        sx={{
+          alignSelf: 'stretch',
+          color: '#909090',
+          fontSize: { xs: 12, sm: 16 },
+          fontFamily: 'Helvetica',
+          fontWeight: 700,
+          lineHeight: { xs: 1, sm: 1.5 },
+          wordWrap: 'break-word',
+        }}
+      >
+        {subHeaderText}
+      </Typography>
+    
+    <Box sx={{ width: '100%' }}>
+      <Button
+        className="fadeInBtn"
+        sx={{
+          display: 'none', // Hide initially
+          opacity: 0,
+          transform: 'translateY(20px)',
+          transition: 'all 0.3s ease',
+          width: '75%',
+          py: 1,
+          borderRadius: 50,
+          border: `1px ${textColor} solid`,
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 1,
-          transition: 'transform 0.3s ease', // Smooth transition for header movement
-          transform: 'translateY(0)', // Default position in center
         }}
       >
         <Typography
           sx={{
-            lineHeight: 1,
-            alignSelf: 'stretch',
+            textAlign: 'center',
             color: textColor,
-            fontSize: { xs: 20, md: 25 },
-            fontFamily: 'Helvetica',
-            fontWeight: 700,
-            wordWrap: 'break-word',
+            fontSize: {xs:12, sm:16},
+            fontFamily: 'Elemental End',
+            textTransform: 'lowercase',
+            fontWeight: 500,
           }}
         >
-          {headerText}
+          Learn More
         </Typography>
-        <Typography
+      </Button>
+    </Box>
+    </Box>
+  </Box>
+  )
+}
+
+export const Card3 = () => {
+  return (
+    <FlexBox
+      gap={5}
+      sx={{
+        pt: { xs: 5, sm: 14 },
+        pb: { xs: 2, sm: 10 },
+        px: 5,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        height: '100%',
+        '&:hover .headerBox': {
+          transform: 'translateY(-10%)',
+        },
+        '&:hover .fadeInBtn': {
+          opacity: 1, // Show button when the entire FlexBox is hovered
+        },
+        transition: 'all 0.3s ease',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          gap: 2,
+          height: '100%',
+        }}
+      >
+        <Box
+          className="headerBox"
           sx={{
             alignSelf: 'stretch',
-            color: '#909090',
-            fontSize: { xs: 12, sm: 12, md: 14 },
-            fontFamily: 'Helvetica',
-            fontWeight: 700,
-            lineHeight: { xs: 1, sm: 1.5 },
-            wordWrap: 'break-word',
-          }}
-        >
-          {subHeaderText}
-        </Typography>
-        {/* Button with fade-in effect */}
-      <Box sx={{ width: '100%' }}>
-        <Button
-          className="fadeInBtn"
-          sx={{
-            opacity: 0,
-            transform: 'translateY(20px)',
-            transition: 'all 0.3s ease',
-            width: '75%',
-            py: 1,
-            borderRadius: 50,
-            border: `1px ${textColor} solid`,
-            justifyContent: 'center',
-            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+            gap: 2,
+            transition: 'transform 0.3s ease',
+            transform: 'translateY(0)',
           }}
         >
           <Typography
             sx={{
-              textAlign: 'center',
-              color: textColor,
-              fontSize: 16,
+              lineHeight: 1,
+              alignSelf: 'stretch',
+              color: 'black',
+              fontSize: { xs: 20, sm: 25 },
               fontFamily: 'Elemental End',
               textTransform: 'lowercase',
-              fontWeight: 700,
+              wordWrap: 'break-word',
             }}
           >
-            Learn More
+            Underserved Customers
           </Typography>
-        </Button>
-      </Box>
-      </Box>
-    </Box>
-    )
-}
-  
-export const Card3 = () => {
-    return (
-      <Box
-        sx={{
-          pt: 5.5,
-          pb: 5.5,
-          px: 4,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 1,
-          position: 'relative',
-          overflow: 'hidden',
-          '&:hover .fadeInBtn': {
-            opacity: 1, // Make button visible on hover
-            transform: 'translateY(0)', // Button comes up smoothly
-          },
-          '&:hover .headerBox': {
-            transform: 'translateY(-10%)', // Move header box to the top on hover
-          },
-          transition: 'all 0.3s ease', // Smooth transition for hover effect
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            gap: 2,
-          }}
-        >
-          {/* Header Box for title and subtitle */}
-          <Box
-            className="headerBox"
+          <Typography
             sx={{
               alignSelf: 'stretch',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              gap: 2,
-              transition: 'transform 0.3s ease', // Smooth transition for header movement
-              transform: 'translateY(0)', // Default position in center
+              color: '#909090',
+              fontSize: { xs: 12, sm: 16 },
+              fontFamily: 'Helvetica',
+              fontWeight: 700,
+              lineHeight: { xs: 1, sm: 1.5 },
+              wordWrap: 'break-word',
+              maxWidth: '1200px',
+              textAlign: 'justify',
+            }}
+          >
+            We are committed to empowering underserved communities through Augmented Reality. Our AR platform prioritizes accessibility, ensuring individuals with disabilities, senior citizens, veterans, and expectant mothers have access to immersive shopping experiences. We’re redefining inclusivity with the mission to create a world where technology adapts to the needs of every user, making shopping more convenient, confident, and comfortable.
+          </Typography>
+        </Box>
+
+        <Box sx={{ width: '100%', height: 50, position: 'relative' }}>
+          <Button
+            className="fadeInBtn"
+            sx={{
+              width: '75%',
+              padding: '10px 0',
+              borderRadius: 50,
+              border: '1px black solid',
+              background: 'transparent',
+              cursor: 'pointer',
+              position: 'absolute',
+              bottom: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              textAlign: 'center',
+              opacity: 0, // Initially hidden
+              transition: 'opacity 0.3s ease-in-out', // Smooth fade-in transition
             }}
           >
             <Typography
               sx={{
-                lineHeight: 1,
-                alignSelf: 'stretch',
+                textAlign: 'center',
                 color: 'black',
-                fontSize: { xs: 20, sm: 32, md: 40 },
-                fontFamily: 'Helvetica',
+                fontSize: 16,
+                fontFamily: 'Elemental End',
+                textTransform: 'lowercase',
                 fontWeight: 700,
-                wordWrap: 'break-word',
               }}
             >
-              Underserved
-              <br />
-              Customers
+              Learn More
             </Typography>
-            <Typography
-              sx={{
-                alignSelf: 'stretch',
-                color: '#909090',
-                fontSize: { xs: 12, sm: 12, md: 18 },
-                fontFamily: 'Helvetica',
-                fontWeight: 700,
-                lineHeight: { xs: 1, sm: 1.5 },
-                wordWrap: 'break-word',
-                maxWidth:'1200px'
-              }}
-            >
-              We are committed to breaking down barriers in digital commerce by empowering underserved communities through Augmented Reality. We strive to be AR platform that priorities accessibility, ensuring individuals with disabilities, seniors, veterans, and expectant mothers have seamless access to immersive shopping experiences. Our platform is  redefining inclusivity in online retail. Our mission is to create a world where technology adapts to the needs of every user, making digital experiences more convenient, confident, and comfortable.
-            </Typography>
-          </Box>
-  
-          <Box sx={{ width: '100%' }}>
-              <Button
-                className="fadeInBtn"
-                sx={{
-                  opacity: 0,
-                  transform: 'translateY(20px)',
-                  transition: 'all 0.3s ease',
-                  width: '75%',
-                  py: 1,
-                  borderRadius: 50,
-                  border: '1px black solid',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Typography
-                  sx={{
-                    textAlign: 'center',
-                    color: 'black',
-                    fontSize: 16,
-                    fontFamily: 'Elemental End',
-                    textTransform: 'lowercase',
-                    fontWeight: 700,
-                  }}
-                >
-                  Learn More
-                </Typography>
-              </Button>
-            </Box>
-        </Box>
-  
-        <Box sx={{ width: '100%' }}>
-          <LazyImage
-            alt="Image"
-            width={200}
-            height={200}
-            src="/assets/images/card/wheelchair.png"
-          />
+          </Button>
         </Box>
       </Box>
-    )
-}
-  
+
+      <LazyImage
+        alt="Image"
+        width={175}
+        height={175}
+        sx={{
+          width: { xs: 80, sm: 175 },
+          height: { xs: 80, sm: 175 },
+        }}
+        src="/assets/images/card/wheelchair.png"
+      />
+    </FlexBox>
+  );
+};
+
+

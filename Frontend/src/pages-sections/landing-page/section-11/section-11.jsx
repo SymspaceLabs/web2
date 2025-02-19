@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Grid } from '@mui/material';
 import { Box, Card, CardContent, Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
+
 
 /**
  * Section11 Component
@@ -17,7 +19,7 @@ import { motion } from 'framer-motion';
  */
 export default function Section11() {
   // Array of statistics for the first set of cards
-  const cardsData1 = [
+  const cardsData = [
     { number: '90', description: (<>90%+ of Americans use/<br/>would use AR for e-commerce</>), },
     { number: '94', description: (<>94% conversion rate for products <br/> purchased through AR/VR ads</>) },
     { number: '98', description: (<>98% of Americans who used AR<br/>while shopping found it helpful</>) },
@@ -34,8 +36,8 @@ export default function Section11() {
       <Container>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <Grid container spacing={3}>
-            {/* Map over the cardsData1 array and render CustomCard1 for each entry */}
-            {cardsData1.slice(0, 3).map((card, index) => (
+            {/* Map over the cardsData array and render CustomCard1 for each entry */}
+            {cardsData.slice(0, 3).map((card, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <motion.div variants={fadeInVariants}>
                   <CustomCard1 number={card.number} description={card.description} />
@@ -71,12 +73,14 @@ export default function Section11() {
  */
 export const CustomCard1 = ({ number, description }) => {
   const [currentNumber, setCurrentNumber] = useState(0);
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
 
-  // Animated number counter that increases over time
   useEffect(() => {
+    if (!inView) return; // Start only when in view
+
     let start = 0;
     const duration = 2000;
-    const increment = Math.ceil(number / (duration / 50)); // Increment value based on target and duration
+    const increment = Math.ceil(number / (duration / 50));
     const interval = setInterval(() => {
       start += increment;
       if (start >= number) {
@@ -86,50 +90,51 @@ export const CustomCard1 = ({ number, description }) => {
       setCurrentNumber(start);
     }, 50);
 
-    // Cleanup the interval when the component is unmounted
     return () => clearInterval(interval);
-  }, [number]);
+  }, [inView, number]);
 
   return (
-    <Card sx={{ minWidth: 275, mb: 2, borderRadius: '50px', '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)', }, }}>
+    <Card 
+      ref={ref} 
+      sx={{ 
+        mb: 2, 
+        borderRadius: '50px', 
+        '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)' } // Button fades in on hover
+      }}
+    >
       <CardContent sx={{ px: 0 }}>
-        {/* Content for CustomCard1 */}
-        <Box sx={{ px: 3, pt: 15, pb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '30px' }}>
-          <Typography component="div" sx={{ fontFamily: 'Helvetica', color: '#000', fontSize: 128, fontWeight: 'bold' }}>
-            {currentNumber}% {/* Display the animated percentage */}
+        <Box sx={{ px: 3, pt: {xs:5, sm:20}, pb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '50px' }}>
+          <Typography component="div" sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#000', fontSize: 100 }}>
+            {currentNumber}%
           </Typography>
-          <Typography sx={{ fontFamily: 'Helvetica', color: '#909090', fontSize: 24, fontWeight: 'bold', textAlign: 'center' }}>
-            {description} {/* Description text for the statistic */}
+          <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: 24, fontWeight: 500, textAlign: 'center' }}>
+            {description}
           </Typography>
-          
-          {/* Fade-in button with transition */}
-          <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Button
+          {/* Button with fade-in effect */}
+          <Box>
+            <Button 
               className="fadeInBtn"
-              sx={{
-                opacity: 0,
-                transform: 'translateY(20px)',
+              sx={{ 
+                opacity: 0, 
+                transform: 'translateY(20px)', 
                 transition: 'all 0.3s ease',
-                width: '50%',
-                py: 1,
+                py: 2,
+                px: 3,
                 borderRadius: 50,
-                border: '1px black solid',
-                justifyContent: 'center',
-                alignItems: 'center',
+                border: '2px solid black',
+                color: 'black',
+                fontSize: 12,
+                fontFamily: 'Elemental End',
+                textTransform: 'lowercase',
+                fontWeight: 500,
+                ':hover': {
+                  background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                  color: '#FFF',
+                  border: '2px solid white',
+                }
               }}
             >
-              <Typography
-                sx={{
-                  textAlign: 'center',
-                  color: 'black',
-                  fontSize: 16,
-                  fontFamily: 'Elemental End',
-                  textTransform: 'lowercase',
-                  fontWeight: 700,
-                }}
-              >
-                Learn More
-              </Typography>
+              Learn More
             </Button>
           </Box>
         </Box>
@@ -148,35 +153,40 @@ export const CustomCard2 = () => {
   return (
     <Card sx={{ borderRadius: '50px', display: 'flex', flexDirection: 'column', height: '100%', '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)'} }}>
       <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '30px', pt: 5, px:5 }}>
-        <Typography variant="h1" component="div" sx={{ fontFamily: 'Helvetica', color: '#000', fontSize: 72, fontWeight: 'bold' }}>
+        <Typography component="div" sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: {xs:48, sm:72}, fontWeight: 'bold' }}>
           AR Visuals
         </Typography>
-        <Typography variant="body2" sx={{ fontFamily: 'Helvetica', color: '#909090', fontSize: '24px', fontWeight: 'bold', textAlign: 'justify' }}>
+        <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: '24px', fontWeight: 500, textAlign: 'justify' }}>
           We create unique AR experiences for our clients. Share your vision and we will bring any idea into reality for your communities. AR Visuals provide businesses and consumers with an immersive medium for marketing. Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
         </Typography>
         
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button className="fadeInBtn" sx={{ opacity: 0, transform: 'translateY(20px)', transition: 'all 0.3s ease',
+          <Button className="fadeInBtn" 
+            sx={{ 
+              opacity: 0, 
+              transform: 'translateY(20px)', 
+              transition: 'all 0.3s ease',
               width: '25%',
-              py: 1,
+              py: 2,
+              px: 3,
               borderRadius: 50,
-              border: '1px black solid',
+              border: '2px solid black',
               justifyContent: 'center',
               alignItems: 'center',
+              textAlign: 'center',
+              color: 'black',
+              fontSize: 12,
+              fontFamily: 'Elemental End',
+              textTransform: 'lowercase',
+              fontWeight: 500,
+              ':hover' : {
+                background : 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                color: '#FFF',
+                border: '2px solid white',
+              }
             }}
           >
-            <Typography
-              sx={{
-                textAlign: 'center',
-                color: 'black',
-                fontSize: 16,
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
-                fontWeight: 700,
-              }}
-            >
-              Contact Us
-            </Typography>
+            Contact Us
           </Button>
         </Box>
       </CardContent>

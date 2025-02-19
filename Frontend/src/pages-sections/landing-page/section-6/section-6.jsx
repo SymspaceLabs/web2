@@ -26,14 +26,14 @@ export default function Section6() {
               {/* Left column: text content */}
               <Grid item xs={12} md={6}>
                 <Box sx={sectionStyles.leftColumn}>
-                  <Typography sx={sectionStyles.title}>
+                  <Typography sx={{fontFamily: 'Elemental End', textTransform:'lowercase', color: '#fff', fontSize: {xs:30, sm:64} }}>
                     3D Repository
                   </Typography>
-                  <Typography sx={sectionStyles.description}>
-                    Generate and store high-quality 3D models of any dynamic or static <br/>
-                    product from text-prompts, images, weblinks, and object scans. Choose <br/> 
-                    from hundreds of templates to create marketing ad videos. Then allow <br/>
-                    your consumers to trial these products realistically in our immersive AR <br/>
+                  <Typography sx={{ maxWidth:'650px', fontFamily: 'Helvetica', color: '#FFF', fontSize: { xs: 14, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: 2 }}>
+                    Generate and store high-quality 3D models of any dynamic or static
+                    product from text-prompts, images, weblinks, and object scans. Choose 
+                    from hundreds of templates to create marketing ad videos. Then allow
+                    your consumers to trial these products realistically in our immersive AR
                     marketplace.
                   </Typography>
                   {/* Call-to-action button */}

@@ -1,7 +1,4 @@
 export const styles = {
-    sectionBackground: {
-      background: '#1F1F1F',
-    },
     container: {
       display: 'flex',
       flexDirection: 'column',

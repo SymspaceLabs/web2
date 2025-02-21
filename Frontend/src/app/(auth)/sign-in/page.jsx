@@ -1,7 +1,7 @@
-import { ForgotPasswordPage } from "@/pages-sections/sessions/page-view"; 
+import { LoginPageView } from "@/pages-sections/sessions/page-view";
 
 export const metadata = {
-  title: "Forgot Password",
+  title: "Sign In",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",
@@ -10,6 +10,6 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default function ResetPassword() {
-  return <ForgotPasswordPage />;
+export default function Login() {
+  return <LoginPageView />;
 }

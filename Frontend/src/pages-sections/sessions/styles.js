@@ -39,26 +39,27 @@ const fbStyle = {
 export const mainContainerStyle = {
   position: 'relative',
   backgroundColor: '#3F3F3F',
-  display: 'flex',
   flexDirection:'column',
-  justifyContent: 'start',
+  justifyContent: "flex-start",
   alignItems: 'center',
-  minHeight: '1000px',
-  px: 2,
+  minHeight: '100vh',
   py: { xs: 0, sm: 5 },
+  // minHeight: 'auto',
+  height: '100%',
+
 };
 
 // Blurred Background Overlay
 export const blurredOverlayStyle1 = {
   zIndex: 0,
   position: 'absolute',
-  top: '50%',
+  top: '40%', // Move it higher
+  transform: 'translate(-50%, -40%)', // Adjust translation
   left: '50%',
   width: { xs: '100%', sm: '80%', md: '890px' }, // Adjust width based on screen size
-  height: { xs: '70vh', sm: '80vh', md: '1000px' }, // Adjust height for smaller screens
+  height: { xs: '50vh', sm: '60vh', md: '700px' }, // Reduce height
   background: 'rgba(3, 102, 254, 0.8)',
   borderRadius: { xs: '30px', sm: '40px', md: '50px' }, // Adjust border radius for smaller screens
-  transform: 'translate(-50%, -50%)',
   opacity: 0.4,
   filter: 'blur(100px)',
   backdropFilter: 'blur(100px)',

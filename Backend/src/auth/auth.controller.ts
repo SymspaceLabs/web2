@@ -61,7 +61,7 @@ export class AuthController {
       if (role === 'seller') {
         redirectUrl = `${process.env.FRONTEND_URL}/vendor/dashboard`;
       } else {
-        redirectUrl = `${process.env.FRONTEND_URL}/signin`;
+        redirectUrl = `${process.env.FRONTEND_URL}/sign-in`;
       }
       return res.redirect(redirectUrl);
     } catch (error) {

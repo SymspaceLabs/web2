@@ -227,9 +227,9 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
                   "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
                 color: "#fff",
               }}
-              onClick={() => handleNavigate("/signin")}
+              onClick={() => handleNavigate("/sign-in")}
             >
-              Sign in
+              Sign In
             </Button>
             <Button
               sx={{
@@ -239,7 +239,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
               }}
               onClick={() => handleNavigate("/signup")}
             >
-              Sign up
+              Sign Up
             </Button>
           </FlexBox>
         </Box>

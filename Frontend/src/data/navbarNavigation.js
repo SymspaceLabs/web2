@@ -232,7 +232,7 @@ const megaMenus = [
   title: "Authentication",
   child: [{
     title: "Signin",
-    url: "/signin"
+    url: "/sign-in"
   }, {
     title: "Register",
     url: "/register"

@@ -98,7 +98,7 @@ const ResetPassword = () => {
         setSnackbarOpen(true);
         setSnackbarSeverity("success");
         setSnackbarMessage(data.message);
-        router.push("/signin");
+        router.push("/sign-in");
         
       }
     } catch (error) {

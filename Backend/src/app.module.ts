@@ -40,11 +40,11 @@ import { UploadModule } from './upload/upload.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get<string>('HOST_DB'),
-        port: parseInt(configService.get<string>('HOST_DB_PORT')),
-        username: configService.get<string>('DB_UNAME'),
-        password: configService.get<string>('DB_UPASS'),
-        database: configService.get<string>('DB_NAME'), 
+        host: configService.get<string>('HOST_DB') || 'localhost',
+        port: parseInt(configService.get<string>('HOST_DB_PORT')) || 3306 ,
+        username: configService.get<string>('DB_UNAME') || 'root',
+        password: configService.get<string>('DB_UPASS') || '1234',
+        database: configService.get<string>('DB_NAME')  || 'sympspace', 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
         options: {

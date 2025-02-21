@@ -50,7 +50,7 @@ export default function ProfilePageView() {
 
   useEffect(() => {
     if (isAuthenticated === false) {
-      router.push("/signin");
+      router.push("/sign-in");
     }
   }, [isAuthenticated, router]);
 

@@ -5,7 +5,7 @@ import { Box, Snackbar, Alert, Dialog, Drawer, useMediaQuery } from '@mui/materi
 import { LoginPageView } from "../../../pages-sections/sessions/page-view"; // GLOBAL CUSTOM COMPONENTS
 import { MiniCart } from "../../../components/mini-cart"; // LOGIN PAGE SECTIONS
 import { Wrapper } from "../../../pages-sections/sessions/styles";
-import LogoWithTitle from "../../../pages-sections/sessions/components/logo-title";
+import LogoWithTitle from "@/components/LogoWithTitle";
 import LoginBottom from "../../../pages-sections/sessions/components/login-bottom";
 import { SocialButtons } from "./SocialButtons";
 

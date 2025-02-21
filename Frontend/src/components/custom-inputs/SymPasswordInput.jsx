@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { TextField, InputAdornment, IconButton, FormHelperText } from "@mui/material";
+import { TextField, InputAdornment, IconButton, FormHelperText, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FlexBox } from "../flex-box";
-import { Small } from "../Typography";
 
 const SymPasswordInput = ({
     title,
@@ -10,12 +9,11 @@ const SymPasswordInput = ({
     onChange,
     isEdit = true,
     placeholder = "",
-    error, // Receive error from parent
-
+    error,
+    showError=true
 }) => {
     const [showPassword, setShowPassword] = useState(false);
-    // const [error, setError] = useState("");
-
+    const [touched, setTouched] = useState(false);
 
     const handleTogglePassword = () => {
         setShowPassword((prev) => !prev);
@@ -32,25 +30,23 @@ const SymPasswordInput = ({
         return "";
     };
 
-    const errorMessage = validatePassword(value) || error;
-
+    const errorMessage = showError && touched ? validatePassword(value) || error : "";
 
     // Handle password change
     const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
         onChange(e); // Pass the updated value to parent
-        setError(validatePassword(newPassword));
     };
 
     return (
         <FlexBox flexDirection="column" flex={1}>
-            <Small color="white" mb={0.5}>
+            <Typography color="white" mb={0.5}  textAlign="left">
                 {title}
-            </Small>
+            </Typography>
             <TextField
                 type={showPassword ? "text" : "password"}
                 value={value}
                 onChange={handlePasswordChange}
+                onBlur={() => setTouched(true)} // Mark as touched when the user leaves the input
                 disabled={!isEdit}
                 placeholder={placeholder}
                 error={Boolean(errorMessage)}

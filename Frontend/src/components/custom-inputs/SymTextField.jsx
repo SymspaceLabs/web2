@@ -1,6 +1,6 @@
 import { FlexBox } from "../flex-box";
 import { Small } from "../Typography";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
 const SymTextField = ({
     title,
@@ -13,9 +13,9 @@ const SymTextField = ({
 }) => {
   return (
     <FlexBox flexDirection="column" flex={1}>
-        <Small color="white" mb={0.5}>
+        <Typography color="white" mb={0.5} textAlign="left">
             {title}
-        </Small>
+        </Typography>
         <TextField
             value={value}
             onChange={onChange}

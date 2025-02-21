@@ -4,13 +4,17 @@ import { Span } from '../Typography';
 import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { useMediaQuery } from '@mui/material';
 
-function SignUpForm ({
+function PartnerSignUpForm ({
     firstName,
     setFirstName,
     lastName,
     setLastName,
     email,
     setEmail,
+    businessName,
+    setBusinessName,
+    website,
+    setWebsite,
     password,
     setPassword,
     retypePassword,
@@ -25,6 +29,9 @@ function SignUpForm ({
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);
     const handleEmailChange = (event) => setEmail(event.target.value);
+    const handleBusinessNameChange = (event) => setBusinessName(event.target.value);
+    const handleWebsiteChange = (event) => setWebsite(event.target.value);
+
     const handleAgreementChange = (event) => setIsChecked(event.target.checked);
 
     const handlePasswordChange = (e) => {
@@ -54,12 +61,18 @@ function SignUpForm ({
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
             {/* EMAIL */}
-            <SymTextField title="Email" value={email} placeholder="Email" onChange={handleEmailChange} />
+            <SymTextField title="Business Email" value={email} placeholder="Email" onChange={handleEmailChange} />
 
             {/* FIRST & LAST NAME */}
             <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
                 <SymTextField title="First Name" value={firstName} placeholder="First Name" onChange={handleFirstNameChange} />
                 <SymTextField title="Last Name" value={lastName} placeholder="Last Name" onChange={handleLastNameChange} />
+            </FlexBox>
+
+            {/* BUSINESS NAME & WEBSITE */}
+            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+                <SymTextField title="Business Name" value={businessName} placeholder="Business Name" onChange={handleBusinessNameChange} />
+                <SymTextField title="Website" value={website} placeholder="Website" onChange={handleWebsiteChange} />
             </FlexBox>
 
             {/* PASSWORD */}
@@ -82,4 +95,4 @@ function SignUpForm ({
     );
 }
 
-export default SignUpForm;
+export default PartnerSignUpForm;

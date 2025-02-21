@@ -1,8 +1,8 @@
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
-
-import { H2 } from "../../../components/Typography"; // Local custom Typography component
-import FlexBox from "../../../components/flex-box/flex-box"; // Styled FlexBox component
+import { H2 } from "@/components/Typography"; // Local custom Typography component
+import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
 import BlogCard from "./blog-card"; // Blog card component
+import { motion } from "framer-motion"; // Import Framer Motion
 
 /**
  * Section3 Component
@@ -15,15 +15,13 @@ import BlogCard from "./blog-card"; // Blog card component
  */
 export default async function Section3() {
   return (
-    <Box sx={{ py: 10, background: '#E0F0FD' }}>
-      <Container>
-        {/* Header text for the section */}
+    <Box sx={{py: {xs:2, sm:10} }}>
+      <Container sx={{ borderRadius:'50px', py: 2, background: '#E0F0FD' }}>
         <H2
           sx={{
             textAlign: 'center',
             color: '#000',
-            pt: 8,
-            pb: 3,
+            py:3,
             fontFamily: 'Elemental End',
             textTransform: 'lowercase',
             fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
@@ -34,13 +32,21 @@ export default async function Section3() {
 
         {/* Grid to display product cards */}
         <Grid container spacing={3}>
-          {products.map((item) => (
+          {products.map((item, index) => (
             <Grid item lg={4} md={8} xs={12} key={item.id}>
-              <BlogCard
-                date={item.createdAt}
-                title={item.title}
-                image={item.image}
-              />
+              {/* Motion wrapper for fade-in animation */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
+              >
+                <BlogCard
+                  date={item.createdAt}
+                  title={item.title}
+                  image={item.image}
+                />
+              </motion.div>
             </Grid>
           ))}
         </Grid>
@@ -55,9 +61,10 @@ export default async function Section3() {
               textTransform: 'lowercase',
               mt: 2,
               borderRadius: '50px',
-              px: 5,
-              py: 2,
+              px: 3,
+              py: 1,
               fontSize: 12,
+              fontWeight:500,
             }}
           >
             Shop By Category

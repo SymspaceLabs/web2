@@ -7,12 +7,13 @@
  * A 'Contact Us' button is provided below the product list in each card.
  */
 
-import { Grid, Box, Card, CardContent, Container, Typography, Button } from "@mui/material";
-import FlexBox from "../../../components/flex-box/flex-box";
-import LazyImage from "../../../components/LazyImage";
-import Link from "next/link";
-import { calculateDiscount } from "../../../lib";
 import { useState } from "react";
+import { Grid, Box, Card, CardContent, Container, Typography, Button } from "@mui/material";
+import { FlexBox } from "@/components/flex-box";
+import { calculateDiscount } from "@/lib";
+import { motion } from "framer-motion"; // Import Framer Motion
+import Link from "next/link";
+import LazyImage from "@/components/LazyImage";
 
 export default function Section7() {
   // Simulated product data
@@ -23,107 +24,116 @@ export default function Section7() {
       <Container>
         <Grid container spacing={4} justifyContent="center">
           {/* Render three identical cards */}
-          {[1, 2, 3].map((_, index) => (
+          {['Shop More', 'Shop New Arrivals', 'Shop Sale'].map((_, index) => (
             <Grid item xs={12} sm={4} key={index}>
-              <Card
-                sx={{
-                  background: "#BDBDBD",
-                  px: 2,
-                  boxShadow:
-                    "inset -5px -5px 20px 1px rgba(255, 255, 255, 0.25), inset 5px 5px 20px 1px rgba(255, 255, 255, 0.25)",
-                  borderRadius: "50px",
-                }}
+              {/* Motion wrapper for fade-in animation */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true, amount: 0.2 }}
               >
-                <CardContent>
-                  {/* Section Title */}
-                  <Typography
-                    sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: 36, fontWeight: 700, py: 2 }}
-                    variant="h5"
-                    component="div"
-                  >
-                    Selected for you
-                  </Typography>
-
-                  {/* Products Grid */}
-                  <Grid container spacing={2}>
-                    {products.slice(0, 4).map((product) => (
-                      <Grid item lg={6} md={6} sm={6} xs={12} key={product.id}>
-                        <Link href={`/products/${product.slug}`} passHref>
-                          <FlexBox
-                            flexDirection="column"
-                            bgcolor="rgba(255, 255, 255, 0.1)"
-                            borderRadius={3}
-                            mb={2}
-                            sx={{ userSelect: "text", textDecoration: "none" }}
-                          >
-                            {/* Product Image */}
-                            <Box sx={{ maxHeight: 150, mt: -2, mb: "25px" }}>
-                              <LazyImage
-                                alt={product.title}
-                                width={100}
-                                height={100}
-                                src={product.thumbnail}
-                              />
-                            </Box>
-
-                            {/* Product Details */}
-                            <Box sx={{ px: 4, pb: 1 }}>
-                              <Typography
-                                sx={{
-                                  fontFamily: "Helvetica",
-                                  color: "#fff",
-                                  fontSize: "18px",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {product.title}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontFamily: "Helvetica",
-                                  color: "#fff",
-                                  fontSize: "16px",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {product.brand}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  fontFamily: "Helvetica",
-                                  color: "#fff",
-                                  fontSize: "20px",
-                                  fontWeight: 700,
-                                }}
-                              >
-                                {calculateDiscount(product.price, product.discount)}
-                              </Typography>
-                            </Box>
-                          </FlexBox>
-                        </Link>
-                      </Grid>
-                    ))}
-                  </Grid>
-
-                  {/* Contact Button */}
-                  <FlexBox justifyContent="center">
-                    <Button
-                      sx={{
-                        background: "#fff",
-                        fontFamily: "Elemental End",
-                        textTransform: "lowercase",
-                        mt: 2,
-                        borderRadius: "50px",
-                        px: 5,
-                        py: 2,
-                        fontSize: 16,
-                      }}
+                <Card
+                  sx={{
+                    background: "#BDBDBD",
+                    px: 2,
+                    boxShadow:
+                      "inset -5px -5px 20px 1px rgba(255, 255, 255, 0.25), inset 5px 5px 20px 1px rgba(255, 255, 255, 0.25)",
+                    borderRadius: "50px",
+                  }}
+                >
+                  <CardContent>
+                    {/* Section Title */}
+                    <Typography
+                      sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: 36, fontWeight: 700, py: 2 }}
+                      variant="h5"
+                      component="div"
                     >
-                      Contact Us
-                    </Button>
-                  </FlexBox>
-                </CardContent>
-              </Card>
+                      Selected for you
+                    </Typography>
+
+                    {/* Products Grid */}
+                    <Grid container spacing={2}>
+                      {products.slice(0, 4).map((product) => (
+                        <Grid item lg={6} md={6} sm={6} xs={12} key={product.id}>
+                          <Link href={`/products/${product.slug}`} passHref>
+                            <FlexBox
+                              flexDirection="column"
+                              bgcolor="rgba(255, 255, 255, 0.1)"
+                              borderRadius={3}
+                              mb={2}
+                              sx={{ userSelect: "text", textDecoration: "none" }}
+                            >
+                              {/* Product Image */}
+                              <Box sx={{ maxHeight: 150, mt: -2, mb: "25px" }}>
+                                <LazyImage
+                                  alt={product.title}
+                                  width={100}
+                                  height={100}
+                                  src={product.thumbnail}
+                                />
+                              </Box>
+
+                              {/* Product Details */}
+                              <Box sx={{ px: 4, pb: 1 }}>
+                                <Typography
+                                  sx={{
+                                    fontFamily: "Helvetica",
+                                    color: "#fff",
+                                    fontSize: "18px",
+                                    fontWeight: 500,
+                                  }}
+                                >
+                                  {product.title}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontFamily: "Helvetica",
+                                    color: "#fff",
+                                    fontSize: "16px",
+                                    fontWeight: 500,
+                                  }}
+                                >
+                                  {product.brand}
+                                </Typography>
+                                <Typography
+                                  sx={{
+                                    fontFamily: "Helvetica",
+                                    color: "#fff",
+                                    fontSize: "20px",
+                                    fontWeight: 700,
+                                  }}
+                                >
+                                  {calculateDiscount(product.price, product.discount)}
+                                </Typography>
+                              </Box>
+                            </FlexBox>
+                          </Link>
+                        </Grid>
+                      ))}
+                    </Grid>
+
+                    {/* Contact Button */}
+                    <FlexBox justifyContent="center">
+                      <Button
+                        sx={{
+                          background: "#fff",
+                          fontFamily: "Elemental End",
+                          textTransform: "lowercase",
+                          mt: 2,
+                          borderRadius: "50px",
+                          px: 5,
+                          py: 2,
+                          fontSize: 16,
+                          fontWeight:500
+                        }}
+                      >
+                        {_}
+                      </Button>
+                    </FlexBox>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </Grid>
           ))}
         </Grid>

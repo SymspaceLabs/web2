@@ -9,12 +9,12 @@ import { Divider, Box, Grid, } from '@mui/material';
 export const SocialButtons = () => { 
     return (
         <Fragment>
-            <Box my={3}>
-            <Divider>
-                <Span lineHeight={1} px={1} sx={{color:'#fff'}}>
-                or
-                </Span>
-            </Divider>
+            <Box my={3} width="100%">
+                <Divider sx={{ borderColor: '#fff' }}>
+                    <Span lineHeight={1} px={1} sx={{ color: '#fff' }}>
+                        or
+                    </Span>
+                </Divider>
             </Box>
             <Grid container spacing={1} alignItems="center">
             <Grid item sm={4} xs={12}>

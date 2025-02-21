@@ -54,11 +54,14 @@ export default function AuthLayout({ children }) {
     BOTTOM_CONTENT = (
       <>
         <SocialButtons />
-        <Box py={3}>
-          <Divider>
-            <Span sx={dividerTextStyle}>or</Span>
+        <Box my={3} width="100%">
+          <Divider sx={{ borderColor: '#fff' }}>
+              <Span lineHeight={1} px={1} sx={{ color: '#fff' }}>
+                  or
+              </Span>
           </Divider>
         </Box>
+
         <Button href="/register-partner" fullWidth size="large" sx={registerButtonStyle}>
           Create a business profile
         </Button>

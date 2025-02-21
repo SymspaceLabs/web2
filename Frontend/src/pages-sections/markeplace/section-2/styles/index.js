@@ -5,7 +5,6 @@ import styled from "@mui/material/styles/styled";
 export const StyledGrid = styled(Grid)(({
   theme
 }) => ({
-  // padding: "3rem",
   borderRadius: 8,
   alignItems: "center",
   [theme.breakpoints.down("sm")]: {

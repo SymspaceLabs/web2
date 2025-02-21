@@ -13,11 +13,12 @@
  * - Responsive and styled using MUI components.
  */
 
-import Link from "next/link";
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Carousel } from "../../../components/carousel";
+import { Box, Container, Typography, Button, Grid } from "@mui/material";
+import { Carousel } from "@/components/carousel";
 import { StyledGrid } from "./styles";
+import { motion } from "framer-motion"; // Import Framer Motion
+import Link from "next/link";
 
 export default function Section2() {
   // State to hold the list of blogs fetched from the API
@@ -46,75 +47,81 @@ export default function Section2() {
 
   return (
     <Box sx={{ py: 3 }}>
-      <Container>
-        {/* Section heading */}
-        <Typography
-          sx={{
-            textAlign: "center",
-            color: "#000",
-            pt: 8,
-            pb: 3,
-            fontFamily: "Elemental End",
-            textTransform: "lowercase",
-            fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
-          }}
-        >
-          Trending News
-        </Typography>
-
-        {/* Carousel to display blogs */}
-        <Carousel dots autoplay adaptiveHeight arrows={true} spaceBetween={1} slidesToShow={2}>
-          {blogs.map((item, index) => (
-            <Link href={`/articles/${item.slug}`} key={index}>
-              {/* Grid styled for each blog */}
-              <StyledGrid
-                container
-                sx={{ position: "relative", borderRadius: 10, overflow: "hidden" }}
-              >
-                {/* Blog image section */}
-                <Grid
-                  item
-                  xs={12}
-                  sx={{
-                    position: "relative",
-                    height: 300,
-                    backgroundImage: `url(${item.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
-                  {/* Title button styled as an overlay */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      bottom: 20,
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      textAlign: "center",
-                    }}
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.3 }} 
+          >
+            {/* Section heading */}
+            <Typography
+              sx={{
+                textAlign: "center",
+                color: "#000",
+                pt: 8,
+                pb: 3,
+                fontFamily: "Elemental End",
+                textTransform: "lowercase",
+                fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
+              }}
+            >
+              Trending News
+            </Typography>
+            {/* Carousel to display blogs */}
+            <Carousel dots autoplay adaptiveHeight arrows={true} spaceBetween={1} slidesToShow={2}>
+              {blogs.map((item, index) => (
+                <Link href={`/articles/${item.slug}`} key={index}>
+                  {/* Grid styled for each blog */}
+                  <StyledGrid
+                    container
+                    sx={{ position: "relative", borderRadius: 10, overflow: "hidden" }}
                   >
-                    <Button
+                    {/* Blog image section */}
+                    <Grid
+                      item
+                      xs={12}
                       sx={{
-                        color: "#fff",
-                        fontFamily: "Elemental End",
-                        textTransform: "lowercase",
-                        background: "rgba(255, 255, 255, 0.01)",
-                        border: "0.9px solid rgba(255, 255, 255, 0.3)",
-                        backdropFilter: "blur(13.515px)",
-                        borderRadius: "37.03px",
+                        position: "relative",
+                        height: 300,
+                        backgroundImage: `url(${item.image})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
                       }}
-                      LinkComponent={Link}
-                      href={item.shopUrl}
                     >
-                      {item.title}
-                    </Button>
-                  </div>
-                </Grid>
-              </StyledGrid>
-            </Link>
-          ))}
-        </Carousel>
-      </Container>
+                      {/* Title button styled as an overlay */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 20,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          textAlign: "center",
+                        }}
+                      >
+                        <Button
+                          sx={{
+                            color: "#fff",
+                            fontFamily: "Elemental End",
+                            textTransform: "lowercase",
+                            background: "rgba(255, 255, 255, 0.01)",
+                            border: "0.9px solid rgba(255, 255, 255, 0.3)",
+                            backdropFilter: "blur(13.515px)",
+                            borderRadius: "37.03px",
+                          }}
+                          LinkComponent={Link}
+                          href={item.shopUrl}
+                        >
+                          {item.title}
+                        </Button>
+                      </div>
+                    </Grid>
+                  </StyledGrid>
+                </Link>
+              ))}
+            </Carousel>
+          </motion.div>
+        </Container>
     </Box>
   );
 }

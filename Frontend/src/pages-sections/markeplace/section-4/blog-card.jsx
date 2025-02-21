@@ -38,7 +38,17 @@ export default function BlogCard({ title, image }) {
         >
           {title}
         </H3>
-        <LazyImage width={340} height={340} alt="Apple Watch" src={image} />
+        <Box sx={{ maxHeight: 400, p:5, width: "100%", overflow: "hidden" }}>
+          <LazyImage
+            width={1000}
+            height={1000}
+            alt="Apple Watch" 
+            src={image}
+            style={{ objectFit: "cover", width: "100%", height: "100%" }}
+          />
+        </Box>
+
+
       </Box>
     </Card>
   );

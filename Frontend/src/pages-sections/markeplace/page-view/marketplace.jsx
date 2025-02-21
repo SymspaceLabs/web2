@@ -19,24 +19,13 @@ import Section9 from "../section-9";
 import { useAuth } from "@/contexts/AuthContext";
 import OnboardingDialog from "@/components/dialog/OnboardingDialog";
 
-export default async function MarketplacePageView() {
-  // State to manage the visibility of the onboarding dialog
+export default function MarketplacePageView() {
   const [showPopup, setShowPopup] = useState(false);
-
-  // Extract authentication and user information from the AuthContext
   const { isAuthenticated, user } = useAuth();
 
-  // useEffect runs on component mount and when user onboarding status changes
   useEffect(() => {
-    // Retrieve the dialog's closed state from localStorage
     const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
 
-    // Debugging logs for user onboarding status and dialog state
-    console.log(user?.isOnboardingFormFilled);
-    console.log(isDialogClosed);
-
-    // Show the onboarding dialog if the user is authenticated, has not filled the onboarding form,
-    // and the dialog is not marked as closed in localStorage
     if (
       isAuthenticated &&
       !user?.isOnboardingFormFilled &&
@@ -72,7 +61,7 @@ export default async function MarketplacePageView() {
       <Section6 /> {/* BANNER */}
       <Section7 /> {/* CATALOGUE */}
       <Section8 /> {/* BENTO */}
-      <Section9 /> {/* 3D Animation */}
+      {/* <Section9 /> {/* 3D Animation */}
       {/* <Section10 /> */} {/* 3D Animation */}
     </div>
   );

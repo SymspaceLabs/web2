@@ -67,6 +67,8 @@ export default function Section8() {
           <LazyImage
             src="/assets/images/banners/banner-55.png"
             alt="offer"
+            width={500}
+            height={500}
           />
           <div className="content">
             <Typography

@@ -1,18 +1,14 @@
 "use client";
 
 import Link from "next/link";
-// GLOBAL CUSTOM COMPONENTS
-import LazyImage from "components/LazyImage";
-import { H3, Span } from "components/Typography"; // LOCAL CUSTOM HOOK
-
 import useProduct from "../use-product"; // LOCAL CUSTOM COMPONENTS
-
 import ProductPrice from "../product-price";
 import DiscountChip from "../discount-chip";
 import ProductStatus from "./components/product-status";
 import ProductRating from "../product-rating";
 import QuantityButtons from "./components/quantity-buttons"; // STYLED COMPONENTS
-
+import { LazyImage } from "@/components/lazy-image";
+import { H3, Span } from "components/Typography"; // LOCAL CUSTOM HOOK
 import { StyledCard, ContentWrapper, ColorBox, ImgBox } from "./styles"; // =======================================================
 
 // =======================================================

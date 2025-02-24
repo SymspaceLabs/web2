@@ -1,16 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { Box, Typography, Button, useTheme, TextField, Snackbar, Alert } from '@mui/material';
-import BlobBox from './blobBox';
+import { Box, Typography, Button, useTheme, TextField } from '@mui/material';
 import { section1Styles } from './styles';
-import LazyImage from '@/components/LazyImage';
-import { useRouter } from 'next/navigation';
 
 export default function Section1() {
   const theme = useTheme();
   const styles = section1Styles(theme);
-  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [showEmailInput, setShowEmailInput] = useState(false);

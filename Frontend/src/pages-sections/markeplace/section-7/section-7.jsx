@@ -7,13 +7,13 @@
  * A 'Contact Us' button is provided below the product list in each card.
  */
 
+import Link from "next/link";
 import { useState } from "react";
 import { Grid, Box, Card, CardContent, Container, Typography, Button } from "@mui/material";
 import { FlexBox } from "@/components/flex-box";
 import { calculateDiscount } from "@/lib";
 import { motion } from "framer-motion"; // Import Framer Motion
-import Link from "next/link";
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 
 export default function Section7() {
   // Simulated product data

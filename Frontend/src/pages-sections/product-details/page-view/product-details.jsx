@@ -4,31 +4,20 @@
  * `ProductDetailsPageView` is a React functional component that serves as the 
  * main container for displaying detailed information about a product.
  * 
- * It includes animations, product introduction, and tabs for additional details 
- * like product features, specifications, and reviews. The component also has a 
- * visually engaging background with animated blob effects.
- * 
  * Props:
  * - `product`: The product data passed to `ProductIntro` component.
- * - `frequentlyBought` (commented): Data for frequently bought products.
- * - `relatedProducts` (commented): Data for related products.
- * 
  * This component is designed with Material-UI for responsive styling.
+ * 
  */
 
 // Material-UI components
-import Container from "@mui/material/Container";
-import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Container } from "@mui/material";
 import { styled, keyframes } from '@mui/material/styles';
-import React, { useEffect, useState } from "react";
 
 // Local custom components
 import ProductTabs from "../product-tabs";
 import ProductIntro from "../product-intro";
-// import AvailableShops from "../available-shops";
-// import RelatedProducts from "../related-products";
-// import FrequentlyBought from "../frequently-bought";
-// import Section5 from "../section-5";
 
 
 const blob = keyframes`
@@ -56,7 +45,6 @@ const BlobBox = styled(Box)(({ theme }) => ({
   opacity: 0.7,
   animation: `${blob} 7s infinite`,
 }));
-
 
 
 export default function ProductDetailsPageView({slug}) {
@@ -127,11 +115,6 @@ export default function ProductDetailsPageView({slug}) {
         {/* Tabs section for detailed product information */}
         <ProductTabs />
 
-        {/* Additional sections (currently commented out) */}
-        {/* <Section5 /> // BEST SELLER PRODUCTS */}
-        {/* <FrequentlyBought products={props.frequentlyBought} /> */}
-        {/* <AvailableShops /> */}
-        {/* <RelatedProducts products={props.relatedProducts} /> */}
       </Container>
     </Box>
   );

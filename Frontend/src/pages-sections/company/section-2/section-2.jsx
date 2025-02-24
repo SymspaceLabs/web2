@@ -13,15 +13,6 @@ import { StyledContainer } from "./styles"; // Styled component for layout styli
  * The side navigation bar adapts its height dynamically based on the content's height.
  * Includes a list of products displayed via the Section4 component.
  *
- * @param {Object[]} products - Array of product objects to be displayed.
- * @param {string} products[].id - Unique identifier for the product.
- * @param {string} products[].name - Name of the product.
- * @param {string} products[].slug - Slug for the product (used in navigation).
- * @param {number} products[].price - Price of the product.
- * @param {Object[]} products[].images - Array of product image objects.
- * @param {string} products[].images[].url - URL of the product image.
- *
- * @returns {JSX.Element} The Section2 layout with side navigation and product display.
  */
 export default async function Section2({ products }) {
   const ref = useRef(); // Ref to track the height of the main content area

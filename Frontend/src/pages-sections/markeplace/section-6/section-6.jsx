@@ -5,16 +5,14 @@
  * a description, a call-to-action button for beta access, and an image. 
  * The section uses Material-UI (MUI) for styling and includes styled components.
  *
- * @returns {JSX.Element} The rendered promotional section.
  */
 
-import React, { useState } from "react";
-import LazyImage from "../../../components/LazyImage"; // Lazy loading component for optimized image rendering
-import { RootStyle, StyledButton } from "./styles"; // Custom styled components
-import { Box, Container, Typography, Button, TextField } from '@mui/material'; // Material-UI components for layout and styling
-import { motion } from "framer-motion"; // Import Framer Motion
+import { useState } from "react";
+import { RootStyle } from "./styles";
+import { Box, Container, Typography, Button, TextField } from '@mui/material';
+import { LazyImage } from "@/components/lazy-image";
+import { motion } from "framer-motion";
 
-import shirt from "../../../../public/assets/images/background/banner-img.png"; // Image used in the section
 
 export default function Section6() {
     const [showInput, setShowInput] = useState(false);
@@ -67,6 +65,7 @@ export default function Section6() {
         setError("An error occurred. Please try again later.");
       }
     };
+    
   return (
     <Box>
       <Container>

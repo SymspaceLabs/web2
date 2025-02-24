@@ -1,8 +1,8 @@
 "use client"
 
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import LazyImage from "../../../components/LazyImage"; // Optimized image component
+import { LazyImage } from '@/components/lazy-image';
 import { sectionStyles } from './styles'; // Import custom styles for the section
 import { motion, useInView } from "framer-motion";
 

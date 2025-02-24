@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
-import { H3 } from '../../../components/Typography';
-import LazyImage from '../../../components/LazyImage';
+import { H3 } from '@/components/Typography';
+import { LazyImage } from '@/components/lazy-image';
 
 export default function BlogCard({ title, image }) {
   return (

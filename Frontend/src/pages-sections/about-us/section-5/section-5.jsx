@@ -4,8 +4,7 @@ import Link from "next/link"; // Used for navigation.
 import { IconButton, Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { FlexBox } from "@/components/flex-box"; // Custom utility for flexible layouts.
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
-import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
-import LazyImage from "@/components/LazyImage"; // Custom lazy-loading image component.
+import { LazyImage } from "@/components/lazy-image";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.

@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container"; // MUI Container for layout
+import { Container } from "@mui/material"; // MUI Container for layout
 
 import { H1, Paragraph } from "../../../components/Typography"; // Global typography components
 import { ProductCard7 } from "../../../components/product-cards/product-card-7"; // Custom product card component
@@ -11,14 +11,6 @@ import { ProductCard7 } from "../../../components/product-cards/product-card-7";
  * 
  * Renders a list of products in a grid layout with product cards.
  * Includes a "Load More" button for additional actions.
- * 
- * @param {Object[]} products - Array of product objects to display.
- * @param {string} products[].id - Unique identifier for the product.
- * @param {string} products[].name - Name of the product.
- * @param {string} products[].slug - Slug for the product (used in navigation).
- * @param {number} products[].price - Price of the product.
- * @param {Object[]} products[].images - Array of product image objects.
- * @param {string} products[].images[].url - URL of the product image.
  * 
  * @returns {JSX.Element} A grid of product cards.
  */

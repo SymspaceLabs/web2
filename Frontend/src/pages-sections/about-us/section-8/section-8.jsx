@@ -1,12 +1,10 @@
 "use client"
 
-import React, { useState } from "react";
-import Container from "@mui/material/Container"; 
-import LazyImage from "../../../components/LazyImage"; 
-import { Paragraph } from "../../../components/Typography"; 
+import { useState } from "react";
+import { LazyImage } from "@/components/lazy-image";
+import { Paragraph } from "@/components/Typography"; 
 import { RootStyle } from "./styles"; 
-import bgImage from "../../../../public/assets/images/banners/banner-55.png"; 
-import { Box, Typography, Button, TextField, useMediaQuery } from "@mui/material";
+import { Box, Typography, Button, Container, useMediaQuery } from "@mui/material";
 
 export default function Section8() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -66,7 +64,10 @@ export default function Section8() {
     <Container sx={{ py:10, display: "flex", justifyContent: "center" }}>
       <Box sx={{ maxWidth: "1400px", width: "100%" }}>
         <RootStyle>
-          <LazyImage src={bgImage} alt="offer" />
+          <LazyImage
+            src="/assets/images/banners/banner-55.png"
+            alt="offer"
+          />
           <div className="content">
             <Typography
               sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}

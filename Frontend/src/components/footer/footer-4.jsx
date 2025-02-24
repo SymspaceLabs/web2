@@ -1,19 +1,16 @@
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
-import Container from "@mui/material/Container"; // LOCAL CUSTOM COMPONENT
-
-import AboutLinks from "./components/about-links";
-import SocialLinks from "./components/social-links";
-import CustomerCareLinks from "./components/customer-care-links"; // GLOBAL CUSTOM COMPONENTS
-
-import LazyImage from "../LazyImage";
-import { Paragraph } from "../Typography";
-import FlexBetween from "../flex-box/flex-between"; // STYLED COMPONENT
-
+import { LazyImage } from "@/components/lazy-image";
+import { Paragraph } from "@/components/Typography";
+import { FlexBetween } from "@/components/flex-box/";
+import { Container, Divider, Grid, Box } from "@mui/material";
 import { Heading } from "./styles";
+
+import SocialLinks from "./components/social-links";
+import CustomerCareLinks from "./components/customer-care-links";
+import AboutLinks from "./components/about-links";
+
 export default function Footer4() {
-  return <Box component="footer" bgcolor="#000" pt={12}>
+  return (
+    <Box component="footer" bgcolor="#000" pt={12}>
       <Container>
         <Grid container spacing={3}>
           <Grid item lg={4} md={4} sm={6} xs={12}>
@@ -26,23 +23,17 @@ export default function Footer4() {
             </Paragraph>
           </Grid>
 
-          {
-          /* ABOUT US LINKS */
-        }
+          {/* ABOUT US LINKS */}
           <Grid sx={{color:'#fff'}} item lg={2} md={2} sm={6} xs={12}>
             <AboutLinks isDark={false} />
           </Grid>
 
-          {
-          /* CUSTOMER CARE LINKS */
-        }
+          {/* CUSTOMER CARE LINKS */}
           <Grid sx={{color:'#fff'}} item lg={3} md={3} sm={6} xs={12}>
             <CustomerCareLinks isDark={false} />
           </Grid>
 
-          {
-          /* CONTACT INFORMATION */
-        }
+          {/* CONTACT INFORMATION */}
           <Grid sx={{color:'#fff'}} item lg={3} md={3} sm={6} xs={12}>
             <Heading>Contact Us</Heading>
 
@@ -67,5 +58,6 @@ export default function Footer4() {
           <SocialLinks variant="dark" />
         </FlexBetween>
       </Container>
-    </Box>;
+    </Box>
+  );
 }

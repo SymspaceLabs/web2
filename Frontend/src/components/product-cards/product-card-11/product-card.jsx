@@ -1,10 +1,9 @@
-import Box from "@mui/material/Box"; // GLOBAL CUSTOM COMPONENTS
 
-import LazyImage from "../../../components/LazyImage";
-import { H3, Paragraph } from "../../../components/Typography";
-import { FlexBetween, FlexRowCenter } from "../../../components/flex-box"; // STYLED COMPONENTS
-
-import { CardRoot, PriceText } from "./styles"; // ==============================================================
+import { LazyImage } from "@/components/lazy-image";
+import { H3, Paragraph } from "@/components/Typography";
+import { FlexBetween, FlexRowCenter } from "@/components/flex-box"; // STYLED COMPONENTS
+import { Box } from "@mui/material";
+import { CardRoot, PriceText } from "./styles";
 
 // ==============================================================
 export default function ProductCard11(props) {

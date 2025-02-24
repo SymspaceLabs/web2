@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Container, Typography, Button, Grid, useTheme, Card } from "@mui/material";
-import LazyImage from "../../../components/LazyImage";
+import { LazyImage } from '@/components/lazy-image';
 import { section1Styles } from "./styles";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";

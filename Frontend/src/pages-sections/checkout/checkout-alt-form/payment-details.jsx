@@ -1,23 +1,12 @@
 // MUI
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import Collapse from "@mui/material/Collapse";
-import MenuItem from "@mui/material/MenuItem";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import ButtonBase from "@mui/material/ButtonBase";
-import FormControlLabel from "@mui/material/FormControlLabel"; // FORMIK
+import { Box, Card, Grid, Button, Collapse, MenuItem, Checkbox, TextField, ButtonBase, FormControlLabel } from "@mui/material";
 
 // LOCAL CUSTOM COMPONENT
-import Heading from "./heading"; // GLOBAL CUSTOM COMPONENTS
-
-import LazyImage from "components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography"; // DATA
-
 import { months, years } from "data/months-years"; // CUSTOM DATA MODEL
+import Heading from "./heading"; // GLOBAL CUSTOM COMPONENTS
 
 // ==============================================================
 const PaymentDetails = ({

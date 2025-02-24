@@ -1,11 +1,8 @@
-import Container from "@mui/material/Container"; // GLOBAL CUSTOM COMPONENTS
-import FlexBox from "../../../components/flex-box/flex-box"; // STYLED COMPONENT
-import { Box, Typography, Button, Grid } from "@mui/material"; // MUI COMPONENTS
-import LazyImage from "../../../components/LazyImage"; // CUSTOM LAZY LOAD IMAGE COMPONENT
-import { H2, Paragraph } from "../../../components/Typography"; // STYLED COMPONENTS FOR TEXT
-
-import { BlackBox, StyledButton, YellowBox } from "./styles"; // CUSTOM STYLES
-
+import { FlexBox } from "@/components/flex-box"; // STYLED COMPONENT
+import { Container, Typography, Button, Grid } from "@mui/material"; // MUI COMPONENTS
+import { LazyImage } from "@/components/lazy-image";
+import { H2, Paragraph } from "@/components/Typography"; // STYLED COMPONENTS FOR TEXT
+import { BlackBox, YellowBox } from "./styles"; // CUSTOM STYLES
 import { motion } from "framer-motion";
 
 /**

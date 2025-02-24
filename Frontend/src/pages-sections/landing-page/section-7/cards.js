@@ -1,5 +1,5 @@
-import { Box, Typography, Button, Grid, Container, Hidden } from '@mui/material';
-import LazyImage from "../../../components/LazyImage"; // LOCAL CUSTOM COMPONENTS
+import { Box, Typography, Button } from '@mui/material';
+import { LazyImage } from '@/components/lazy-image';
 import { FlexBox } from '@/components/flex-box';
 
 export const Card1 = () => {

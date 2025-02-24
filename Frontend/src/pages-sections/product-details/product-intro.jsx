@@ -8,24 +8,20 @@
  * sizes, and adding items to the cart. It also includes functionality to toggle a favorite icon
  * and navigate product images.
  *
- * @param {Object} product - The product object containing details like name, price, colors, sizes, images, and more.
- * @returns {JSX.Element} A React component for displaying product details.
  */
 
-
 import Link from "next/link";
-import { useState, Fragment } from "react";
+import { useState } from "react";
 
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
-import useCart from "../../hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
+import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 
-import LazyImage from "../../components/LazyImage";
-import { H1, H2, H3, H6 } from "../../components/Typography";
-import { FlexBox, FlexRowCenter } from "../../components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
-import { currency } from "../../lib"; // DUMMY DATA
+import { LazyImage } from "@/components/lazy-image";
+import { H1, H2, H6 } from "@/components/Typography";
+import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
+import { currency } from "@/lib";
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -33,7 +29,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import HandBagCanvas from "../../components/HandBagCanvas";
 import SymAccordion from "./components/SymAccordion"
-import DynamicCanvas from "@/components/DynamicCanvas";
 import { DrawerRight } from "@/components/drawer";
 
 // ================================================================
@@ -52,7 +47,6 @@ export default function ProductIntro({ product }) {
     thumbnail,
     company,
     sizeFit,
-    threeDModel,
   } = product || {};
 
   // State hooks for selected options and toggles
@@ -84,24 +78,6 @@ export default function ProductIntro({ product }) {
     const handleImageClick = ind => () => setSelectedImage(ind);
 
 
-
-
-  // const [selectVariants, setSelectVariants] = useState({
-  //   option: "option 1",
-  //   type: "type 1"
-  // });
-
-  // const handleChangeVariant = (variantName, value) => () => {
-  //   setSelectVariants(state => ({ ...state,
-  //     [variantName.toLowerCase()]: value
-  //   }));
-  // };
-
-  // const cartItem = state.cart.find(item => item.id === id);
-
-
-
-
   const [sidenavOpen, setSidenavOpen] = useState();
   const toggleSidenav = () => setSidenavOpen(state => !state);
 
@@ -115,7 +91,7 @@ export default function ProductIntro({ product }) {
           <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
           <IconButton 
             onClick={() => setSelectedImage((prev) => 
-              prev > 0 ? prev - 1 : images?.length // If 0, wrap to last image
+              prev > 0 ? prev - 1 : images?.length
             )}
             style={{
               position: "absolute",
@@ -128,7 +104,6 @@ export default function ProductIntro({ product }) {
           </IconButton>
 
             {selectedImage === 0 ? (                               
-              //  <DynamicCanvas gltfPath={threeDModel} />
                <HandBagCanvas />
             ) : (
               <LazyImage 
@@ -379,26 +354,25 @@ export default function ProductIntro({ product }) {
         </Grid>
       </Grid>
       <Box sx={{ background:'transparent' }}>
-      <Drawer
-        open={sidenavOpen}
-        anchor="right"
-        onClose={toggleSidenav}
-        sx={{
-          zIndex: 1200, // Default z-index of the Drawer
-          overflow: 'visible', // Ensure the dropdown isn't clipped      
-          '& .MuiPaper-root': {
-            background: 'linear-gradient(117.54deg,rgba(255, 255, 255, 0.95) -19.85%,rgba(245, 245, 245, 0.6) 4.2%,rgba(240, 240, 240, 0.5) 13.88%,rgba(230, 230, 230, 0.4) 27.98%,rgba(225, 225, 225, 0.35) 37.8%,rgba(220, 220, 220, 0.3) 44.38%,rgba(215, 215, 215, 0.25) 50.54%,rgba(210, 210, 210, 0.2) 60.21%)',
-            backdropFilter: 'blur(5px)',
-            borderRadius:'15px'
-          },
-        }}
-      >
-        <DrawerRight
-          toggleSidenav={toggleSidenav}
-          headerTitle="personalized sizing"
-        />
-      </Drawer>
-
+        <Drawer
+          open={sidenavOpen}
+          anchor="right"
+          onClose={toggleSidenav}
+          sx={{
+            zIndex: 1200, // Default z-index of the Drawer
+            overflow: 'visible', // Ensure the dropdown isn't clipped      
+            '& .MuiPaper-root': {
+              background: 'linear-gradient(117.54deg,rgba(255, 255, 255, 0.95) -19.85%,rgba(245, 245, 245, 0.6) 4.2%,rgba(240, 240, 240, 0.5) 13.88%,rgba(230, 230, 230, 0.4) 27.98%,rgba(225, 225, 225, 0.35) 37.8%,rgba(220, 220, 220, 0.3) 44.38%,rgba(215, 215, 215, 0.25) 50.54%,rgba(210, 210, 210, 0.2) 60.21%)',
+              backdropFilter: 'blur(5px)',
+              borderRadius:'15px'
+            },
+          }}
+        >
+          <DrawerRight
+            toggleSidenav={toggleSidenav}
+            headerTitle="personalized sizing"
+          />
+        </Drawer>
       </Box>
     </>
     

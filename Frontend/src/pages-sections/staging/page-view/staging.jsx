@@ -1,9 +1,6 @@
 import { Box } from "@mui/material";
+import { FlexColCenter } from "@/components/flex-box";
 import Section1 from "../section-1";
-import Section2 from "../section-2";
-import Section3 from "../section-3";
-import Section4 from "../section-4";
-import Section5 from "../section-5";
 
 export default async function StagingPageView() {
   return (
@@ -16,13 +13,9 @@ export default async function StagingPageView() {
       <BlobBox top='65%' right={-150} /> */}
 
       {/* CONTENT */}
-      <Box>
+      <FlexColCenter sx={{ width:'100%' }}>
         <Section1 /> {/* HERO  */}
-        {/* <Section2 /> {/* 3 MOBILE SCREENS */}
-        {/* <Section3 /> {/* BENEFITS */}
-        {/* <Section4 /> {/* BANNER */}
-        {/* <Section5 /> {/* TESTIMONIAL MARQUEE */}
-      </Box>
+      </FlexColCenter>
     </Box>
   );
 }

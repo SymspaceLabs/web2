@@ -12,13 +12,12 @@
  * - A "Beta Access" button with an icon and gradient styling.
  * - Uses styled-components for custom layout and design consistency.
  * 
- * @returns {JSX.Element} The Section6 promotional component.
  */
 
-import React, { useState } from "react";
-import LazyImage from "../../../components/LazyImage"; // Lazy-loaded image component.
-import { RootStyle } from "./styles"; // Custom styled-component for layout.
-import { Box, Container, Typography, Button, TextField } from '@mui/material'; // MUI components.
+import { useState } from "react";
+import { RootStyle } from "./styles";
+import { Box, Container, Typography, Button, TextField } from '@mui/material';
+import { LazyImage } from "@/components/lazy-image";
 
 export default function Section6() {
   const [showInput, setShowInput] = useState(false);

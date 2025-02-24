@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import Link from "next/link";
+import { useState } from "react";
 import { FlexRowCenter, FlexBox } from "@/components/flex-box";
 import { H2, Paragraph } from "@/components/Typography";
 import { calculateDiscount } from "@/lib";
 import { Box, Container, Typography, Grid } from "@mui/material";
 import { motion } from "framer-motion";
-
-import Link from "next/link";
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 
 /**
  * Section5 Component
@@ -19,6 +18,7 @@ import LazyImage from "@/components/LazyImage";
  * to the `Content` component for rendering.
  *
  */
+
 export default function Section5() {
   // State to hold the list of products; initialized with static data
   const [products, setProducts] = useState(data);

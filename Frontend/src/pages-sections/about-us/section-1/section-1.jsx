@@ -1,10 +1,10 @@
 "use client"
 
 import { Box, Typography, Container } from '@mui/material';
-import LazyImage from '@/components/LazyImage';
+import { LazyImage } from '@/components/lazy-image';
 import { FlexBox } from '@/components/flex-box';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useRouter } from "next/navigation";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function Section1() {
 

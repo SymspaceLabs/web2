@@ -63,9 +63,7 @@ export default async function CompanyPageView({ slug }) {
 
   return (
     <div className="bg-white">
-      {/* Render Section1 with company details */}
       <Section1 company={company} />
-      {/* Render Section2 with company's products */}
       <Section2 products={company.products} />
     </div>
   );

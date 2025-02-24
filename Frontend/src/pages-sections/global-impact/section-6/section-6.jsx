@@ -6,7 +6,6 @@ import Container from "@mui/material/Container";
 import { LazyImage } from "@/components/lazy-image";
 import { Paragraph } from "@/components/Typography"; 
 import { RootStyle } from "./styles"; 
-import bgImage from "/assets/images/banners/banner-55.png"; 
 import { Box, Typography, Button, TextField, useMediaQuery } from "@mui/material";
 
 export default function Section6() {
@@ -69,6 +68,8 @@ export default function Section6() {
         <LazyImage 
           src="/assets/images/banners/banner-55.png" 
           alt="offer"
+          width={500}
+          height={500}
         />
         <div className="content">
           <Typography

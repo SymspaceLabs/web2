@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
-import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import styled from "@mui/material/styles/styled";
 import { useRouter } from 'next/navigation';
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 import { FlexBox } from '@/components/flex-box';
 
 export default function Section6() {

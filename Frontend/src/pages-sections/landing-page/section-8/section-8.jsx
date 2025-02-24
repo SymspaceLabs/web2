@@ -11,10 +11,9 @@
  * The layout adjusts responsively, and the floating image is hidden on smaller screens.
  */
 import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
-import LazyImage from "../../../components/LazyImage"; // Importing a lazy-loading image component
+import { LazyImage } from '@/components/lazy-image';
 import { FlexBox } from '@/components/flex-box';
 import { motion } from "framer-motion"; // Importing framer-motion
-
 
 export default function Section8() {
   return (

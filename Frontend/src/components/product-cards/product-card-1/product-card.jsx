@@ -1,15 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Box from "@mui/material/Box";
-import Rating from "@mui/material/Rating"; // GLOBAL CUSTOM COMPONENTS
+import { Rating, Box} from "@mui/material"; // GLOBAL CUSTOM COMPONENTS
+import { LazyImage } from "@/components/lazy-image";
+import { Span } from "@/components/Typography";
+import ProductViewDialog from "@/components/products-view/product-view-dialog"; // LOCAL CUSTOM HOOK
 
-import LazyImage from "../../../components/LazyImage";
-import { Span } from "../../../components/Typography";
-import ProductViewDialog from "../../../components/products-view/product-view-dialog"; // LOCAL CUSTOM HOOK
-
-import useProduct from "../use-product"; // LOCAL CUSTOM COMPONENTS
-
+import useProduct from "../use-product";
 import HoverActions from "./components/hover-actions";
 import ProductPrice from "../product-price";
 import ProductTitle from "../product-title";

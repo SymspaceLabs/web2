@@ -9,19 +9,17 @@
  * - products (Array): List of product objects to display in the carousel.
  */
 
-import Link from "next/link"; // Used for navigation.
-import Container from "@mui/material/Container"; // Material-UI layout component.
-import IconButton from "@mui/material/IconButton"; // Material-UI button with icon support.
-import { FlexBox } from "../../../components/flex-box"; // Custom utility for flexible layouts.
-import LazyImage from "../../../components/LazyImage"; // Custom lazy-loading image component.
-import { H6 } from "../../../components/Typography"; // Custom typography component.
+import { FlexBox } from "@/components/flex-box"; // Custom utility for flexible layouts.
+import { LazyImage } from '@/components/lazy-image';
+import { H6 } from "@/components/Typography"; // Custom typography component.
+import { Carousel } from "@/components/carousel"; // Custom carousel component.
+import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
+import { Typography, Container, IconButton} from "@mui/material";
+import { motion } from "framer-motion"; // Import Framer Motion
 import ArrowBack from "@mui/icons-material/ArrowBack"; // Material-UI back arrow icon.
 import ArrowForward from "@mui/icons-material/ArrowForward"; // Material-UI forward arrow icon.
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
-import { Carousel } from "../../../components/carousel"; // Custom carousel component.
-import { FlexBetween } from "../../../components/flex-box"; // Custom layout utility.
-import { Typography } from "@mui/material";
-import { motion } from "framer-motion"; // Import Framer Motion
+import Link from "next/link"; // Used for navigation.
 
 // Fade-in animation variants
 const fadeIn = {

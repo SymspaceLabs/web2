@@ -1,30 +1,18 @@
 "use client";
 
-import { Grid, Box, Card, CardContent, Container, Typography, Button } from '@mui/material';
-import FlexBox from "../../../components/flex-box/flex-box";
-import LazyImage from "../../../components/LazyImage";
 import Link from "next/link";
-import { calculateDiscount, currency } from "../../../lib"; // STYLED COMPONENTS
 import { useState } from "react";
+import { Grid, Box, Card, CardContent, Container, Typography, Button } from '@mui/material';
+import { FlexBox } from "@/components/flex-box";
+import { LazyImage } from '@/components/lazy-image';
+import { calculateDiscount } from "@/lib"; // STYLED COMPONENTS
 
-// import api from "../../../utils/__api__/furniture-2";
+
 export default async function Section7() {
-  // const services = await api.getServices();
+
   const [products, setProducts] = useState(data);
 
-  // const getAllProducts = async () => {
-  //   try {
-  //     const products = await api.getNewArrivalProducts();
-  //     setProducts(products);
-  //   } catch (error) {
-  //     console.error("Error during fetching products:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getAllProducts();
-  // }, []);
-  return  <Box sx={{py:5}}>
+return  <Box sx={{py:5}}>
     <Container>
       <Grid container spacing={4} justifyContent="center">
         <Grid item xs={12} sm={4}>

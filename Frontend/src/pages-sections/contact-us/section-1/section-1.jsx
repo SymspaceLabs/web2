@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
-import Container from "@mui/material/Container"; 
-import { Box, Typography, Grid, Button } from "@mui/material";
-import ContactUsForm from "@/components/forms/ContactUsForm";
+import { useState, useEffect, useMemo } from "react";
+import { Box, Typography, Grid, Button, Container } from "@mui/material";
+import { ContactUsForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import LazyImage from "@/components/LazyImage";
-import SocialLinks from "@/components/footer/components/social-links";
+import { LazyImage } from "@/components/lazy-image";
+import { SocialLinks } from "@/components/footer/components";
 
 export default function Section2({
   isSubmitted,
@@ -116,18 +115,18 @@ export default function Section2({
             {/* Right Content */}
             <Grid item xs={12} md={6} sx={{display:'flex', flexDirection:'column', gap:3 }}>
               <ContactUsForm
-                  firstName={firstName}
-                  setFirstName={setFirstName}
-                  lastName={lastName}
-                  setLastName={setLastName}
-                  email={email}
-                  setEmail={setEmail}
-                  topic={topic}
-                  setTopic={setTopic}
-                  message={message}
-                  setMessage={setMessage}
-                  isChecked={isChecked}
-                  setIsChecked={setIsChecked}
+                firstName={firstName}
+                setFirstName={setFirstName}
+                lastName={lastName}
+                setLastName={setLastName}
+                email={email}
+                setEmail={setEmail}
+                topic={topic}
+                setTopic={setTopic}
+                message={message}
+                setMessage={setMessage}
+                isChecked={isChecked}
+                setIsChecked={setIsChecked}
               />
               <Button 
                 sx={buttonStyles} 

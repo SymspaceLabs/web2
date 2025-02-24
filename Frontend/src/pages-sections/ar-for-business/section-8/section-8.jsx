@@ -1,12 +1,8 @@
-import Container from "@mui/material/Container"; // GLOBAL CUSTOM COMPONENTS
-import FlexBox from "../../../components/flex-box/flex-box"; // STYLED COMPONENT
-import { Box, Typography, Button, Grid } from '@mui/material';
-import LazyImage from "../../../components/LazyImage";
-import { H2, Paragraph } from "../../../components/Typography"; // STYLED COMPONENTS
-
-import { BlackBox, StyledButton, YellowBox } from "./styles"; // IMPORT IMAGES
-
-import robot from "../../../../public/assets/images/card/robot.png";
+import { FlexBox } from "@/components/flex-box/flex-box"; // STYLED COMPONENT
+import { Container, Typography, Button, Grid } from '@mui/material';
+import { H2, Paragraph } from "@/components/Typography"; // STYLED COMPONENTS
+import { LazyImage } from '@/components/lazy-image';
+import { BlackBox, YellowBox } from "./styles"; // IMPORT IMAGES
  
 export default function Section5() {
   return (
@@ -67,7 +63,10 @@ export default function Section5() {
               
             </div>
             <div className="img-wrapper">
-              <LazyImage src={robot} alt="Watch" />
+              <LazyImage 
+                src="/assets/images/card/robot.png"
+                alt="Watch"
+              />
             </div>
           </BlackBox>
         </Grid>

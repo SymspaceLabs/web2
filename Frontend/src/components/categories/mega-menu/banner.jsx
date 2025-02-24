@@ -1,10 +1,9 @@
 import Link from "next/link";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid"; // GLOBAL CUSTOM COMPONENTS
+import { Grid, Box } from "@mui/material"; // GLOBAL CUSTOM COMPONENTS
+import { LazyImage } from "@/components/lazy-image";
+import { H3, Paragraph, Small } from "@/components/Typography";
+import { FlexBox } from "@/components/flex-box";
 
-import LazyImage from "../../../components/LazyImage";
-import { H3, Paragraph, Small } from "../../../components/Typography";
-import FlexBox from "../../../components/flex-box/flex-box";
 export default function OfferBanner() {
   return <Link href="/sale-page-2">
       <Grid className="h-full" container spacing={0} wrap="wrap-reverse" alignItems="center" mb={-1}>

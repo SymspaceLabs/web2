@@ -2,9 +2,8 @@
 
 import React from 'react';
 import { FlexBox } from "@/components/flex-box";
-import { H6, Paragraph } from "@/components/Typography";
 import { ImageWrapper } from "@/pages-sections/landing-page/section-13/styles";
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 import { styled } from "@mui/system";
 import { Box, Typography } from "@mui/material";
 

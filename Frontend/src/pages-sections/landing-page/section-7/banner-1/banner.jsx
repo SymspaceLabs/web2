@@ -1,12 +1,10 @@
 // GLOBAL CUSTOM COMPONENTS
-import LazyImage from "../../../../components/LazyImage";
-import { H3, H6, Paragraph, Span } from "../../../../components/Typography"; // LOCAL CUSTOM COMPONENT
-
+import { LazyImage } from '@/components/lazy-image';
+import { H3, H6, Paragraph, Span } from "@/components/Typography"; // LOCAL CUSTOM COMPONENT
+import { BannerOneWrapper } from "../styles"; // IMPORT IMAGE
+import bannerImg from "../../../../../public/assets/images/banners/banner-32.jpg";
 import CountDown from "./count-down"; // STYLED COMPONENTS
 
-import { BannerOneWrapper } from "../styles"; // IMPORT IMAGE
-
-import bannerImg from "../../../../../public/assets/images/banners/banner-32.jpg";
 export default function Banner1() {
   return <BannerOneWrapper>
       <LazyImage src={bannerImg} alt="banner" />

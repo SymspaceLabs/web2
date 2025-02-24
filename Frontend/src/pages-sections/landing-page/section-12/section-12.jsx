@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
 import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { FlexBox } from "../../../components/flex-box";
-import LazyImage from "../../../components/LazyImage";
+import { LazyImage } from '@/components/lazy-image';
 import { calculateDiscount, currency } from "../../../lib";
 import { motion, useInView } from "framer-motion";
 

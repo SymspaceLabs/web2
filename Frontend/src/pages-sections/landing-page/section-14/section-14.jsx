@@ -1,12 +1,10 @@
 "use client"
 
-import React, { useState } from "react";
-import Container from "@mui/material/Container"; 
-import LazyImage from "../../../components/LazyImage"; 
-import { Paragraph } from "../../../components/Typography"; 
+import { useState } from "react";
+import { LazyImage } from '@/components/lazy-image';
+import { Paragraph } from "@/components/Typography"; 
 import { RootStyle } from "./styles"; 
-import bgImage from "../../../../public/assets/images/banners/banner-55.png"; 
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Box, Typography, Button, TextField, Container} from "@mui/material";
 import { motion } from "framer-motion";
 
 export default function Section14() {
@@ -72,7 +70,12 @@ export default function Section14() {
     >
       <Container sx={{ py: 10 }}>
         <RootStyle>
-          <LazyImage src={bgImage} alt="offer" />
+          <LazyImage
+            src="/assets/images/banners/banner-55.png"
+            alt="offer"
+            width={500}
+            height={500}
+          />
           <div className="content">
             <Typography
               sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}

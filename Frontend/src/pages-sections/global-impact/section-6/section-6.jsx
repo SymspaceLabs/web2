@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Container from "@mui/material/Container"; 
-import LazyImage from "../../../components/LazyImage"; 
-import { Paragraph } from "../../../components/Typography"; 
+
+import { LazyImage } from "@/components/lazy-image";
+import { Paragraph } from "@/components/Typography"; 
 import { RootStyle } from "./styles"; 
-import bgImage from "../../../../public/assets/images/banners/banner-55.png"; 
+import bgImage from "/assets/images/banners/banner-55.png"; 
 import { Box, Typography, Button, TextField, useMediaQuery } from "@mui/material";
 
 export default function Section6() {
@@ -65,7 +66,10 @@ export default function Section6() {
   return (
     <Container sx={{ py: 10 }}>
       <RootStyle>
-        <LazyImage src={bgImage} alt="offer" />
+        <LazyImage 
+          src="/assets/images/banners/banner-55.png" 
+          alt="offer"
+        />
         <div className="content">
           <Typography
             sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}

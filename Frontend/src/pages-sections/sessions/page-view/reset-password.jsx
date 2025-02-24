@@ -15,16 +15,15 @@
  * - Redirect to signin upon successful password reset
  */
 
-
-import { useState } from 'react';
-import { useFormik } from "formik";
 import * as yup from "yup"; // For form validation
 import BazaarTextField from "../../../components/BazaarTextField"; // Custom text field component
 import usePasswordVisible from "../use-password-visible"; // Hook to toggle password visibility
 import EyeToggleButton from "../components/eye-toggle-button"; // Button for toggling password visibility
+import { useState } from 'react';
+import { useFormik } from "formik";
 import { Box, Button, Typography, Snackbar, Alert } from "@mui/material";
 import { useSearchParams, useRouter } from "next/navigation";
-import LazyImage from "@/components/LazyImage"; // For lazy-loaded images
+import { LazyImage } from "@/components/lazy-image";
 
 const ResetPassword = () => {
   

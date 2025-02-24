@@ -12,22 +12,8 @@
 
 
 
-import React, { useState, useEffect, useMemo } from "react";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { useFormik } from "formik";
-import * as yup from "yup"; // LOCAL CUSTOM COMPONENTS
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import EyeToggleButton from "../components/eye-toggle-button"; // LOCAL CUSTOM HOOK
-
-import BoxLink from "../components/box-link";
-import usePasswordVisible from "../use-password-visible"; // GLOBAL CUSTOM COMPONENTS
-
-import { Span } from "../../../components/Typography";
-import { FlexBox } from "../../../components/flex-box";
-import BazaarTextField from "../../../components/BazaarTextField";
-import { Box, Typography, Button } from '@mui/material';
+import React, { useState, useMemo } from "react";
+import { Box, Button } from '@mui/material';
 import JobForm from "@/components/forms/JobForm";
 import { useAuth } from "@/contexts/AuthContext";
 

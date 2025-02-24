@@ -1,6 +1,4 @@
 import { Box, Button, Card, Typography } from '@mui/material';
-import { H3 } from '../../../components/Typography';
-import LazyImage from '../../../components/LazyImage';
 import Link from 'next/link';
 
 export default function BlogCard({ title, subTitle, btnUrl }) {
@@ -19,19 +17,6 @@ export default function BlogCard({ title, subTitle, btnUrl }) {
         overflow: 'hidden',   // Ensure overflow is hidden to contain child elements
       }}
     >
-      {/* <Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundImage: `url(/assets/images/background/Rectangle.png)`,
-          mixBlendMode: 'overlay',
-        }}
-      /> */}
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection:'column', gap:'25px' }}>
         <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', fontSize: 21, color:'#2F2F2F' }}>
           {title}
@@ -58,8 +43,6 @@ export default function BlogCard({ title, subTitle, btnUrl }) {
             </Button>
           </Link>
         </Box>
-        
-        
       </Box>
     </Card>
   );

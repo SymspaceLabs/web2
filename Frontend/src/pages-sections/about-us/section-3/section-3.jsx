@@ -1,35 +1,12 @@
 "use client";
 
-import { Button, Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery } from "@mui/material";
+import { Button, Box, Container, Typography, useMediaQuery } from "@mui/material";
 import { FlexBox } from '@/components/flex-box';
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 
 export default function Section3() {
   const isMobile = useMediaQuery('(max-width:600px)');
   
-  const rows = [
-    { 
-      title: "innovation",
-      description: "The future of shopping is immersive. We push the boundaries of AI-driven 3D modeling and AR to create smarter, more intuitive experiences for consumers and brands."
-    },
-    { 
-      title: "inclusion", 
-      description: "Technology works best when it works for everyone. We prioritize accessibility-first design, ensuring individuals of all abilities, backgrounds, and circumstances can fully engage with AR commerce."
-    },
-    { 
-      title: "sustainability",
-      description: "Reducing waste starts with better technology. Our virtual try-ons, digital staging, and AI-powered modeling help brands cut down on returns, overproduction, and environmental impact."
-    },
-    { 
-      title: "empowerment",
-      description: "Convenience should never be a barrier. Whether it’s homebound shoppers, expectant mothers, or veterans, we develop tools that enhance independence and confidence in every purchase."
-    },
-    { 
-      title: "impact", 
-      description: "We don’t just build AR experiences—we create solutions that bridge gaps, remove limitations, and set new standards for inclusive digital commerce." 
-    },
-  ];
-
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:2 }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>

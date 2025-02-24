@@ -1,18 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Button, Box, Divider, Typography } from "@mui/material";
 import BoxLink from "./components/box-link";
 import LogoWithTitle from "@/components/LogoWithTitle";
 import LoginBottom from "./components/login-bottom";
+import { usePathname } from "next/navigation";
+import { Button, Box, Divider, Typography } from "@mui/material";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
 import { Span } from "../../components/Typography";
 import { mainContainerStyle, blurredOverlayStyle1, blurredOverlayStyle2, wrapperStyle, registerButtonStyle, dividerTextStyle } from "./styles";
 import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // ==============================================================
-import Image from "next/image";
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();

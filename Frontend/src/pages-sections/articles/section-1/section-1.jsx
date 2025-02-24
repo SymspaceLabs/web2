@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box, Container, Grid, InputAdornment, Typography, Divider, TextField, useMediaQuery, Button } from '@mui/material';
-import styled from "@mui/material/styles/styled";
 import { FlexBox } from '@/components/flex-box';
 import { useRouter } from 'next/navigation';
+import { LazyImage } from '@/components/lazy-image';
+import styled from "@mui/material/styles/styled";
 import SearchIcon from '@mui/icons-material/Search';
-import LazyImage from '@/components/LazyImage';
 
 export default function Section1() {
   const isMobile = useMediaQuery('(max-width:600px)');

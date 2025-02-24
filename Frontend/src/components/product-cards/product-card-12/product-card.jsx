@@ -1,13 +1,10 @@
 import Link from "next/link";
-import Rating from "@mui/material/Rating"; // GLOBAL CUSTOM COMPONENTS
-
-import { H6 } from "../../../components/Typography";
-import LazyImage from "../../../components/LazyImage";
-import { FlexBox } from "../../../components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTIONS
-
-import { calculateDiscount, currency } from "../../../lib"; // STYLED COMPONENTS
-
-import { PriceText } from "./styles"; // CUSTOM DATA MODEL
+import { H6 } from "@/components/Typography";
+import { LazyImage } from "@/components/lazy-image";
+import { FlexBox } from "@/components/flex-box";
+import { Rating } from "@mui/material";
+import { calculateDiscount, currency } from "@/lib";
+import { PriceText } from "./styles";
 
 // ==============================================================
 export default function ProductCard12({

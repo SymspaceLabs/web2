@@ -1,87 +1,72 @@
-"use client";
+"use client"
 
-import React, { useRef } from "react";
-import { Box, Grid, Container, keyframes } from "@mui/material";
-import { Card1, Card2, Card3 } from "./cards";
-import { motion, useInView } from "framer-motion";
-import { FlexBox } from "@/components/flex-box";
+import { motion } from "framer-motion";
+import { LazyImage } from '@/components/lazy-image';
+import { FlexBox, FlexCol, FlexRowCenter } from '@/components/flex-box';
+import { Box, Container, Typography, Button, Grid } from '@mui/material';
 
-export default function Section7() {
-  const blob = keyframes`
-    0% { transform: translate(0px, 0px) scale(1); }
-    33% { transform: translate(30px, -50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-    100% { transform: translate(0px, 0px) scale(1); }
-  `;
-
-  // Refs for animation triggers
-  const ref1 = useRef(null);
-  const ref2 = useRef(null);
-  const ref3 = useRef(null);
-  const ref4 = useRef(null);
-
-  const isInView1 = useInView(ref1, { triggerOnce: true, threshold: 0.2 });
-  const isInView2 = useInView(ref2, { triggerOnce: true, threshold: 0.2 });
-  const isInView3 = useInView(ref3, { triggerOnce: true, threshold: 0.2 });
-  const isInView4 = useInView(ref4, { triggerOnce: true, threshold: 0.2 });
-
-    // Framer Motion fade-in animation
-    const fadeIn = {
-      hidden: { opacity: 0, y: 50 },
-      visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-    };
-
+export default function Section6() {
   return (
-    <Grid sx={{ background: "#1F1F1F", pt: 10, pb: 20, height: "100%", position: "relative" }}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "80%",
-          left: "10%",
-          width: { xs: "300px", sm: "400px", md: "500px" },
-          height: { xs: "300px", sm: "400px", md: "500px" },
-          background: "#FFF",
-          borderRadius: "50%",
-          zIndex: 1,
-          opacity: 0.3,
-          filter: "blur(80px)",
-          animation: `${blob} 7s infinite`,
-        }}
-      />
-      <Container sx={{ height: "100%" }}>
-        <Grid container alignItems="stretch" spacing={2} sx={{ height: "100%" }}>
-          {/* Left column */}
-          <Grid item xs={12} sm={12} md={6}>
-            <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: "10px" }}>
-              {/* Card 1 */}
-              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ width: "100%" }}>
-                <Card1 />
-              </motion.div>
-
-              {/* Card 2 - Website & App Integration */}
-              <FlexBox sx={{ width: "100%", flexDirection: { xs: "column", lg: "row" }, gap: 2, justifyContent: "space-between", alignItems: "stretch", mt: { xs: 2, md: 0 }}}>
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ flex: 1 }}>
-                  <Card2 imageUrl="/assets/images/card/cursor.png" headerText="Website Integration" subHeaderText="Enhance your customers experience" bg="#D5D5D5" />
-                </motion.div>
-
-                <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ flex: 1 }}>
-                  <Card2 imageUrl="/assets/images/card/mobile.png" headerText="Application Integration" subHeaderText="An immersive way to shop conveniently" bg="#353535" textColor="#fff" />
-                </motion.div>
-              </FlexBox>
-
-            </Box>
-          </Grid>
-
-          {/* Right column */}
-          <Grid item xs={12} sm={12} md={6}>
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-            <Box sx={{ display: "flex", flexDirection: "column", height: "100%", bgcolor: "#D5D5D5", borderRadius: "50px", justifyContent: "center" }}>
-              <Card3 />
-            </Box>
-          </motion.div>
-          </Grid>
-        </Grid>
-      </Container>
+    <Grid sx={{ background: '#1F1F1F' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+        style={{ height: "100%" }} // Ensures motion.div spans full height
+      >
+        <Container>
+          <Box sx={{ flexGrow: 1, py: 8 }}>
+            <Grid container spacing={4} alignItems="stretch" sx={{ height: '100%' }}>
+              <Grid item xs={12} md={6}>
+                <FlexCol sx={{ gap: 4, height: '100%' }}>
+                  <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#fff', fontSize: {xs:20, sm:64}, textAlign:{xs:'center', sm:'left'} }}>
+                    3D Repository
+                  </Typography>
+                  <Typography sx={{ maxWidth:'550px', color: '#FFF', fontSize: { xs: 14, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: 2 }}>
+                    Generate and store high-quality 3D models of any dynamic or static product from text-prompts, images, weblinks, and object scans. Choose from hundreds of templates to create marketing ad videos. Then allow your consumers to trial these products realistically in our immersive AR marketplace.
+                  </Typography>
+                  {/* Call-to-action button */}
+                  <FlexBox sx={{ pt:{sm:5}, justifyContent:{xs:'center', sm:'left'} }}>
+                    <Button sx={outlinedButton}>
+                      Explore
+                    </Button>
+                  </FlexBox>
+                </FlexCol>
+              </Grid>
+              {/* Right column: image content */}
+              <Grid item xs={12} md={6}>
+                <FlexRowCenter sx={{ height: '100%' }}>
+                  <LazyImage
+                    width={650}
+                    height={650}
+                    src="/assets/images/dashboard.png"
+                    alt="iphone"
+                  />
+                </FlexRowCenter>
+              </Grid>
+            </Grid>
+          </Box>
+        </Container>
+      </motion.div>
     </Grid>
   );
+}
+
+const outlinedButton = {
+  fontWeight: 400,
+  minWidth: 175,
+  fontFamily: 'Elemental End',
+  textTransform: 'lowercase',
+  color: '#fff',
+  borderRadius: '50px',
+  border: '2px solid white',
+  py: {xs:1, sm:2},
+  px: 3,
+  fontSize: 12,
+  transition: 'all 0.3s ease-in-out', // Smooth transition effect
+  ':hover': {
+    background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
+    color: '#000',
+  },
 }

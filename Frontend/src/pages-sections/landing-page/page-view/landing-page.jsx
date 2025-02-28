@@ -1,24 +1,18 @@
+"use client";
+
 /**
  * LandingPageView Component
  *
  * This component serves as the main layout for the landing page of the application.
  * It incorporates multiple sections imported from local custom section components.
- * Each section is responsible for rendering a specific part of the landing page,
- * such as the hero section, carousel, 3D model, and statistics.
  *
+ * 
  * Structure:
  * - Hero Section: Highlights the main feature or attraction.
  * - Application Section: Introduces the core application.
  * - Carousel Section: Displays a rotating showcase.
- * - Bento Box Section: Organized information layout.
- * - SYM AI Section: Highlights AI features.
- * - 3D Model Section: Interactive or visual 3D models.
- * - Statistics Section: Highlights key performance metrics.
- * - Product Section: Showcases products or services.
- *
- * Usage:
- * Simply include this component to render the landing page view.
- */
+ * 
+*/
 
 import Section1 from "../section-1";
 import Section2 from "../section-2";
@@ -35,27 +29,62 @@ import Section12 from "../section-12";
 import Section13 from "../section-13";
 import Section14 from "../section-14";
 import Section15 from "../section-15";
-
+import Section16 from "../section-16";
+import { Box } from "@mui/material";
+import { styles } from "./styles";
 
 export default function LandingPageView() {
   return (
-    <div className="bg-white">
-      <Section1 />   {/* Hero section */}
-      <Section2 />   {/* Future of Retail */}
-      <Section5 />   {/* Carousal section */}
-      <Section4 />   {/* Convenient & Comfortable */}
-      <Section3 />   {/* Application */}
-      <Section6 />   {/* Realistic 3D Products */}
-      <Section7 />   {/* Bento Box section */}
+    <Box sx={{ position:'relative', overflow:'hidden' }}>
+      {/* GRADIENT CIRCLES */}
+      <Box sx={styles.blob1} /> {/* BLUE */}
+      <Box sx={styles.blob2} /> {/* WHITE */}
+      <Box sx={styles.blob3} /> {/* BLUE */}
+      <Box sx={styles.blob4} /> {/* WHITE */}
 
-      <Section8 />   {/* 3D SIMULATION */}
-      <Section9 />   {/* 3D Model */}
-      <Section10 />  {/* Our Focus */}
-      <Section11 />  {/* Statistics */}
-      <Section12 />  {/* Products */}
-      <Section15 />  {/* FAQs */}
-      <Section13 />  {/* Testimonial */}
-      <Section14 />  {/* Banner */}
-    </div>
+      <BlobBox top='55%' left={100} background="#933FFE"/>
+
+      <Box sx={{ background:'#1F1F1F' }}>
+        <Section1 />   {/* Hero section */}
+        <Section2 />   {/* Video section */}
+        <Section3 />   {/* Future of Retail */}
+        <Section4 />   {/* Carousal section */}
+        <Section5 />   {/* Convenient & Comfortable */}
+        <Section6 />   {/* Application */}
+        <Section7 />   {/* Realistic 3D Products */}
+        <Section8 />   {/* Bento Box section */}
+        <Section9 />   {/* 3D Simulation */}
+        <Section10 />  {/* 3D Model */}
+        <Section11 />  {/* Our Focus */}
+        <Section12 />  {/* Statistics */}
+        <Section13 />  {/* Products */}
+        <Section14 />  {/* FAQs */}
+        <Section15 />  {/* Testimonial */}
+        <Section16 />  {/* Banner */}
+      </Box>
+    </Box>
+  )
+}
+
+
+const BlobBox = ({top=null, right=null, bottom=null, left=null, background="#0366FE"}) => {
+  return(
+    <Box
+      sx={{
+        position: 'absolute',
+        top,
+        right,
+        bottom,
+        left,
+        width: '50vw',
+        height: '50vw',
+        maxWidth: '500px',
+        maxHeight: '500px',
+        borderRadius: '50%',
+        filter: 'blur(150px)',
+        opacity: 0.5,
+        background,
+      }}
+    />
   )
 }

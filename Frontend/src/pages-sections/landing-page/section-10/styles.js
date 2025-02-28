@@ -1,44 +1,39 @@
-export const styles = {
-    container: {
+export const sectionStyles = {
+    gridContainer: {
+      background: '#1F1F1F',
+    },
+    boxContainer: {
+      flexGrow: 1,
+      py: 8,
+    },
+    leftGridItem: {
       display: 'flex',
       flexDirection: 'column',
-      gap: 3,
-      alignItems: 'center',
-      py: 10,
+      gap: 2,
     },
-    title: {
-      width: '100%',
-      maxWidth: 1200,
-      fontFamily: 'Elemental End',
-      textTransform:'lowercase',
-      color: '#fff',
-      fontSize: 72,
-      textAlign: 'left',
+    textBoxGrey: {
+      display: 'flex',
+      flexDirection: 'column',
+      background: '#D5D5D5',
+      p: 5,
+      borderRadius: '25px',
     },
-    description: {
-      maxWidth: 1200,
+    textBoxWhite: {
+      display: 'flex',
+      flexDirection: 'column',
+      background: '#fff',
+      p: 5,
+      borderRadius: '25px',
+    },
+    typographyStyles: {
       fontFamily: 'Helvetica',
-      color: '#FFF',
-      fontSize: 18,
-      lineHeight: 2,
-      textAlign: 'justify'
+      color: '#000',
+      fontSize: 20,
+      fontWeight: 'bold',
     },
-    buttonContainer: {
-      width: '100%',
-      maxWidth: 1200,
-    },
-    button: {
-      fontWeight:400,
-      fontFamily: 'Elemental End',
-      textTransform: 'lowercase',
-      color: '#fff',
-      borderRadius: '50px',
-      py: 2,
-      px: 7.5,
-      ':hover': {
-        background: '#fff',
-        color: '#000',
-      },
+    rightGridItem: {
+      minHeight: { xs: '250px', md: '750px' },
+      maxHeight: { xs: '250px', md: '750px' },
     },
   };
   

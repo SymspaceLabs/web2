@@ -1,179 +1,218 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { FlexBox } from "../../../components/flex-box";
-import { LazyImage } from '@/components/lazy-image';
-import { calculateDiscount, currency } from "../../../lib";
-import { motion, useInView } from "framer-motion";
+import React, { useState, useEffect } from 'react';
+import { Container, Grid } from '@mui/material';
+import { Box, Card, CardContent, Typography, Button } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
-export default function Section12() {
-  const theme = useTheme();
-  const [activeTab, setActiveTab] = useState("newArrival");
-  const [products, setProducts] = useState([]); 
-  const [loading, setLoading] = useState(true);
 
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  const categories = [
-    { id: 1, title: "New Arrival", slug: "newArrival" },
-    { id: 2, title: "Best Seller", slug: "bestSeller" },
-    { id: 3, title: "Featured Products", slug: "featured" },
+/**
+ * Section11 Component
+ *
+ * This component displays three distinct cards with information about AR (Augmented Reality) statistics and services.
+ * - The first set of cards displays statistics about AR usage and effectiveness.
+ * - The second card provides details about AR Visuals, showcasing the company's AR services.
+ * - The third card contains a video showcasing an AR visual, enhancing the user experience.
+ * 
+ * The layout is responsive, with card components adapting to various screen sizes.
+ */
+export default function Section11() {
+  // Array of statistics for the first set of cards
+  const cardsData = [
+    { number: '90', description: (<>90%+ of Americans use/<br/>would use AR for e-commerce</>), },
+    { number: '94', description: (<>94% conversion rate for products <br/> purchased through AR/VR ads</>) },
+    { number: '98', description: (<>98% of Americans who used AR<br/>while shopping found it helpful</>) },
   ];
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const handleChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
-  const blob1 = {
-    position: 'absolute',
-    top: 250,
-    left: -50,
-    width: { xs: '300px', sm: '400px', md: '500px' },
-    height: { xs: '300px', sm: '400px', md: '500px' },
-    background: '#FFFFFF',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.2,
-    filter: 'blur(120px)',
-  };
-
-  const blob2 = {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: { xs: '300px', sm: '400px', md: '500px' },
-    height: { xs: '300px', sm: '400px', md: '500px' },
-    background: '#FFFFFF',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.2,
-    filter: 'blur(120px)',
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
+  const fadeInVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
   };
 
   return (
-    <Box sx={{ width: "100%", background: "#1F1F1F", py: 10 }}>
-      <Container>
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <Box sx={{ zIndex: 2, position: "relative" }} py={4} textAlign="center">
-            <Box mb={4} overflow="hidden">
-              <Tabs value={activeTab} onChange={handleChange}
-                sx={{
-                  "& .MuiTabs-indicator": {
-                    backgroundColor: "#FFF",
-                  },
-                }}
-              >
-                {categories.map((item) => (
-                  <Tab key={item.slug} label={item.title} value={item.slug}
-                    sx={{
-                      textTransform: "none",
-                      fontFamily: "Elemental End",
-                      textTransform: "lowercase",
-                      fontWeight: 400,
-                      fontSize: 18,
-                      color: "#BDBDBD",
-                      "&.Mui-selected": {
-                        color: "#FFFFFF",
-                      },
-                    }}
-                  />
-                ))}
-              </Tabs>
-            </Box>
-          </Box>
-
-          <Grid sx={{ zIndex: 2, position: "relative" }} container spacing={3}>
-            {products.map((product) => (
-              <Grid item lg={3} md={4} sm={6} xs={12} key={product.id}>
-                <Link href={`/products/${product.slug}`}>
-                  <FlexBox
-                    flexDirection="column"
-                    bgcolor="rgba(255, 255, 255, 0.1)"
-                    borderRadius={3}
-                    mb={2}
-                    sx={{
-                      transition: "background-color 0.3s ease",
-                      "&:hover": {
-                        bgcolor: "rgba(255, 255, 255, 0.15)",
-                      },
-                    }}
-                  >
-                    <LazyImage
-                      alt="product images"
-                      width={380}
-                      height={379}
-                      src={product.images?.[0]?.url || "/placeholder.png"}
-                    />
-                    <Box sx={{ px: 4, pb: 4 }}>
-                      <Typography
-                        sx={{
-                          fontFamily: "Helvetica",
-                          color: "#fff",
-                          fontSize: 18,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontFamily: "Helvetica",
-                          textTransform: "uppercase",
-                          color: "rgba(255,255,255,0.5)",
-                          fontSize: "17px",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {product.company.businessName}
-                      </Typography>
-
-                      <FlexBox gap={1}>
-                        <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: "17px", fontWeight: 500 }}>
-                          {currency(calculateDiscount(product.price, 0))}
-                        </Typography>
-                        <Typography sx={{ fontFamily: "Helvetica", color: "rgba(255,255,255,0.5)", fontSize: "17px", fontWeight: 500, textDecoration: "line-through" }}>
-                          {currency(calculateDiscount(product.price, 0))}
-                        </Typography>
-                      </FlexBox>
-                    </Box>
-                  </FlexBox>
-                </Link>
+    // Main grid container with background and padding
+    <Grid sx={{ background: '#1F1F1F', py: 10 }}>
+      <Container sx={{ pr:0 }} disableGutters>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <Grid container spacing={3}>
+            {/* Map over the cardsData array and render CustomCard1 for each entry */}
+            {cardsData.slice(0, 3).map((card, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <motion.div variants={fadeInVariants}>
+                  <CustomCard1 number={card.number} description={card.description} />
+                </motion.div>
               </Grid>
             ))}
+            
+            <motion.div variants={fadeInVariants} style={{ width: '100%' }}>
+              <Grid container spacing={3} sx={{marginLeft:'0 !important', width: '100%'}}>
+                <Grid item xs={12} sm={6} md={6}>
+                  <CustomCard2 />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <motion.div variants={fadeInVariants}>
+                    <CustomCard3 />
+                  </motion.div>
+                </Grid>
+              </Grid>
+            </motion.div>
+
           </Grid>
         </motion.div>
-
-        <Box sx={blob1} />
-        <Box sx={blob2} />
       </Container>
-    </Box>
+    </Grid>
   );
 }
+
+/**
+ * CustomCard1 Component
+ * 
+ * A card displaying a percentage statistic with an animated number counter.
+ * The number increases over time, and the card contains a description and a "Learn More" button.
+ */
+export const CustomCard1 = ({ number, description }) => {
+  const [currentNumber, setCurrentNumber] = useState(0);
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
+
+  useEffect(() => {
+    if (!inView) return; // Start only when in view
+
+    let start = 0;
+    const duration = 2000;
+    const increment = Math.ceil(number / (duration / 50));
+    const interval = setInterval(() => {
+      start += increment;
+      if (start >= number) {
+        clearInterval(interval);
+        start = number;
+      }
+      setCurrentNumber(start);
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, [inView, number]);
+
+  return (
+    <Card 
+      ref={ref} 
+      sx={{ 
+        mb: 2, 
+        borderRadius: '50px', 
+        '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)' } // Button fades in on hover
+      }}
+    >
+      <CardContent sx={{ px: 0 }}>
+        <Box sx={{ px: 3, pt: {xs:5, sm:20}, pb: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '50px' }}>
+          <Typography component="div" sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#000', fontSize: 100 }}>
+            {currentNumber}%
+          </Typography>
+          <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: 24, fontWeight: 500, textAlign: 'center' }}>
+            {description}
+          </Typography>
+          {/* Button with fade-in effect */}
+          <Box>
+            <Button 
+              className="fadeInBtn"
+              sx={{ 
+                opacity: 0, 
+                transform: 'translateY(20px)', 
+                transition: 'all 0.3s ease',
+                py: 2,
+                px: 3,
+                borderRadius: 50,
+                border: '2px solid black',
+                color: 'black',
+                fontSize: 12,
+                fontFamily: 'Elemental End',
+                textTransform: 'lowercase',
+                fontWeight: 500,
+                ':hover': {
+                  background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                  color: '#FFF',
+                  border: '2px solid white',
+                }
+              }}
+            >
+              Learn More
+            </Button>
+          </Box>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+/**
+ * CustomCard2 Component
+ * 
+ * A card that describes AR Visuals and provides information about the company's AR services.
+ * Includes a "Contact Us" button to engage users.
+ */
+export const CustomCard2 = () => {
+  return (
+    <Card sx={{ borderRadius: '50px', display: 'flex', flexDirection: 'column', height: '100%', '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)'} }}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '30px', pt: 8, px:{xs:5, sm:15} }}>
+        <Typography component="div" sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: {xs:48, sm:72} }}>
+          AR Visuals
+        </Typography>
+        <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: {xs:'14px', sm:'24px'}, fontWeight: 500, textAlign: 'justify' }}>
+          We create unique AR experiences for brands helping them bring any idea into reality. Augment animated visuals on top of products, displays, or billboards for an immersive marketing medium. Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
+        </Typography>
+        
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button className="fadeInBtn" 
+            sx={{ 
+              opacity: 0, 
+              transform: 'translateY(20px)', 
+              transition: 'all 0.3s ease',
+              width: '25%',
+              py: 2,
+              px: 3,
+              borderRadius: 50,
+              border: '2px solid black',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              color: 'black',
+              fontSize: 12,
+              fontFamily: 'Elemental End',
+              textTransform: 'lowercase',
+              fontWeight: 500,
+              ':hover' : {
+                background : 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                color: '#FFF',
+                border: '2px solid white',
+              }
+            }}
+          >
+            Contact Us
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+/**
+ * CustomCard3 Component
+ * 
+ * A card that displays a video showcasing AR Visuals. It uses a webm video as a background to display AR content.
+ */
+export const CustomCard3 = () => {
+  return (
+    <Card sx={{ minWidth: 275, borderRadius: '50px', display: 'flex', flexDirection: 'column', height: 580, overflow: 'hidden' }}>
+      <Box sx={{ position: 'relative', width: '100%', height: 580, overflow: 'hidden' }}>
+        <video
+          width={292}
+          height={195}
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+          autoPlay loop muted
+        >
+          <source src="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/646e4fcefb0291863787d1a7_AR_Visuals_Spaceman-transcode.webm" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </Box>
+    </Card>
+  );
+};

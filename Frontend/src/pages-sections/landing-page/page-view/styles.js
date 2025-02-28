@@ -1,6 +1,8 @@
+"use client";
+
 import { keyframes } from '@mui/material/styles';
 
-const blob = keyframes`
+const blobKeyframe = keyframes`
   0% {
     transform: translate(0px, 0px) scale(1);
   }
@@ -15,10 +17,7 @@ const blob = keyframes`
   }
 `;
 
-export const section1Styles = (theme) => ({
-  container: {
-    position: 'relative',
-  },
+export const styles = {
   blob1: {
     position: 'absolute',
     top: '50%',
@@ -30,12 +29,12 @@ export const section1Styles = (theme) => ({
     zIndex: 1,
     opacity: 0.5,
     filter: 'blur(75px)',
-    animation: `${blob} 7s infinite`,
+    animation: `${blobKeyframe} 7s infinite`,
   },
   blob2: {
     position: 'absolute',
-    top: '10%',
-    right: '5%',
+    top: 0,
+    right: 0,
     width: '400px',
     height: '400px',
     background: '#0366FE',
@@ -43,14 +42,11 @@ export const section1Styles = (theme) => ({
     zIndex: 1,
     opacity: 0.5,
     filter: 'blur(75px)',
-    animation: `${blob} 7s infinite`,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',  // Hide on small screens (mobile)
-    },
+    animation: `${blobKeyframe} 7s infinite`,
   },
   blob3: {
     position: 'absolute',
-    top: -150,
+    top: 0,
     left: -150,
     width: '500px',
     height: '500px',
@@ -59,10 +55,7 @@ export const section1Styles = (theme) => ({
     zIndex: 1,
     opacity: 0.5,
     filter: 'blur(75px)',
-    animation: `${blob} 7s infinite`,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',  // Hide on small screens (mobile)
-    },
+    animation: `${blobKeyframe} 7s infinite`,
   },
   blob4: {
     position: 'absolute',
@@ -75,9 +68,6 @@ export const section1Styles = (theme) => ({
     zIndex: 1,
     opacity: 0.4,
     filter: 'blur(100px)',
-    animation: `${blob} 7s infinite`,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',  // Hide on small screens (mobile)
-    },
-  }
-});
+    animation: `${blobKeyframe} 7s infinite`,
+  },
+};

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlexBox } from '../flex-box';
 import { Small } from '../Typography';
-import { Select, MenuItem, Checkbox, ListItemText, useMediaQuery, Typography } from '@mui/material';
+import { Select, MenuItem, ListItemText } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const SymDropdown = ({

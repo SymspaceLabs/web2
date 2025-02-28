@@ -1,55 +1,56 @@
-"use client"
+"use client";
 
-import React, { useRef, useState } from "react";
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { styles } from './styles'; // Importing predefined styles
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { FlexColCenter } from "@/components/flex-box";
+import { Button, Box, Typography } from '@mui/material';
 
-export default function Section3() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { threshold: 0.3 }); // Adjust threshold as needed
+export default function Section2() {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/register-partner');
+  };
 
   return (
-    <Grid sx={{ background: '#FAFAFA' }} ref={ref}>
-      <Container sx={styles.container}>
-        <Box sx={styles.contentBox}>
-          <Grid container spacing={4} alignItems="center">
-            {/* Left content */}
-            <Grid item xs={12} md={4} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} 
-                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }} 
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                {/* Add content here if needed */}
-              </motion.div>
-            </Grid>
-
-            {/* Right content: Promotional video */}
-            <Grid item xs={12} md={8} sx={{ zIndex: 2 }}>
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} 
-                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }} 
-                transition={{ duration: 1, ease: "easeInOut" }}
-              >
-                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 30, sm: 64 }, px: { xs: 2, sm: 0 }, }}>
-                  Application
-                </Typography>
-
-                <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: { xs: 14, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: 2 }}>
-                  Optimized for user experience, our AR application allows consumers to leverage various advanced AR features to trial products like never before. Consumers are able to augment 3D products realistically in their own space, providing a virtual trial room experience for clothes, furniture, and more. The Symspace app goes beyond visualization by offering near-precise sizing recommendations, reducing returns, and increasing consumer confidence levels.
-                </Typography>
-
-                <Box sx={styles.buttonContainer}>
-                  <Button variant="outlined" sx={styles.learnMoreButton}>
-                    Learn More
-                  </Button>
-                </Box>
-              </motion.div>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
-    </Grid>
+    <Box sx={{ background: '#1F1F1F', py: {xs:2, sm:5} }}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+        style={{ height: "100%" }} // Ensures motion.div spans full height
+      >
+        <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:3 }}>
+          <Typography sx={{fontFamily: 'Elemental End', textTransform:'lowercase', color: '#FFF', fontSize:  { xs: 20, sm: 64 }, }}>
+            Future of Retail
+          </Typography>
+          <Typography sx={{fontFamily: 'Helvetica', color: '#fff', fontSize: { xs:12, sm:18 }, textAlign: 'justify', maxWidth: 1200, lineHeight: { xs:1.5, sm:2 } }}>
+            In the rapidly growing XR industry, Symspace is at the forefront of empowering brands for the future. By creating highly accurate, detailed, realistic 3D models, we help brands prepare for the AR revolution when XR hardware becomes more accessible and affordable. We imagine a world where individuals can effortlessly explore and purchase products remotely by immersing themselves in virtual experiences. We aim to become the standard for XR accessibility by prioritizing and empowering those unable to travel our convenient AR solution. With Symspace, consumers can shop from home, receive sizing recommendations, and feel confident in their purchases. Embrace the future and simulate the retail space with us.
+          </Typography>
+          <Button sx={outlinedButton} onClick={handleClick}>
+            partner sign up
+          </Button>
+        </FlexColCenter>
+      </motion.div>
+    </Box>
   );
+}
+
+
+const outlinedButton = {
+  fontWeight: 400,
+  fontFamily: 'Elemental End',
+  textTransform: 'lowercase',
+  color: '#fff',
+  borderRadius: '50px',
+  border: '2px solid white',
+  py: {sm:2},
+  px: 3,
+  fontSize: 12,
+  transition: 'all 0.3s ease-in-out', // Smooth transition effect
+  ':hover': {
+    background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
+    color: '#000',
+  },
 }

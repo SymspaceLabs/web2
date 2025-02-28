@@ -1,104 +1,101 @@
-'use client'
+"use client";
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Box, Container, Typography, Grid } from '@mui/material';
-import { motion, useInView } from 'framer-motion';
-import HandBagCanvas from '../../../components/HandBagCanvas';
-import { sectionStyles } from './styles';
+/**
+ * Section8 Component
+ *
+ * This component showcases the "SYM-AI" 3D modeling SaaS platform with:
+ * - A floating image for enhanced visual appeal.
+ * - A centralized description of the platform's features.
+ * - A call-to-action button encouraging users to learn more.
+ *
+ * The layout adjusts responsively, and the floating image is hidden on smaller screens.
+ */
+import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
+import { LazyImage } from '@/components/lazy-image';
+import { FlexBox } from '@/components/flex-box';
+import { motion } from "framer-motion"; // Importing framer-motion
 
-// Define animation variants
-const listItemVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: (index) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: index * 0.2, duration: 0.6, ease: "easeOut" }
-  }),
-};
-
-const rightComponentVariants = {
-  hidden: { opacity: 0, x: 50 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, ease: "easeOut" }
-  },
-};
-
-export default function Section9() {
-  const features = [
-    "Innovative and immersive experiences",
-    "Improve consumer confidence and convenience",
-    "Reduce manufacturing and inventory costs",
-    "Customizable AR content for marketing purposes",
-    "Awareness and assistance for underserved communities",
-    "Gauge consumer demand through AR Room",
-  ];
-
-  // Refs for tracking visibility
-  const leftRef = useRef(null);
-  const rightRef = useRef(null);
-
-  // useInView hooks
-  const leftInView = useInView(leftRef, { triggerOnce: true, threshold: 0.2 });
-  const rightInView = useInView(rightRef, { triggerOnce: true, threshold: 0.2 });
-
-  // Persistent state for animation
-  const [leftHasAnimated, setLeftHasAnimated] = useState(false);
-  const [rightHasAnimated, setRightHasAnimated] = useState(false);
-
-  // Set state once animation is triggered
-  useEffect(() => {
-    if (leftInView) setLeftHasAnimated(true);
-    if (rightInView) setRightHasAnimated(true);
-  }, [leftInView, rightInView]);
-
+export default function Section8() {
   return (
-    <Grid sx={sectionStyles.gridContainer}>
-      <Container>
-        <Box sx={sectionStyles.boxContainer}>
-          <Grid container spacing={6} alignItems="center">
-            
-            {/* Left section: List of features */}
-            <Grid item xs={12} md={6} sx={sectionStyles.leftGridItem}>
-              <motion.div
-                ref={leftRef}
-                initial="hidden"
-                animate={leftHasAnimated ? "visible" : "hidden"} // Persistent state
-              >
-                {features.map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    variants={listItemVariants}
-                    custom={index}
-                    style={{ marginBottom: '16px' }} // Added gap between cards
-                  >
-                    <Box sx={index % 2 === 0 ? sectionStyles.textBoxGrey : sectionStyles.textBoxWhite}>
-                      <Typography sx={sectionStyles.typographyStyles}>
-                        {feature}
-                      </Typography>
-                    </Box>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </Grid>
+    <Grid sx={{ background: '#EDEDED', py: 8, position: 'relative' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        <Container>
+          <FlexBox flexDirection='column' gap={5} sx={{ textAlign: 'center', alignItems: 'center' }}>
+            {/* Section Title */}
+            <Typography fontFamily='Elemental End' color='#191F28' sx={{fontSize: {xs:30, sm:64} }}>
+              3d simulation
+            </Typography>
 
-            {/* Right section: 3D interactive canvas */}
-            <Grid item xs={12} md={6}>
-              <motion.div
-                ref={rightRef}
-                initial="hidden"
-                animate={rightHasAnimated ? "visible" : "hidden"} // Persistent state
-                variants={rightComponentVariants}
+            {/* Description of the platform */}
+            <Typography
+              sx={{ fontFamily: 'Helvetica', color: '#909090', fontSize: { xs: 14, sm: 18 },
+                textAlign: 'justify',
+                maxWidth: 1350,
+                lineHeight: {xs:1.5, sm:2}
+              }}
+            >
+              Symspace's Generative AI 3D modeling software serves as a tool for brands to gauge traction before all the spending. Create realistic 3D models of your products, then share animated product videos with your community. Within Real Estate, partners are using our platform and iOS application to virtually showcase furniture. We have streamlined our platform to simplify the process for any sized brand looking to launch a new product, improve sales on an existing product, or stage products in unfurnished homes. Our partner portal provides analytics on sales, AR usage, and product interactions. Brands can engage their communities through AR without incurring any manufacturing or inventory costs. Augmented Reality has proven to effectively reduce returns by giving consumers more confidence in their purchases. Customize any 3D product through text, images, object scans, and videos. Save time and resources, while focusing on what matters most- product demand through unique consumer interactions.
+            </Typography>
+
+            {/* Call-to-action button */}
+            <Box sx={{ width: "100%" }}>
+              <Button
+                sx={{
+                  gap: 2,
+                  fontFamily: "Helvetica",
+                  color: "#353535",
+                  borderRadius: "50px",
+                  py: 2,
+                  px: 3,
+                  background: "transparent",
+                  border: "2px solid #353535",
+                  transition: "all 0.3s ease-in-out",
+                  "&:hover": {
+                    color: "#fff",
+                    background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
+                    border: "2px solid #FFF",
+                    "& img": {
+                      content: 'url("/assets/images/sparkler-white.png")',
+                    },
+                  },
+                }}
               >
-                <Box sx={sectionStyles.rightGridItem}>
-                  <HandBagCanvas />
+                {/* Button Text */}
+                <Typography fontFamily="Elemental End" textTransform="lowercase" fontSize={16} >
+                  Get Started
+                </Typography>
+
+                {/* Icon inside the button */}
+                <Box
+                  sx={{
+                    width: "35px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <LazyImage
+                    alt="furniture shop"
+                    width={25}
+                    height={25}
+                    src="/assets/images/sparkler-grey.png"
+                    sx={{
+                      transition: "all 0.3s ease-in-out",
+                    }}
+                  />
                 </Box>
-              </motion.div>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
+              </Button>
+            </Box>
+
+          </FlexBox>
+        </Container>
+      </motion.div>
     </Grid>
   );
 }

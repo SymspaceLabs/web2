@@ -1,101 +1,87 @@
 "use client";
 
-/**
- * Section8 Component
- *
- * This component showcases the "SYM-AI" 3D modeling SaaS platform with:
- * - A floating image for enhanced visual appeal.
- * - A centralized description of the platform's features.
- * - A call-to-action button encouraging users to learn more.
- *
- * The layout adjusts responsively, and the floating image is hidden on smaller screens.
- */
-import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
-import { LazyImage } from '@/components/lazy-image';
-import { FlexBox } from '@/components/flex-box';
-import { motion } from "framer-motion"; // Importing framer-motion
+import { Box, Grid, Container } from "@mui/material";
+import { Card1, Card2, Card3 } from "./cards";
+import { motion } from "framer-motion";
+import { FlexBox } from "@/components/flex-box";
 
-export default function Section8() {
+export default function Section7() {
+  // Framer Motion fade-in animation
+  const fadeIn = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   return (
-    <Grid sx={{ background: '#EDEDED', py: 8, position: 'relative' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
-      >
-        <Container>
-          <FlexBox flexDirection='column' gap={5} sx={{ textAlign: 'center', alignItems: 'center' }}>
-            {/* Section Title */}
-            <Typography fontFamily='Elemental End' color='#191F28' sx={{fontSize: {xs:30, sm:64} }}>
-              3d simulation
-            </Typography>
+    <Grid sx={{ background: "#1F1F1F", pt: 10, pb: 20, height: "100%", position: "relative" }}>
+      <Container sx={{ height: "100%" }}>
+        <Grid container alignItems="stretch" spacing={2} sx={{ height: "100%" }}>
+          {/* Left column */}
+          <Grid item xs={12} sm={12} md={6}>
+            <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: "10px" }}>
+              {/* Card 1 */}
+              <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} style={{ width: "100%" }}>
+                <Card1 />
+              </motion.div>
 
-            {/* Description of the platform */}
-            <Typography
-              sx={{ fontFamily: 'Helvetica', color: '#909090', fontSize: { xs: 14, sm: 18 },
-                textAlign: 'justify',
-                maxWidth: 1400,
-                lineHeight: {xs:1.5, sm:2}
-              }}
-            >
-              Symspace's Generative AI 3D modeling software serves as a tool for brands to gauge traction before all the spending. Create realistic 3D models of your products, then share animated product videos with your community. Within Real Estate, partners are using our platform and iOS application to virtually showcase furniture. We have streamlined our platform to simplify the process for any sized brand looking to launch a new product, improve sales on an existing product, or stage products in unfurnished homes. Our partner portal provides analytics on sales, AR usage, and product interactions. Brands can engage their communities through AR without incurring any manufacturing or inventory costs. Augmented Reality has proven to effectively reduce returns by giving consumers more confidence in their purchases. Customize any 3D product through text, images, object scans, and videos. Save time and resources, while focusing on what matters most- product demand through unique consumer interactions.
-            </Typography>
-
-            {/* Call-to-action button */}
-            <Box sx={{ width: "100%" }}>
-              <Button
+              {/* Card 2 - Website & App Integration */}
+              <FlexBox
                 sx={{
+                  width: "100%",
                   gap: 2,
-                  fontFamily: "Helvetica",
-                  color: "#353535",
-                  borderRadius: "50px",
-                  py: 2,
-                  px: 3,
-                  background: "transparent",
-                  border: "2px solid #353535",
-                  transition: "all 0.3s ease-in-out",
-                  "&:hover": {
-                    color: "#fff",
-                    background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
-                    border: "2px solid #FFF",
-                    "& img": {
-                      content: 'url("/assets/images/sparkler-white.png")',
-                    },
-                  },
+                  justifyContent: "space-between",
+                  alignItems: "stretch",
+                  flexWrap: { xs: "wrap", md: "nowrap" }, // Allow wrapping on small screens
+                  mt: { xs: 2, md: 0 },
                 }}
               >
-                {/* Button Text */}
-                <Typography fontFamily="Elemental End" textTransform="lowercase" fontSize={16} >
-                  Get Started
-                </Typography>
-
-                {/* Icon inside the button */}
-                <Box
-                  sx={{
-                    width: "35px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeIn}
+                  style={{ flex: 1, minWidth: "45%" }} // Ensure minimum width for proper spacing
                 >
-                  <LazyImage
-                    alt="furniture shop"
-                    width={25}
-                    height={25}
-                    src="/assets/images/sparkler-grey.png"
-                    sx={{
-                      transition: "all 0.3s ease-in-out",
-                    }}
+                  <Card2
+                    imageUrl="/assets/images/card/cursor.png"
+                    headerText="Website Integration"
+                    subHeaderText="Enhance your customers experience"
+                    bg="#D5D5D5"
+                    sx={{ mb: { xs: 2, md: 0 } }}
                   />
-                </Box>
-              </Button>
-            </Box>
+                </motion.div>
 
-          </FlexBox>
-        </Container>
-      </motion.div>
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeIn}
+                  style={{ flex: 1, minWidth: "45%" }} // Ensure minimum width for proper spacing
+                >
+                  <Card2
+                    imageUrl="/assets/images/card/mobile.png"
+                    headerText="Application Integration"
+                    subHeaderText="An immersive way to shop conveniently"
+                    bg="#353535"
+                    textColor="#fff"
+                    sx={{ mb: { xs: 2, md: 0 } }}
+                  />
+                </motion.div>
+              </FlexBox>
+
+
+
+            </Box>
+          </Grid>
+
+          {/* Right column */}
+          <Grid item xs={12} sm={12} md={6}>
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
+                <Card3 />
+            </motion.div>
+          </Grid>
+        </Grid>
+      </Container>
     </Grid>
   );
 }

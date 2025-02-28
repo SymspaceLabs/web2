@@ -13,7 +13,7 @@ export default function Section7() {
   };
 
   return (
-    <Grid sx={{ background: "#1F1F1F", pt: 10, pb: 20, height: "100%", position: "relative" }}>
+    <Grid sx={{ background: "#1F1F1F", pt: {xs:5, sm:10}, pb: {xs:10, md:20}, height: "100%", position: "relative" }}>
       <Container sx={{ height: "100%" }}>
         <Grid container alignItems="stretch" spacing={2} sx={{ height: "100%" }}>
           {/* Left column */}
@@ -32,7 +32,6 @@ export default function Section7() {
                   justifyContent: "space-between",
                   alignItems: "stretch",
                   flexWrap: { xs: "wrap", md: "nowrap" }, // Allow wrapping on small screens
-                  mt: { xs: 2, md: 0 },
                 }}
               >
                 <motion.div
@@ -47,7 +46,6 @@ export default function Section7() {
                     headerText="Website Integration"
                     subHeaderText="Enhance your customers experience"
                     bg="#D5D5D5"
-                    sx={{ mb: { xs: 2, md: 0 } }}
                   />
                 </motion.div>
 
@@ -64,7 +62,6 @@ export default function Section7() {
                     subHeaderText="An immersive way to shop conveniently"
                     bg="#353535"
                     textColor="#fff"
-                    sx={{ mb: { xs: 2, md: 0 } }}
                   />
                 </motion.div>
               </FlexBox>

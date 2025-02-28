@@ -27,31 +27,41 @@ export default function Section8() {
         <Container>
           <FlexBox flexDirection='column' gap={5} sx={{ textAlign: 'center', alignItems: 'center' }}>
             {/* Section Title */}
-            <Typography fontFamily='Elemental End' color='#191F28' sx={{fontSize: {xs:30, sm:64} }}>
+            <Typography fontFamily='Elemental End' color='#191F28' sx={{fontSize: {xs:20, sm:64} }}>
               3d simulation
             </Typography>
 
             {/* Description of the platform */}
             <Typography
-              sx={{ fontFamily: 'Helvetica', color: '#909090', fontSize: { xs: 14, sm: 18 },
+              sx={{
+                color: '#909090',
+                fontSize: { xs: 12, sm: 18 },
                 textAlign: 'justify',
                 maxWidth: 1350,
-                lineHeight: {xs:1.5, sm:2}
+                fontWeight:{xs:600, sm:500},
+                lineHeight: { xs: 1.5, sm: 2 },
+                display: { xs: '-webkit-box', sm: 'block' },
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: { xs: 7, sm: 'unset' }, // Truncate to 4 lines on mobile
+                overflow: { xs: 'hidden', sm: 'unset' }
               }}
             >
               Symspace's Generative AI 3D modeling software serves as a tool for brands to gauge traction before all the spending. Create realistic 3D models of your products, then share animated product videos with your community. Within Real Estate, partners are using our platform and iOS application to virtually showcase furniture. We have streamlined our platform to simplify the process for any sized brand looking to launch a new product, improve sales on an existing product, or stage products in unfurnished homes. Our partner portal provides analytics on sales, AR usage, and product interactions. Brands can engage their communities through AR without incurring any manufacturing or inventory costs. Augmented Reality has proven to effectively reduce returns by giving consumers more confidence in their purchases. Customize any 3D product through text, images, object scans, and videos. Save time and resources, while focusing on what matters most- product demand through unique consumer interactions.
             </Typography>
 
+
             {/* Call-to-action button */}
             <Box sx={{ width: "100%" }}>
               <Button
                 sx={{
-                  gap: 2,
-                  fontFamily: "Helvetica",
+                  gap: {xs:1, sm:2},
+                  fontFamily: "Elemental End",
+                  textTransform:"lowercase",
                   color: "#353535",
                   borderRadius: "50px",
-                  py: 2,
-                  px: 3,
+                  py: {xs:1, sm:2},
+                  px: {xs:2, sm:3},
+                  fontSize: {xs:12, sm:16},
                   background: "transparent",
                   border: "2px solid #353535",
                   transition: "all 0.3s ease-in-out",
@@ -65,15 +75,12 @@ export default function Section8() {
                   },
                 }}
               >
-                {/* Button Text */}
-                <Typography fontFamily="Elemental End" textTransform="lowercase" fontSize={16} >
-                  Get Started
-                </Typography>
+                Get Started
 
                 {/* Icon inside the button */}
                 <Box
                   sx={{
-                    width: "35px",
+                    width: {xs:'25px', sm:"35px"},
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -82,8 +89,8 @@ export default function Section8() {
                 >
                   <LazyImage
                     alt="furniture shop"
-                    width={25}
-                    height={25}
+                    width={100}
+                    height={100}
                     src="/assets/images/sparkler-grey.png"
                     sx={{
                       transition: "all 0.3s ease-in-out",

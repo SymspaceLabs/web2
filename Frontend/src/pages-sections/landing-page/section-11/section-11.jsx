@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Box, Container, Typography, Button, Grid } from "@mui/material";
-import { FlexCol } from "@/components/flex-box";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 
 
 export default function Section10() {
@@ -16,18 +16,26 @@ export default function Section10() {
           viewport={{ once: true }}
           style={{ height: "100%" }} // Ensures motion.div spans full height
         >
-          <FlexCol sx={{ gap: 3, alignItems: 'center', py: 10 }}>
-            <Typography fontFamily='Elemental End' textTransform='lowercase' color='#FFF' sx={{fontSize: { xs:30, sm:64 } }} textAlign='left' width="100%" maxWidth="1200px">
+          <FlexCol sx={{ gap: 3, py: 10, textAlign: 'center', alignItems: 'center' }}>
+            <Typography fontFamily='Elemental End' textTransform='lowercase' color='#FFF' sx={{fontSize: { xs:20, sm:64 }, textAlign:{xs:'center', sm:'left'} }}  width="100%" maxWidth="1200px">
               Our Focus
             </Typography>
-            <Typography sx={{ maxWidth: 1200, color: '#FFF', fontSize: 18, lineHeight: 2, textAlign: 'justify' }}>
+            <Typography 
+              sx={{ 
+                maxWidth: 1200,
+                color: '#FFF',
+                fontSize: { xs: 12, sm: 18 },
+                lineHeight: { xs: 1.5, sm: 2 },
+                textAlign: 'justify'
+              }}
+            >
               We empower individuals with Augmented Reality, while equipping brands with resources to showcase their products in unimaginable ways. Our goal is to revolutionize the end-to-end e-commerce process by creating 3D assets of retail products and enabling consumers to augment these products with enhanced AR functionalities. We offer a sustainable solution that delivers immersive, hyper-realistic, and seamless 3D models coupled with unparalleled AR experiences. Through cutting-edge technologies such as artificial intelligence and augmented reality, we are positioned to transform mere imagination into tangible simulations of reality.
             </Typography>
-            <Box sx={{ width: '100%', maxWidth: 1200 }}>
+            <FlexBox sx={{ width: '100%', maxWidth: 1200, justifyContent:{xs:'center', sm:'flex-start'}  }}>
               <Button variant="outlined" sx={outlinedButton}>
                 About Us
               </Button>
-            </Box>
+            </FlexBox>
           </FlexCol>
         </motion.div>
       </Container>
@@ -43,7 +51,7 @@ const outlinedButton = {
   color: '#fff',
   borderRadius: '50px',
   border: '2px solid white',
-  py: 2,
+  py: {xs:1, sm:2},
   px: 3,
   fontSize: 12,
   transition: 'all 0.3s ease-in-out', // Smooth transition effect

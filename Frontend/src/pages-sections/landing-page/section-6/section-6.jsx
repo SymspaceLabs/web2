@@ -35,11 +35,11 @@ export default function Section6() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 30, sm: 64 }, px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
+                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 20, sm: 64 }, px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
                   Application
                 </Typography>
 
-                <Typography sx={{ py:{xs:2, sm:5}, maxWidth:'1000px', fontFamily: 'Helvetica', color: '#353535', fontSize: { xs: 14, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1, sm:2} }}>
+                <Typography sx={{ py:{xs:2, sm:5}, maxWidth:'1000px', fontFamily: 'Helvetica', color: '#353535', fontSize: { xs: 12, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
                   Optimized for user experience, our AR application allows consumers to leverage various advanced AR features to trial products like never before. Consumers are able to augment 3D products realistically in their own space, providing a virtual trial room experience for clothes, furniture, and more. The Symspace app goes beyond visualization by offering near-precise sizing recommendations, reducing returns, and increasing consumer confidence levels.
                 </Typography>
 

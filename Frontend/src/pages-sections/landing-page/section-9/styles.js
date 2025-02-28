@@ -1,39 +1,37 @@
-export const sectionStyles = {
-    gridContainer: {
-      background: '#1F1F1F',
+"use client";
+
+import styled from "@mui/material/styles/styled";
+export const RootStyle = styled("div")(({
+  theme
+}) => ({
+  minHeight: 300,
+  borderRadius: 12,
+  display: "flex",
+  overflow: "hidden",
+  position: "relative",
+  marginTop: "-10rem",
+  img: {
+    objectFit: "cover"
+  },
+  ".content": {
+    top: "40%",
+    right: "15%",
+    position: "absolute",
+    transform: "translateY(-40%)",
+    [theme.breakpoints.down("sm")]: {
+      top: "50%",
+      insetInline: 0,
+      padding: "2rem",
+      transform: "translateY(-50%)"
     },
-    boxContainer: {
-      flexGrow: 1,
-      py: 8,
-    },
-    leftGridItem: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 2,
-    },
-    textBoxGrey: {
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#D5D5D5',
-      p: 5,
-      borderRadius: '25px',
-    },
-    textBoxWhite: {
-      display: 'flex',
-      flexDirection: 'column',
-      background: '#fff',
-      p: 5,
-      borderRadius: '25px',
-    },
-    typographyStyles: {
-      fontFamily: 'Helvetica',
-      color: '#000',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    rightGridItem: {
-      minHeight: { xs: '250px', md: '750px' },
-      maxHeight: { xs: '250px', md: '750px' },
-    },
-  };
-  
+    [theme.breakpoints.down(375)]: {
+      h2: {
+        fontSize: 24,
+        marginTop: 0
+      }
+    }
+  },
+  [theme.breakpoints.down(375)]: {
+    minHeight: 260
+  }
+}));

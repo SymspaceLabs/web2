@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FlexBox } from "@/components/flex-box";
-import { ImageWrapper } from "@/pages-sections/landing-page/section-13/styles";
+import { ImageWrapper } from "@/pages-sections/landing-page/section-15/styles";
 import { LazyImage } from "@/components/lazy-image";
 import { styled } from "@mui/system";
 import { Box, Typography } from "@mui/material";

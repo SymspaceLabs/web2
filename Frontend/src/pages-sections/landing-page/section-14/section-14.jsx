@@ -1,219 +1,101 @@
-"use client"
+"use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { LazyImage } from '@/components/lazy-image';
-import { Paragraph } from "@/components/Typography"; 
-import { RootStyle } from "./styles"; 
-import { Box, Typography, Button, TextField, Container} from "@mui/material";
 import { motion } from "framer-motion";
+import { FlexBox } from "@/components/flex-box";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import BoxLink from "@/pages-sections/sessions/components/box-link";
 
-export default function Section14() {
-  const [showInput, setShowInput] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState("");
+export default function Section15() {
+  const [expanded, setExpanded] = useState(false);
 
-  const handleBetaAccessClick = () => {
-    setShowInput(true);
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const faqs = [
+    { question: "What is Symspace, and how does it work?", answer: "We accept Visa, MasterCard, PayPal, and Apple Pay." },
+    { question: "How can Symspace help my brand reduce returns and increase sales?", answer: "Shipping typically takes 5-7 business days, depending on your location." },
+    { question: "How accurate is AR sizing for furniture and apparel?", answer: "Yes, we ship to most countries worldwide. Shipping fees may vary." },
+  ];
+
+  const accordionStyles = {
+    background: "linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)",
+    boxShadow: "0px 1px 24px -1px rgba(0, 0, 0, 0.18)",
+    backdropFilter: "blur(12px)",
+    borderRadius: "15px",
+    color: "#fff",
+    marginBottom: "15px",
+    padding: "10px",
+    position: "relative",
+    border: "2px solid linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%)", // Base transparent border
+    borderRadius: "15px",
+    backgroundClip: "padding-box", // Ensures inner content is not affected
+    "&:first-of-type": { borderRadius: "15px !important" },
+    "&:last-of-type": { borderRadius: "15px !important" }
   };
 
-  const isValidEmail = (email) => {
-    // Regular expression for email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleEmailSubmit = async () => {
-    setError(""); // Reset error state before validation
-    if (!isValidEmail(email.trim())) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-  
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/potential-users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: email.trim() }),
-      });
-  
-      if (response.ok) {
-        setIsSubmitted(true);
-        setEmail(""); // Clear the input field
-        setTimeout(() => {
-          setIsSubmitted(false);
-          setShowInput(false);
-        }, 3000);
-      } else {
-        const data = await response.json();
-        setError(data.message || "Failed to submit email.");
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again later.");
-    }
-  };
-  
   return (
-    <motion.div
-      component={Box}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      viewport={{ once: true }}
-      style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
-    >
-      <Container sx={{ py: 10 }}>
-        <RootStyle>
-          <LazyImage
-            src="/assets/images/banners/banner-55.png"
-            alt="offer"
-            width={500}
-            height={500}
-          />
-          <div className="content">
-            <Typography
-              sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}
-              mt={3}
-              mb={1}
-              lineHeight={1.2}
-              fontSize={{ sm: 40, xs: 30 }}
-            >
-              stay up to date
+    <Box sx={{ width: "100%", background: "#1F1F1F", py: 10 }}>
+      <motion.div
+        component={Box} // Makes motion.div behave like a Box
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true }}
+        style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
+      >
+        <Container>
+          <FlexBox justifyContent="space-between" alignItems="center" py={4}>
+            <Typography fontFamily="Elemental End" textTransform="lowercase" color="#fff" fontSize={50} >
+              FAQs
             </Typography>
-
-            <Paragraph mb={3} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
-              Get updates on new partnered brands, products, <br /> and technology.
-            </Paragraph>
-
-            {!showInput && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleBetaAccessClick}
-                sx={{
-                  gap: 2,
-                  color: "#fff",
-                  borderRadius: "50px",
-                  py: 2,
-                  px: 4,
-                  mt: 4,
-                  background:
-                    "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
+            <Link href="/faqs" target="blank" >
+              <Typography
+                sx={{ 
+                  color: 'rgba(255,255,255,0.5)', 
+                  fontFamily: "Elemental End", 
+                  textTransform: 'lowercase', 
+                  textDecoration: 'none', 
+                  '&:hover': { 
+                    color: '#FFF',
+                    textDecoration: 'underline',
+                  } 
                 }}
               >
-                <Typography
-                  sx={{
-                    fontFamily: "Elemental End",
-                    textTransform: "lowercase",
-                    fontSize: 12,
-                  }}
-                >
-                  Beta Access
-                </Typography>
-                <Box
-                  sx={{
-                    width: "35px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <LazyImage
-                    alt="furniture shop"
-                    width={25}
-                    height={25}
-                    src="/assets/images/sparkler.png"
-                  />
-                </Box>
-              </Button>
-            )}
+                More FAQS
+              </Typography>
+            </Link>
+          </FlexBox>
 
-            {showInput && (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    marginTop: "2rem",
-                    width: "100%",
-                    maxWidth: "400px",
-                    position: "relative",
-                    animation: "fadeIn 0.5s ease-in-out",
-                    "@keyframes fadeIn": {
-                      from: { opacity: 0, transform: "translateY(-20px)" },
-                      to: { opacity: 1, transform: "translateY(0)" },
-                    },
-                  }}
+
+          {faqs.map((faq, index) => (
+            <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
+              <Box sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}> {/* Ensures spacing remains consistent */}
+                <Accordion
+                  expanded={expanded === index}
+                  onChange={handleChange(index)}
+                  sx={accordionStyles}
                 >
-                  <TextField
-                    variant="outlined"
-                    placeholder={
-                      isSubmitted ? "Successfully subscribed!" : "Enter your email"
-                    }
-                    value={email}
-                    onChange={handleEmailChange}
-                    error={!!error}
-                    // helperText={error}
-                    sx={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      background:
-                        "linear-gradient(90.77deg, #474747 0%, #1D1D1D 63%)",
-                      borderRadius: "50px",
-                      paddingRight: "70px",
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      input: {
-                        color: "#fff",
-                        padding: "20px 30px",
-                      },
-                    }}
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={handleEmailSubmit}
-                    sx={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      background: isSubmitted
-                        ? "#fff"
-                        : "linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)",
-                      border: "1px solid #FFFFFF",
-                      borderRadius: "50px",
-                      color: isSubmitted ? "#000" : "#fff",
-                      padding: "6px 12px",
-                      fontFamily: "Elemental End",
-                      textTransform: "lowercase",
-                      "&:hover": {
-                        background: isSubmitted
-                          ? "#f0f0f0"
-                          : "linear-gradient(97.04deg, #888888 0%, #2D2D2D 100%)",
-                      },
-                    }}
-                  >
-                    {isSubmitted ? "✔️" : "Submit"}
-                  </Button>
-                </Box>
-                <Typography sx={{ py:1, px:3, color:'red' }}>
-                  {error}
-                </Typography>
-              </>
-              
-            )}
-          </div>
-        </RootStyle>
-      </Container>
-    </motion.div>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
+                    <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" fontSize={18}>
+                      {faq.question}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography variant="body1" sx={{ color: "#fff" }}>
+                      {faq.answer}
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            </motion.div>
+          ))}
+
+        </Container>
+      </motion.div>
+    </Box>
   );
 }

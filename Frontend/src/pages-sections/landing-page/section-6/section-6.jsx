@@ -1,64 +1,77 @@
 "use client"
 
-import { useRef } from 'react';
+import React, { useRef, useState } from "react";
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { LazyImage } from '@/components/lazy-image';
-import { sectionStyles } from './styles'; // Import custom styles for the section
+import { styles } from './styles'; // Importing predefined styles
 import { motion, useInView } from "framer-motion";
+import { FlexBox } from "@/components/flex-box";
 
 export default function Section6() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { triggerOnce: true, threshold: 0.2 }); // 20% visibility triggers animation
+  const isInView = useInView(ref, { threshold: 0.3 }); // Adjust threshold as needed
 
   return (
-    <Grid sx={sectionStyles.sectionBackground}>
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 50 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
-                {/* Main container for the section */}
-                <Container>
-          <Box sx={sectionStyles.flexContainer}>
-            {/* Responsive grid container with two columns */}
-            <Grid container spacing={4} alignItems="stretch" sx={sectionStyles.gridContainer}>
-              {/* Left column: text content */}
-              <Grid item xs={12} md={6}>
-                <Box sx={sectionStyles.leftColumn}>
-                  <Typography sx={{fontFamily: 'Elemental End', textTransform:'lowercase', color: '#fff', fontSize: {xs:30, sm:64} }}>
-                    3D Repository
-                  </Typography>
-                  <Typography sx={{ maxWidth:'650px', fontFamily: 'Helvetica', color: '#FFF', fontSize: { xs: 14, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: 2 }}>
-                    Generate and store high-quality 3D models of any dynamic or static
-                    product from text-prompts, images, weblinks, and object scans. Choose 
-                    from hundreds of templates to create marketing ad videos. Then allow
-                    your consumers to trial these products realistically in our immersive AR
-                    marketplace.
-                  </Typography>
-                  {/* Call-to-action button */}
-                  <Box sx={sectionStyles.buttonContainer}>
-                    <Button variant="outlined" sx={sectionStyles.button}>
-                      Partners
-                    </Button>
-                  </Box>
-                </Box>
-              </Grid>
-              {/* Right column: image content */}
-              <Grid item xs={12} md={6}>
-                <Box sx={sectionStyles.rightColumn}>
-                  <LazyImage
-                    width={650}
-                    height={650}
-                    src="/assets/images/dashboard.png"
-                    alt="iphone"
-                  />
-                </Box>
-              </Grid>
+    <Grid sx={{ background: '#FAFAFA' }} ref={ref}>
+      <Container sx={styles.container}>
+        <Box sx={styles.contentBox}>
+          <Grid container spacing={4} alignItems="center">
+            {/* Left content */}
+            <Grid item xs={12} md={4} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }} 
+                animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 30 }} 
+                transition={{ duration: 1, ease: "easeInOut" }}
+              >
+                {/* Add content here if needed */}
+              </motion.div>
             </Grid>
-          </Box>
-        </Container>
-      </motion.div>
+
+            {/* Right content: Promotional video */}
+            <Grid item xs={12} md={8} sx={{ zIndex: 2 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                viewport={{ once: true }}
+                style={{ height: "100%" }} // Ensures motion.div spans full height
+              >
+                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 30, sm: 64 }, px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
+                  Application
+                </Typography>
+
+                <Typography sx={{ py:{xs:2, sm:5}, maxWidth:'1000px', fontFamily: 'Helvetica', color: '#353535', fontSize: { xs: 14, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1, sm:2} }}>
+                  Optimized for user experience, our AR application allows consumers to leverage various advanced AR features to trial products like never before. Consumers are able to augment 3D products realistically in their own space, providing a virtual trial room experience for clothes, furniture, and more. The Symspace app goes beyond visualization by offering near-precise sizing recommendations, reducing returns, and increasing consumer confidence levels.
+                </Typography>
+
+                <FlexBox sx={{ pt:2, display: 'flex', justifyContent: {xs:'center', sm:'flex-start'},}}>
+                  <Button sx={outlinedButton}>
+                    Learn More
+                  </Button>
+                </FlexBox>
+              </motion.div>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </Grid>
   );
+}
+
+const outlinedButton = {
+  border:'2px solid black',
+  fontWeight: 400,
+  minWidth: 175,
+  fontFamily: 'Elemental End',
+  textTransform: 'lowercase',
+  color: '#000',
+  borderRadius: '50px',
+  py: {xs:1, sm:2},
+  px: 3,
+  fontSize: 12,
+  transition: 'all 0.3s ease-in-out', // Smooth transition effect
+  ':hover': {
+    background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+    color: '#FFF',
+    border: '2px solid white',
+  },
 }

@@ -1,42 +1,46 @@
-export const sectionStyles = {
-    sectionBackground: {
-      background: '#1F1F1F',
+import { keyframes } from '@mui/material/styles';
+
+const blob = keyframes`
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+`;
+
+export const styles = {
+    container: {
+      position: 'relative',
     },
-    flexContainer: {
-      flexGrow: 1,
-      py: 8,
+    blobCircle: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: { xs: '300px', sm: '400px', md: '500px' },
+      height: { xs: '300px', sm: '400px', md: '500px' },
+      background: '#FFF',
+      borderRadius: '50%',
+      zIndex: 1,
+      opacity: 0.3,
+      filter: 'blur(80px)',
+      animation: `${blob} 7s infinite`,
     },
-    gridContainer: {
-      height: '100%',
-    },
-    leftColumn: {
-      height: '100%',
+    contentBox: {
+      position: 'relative',
+      zIndex: 2,
+      minHeight: { xs: '400px', md: '600px' },
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'start',
-      gap: 4,
-    },
-    buttonContainer: {
-      display: 'flex',
-      pt: 5,
-    },
-    button: {
-      fontFamily: 'Elemental End',
-      textTransform: 'lowercase',
-      color: '#fff',
-      borderRadius: '50px',
-      py: 2,
-      px: 7.5,
-      ':hover': {
-        background: '#fff',
-        color: '#000',
-      },
-    },
-    rightColumn: {
-      height: '100%',
-      display: 'flex',
-      alignItems: 'center',
+      gap: 3,
+      py: { xs: 4, md: 8 },
+      alignItems: 'flex-start',
       justifyContent: 'center',
     },
   };
-  

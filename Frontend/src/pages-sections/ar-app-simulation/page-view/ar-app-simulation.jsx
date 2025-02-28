@@ -7,7 +7,7 @@ import Section5 from "../section-5";
 
 export default async function ArAppSimulationPageView() {
   return (
-    <Box sx={{ position:'relative', overflow:'hidden', backgroundColor: '#fff' }}>
+    <Box sx={{ position:'relative', overflow:'hidden', background: '#fff' }}>
       {/* GRADIENT CIRCLES */}
       <BlobBox top='1%' right={-150} />
       <BlobBox top='35%' left={250} />

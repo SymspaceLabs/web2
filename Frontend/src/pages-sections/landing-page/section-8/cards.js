@@ -144,7 +144,6 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
       alignItems: "center",
       gap: 3,
       borderRadius: { xs: '25px', sm: "50px" },
-      mb: { xs: 2, md: 0 }, 
       position: "relative",
       overflow: "hidden",
       '@media (max-width:600px)': {
@@ -196,7 +195,7 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
             lineHeight: 1.5,
             alignSelf: 'stretch',
             color: textColor,
-            fontSize: { xs: 10, sm: 20 },
+            fontSize: { xs: 8.5, sm: 20 },
             fontFamily: 'Elemental End',
             textTransform: 'lowercase',
             wordWrap: 'break-word',
@@ -254,7 +253,7 @@ export const Card3 = () => {
   return (
     <FlexBox 
       sx={{ 
-        pt: { xs: 5, sm: 14 },
+        pt: { xs: 4, sm: 14 },
         pb: { xs: 2, sm: 10 },
         px: { xs: 2, sm: 5 },
         display: "flex", 
@@ -355,7 +354,7 @@ export const Card3 = () => {
             </Typography>
           </Box>
 
-          <FlexBox sx={{ width: '100%', height: 50, position: 'relative' }}>
+          <FlexBox sx={{ width: '100%', height: {ms:50}, position: 'relative', justifyContent:{xs:'flex-end'} }}>
             <Button
               className="fadeInBtn"
               sx={{
@@ -368,7 +367,7 @@ export const Card3 = () => {
                 border: '1px black solid',
                 justifyContent: 'center',
                 alignItems: 'center',
-                maxHeight:{xs:'35px'},
+                maxHeight:{xs:'30px'},
                 textAlign: 'center',
                 color: 'black',
                 fontSize: {xs:10, sm:16},

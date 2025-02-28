@@ -73,8 +73,8 @@ export default function Section9() {
                     custom={index}
                     style={{ marginBottom: '16px' }} // Added gap between cards
                   >
-                    <Box sx={index % 2 === 0 ? sectionStyles.textBoxGrey : sectionStyles.textBoxWhite}>
-                      <Typography sx={sectionStyles.typographyStyles}>
+                    <Box sx={{ p: {xs:2, sm:5}, background: index % 2 === 0 ? '#D5D5D5' : '#fff', borderRadius: {xs:'20px', sm:'25px'}, textAlign:{xs:'center', sm:'left'} }}>
+                      <Typography sx={{ color: '#000', fontSize: {xs:12, sm:20}, fontWeight: 'bold' }}>
                         {feature}
                       </Typography>
                     </Box>

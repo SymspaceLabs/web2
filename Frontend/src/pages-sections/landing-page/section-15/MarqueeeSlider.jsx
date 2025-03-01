@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { keyframes, styled } from "@mui/system";
 import { Box } from "@mui/material";
@@ -6,7 +6,7 @@ import TestimonialCard from "@/components/cards/TestimonialCard";
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  100% { transform: translateX(-50%); }
 `;
 
 const MarqueeContainer = styled(Box)({
@@ -20,7 +20,7 @@ const MarqueeContainer = styled(Box)({
 const MarqueeWrapper = styled(Box)({
   paddingTop: "25px",
   paddingBottom: "25px",
-  display: "inline-flex",
+  display: "flex",
   animation: `${marqueeAnimation} 100s linear infinite`,
   gap: "20px",
   width: "max-content",
@@ -29,16 +29,17 @@ const MarqueeWrapper = styled(Box)({
   },
 });
 
-const MarqueeeSlider = ({testimonials}) => {
+const MarqueeeSlider = ({ testimonials }) => {
   return (
     <MarqueeContainer>
-        <MarqueeWrapper>
-        {testimonials.concat(testimonials).map((testimonial, index) => (
-            <TestimonialCard key={index} testimonial={testimonial} />
+      <MarqueeWrapper>
+        {/* Duplicate testimonials to ensure smooth looping */}
+        {[...testimonials, ...testimonials].map((testimonial, index) => (
+          <TestimonialCard key={index} testimonial={testimonial} />
         ))}
-        </MarqueeWrapper>
+      </MarqueeWrapper>
     </MarqueeContainer>
-  )
-}
+  );
+};
 
-export default MarqueeeSlider
+export default MarqueeeSlider;

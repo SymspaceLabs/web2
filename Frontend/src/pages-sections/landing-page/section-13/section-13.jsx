@@ -1,25 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { FlexBox } from "../../../components/flex-box";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { FlexBox } from "@/components/flex-box";
 import { LazyImage } from '@/components/lazy-image';
-import { calculateDiscount, currency } from "../../../lib";
-import { motion, useInView } from "framer-motion";
+import { calculateDiscount, currency } from "@/lib";
+import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
 
 export default function Section12() {
-  const theme = useTheme();
   const [activeTab, setActiveTab] = useState("newArrival");
   const [products, setProducts] = useState([]); 
   const [loading, setLoading] = useState(true);
 
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
   const categories = [
-    { id: 1, title: "New Arrival", slug: "newArrival" },
+    { id: 1, title: "New Arrivals", slug: "newArrival" },
     { id: 2, title: "Best Seller", slug: "bestSeller" },
     { id: 3, title: "Featured Products", slug: "featured" },
   ];
@@ -44,51 +39,21 @@ export default function Section12() {
     setActiveTab(newValue);
   };
 
-  const blob1 = {
-    position: 'absolute',
-    top: 250,
-    left: -50,
-    width: { xs: '300px', sm: '400px', md: '500px' },
-    height: { xs: '300px', sm: '400px', md: '500px' },
-    background: '#FFFFFF',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.2,
-    filter: 'blur(120px)',
-  };
-
-  const blob2 = {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: { xs: '300px', sm: '400px', md: '500px' },
-    height: { xs: '300px', sm: '400px', md: '500px' },
-    background: '#FFFFFF',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.2,
-    filter: 'blur(120px)',
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  };
-
   return (
-    <Box sx={{ width: "100%", background: "#1F1F1F", py: 10 }}>
+    <Box sx={{ width: "100%", py: { xs: 5, sm: 10 }, position:'relative', zIndex:2 }}>
       <Container>
         <motion.div
-          ref={ref}
           initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          viewport={{ once: true }}
+          style={{ height: "100%" }}
         >
-          <Box sx={{ zIndex: 2, position: "relative" }} py={4} textAlign="center">
+          <Box sx={{ zIndex: 2, py: { xs: 1, sm: 4 }, position: "relative" }} textAlign="center">
             <Box mb={4} overflow="hidden">
               <Tabs value={activeTab} onChange={handleChange}
                 sx={{
-                  "& .MuiTabs-indicator": {
-                    backgroundColor: "#FFF",
-                  },
+                  "& .MuiTabs-indicator": { backgroundColor: "#FFF" },
                 }}
               >
                 {categories.map((item) => (
@@ -98,11 +63,9 @@ export default function Section12() {
                       fontFamily: "Elemental End",
                       textTransform: "lowercase",
                       fontWeight: 400,
-                      fontSize: 18,
+                      fontSize: { xs: 10, sm: 18 },
                       color: "#BDBDBD",
-                      "&.Mui-selected": {
-                        color: "#FFFFFF",
-                      },
+                      "&.Mui-selected": { color: "#FFFFFF" },
                     }}
                   />
                 ))}
@@ -110,70 +73,73 @@ export default function Section12() {
             </Box>
           </Box>
 
-          <Grid sx={{ zIndex: 2, position: "relative" }} container spacing={3}>
-            {products.map((product) => (
-              <Grid item lg={3} md={4} sm={6} xs={12} key={product.id}>
-                <Link href={`/products/${product.slug}`}>
-                  <FlexBox
-                    flexDirection="column"
-                    bgcolor="rgba(255, 255, 255, 0.1)"
-                    borderRadius={3}
-                    mb={2}
-                    sx={{
-                      transition: "background-color 0.3s ease",
-                      "&:hover": {
-                        bgcolor: "rgba(255, 255, 255, 0.15)",
-                      },
-                    }}
-                  >
-                    <LazyImage
-                      alt="product images"
-                      width={380}
-                      height={379}
-                      src={product.images?.[0]?.url || "/placeholder.png"}
-                    />
-                    <Box sx={{ px: 4, pb: 4 }}>
-                      <Typography
-                        sx={{
-                          fontFamily: "Helvetica",
-                          color: "#fff",
-                          fontSize: 18,
-                          fontWeight: 500,
-                        }}
-                      >
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontFamily: "Helvetica",
-                          textTransform: "uppercase",
-                          color: "rgba(255,255,255,0.5)",
-                          fontSize: "17px",
-                          fontWeight: 400,
-                        }}
-                      >
-                        {product.company.businessName}
-                      </Typography>
-
-                      <FlexBox gap={1}>
-                        <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: "17px", fontWeight: 500 }}>
-                          {currency(calculateDiscount(product.price, 0))}
+          {/* Product List Container */}
+          <Box sx={{ overflowX: { xs: "auto", sm: "visible" }, whiteSpace: "nowrap", pb: 2, pt: 3, pl: 3.5 }}>
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                display: "flex",
+                flexWrap: { xs: "nowrap", sm: "wrap" }, // Prevent wrapping on mobile, allow on desktop
+                justifyContent: { xs: "flex-start", sm: "flex-start" }, // Align to left
+              }}
+            >
+              {products.map((product) => (
+                <Grid
+                  item
+                  key={product.id}
+                  lg={3} md={4} sm={6} xs={12} // Max 4 per row on desktop
+                  sx={{
+                    flex: { xs: "0 0 auto", sm: "1 1 auto" }, 
+                    width: { xs: "35%", sm: "auto" }, 
+                    mr: { xs: 2, sm: 0 }, // Keep spacing for mobile scroll
+                    pl: { xs: "0px !important", sm: "12px !important" }, // Adds left padding for spacing on desktop
+                    pt: { xs: "0px !important", sm: "12px" }, // Adjust top padding for uniform spacing
+                  }}
+                >
+                  <Link href={`/products/${product.slug}`}>
+                    <FlexBox
+                      flexDirection="column"
+                      bgcolor="rgba(255, 255, 255, 0.1)"
+                      borderRadius={3}
+                      mb={2}
+                      sx={{
+                        transition: "background-color 0.3s ease",
+                        "&:hover": { bgcolor: "rgba(255, 255, 255, 0.15)" },
+                      }}
+                    >
+                      <LazyImage
+                        alt="product images"
+                        width={380}
+                        height={379}
+                        src={product.images?.[0]?.url || "/placeholder.png"}
+                      />
+                      <Box sx={{ px: { xs: 1.5, sm: 4 }, pb: 4 }}>
+                        <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: { xs: 10, sm: 18 }, fontWeight: 500 }}>
+                          {product.name}
                         </Typography>
-                        <Typography sx={{ fontFamily: "Helvetica", color: "rgba(255,255,255,0.5)", fontSize: "17px", fontWeight: 500, textDecoration: "line-through" }}>
-                          {currency(calculateDiscount(product.price, 0))}
+                        <Typography sx={{ fontFamily: "Helvetica", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 400 }}>
+                          {product.company.businessName}
                         </Typography>
-                      </FlexBox>
-                    </Box>
-                  </FlexBox>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+                        <FlexBox gap={1}>
+                          <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: { xs: 10, sm: 17 }, fontWeight: 500 }}>
+                            {currency(calculateDiscount(product.price, 0))}
+                          </Typography>
+                          <Typography sx={{ fontFamily: "Helvetica", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 500, textDecoration: "line-through" }}>
+                            {currency(calculateDiscount(product.price, 0))}
+                          </Typography>
+                        </FlexBox>
+                      </Box>
+                    </FlexBox>
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </motion.div>
-
-        <Box sx={blob1} />
-        <Box sx={blob2} />
       </Container>
     </Box>
+
+
   );
 }

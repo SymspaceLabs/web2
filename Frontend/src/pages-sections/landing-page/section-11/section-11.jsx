@@ -1,13 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
 import { FlexBox, FlexCol } from "@/components/flex-box";
+import { Box, Container, Typography, Button, Grid } from "@mui/material";
 
 
 export default function Section10() {
   return (
-    <Grid sx={{ background: '#1F1F1F' }}>
+    <Grid sx={{ position:'relative', zIndex:2 }}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 50 }}

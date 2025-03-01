@@ -7,7 +7,7 @@ import { Box, Container, Typography, Button, Grid } from '@mui/material';
 
 export default function Section6() {
   return (
-    <Grid sx={{ background: '#1F1F1F' }}>
+    <Grid sx={{ position:'relative', zIndex:2 }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

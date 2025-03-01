@@ -28,7 +28,7 @@ export default function Section15() {
     borderRadius: "15px",
     color: "#fff",
     marginBottom: "15px",
-    padding: "10px",
+    padding: {xs:"5px", sm:"10px"},
     position: "relative",
     border: "2px solid linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%)", // Base transparent border
     borderRadius: "15px",
@@ -38,7 +38,7 @@ export default function Section15() {
   };
 
   return (
-    <Box sx={{ width: "100%", background: "#1F1F1F", py: 10 }}>
+    <Box sx={{ width: "100%", py: { xs:2, sm:10 }, background: "#1F1F1F" }}>
       <motion.div
         component={Box} // Makes motion.div behave like a Box
         initial={{ opacity: 0, y: 30 }}
@@ -48,8 +48,8 @@ export default function Section15() {
         style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
       >
         <Container>
-          <FlexBox justifyContent="space-between" alignItems="center" py={4}>
-            <Typography fontFamily="Elemental End" textTransform="lowercase" color="#fff" fontSize={50} >
+          <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
+            <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="Elemental End" textTransform="lowercase" color="#fff"  >
               FAQs
             </Typography>
             <Link href="/faqs" target="blank" >
@@ -59,6 +59,7 @@ export default function Section15() {
                   fontFamily: "Elemental End", 
                   textTransform: 'lowercase', 
                   textDecoration: 'none', 
+                  fontSize:{xs:10},
                   '&:hover': { 
                     color: '#FFF',
                     textDecoration: 'underline',
@@ -80,7 +81,7 @@ export default function Section15() {
                   sx={accordionStyles}
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" fontSize={18}>
+                    <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" sx={{fontSize:{xs:10, sm:18}}} >
                       {faq.question}
                     </Typography>
                   </AccordionSummary>

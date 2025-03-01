@@ -23,10 +23,10 @@ export default function Section13() {
     >
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", py: 4, background: "#fff" }}>
         <Box sx={{ width: "100%", maxWidth: "1600px", p: 2 }}>
-          <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#434167" }}>
+          <Typography fontSize="16px" sx={{ color: "#434167" }}>
             What everyone is saying
           </Typography>
-          <Typography sx={{ pb: "25px" }} fontSize={{ xs: 28, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase">
+          <Typography sx={{ pb: "25px" }} fontSize={{ xs: 20, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase">
             trusted by users globally
           </Typography>
         </Box>
@@ -58,7 +58,7 @@ const testimonials = [
     comment: `The AR simulation helped me figure out if my new dining table would fit perfectly!`,
     user: {
       name: "Olivia",
-      avatar: "/assets/images/faces/3.jpg",
+      avatar: "/assets/images/faces/19.jpg",
       designation: "Manager, Google",
     },
   },
@@ -98,7 +98,7 @@ const testimonials = [
     comment: `I can’t travel outside a lot but this helped me see the possibilities of augmented reality`,
     user: {
       name: "Jasmine",
-      avatar: "/assets/images/faces/7.png",
+      avatar: "/assets/images/faces/17.jpg",
       designation: "Manager, Google",
     },
   },
@@ -108,7 +108,7 @@ const testimonials = [
     comment: `I used Symspace to stage furniture for my tenants and it helped save so much time.`,
     user: {
       name: "Sholom",
-      avatar: "/assets/images/faces/8.png",
+      avatar: "/assets/images/faces/10.jpg",
       designation: "Manager, Google",
     },
   },
@@ -118,7 +118,7 @@ const testimonials = [
     comment: `Being pregnant makes it hard to travel but I enjoyed seeing products in my home without having to go out.`,
     user: {
       name: "Maya",
-      avatar: "/assets/images/faces/9.jpg",
+      avatar: "/assets/images/faces/16.jpg",
       designation: "Manager, Google",
     },
   },
@@ -128,7 +128,7 @@ const testimonials = [
     comment: `The virtual try-on feature is brilliant! I could see how glasses looked on me before ordering them.`,
     user: {
       name: "Shira",
-      avatar: "/assets/images/faces/10.jpg",
+      avatar: "/assets/images/faces/8.jpg",
       designation: "Manager, Google",
     },
   },

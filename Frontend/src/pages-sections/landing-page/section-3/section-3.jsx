@@ -13,7 +13,7 @@ export default function Section2() {
   };
 
   return (
-    <Box sx={{ background: '#1F1F1F', py: {xs:2, sm:5} }}>
+    <Box sx={{ position:'relative', zIndex:2, py: {xs:2, sm:5} }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

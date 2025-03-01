@@ -13,7 +13,7 @@ export default function Section7() {
   };
 
   return (
-    <Grid sx={{ background: "#1F1F1F", pt: {xs:5, sm:10}, pb: {xs:10, md:20}, height: "100%", position: "relative" }}>
+    <Grid sx={{ pt: {xs:5, sm:10}, pb: {xs:10, md:20}, height: "100%", position: "relative" }}>
       <Container sx={{ height: "100%" }}>
         <Grid container alignItems="stretch" spacing={2} sx={{ height: "100%" }}>
           {/* Left column */}
@@ -65,9 +65,6 @@ export default function Section7() {
                   />
                 </motion.div>
               </FlexBox>
-
-
-
             </Box>
           </Grid>
 

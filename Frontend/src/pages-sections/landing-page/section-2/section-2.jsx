@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function Section2() {
   return (
-    <Box sx={{ position: 'relative', background: '#1F1F1F', overflow: 'hidden' }}>
+    <Box sx={{ position: 'relative', overflow: 'hidden', zIndex:2 }}>
       <Container sx={{ py: {sm:5} }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}

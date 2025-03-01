@@ -54,7 +54,7 @@ export default function Section9() {
   }, [leftInView, rightInView]);
 
   return (
-    <Grid sx={sectionStyles.gridContainer}>
+    <Grid sx={{ position:'relative', zIndex:2 }}>
       <Container>
         <Box sx={sectionStyles.boxContainer}>
           <Grid container spacing={6} alignItems="center">

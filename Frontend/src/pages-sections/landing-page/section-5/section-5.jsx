@@ -12,7 +12,7 @@
 
 import { Container, Typography, Button, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { FlexBox, FlexColCenter } from "@/components/flex-box";
+import { FlexColCenter } from "@/components/flex-box";
 import { motion } from "framer-motion";
 
 export default function Section5() {
@@ -23,7 +23,7 @@ export default function Section5() {
   };
 
   return (
-    <Box sx={{ background: "#1F1F1F", py: 10 }}>
+    <Box sx={{ py: 10, position:'relative', zIndex:2 }}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -38,7 +38,7 @@ export default function Section5() {
             </Typography>
 
             <Typography
-              sx={{ color: "#FFF", fontSize: { xs: 12, sm: 18 }, textAlign: "center", lineHeight: 2 }}>
+              sx={{ color: "#FFF", fontSize: { xs: 12, sm: 18 }, textAlign: {xs:'justify', sm:"center"}, lineHeight: 2, px: { xs: 2, sm: 0 } }}>
               Explore products from the comfort of your home to conveniently and confidently shop through Augmented Reality.
               <Box component="br" sx={{ display: { xs: "none", sm: "block" } }} />
               Receive sizing recommendations and use our advanced AR application to augment products in real-time.

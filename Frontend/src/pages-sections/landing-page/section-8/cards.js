@@ -252,13 +252,13 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
 export const Card3 = () => {
   return (
     <FlexBox 
-      sx={{ 
+      sx={{
+        height: "100%", 
         pt: { xs: 4, sm: 14 },
         pb: { xs: 2, sm: 10 },
         px: { xs: 2, sm: 5 },
         display: "flex", 
         flexDirection: "column", 
-        height: "100%", 
         bgcolor: "#D5D5D5", 
         borderRadius: {xs:'25px', sm:"50px"}, 
         justifyContent: "center",
@@ -287,6 +287,7 @@ export const Card3 = () => {
     >
       <FlexBox gap={5}
         sx={{
+          height: "100%",
           justifyContent: 'space-between',
           alignItems: 'center',
           position: 'relative',
@@ -302,6 +303,7 @@ export const Card3 = () => {
       >
         <Box
           sx={{
+            height: "100%",
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -354,7 +356,7 @@ export const Card3 = () => {
             </Typography>
           </Box>
 
-          <FlexBox sx={{ width: '100%', height: {ms:50}, position: 'relative', justifyContent:{xs:'flex-end'} }}>
+          <FlexBox sx={{ width: '100%', height: {ms:50}, position: 'relative', justifyContent:{xs:'flex-end', sm:'flex-start'} }}>
             <Button
               className="fadeInBtn"
               sx={{

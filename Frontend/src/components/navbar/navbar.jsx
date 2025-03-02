@@ -1,17 +1,19 @@
 // LOCAL CUSTOM COMPONENTS
+import { FlexBox } from "../flex-box";
 import Categories from "./categories";
 import NavigationList from "./nav-list/nav-list"; // STYLED COMPONENTS
+import { StyledNavLink } from "./styles";
 
 import { NavBarWrapper, InnerContainer } from "./styles"; // DATA TYPES
 // ==========================================================
 
 // ==========================================================
 export default function Navbar({
-  border,
+  bg,
   elevation = 2,
   hideCategories = false
 }) {
-  return <NavBarWrapper hoverEffect={false} elevation={elevation} border={border}>
+  return <NavBarWrapper bg={bg} hoverEffect={false} elevation={elevation} border={0}>
       {hideCategories ? <InnerContainer sx={{ justifyContent: "center"}}>
           <NavigationList />
         </InnerContainer> : <InnerContainer>
@@ -20,8 +22,19 @@ export default function Navbar({
             <Categories />
 
             {/* HORIZONTAL MENU */}
-            <NavigationList />
-
+            {/* <NavigationList /> */}
+            <FlexBox justifyContent="space-between" width="80%">
+              {categories.map((item, index)=> (
+                  <StyledNavLink href="" key={index} sx={{ "&:hover": { color: "#0366FE" } }}>
+                    {item}
+                  </StyledNavLink>
+                ))
+              }
+            </FlexBox>
         </InnerContainer>}
     </NavBarWrapper>;
 }
+
+const categories = [
+  "Women", "Men", "Kids", "Maternity", "Elderly", "Assisted Aid", "Home", "Sales & Deals"
+]

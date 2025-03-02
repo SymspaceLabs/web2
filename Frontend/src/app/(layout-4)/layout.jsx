@@ -1,4 +1,4 @@
-import ShopLayout1 from "../../components/layouts/shop-layout-4";
+import ShopLayout1 from "@/components/layouts/shop-layout-1";
 export default function Layout1({
   children
 }) {

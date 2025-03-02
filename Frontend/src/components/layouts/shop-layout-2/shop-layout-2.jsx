@@ -5,7 +5,6 @@ import { Fragment, useCallback, useState } from "react";
 import Divider from "@mui/material/Divider"; // GLOBAL CUSTOM COMPONENTS
 
 import Sticky from "components/sticky";
-import Topbar from "components/topbar";
 import Header from "components/header";
 import { Navbar } from "components/navbar";
 import { SearchInput } from "components/search-box";
@@ -23,8 +22,6 @@ export default function ShopLayout2({
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []); // FOR HANDLE TOP BAR AREA
 
   let TOP_BAR_CONTENT = null;
-  const SHOW_TOP_BAR = ["/grocery-2", "/health-beauty", "/checkout-alternative"];
-  if (SHOW_TOP_BAR.includes(pathname)) TOP_BAR_CONTENT = <Topbar />; // FOR HANDLE NAV BAR AREA
 
   let NAV_BAR_CONTENT = null;
   const SHOW_NAV_BAR = ["/checkout-alternative"];

@@ -14,7 +14,6 @@ const BazaarCard = styled(Card, {
   color:'#fff',
   overflow: "unset",
   borderRadius: "8px",
-  border: "1px solid",
   borderColor: "grey.200",
   transition: "all 250ms ease-in-out",
   "&:hover": { ...(hoverEffect && {

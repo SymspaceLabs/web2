@@ -1,84 +1,35 @@
-import ChevronRight from "@mui/icons-material/ChevronRight"; // GLOBAL CUSTOM COMPONENTS
-import { useCallback, useEffect, useState } from "react";
-import styled from "@mui/material/styles/styled";
-import { Paragraph } from "../../components/Typography";
-// import CategoryMenu from "../../components/categories/category-menu"; // CUSTOM ICON COMPONENT
-// import CategoryList from "../categories/category-list";
-import Category from "../../icons/Category"; // STYLED COMPONENT
-import { FlexBox } from "../flex-box";
+import { Paragraph } from "@/components/Typography";
+import { FlexBox } from "@/components/flex-box";
 import { CategoryMenuButton } from "./styles";
-import { NAV_LINK_STYLES } from "./styles";
-import { KeyboardArrowDown } from "@mui/icons-material";
 import { ChildNavListWrapper } from "./styles";
-import { StyledNavLink } from "./styles";
-import BazaarCard from "../BazaarCard";
 import { NavLink } from "../nav-link";
 import { MenuItem } from "@mui/material";
+import { IoGrid } from "react-icons/io5";
 import NavItemChild from "./nav-list/nav-item-child";
+import BazaarCard from "../BazaarCard";
+import styled from "@mui/material/styles/styled";
+
 
 export default function Categories() {
   return (
-    <CategoryMenu
-      render={handler =>  <></>
-      // <CategoryMenuButton variant="text" onClick={e => handler(e)}>
-      //   <div className="prefix">
-      //     <Category fontSize="small" currentcolor="#fff" />
-      //     <Paragraph color="#fff" fontFamily="Elemental End" fontWeight="600">
-      //       Categories
-      //     </Paragraph>
-      //   </div>
-      //   {/* <ChevronRight className="dropdown-icon" fontSize="small" /> */}
-      // </CategoryMenuButton>
-      }
-    />
-  );
-}
-
-const CategoryMenu = ({ render}) => {
-  const [open, setOpen] = useState(false);
-
-  const onClick = e => {
-    e.stopPropagation();
-    setOpen(open => !open);
-  };
-
-  const handleDocumentClick = useCallback(() => setOpen(false), []);
-  useEffect(() => {
-    window.addEventListener("click", handleDocumentClick);
-    return () => window.removeEventListener("click", handleDocumentClick);
-  }, [handleDocumentClick]);
-  return <Wrapper open={open}>
-      {render(onClick)}
-      {/* <CategoryBasedMenu title={nav.title} menuList={nav.child} />; */}
-      {/* <CategoryList open={open} /> */}
+    <Wrapper>
       <NavigationList />
-    </Wrapper>;
+    </Wrapper>
+  );
 }
 
 function NavigationList() {
   const renderNestedNav = (list = [], isRoot = false) => {
     return list.map(nav => {
       if (isRoot) {
-
-        // if (nav.url) {
-        //   return <StyledNavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" } }}>
-        //       {nav.title}
-        //     </StyledNavLink>;
-        // }
-
         if (nav.child) {
           return <FlexBox sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } }}} key={nav.title} alignItems="center" position="relative" flexDirection="column" >
-              {/* <FlexBox alignItems="flex-end" gap={0.3} sx={NAV_LINK_STYLES}>
-                {nav.title} <KeyboardArrowDown sx={{ color: "grey.500", fontSize: "1.1rem"}} />
-              </FlexBox> */}
+
               <CategoryMenuButton variant="text" onClick={e => handler(e)}>
-                <div className="prefix">
-                  <Category fontSize="small" currentcolor="#fff" />
-                  <Paragraph color="#fff" fontFamily="Elemental End" fontWeight="600">
-                    Categories
-                  </Paragraph>
-                </div>
-                {/* <ChevronRight className="dropdown-icon" fontSize="small" /> */}
+                <IoGrid size="1.3em" color="#fff" />
+                <Paragraph color="#fff" fontFamily="Elemental End" fontWeight="600">
+                  Categories
+                </Paragraph>
               </CategoryMenuButton>
 
               <ChildNavListWrapper className="child-nav-item">
@@ -114,7 +65,7 @@ function NavigationList() {
 const Wrapper = styled("div", {
   shouldForwardProp: prop => prop !== "open"
 })(({
-  open,
+  // open,
   theme: {
     direction
   }
@@ -123,7 +74,7 @@ const Wrapper = styled("div", {
   position: "relative",
   "& .dropdown-icon": {
     transition: "all 250ms ease-in-out",
-    transform: `rotate(${open ? direction === "rtl" ? "-90deg" : "90deg" : "0deg"})`
+    // transform: `rotate(${open ? direction === "rtl" ? "-90deg" : "90deg" : "0deg"})`
   }
 }));
 

@@ -1,14 +1,13 @@
-import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; // GLOBAL CUSTOM COMPONENTS
-import { NavLink } from "../../../components/nav-link";
-import { FlexBox } from "../../../components/flex-box";
-import BazaarCard from "../../../components/BazaarCard"; // LOCAL CUSTOM COMPONENTS
-import MegaMenu from "../mega-menu";
-import NavItemChild from "./nav-item-child";
-import CategoryBasedMenu from "../category-based-menu"; // NAVIGATION DATA LIST
-import navigation from "../../../data/navbarNavigation"; // STYLED COMPONENTS
+import { NavLink } from "@/components/nav-link";
+import { FlexBox } from "@/components/flex-box";
 import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper } from "../styles"; // DATA TYPES
 import Link from "next/link"; // MUI
+import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
+import navigation from "@/data/navbarNavigation"; // STYLED COMPONENTS
+import BazaarCard from "@/components/BazaarCard"; // LOCAL CUSTOM COMPONENTS
+import NavItemChild from "./nav-item-child";
+import CategoryBasedMenu from "../category-based-menu"; // NAVIGATION DATA LIST
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; // GLOBAL CUSTOM COMPONENTS
 
 export default function NavigationList() {
   const renderNestedNav = (list = [], isRoot = false) => {

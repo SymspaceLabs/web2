@@ -2,8 +2,6 @@
 
 import { Fragment } from "react";
 import Divider from "@mui/material/Divider"; // CUSTOM GLOBAL COMPONENTS
-
-import Topbar from "components/topbar";
 import Header from "components/header";
 import { Navbar } from "components/navbar";
 import { Footer1 } from "components/footer";
@@ -37,30 +35,19 @@ export default function SalesLayout(props) {
       </Fragment>;
   }
 
-  return <Fragment>
-      {
-      /* TOP BAR AREA */
-    }
-      <Topbar />
-
-      {
-      /* HEADER AREA */
-    }
+  return (
+    <Fragment>
+      {/* HEADER AREA */}
       <Header midSlot={<SearchInput />} />
 
-      {
-      /* RENDER MAIN CONTENT AREA */
-    }
+      {/* RENDER MAIN CONTENT AREA */}
       {CONTENT}
 
-      {
-      /* FOOTER AREA */
-    }
+      {/* FOOTER AREA */}
       <Footer1 />
 
-      {
-      /* SMALLER DEVICE NAVIGATION */
-    }
+      {/* SMALLER DEVICE NAVIGATION */}
       <MobileNavigationBar />
-    </Fragment>;
+    </Fragment>
+  );
 }

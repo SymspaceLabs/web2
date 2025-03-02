@@ -61,10 +61,11 @@ export const ParentNavItem = styled("div", {
 export const NavBarWrapper = styled(BazaarCard, {
   shouldForwardProp: prop => prop !== "border"
 })(({
+  bg,
   theme,
   border
 }) => ({
-  background:'#353535',
+  background: bg=='dark'? '#353535':' linear-gradient(94.91deg, #FFFFFF 0%, #BEBEBE 100%)',
   height: "60px",
   display: "block",
   borderRadius: "0px",
@@ -85,22 +86,16 @@ export const InnerContainer = styled(Container)({
 export const CategoryMenuButton = styled(Button)(({
   theme
 }) => ({
+  display: "flex",
+  justifyContent:'flex-start',
+  paddingLeft:'15px !important',
+  gap: 8,
+  flex: 1,
+  minWidth:'200px',
   borderRadius: '50px',
   background:'#717171',
   color:'#fff',
-  ...(theme.direction === "rtl" && {
-    ".dropdown-icon": {
-      rotate: "180deg"
-    }
-  }),
-  ".prefix": {
-    px:3,
-    gap: 8,
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    color: theme.palette.grey[800]
-  }
+  color: theme.palette.grey[800],
 }));
 export const ChildNavListWrapper = styled("div")({
   zIndex: 5,

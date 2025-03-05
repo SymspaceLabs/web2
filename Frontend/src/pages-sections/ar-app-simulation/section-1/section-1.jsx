@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Button, useTheme, TextField } from '@mui/material';
 import { section1Styles } from './styles';
 import { useRouter } from 'next/navigation';
-import { LazyImage } from '@/components/lazy-image';
 import BlobBox from './blobBox';
+import AppStore from '@/components/footer/components/app-store';
 
 export default function Section1() {
   const theme = useTheme();
@@ -112,7 +112,10 @@ export default function Section1() {
         </Box>
 
         {/* Images Section */}
-        <Box
+        <Box py={3}>
+          <AppStore onClick={handleImageClick} />
+        </Box>
+        {/* <Box
           sx={{
             display: 'flex',
             justifyContent: 'center',
@@ -146,7 +149,7 @@ export default function Section1() {
               src="/assets/images/app-download/play-store.png"
             />
           </Box>
-        </Box>
+        </Box> */}
 
         {/* Email Input with Animation */}
         {showEmailInput && (

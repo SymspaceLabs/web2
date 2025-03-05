@@ -1,5 +1,5 @@
-import FurnitureTwoPageView from "../pages-sections/landing-page/page-view";
-import ShopLayout3 from "../components/layouts/shop-layout-3";
+import ShopLayout1 from "@/components/layouts/shop-layout-1";
+import LandingPageView from "@/pages-sections/landing-page/page-view";
 
 export const metadata = {
   title: "Symspacelabs",
@@ -13,8 +13,8 @@ export const metadata = {
 
 export default function IndexPage() {
   return (
-      <ShopLayout3>
-        <FurnitureTwoPageView />
-      </ShopLayout3>
+      <ShopLayout1>
+        <LandingPageView />
+      </ShopLayout1>
   )
 }

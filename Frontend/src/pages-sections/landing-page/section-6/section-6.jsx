@@ -2,9 +2,10 @@
 
 import React, { useRef, useState } from "react";
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { styles } from './styles'; // Importing predefined styles
 import { motion, useInView } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";
+import Link from "next/link";
+import { styles } from "../page-view/styles";
 
 export default function Section6() {
   const ref = useRef(null);
@@ -12,8 +13,8 @@ export default function Section6() {
 
   return (
     <Grid sx={{ background: '#FAFAFA' }} ref={ref}>
-      <Container sx={styles.container}>
-        <Box sx={styles.contentBox}>
+      <Container>
+        <Box sx={{ position: 'relative', zIndex: 2, minHeight: { xs: '400px', md: '600px' }, display: 'flex', flexDirection: 'column', gap: 3, py: { xs: 4, md: 8 }, alignItems: 'flex-start', justifyContent: 'center' }}>
           <Grid container spacing={4} alignItems="center">
             {/* Left content */}
             <Grid item xs={12} md={4} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>
@@ -44,9 +45,11 @@ export default function Section6() {
                 </Typography>
 
                 <FlexBox sx={{ pt:2, display: 'flex', justifyContent: {xs:'center', sm:'flex-start'},}}>
-                  <Button sx={outlinedButton}>
-                    Learn More
-                  </Button>
+                  <Link href="/ar-app-simulation" passHref>
+                    <Button sx={styles.outlinedLightBtn}>
+                      Learn More
+                    </Button>
+                  </Link>
                 </FlexBox>
               </motion.div>
             </Grid>
@@ -57,21 +60,4 @@ export default function Section6() {
   );
 }
 
-const outlinedButton = {
-  border:'2px solid black',
-  fontWeight: 400,
-  minWidth: 175,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  color: '#000',
-  borderRadius: '50px',
-  py: {xs:1, sm:2},
-  px: 3,
-  fontSize: 12,
-  transition: 'all 0.3s ease-in-out', // Smooth transition effect
-  ':hover': {
-    background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
-    color: '#FFF',
-    border: '2px solid white',
-  },
-}
+

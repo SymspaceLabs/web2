@@ -5,7 +5,8 @@ import { Container, Grid } from '@mui/material';
 import { Box, Card, CardContent, Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FlexBox } from '@/components/flex-box';
+import { FlexBox, FlexCol } from '@/components/flex-box';
+import Link from 'next/link';
 
 
 /**
@@ -109,30 +110,33 @@ export const CustomCard1 = ({ number, description }) => {
           </Typography>
           {/* Button with fade-in effect */}
           <FlexBox>
-            <Button
-              className="fadeInBtn"
-              sx={{
-                opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
-                transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
-                transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
-                py: { sm:2 },
-                px: { sm:3 },
-                borderRadius: 50,
-                border: '2px solid black',
-                color: 'black',
-                fontSize: {xs:8, sm:12},
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
-                fontWeight: 500,
-                ':hover': {
-                  background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
-                  color: '#FFF',
-                  border: '2px solid white',
-                },
-              }}
-            >
-              Learn More
-            </Button>
+            <Link href="/global-impact" passHref>
+              <Button
+                className="fadeInBtn"
+                sx={{
+                  opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
+                  transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
+                  transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
+                  py: { sm:2 },
+                  px: { sm:3 },
+                  borderRadius: 50,
+                  border: '2px solid black',
+                  color: 'black',
+                  fontSize: {xs:8, sm:12},
+                  fontFamily: 'Elemental End',
+                  textTransform: 'lowercase',
+                  fontWeight: 500,
+                  ':hover': {
+                    background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                    color: '#FFF',
+                    border: '2px solid white',
+                  },
+                }}
+              >
+                Learn More
+              </Button>
+            </Link>
+
           </FlexBox>
         </FlexBox>
     </Box>
@@ -147,15 +151,14 @@ export const CustomCard1 = ({ number, description }) => {
  */
 export const CustomCard2 = () => {
   return (
-    <Card
+    <FlexCol
       sx={{
-        borderRadius: {xs:'20px', sm:'50px'},
-        display: 'flex',
-        flexDirection: 'column',
+        borderRadius: { xs: '20px', sm: '50px' },
         height: '100%',
+        background:'#FFF',
         '&:hover .fadeInBtn': {
-          opacity: { xs: 1, sm: 1 }, // Always visible on mobile
-          transform: { xs: 'none', sm: 'translateY(0)' }, // Disable fade-in on mobile
+          opacity: { sm: 1 }, // Fade-in only on desktop
+          transform: { sm: 'translateY(0)' },
         },
       }}
     >
@@ -165,8 +168,8 @@ export const CustomCard2 = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '30px',
-          py: { xs: 2, sm: 8 },
+          gap: { xs:'25px', sm:'30px' },
+          py: { xs: 4, sm: 8 },
           px: { xs: 2, sm: 10 },
         }}
       >
@@ -194,37 +197,40 @@ export const CustomCard2 = () => {
           Augment animated visuals on top of products, displays, or billboards for an immersive marketing medium.
           Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
         </Typography>
+        <FlexBox>
+          <Link  href="/ar-for-business#benefits" passHref>
+            <Button
+              className="fadeInBtn"
+              sx={{
+                opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
+                transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
+                transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
+                py: { sm:2 },
+                px: { sm:3 },
+                borderRadius: 50,
+                border: '2px solid black',
+                color: 'black',
+                fontSize: {xs:8, sm:12},
+                fontFamily: 'Elemental End',
+                textTransform: 'lowercase',
+                fontWeight: 500,
+                ':hover': {
+                  background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                  color: '#FFF',
+                  border: '2px solid white',
+                },
+              }}
+            >
+              Contact Us
+            </Button>
+          </Link>
 
-        <FlexBox sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button
-            className="fadeInBtn"
-            sx={{
-              display: { xs: 'flex', sm: 'none' },
-              opacity: { xs: 1, sm: 0 },
-              transform: { xs: 'translateY(0)', sm: 'translateY(20px)' },
-              transition: { sm: 'all 0.3s ease' },
-              py: 1,
-              px: 2, 
-              borderRadius: 50,
-              border: '2px black solid',
-              justifyContent: 'center',
-              alignItems: 'center',
-              maxHeight:{xs:'30px'},
-              textAlign: 'center',
-              color: 'black',
-              fontSize: {xs:10, sm:16},
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              fontWeight: 500,
-            }}
-          >
-            Contact Us
-          </Button>
-        </FlexBox>
+          </FlexBox>
       </CardContent>
-    </Card>
+    </FlexCol>
   );
 };
+
 
 /**
  * CustomCard3 Component

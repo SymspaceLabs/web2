@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
+import { FAQS } from "@/data/faqs";
 import { motion } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-import BoxLink from "@/pages-sections/sessions/components/box-link";
 
 export default function Section15() {
   const [expanded, setExpanded] = useState(false);
@@ -52,7 +52,7 @@ export default function Section15() {
             <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="Elemental End" textTransform="lowercase" color="#fff"  >
               FAQs
             </Typography>
-            <Link href="/faqs" target="blank" >
+            <Link href="/faq" target="blank" >
               <Typography
                 sx={{ 
                   color: 'rgba(255,255,255,0.5)', 
@@ -72,7 +72,7 @@ export default function Section15() {
           </FlexBox>
 
 
-          {faqs.map((faq, index) => (
+          {FAQS.slice(0,3).map((faq, index) => (
             <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
               <Box sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}> {/* Ensures spacing remains consistent */}
                 <Accordion

@@ -1,29 +1,24 @@
-"use client"
-
-import React from 'react';
-import { Box, Container, Button, Typography, useMediaQuery } from '@mui/material';
-import { FlexBox } from '@/components/flex-box';
+import { Box, Container, Button, Typography } from '@mui/material';
+import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 
 export default function Section3() {
-  const isMobile = useMediaQuery('(max-width:600px)');
-
   return (
     <Container sx={{ py:5 }}>
-      <Box py={isMobile? 2 : 5} px={isMobile? 3 : 8} sx={cardStyle}>
-        <FlexBox flexDirection={ isMobile? 'column' : 'row' } justifyContent='space-between' gap={2}>
-          <Box sx={{ display:'flex', flexDirection:'column', gap:2}}>
-            <Typography fontFamily='Elemental End' fontSize={isMobile? 30 : 40} color="#fff">
+      <Box sx={cardStyle}>
+        <FlexBox sx={{ flexDirection:{xs:'column', sm:'row'}, justifyContent:'space-between', gap:2 }}>
+          <FlexCol gap={2}>
+            <Typography fontFamily='Elemental End' sx={{ fontSize: {xs:30,sm:40} }} color="#fff">
               how to apply
             </Typography>
-            <Typography fontFamily='Helvetica' fontSize={isMobile? 18 : 24} color="#fff" sx={{ maxWidth:'850px' }}>
+            <Typography fontFamily='Helvetica' sx={{ fontSize: {xs:18,sm:24}, maxWidth:'850px' }} color="#fff" >
               Attach your resume and cover letter detailing your relevant experience and why you are interested in joining SYMSPACE
             </Typography>
-          </Box>
-          <Box sx={{ display:'flex', flexDirection:'column', justifyContent:'center'}}>
+          </FlexCol>
+          <FlexColCenter>
             <Button sx={{ fontFamily: 'Elemental End', background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)', borderRadius: '50px', px:12.5, py:2, color: '#fff', fontSize:'20px', textTransform:'lowercase', fontWeight:400, border:'1px solid #FFF' }}>
               Apply
             </Button>
-          </Box>
+          </FlexColCenter>
         </FlexBox>
       </Box>
     </Container>
@@ -31,6 +26,8 @@ export default function Section3() {
 }
 
 const cardStyle = {
+  py:{xs:2, sm:5},
+  px:{xs:3, sm:8},
   background: 'rgba(255, 255, 255, 0.35)',
   boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
               inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),

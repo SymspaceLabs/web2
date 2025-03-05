@@ -1,73 +1,55 @@
-"use client";
-
-import { keyframes } from '@mui/material/styles';
-
-const blobKeyframe = keyframes`
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-`;
-
 export const styles = {
-  blob1: {
-    position: 'absolute',
-    top: '50%',
-    right: '20%',
-    width: '400px',
-    height: '400px',
-    background: '#FFFFFF',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.5,
-    filter: 'blur(75px)',
-    animation: `${blobKeyframe} 7s infinite`,
+   gradientBtn : {
+    flex:{xs:1, sm:0},
+    gap: 1,
+    minWidth: { sm:250 },
+    color: '#fff',
+    borderRadius: '50px',
+    border: '2px solid white',
+    py: {xs:1, sm:2},
+    background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
+    minWidth: { sm:'250px' },
+    transition: 'all 0.3s ease-in-out',
+    ':hover' : {
+      boxShadow:' 0px 4px 4px rgba(0, 0, 0, 0.25)',
+      border: '2px solid rgba(255, 255, 255, 0.5)',
+    },
   },
-  blob2: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: '400px',
-    height: '400px',
-    background: '#0366FE',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.5,
-    filter: 'blur(75px)',
-    animation: `${blobKeyframe} 7s infinite`,
+  outlinedBtn : {
+    height:'100%',
+    flex:{xs:1, sm:0},
+    minWidth: { sm:250 },
+    fontFamily: 'Elemental End',
+    textTransform: 'lowercase',
+    fontWeight: 500,
+    color: '#fff',
+    borderRadius: '50px',
+    border: '2px solid white',
+    py: {xs:1, sm:2},
+    px: 3,
+    fontSize: { xs:10, sm:16 },
+    transition: 'all 0.3s ease-in-out', // Smooth transition effect
+    ':hover': {
+      background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
+      color: '#000',
+    },
   },
-  blob3: {
-    position: 'absolute',
-    top: 0,
-    left: -150,
-    width: '500px',
-    height: '500px',
-    background: '#0366FE',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.5,
-    filter: 'blur(75px)',
-    animation: `${blobKeyframe} 7s infinite`,
-  },
-  blob4: {
-    position: 'absolute',
-    top: -150,
-    left: 150,
-    width: '500px',
-    height: '500px',
-    background: '#fff',
-    borderRadius: '50%',
-    zIndex: 1,
-    opacity: 0.4,
-    filter: 'blur(100px)',
-    animation: `${blobKeyframe} 7s infinite`,
-  },
+  outlinedLightBtn : {
+    border:'2px solid black',
+    fontWeight: 400,
+    minWidth: 175,
+    fontFamily: 'Elemental End',
+    textTransform: 'lowercase',
+    color: '#000',
+    borderRadius: '50px',
+    py: {xs:1, sm:2},
+    px: 3,
+    fontSize: 12,
+    transition: 'all 0.3s ease-in-out', // Smooth transition effect
+    ':hover': {
+      background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+      color: '#FFF',
+      border: '2px solid white',
+    },
+  }
 };

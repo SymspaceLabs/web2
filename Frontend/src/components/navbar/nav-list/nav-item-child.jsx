@@ -4,12 +4,12 @@ import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
 import ArrowLeft from "@mui/icons-material/ArrowLeft";
 import ArrowRight from "@mui/icons-material/ArrowRight"; // GLOBAL CUSTOM HOOKS
 
-import useOverflowDetect from "../../../hooks/useOverflowDetect"; // GLOBAL CUSTOM COMPONENTS
+import useOverflowDetect from "@/hooks/useOverflowDetect"; // GLOBAL CUSTOM COMPONENTS
 
-import { Span } from "../../../components/Typography";
-import BazaarCard from "../../../components/BazaarCard"; // GLOBAL CUSTOM HOOK
+import { Span } from "@/components/Typography";
+import BazaarCard from "@/components/BazaarCard"; // GLOBAL CUSTOM HOOK
 
-import useSettings from "../../../hooks/useSettings"; // STYLED COMPONENTS
+import useSettings from "@/hooks/useSettings"; // STYLED COMPONENTS
 
 import { ParentNav, ParentNavItem } from "../styles";
 // ==============================================================
@@ -18,9 +18,7 @@ export default function NavItemChild({
   children
 }) {
   const pathname = usePathname();
-  const {
-    settings
-  } = useSettings();
+  const { settings } = useSettings();
   const {
     checkOverflow,
     elementRef,
@@ -29,12 +27,14 @@ export default function NavItemChild({
   } = useOverflowDetect();
   const isActive = nav.child.flat().find(item => item.url === pathname); // console.log(isLeftOverflowing, isRightOverflowing);
 
-  return <ParentNav minWidth={200} active={isActive ? 1 : 0} onMouseEnter={checkOverflow}>
+  return (
+    <ParentNav minWidth={200} active={isActive ? 1 : 0} onMouseEnter={checkOverflow}>
+      
+      {/* Parent */}
       <MenuItem color="grey.700">
         <Span flex="1 1 0" sx={{ fontFamily:'Elemental End', textTransform:'lowercase' }}>
           {nav.title}
         </Span>
-
         {settings.direction === "ltr" ? <ArrowRight fontSize="small" /> : <ArrowLeft fontSize="small" />}
       </MenuItem>
 
@@ -43,5 +43,6 @@ export default function NavItemChild({
           {children}
         </BazaarCard>
       </ParentNavItem>
-    </ParentNav>;
+    </ParentNav>
+  );
 }

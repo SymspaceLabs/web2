@@ -90,7 +90,7 @@ export default function Section5() {
   };
 
   return (
-    <Box sx={{ py: 8 }}>
+    <Box sx={{ py: 8 }} id="pricing">
       <Container>
 
         {/* Header Section */}

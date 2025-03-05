@@ -61,7 +61,7 @@ export default function Section7() {
                     headerText="Application Integration"
                     subHeaderText="An immersive way to shop conveniently"
                     bg="#353535"
-                    textColor="#fff"
+                    textColor="#FFF"
                   />
                 </motion.div>
               </FlexBox>

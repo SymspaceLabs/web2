@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
@@ -12,6 +15,22 @@ import { BlobBox2 } from "./blobBox2";
 import { BlobBox } from "./blobBox";
 
 export default async function AboutUsPageView() {
+  
+  {/* This code helps for scroll to section */}
+  useEffect(() => {
+    // Check if the URL has a hash (e.g., #benefits)
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100); // Add slight delay to ensure element is rendered
+      }
+    }
+  }, []);
+
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
       

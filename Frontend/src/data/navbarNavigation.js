@@ -1,5 +1,3 @@
-import categoriesMegaMenu from "./categoriesMegaMenu"; // MEGA-MENU DATA
-
 const navbarNavigation = [
   // MARKETPLACE
   {
@@ -31,7 +29,7 @@ const navbarNavigation = [
         }]
       }, {
         title: "Staging Furniture",
-        url: "/furniture-1"
+        url: "/staging"
       }
     ]
   }, 
@@ -44,10 +42,10 @@ const navbarNavigation = [
     child: [
       {
         title: "Become a partner",
-        url: "/medical"
+        url: "/register-partner"
       }, {
         title: "Pricing & Packages",
-        url: "/gift-shop"
+        url: "/ar-for-business#pricing"
       },
     ]
   }, 
@@ -69,7 +67,7 @@ const navbarNavigation = [
         url: "/contact-us"
       }, {
         title: "Careers",
-        url: "/about-us#careers"
+        url: "/careers"
       }
     ]
   }

@@ -13,15 +13,6 @@ export default function NavigationList() {
   const renderNestedNav = (list = [], isRoot = false) => {
     return list.map(nav => {
       if (isRoot) {
-
-        if (nav.megaMenu) {
-          // return <MegaMenu key={nav.title} title={nav.title} menuList={nav.child} />;
-        }
-
-        if (nav.megaMenuWithSub && nav.url) {
-          return <CategoryBasedMenu url={nav.url} key={nav.title} title={nav.title} menuList={nav.child} />;
-        }
-
         
         if (nav.child && nav.url) {
           return (
@@ -55,9 +46,11 @@ export default function NavigationList() {
         }
 
         if (nav.url) {
-          return <StyledNavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" } }}>
+          return (
+            <StyledNavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" } }}>
               {nav.title}
-            </StyledNavLink>;
+            </StyledNavLink>
+          );
         }
 
         if (nav.child) {
@@ -72,7 +65,6 @@ export default function NavigationList() {
                   sx={{
                     mt: 2.5,
                     py: 1,
-                    // color: "#fff",
                     minWidth: 100,
                     borderRadius: "8px",
                     border: "1px solid white",

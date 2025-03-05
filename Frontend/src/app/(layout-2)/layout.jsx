@@ -1,6 +1,6 @@
-import ShopLayout2 from "components/layouts/shop-layout-2";
+import ShopLayout1 from "components/layouts/shop-layout-1";
 export default function Layout({
   children
 }) {
-  return <ShopLayout2>{children}</ShopLayout2>;
+  return <ShopLayout1>{children}</ShopLayout1>;
 }

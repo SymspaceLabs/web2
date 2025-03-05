@@ -19,7 +19,7 @@ import BlogCard from './blog-card';
 
 export default function Section4() {
   return (
-    <Box>
+    <Box id="benefits">
       <Container>
         {/* Section header */}
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

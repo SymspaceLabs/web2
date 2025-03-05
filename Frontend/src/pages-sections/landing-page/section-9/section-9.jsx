@@ -14,6 +14,7 @@ import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Imp
 import { LazyImage } from '@/components/lazy-image';
 import { FlexBox } from '@/components/flex-box';
 import { motion } from "framer-motion"; // Importing framer-motion
+import Link from 'next/link';
 
 export default function Section8() {
   return (
@@ -52,52 +53,56 @@ export default function Section8() {
 
             {/* Call-to-action button */}
             <Box sx={{ width: "100%" }}>
-              <Button
-                sx={{
-                  gap: {xs:1, sm:2},
-                  fontFamily: "Elemental End",
-                  textTransform:"lowercase",
-                  color: "#353535",
-                  borderRadius: "50px",
-                  py: {xs:1, sm:2},
-                  px: {xs:2, sm:3},
-                  fontSize: {xs:12, sm:16},
-                  background: "transparent",
-                  border: "2px solid #353535",
-                  transition: "all 0.3s ease-in-out",
-                  "&:hover": {
-                    color: "#fff",
-                    background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
-                    border: "2px solid #FFF",
-                    "& img": {
-                      content: 'url("/assets/images/sparkler-white.png")',
-                    },
-                  },
-                }}
-              >
-                Get Started
-
-                {/* Icon inside the button */}
-                <Box
+              <Link href="/ar-for-business#benefits" passHref>
+                <Button
                   sx={{
-                    width: {xs:'25px', sm:"35px"},
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    gap: 1,
+                    fontFamily: "Elemental End",
+                    textTransform:"lowercase",
+                    color: "#353535",
+                    borderRadius: "50px",
+                    py: {xs:1, sm:2},
+                    px: {xs:2, sm:3},
+                    fontSize: {xs:12, sm:16},
+                    background: "transparent",
+                    minWidth: { sm:'250px' },
+                    border: "2px solid #353535",
+                    transition: "all 0.3s ease-in-out",
+                    "&:hover": {
+                      color: "#fff",
+                      background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
+                      border: "2px solid #FFF",
+                      "& img": {
+                        content: 'url("/assets/images/sparkler-white.png")',
+                      },
+                    },
                   }}
                 >
-                  <LazyImage
-                    alt="furniture shop"
-                    width={100}
-                    height={100}
-                    src="/assets/images/sparkler-grey.png"
+                  Get Started
+
+                  {/* Icon inside the button */}
+                  <Box
                     sx={{
-                      transition: "all 0.3s ease-in-out",
+                      width: {xs:'25px', sm:"35px"},
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
-                  />
-                </Box>
-              </Button>
+                  >
+                    <LazyImage
+                      alt="furniture shop"
+                      width={100}
+                      height={100}
+                      src="/assets/images/sparkler-grey.png"
+                      sx={{
+                        transition: "all 0.3s ease-in-out",
+                      }}
+                    />
+                  </Box>
+                </Button>
+              </Link>
+
             </Box>
 
           </FlexBox>

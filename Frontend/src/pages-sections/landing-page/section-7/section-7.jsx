@@ -1,9 +1,11 @@
 "use client"
 
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
 import { LazyImage } from '@/components/lazy-image';
 import { FlexBox, FlexCol, FlexRowCenter } from '@/components/flex-box';
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
+import Link from "next/link";
 
 export default function Section6() {
   return (
@@ -28,9 +30,11 @@ export default function Section6() {
                   </Typography>
                   {/* Call-to-action button */}
                   <FlexBox sx={{ pt:{sm:5}, justifyContent:{xs:'center', sm:'left'} }}>
-                    <Button sx={outlinedButton}>
-                      Explore
-                    </Button>
+                    <Link href="/ar-for-business#benefits" passHref>
+                      <Button sx={styles.outlinedBtn}>
+                        Explore
+                      </Button>
+                    </Link>
                   </FlexBox>
                 </FlexCol>
               </Grid>

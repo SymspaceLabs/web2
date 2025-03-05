@@ -7,13 +7,12 @@ import { NavLink } from "../../components/nav-link";
 import BazaarCard from "../../components/BazaarCard"; // COMMON STYLED OBJECT
 
 export const NAV_LINK_STYLES = {
-  fontFamily:'Helvetica',
   color:'#6A6B6B',
-  fontWeight:'bold',
+  fontWeight: 'bold',
   cursor: "pointer",
-  // transition: "color 150ms ease-in-out",
+  transition: "color 150ms ease-in-out",
   "&:hover": {
-    color: "#fff"
+    color: "#0366FE"
   },
   "&:last-child": {
     marginRight: 0
@@ -65,7 +64,7 @@ export const NavBarWrapper = styled(BazaarCard, {
   theme,
   border
 }) => ({
-  background: bg=='dark'? '#353535':' linear-gradient(94.91deg, #FFFFFF 0%, #BEBEBE 100%)',
+  background: 'linear-gradient(94.91deg, #FFFFFF 0%, #BEBEBE 100%)',
   height: "60px",
   display: "block",
   borderRadius: "0px",
@@ -95,7 +94,10 @@ export const CategoryMenuButton = styled(Button)(({
   borderRadius: '50px',
   background:'#717171',
   color:'#fff',
-  color: theme.palette.grey[800],
+  "&:hover": {
+    background: "#000",
+    color:'#717171',
+  },
 }));
 export const ChildNavListWrapper = styled("div")({
   zIndex: 5,

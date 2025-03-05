@@ -12,9 +12,9 @@
  * - Section6: Banner for call-to-action or promotional content.
  *
  * The component uses the "use client" directive to enable client-side rendering.
- *
- * @returns {JSX.Element} Rendered "AR for Business" page view
  */
+
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
@@ -24,6 +24,23 @@ import Section5 from "../section-5";
 import Section6 from "../section-6";
 
 export default async function ArForBusinessPageView() {
+
+  {/* This code helps for scroll to section */}
+  useEffect(() => {
+    // Check if the URL has a hash (e.g., #benefits)
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100); // Add slight delay to ensure element is rendered
+      }
+    }
+  }, []);
+
+
   return (
     <Box sx={{ position:'relative', overflow:'hidden', backgroundColor: '#fff' }}>
       {/* GRADIENT CIRCLES */}
@@ -39,15 +56,14 @@ export default async function ArForBusinessPageView() {
       <BlobBox top='80%' left={30} width="80vw" />
       <BlobBox top='80%' right={-50} width="80vw" color="#933FFE" />
 
-
       {/* CONTENT */}
       <Box>
-        <Section1 /> {/* HERO  */}
-        <Section2 /> {/* COMPANY */}
-        <Section3 /> {/* STATS */}
-        <Section4 /> {/* BENEFITS */}
-        <Section5 /> {/* PRICING */}
-        <Section6 /> {/* BANNER */}
+        <Section1 /> {/*   HERO      */}
+        <Section2 /> {/*   COMPANY   */}
+        <Section3 /> {/*   STATS     */}
+        <Section4 /> {/*   BENEFITS  */}
+        <Section5 /> {/*   PRICING   */}
+        <Section6 /> {/*   BANNER    */}
       </Box>
     </Box>
   );

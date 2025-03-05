@@ -8,20 +8,13 @@
  *
  */
 
-"use client";
-
 import { Container, Typography, Button, Box } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { FlexColCenter } from "@/components/flex-box";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
+import Link from "next/link";
 
 export default function Section5() {
-  const router = useRouter();
-
-  const handleClick = () => {
-    router.push("/register-partner");
-  };
-
   return (
     <Box sx={{ py: 10, position:'relative', zIndex:2 }}>
       <Container>
@@ -45,31 +38,15 @@ export default function Section5() {
             </Typography>
 
             <Box>
-              <Button sx={outlinedButton} onClick={handleClick}>
-                Shop
-              </Button>
+              <Link href="/marketplace" passHref>
+                <Button sx={styles.outlinedBtn}>
+                  Shop
+                </Button>
+              </Link>
             </Box>
           </FlexColCenter>
         </motion.div>
       </Container>
     </Box>
   );
-}
-
-const outlinedButton = {
-  fontWeight: 400,
-  minWidth: 175,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  color: '#fff',
-  borderRadius: '50px',
-  border: '2px solid white',
-  py: {xs:1, sm:2},
-  px: 3,
-  fontSize: 12,
-  transition: 'all 0.3s ease-in-out', // Smooth transition effect
-  ':hover': {
-    background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
-    color: '#000',
-  },
 }

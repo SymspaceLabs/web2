@@ -16,16 +16,16 @@ export const SocialButtons = () => {
                     </Span>
                 </Divider>
             </Box>
-            <Grid container spacing={1} alignItems="center">
-            <Grid item sm={4} xs={12}>
-                <GoogleLoginButton />
-            </Grid>
-            <Grid item sm={4} xs={12}>
-                <FacebookLoginButton />
-            </Grid>
-            <Grid item sm={4} xs={12}>
-                <AppleSigninButton />          
-            </Grid>
+            <Grid container spacing={1} alignItems="center" justifyContent="center" wrap="nowrap">
+                <Grid item sm={4} xs={4}>
+                    <GoogleLoginButton />
+                </Grid>
+                <Grid item sm={4} xs={4}>
+                    <FacebookLoginButton />
+                </Grid>
+                <Grid item sm={4} xs={4}>
+                    <AppleSigninButton />
+                </Grid>
             </Grid>
         </Fragment>
     );

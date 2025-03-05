@@ -1,6 +1,6 @@
 import FurnitureOnePageView from "../../../../pages-sections/company/page-view";
 export const metadata = {
-  title: "Furniture Shop - Bazaar Next.js E-commerce Template",
+  title: "Company Page",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

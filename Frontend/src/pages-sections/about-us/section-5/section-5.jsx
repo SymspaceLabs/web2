@@ -15,54 +15,57 @@ export default function Section5() {
   
 
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
-      <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
-          {/* Section title */}
-          <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff' }}>
-            our  leadership  team
-          </Typography>
+    <Box id="team">
+      <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center' }}>
+        <Box sx={{ width:'100%', maxWidth:'1400px' }}>
+          <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
+            {/* Section title */}
+            <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff' }}>
+              our  leadership  team
+            </Typography>
 
-          {/* Navigation buttons for the carousel */}
-          <FlexBox justifyContent="space-between" maxWidth="90px" >
-            <IconButton onClick={handlePrev}>
-              <ArrowBackIosIcon fontSize="large" sx={{ color:"#fff" }}  />
-            </IconButton>
-            <IconButton onClick={handleNext}>
-              <ArrowForwardIosIcon fontSize="large" sx={{ color:"#fff" }} />
-            </IconButton>
+            {/* Navigation buttons for the carousel */}
+            <FlexBox justifyContent="space-between" maxWidth="90px" >
+              <IconButton onClick={handlePrev}>
+                <ArrowBackIosIcon fontSize="large" sx={{ color:"#fff" }}  />
+              </IconButton>
+              <IconButton onClick={handleNext}>
+                <ArrowForwardIosIcon fontSize="large" sx={{ color:"#fff" }} />
+              </IconButton>
+            </FlexBox>
           </FlexBox>
-        </FlexBox>
 
-        {/* Carousel displaying staffs */}
-        <Carousel spaceBetween={20} ref={carouselRef} slidesToShow={4} responsive={responsive} arrows={false}>
-          {staffs.map((staff) => (
-            <Link href={`linkedin.com/${staff.slug}`} key={staff.id}>
-              {/* staff card */}
-              <FlexBox sx={cardStyle} gap={3}>
-                {/* staff image */}
-                <LazyImage
-                  alt={staff.title}
-                  width={100}
-                  height={100}
-                  sx={{ width: "150px", height: "150px" }}
-                  src={staff.imgUrl}
-                />
-                {/* staff title */}
-                <FlexBox flexDirection="column" alignItems="center" gap={1}>
-                  <Typography sx={{ fontFamily: "Elemental End", textTransform: "lowercase", color: "#fff" }}>
-                    {staff.title}
-                  </Typography>
-                  <Typography color="#fff">
-                    {staff.role}
-                  </Typography>
+          {/* Carousel displaying staffs */}
+          <Carousel spaceBetween={20} ref={carouselRef} slidesToShow={4} responsive={responsive} arrows={false}>
+            {staffs.map((staff) => (
+              <Link href={`linkedin.com/${staff.slug}`} key={staff.id}>
+                {/* staff card */}
+                <FlexBox sx={cardStyle} gap={3}>
+                  {/* staff image */}
+                  <LazyImage
+                    alt={staff.title}
+                    width={100}
+                    height={100}
+                    sx={{ width: "150px", height: "150px" }}
+                    src={staff.imgUrl}
+                  />
+                  {/* staff title */}
+                  <FlexBox flexDirection="column" alignItems="center" gap={1}>
+                    <Typography sx={{ fontFamily: "Elemental End", textTransform: "lowercase", color: "#fff" }}>
+                      {staff.title}
+                    </Typography>
+                    <Typography color="#fff">
+                      {staff.role}
+                    </Typography>
+                  </FlexBox>
                 </FlexBox>
-              </FlexBox>
-            </Link>
-          ))}
-        </Carousel>
-      </Box>
-    </Container>
+              </Link>
+            ))}
+          </Carousel>
+        </Box>
+      </Container>
+    </Box>
+
   );
 }
 

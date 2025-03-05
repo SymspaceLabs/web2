@@ -1,6 +1,7 @@
 import { LazyImage } from '@/components/lazy-image';
 import { Box, Typography, Button } from '@mui/material';
-import { FlexBox, FlexColCenter, FlexRowCenter } from '@/components/flex-box';
+import { FlexBox, FlexColCenter } from '@/components/flex-box';
+import Link from 'next/link';
 
 export const Card1 = () => {
   return (
@@ -100,30 +101,15 @@ export const Card1 = () => {
             justifyContent: {xs:'flex-end', sm:'flex-start'}
           }}
         >
-          <Button
-            className="fadeInBtn"
-            sx={{
-              display: { xs: 'flex', sm: 'none' },
-              opacity: { xs: 1, sm: 0 },
-              transform: { xs: 'translateY(0)', sm: 'translateY(20px)' },
-              transition: { sm: 'all 0.3s ease' },
-              py: 1,
-              borderRadius: 50,
-              border: '1px black solid',
-              justifyContent: 'center',
-              alignItems: 'center',
-              maxHeight:{xs:'35px'},
-              textAlign: 'center',
-              color: 'black',
-              fontSize: {xs:10, sm:16},
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              fontWeight: 500,
-              maxHeight:{xs:'30px'},
-            }}
-          >
-            Learn More
-          </Button>
+          <Link href="/global-impact" passHref>
+            <Button
+              className="fadeInBtn"
+              sx={btnStyle('#000')}
+            >
+              Learn More
+            </Button>
+          </Link>
+
         </FlexBox>
       </Box>
     </Box>
@@ -220,29 +206,15 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
         </Typography>
       
         <Box sx={{ width: '100%' }}>
-          <Button
-            className="fadeInBtn"
-            sx={{
-              display: { xs: 'flex', sm: 'none' },
-              opacity: 1,
-              transform: "none",
-              transition: { xs: "none", sm: "all 0.3s ease" }, 
-              py: 1,
-              borderRadius: 50,
-              border: `1px ${textColor} solid`,
-              justifyContent: 'center',
-              alignItems: 'center',
-              textAlign: 'center',
-              color: textColor,
-              fontSize: { xs: 10, sm: 16 },
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              fontWeight: 500,
-              maxHeight:{xs:'30px'},
-            }}
-          >
-            Learn More
-          </Button>
+          <Link href="/ar-app-simulation" passHref>
+            <Button
+              className="fadeInBtn"
+              sx={btnStyle(textColor)}
+            >
+              Learn More
+            </Button>
+          </Link>
+
         </Box>
       </FlexColCenter>
     </Box>
@@ -253,20 +225,20 @@ export const Card3 = () => {
   return (
     <FlexBox 
       sx={{
-        height: "100%", 
-        pt: { xs: 4, sm: 14 },
-        pb: { xs: 2, sm: 10 },
-        px: { xs: 2, sm: 5 },
-        display: "flex", 
-        flexDirection: "column", 
-        bgcolor: "#D5D5D5", 
-        borderRadius: {xs:'25px', sm:"50px"}, 
-        justifyContent: "center",
-        overflow: 'hidden',
-        position:'relative',
-        '@media (max-width:600px)': {
-          '&:hover .fadeInBtn': {
-            display: 'none',
+          height: "100%", 
+          pt: { xs: 4, sm: 14 },
+          pb: { xs: 2, sm: 10 },
+          px: { xs: 2, sm: 5 },
+          display: "flex", 
+          flexDirection: "column", 
+          bgcolor: "#D5D5D5", 
+          borderRadius: {xs:'25px', sm:"50px"}, 
+          justifyContent: "center",
+          overflow: 'hidden',
+          position:'relative',
+          '@media (max-width:600px)': {
+            '&:hover .fadeInBtn': {
+              display: 'none',
             opacity: 0,
             transform: 'none',
           },
@@ -357,29 +329,15 @@ export const Card3 = () => {
           </Box>
 
           <FlexBox sx={{ width: '100%', height: {ms:50}, position: 'relative', justifyContent:{xs:'flex-end', sm:'flex-start'} }}>
-            <Button
-              className="fadeInBtn"
-              sx={{
-                display: { xs: 'flex', sm: 'none' },
-                opacity: { xs: 1, sm: 0 },
-                transform: { xs: 'translateY(0)', sm: 'translateY(20px)' },
-                transition: { sm: 'all 0.3s ease' },
-                py: 1,
-                borderRadius: 50,
-                border: '1px black solid',
-                justifyContent: 'center',
-                alignItems: 'center',
-                maxHeight:{xs:'30px'},
-                textAlign: 'center',
-                color: 'black',
-                fontSize: {xs:10, sm:16},
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
-                fontWeight: 500,
-              }}              
-            >
-              Learn More
-            </Button>
+            <Link href="/global-impact" passHref>
+              <Button
+                className="fadeInBtn"
+                sx={btnStyle('#000')}              
+              >
+                Learn More
+              </Button>
+            </Link>
+
           </FlexBox>
         </Box>
       </FlexBox>
@@ -401,5 +359,30 @@ export const Card3 = () => {
     </FlexBox>
   );
 };
+
+
+const btnStyle = (color = "#000") => ({
+    display: { xs: 'flex', sm: 'none' },
+    opacity: 1,
+    transform: "none",
+    transition: { xs: "none", sm: "all 0.3s ease" }, 
+    py: {xs:1, sm:2},
+    px: {xs:1, sm:2},
+    maxHeight:{xs:'30px'},
+    borderRadius: 50,
+    border: `1px solid ${color}`,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    color,
+    fontSize: { xs: 10, sm: 16 },
+    fontFamily: 'Elemental End',
+    textTransform: 'lowercase',
+    fontWeight: 500,
+    "&:hover": {
+      bgcolor: color,
+      color: color==="#FFF"?'#000':'#FFF',
+    },
+});
 
 

@@ -18,10 +18,25 @@ export default function DialogDrawer(props) {
 
   return (
     <Fragment>
-      <Dialog PaperProps={{ style: { backgroundColor: 'transparent', boxShadow: 'none', borderRadius: '80px', boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)' },}} scroll="body" open={dialogOpen} fullWidth={isMobile} onClose={toggleDialog} sx={{ zIndex: 9999 }}>
-        <Box style={{ width: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
-          <Box style={{ alignSelf: 'stretch', flex: '1 1 0', position: 'relative' }}>
-            <img style={{ background: 'rgba(255,255,255,0.2)', width: 580, height: 885, left: 0, top: 0, position: 'absolute', boxShadow: '0px 1.0028538703918457px 20.55850601196289px rgba(255, 255, 255, 0.80) inset', backdropFilter: 'blur(20.06px)'}} src="/assets/images/background/Rectangle.png"/>
+      <Dialog 
+        PaperProps={{ 
+          style: { 
+            background: 'rgba(255, 255, 255, 0.39)', 
+            borderRadius: '50px', 
+            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)', 
+            backdropFilter: 'blur(7.2px)', 
+            WebkitBackdropFilter: 'blur(7.2px)', 
+            border: '1px solid rgba(255, 255, 255, 0.72)' 
+          }
+        }}
+        scroll="body" 
+        open={dialogOpen} 
+        fullWidth 
+        onClose={toggleDialog} 
+        sx={{ zIndex: 9999 }}
+      >
+        <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+          <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
             <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
               <Wrapper>
                 <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />

@@ -13,19 +13,18 @@ export default function Navbar({
   elevation = 2,
   hideCategories = false
 }) {
-  return <NavBarWrapper bg={bg} hoverEffect={false} elevation={elevation} border={0}>
+  return <NavBarWrapper hoverEffect={false} elevation={elevation} border={0}>
       {hideCategories ? <InnerContainer sx={{ justifyContent: "center"}}>
           <NavigationList />
         </InnerContainer> : <InnerContainer>
 
-            {/* CATEGORY MEGA MENU */}
+            {/* CATEGORY DROPDOWN */}
             <Categories />
 
-            {/* HORIZONTAL MENU */}
             {/* <NavigationList /> */}
             <FlexBox justifyContent="space-between" width="80%">
               {categories.map((item, index)=> (
-                  <StyledNavLink href="" key={index} sx={{ "&:hover": { color: "#0366FE" } }}>
+                  <StyledNavLink href="" key={index} sx={{ fontWeight:500, color:bg=='dark'?'#FFF':'#' }}>
                     {item}
                   </StyledNavLink>
                 ))

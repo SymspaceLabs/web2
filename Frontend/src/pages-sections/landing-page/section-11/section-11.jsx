@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { Box, Container, Typography, Button, Grid } from "@mui/material";
+import { styles } from "../page-view/styles";
+import Link from "next/link";
 
 
 export default function Section10() {
@@ -32,9 +34,11 @@ export default function Section10() {
               We empower individuals with Augmented Reality, while equipping brands with resources to showcase their products in unimaginable ways. Our goal is to revolutionize the end-to-end e-commerce process by creating 3D assets of retail products and enabling consumers to augment these products with enhanced AR functionalities. We offer a sustainable solution that delivers immersive, hyper-realistic, and seamless 3D models coupled with unparalleled AR experiences. Through cutting-edge technologies such as artificial intelligence and augmented reality, we are positioned to transform mere imagination into tangible simulations of reality.
             </Typography>
             <FlexBox sx={{ width: '100%', maxWidth: 1200, justifyContent:{xs:'center', sm:'flex-start'}  }}>
-              <Button variant="outlined" sx={outlinedButton}>
-                About Us
-              </Button>
+              <Link href="/about-us" passHref>
+                <Button variant="outlined" sx={styles.outlinedBtn}>
+                  About Us
+                </Button>
+              </Link>
             </FlexBox>
           </FlexCol>
         </motion.div>

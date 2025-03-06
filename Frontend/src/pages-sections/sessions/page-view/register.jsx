@@ -85,6 +85,8 @@ const RegisterPageView = () => {
 
   return (
     <FlexBox flexDirection="column" gap={3}>
+      
+      {/* Sign Up form */}
       <SignUpForm
         email={email}
         setEmail={setEmail}
@@ -101,6 +103,8 @@ const RegisterPageView = () => {
         isChecked={isChecked}
         setIsChecked={setIsChecked}
       />
+
+      {/* Submit Button */}
       <AuthSubmitButton
         title="Sign Up"
         isValid={isValid}

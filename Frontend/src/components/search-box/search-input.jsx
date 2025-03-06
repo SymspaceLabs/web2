@@ -15,7 +15,7 @@ export default function SearchInput() {
   } = useSearch();
   const INPUT_PROPS = {
     sx: {
-      border: 0,
+      borderRadius: '50px',
       height: 44,
       paddingRight: 0,
       overflow: "hidden",
@@ -24,23 +24,39 @@ export default function SearchInput() {
         border: 0
       }
     },
-    endAdornment: <Button color="primary" disableElevation variant="contained" sx={{
-      px: "3rem",
-      height: "100%",
-      borderRadius: "0 4px 4px 0"
-    }}>
+    endAdornment: (
+      <Button 
+        disableElevation
+        sx={{
+          px: "1.5rem",
+          height: "100%",
+          borderRadius: "50px",
+          fontFamily: 'Elemental End',
+          textTransform:'lowercase',
+          fontSize: 11,
+          fontWeight: 400,
+          color:'#FFF',
+          background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+          border:'5px solid #FFF'
+        }}
+      >
         Search
-      </Button>,
+      </Button>
+    ),
     startAdornment: <SearchOutlinedIcon fontSize="small" />
   };
-  return <Box position="relative" flex="1 1 0" maxWidth="670px" mx="auto" {...{
-    ref: parentRef
-  }}>
+  return (
+    <Box 
+      position="relative"
+      flex="1 1 0"
+      maxWidth="670px"
+      mx="auto" 
+      {...{ref: parentRef}}
+    >
       <TextField fullWidth variant="outlined" placeholder="Searching for..." onChange={handleSearch} InputProps={INPUT_PROPS} />
 
-      {
-      /* SHOW SEARCH RESULT LIST */
-    }
+      {/* SHOW SEARCH RESULT LIST */}
       {resultList.length > 0 ? <SearchResult results={resultList} /> : null}
-    </Box>;
+    </Box>
+  );
 }

@@ -13,10 +13,10 @@ function NextArrow({
   const {
     direction
   } = useTheme();
-  return <ArrowButton onClick={onClick} className="slick-arrow next" right={0} sx={{ ...sx
-  }}>
+  return (
+    <ArrowButton onClick={onClick} className="slick-arrow next" right={0} sx={{ ...sx }}>
       {direction === "rtl" ? <ArrowBack fontSize="small" color="inherit" /> : <ArrowForward fontSize="small" color="inherit" />}
-    </ArrowButton>;
+    </ArrowButton>);
 }
 
 function PrevArrow({

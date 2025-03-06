@@ -95,7 +95,8 @@ export const ArrowButton = styled(Box)(({
   justifyContent: "center",
   transform: "translate(0, -50%)",
   transition: "all 0.2s ease-in-out",
-  color: theme.palette.secondary.contrastText,
-  backgroundColor: theme.palette.secondary.main,
-  boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)"
+  color: "#302f2f",
+  backgroundColor: "#FFF",
+  boxShadow: 2,
+  borderRadius:'50px'
 }));

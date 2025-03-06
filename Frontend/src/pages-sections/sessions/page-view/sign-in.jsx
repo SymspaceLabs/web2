@@ -14,24 +14,23 @@
 import { useState, useEffect } from "react";
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from "next/navigation";
-import { FlexBox } from "@/components/flex-box";
+import { FlexColCenter } from "@/components/flex-box";
 import { LoginForm } from '@/components/forms';
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { AuthSubmitButton } from "@/components/custom-buttons";
 
 const LoginPageView = ({ closeDialog }) => {
-  const router = useRouter(); // Next.js router for navigation.
+  const router = useRouter();
 
   const { handleAuthResponse } = useAuth(); // Context for handling authentication state.
   const { showSnackbar } = useSnackbar();
   
-  const [errorMessage, setErrorMessage] = useState(''); // For displaying error messages.
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
-    setIsValid( email && password);
+    setIsValid(email && password);
   }, [email, password]);
 
   // Form submission handler
@@ -56,7 +55,7 @@ const LoginPageView = ({ closeDialog }) => {
         }
       } else {
         // Successful login
-        showSnackbar(data.message, "error");
+        showSnackbar(data.message, "success");
 
         closeDialog?.();
         handleAuthResponse(data.user, data.accessToken);
@@ -74,7 +73,7 @@ const LoginPageView = ({ closeDialog }) => {
   };
 
   return (
-    <FlexBox sx={{width:'100%'}} flexDirection="column" gap={3}>
+    <FlexColCenter width='100%' gap={3}>
       
       {/* LOGIN FORM */}
       <LoginForm
@@ -91,7 +90,7 @@ const LoginPageView = ({ closeDialog }) => {
         onClick={handleSubmit}
       />
 
-    </FlexBox>
+    </FlexColCenter>
   );
 };
 

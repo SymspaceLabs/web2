@@ -68,6 +68,7 @@ export default function Section2() {
             >
               Trending News
             </Typography>
+            
             {/* Carousel to display blogs */}
             <Carousel dots autoplay adaptiveHeight arrows={true} spaceBetween={1} slidesToShow={2}>
               {blogs.map((item, index) => (

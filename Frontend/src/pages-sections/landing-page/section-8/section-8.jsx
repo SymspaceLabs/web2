@@ -5,7 +5,7 @@ import { Card1, Card2, Card3 } from "./cards";
 import { motion } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";
 
-export default function Section7() {
+export default function Section8() {
   // Framer Motion fade-in animation
   const fadeIn = {
     hidden: { opacity: 0, y: 50 },
@@ -69,11 +69,18 @@ export default function Section7() {
           </Grid>
 
           {/* Right column */}
-          <Grid item xs={12} sm={12} md={6}>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                <Card3 />
+          <Grid item xs={12} sm={12} md={6} sx={{ height: "auto" }}>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+              style={{ height: "100%" }} // Ensure it fills the available height
+            >
+              <Card3 />
             </motion.div>
           </Grid>
+
         </Grid>
       </Container>
     </Grid>

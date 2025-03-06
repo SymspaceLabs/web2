@@ -58,12 +58,12 @@ export default async function ArForBusinessPageView() {
 
       {/* CONTENT */}
       <Box>
-        <Section1 /> {/*   HERO      */}
-        <Section2 /> {/*   COMPANY   */}
-        <Section3 /> {/*   STATS     */}
-        <Section4 /> {/*   BENEFITS  */}
-        <Section5 /> {/*   PRICING   */}
-        <Section6 /> {/*   BANNER    */}
+        <Section1 /> {/* HERO */}
+        <Section2 /> {/* COMPANY */}
+        <Section3 /> {/* STATS */}
+        <Section4 /> {/* BENEFITS */}
+        <Section5 /> {/* PRICING */}
+        <Section6 /> {/* BANNER */}
       </Box>
     </Box>
   );

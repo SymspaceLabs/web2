@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { Button, Box, Divider, Typography } from "@mui/material";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
 import { Span } from "../../components/Typography";
-import { mainContainerStyle, blurredOverlayStyle1, blurredOverlayStyle2, wrapperStyle, registerButtonStyle, dividerTextStyle } from "./styles";
+import { mainContainerStyle, blurredOverlayStyle1, blurredOverlayStyle2, registerButtonStyle, dividerTextStyle } from "./styles";
 import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // ==============================================================
 import { LazyImage } from "@/components/lazy-image";
 
@@ -174,8 +174,34 @@ export default function AuthLayout({ children }) {
   }
 
   if (pathname === "/reset-password") {
-    BOTTOM_CONTENT = null;
-    TITLE = null;
+
+    IMAGE = (
+      <LazyImage
+        alt="model"
+        width={500}
+        height={500}
+        sx={{ width: "35%" }}
+        src="/assets/images/3d-reset-password.png"
+      />
+    );
+
+    TITLE = (
+      <LogoWithTitle
+        title="Reset Password"
+        subTitle="Enter a new password"
+      />
+    );
+
+    BOTTOM_CONTENT = (
+      <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
+        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+      </Typography>
+    )
+
+    BLURRED_BG = (
+      <Box sx={blurredOverlayStyle1} />
+    ) 
+
   }
 
   // Responsive Card Style

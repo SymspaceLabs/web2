@@ -18,21 +18,24 @@ export default function Header({
   const theme = useTheme();
   const downMd = useMediaQuery(theme.breakpoints.down(1150));
 
-  const CONTENT_FOR_LARGE_DEVICE = <Fragment>
-
+  const CONTENT_FOR_LARGE_DEVICE = (
+    <Fragment>
       <FlexBox minWidth={100} alignItems="center">
         <Link href="/">
           <LazyImage src={require("../../../public/assets/images/logos/Logo.svg")} alt="logo" />
         </Link>
       </FlexBox>
-
       <FlexBox alignItems="center" gap={3} width="100%">
         {midSlot}
       </FlexBox>
-
-    </Fragment>;
+    </Fragment>
+  );
     
-  return <HeaderWrapper position={position} className={clsx(className)}>
-      <StyledContainer>{downMd ? <MobileHeader /> : CONTENT_FOR_LARGE_DEVICE}</StyledContainer>
-    </HeaderWrapper>;
+  return (
+    <HeaderWrapper position={position} className={clsx(className)}>
+      <StyledContainer>
+        {downMd ? <MobileHeader /> : CONTENT_FOR_LARGE_DEVICE}
+      </StyledContainer>
+    </HeaderWrapper>
+  );
 }

@@ -1,10 +1,12 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import FlexRowCenter from "../components/flex-box/flex-row-center";
+import { FlexRowCenter } from "@/components/flex-box";
 
 const Loading = () => {
-  return <FlexRowCenter minHeight="100vh">
+  return (
+    <FlexRowCenter minHeight="100vh">
       <CircularProgress color="primary" />
-    </FlexRowCenter>;
+    </FlexRowCenter>
+  );
 };
 
 export default Loading;

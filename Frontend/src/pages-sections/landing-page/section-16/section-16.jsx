@@ -83,12 +83,12 @@ export default function Section14() {
                 mt={3}
                 mb={1}
                 lineHeight={1.2}
-                fontSize={{ sm: 40, xs: 30 }}
+                fontSize={{ xs: 20, sm: 40 }}
               >
                 stay up to date
               </Typography>
 
-              <Paragraph mb={3} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
+              <Paragraph mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
                 Get updates on new partnered brands, products, <br /> and technology.
               </Paragraph>
 

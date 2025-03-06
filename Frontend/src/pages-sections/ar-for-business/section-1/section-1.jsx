@@ -17,46 +17,66 @@
 
 import React from 'react';
 import { Box, Container, Typography, Button, Grid, useTheme } from '@mui/material';
-import { section1Styles } from './styles'; // Import custom styles
-import BlobBox from './blobBox'; // Decorative component for visual enhancement
+import { motion } from "framer-motion"; // Import Framer Motion
+import { FlexBox } from '@/components/flex-box';
 
 export default function Section1() {
-  const theme = useTheme(); // Access the current theme for dynamic styling
-  const styles = section1Styles(theme); // Generate styles based on the theme
-
   return (
     <Box>
       <Container>
-        {/* Content box containing text and buttons */}
-        <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }}>
-          <Grid container spacing={4} alignItems="center">
-            {/* Left column: Text content */}
-            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
-              {/* Headline */}
-              <Typography sx={styles.title}>
-                sell more <br /> with SYMSPACE
-              </Typography>
+        {/* Animated Content Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }} // Start faded and slightly moved down
+          animate={{ opacity: 1, y: 0 }} // Fade in and move up
+          transition={{ duration: 0.8, ease: "easeOut" }} // Smooth transition
+        >
+          {/* Content box containing text and buttons */}
+          <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }}>
+            <Grid container spacing={4} alignItems="center">
+              {/* Left column: Text content */}
+              <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+                {/* Headline */}
+                <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 30, md: 40, lg: 50, xl: 60 }, color: '#4E4E4E' }}>
+                  sell more <br /> with SYMSPACE
+                </Typography>
 
-              {/* Promotional offer */}
-              <Typography sx={styles.description}>
-                *Initial 100 Partners gain 50% more on marketplace sales
-              </Typography>
+                {/* Promotional offer */}
+                <Typography sx={{ color: '#797979', fontSize: {xs:12, sm:18} }}>
+                  *Initial 100 Partners gain 50% more on marketplace sales
+                </Typography>
 
-              {/* Button group */}
-              <Box sx={styles.buttonGroup}>
-                <Button variant="outlined" sx={styles.outlinedButton}>
-                  sign up
-                </Button>
-              </Box>
+                {/* Button group */}
+                <FlexBox sx={{ pt: 2.5 }}>
+                  <Button variant="outlined" sx={outlinedButton}>
+                    sign up
+                  </Button>
+                </FlexBox>
+              </Grid>
+
+              {/* Right column: Image container (currently empty) */}
+              <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
+                <Box sx={{ minHeight: {sm:'500px'} }}></Box>
+              </Grid>
             </Grid>
-
-            {/* Right column: Image container (currently empty) */}
-            <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
-              <Box sx={styles.imageContainer}></Box>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </motion.div>
       </Container>
     </Box>
   );
+}
+
+
+const outlinedButton = {
+  background: '#000',
+  fontFamily: 'Elemental End',
+  textTransform: 'lowercase',
+  color: '#fff',
+  borderRadius: '50px',
+  py: 2,
+  px: 7.5,
+  transition: 'all 0.3s ease-in-out', // Smooth transition effect
+  ':hover': {
+    background: '#fff',
+    color: '#000',
+  },
 }

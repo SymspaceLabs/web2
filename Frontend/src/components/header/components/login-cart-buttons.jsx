@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef } from 'react';
+/**
+ * Header Icons On the Right
+ * 
+ * 
+ */
+
+import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Badge from "@mui/material/Badge";
 import { IconButton, MenuItem, Menu } from "@mui/material";

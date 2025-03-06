@@ -68,8 +68,8 @@ export default function Section5() {
 
       <MarqueeContainer>
         <MarqueeWrapper>
-          {testimonials.concat(testimonials).map((testimonial, index) => (
-            <TestimonialCard key={index} testimonial={TESTIMONIALS} />
+          {TESTIMONIALS.concat(TESTIMONIALS).map((testimonial, index) => (
+            <TestimonialCard key={index} testimonial={testimonial} />
           ))}
         </MarqueeWrapper>
       </MarqueeContainer>

@@ -1,11 +1,11 @@
 "use client"
 
 import React from 'react';
-import { FlexBox } from "@/components/flex-box";
-import { ImageWrapper } from "@/pages-sections/landing-page/section-15/styles";
-import { LazyImage } from "@/components/lazy-image";
 import { styled } from "@mui/system";
 import { Box, Typography } from "@mui/material";
+import { FlexBox } from "@/components/flex-box";
+import { LazyImage } from "@/components/lazy-image";
+import { ImageWrapper } from "@/pages-sections/landing-page/section-15/styles";
 
 const TestimonialWrapper = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",

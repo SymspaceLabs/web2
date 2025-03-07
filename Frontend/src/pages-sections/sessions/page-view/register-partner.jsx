@@ -21,14 +21,11 @@ const RegisterPartnerPageView = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); 
-
   const [businessName, setBusinessName] = useState('');
   const [website, setWebsite] = useState(''); 
-
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState(''); 
   const [retypeError, setRetypeError] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
@@ -40,10 +37,9 @@ const RegisterPartnerPageView = () => {
       lastName &&
       email &&
       passwordIsValid &&
-      passwordMatch &&
-      isChecked
+      passwordMatch
     );
-  }, [firstName, lastName, email, password, retypePassword, isChecked]);
+  }, [firstName, lastName, email, password, retypePassword]);
 
   // Form submission handler
   const handleSubmit = async () => {
@@ -81,6 +77,8 @@ const RegisterPartnerPageView = () => {
 
   return (
     <FlexBox flexDirection="column" sx={{ width:'100%', gap:2, py:{xs:1, sm:2} }}>
+      
+      {/* Sign Up form */}
       <PartnerSignUpForm
         email={email}
         setEmail={setEmail}
@@ -98,9 +96,9 @@ const RegisterPartnerPageView = () => {
         setRetypePassword={setRetypePassword}
         retypeError={retypeError}
         setRetypeError={setRetypeError}
-        isChecked={isChecked}
-        setIsChecked={setIsChecked}
       />
+
+      {/* Submit Button */}
       <AuthSubmitButton
         title="Sign Up"
         isValid={isValid}

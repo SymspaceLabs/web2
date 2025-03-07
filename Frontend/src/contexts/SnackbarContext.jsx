@@ -37,9 +37,25 @@ export default function SnackbarProvider({
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Centered at the top
       >
-        <Alert onClose={handleClose} severity={severity}>
+        <Alert 
+          onClose={handleClose} 
+          severity={severity} 
+          sx={{ 
+            background: "linear-gradient(0deg, rgba(140, 140, 140, 0.3), rgba(140, 140, 140, 0.3)), rgba(255, 255, 255, 0.1)", 
+            borderRadius: "35px",
+            backdropFilter: "blur(10px)", // Optional for a glass effect
+            color: "#fff", // Ensure text is visible
+            fontWeight: 500,
+            px: 3, // Padding for better appearance
+            py: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%", // Ensure it takes proper space
+          }}
+        >
           {message}
         </Alert>
       </Snackbar>

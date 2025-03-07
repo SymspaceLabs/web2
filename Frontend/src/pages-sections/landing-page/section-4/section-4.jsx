@@ -79,8 +79,8 @@ export default async function Section4() {
               paddingBottom: 2, // Ensure spacing for scroll
             }}
           >
-            {categories.map((item) => (
-              <Link href={`/products/search/${item.slug}`} passHref>
+            {categories.map((item,index) => (
+              <Link key={index} href={`/products/search/${item.slug}`} passHref>
                 {/* Product card */}
                 <FlexColCenter
                   sx={{

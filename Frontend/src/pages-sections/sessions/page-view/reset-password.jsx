@@ -93,7 +93,7 @@ const ResetPassword = () => {
 
         {/* Submit Button */}
         <AuthSubmitButton
-          title="Sign In"
+          title="Submit"
           isValid={isValid}
           onClick={handleSubmit}
         />

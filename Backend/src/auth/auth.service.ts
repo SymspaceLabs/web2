@@ -7,6 +7,7 @@ import {
   PayloadTooLargeException,
   BadRequestException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import User, { AuthMethod } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,6 +26,7 @@ import * as validator from 'validator';
 import * as bcrypt from 'bcrypt';
 import * as jwksClient from 'jwks-rsa';
 import axios from 'axios';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 
 
 
@@ -168,6 +170,7 @@ export class AuthService {
       token,
     };
   }
+
   
   async signUp(
     signUpDto: SignUpDto,
@@ -204,6 +207,11 @@ export class AuthService {
     }
   
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiresAt = new Date();
+    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
   
     const user = this.usersRepository.create({
       firstName,
@@ -211,6 +219,9 @@ export class AuthService {
       email,
       password: hashedPassword,
       role,
+      otp,
+      otpExpiresAt,
+      isVerified: false, // New column to track verification status
     });
   
     await this.usersRepository.save(user);
@@ -229,9 +240,15 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
   
-    const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
+    // const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
   
-    await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
+    // await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
+    // Send OTP email using Mailchimp template
+    await this.mailchimpService.sendOtpEmail(
+      email,
+      'Your OTP for Account Verification',
+      otp
+    );
   
     return {
       message:
@@ -239,6 +256,54 @@ export class AuthService {
       token,
     };
   }
+
+  async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string; accessToken: string; user: any }> {
+    const { email, otp } = verifyOtpDto;
+
+    // Find the user
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+        throw new NotFoundException('User not found.');
+    }
+
+    // Check if OTP matches and hasn't expired
+    if (!user.otp || user.otp !== otp || new Date() > user.otpExpiresAt) {
+        throw new BadRequestException('Invalid or expired OTP.');
+    }
+
+    // Mark the user as verified
+    user.isVerified = true;
+    user.otp = null;
+    user.otpExpiresAt = null;
+    await this.usersRepository.save(user);
+
+    // Generate JWT token
+    const accessToken = this.jwtService.sign(
+        { userId: user.id, email: user.email },
+        { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+    );
+
+    // Store token in Redis (optional)
+    await this.redisService.getClient().set(`auth:${user.id}`, accessToken, 'EX', 3600);
+
+    // Save token as refresh token (optional)
+    await this.authRepository.update(user.id, { refreshToken: accessToken });
+
+    return {
+        message: 'OTP verified successfully! You are now logged in.',
+        accessToken,
+        user: {
+            id: user.id,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            role: user.role,
+            isOnboardingFormFilled: user.isOnboardingFormFilled,
+        },
+    };
+  }
+
   
   async login(loginDto: LoginDto): Promise<{ accessToken: string; user: any }> {
     const { email, password } = loginDto;

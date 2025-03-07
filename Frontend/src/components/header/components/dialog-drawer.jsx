@@ -1,23 +1,31 @@
 "use client";
 
-import { useState, Fragment } from "react";
-import { Box, Snackbar, Alert, Dialog, Drawer, useMediaQuery } from '@mui/material';
-import { LoginPageView } from "../../../pages-sections/sessions/page-view"; // GLOBAL CUSTOM COMPONENTS
-import { MiniCart } from "../../../components/mini-cart"; // LOGIN PAGE SECTIONS
-import { Wrapper } from "../../../pages-sections/sessions/styles";
-import LogoWithTitle from "@/components/LogoWithTitle";
-import LoginBottom from "../../../pages-sections/sessions/components/login-bottom";
-import { SocialButtons } from "./SocialButtons";
-
+/**
+ * 
+ * A component that renders a modal dialog for .
+ *   - user login 
+ *   - side drawer (mini cart)
+ * 
+ */
 // ==============================================================
+import { useState, Fragment } from "react";
+import { LogoWithTitle } from "@/components";
+import { styled } from '@mui/material/styles';
+import { SocialButtons } from "./SocialButtons";
+import { MiniCart } from "@/components/mini-cart";
+import { LoginBottom } from "@/pages-sections/sessions/components";
+import { LoginPageView } from "@/pages-sections/sessions/page-view";
+import { Box, Snackbar, Alert, Dialog, Drawer, Card } from '@mui/material';
+// ==============================================================
+
 export default function DialogDrawer(props) {  
   const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = props;
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down("xs"));
-
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   return (
     <Fragment>
+      
+      {/* Login Dialog */}
       <Dialog 
         PaperProps={{ 
           style: { 
@@ -49,10 +57,12 @@ export default function DialogDrawer(props) {
         </Box>
       </Dialog>
 
+      {/* Side Navigation Drawer for MiniCart */}
       <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav} sx={{ zIndex: 9999 }}>
         <MiniCart toggleSidenav={toggleSidenav} />
       </Drawer>
 
+      {/* Snackbar Notification */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}
@@ -66,3 +76,35 @@ export default function DialogDrawer(props) {
     </Fragment>
   );
 }
+
+const fbStyle = {
+  background: "#3B5998",
+  color: "white"
+};
+const googleStyle = {
+  background: "#4285F4",
+  color: "white"
+};
+
+const Wrapper = styled(Card)(({ theme }) => ({
+  padding: "2rem 3rem",
+  background: 'transparent',
+
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    padding: "2rem 2rem", // Mobile-specific padding
+  },
+  ".facebookButton": {
+    marginBottom: 10,
+    ...fbStyle,
+    "&:hover": fbStyle,
+  },
+  ".googleButton": {
+    ...googleStyle,
+    "&:hover": googleStyle,
+  },
+  ".agreement": {
+    marginTop: 12,
+    marginBottom: 24,
+  },
+}));

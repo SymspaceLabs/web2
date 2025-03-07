@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 const LogoWithTitle = ({ title, subTitle }) => {
     
     return (
-        <FlexRowCenter flexDirection="column" gap={1.5} sx={{ alignItems:"center", py:{xs:1, sm:4}, maxWidth:'450px' }}>
+        <FlexRowCenter flexDirection="column" gap={1.5} sx={{ alignItems:"center", py:{xs:1, sm:4}, maxWidth:{xs:'450px', sm:'100%'}, width:'100%' }}>
             <Typography
                 sx={{
                     lineHeight: 1.25,
@@ -13,6 +13,8 @@ const LogoWithTitle = ({ title, subTitle }) => {
                     color: '#fff',
                     fontSize: {xs:16, sm:24},
                     textAlign: 'center',
+                    letterSpacing: '0.05em',
+                    wordSpacing: '0.1em',
                 }}
             >
                 {title}

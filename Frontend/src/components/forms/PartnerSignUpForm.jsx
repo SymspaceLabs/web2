@@ -1,8 +1,8 @@
-import { FlexBox } from '../flex-box';
-import { SymPasswordInput, SymTextField, SymCheckbox } from '../custom-inputs';
-import { Span } from '../Typography';
-import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { useMediaQuery } from '@mui/material';
+import { Span } from '@/components/Typography';
+import { FlexBox } from '@/components/flex-box';
+import { BoxLink } from '@/pages-sections/sessions/components';
+import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
 
 function PartnerSignUpForm ({
     firstName,
@@ -21,8 +21,6 @@ function PartnerSignUpForm ({
     setRetypePassword,
     retypeError,
     setRetypeError,
-    isChecked,
-    setIsChecked
 }) {
     const isMobile = useMediaQuery('(max-width:600px)');
     
@@ -31,8 +29,6 @@ function PartnerSignUpForm ({
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handleBusinessNameChange = (event) => setBusinessName(event.target.value);
     const handleWebsiteChange = (event) => setWebsite(event.target.value);
-
-    const handleAgreementChange = (event) => setIsChecked(event.target.checked);
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
@@ -82,15 +78,9 @@ function PartnerSignUpForm ({
             </FlexBox>
 
             {/* Checkbox */}
-            <SymCheckbox
-                onChange={handleAgreementChange} 
-                checked={isChecked}
-                content={
-                    <Span display={{ color:'#fff', sm: "inline-block" }}>
-                        By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
-                    </Span>     
-                }
-            />
+            <Span display={{ color:'#fff', sm: "inline-block" }}>
+                By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
+            </Span> 
         </FlexBox>
     );
 }

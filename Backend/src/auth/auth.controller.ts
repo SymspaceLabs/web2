@@ -22,6 +22,8 @@ import { UsersService } from 'src/users/users.service';
 import { MailchimpService } from 'src/mailchimp/mailchimp.service';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
+
 
 @Controller('auth')
 export class AuthController {
@@ -40,6 +42,11 @@ export class AuthController {
     } else {
       return res.status(HttpStatus.CONFLICT).json(result);
     }
+  }
+
+  @Post('verify-otp')
+  async verifyOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+    return this.authService.verifyOtp(verifyOtpDto);
   }
 
   @Post('signup-seller')

@@ -63,6 +63,12 @@ export class User {
 
   @Column({ default: false })
   isOnboardingFormFilled: boolean;
+
+  @Column({ nullable: true })
+  otp?: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  otpExpiresAt?: Date;
   
 }
 

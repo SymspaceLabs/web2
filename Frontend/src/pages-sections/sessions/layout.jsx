@@ -1,17 +1,27 @@
 "use client";
 
+/**
+ * Authentication Layout Component
+ *
+ * This component dynamically renders different authentication pages based on the current route.
+ * It customizes the UI for login, registration, password recovery, and email verification.
+ *
+ */
+
 import Image from "next/image";
 import Link from "next/link";
 import BoxLink from "./components/box-link";
 import LogoWithTitle from "@/components/LogoWithTitle";
 import LoginBottom from "./components/login-bottom";
+import { styles } from "./styles";
 import { usePathname } from "next/navigation";
+import { Span } from "@/components/Typography";
+import { LazyImage } from "@/components/lazy-image";
+import { FlexBox, FlexRowCenter } from "@/components/flex-box";
 import { Button, Box, Divider, Typography } from "@mui/material";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
-import { Span } from "../../components/Typography";
-import { mainContainerStyle, blurredOverlayStyle1, blurredOverlayStyle2, registerButtonStyle, dividerTextStyle } from "./styles";
-import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // ==============================================================
-import { LazyImage } from "@/components/lazy-image";
+
+// ==============================================================
 
 export default function AuthLayout({ children }) {
   const pathname = usePathname();
@@ -20,6 +30,7 @@ export default function AuthLayout({ children }) {
   let BOTTOM_CONTENT = null;
   let BLURRED_BG = null;
 
+  // Sign in page
   if (pathname === "/sign-in") {
 
     TITLE = (
@@ -37,10 +48,11 @@ export default function AuthLayout({ children }) {
     );
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle1} />
+      <Box sx={styles.blurredOverlay1} />
     ) 
   }
 
+  // Registration page
   if (pathname === "/register") {
 
     TITLE = (
@@ -61,7 +73,7 @@ export default function AuthLayout({ children }) {
           </Divider>
         </Box>
 
-        <Button href="/register-partner" fullWidth size="large" sx={registerButtonStyle}>
+        <Button href="/register-partner" fullWidth size="large" sx={styles.registerButton}>
           Create a business profile
         </Button>
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", gap: 1, pt: 2, pb: 5 }}>
@@ -71,10 +83,11 @@ export default function AuthLayout({ children }) {
     );
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle1} />
+      <Box sx={styles.blurredOverlay1} />
     ) 
   }
 
+  // Partner registration page
   if (pathname === "/register-partner") {
     TITLE = (
       <LogoWithTitle
@@ -92,11 +105,12 @@ export default function AuthLayout({ children }) {
     );
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle2} />
+      <Box sx={styles.blurredOverlay2} />
     ) 
 
   }
 
+  // Applicant registration page
   if (pathname === "/register-applicant") {
     BOTTOM_CONTENT = (
       <FlexRowCenter sx={{ fontFamily: 'Helvetica', color: '#fff', flexDirection: 'column' }} gap={1} mt={3}>
@@ -109,6 +123,7 @@ export default function AuthLayout({ children }) {
 
   }
 
+  // Email verification page
   if (pathname === "/verify-email") {
 
     IMAGE = (
@@ -135,11 +150,43 @@ export default function AuthLayout({ children }) {
     )
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle1} />
+      <Box sx={styles.blurredOverlay1} />
+    ) 
+  }
+
+  // OTP
+  if (pathname === "/otp") {
+
+    IMAGE = (
+      <LazyImage
+        alt="model"
+        width={500}
+        height={500}
+        sx={{ width: "35%" }}
+        src="/assets/images/3d-mailbox.png"
+      />
+    );
+
+    TITLE = (
+      <LogoWithTitle
+        title="check your email"
+        subTitle='You’re almost there! Enter the 6-digit code we just sent to your email to continue. If you don’t see it, you may need to check your spam folder.'
+      />
+    );
+
+    BOTTOM_CONTENT = (
+      <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
+        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+      </Typography>
+    )
+
+    BLURRED_BG = (
+      <Box sx={styles.blurredOverlay1} />
     ) 
   }
   
 
+  // Forgot password page
   if (pathname === "/forgot-password") {
 
     IMAGE = (
@@ -167,12 +214,13 @@ export default function AuthLayout({ children }) {
     )
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle1} />
+      <Box sx={styles.blurredOverlay1} />
     ) 
 
 
   }
 
+  // Reset password page
   if (pathname === "/reset-password") {
 
     IMAGE = (
@@ -199,25 +247,15 @@ export default function AuthLayout({ children }) {
     )
 
     BLURRED_BG = (
-      <Box sx={blurredOverlayStyle1} />
+      <Box sx={styles.blurredOverlay1} />
     ) 
 
   }
 
   // Responsive Card Style
-  const cardStyle = {
-    zIndex: 2,
-    px: { xs:3, sm:10 },
-    py: { xs:3, sm:8 },
-    background: 'rgba(140, 140, 140, 0.3)',
-    borderRadius: '50px',
-    alignItems: 'center',
-    maxWidth:'650px',
-    width:'100%' 
-  };
 
   return (
-    <FlexBox sx={mainContainerStyle}>
+    <FlexBox sx={styles.mainContainer}>
       {/* LOGO */}
       <FlexBox sx={{ zIndex: 2, py:3 }}>
         <Link href="/">
@@ -232,7 +270,7 @@ export default function AuthLayout({ children }) {
       </FlexBox>
 
       {/* CARD */}
-      <FlexBox flexDirection="column" sx={cardStyle}>
+      <FlexBox flexDirection="column" sx={styles.cardStyle}>
         {IMAGE}
         {TITLE}
         {children}

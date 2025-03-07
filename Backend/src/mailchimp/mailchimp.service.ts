@@ -2,11 +2,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as Mailchimp from '@mailchimp/mailchimp_marketing';
 import * as MailchimpTransactional from '@mailchimp/mailchimp_transactional';
 import { ConfigService } from '@nestjs/config';
+import { otpEmailTemplate } from 'src/emailTemplates/Otp';
 
 @Injectable()
 export class MailchimpService {
   private readonly logger = new Logger(MailchimpService.name);
-  private readonly transactionalClient;
+  private readonly mailchimpClient;
 
   constructor(private readonly configService: ConfigService) {
     Mailchimp.setConfig({
@@ -14,7 +15,7 @@ export class MailchimpService {
       server: process.env.MAILCHIMP_SERVER_PREFIX,
     });
 
-    this.transactionalClient = MailchimpTransactional(
+    this.mailchimpClient = MailchimpTransactional(
       process.env.MAILCHIMP_TRANSACTIONAL_API_KEY,
     );
   }
@@ -38,7 +39,7 @@ export class MailchimpService {
 
   async sendVerificationEmail(email: string, verificationUrl: string) {
     try {
-      const response = await this.transactionalClient.messages.send({
+      const response = await this.mailchimpClient.messages.send({
         key: process.env.MAILCHIMP_TRANSACTIONAL_API_KEY,
         message: {
           from_email: 'contact@symspacelabs.com',
@@ -192,7 +193,7 @@ CONFIRM
 
   async sendOtp(email: string, otp: string) {
     try {
-      const response = await this.transactionalClient.messages.send({
+      const response = await this.mailchimpClient.messages.send({
         key: process.env.MAILCHIMP_TRANSACTIONAL_API_KEY,
         message: {
           from_email: 'contact@symspacelabs.com',
@@ -346,7 +347,7 @@ CONFIRM
 
   async sendEmail(email: string, verificationUrl: string) {
     try {
-      const response = await this.transactionalClient.messages.send({
+      const response = await this.mailchimpClient.messages.send({
         key: process.env.MAILCHIMP_TRANSACTIONAL_API_KEY,
         message: {
           from_email: 'contact@symspacelabs.com',
@@ -366,7 +367,7 @@ CONFIRM
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
     try {
-      const response = await this.transactionalClient.messages.send({
+      const response = await this.mailchimpClient.messages.send({
         key: process.env.MAILCHIMP_TRANSACTIONAL_API_KEY,
         message: {
           from_email: 'contact@symspacelabs.com',
@@ -516,4 +517,59 @@ CONFIRM
       this.logger.error(`Failed to send verification email: ${error.message}`);
       throw error;
     }
-}}
+  }
+
+  async sendTemplateEmail(toEmail: string, subject: string, templateName: string, mergeVars: Record<string, any>) {
+    try {
+      const response = await this.mailchimpClient.messages.sendTemplate({
+        template_name: 10573358, // Template ID or name from Mailchimp
+        template_content: [],
+        message: {
+          to: [{ email: toEmail, type: 'to' }],
+          from_email: 'contact@symspacelabs.com',
+          subject,
+          merge_vars: [
+            {
+              rcpt: toEmail,
+              vars: Object.entries(mergeVars).map(([name, content]) => ({
+                name,
+                content,
+              })),
+            },
+          ],
+        },
+      });
+
+      console.log('Email sent:', response);
+      return response;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw new Error('Failed to send email');
+    }
+  }
+
+  async sendOtpEmail(toEmail: string, subject: string, otp: string) {
+    try {
+      const htmlContent = otpEmailTemplate(otp);
+
+      const response = await this.mailchimpClient.messages.send({
+        message: {
+          to: [{ email: toEmail, type: 'to' }],
+          from_email: 'contact@symspacelabs.com',
+          subject,
+          html: htmlContent, // Use the HTML template
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw new Error('Failed to send OTP email');
+    }
+  }
+
+
+
+
+}
+
+  

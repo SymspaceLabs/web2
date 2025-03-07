@@ -1,7 +1,7 @@
-import { RegisterPageView } from "@/pages-sections/sessions/page-view";
+import { OtpPageView } from "@/pages-sections/sessions/page-view";
 
 export const metadata = {
-  title: "Register",
+  title: "OTP",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",
@@ -10,6 +10,6 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default function Register() {
-  return <RegisterPageView />;
+export default function Login() {
+  return <OtpPageView />;
 }

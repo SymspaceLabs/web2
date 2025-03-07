@@ -34,8 +34,11 @@ const LoginPageView = ({ closeDialog }) => {
   }, [email, password]);
 
   // Form submission handler
-  const handleSubmit = async (values) => {
-    const body = { email: values.email, password: values.password };
+  const handleSubmit = async () => {
+    const body = { 
+      email,
+      password
+    };
 
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login`, {

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { useSnackbar } from "@/contexts/SnackbarContext";
+import { FlexCol } from '@/components/flex-box';
 import { ForgotPasswordForm } from '@/components/forms';
-import { FlexBox } from '@/components/flex-box';
+import { useSnackbar } from "@/contexts/SnackbarContext";
 import { AuthSubmitButton } from '@/components/custom-buttons';
 
 /**
@@ -56,8 +56,7 @@ const ForgotPasswordPage = () => {
   };
   
   return (
-    <FlexBox sx={{width:'100%'}} flexDirection="column" gap={3}>
-      
+    <FlexCol gap={3}>
       {/* FORM */}
       <ForgotPasswordForm
         email={email}
@@ -70,7 +69,7 @@ const ForgotPasswordPage = () => {
         isValid={isValid}
         onClick={handleSubmit}
       />
-    </FlexBox>
+    </FlexCol>
   );
 };
 

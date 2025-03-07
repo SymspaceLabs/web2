@@ -1,11 +1,10 @@
-import MeasurementForm from "./MeasurementForm";
-import PreferenceForm from "./PreferenceForm";
-import ProfileForm from "./ProfileForm";
-import SignUpForm from "./SignUpForm";
-import LoginForm from "./LoginForm";
-import PartnerSignUpForm from "./PartnerSignUpForm";
-import ForgotPasswordForm from "./ForgotPasswordForm";
-import ContactUsForm from "./ContactUsForm";
-import ResetPasswordForm from "./ResetPasswordForm";
-
-export { MeasurementForm, PreferenceForm, ProfileForm, SignUpForm, LoginForm, PartnerSignUpForm, ForgotPasswordForm, ContactUsForm, ResetPasswordForm }
+export {default as OtpForm} from "./OtpForm";
+export {default as LoginForm} from "./LoginForm";
+export {default as SignUpForm} from "./SignUpForm";
+export {default as ProfileForm} from "./ProfileForm";
+export {default as ContactUsForm} from "./ContactUsForm";
+export {default as PreferenceForm} from "./PreferenceForm";
+export {default as MeasurementForm} from "./MeasurementForm";
+export {default as ResetPasswordForm} from "./ResetPasswordForm";
+export {default as PartnerSignUpForm} from "./PartnerSignUpForm";
+export {default as ForgotPasswordForm} from "./ForgotPasswordForm";

@@ -10,11 +10,11 @@
  * 
  **/
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Navigation for Next.js
-import { useSnackbar } from "@/contexts/SnackbarContext";
-import { SignUpForm } from "@/components/forms";
 import { FlexBox } from "@/components/flex-box";
+import { SignUpForm } from "@/components/forms";
+import { useSnackbar } from "@/contexts/SnackbarContext";
 import { AuthSubmitButton } from "@/components/custom-buttons";
 
 
@@ -31,24 +31,20 @@ const RegisterPageView = () => {
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState(''); 
   const [retypeError, setRetypeError] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
   
   useEffect(() => {
     const passwordIsValid = password.length >= 8 && /[!@#$%^&*(),.?":{}|<>]/.test(password);
     const passwordMatch = retypePassword === password;
-  
     setIsValid(
       firstName &&
       lastName &&
       email &&
       passwordIsValid &&
-      passwordMatch &&
-      isChecked
+      passwordMatch
     );
-  }, [firstName, lastName, email, password, retypePassword, isChecked]);
+  }, [firstName, lastName, email, password, retypePassword]);
   
-
   // Form submission handler
   const handleSubmit = async () => {
     const body = {
@@ -73,7 +69,7 @@ const RegisterPageView = () => {
       const data = await response.json();
       if (response.ok) {
         showSnackbar(data.message, "success");
-        router.push('/verify-email')
+        router.push(`/otp?email=${email}`)
       } else {
         showSnackbar(data.message, "error");
       }
@@ -100,8 +96,6 @@ const RegisterPageView = () => {
         setRetypePassword={setRetypePassword}
         retypeError={retypeError}
         setRetypeError={setRetypeError}
-        isChecked={isChecked}
-        setIsChecked={setIsChecked}
       />
 
       {/* Submit Button */}

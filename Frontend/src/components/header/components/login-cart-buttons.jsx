@@ -9,7 +9,7 @@
 import { useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Badge from "@mui/material/Badge";
-import { IconButton, MenuItem, Menu } from "@mui/material";
+import { IconButton, MenuItem, Menu, Box } from "@mui/material";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingBagOutlined from "../../../icons/ShoppingBagOutlined";
@@ -17,8 +17,13 @@ import useCart from "../../../hooks/useCart";
 import { useAuth } from '../../../contexts/AuthContext';
 import React from 'react';
 import { styles } from './styles';
-import axios from 'axios';
- // Import the new GoogleLoginButton component
+
+import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
+import { FlexBox } from "@/components/flex-box";
+import BazaarCard from "@/components/BazaarCard";
+import Link from "next/link";
+import { ChildNavListWrapper } from '@/components/navbar/styles';
+// Import the new GoogleLoginButton component
 
 export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
   const { state } = useCart();
@@ -27,9 +32,10 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [open, setOpen] = useState(false);
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
   const processedLogin = useRef(false); 
 
   const handleClose = () => setAnchorEl(null);
@@ -68,44 +74,118 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
   };
 
   return (
-    <div>
+    <FlexBox alignItems="center">
+      {/* Favorite Icon Button */}
       <IconButton onClick={toggleDialog}>
         <FavoriteBorderIcon sx={ICON_COLOR} />
       </IconButton>
 
+      {/* Shopping Bag Icon Button */}
       <Badge badgeContent={state.cart.length} color="primary">
         <IconButton onClick={toggleSidenav}>
           <ShoppingBagOutlined sx={ICON_COLOR} />
         </IconButton>
       </Badge>
 
-      <IconButton onClick={handleMenuClick} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
-        <PersonOutline sx={ICON_COLOR} />
-      </IconButton>
-
-      <Menu 
-        open={open}
-        id="account-menu"
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        onClick={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        slotProps={{ paper: styles.paper }}
+      {/* Account Dropdown Wrapper */}
+      <FlexBox
+        sx={{
+          position: "relative",
+          "&:hover .child-nav-item": { display: "block" }, // Ensure dropdown stays visible on hover
+          cursor: "pointer",
+        }}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        alignItems="flex-end"
+        gap={0.3}
       >
-        {!isAuthenticated ? (
-          <>
-            <MenuItem onClick={handleLoginRoute} sx={styles.text}>Sign in</MenuItem>
-            <MenuItem onClick={handleSignUp} sx={styles.text}>Sign up</MenuItem>
-          </>
-        ) : (
-          <>
-            <MenuItem sx={styles.text}>{user?.email || 'User'}</MenuItem>
-            <MenuItem onClick={handleProfile} sx={styles.text}>Profile</MenuItem>
-            <MenuItem onClick={handleLogout} sx={styles.text}>Logout</MenuItem>
-          </>
-        )}
-      </Menu>
-    </div>
+        {/* Account Button */}
+        <FlexBox alignItems="center">
+          <IconButton>
+            <PersonOutline sx={ICON_COLOR} />
+          </IconButton>
+        </FlexBox>
+
+        {/* Dropdown Menu */}
+        <ChildNavListWrapper
+          className="child-nav-item"
+          sx={{ display: open ? "block" : "none" }}
+          slotProps={{ paper: styles.paper }}
+        >
+          <BazaarCard
+            elevation={3}
+            sx={{
+              ...styles.paper,
+              py: 1,
+              borderRadius: "8px",
+              border: "1px solid white",
+              "& .MuiMenuItem-root:hover": {
+                background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
+                color: "#fff",
+              },
+            }}
+          >
+            {!isAuthenticated ? (
+              <>
+                <MenuItem onClick={handleLoginRoute} sx={styles.text}>Sign in</MenuItem>
+                <MenuItem onClick={handleSignUp} sx={styles.text}>Sign up</MenuItem>
+              </>
+            ) : (
+              <>
+                <MenuItem sx={styles.text}>{user?.email || 'User'}</MenuItem>
+                <MenuItem onClick={handleProfile} sx={styles.text}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout} sx={styles.text}>Logout</MenuItem>
+              </>
+            )}
+          </BazaarCard>
+        </ChildNavListWrapper>
+      </FlexBox>
+    </FlexBox>
+    // <Box sx={{ position:'relative', overflow: 'visible !important' }}>
+    //   <IconButton onClick={toggleDialog}>
+    //     <FavoriteBorderIcon sx={ICON_COLOR} />
+    //   </IconButton>
+
+    //   <Badge badgeContent={state.cart.length} color="primary">
+    //     <IconButton onClick={toggleSidenav}>
+    //       <ShoppingBagOutlined sx={ICON_COLOR} />
+    //     </IconButton>
+    //   </Badge>
+
+    //   <IconButton onClick={handleMenuClick} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
+    //     <PersonOutline sx={ICON_COLOR} />
+    //   </IconButton>
+
+    //   <Menu 
+    //     open={open}
+    //     id="account-menu"
+    //     anchorEl={anchorEl}
+    //     onClose={handleClose}
+    //     onClick={handleClose}
+    //     transformOrigin={{ horizontal: "center", vertical: "top" }}
+    //     anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+    //     slotProps={{ paper: styles.paper }}
+    //     MenuProps={{
+    //       disablePortal: false,
+    //       container: document.body,
+    //       sx: { position: "absolute !important" },
+    //       getContentAnchorEl: null
+
+    //     }}
+    //   >
+    //     {!isAuthenticated ? (
+    //       <>
+    //         <MenuItem onClick={handleLoginRoute} sx={styles.text}>Sign in</MenuItem>
+    //         <MenuItem onClick={handleSignUp} sx={styles.text}>Sign up</MenuItem>
+    //       </>
+    //     ) : (
+    //       <>
+    //         <MenuItem sx={styles.text}>{user?.email || 'User'}</MenuItem>
+    //         <MenuItem onClick={handleProfile} sx={styles.text}>Profile</MenuItem>
+    //         <MenuItem onClick={handleLogout} sx={styles.text}>Logout</MenuItem>
+    //       </>
+    //     )}
+    //   </Menu>
+    // </Box>
   );
 }

@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-const AuthSubmitButton = ({ isValid, onClick, title }) => {
+const AuthSubmitButton = ({ isValid, onClick, title, loading }) => {
   return (
     <Button
       sx={{

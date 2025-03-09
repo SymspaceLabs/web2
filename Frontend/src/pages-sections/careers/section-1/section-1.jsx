@@ -1,5 +1,5 @@
-import { Box, Typography, Container } from '@mui/material';
 import { LazyImage } from '@/components/lazy-image';
+import { Box, Typography, Container } from '@mui/material';
 
 export default function Section1() {
 

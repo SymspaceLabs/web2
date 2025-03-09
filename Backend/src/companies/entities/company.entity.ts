@@ -22,6 +22,12 @@ export class Company {
   @Column()
   website: string;
 
+  @Column()
+  location: string;
+
+  @Column()
+  ein: string;
+
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;

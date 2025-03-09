@@ -11,7 +11,7 @@ export default function Banner({
   return (
     <Container sx={{ py:5 }}>
       <Box sx={cardStyle}>
-        <FlexBox sx={{ flexDirection:{xs:'column', sm:'row'}, justifyContent:'space-between', gap:2 }}>
+        <FlexBox sx={{ flexDirection:{xs:'column', sm:'row'}, justifyContent:'space-between' }}>
           <FlexCol gap={2}>
             <Typography 
                 sx={{ 
@@ -32,24 +32,24 @@ export default function Banner({
               {description}
             </Typography>
           </FlexCol>
-          <FlexColCenter>
+          <FlexColCenter sx={{ minWidth:'250px' }}>
             <Link href={btnUrl} passHref>
-                <Button 
-                    sx={{ 
-                        fontFamily: 'Elemental End',
-                        background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
-                        borderRadius: '50px',
-                        px:5,
-                        py:2,
-                        color: '#fff',
-                        fontSize:14,
-                        textTransform:'lowercase',
-                        fontWeight:400,
-                        border:'1px solid #FFF'
-                    }}
-                >
-                    {btnText}
-                </Button>
+              <Button
+                sx={{ 
+                    fontFamily: 'Elemental End',
+                    background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
+                    borderRadius: '50px',
+                    px:5,
+                    py:2,
+                    color: '#fff',
+                    fontSize:14,
+                    textTransform:'lowercase',
+                    fontWeight:400,
+                    border:'1px solid #FFF'
+                }}
+              >
+                {btnText}
+              </Button>
             </Link>
           </FlexColCenter>
         </FlexBox>

@@ -21,6 +21,10 @@ function PartnerSignUpForm ({
     setRetypePassword,
     retypeError,
     setRetypeError,
+    location,
+    setLocation,
+    ein,
+    setEin
 }) {
     const isMobile = useMediaQuery('(max-width:600px)');
     
@@ -51,6 +55,10 @@ function PartnerSignUpForm ({
             setRetypeError("");
         }
     };
+
+    const handleLocationChange = (event) => setLocation(event.target.value);
+    const handleEinChange = (event) => setEin(event.target.value);
+
     
     
     return (
@@ -65,9 +73,9 @@ function PartnerSignUpForm ({
                 <SymTextField title="Last Name" value={lastName} placeholder="Last Name" onChange={handleLastNameChange} />
             </FlexBox>
 
-            {/* BUSINESS NAME & WEBSITE */}
+            {/* ENTITY NAME & WEBSITE */}
             <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
-                <SymTextField title="Business Name" value={businessName} placeholder="Business Name" onChange={handleBusinessNameChange} />
+                <SymTextField title="Entity Name" value={businessName} placeholder="Business Name" onChange={handleBusinessNameChange} />
                 <SymTextField title="Website" value={website} placeholder="Website" onChange={handleWebsiteChange} />
             </FlexBox>
 
@@ -75,6 +83,12 @@ function PartnerSignUpForm ({
             <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
                 <SymPasswordInput title="Password" value={password} placeholder="Password" onChange={handlePasswordChange} error={retypeError} />
                 <SymPasswordInput title="Retype Password" value={retypePassword} placeholder="Retype Password" onChange={handleRetypePasswordChange} error={retypeError} />
+            </FlexBox>
+
+            {/* BUSINESS LOCATION & EIN */}
+            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+                <SymTextField title="Business Location" value={location} placeholder="City, State" onChange={handleLocationChange} />
+                <SymTextField title="Employer Identification Number" value={ein} placeholder="EIN" onChange={handleEinChange} />
             </FlexBox>
 
             {/* Checkbox */}

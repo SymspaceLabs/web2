@@ -35,4 +35,14 @@ export class SignUpDto {
   @IsOptional()
   @IsString()
   website?: string;
+
+  @IsOptional()
+  @IsString()
+  location?: string;
+
+  @IsOptional()
+  @IsString()
+  ein?: string;
+
+
 }

@@ -35,5 +35,5 @@ export default function Navbar({
 }
 
 const categories = [
-  "Women", "Men", "Kids", "Maternity", "Elderly", "Assisted Aid", "Home", "Sales & Deals"
+  "Women", "Men", "Kids", "Maternity", "Elderly", "Assisted Aid", "Home & Furniture", "Sales & Deals"
 ]

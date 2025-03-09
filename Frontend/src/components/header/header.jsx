@@ -25,7 +25,7 @@ export default function Header({
           <LazyImage src={require("../../../public/assets/images/logos/Logo.svg")} alt="logo" />
         </Link>
       </FlexBox>
-      <FlexBox alignItems="center" gap={3} width="100%">
+      <FlexBox justifyContent="flex-end" alignItems="center" width="90%">
         {midSlot}
       </FlexBox>
     </Fragment>

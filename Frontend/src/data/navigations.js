@@ -608,7 +608,7 @@ export const categoryMenus = [
     {
         icon: MakeUp,
         href: "/fashion",
-        title: "Beauty, Health & Personal Care",
+        title: "Beauty, Health & Pets",
         component: MegaMenu2.name,
         children: [
         {

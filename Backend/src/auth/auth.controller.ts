@@ -49,6 +49,11 @@ export class AuthController {
     return this.authService.verifyOtp(verifyOtpDto);
   }
 
+  @Post('resend-otp')
+  async resendOtp(@Body() resendOtpDto: any) {
+    return this.authService.resendOtp(resendOtpDto);
+  }
+
   @Post('signup-seller')
   async signUpSeller(@Body() signUpDto: SignUpDto, @Res() res: Response) {
     const result = await this.authService.signUpSeller(signUpDto);

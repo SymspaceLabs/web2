@@ -10,7 +10,7 @@ const navbarNavigation = [
 
   // AR FOR BUSINESS
   {
-    title: "AR for business",
+    title: "AR for Business",
     url: '/ar-for-business',
     megaMenu: false,
     megaMenuWithSub: false,

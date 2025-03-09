@@ -12,7 +12,6 @@ import Icon from "@/icons"; // LOCAL CUSTOM COMPONENTS
 import DialogDrawer from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
 
 import Image from "@/components/BazaarImage";
-import { Paragraph } from "@/components/Typography";
 import { SearchInput } from "@/components/search-box";
 import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { FlexBetween, FlexBox } from "@/components/flex-box"; // GLOBAL CUSTOM HOOK

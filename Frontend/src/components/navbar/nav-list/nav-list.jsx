@@ -6,7 +6,6 @@ import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
 import navigation from "@/data/navbarNavigation"; // STYLED COMPONENTS
 import BazaarCard from "@/components/BazaarCard"; // LOCAL CUSTOM COMPONENTS
 import NavItemChild from "./nav-item-child";
-import CategoryBasedMenu from "../category-based-menu"; // NAVIGATION DATA LIST
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; // GLOBAL CUSTOM COMPONENTS
 
 export default function NavigationList() {
@@ -111,5 +110,5 @@ export default function NavigationList() {
     });
   };
 
-  return <FlexBox gap={4}>{renderNestedNav(navigation, true)}</FlexBox>;
+  return <FlexBox gap={10} justifyContent="space-between" >{renderNestedNav(navigation, true)}</FlexBox>;
 }

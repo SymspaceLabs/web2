@@ -19,20 +19,28 @@ export default function RootLayout({children}) {
         <meta name="theme-color" content="#ffffff" />
         <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async></script>
         <script src="https://accounts.google.com/gsi/client" async defer ></script>
+        <style>
+          {`
+            .css-1ix0aqo-MuiSnackbar-root {
+              z-index: 2000 !important;
+            }
+          `}
+        </style>
+
       </head>
       <body>
           <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
             <AuthProvider>
-              <CartProvider>
-                <SettingsProvider>
-                  <ThemeProvider>
-                    <SnackbarProvider>
-                      <ProgressBar />
-                      <RTL>{children}</RTL>
-                    </SnackbarProvider>
-                  </ThemeProvider>
-                </SettingsProvider>
-              </CartProvider>
+              <ThemeProvider>
+                <SnackbarProvider>
+                  <CartProvider>
+                    <SettingsProvider>
+                          <ProgressBar />
+                          <RTL>{children}</RTL>
+                    </SettingsProvider>
+                  </CartProvider>
+                </SnackbarProvider>
+              </ThemeProvider>
             </AuthProvider>
           </GoogleOAuthProvider>
       </body>

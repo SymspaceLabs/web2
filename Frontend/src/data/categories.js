@@ -360,9 +360,9 @@ const CATEGORIES_DATA = [
         },
         
         
-        // Beauty, Health & Personal Care
+        // Beauty, Health & Pets
         {
-          title: "Beauty, Health & Personal Care",
+          title: "Beauty, Health & Pets",
           child: [
             {
               title: "Beauty",
@@ -418,6 +418,20 @@ const CATEGORIES_DATA = [
                 { title: "Hair Removal Devices", url: "/market-1" },
               ],
             },
+            {
+              title: "Pet Supplies",
+              child: [
+                { title: "Dog Supplies", url: "/market-1" },
+                { title: "Dog Food", url: "/market-1" },
+                { title: "Cat Supplies", url: "/market-1" },
+                { title: "Cat Food", url: "/market-1" },
+                { title: "Fish & Aquatic Pets", url: "/market-1" },
+                { title: "Small Animals", url: "/market-1" },
+                { title: "Birds", url: "/market-1" },
+              ],
+            },
+
+
           ],
         },
         

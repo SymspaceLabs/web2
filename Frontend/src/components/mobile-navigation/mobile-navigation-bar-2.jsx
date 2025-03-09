@@ -5,12 +5,12 @@ import Box from "@mui/material/Box";
 import Badge from "@mui/material/Badge";
 import useMediaQuery from "@mui/material/useMediaQuery"; // CUSTOM ICON COMPONENTS
 
-import Home from "../../icons/Home";
-import User2 from "../../icons/User2";
-import CategoryOutlined from "../../icons/CategoryOutline";
-import ShoppingBagOutlined from "../../icons/ShoppingBagOutlined"; // GLOBAL CUSTOM HOOKS
+import Home from "@/icons/Home";
+import User2 from "@/icons/User2";
+import CategoryOutlined from "@/icons/CategoryOutline";
+import ShoppingBagOutlined from "@/icons/ShoppingBagOutlined"; // GLOBAL CUSTOM HOOKS
 
-import useCart from "../../hooks/useCart"; // STYLED COMPONENTS
+import useCart from "@/hooks/useCart"; // STYLED COMPONENTS
 
 import { iconStyle, StyledBox, StyledDrawer, StyledNavLink, Wrapper } from "./styles";
 /**

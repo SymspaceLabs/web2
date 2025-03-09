@@ -7,7 +7,7 @@ import useSearch from "./hooks/use-search"; // LOCAL CUSTOM COMPONENT
 import SearchResult from "./components/search-result"; // STYLED COMPONENT
 
 import { SearchOutlinedIcon } from "./styles";
-export default function SearchInput() {
+export default function SearchInput({ btn=true, mxWidth="670px" }) {
   const {
     handleSearch,
     parentRef,
@@ -24,7 +24,7 @@ export default function SearchInput() {
         border: 0
       }
     },
-    endAdornment: (
+    endAdornment: btn && (
       <Button 
         disableElevation
         sx={{
@@ -49,7 +49,7 @@ export default function SearchInput() {
     <Box 
       position="relative"
       flex="1 1 0"
-      maxWidth="670px"
+      maxWidth={mxWidth}
       mx="auto" 
       {...{ref: parentRef}}
     >

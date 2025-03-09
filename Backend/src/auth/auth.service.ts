@@ -105,6 +105,8 @@ export class AuthService {
       'password',
       'businessName',
       'website',
+      'location',
+      'ein'
     ];
   
     const missingFields = this.validateFields(signUpDto, requiredFields);
@@ -123,7 +125,7 @@ export class AuthService {
   
     this.validatePasswordFormat(password);
   
-    const { firstName, lastName, role = 'seller', businessName, website } =
+    const { firstName, lastName, role = 'seller', businessName, website, location, ein } =
       signUpDto;
   
     const existingUser = await this.usersRepository.findOne({
@@ -135,6 +137,11 @@ export class AuthService {
     }
   
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate a 6-digit OTP (SELLER)
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiresAt = new Date();
+    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
   
     const user = this.usersRepository.create({
       firstName,
@@ -142,6 +149,9 @@ export class AuthService {
       email,
       password: hashedPassword,
       role,
+      otp,
+      otpExpiresAt,
+      isVerified: false
     });
   
     await this.usersRepository.save(user);
@@ -151,6 +161,8 @@ export class AuthService {
         userId: user.id,
         businessName,
         website,
+        location,
+        ein
       });
       await this.companiesRepository.save(company);
     }
@@ -160,9 +172,14 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
   
-    const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
-  
-    await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
+    // const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
+    // await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
+
+    await this.mailchimpService.sendOtpEmail(
+      email,
+      'Your OTP for Account Verification',
+      otp
+    );
   
     return {
       message:
@@ -208,7 +225,7 @@ export class AuthService {
   
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a 6-digit OTP
+    // Generate a 6-digit OTP (BUYER)
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiresAt = new Date();
     otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
@@ -303,6 +320,48 @@ export class AuthService {
         },
     };
   }
+
+  async resendOtp(resendOtpDto: any): Promise<{ message: string }> {
+
+    const { email } = resendOtpDto;
+
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+  
+    if (user.isVerified) {
+      throw new BadRequestException('User is already verified.');
+    }
+  
+    // Check rate limit in Redis
+    const redisKey = `otp-resend:${email}`;
+    const requestCount = await this.redisService.getClient().get(redisKey);
+  
+    if (requestCount && parseInt(requestCount) >= 3) {
+      throw new BadRequestException('Too many OTP requests. Please try again later.');
+    }
+  
+    // Generate and save OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiresAt = new Date();
+    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10);
+  
+    user.otp = otp;
+    user.otpExpiresAt = otpExpiresAt;
+    await this.usersRepository.save(user);
+  
+    // Increase request count in Redis (expires in 5 minutes)
+    await this.redisService.getClient().incr(redisKey);
+    await this.redisService.getClient().expire(redisKey, 300); // 5-minute expiry
+  
+    // Send OTP email
+    await this.mailchimpService.sendOtpEmail(email, 'Your New OTP for Account Verification', otp);
+  
+    return { message: 'A new OTP has been sent to your email.' };
+  }
+  
 
   
   async login(loginDto: LoginDto): Promise<{ accessToken: string; user: any }> {

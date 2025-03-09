@@ -8,7 +8,8 @@ import { FlexBox } from "@/components/flex-box";
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
-import SearchInput from "@/components/SearchInput";
+import { SearchInput } from "@/components/search-box";
+
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 import useHeader from "@/components/header/hooks/use-header";
 import DialogDrawer from "@/components/header/components/dialog-drawer";
@@ -32,9 +33,9 @@ export default function ShopLayout1({
   } = useHeader();
 
   const HEADER_SLOT = (
-    <FlexBox width="100%" gap={3} alignItems="center" justifyContent="flex-end">
+    <FlexBox width="90%" alignItems="center" justifyContent="space-between">
       <NavigationList />
-      <SearchInput />
+      <SearchInput btn={false} mxWidth="350px" />
       <LoginCartButtons toggleDialog={toggleDialog} toggleSidenav={toggleSidenav} />
     </FlexBox>
   );

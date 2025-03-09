@@ -1,13 +1,22 @@
 "use client";
 
 import { FlexBox } from "@/components/flex-box";
-import { Button, Box, Container, Divider, Typography, Grid } from "@mui/material";
+import { Link, Breadcrumbs, Button, Box, Container, Divider, Typography, Grid } from "@mui/material";
 import styled from "@mui/material/styles/styled";
 
 export default function Section1({job, toggleDialog}) {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ width:'100%' }}>
+        {/* Breadcrumbs */}
+        <Breadcrumbs aria-label="breadcrumb" sx={{ color: "#fff", fontSize: 14 }} separator="›">
+          <Link href="/careers" underline="hover" color="primary" fontFamily='Helvetica' fontWeight={600} >
+            Careers
+          </Link>
+          <Typography  fontWeight={600}>
+            {job.location}
+          </Typography>
+        </Breadcrumbs>
         <FlexBox gap={3} justifyContent="space-between" sx={{ py:5, flexDirection:{xs:'column', sm:'row'}, alignItems:{xs:'left', sm:"center"} }} >
           <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', fontSize: { xs: 25, sm: 50 }, color: '#fff' }}>
             {job.title}

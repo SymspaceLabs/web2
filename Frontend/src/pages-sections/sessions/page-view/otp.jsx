@@ -2,22 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Button, Typography, CircularProgress } from "@mui/material";
-import { FlexBox } from "@/components/flex-box";
+import { Button, Typography, CircularProgress, Box } from "@mui/material";
+import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { OtpForm } from "@/components/forms";
 import { useAuth } from '@/contexts/AuthContext';
+import { AuthSubmitButton } from "@/components/custom-buttons";
 
 const OtpPageView = () => {
   const { showSnackbar } = useSnackbar();
-  const { handleAuthResponse } = useAuth(); // Context for handling authentication state.
-  
+  const { handleAuthResponse } = useAuth();
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const email = searchParams.get("email");
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const [cooldown, setCooldown] = useState(0); // Cooldown in seconds
 
   useEffect(() => {
     if (!email) {
@@ -31,6 +34,13 @@ const OtpPageView = () => {
       handleVerifyOtp(otp);
     }
   }, [otp]);
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldown]);
 
   const handleVerifyOtp = async (otp) => {
     if (otp.length !== 6) {
@@ -49,20 +59,50 @@ const OtpPageView = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "OTP verification failed.")
+        throw new Error(data.message || "OTP verification failed.");
       } else {
         showSnackbar(data.message, "success");
         handleAuthResponse(data.user, data.accessToken);
-        
-        // Redirect based on user role
-        if (data.user.role === 'seller') {
-          router.push('/vendor/dashboard');
+
+        if (data.user.role === "seller") {
+          router.push("/vendor/dashboard");
         } else {
-          router.push('/marketplace');
+          router.push("/marketplace");
         }
       }
     } catch (error) {
       showSnackbar(error.message, "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    if (cooldown > 0) return; // Prevent spamming
+
+    const body = { email };
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/resend-otp`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        showSnackbar(data.message, "error");
+      } else {
+        showSnackbar(data.message, "success");
+        setCooldown(60); // Start cooldown (60 seconds)
+      }
+    } catch (error) {
+      console.error("Error during forgot password request:", error);
     } finally {
       setLoading(false);
     }
@@ -76,13 +116,24 @@ const OtpPageView = () => {
 
       <OtpForm onVerifyOtp={setOtp} />
 
-      <Button
-        onClick={() => handleVerifyOtp(otp)}
-        disabled={loading}
-        sx={{ mt: 2, background: "#000", color: "#fff", borderRadius: "12px", px: 3, py: 1 }}
-      >
-        {loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : "Verify OTP"}
-      </Button>
+      <FlexColCenter paddingTop={2} gap={2}>
+        <Typography color="#FFF">
+          Didn’t receive the Code?
+        </Typography>
+        <AuthSubmitButton
+          title={loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : 
+            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+          isValid={!(cooldown > 0) && !loading}
+          disabled={cooldown > 0 || loading}
+          onClick={handleResendCode}
+          loading={loading}
+        />
+      </FlexColCenter>
+
+
+
+
+
     </FlexBox>
   );
 };

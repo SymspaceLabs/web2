@@ -255,7 +255,7 @@ export const categoriesSeedData = [
   //Health
   {
     id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
-    name: 'Beauty, Health & Personal Care',
+    name: 'Beauty, Health & Pets',
     subcategories: [
       {
         id: "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",

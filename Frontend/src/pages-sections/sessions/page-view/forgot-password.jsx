@@ -28,10 +28,8 @@ const ForgotPasswordPage = () => {
   }, [email]);
       
 
-  const handleSubmit = async (values) => {
-    const body = {
-      email: values.email,
-    };
+  const handleSubmit = async () => {
+    const body = { email };
   
     try {
       // Sending POST request to the backend API

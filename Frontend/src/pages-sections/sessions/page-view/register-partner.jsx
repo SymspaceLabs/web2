@@ -9,6 +9,8 @@
  * and upon submission, sends the data to the backend for account creation.
  */
 
+
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FlexBox } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
@@ -17,6 +19,7 @@ import { AuthSubmitButton } from "@/components/custom-buttons";
 
 const RegisterPartnerPageView = () => {
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -27,19 +30,23 @@ const RegisterPartnerPageView = () => {
   const [retypePassword, setRetypePassword] = useState(''); 
   const [retypeError, setRetypeError] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const [location, setLocation] = useState('');
+  const [ein, setEin] = useState('');
 
   useEffect(() => {
     const passwordIsValid = password.length >= 8 && /[!@#$%^&*(),.?":{}|<>]/.test(password);
     const passwordMatch = retypePassword === password;
-  
+    
     setIsValid(
       firstName &&
       lastName &&
       email &&
+      location &&
+      ein &&
       passwordIsValid &&
       passwordMatch
     );
-  }, [firstName, lastName, email, password, retypePassword]);
+  }, [firstName, lastName, email, password, location, ein, retypePassword]);
 
   // Form submission handler
   const handleSubmit = async () => {
@@ -49,6 +56,8 @@ const RegisterPartnerPageView = () => {
       email,
       businessName,
       website,
+      location,
+      ein,
       password,
       role: "seller"
     }
@@ -66,7 +75,8 @@ const RegisterPartnerPageView = () => {
       const data = await response.json();
 
       if (response.ok) {
-        showSnackbar(data.message, "success");        
+        showSnackbar(data.message, "success");
+        router.push(`/otp?email=${email}`);
       } else {
         showSnackbar(data.message, "error");  
       }
@@ -96,6 +106,10 @@ const RegisterPartnerPageView = () => {
         setRetypePassword={setRetypePassword}
         retypeError={retypeError}
         setRetypeError={setRetypeError}
+        location={location}
+        setLocation={setLocation}
+        ein={ein}
+        setEin={setEin}
       />
 
       {/* Submit Button */}

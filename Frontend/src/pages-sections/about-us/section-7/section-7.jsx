@@ -10,6 +10,7 @@ import styled from "@mui/material/styles/styled";
 import { useRouter } from 'next/navigation';
 import { LazyImage } from "@/components/lazy-image";
 import { FlexBox } from '@/components/flex-box';
+import { BsArrowUpRight } from "react-icons/bs";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -33,10 +34,16 @@ export default function Section6() {
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', pb:4 }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
         <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
+
           {/* Section title */}
-          <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff' }}>
-            press releases
-          </Typography>
+          <FlexBox alignItems="center" gap={2}>
+            <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+              press releases
+            </Typography>
+            <IconButton onClick={() => window.open('/press-releases', '_blank')}>
+              <BsArrowUpRight color="#fff" size="1.35em" />
+            </IconButton>
+          </FlexBox>
 
           {/* Navigation buttons for the carousel */}
           <FlexBox justifyContent="space-between" maxWidth="90px" >

@@ -26,7 +26,8 @@ const ResetPassword = () => {
   
   // Extract token from URL query parameters
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const email = searchParams.get("email");
+  const otp = searchParams.get("otp");
   
   const { showSnackbar } = useSnackbar();
   const [isValid, setIsValid] = useState(true);
@@ -50,7 +51,8 @@ const ResetPassword = () => {
   // Handle form submission
   const handleSubmit = async () => {
     const body = {
-      token,
+      email,
+      otp,
       newPassword:password,
     };
   

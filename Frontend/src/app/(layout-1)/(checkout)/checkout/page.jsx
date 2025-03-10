@@ -1,6 +1,6 @@
 import { CheckoutPageView } from "pages-sections/checkout/page-view";
 export const metadata = {
-  title: "Checkout - Bazaar Next.js E-commerce Template",
+  title: "Checkout  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

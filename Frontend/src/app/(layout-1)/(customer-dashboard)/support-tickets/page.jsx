@@ -2,7 +2,7 @@ import { TicketsPageView } from "pages-sections/customer-dashboard/support-ticke
 
 // import api from "utils/__api__/ticket";
 export const metadata = {
-  title: "Support Tickets - Bazaar Next.js E-commerce Template",
+  title: "Support Tickets  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

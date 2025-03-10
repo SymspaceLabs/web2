@@ -1,11 +1,31 @@
+"use client";
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
 import Section4 from "../section-4";
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 
 export default async function CareersPageView() {
+
+  {/* This code helps for scroll to section */}
+  useEffect(() => {
+    // Check if the URL has a hash (e.g., #benefits)
+    const hash = window.location.hash;
+    if (hash) {
+      const id = hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100); // Add slight delay to ensure element is rendered
+      }
+    }
+  }, []);
+
+
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
       

@@ -1,6 +1,6 @@
 import { ProfileEditPageView } from "../../../../../pages-sections/customer-dashboard/profile/page-view"; // API FUNCTIONS
 export const metadata = {
-  title: "Profile - Bazaar Next.js E-commerce Template",
+  title: "Profile  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

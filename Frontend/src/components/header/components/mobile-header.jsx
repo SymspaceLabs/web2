@@ -60,15 +60,6 @@ export default function MobileHeader() {
             <FavoriteBorderIcon sx={{ color: "grey.600" }} />
           </IconButton>
 
-          {/* <IconButton onClick={toggleDialog}>
-            <Icon.User sx={ICON_STYLE} />
-          </IconButton> */}
-
-          {/* <Badge badgeContent={state.cart.length} color="primary">
-            <IconButton onClick={toggleSidenav}>
-              <Icon.CartBag sx={ICON_STYLE} />
-            </IconButton>
-          </Badge> */}
         </FlexBox>
       </FlexBetween>
 

@@ -57,7 +57,7 @@ export default function Section3() {
   
 
   return (
-    <Box sx={{ py: { xs: 2, sm: 20 } }}>
+    <Box id="open-roles" sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FlexBox flexDirection={isMobile? 'column': 'row'} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2}>
           <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>

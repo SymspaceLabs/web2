@@ -1,6 +1,6 @@
 import { ResetPasswordPageView } from "pages-sections/sessions/page-view";
 export const metadata = {
-  title: "Reset Password - Bazaar Next.js E-commerce Template",
+  title: "Reset Password  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

@@ -1,6 +1,6 @@
 import { OrderConfirmationPageView } from "pages-sections/order-confirmation";
 export const metadata = {
-  title: "Order Confirmation - Bazaar Next.js E-commerce Template",
+  title: "Order Confirmation  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

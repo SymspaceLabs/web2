@@ -15,19 +15,19 @@ export default function Section1() {
     },
     {
       content:'enhancing real estate experiences',
-      url:'/ar-app-simulation'
+      url:'/staging'
     },
     {
       content:'prioritizing accessibility for all',
-      url:'/ar-app-simulation'
+      url:'/global-impact'
     }
   ]
 
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 45 }, color: '#fff' }}>
-          simulating  reality  with  technology that  brings  spaces  to  life
+        <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 45 }, color: '#fff', wordSpacing: "10px", }}>
+          simulating reality with technology that brings spaces to life
         </Typography>
 
         <FlexBox sx={{ flexDirection:{ xs:'column', sm:'row' }, justifyContent: { xs:'center', sm:'space-between' }, mt:{ xs:0, sm:-6 } }} alignItems="center">

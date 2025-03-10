@@ -18,7 +18,7 @@ const blobKeyframe = keyframes`
   }
 `;
 
-export const BlobBox = ({top=null, right=null, bottom=null, left=null, background="#0366FE", displayNoneMobile=false }) => {
+export const BlobBox = ({top=null, right=null, bottom=null, left=null, background="#0366FE", displayNoneMobile=false, widthHeight='500px' }) => {
     return(
       <Box
         sx={{
@@ -28,8 +28,8 @@ export const BlobBox = ({top=null, right=null, bottom=null, left=null, backgroun
           right,
           bottom,
           left,
-          width: {xs:'250px', sm:'500px'},
-          height: {xs:'250px', sm:'500px'},
+          width: {xs:'250px', sm:widthHeight},
+          height: {xs:'250px', sm:widthHeight},
           background,
           borderRadius: '50%',
           zIndex: 0,

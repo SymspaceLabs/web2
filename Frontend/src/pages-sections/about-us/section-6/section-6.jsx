@@ -10,12 +10,15 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import styled from "@mui/material/styles/styled";
 import EastIcon from '@mui/icons-material/East';
+import { BsArrowUpRight } from "react-icons/bs";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const route = useRouter();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -43,9 +46,14 @@ export default function Section6() {
         <Box sx={{ width:'100%', maxWidth:'1400px' }}>
           <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
             {/* Section title */}
-            <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff' }}>
-              open roles
-            </Typography>
+            <FlexBox alignItems="center" gap={2}>
+              <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+                open roles
+              </Typography>
+              <IconButton onClick={() => window.open('/careers#open-roles', '_blank')}>
+                <BsArrowUpRight color="#fff" size="1.35em" />
+              </IconButton>
+            </FlexBox>
 
             {/* Navigation buttons for the carousel */}
             <FlexBox justifyContent="space-between" maxWidth="90px" >

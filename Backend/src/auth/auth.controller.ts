@@ -23,6 +23,7 @@ import { MailchimpService } from 'src/mailchimp/mailchimp.service';
 import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 
 @Controller('auth')
@@ -47,6 +48,11 @@ export class AuthController {
   @Post('verify-otp')
   async verifyOtp(@Body() verifyOtpDto: VerifyOtpDto) {
     return this.authService.verifyOtp(verifyOtpDto);
+  }
+
+  @Post('verify-forgot-password-otp')
+  async verifyForgotPasswordOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+    return this.authService.verifyResetPasswordOtp(verifyOtpDto);
   }
 
   @Post('resend-otp')
@@ -129,60 +135,13 @@ export class AuthController {
     res.status(200).json({ message: 'Logged out successfully' });
   }
 
-  @Get('/facebook')
-  @UseGuards(AuthGuard('facebook'))
-  async facebookLogin(): Promise<any> {
-    return HttpStatus.OK;
-  }
-
-  @Get('/callback/facebook')
-  @UseGuards(AuthGuard('facebook'))
-  async facebookLoginRedirect(@Req() req: any): Promise<any> {
-    return {
-      statusCode: HttpStatus.OK,
-      data: req.user,
-    };
-  }
-
-  @Get('github')
-  @UseGuards(AuthGuard('github'))
-  async githubAuth() {
-    // initiates the GitHub OAuth2 login flow
-  }
-
-  @Get('callback/github')
-  @UseGuards(AuthGuard('github'))
-  githubAuthRedirect(@Req() req, @Res() res: Response) {
-    const { user, accessToken } = req.user;
-    const frontendRedirectUrl = `${process.env.FRONTEND_URL}/auth/callback?user=${encodeURIComponent(
-      JSON.stringify(user),
-    )}&accessToken=${accessToken}`;
-    return res.redirect(frontendRedirectUrl);
-  }
-
-  @Get('apple')
-  @UseGuards(AuthGuard('apple'))
-  async appleAuth() {
-    // Initiates the Apple OAuth2 login flow
-  }
-
-  @Get('/callback/apple')
-  @UseGuards(AuthGuard('apple'))
-  appleAuthRedirect(@Req() req, @Res() res: Response) {
-    const { user, accessToken } = req.user;
-
-    const frontendRedirectUrl = `${process.env.FRONTEND_URL}/auth/callback?user=${encodeURIComponent(
-      JSON.stringify(user),
-    )}&accessToken=${accessToken}`;
-    return res.redirect(frontendRedirectUrl);
-  }
-
+  
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
     try {
-      await this.authService.generateResetToken(email);
+      await this.authService.generateResetPasswordOtp(email);
       return {
-        message: 'Password reset url has been sent to your email',
+        message: 'An OTP has been sent to your mailbox.',
       };
     } catch (error) {
       throw new BadRequestException(error.message);
@@ -190,18 +149,8 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  async resetPassword(
-    @Body('token') token: string,
-    @Body('newPassword') newPassword: string,
-  ) {
-    try {
-      await this.authService.resetPassword(token, newPassword);
-      return {
-        message: 'Password reset successful!',
-      };
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   @Post('/send-email')
@@ -221,11 +170,6 @@ export class AuthController {
     const { currentPassword, newPassword } = changePasswordDto;
     const userId = req.user.id;  // Extract user ID from the decoded JWT token
     return await this.authService.changePassword(userId, currentPassword, newPassword);
-
-    try {
-    } catch (error) {
-      throw new BadRequestException(error.message);  // Handle and propagate errors
-    }
   }
 
   @Post('resend-verification')

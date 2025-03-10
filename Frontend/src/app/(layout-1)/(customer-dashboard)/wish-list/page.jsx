@@ -2,7 +2,7 @@ import { WishListPageView } from "pages-sections/customer-dashboard/wish-list"; 
 
 // import { getWishListProducts } from "utils/__api__/wish-list";
 export const metadata = {
-  title: "Wish List - Bazaar Next.js E-commerce Template",
+  title: "Wish List  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

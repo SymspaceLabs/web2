@@ -1,6 +1,7 @@
-import { CartPageView } from "pages-sections/cart/page-view";
+import { OtpForgotPasswordPageView } from "@/pages-sections/sessions/page-view";
+
 export const metadata = {
-  title: "Cart  E-commerce Template",
+  title: "OTP",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",
@@ -8,6 +9,7 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function Cart() {
-  return <CartPageView />;
+
+export default function OtpForgotPassword() {
+  return <OtpForgotPasswordPageView />;
 }

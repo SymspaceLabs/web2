@@ -10,14 +10,14 @@ import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
-import { FlexBox } from "../../components/flex-box";
-import { Carousel } from "../../components/carousel";
-import BazaarImage from "../../components/BazaarImage";
-import { H1, H2, H3, H6, Paragraph } from "../../components/Typography"; // LOCAL CUSTOM HOOKS
+import { FlexBox } from "@/components/flex-box";
+import { Carousel } from "@/components/carousel";
+import BazaarImage from "@/components/BazaarImage";
+import { H1, H2, H3, H6, Paragraph } from "@/components/Typography"; // LOCAL CUSTOM HOOKS
 
-import useCart from "../../hooks/useCart"; // CUSTOM UTILS LIBRARY FUNCTION
+import useCart from "@/hooks/useCart"; // CUSTOM UTILS LIBRARY FUNCTION
 
-import { currency } from "../../lib"; // =====================================================
+import { currency } from "@/lib"; // =====================================================
 
 // =====================================================
 export default function ProductViewDialog(props) {

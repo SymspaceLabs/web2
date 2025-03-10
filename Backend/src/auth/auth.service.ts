@@ -27,7 +27,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwksClient from 'jwks-rsa';
 import axios from 'axios';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
-
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 
 @Injectable()
@@ -95,6 +95,16 @@ export class AuthService {
     }
   }
 
+  private async generateOtp() {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiresAt = new Date();
+    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
+    return {
+      otp,
+      otpExpiresAt
+    }
+  }
+
   async signUpSeller(
     signUpDto: SignUpDto,
   ): Promise<{ message: string; token?: string }> {
@@ -138,11 +148,9 @@ export class AuthService {
   
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a 6-digit OTP (SELLER)
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiresAt = new Date();
-    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
-  
+    // Generate a 6-digit OTP
+    const { otp, otpExpiresAt } = await this.generateOtp();
+
     const user = this.usersRepository.create({
       firstName,
       lastName,
@@ -172,9 +180,6 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
   
-    // const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
-    // await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
-
     await this.mailchimpService.sendOtpEmail(
       email,
       'Your OTP for Account Verification',
@@ -188,21 +193,20 @@ export class AuthService {
     };
   }
 
-  
   async signUp(
     signUpDto: SignUpDto,
   ): Promise<{ message: string; token?: string }> {
+    
     const requiredFields = ['firstName', 'lastName', 'email', 'password'];
-  
     const missingFields = this.validateFields(signUpDto, requiredFields);
+    const { password, email } = signUpDto;
   
+    // Check for missing inputs
     if (missingFields.length > 0) {
       throw new UnauthorizedException(
         `Missing required field(s): ${missingFields.join(', ')}.`,
       );
     }
-  
-    const { password, email } = signUpDto;
   
     // Validate email format
     if (!validator.isEmail(email)) {
@@ -225,10 +229,8 @@ export class AuthService {
   
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Generate a 6-digit OTP (BUYER)
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiresAt = new Date();
-    otpExpiresAt.setMinutes(otpExpiresAt.getMinutes() + 10); // OTP valid for 10 mins
+    // Generate a 6-digit OTP
+    const { otp, otpExpiresAt } = await this.generateOtp();
   
     const user = this.usersRepository.create({
       firstName,
@@ -257,10 +259,6 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
   
-    // const verificationUrl = `${process.env.BACKEND_URL}/auth/verify-email?token=${token}`;
-  
-    // await this.mailchimpService.sendVerificationEmail(email, verificationUrl);
-    // Send OTP email using Mailchimp template
     await this.mailchimpService.sendOtpEmail(
       email,
       'Your OTP for Account Verification',
@@ -321,6 +319,31 @@ export class AuthService {
     };
   }
 
+  async verifyResetPasswordOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string }> {
+    const { email, otp } = verifyOtpDto;
+
+    // Find the user
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+        throw new NotFoundException('User not found.');
+    }
+
+    // Check if OTP matches and hasn't expired
+    if (!user.otp || user.otp !== otp || new Date() > user.otpExpiresAt) {
+        throw new BadRequestException('Invalid or expired OTP.');
+    }
+
+    // OTP verified, allow user to proceed to reset password
+    user.isVerified = true;
+    user.otpExpiresAt = null;
+    await this.usersRepository.save(user);
+
+    return {
+        message: 'OTP verified successfully!',
+    };
+  }
+
   async resendOtp(resendOtpDto: any): Promise<{ message: string }> {
 
     const { email } = resendOtpDto;
@@ -361,10 +384,8 @@ export class AuthService {
   
     return { message: 'A new OTP has been sent to your email.' };
   }
-  
 
-  
-  async login(loginDto: LoginDto): Promise<{ accessToken: string; user: any }> {
+  async login(loginDto: LoginDto): Promise<{ message:string, accessToken: string; user: any }> {
     const { email, password } = loginDto;
 
     const user = await this.usersRepository.findOne({
@@ -397,6 +418,7 @@ export class AuthService {
     await this.authRepository.update(user.id, { refreshToken: accessToken });
 
     return {
+      message: 'Login successful!',
       accessToken,
       user: {
         id: user.id,
@@ -415,8 +437,6 @@ export class AuthService {
 
     const { email } = googleUser;
 
-    
-
     let user = await this.usersRepository.findOne({
       where: { email },
     });
@@ -432,17 +452,13 @@ export class AuthService {
             role: 'buyer',
             password: '',
             authMethod: AuthMethod.GOOGLE,
-  
         });
-  
         await this.usersRepository.save(user);  
       }
     } catch (error) {
       console.error('Error saving user:', error.message);
       throw new Error('Failed to create user. Please check your data and try again.');
     }
-
-
 
     const accessToken = this.jwtService.sign(
       { userId: user.id, email: user.email },
@@ -480,44 +496,44 @@ export class AuthService {
     const publicKey = await this.getApplePublicKey(decodedHeader.header.kid);
 
     try {
-        const verifiedPayload:any = jwt.verify(idToken, publicKey, {
-            algorithms: ['RS256'],
-            issuer: 'https://appleid.apple.com',
-            audience: 'com.symspacelabs.si', // Replace with your client ID
+      const verifiedPayload:any = jwt.verify(idToken, publicKey, {
+          algorithms: ['RS256'],
+          issuer: 'https://appleid.apple.com',
+          audience: 'com.symspacelabs.si', // Replace with your client ID
+      });
+
+      const { email } = verifiedPayload;
+
+      let user = await this.usersRepository.findOne({
+        where: { email },
+      });
+
+      if (!user) {
+        user = this.usersRepository.create({
+            email: email,
+            firstName: verifiedPayload.firstName || '',
+            lastName: verifiedPayload.lastName || '',
+            avatar: verifiedPayload.picture || '',
+            isVerified: true,
+            role: 'buyer',
+            password: '',
+            authMethod: AuthMethod.APPLE,
         });
+  
+        await this.usersRepository.save(user);
+      }
 
-        const { email } = verifiedPayload;
+      const accessToken = this.jwtService.sign(
+        { userId: user.id, email: user.email },
+        { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+      );
 
-        let user = await this.usersRepository.findOne({
-          where: { email },
-        });
+      // Store the token in Redis
+      await this.redisService
+      .getClient()
+      .set(`auth:${user.id}`, accessToken, 'EX', 3600);
 
-        if (!user) {
-          user = this.usersRepository.create({
-              email: email,
-              firstName: verifiedPayload.firstName || '',
-              lastName: verifiedPayload.lastName || '',
-              avatar: verifiedPayload.picture || '',
-              isVerified: true,
-              role: 'buyer',
-              password: '',
-              authMethod: AuthMethod.APPLE,
-          });
-    
-          await this.usersRepository.save(user);
-        }
-
-        const accessToken = this.jwtService.sign(
-          { userId: user.id, email: user.email },
-          { secret: process.env.JWT_SECRET, expiresIn: '1h' },
-        );
-
-        // Store the token in Redis
-        await this.redisService
-        .getClient()
-        .set(`auth:${user.id}`, accessToken, 'EX', 3600);
-
-        await this.authRepository.update(user.id, { refreshToken: accessToken });
+      await this.authRepository.update(user.id, { refreshToken: accessToken });
 
         return {
           accessToken,
@@ -604,15 +620,10 @@ export class AuthService {
   async verifyEmail(token: string): Promise<boolean> {
     try {
       const { email } = this.jwtService.verify(token);
-
       const user = await this.usersRepository.findOne({ where: { email } });
-      if (!user) {
-        throw new HttpException('User not found', 404);
-      }
-
+      if (!user) throw new HttpException('User not found', 404);
       user.isVerified = true;
       await this.usersRepository.save(user);
-
       return true;
     } catch (error) {
       this.logger.error(`Email verification failed: ${error.message}`);
@@ -628,6 +639,29 @@ export class AuthService {
         );
       }
     }
+  }
+
+  async generateResetPasswordOtp(email: string): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+    
+    if (!user) {
+      throw new HttpException('No account found with this email. Please verify your email and try again.', 421);
+    }
+
+    // Generate a 6-digit OTP
+    const { otp, otpExpiresAt } = await this.generateOtp();
+
+    // Update User Data
+    user.otp = otp;
+    user.otpExpiresAt = otpExpiresAt;
+    await this.usersRepository.save(user);
+  
+    // Send OTP via Email
+    await this.mailchimpService.sendOtpEmail(
+      email,
+      'Your OTP for Reset Password',
+      otp
+    )
   }
 
   async generateResetToken(email: string): Promise<void> {
@@ -648,21 +682,34 @@ export class AuthService {
     await this.mailchimpService.sendPasswordResetEmail(email, token);
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<void> {
-    const user = await this.usersRepository.findOne({
-      where: { resetToken: token },
-    });
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{ message: string }> {
+    const { email, otp, newPassword } = resetPasswordDto;
 
-    if (!user || user.resetTokenExpiry < new Date()) {
-      throw new HttpException('Your password reset link has expired. Please request a new link', 422);
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new HttpException('No account found with this email.', 404);
     }
 
-    this.validatePasswordFormat(newPassword);
+    // Check if OTP matches and is not expired
+    if (!user.otp || user.otp !== otp) {
+      throw new HttpException('Invalid OTP. Please enter the correct OTP.', 400);
+    }
 
+    const now = new Date();
+    if (user.otpExpiresAt && user.otpExpiresAt < now) {
+      throw new HttpException('OTP has expired. Request a new one.', 400);
+    }
+
+    // Hash new password
     user.password = await bcrypt.hash(newPassword, 10);
-    user.resetToken = null;
-    user.resetTokenExpiry = null;
+
+    // Clear OTP fields after successful password reset
+    user.otp = null;
+    user.otpExpiresAt = null;
     await this.usersRepository.save(user);
+
+    return { message: 'Password has been reset successfully. You can now log in with your new password.' };
   }
 
   async validateGoogleUser(googleUser: any): Promise<any> {

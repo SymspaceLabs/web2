@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { AddressDetailsPageView } from "pages-sections/customer-dashboard/address/page-view"; // API FUNCTIONS
 
 export const metadata = {
-  title: "Address - Bazaar Next.js E-commerce Template",
+  title: "Address  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

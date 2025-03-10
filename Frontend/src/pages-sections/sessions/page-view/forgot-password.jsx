@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { FlexCol } from '@/components/flex-box';
 import { ForgotPasswordForm } from '@/components/forms';
 import { useSnackbar } from "@/contexts/SnackbarContext";
@@ -19,6 +20,7 @@ import { AuthSubmitButton } from '@/components/custom-buttons';
 
 const ForgotPasswordPage = () => {
   const { showSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [isValid, setIsValid] = useState(true);
@@ -46,7 +48,8 @@ const ForgotPasswordPage = () => {
       if (!response.ok) {   
         showSnackbar(data.message, "error"); 
       } else {
-        showSnackbar(data.message, "error");  
+        showSnackbar(data.message, "success");
+        router.push(`/otp-forgot-password?email=${email}`)  
       }
     } catch (error) {
       console.error('Error during forgot password request:', error);

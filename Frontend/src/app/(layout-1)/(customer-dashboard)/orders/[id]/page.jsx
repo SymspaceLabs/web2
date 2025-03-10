@@ -3,7 +3,7 @@ import { OrderDetailsPageView } from "../../../../../pages-sections/customer-das
 
 // import api from "../../../../../utils/__api__/orders";
 export const metadata = {
-  title: "Order Details - Bazaar Next.js E-commerce Template",
+  title: "Order Details  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

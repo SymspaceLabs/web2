@@ -1,6 +1,6 @@
 import { PaymentDetailsPageView } from "../../../../../pages-sections/customer-dashboard/payment-methods/page-view";
 export const metadata = {
-  title: "Payment Details - Bazaar Next.js E-commerce Template",
+  title: "Payment Details  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",

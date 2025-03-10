@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -10,9 +8,9 @@ import Section5 from "../section-5";
 import Section6 from "../section-6";
 import Section7 from "../section-7";
 import Section8 from "../section-8";
-
-import { BlobBox2 } from "./blobBox2";
-import { BlobBox } from "./blobBox";
+import { useEffect } from "react";
+import { Box } from "@mui/material";
+import { BlobBox } from "@/components/BlobBox";
 
 export default async function AboutUsPageView() {
   
@@ -35,11 +33,28 @@ export default async function AboutUsPageView() {
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
       
       {/* GRADIENT CIRCLES */}
-      <BlobBox2 />
-      {/* <BlobBox top='35%' left={250} />
-      <BlobBox top='45%' right={100} />
-      <BlobBox top='55%' left={100} color="#933FFE"/>
-      <BlobBox top='65%' right={-150} /> */}
+      {/* Blob 1: Hero Section Left */}
+      <BlobBox top="-5%" right="35%" background="#0366FE" widthHeight='750px' displayNoneMobile={true} /> {/* BLUE */}
+
+      {/* Blob 2: Our Mission Left */}
+      <BlobBox top="15%" right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
+      <BlobBox top="15%" right="5%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      
+      {/* Blob 3: Industry Leaders Left */}
+      <BlobBox top="25%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
+      <BlobBox top="25%" left="5%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+
+      {/* Blob 4: Core Values Left */}
+      <BlobBox top="43%" left="50%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
+      <BlobBox top="40%" left="50%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+
+      {/* Blob 4: Leadership Left */}
+      <BlobBox top="50%" left="-15%" background="#0366FE" widthHeight='750px' displayNoneMobile={true} /> {/* WHITE */}
+
+      {/* Blob 5: Open Roles Left */}
+      <BlobBox top="70%" right="20%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
+      <BlobBox top="70%" right="30%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      
 
       {/* CONTENT */}
       <Box sx={{ zIndex:1, width:'100%' }}>

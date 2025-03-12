@@ -13,38 +13,12 @@
 // Material-UI components
 import { useEffect, useState } from "react";
 import { Box, Container } from "@mui/material";
-import { styled, keyframes } from '@mui/material/styles';
 
 // Local custom components
 import ProductTabs from "../product-tabs";
 import ProductIntro from "../product-intro";
+import { BlobBox } from "@/components/BlobBox";
 
-
-const blob = keyframes`
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-`;
-
-// Styled component for creating animated blob-like elements
-const BlobBox = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  width: '25rem',
-  height: '25rem',
-  borderRadius: '50%',
-  filter: 'blur(20px)',
-  opacity: 0.7,
-  animation: `${blob} 7s infinite`,
-}));
 
 
 export default function ProductDetailsPageView({slug}) {
@@ -77,44 +51,19 @@ export default function ProductDetailsPageView({slug}) {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    // Main container for the product details page
-    <Box
-      sx={{
-        backgroundColor: '#fff',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative', // Enables positioning of blob effects
-      }}
-    >
+    <Box sx={{ position: 'relative', overflow: 'hidden', background: '#FFF', display: 'flex', justifyContent: 'center' }}>
+      {/* Animated blob background elements */}
+      {/* Blob 1: Hero Section Left */}
+      <BlobBox top="-5%" right="-10%" background="rgba(0,0,0,0.5)" widthHeight='500px' displayNoneMobile={true} /> {/* BLACK */}
+      <BlobBox top="20%" right="15%" background="#0366FE" widthHeight='750px' displayNoneMobile={true} /> {/* BLUE */}
+
+      {/* Blob 2: Hero Section Left */}
+      <BlobBox top="35%" left={'-10%'} background="rgba(0,0,0,0.5)" widthHeight='500px' displayNoneMobile={true} /> {/* BLACK */}
+      <BlobBox top="60%" left={'-10%'} background="#0366FE" widthHeight='500px' displayNoneMobile={true} /> {/* BLUE */}
+
       <Container className="mt-2 mb-2">
-        {/* Animated blob background elements */}
-        <BlobBox sx={{ top: '15rem', right: '30rem', backgroundColor: '#D8B4FE' }} />
-        <BlobBox
-          sx={{
-            top: '15rem',
-            right: '40rem',
-            backgroundColor: '#FDE68A',
-            animationDelay: '2s', // Staggered animation
-          }}
-        />
-        <BlobBox
-          sx={{
-            top: '20rem',
-            right: '35rem',
-            backgroundColor: '#FBCFE8',
-            animationDelay: '4s', // Staggered animation
-          }}
-        />
-
-        {/* Product introduction section */}
-        <ProductIntro product={product} />
-
-        {/* Tabs section for detailed product information */}
-        <ProductTabs />
-
+        <ProductIntro product={product} /> {/* Product introduction */}
+        <ProductTabs /> {/* Tabs section for detailed product information */}
       </Container>
     </Box>
   );

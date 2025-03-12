@@ -72,7 +72,7 @@ export default function Section2() {
             {/* Carousel to display blogs */}
             <Carousel dots autoplay adaptiveHeight arrows={true} spaceBetween={1} slidesToShow={2}>
               {blogs.map((item, index) => (
-                <Link href={`/articles/${item.slug}`} key={index}>
+                <Link href={`/press-releases/${item.slug}`} key={index}>
                   {/* Grid styled for each blog */}
                   <StyledGrid
                     container

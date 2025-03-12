@@ -14,6 +14,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Box, Grid, Container, Button } from "@mui/material";
 import { H2, Paragraph } from "@/components/Typography";
+import { styles } from "../page-view/styles";
 
 export default function Section1() {
   return (
@@ -39,7 +40,7 @@ export default function Section1() {
                   <br />
                   Homebound Convenience
                 </H2>
-                <Button sx={buttonStyle}>
+                <Button sx={styles.buttonDark}>
                   Shop By Category
                 </Button>
               </Box>
@@ -96,7 +97,7 @@ export default function Section1() {
                   <br />
                   Products
                 </H2>
-                <Button sx={{...buttonStyle, background:'#FFF', color:'#000'}}>
+                <Button sx={styles.buttonLight}>
                   Download The App
                 </Button>
               </Box>
@@ -123,7 +124,7 @@ export default function Section1() {
                   Positive Impacts of Mixed
                   <br /> Reality Commerce
                 </H2>
-                <Button sx={buttonStyle}>
+                <Button sx={styles.buttonDark}>
                   Learn More
                 </Button>
               </Box>
@@ -154,12 +155,3 @@ const contentWrapper = {
   borderRadius: 12,
 }
 
-const buttonStyle= {
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  fontWeight: 500,
-  borderRadius: 32,
-  padding: ".5rem 1.5rem",
-  background:'#373F50',
-  color:'#FFF'
-}

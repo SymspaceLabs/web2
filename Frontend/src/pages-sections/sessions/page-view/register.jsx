@@ -12,10 +12,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
 import { SignUpForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { AuthSubmitButton } from "@/components/custom-buttons";
+import { BoxLink } from '@/pages-sections/sessions/components';
 
 
 // ==============================================================
@@ -103,7 +105,12 @@ const RegisterPageView = () => {
         title="Sign Up"
         isValid={isValid}
         onClick={handleSubmit}
-      />        
+      />     
+
+      {/* Checkbox */}
+      <Span display={{ color:'#fff', sm: "inline-block" }}>
+          By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
+      </Span>     
     </FlexBox>
   );
 };

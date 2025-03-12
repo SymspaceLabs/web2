@@ -97,7 +97,7 @@ const BlogCard = ({ blog }) => {
   const router = useRouter(); // Initialize the router
 
   const handleCardClick = () => {
-    router.push(`/articles/${blog.slug}`); // Navigate to the blog details page
+    router.push(`/press-releases/${blog.slug}`); // Navigate to the blog details page
   };
 
   return (

@@ -17,8 +17,14 @@ export const styles = {
     }
   },
   text: {
-      fontFamily:'Elemental End',
-      textTransform:'lowercase',
+    fontFamily:'Elemental End',
+    textTransform:'lowercase',
+    color: "#fff",
+    "& .MuiMenuItem-root:hover": {
       color: "#fff",
+    },
+    ":hover": {
+      color: "#fff",
+    }
   }
 }

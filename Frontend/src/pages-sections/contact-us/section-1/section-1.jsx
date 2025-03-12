@@ -1,11 +1,13 @@
 "use client";
 
+import { Span } from '@/components/Typography';
 import { useState, useEffect, useMemo } from "react";
-import { Box, Typography, Grid, Button, Container } from "@mui/material";
 import { ContactUsForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { LazyImage } from "@/components/lazy-image";
 import { SocialLinks } from "@/components/footer/components";
+import BoxLink from '@/pages-sections/sessions/components/box-link';
+import { Box, Typography, Grid, Button, Container } from "@mui/material";
 
 export default function Section2({
   isSubmitted,
@@ -18,7 +20,6 @@ export default function Section2({
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState('');
   const [message, setMessage] = useState('');
-  const [isChecked, setIsChecked] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -28,10 +29,9 @@ export default function Section2({
         lastName && 
         email && 
         topic && 
-        message && 
-        isChecked
+        message
     );
-  }, [firstName, lastName, email, topic, message, isChecked]);
+  }, [firstName, lastName, email, topic, message]);
 
   const buttonStyles = useMemo(() => ({
       fontFamily:'Elemental End',
@@ -59,7 +59,6 @@ export default function Section2({
     setEmail('');
     setTopic('');
     setMessage('');
-    setIsChecked('');
   }
 
   const handleSubmit = async () => {
@@ -125,8 +124,6 @@ export default function Section2({
                 setTopic={setTopic}
                 message={message}
                 setMessage={setMessage}
-                isChecked={isChecked}
-                setIsChecked={setIsChecked}
               />
               <Button 
                 sx={buttonStyles} 
@@ -140,6 +137,10 @@ export default function Section2({
               >
                 {loading ? 'Submitting...' : 'Submit'}
               </Button>
+
+              <Span display={{ color:'#fff', sm: "inline-block" }}>
+                  By clicking Submit, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
+              </Span> 
             </Grid>
           </Grid>
         </Box>  

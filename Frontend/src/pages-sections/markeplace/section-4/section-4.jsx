@@ -6,18 +6,18 @@
  * @returns {JSX.Element} A styled section with blog cards.
  */
 
+import BlogCard from "../section-3/blog-card";
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { H2 } from "../../../components/Typography"; // Custom Typography component
-import { FlexBox } from "../../../components/flex-box"; // Styled FlexBox component
-import BlogCard from "./blog-card"; // BlogCard component for displaying individual blog details
+import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
 import { motion } from "framer-motion"; // Import Framer Motion
+import { styles } from '../page-view/styles';
 
 export default function Section4() {
   return (
     <Box>
       <Container sx={{  borderRadius:'50px', py: 2, background: '#353535' }}>
         {/* Section heading */}
-        <H2
+        <Typography
           sx={{
             textAlign: 'center',
             color: '#fff',
@@ -28,7 +28,7 @@ export default function Section4() {
           }}
         >
           Shop Men
-        </H2>
+        </Typography>
 
         {/* Grid layout for blog cards */}
         <Grid container spacing={3}>
@@ -45,6 +45,7 @@ export default function Section4() {
                   date={blog.createdAt}
                   title={blog.title}
                   image={blog.image}
+                  textColor='#FFF'
                 />
               </motion.div>
             </Grid>
@@ -53,19 +54,7 @@ export default function Section4() {
 
         {/* Call-to-action button */}
         <FlexBox justifyContent="end" sx={{ mt: 5 }}>
-          <Button
-            sx={{
-              background: '#494949',
-              color: '#fff',
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              mt: 2,
-              borderRadius: '50px',
-              px: 5,
-              py: 2,
-              fontSize: 12,
-            }}
-          >
+          <Button sx={styles.buttonLight}>
             Shop By Category
           </Button>
         </FlexBox>

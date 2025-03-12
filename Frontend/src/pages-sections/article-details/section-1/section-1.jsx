@@ -26,7 +26,7 @@ export default function Section1({ article }) {
       <Container maxWidth="md" sx={{ display:'flex', gap:5, flexDirection:'column', py: 4 }}>
         {/* Breadcrumbs */}
         <Breadcrumbs aria-label="breadcrumb" sx={{ color: "#fff", fontSize: 14 }} separator="›">
-          <Link href="/articles" underline="hover" color="primary" fontFamily='Helvetica' fontWeight={600} >
+          <Link href="/press-releases" underline="hover" color="primary" fontFamily='Helvetica' fontWeight={600} >
             Press Releases
           </Link>
           <Typography  fontWeight={600}>
@@ -47,7 +47,7 @@ export default function Section1({ article }) {
             {article.title}
           </Typography>
           <Typography sx={{pb:2}} variant="body1" component="div" color="#fff">
-            Written By  <a href={article.handle_url} target="blank" style={{ textDecoration: 'none', color: '#0366FE' }} 
+            Written By  <a href={`https://${article.handle_url}`} target="blank" style={{ textDecoration: 'none', color: '#0366FE' }} 
                 onMouseOver={e => e.currentTarget.style.textDecoration = 'underline'} 
                 onMouseOut={e => e.currentTarget.style.textDecoration = 'none'}>
                 {article.author}

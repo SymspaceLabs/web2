@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   Unique,
 } from 'typeorm';
-import { IsNotEmpty, IsString, IsNumber, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsUrl, Length } from 'class-validator';
 
 @Entity()
 @Unique(['slug'])
@@ -39,9 +39,10 @@ export class Blog {
   @IsString()
   author: string;
 
-  @Column()
+  @Column({ length: 255, unique: true }) // Ensuring uniqueness and length constraint
   @IsNotEmpty()
   @IsString()
+  @Length(1, 255)
   slug: string;
 
   @Column()

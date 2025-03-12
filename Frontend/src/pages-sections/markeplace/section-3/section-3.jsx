@@ -3,6 +3,7 @@ import { H2 } from "@/components/Typography"; // Local custom Typography compone
 import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
 import BlogCard from "./blog-card"; // Blog card component
 import { motion } from "framer-motion"; // Import Framer Motion
+import { styles } from '../page-view/styles';
 
 /**
  * Section3 Component
@@ -53,20 +54,7 @@ export default async function Section3() {
 
         {/* Call-to-action button aligned to the right */}
         <FlexBox justifyContent="end" sx={{ mt: 5 }}>
-          <Button
-            sx={{
-              background: '#fff',
-              color: '#000',
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              mt: 2,
-              borderRadius: '50px',
-              px: 3,
-              py: 1,
-              fontSize: 12,
-              fontWeight:500,
-            }}
-          >
+          <Button sx={styles.buttonLight}>
             Shop By Category
           </Button>
         </FlexBox>

@@ -393,7 +393,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('Account not found');
+      throw new UnauthorizedException('No account found with this email. Please sign up or try a different email.');
     }
 
     if (!user.isVerified) {

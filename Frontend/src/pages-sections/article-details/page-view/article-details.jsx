@@ -3,8 +3,13 @@ import Section2 from "../section-2";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 
+export default async function ArticlePageView({ slug }) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blogs/slug/${slug}`);
+  const article = await response.json();
 
-export default async function ArticlesPageView() {
+  if (!article) {
+    return <div>Loading...</div>; // Or a loading spinner
+  }
 
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
@@ -29,8 +34,8 @@ export default async function ArticlesPageView() {
 
       {/* CONTENT */}
       <Box sx={{ zIndex:1, width:'100%' }}>
-        <Section1 />
-        <Section2 />
+        <Section1 article={article} />
+        <Section2/>
       </Box>
     </Box>
   );

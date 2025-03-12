@@ -119,9 +119,11 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
               py: 1,
               borderRadius: "8px",
               border: "1px solid white",
-              "& .MuiMenuItem-root:hover": {
-                background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
-                color: "#fff",
+              "& .MuiMenuItem-root": {
+                "&:hover": {
+                  background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
+                  color: "#fff",
+                },
               },
             }}
           >

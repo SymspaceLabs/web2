@@ -1,9 +1,10 @@
+import { motion } from "framer-motion";
+import { BlackBox, YellowBox } from "./styles"; // CUSTOM STYLES
 import { FlexBox } from "@/components/flex-box"; // STYLED COMPONENT
-import { Container, Typography, Button, Grid } from "@mui/material"; // MUI COMPONENTS
 import { LazyImage } from "@/components/lazy-image";
 import { H2, Paragraph } from "@/components/Typography"; // STYLED COMPONENTS FOR TEXT
-import { BlackBox, YellowBox } from "./styles"; // CUSTOM STYLES
-import { motion } from "framer-motion";
+import { Container, Typography, Button, Grid } from "@mui/material"; // MUI COMPONENTS
+import { styles } from "../page-view/styles";
 
 /**
  * Section8 Component
@@ -20,7 +21,6 @@ const fadeIn = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }
 };
-
 
 export default function Section8() {
   return (
@@ -55,18 +55,7 @@ export default function Section8() {
                     </Paragraph>
                   </div>
                   <FlexBox justifyContent="end">
-                    <Button
-                      sx={{
-                        background: "#fff",
-                        fontFamily: "Elemental End",
-                        textTransform: "lowercase",
-                        mt: 2,
-                        borderRadius: "50px",
-                        px: 5,
-                        py: 2,
-                        fontSize: 16,
-                      }}
-                    >
+                    <Button sx={styles.buttonLight}>
                       Contact Us
                     </Button>
                   </FlexBox>
@@ -96,18 +85,7 @@ export default function Section8() {
                     </Paragraph>
                   </div>
                   <FlexBox justifyContent="end">
-                    <Button
-                      sx={{
-                        background: "#fff",
-                        fontFamily: "Elemental End",
-                        textTransform: "lowercase",
-                        mt: 2,
-                        borderRadius: "50px",
-                        px: 5,
-                        py: 2,
-                        fontSize: 16,
-                      }}
-                    >
+                    <Button sx={styles.buttonLight2}>
                       Contact Us
                     </Button>
                   </FlexBox>
@@ -133,28 +111,8 @@ export default function Section8() {
                   Allow consumers to augment 3D products from the comfort of their home to revolutionize the way they engage with products.
                 </Paragraph>
                 <FlexBox justifyContent="end" flex={1}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      gap: 2,
-                      fontFamily: "Helvetica",
-                      color: "#fff",
-                      borderRadius: "50px",
-                      py: 2,
-                      px: 4,
-                      background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontFamily: "Elemental End",
-                        textTransform: "lowercase",
-                        fontSize: 16,
-                      }}
-                    >
-                      Partner With Us
-                    </Typography>
+                  <Button sx={styles.buttonGradient}>
+                    Partner With Us
                   </Button>
                 </FlexBox>
               </div>

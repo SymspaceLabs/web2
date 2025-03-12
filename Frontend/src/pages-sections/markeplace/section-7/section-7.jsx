@@ -14,6 +14,7 @@ import { FlexBox } from "@/components/flex-box";
 import { calculateDiscount } from "@/lib";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { LazyImage } from "@/components/lazy-image";
+import { styles } from "../page-view/styles";
 
 export default function Section7() {
   // Simulated product data
@@ -115,19 +116,7 @@ export default function Section7() {
 
                     {/* Contact Button */}
                     <FlexBox justifyContent="center">
-                      <Button
-                        sx={{
-                          background: "#fff",
-                          fontFamily: "Elemental End",
-                          textTransform: "lowercase",
-                          mt: 2,
-                          borderRadius: "50px",
-                          px: 5,
-                          py: 2,
-                          fontSize: 16,
-                          fontWeight:500
-                        }}
-                      >
+                      <Button sx={styles.buttonLight}>
                         {_}
                       </Button>
                     </FlexBox>

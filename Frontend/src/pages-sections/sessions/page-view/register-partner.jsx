@@ -16,6 +16,8 @@ import { FlexBox } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { PartnerSignUpForm } from "@/components/forms";
 import { AuthSubmitButton } from "@/components/custom-buttons";
+import { BoxLink } from '@/pages-sections/sessions/components';
+import { Span } from '@/components/Typography';
 
 const RegisterPartnerPageView = () => {
   const { showSnackbar } = useSnackbar();
@@ -118,6 +120,11 @@ const RegisterPartnerPageView = () => {
         isValid={isValid}
         onClick={handleSubmit}
       />
+
+      {/* Checkbox */}
+      <Span display={{ color:'#fff', sm: "inline-block" }}>
+        By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
+      </Span> 
     </FlexBox>
   )
 };

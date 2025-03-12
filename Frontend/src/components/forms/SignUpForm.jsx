@@ -1,7 +1,5 @@
 import { useMediaQuery } from '@mui/material';
-import { Span } from '@/components/Typography';
 import { FlexBox } from '@/components/flex-box';
-import { BoxLink } from '@/pages-sections/sessions/components';
 import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
 
 function SignUpForm ({
@@ -64,11 +62,6 @@ function SignUpForm ({
                 <SymPasswordInput title="Password" value={password} placeholder="Password" onChange={handlePasswordChange} error={retypeError} />
                 <SymPasswordInput title="Retype Password" value={retypePassword} placeholder="Retype Password" onChange={handleRetypePasswordChange} error={retypeError} />
             </FlexBox>
-
-            {/* Checkbox */}
-            <Span display={{ color:'#fff', sm: "inline-block" }}>
-                By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
-            </Span>  
         </FlexBox>
     );
 }

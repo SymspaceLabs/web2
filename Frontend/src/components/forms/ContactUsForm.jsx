@@ -1,11 +1,6 @@
-import React from 'react';
-import { FlexBox } from '../flex-box';
-import { SymTextField } from '../custom-inputs';
-import SymDropdown from '../custom-inputs/SymDropdown';
-import SymCheckbox from '../custom-inputs/SymCheckbox';
-import { Span } from '../Typography';
-import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { useMediaQuery } from '@mui/material';
+import { FlexBox } from '@/components/flex-box';
+import { SymDropdown, SymTextField } from '@/components/custom-inputs';
 
 function ContactUsForm ({
     firstName,
@@ -18,8 +13,6 @@ function ContactUsForm ({
     setTopic,
     message,
     setMessage,
-    isChecked,
-    setIsChecked
 }) {
     const isMobile = useMediaQuery('(max-width:600px)');
     
@@ -28,7 +21,6 @@ function ContactUsForm ({
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handleTopicChange = (event) => setTopic(event.target.value);
     const handleMessageChange = (event) => setMessage(event.target.value);
-    const handleAgreementChange = (event) => setIsChecked(event.target.checked);
     
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
@@ -58,15 +50,6 @@ function ContactUsForm ({
                 ]}
             />
             <SymTextField title="Message" value={message} placeholder="Enter your message here" onChange={handleMessageChange} multiline={true} />
-            <SymCheckbox
-                onChange={handleAgreementChange} 
-                checked={isChecked}
-                content={
-                    <Span display={{ color:'#fff', sm: "inline-block" }}>
-                        By clicking Submit, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
-                    </Span>     
-                }
-            />
         </FlexBox>
     );
 }

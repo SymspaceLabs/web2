@@ -79,8 +79,8 @@ export default function Section1() {
 
         {[
           { src: "hero-6.png", delay: 1.5, top: "50%", left: "-10%", zIndex: 3 },
-          { src: "hero-7.png", delay: 1.5, top: "60%", left: "15%", zIndex: 2 },
-          { src: "hero-8.png", delay: 1.5, top: "55%", left: "30%", zIndex: 1 },
+          { src: "hero-7.png", delay: 2, top: "60%", left: "15%", zIndex: 2 },
+          { src: "hero-8.png", delay: 2.5, top: "55%", left: "30%", zIndex: 1 },
         ].map(({ src, delay, top, left, right, width, height, zIndex }) => (
           <motion.img
             key={src}

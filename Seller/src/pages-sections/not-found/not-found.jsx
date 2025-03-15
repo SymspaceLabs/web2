@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button"; // CUSTOM GLOBAL COMPONENTS
+import { Box, Button } from "@mui/material";
+import { FlexRowCenter } from "@/components/flex-box";
 
-import { FlexBox, FlexRowCenter } from "../../components/flex-box";
 export default function NotFound() {
   const router = useRouter();
   return <FlexRowCenter px={2} minHeight="100vh" flexDirection="column">
@@ -16,7 +15,7 @@ export default function NotFound() {
       }} />
       </Box>
 
-      <FlexBox flexWrap="wrap" gap={2}>
+      <FlexRowCenter flexWrap="wrap" gap={2}>
         <Button variant="outlined" color="primary" onClick={() => router.back()}>
           Go Back
         </Button>
@@ -24,6 +23,6 @@ export default function NotFound() {
         <Button variant="contained" color="primary" onClick={() => router.push("/")}>
           Go to Home
         </Button>
-      </FlexBox>
+      </FlexRowCenter>
     </FlexRowCenter>;
 }

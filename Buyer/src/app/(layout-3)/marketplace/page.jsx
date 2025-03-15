@@ -1,5 +1,4 @@
-import MarketplacePageView from "@/pages-sections/markeplace/page-view";
-
+import MarketplacePageView from "@/pages-sections/marketplace/page-view";
 export const metadata = {
   title: "Marketplace",
   description: "Symspace is an E-commerce website.",

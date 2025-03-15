@@ -1,4 +1,4 @@
-import { OtpForgotPasswordPageView } from "@/pages-sections/sessions/page-view";
+import { OtpForgotPasswordPageView } from "../../../pages-sections/sessions/page-view";
 
 export const metadata = {
   title: "OTP",

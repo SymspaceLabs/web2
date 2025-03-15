@@ -1,4 +1,4 @@
-import { VerifyEmailPage } from "@/pages-sections/sessions/page-view"; 
+import { VerifyEmailPage } from "../../../pages-sections/sessions/page-view"; 
 export const metadata = {
   title: "Verify Email",
   description: `Symspace is an E-commerce website.`,

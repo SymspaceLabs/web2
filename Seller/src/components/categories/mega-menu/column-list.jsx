@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
-import { FlexBox } from "@/components/flex-box";
-import { NavLink } from "@/components/nav-link"; // STYLED COMPONENTS
+import { FlexBox } from "../../../components/flex-box";
+import { NavLink } from "../../../components/nav-link"; // STYLED COMPONENTS
 import { StyledRoot } from "./styles"; // DATA TYPES
 
 // ==============================================================

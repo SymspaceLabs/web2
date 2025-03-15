@@ -1,4 +1,4 @@
-import { ForgotPasswordPage } from "@/pages-sections/sessions/page-view"; 
+import { ForgotPasswordPage } from "../../../pages-sections/sessions/page-view"; 
 
 export const metadata = {
   title: "Forgot Password",

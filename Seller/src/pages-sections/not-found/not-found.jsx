@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Box, Button } from "@mui/material";
-import { FlexRowCenter } from "@/components/flex-box";
+import { FlexRowCenter } from "../../components/flex-box";
 
 export default function NotFound() {
   const router = useRouter();

@@ -11,122 +11,122 @@ const CATEGORIES_DATA = [
               title: "Dresses",
               child: [{
                 title: "Casual Dresses",
-                url: "/market-1"
+                url: "/products/search"
               },{
                 title: "Formal Dresses",
-                url: "/market-1"
+                url: "/products/search"
               },{
                 title: "Summer Dresses",
-                url: "/market-1"
+                url: "/products/search"
               }],
             }, {
               title: "Tops",
               child: [{
                 title: "Blouses",
-                url: "/market-1"
+                url: "/products/search"
               },{
                 title: "T-Shirts",
-                url: "/market-1"
+                url: "/products/search"
               },{
                 title: "Sweaters",
-                url: "/market-1"
+                url: "/products/search"
               },{
                 title: "Cardigans",
-                url: "/market-1"
+                url: "/products/search"
               }],
             }, {
             title: "Shirts",
             child: [{
               title: "Casual Shirts",
-              url: "/market-1"
+              url: "/products/search"
             }, {
               title: "Dress Shirts",
-              url: "/market-1"
+              url: "/products/search"
             }, {
               title: "Polo Shirts",
-              url: "/market-1"
+              url: "/products/search"
             }],
             }, {
               title: "Bottoms",
               child: [{
                 title: "Jeans",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Trousers",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Shorts",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Skirts",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Pants",
-                url: "/market-1"
+                url: "/products/search"
               }],
             }, {
               title: "Outerwear",
               child: [{
                 title: "Jackets",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Coats",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Blazers",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Vests",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Hoodies",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Suits",
-                url: "/market-1"
+                url: "/products/search"
               }],
             }, {
               title: "Activewear",
               child: [{
                 title: "Leggings",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Sport bras",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Track pants",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Workout Tops",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Yoga pants",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Sports shorts",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Joggers",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Gym Shorts",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Sweatshirts",
-                url: "/market-1"
+                url: "/products/search"
               }, {
                 title: "Compression Wear",
-                url: "/market-1"
+                url: "/products/search"
               }],
             }, {
               title: "Intimates",
               child: [
                 {
                 title: "Lingerie",
-                url: "/market-1"
+                url: "/products/search"
                 }, {
                   title: "Sleepwear",
-                  url: "/market-1"
+                  url: "/products/search"
                 }
               ],
             }, {
@@ -134,28 +134,28 @@ const CATEGORIES_DATA = [
               child: [
                 {
                 title: "Sandals",
-                url: "/market-1"
+                url: "/products/search"
                 }, {
                   title: "Flats",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Heels",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Boots",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Sneakers",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Athletic Shoes",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Formal Shoes",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Casual Shoes",
-                  url: "/market-1"
+                  url: "/products/search"
                 }
               ],
             }, {
@@ -163,25 +163,25 @@ const CATEGORIES_DATA = [
               child: [
                 {
                 title: "Handbags",
-                url: "/market-1"
+                url: "/products/search"
                 }, {
                   title: "Jewelry",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Watches",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Scarves",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Ties",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Wallets",
-                  url: "/market-1"
+                  url: "/products/search"
                 }, {
                   title: "Backpacks",
-                  url: "/market-1"
+                  url: "/products/search"
                 }
               ],
             }
@@ -197,23 +197,23 @@ const CATEGORIES_DATA = [
               child: [
                 {
                   title: "Smartphones",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Cases & Covers",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Screen Protectors",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Chargers & Cables",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Power Banks",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
               ],
             },
@@ -222,23 +222,23 @@ const CATEGORIES_DATA = [
               child: [
                 {
                   title: "Laptops",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Desktops",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Monitors",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Keyboards & Mice",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Printers & Scanners",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
               ],
             },
@@ -247,19 +247,19 @@ const CATEGORIES_DATA = [
               child: [
                 {
                   title: "Televisions",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Sound Systems",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Streaming Devices",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Blu-ray & DVD Players",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
               ],
             },
@@ -268,19 +268,19 @@ const CATEGORIES_DATA = [
               child: [
                 {
                   title: "Digital Cameras",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Lenses",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Tripods",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
                 {
                   title: "Camera Accessories",
-                  url: "/market-1",
+                  url: "/products/search",
                 },
               ],
             },
@@ -295,65 +295,65 @@ const CATEGORIES_DATA = [
             {
               title: "Furniture",
               child: [
-                { title: "Living Room", url: "/market-1" },
-                { title: "Sofas", url: "/market-1" },
-                { title: "Coffee Tables", url: "/market-1" },
-                { title: "TV Stands", url: "/market-1" },
-                { title: "Recliners", url: "/market-1" },
-                { title: "Bedroom", url: "/market-1" },
-                { title: "Beds", url: "/market-1" },
-                { title: "Dressers", url: "/market-1" },
-                { title: "Nightstands", url: "/market-1" },
-                { title: "Wardrobes", url: "/market-1" },
-                { title: "Office", url: "/market-1" },
-                { title: "Desks", url: "/market-1" },
-                { title: "Office Chairs", url: "/market-1" },
-                { title: "Bookcases", url: "/market-1" },
-                { title: "Outdoor", url: "/market-1" },
-                { title: "Patio Sets", url: "/market-1" },
-                { title: "Outdoor Chairs", url: "/market-1" },
-                { title: "Garden Storage", url: "/market-1" },
+                { title: "Living Room", url: "/products/search" },
+                { title: "Sofas", url: "/products/search" },
+                { title: "Coffee Tables", url: "/products/search" },
+                { title: "TV Stands", url: "/products/search" },
+                { title: "Recliners", url: "/products/search" },
+                { title: "Bedroom", url: "/products/search" },
+                { title: "Beds", url: "/products/search" },
+                { title: "Dressers", url: "/products/search" },
+                { title: "Nightstands", url: "/products/search" },
+                { title: "Wardrobes", url: "/products/search" },
+                { title: "Office", url: "/products/search" },
+                { title: "Desks", url: "/products/search" },
+                { title: "Office Chairs", url: "/products/search" },
+                { title: "Bookcases", url: "/products/search" },
+                { title: "Outdoor", url: "/products/search" },
+                { title: "Patio Sets", url: "/products/search" },
+                { title: "Outdoor Chairs", url: "/products/search" },
+                { title: "Garden Storage", url: "/products/search" },
               ],
             },
             {
               title: "Home Decor",
               child: [
-                { title: "Lighting", url: "/market-1" },
-                { title: "Lamps", url: "/market-1" },
-                { title: "Ceiling Lights", url: "/market-1" },
-                { title: "Wall Lights", url: "/market-1" },
-                { title: "Rugs", url: "/market-1" },
-                { title: "Wall Art", url: "/market-1" },
-                { title: "Clocks", url: "/market-1" },
-                { title: "Mirrors", url: "/market-1" },
+                { title: "Lighting", url: "/products/search" },
+                { title: "Lamps", url: "/products/search" },
+                { title: "Ceiling Lights", url: "/products/search" },
+                { title: "Wall Lights", url: "/products/search" },
+                { title: "Rugs", url: "/products/search" },
+                { title: "Wall Art", url: "/products/search" },
+                { title: "Clocks", url: "/products/search" },
+                { title: "Mirrors", url: "/products/search" },
               ],
             },
             {
               title: "Kitchen & Dining",
               child: [
-                { title: "Cookware", url: "/market-1" },
-                { title: "Pots & Pans", url: "/market-1" },
-                { title: "Bakeware", url: "/market-1" },
-                { title: "Tableware", url: "/market-1" },
-                { title: "Dinner Sets", url: "/market-1" },
-                { title: "Glassware", url: "/market-1" },
-                { title: "Cutlery", url: "/market-1" },
-                { title: "Kitchen Storage", url: "/market-1" },
-                { title: "Containers", url: "/market-1" },
-                { title: "Racks & Holders", url: "/market-1" },
-                { title: "Small Appliances", url: "/market-1" },
-                { title: "Toasters", url: "/market-1" },
-                { title: "Blenders", url: "/market-1" },
-                { title: "Coffee Makers", url: "/market-1" },
+                { title: "Cookware", url: "/products/search" },
+                { title: "Pots & Pans", url: "/products/search" },
+                { title: "Bakeware", url: "/products/search" },
+                { title: "Tableware", url: "/products/search" },
+                { title: "Dinner Sets", url: "/products/search" },
+                { title: "Glassware", url: "/products/search" },
+                { title: "Cutlery", url: "/products/search" },
+                { title: "Kitchen Storage", url: "/products/search" },
+                { title: "Containers", url: "/products/search" },
+                { title: "Racks & Holders", url: "/products/search" },
+                { title: "Small Appliances", url: "/products/search" },
+                { title: "Toasters", url: "/products/search" },
+                { title: "Blenders", url: "/products/search" },
+                { title: "Coffee Makers", url: "/products/search" },
               ],
             },
             {
               title: "Large Appliances",
               child: [
-                { title: "Refrigerators", url: "/market-1" },
-                { title: "Washing Machines", url: "/market-1" },
-                { title: "Ovens", url: "/market-1" },
-                { title: "Dishwashers", url: "/market-1" },
+                { title: "Refrigerators", url: "/products/search" },
+                { title: "Washing Machines", url: "/products/search" },
+                { title: "Ovens", url: "/products/search" },
+                { title: "Dishwashers", url: "/products/search" },
               ],
             },
           ],
@@ -367,67 +367,67 @@ const CATEGORIES_DATA = [
             {
               title: "Beauty",
               child: [
-                { title: "Skincare", url: "/market-1" },
-                { title: "Moisturizers", url: "/market-1" },
-                { title: "Cleansers", url: "/market-1" },
-                { title: "Serums", url: "/market-1" },
-                { title: "Masks", url: "/market-1" },
-                { title: "Haircare", url: "/market-1" },
-                { title: "Shampoos", url: "/market-1" },
-                { title: "Conditioners", url: "/market-1" },
-                { title: "Hair Treatments", url: "/market-1" },
-                { title: "Styling Tools", url: "/market-1" },
-                { title: "Makeup", url: "/market-1" },
-                { title: "Foundations", url: "/market-1" },
-                { title: "Lipsticks", url: "/market-1" },
-                { title: "Eyeshadows", url: "/market-1" },
-                { title: "Mascaras", url: "/market-1" },
-                { title: "Blushes", url: "/market-1" },
-                { title: "Makeup Tools", url: "/market-1" },
-                { title: "Concealers", url: "/market-1" },
-                { title: "Powders", url: "/market-1" },
-                { title: "Eyeliners", url: "/market-1" },
-                { title: "Brow Products", url: "/market-1" },
-                { title: "Fragrances", url: "/market-1" },
-                { title: "Perfumes", url: "/market-1" },
-                { title: "Body Sprays", url: "/market-1" },
+                { title: "Skincare", url: "/products/search" },
+                { title: "Moisturizers", url: "/products/search" },
+                { title: "Cleansers", url: "/products/search" },
+                { title: "Serums", url: "/products/search" },
+                { title: "Masks", url: "/products/search" },
+                { title: "Haircare", url: "/products/search" },
+                { title: "Shampoos", url: "/products/search" },
+                { title: "Conditioners", url: "/products/search" },
+                { title: "Hair Treatments", url: "/products/search" },
+                { title: "Styling Tools", url: "/products/search" },
+                { title: "Makeup", url: "/products/search" },
+                { title: "Foundations", url: "/products/search" },
+                { title: "Lipsticks", url: "/products/search" },
+                { title: "Eyeshadows", url: "/products/search" },
+                { title: "Mascaras", url: "/products/search" },
+                { title: "Blushes", url: "/products/search" },
+                { title: "Makeup Tools", url: "/products/search" },
+                { title: "Concealers", url: "/products/search" },
+                { title: "Powders", url: "/products/search" },
+                { title: "Eyeliners", url: "/products/search" },
+                { title: "Brow Products", url: "/products/search" },
+                { title: "Fragrances", url: "/products/search" },
+                { title: "Perfumes", url: "/products/search" },
+                { title: "Body Sprays", url: "/products/search" },
               ],
             },
             {
               title: "Health & Wellness",
               child: [
-                { title: "Vitamins & Supplements", url: "/market-1" },
-                { title: "Medical Equipment", url: "/market-1" },
-                { title: "Fitness Equipment", url: "/market-1" },
-                { title: "Health Monitors", url: "/market-1" },
+                { title: "Vitamins & Supplements", url: "/products/search" },
+                { title: "Medical Equipment", url: "/products/search" },
+                { title: "Fitness Equipment", url: "/products/search" },
+                { title: "Health Monitors", url: "/products/search" },
               ],
             },
             {
               title: "Personal Care",
               child: [
-                { title: "Oral Care", url: "/market-1" },
-                { title: "Toothbrushes", url: "/market-1" },
-                { title: "Toothpaste", url: "/market-1" },
-                { title: "Bath & Body", url: "/market-1" },
-                { title: "Body Wash", url: "/market-1" },
-                { title: "Lotions", url: "/market-1" },
-                { title: "Hand Sanitizers", url: "/market-1" },
-                { title: "Shaving & Hair Removal", url: "/market-1" },
-                { title: "Razors", url: "/market-1" },
-                { title: "Shaving Cream", url: "/market-1" },
-                { title: "Hair Removal Devices", url: "/market-1" },
+                { title: "Oral Care", url: "/products/search" },
+                { title: "Toothbrushes", url: "/products/search" },
+                { title: "Toothpaste", url: "/products/search" },
+                { title: "Bath & Body", url: "/products/search" },
+                { title: "Body Wash", url: "/products/search" },
+                { title: "Lotions", url: "/products/search" },
+                { title: "Hand Sanitizers", url: "/products/search" },
+                { title: "Shaving & Hair Removal", url: "/products/search" },
+                { title: "Razors", url: "/products/search" },
+                { title: "Shaving Cream", url: "/products/search" },
+                { title: "Hair Removal Devices", url: "/products/search" },
               ],
             },
             {
               title: "Pet Supplies",
               child: [
-                { title: "Dog Supplies", url: "/market-1" },
-                { title: "Dog Food", url: "/market-1" },
-                { title: "Cat Supplies", url: "/market-1" },
-                { title: "Cat Food", url: "/market-1" },
-                { title: "Fish & Aquatic Pets", url: "/market-1" },
-                { title: "Small Animals", url: "/market-1" },
-                { title: "Birds", url: "/market-1" },
+                { title: "Dog Supplies", url: "/products/search" },
+                { title: "Dog Food", url: "/products/search" },
+                { title: "Cat Supplies", url: "/products/search" },
+                { title: "Cat Food", url: "/products/search" },
+                { title: "Fish & Aquatic Pets", url: "/products/search" },
+                { title: "Small Animals", url: "/products/search" },
+                { title: "Birds", url: "/products/search" },
               ],
             },
 
@@ -442,41 +442,41 @@ const CATEGORIES_DATA = [
             {
               title: "Baby",
               child: [
-                { title: "Diapers", url: "/market-1" },
-                { title: "Disposable Diapers", url: "/market-1" },
-                { title: "Cloth Diapers", url: "/market-1" },
-                { title: "Feeding", url: "/market-1" },
-                { title: "Bottles", url: "/market-1" },
-                { title: "Breastfeeding Accessories", url: "/market-1" },
-                { title: "Baby Gear", url: "/market-1" },
-                { title: "Strollers", url: "/market-1" },
-                { title: "Car Seats", url: "/market-1" },
-                { title: "Carriers", url: "/market-1" },
-                { title: "Nursery", url: "/market-1" },
-                { title: "Cribs", url: "/market-1" },
-                { title: "Changing Tables", url: "/market-1" },
-                { title: "Baby Monitors", url: "/market-1" },
+                { title: "Diapers", url: "/products/search" },
+                { title: "Disposable Diapers", url: "/products/search" },
+                { title: "Cloth Diapers", url: "/products/search" },
+                { title: "Feeding", url: "/products/search" },
+                { title: "Bottles", url: "/products/search" },
+                { title: "Breastfeeding Accessories", url: "/products/search" },
+                { title: "Baby Gear", url: "/products/search" },
+                { title: "Strollers", url: "/products/search" },
+                { title: "Car Seats", url: "/products/search" },
+                { title: "Carriers", url: "/products/search" },
+                { title: "Nursery", url: "/products/search" },
+                { title: "Cribs", url: "/products/search" },
+                { title: "Changing Tables", url: "/products/search" },
+                { title: "Baby Monitors", url: "/products/search" },
               ],
             },
             {
               title: "Toys",
               child: [
-                { title: "Educational", url: "/market-1" },
-                { title: "Learning Toys", url: "/market-1" },
-                { title: "STEM Toys", url: "/market-1" },
-                { title: "Action Figures", url: "/market-1" },
-                { title: "Dolls & Accessories", url: "/market-1" },
-                { title: "Outdoor Play", url: "/market-1" },
-                { title: "Playhouses", url: "/market-1" },
-                { title: "Slides", url: "/market-1" },
-                { title: "Swings", url: "/market-1" },
+                { title: "Educational", url: "/products/search" },
+                { title: "Learning Toys", url: "/products/search" },
+                { title: "STEM Toys", url: "/products/search" },
+                { title: "Action Figures", url: "/products/search" },
+                { title: "Dolls & Accessories", url: "/products/search" },
+                { title: "Outdoor Play", url: "/products/search" },
+                { title: "Playhouses", url: "/products/search" },
+                { title: "Slides", url: "/products/search" },
+                { title: "Swings", url: "/products/search" },
               ],
             },
             {
               title: "Kids Clothing",
               child: [
-                { title: "Girls", url: "/market-1" },
-                { title: "Boys", url: "/market-1" },
+                { title: "Girls", url: "/products/search" },
+                { title: "Boys", url: "/products/search" },
               ],
             },
           ],
@@ -489,45 +489,45 @@ const CATEGORIES_DATA = [
             {
               title: "Fresh Produce",
               child: [
-                { title: "Fruits", url: "/market-1" },
-                { title: "Vegetables", url: "/market-1" },
+                { title: "Fruits", url: "/products/search" },
+                { title: "Vegetables", url: "/products/search" },
               ],
             },
             {
               title: "Pantry Staples",
               child: [
-                { title: "Snacks", url: "/market-1" },
-                { title: "Beverages", url: "/market-1" },
-                { title: "Tea", url: "/market-1" },
-                { title: "Coffee", url: "/market-1" },
-                { title: "Soft Drinks", url: "/market-1" },
-                { title: "Baking", url: "/market-1" },
-                { title: "Flour", url: "/market-1" },
-                { title: "Sugar", url: "/market-1" },
-                { title: "Baking Mixes", url: "/market-1" },
+                { title: "Snacks", url: "/products/search" },
+                { title: "Beverages", url: "/products/search" },
+                { title: "Tea", url: "/products/search" },
+                { title: "Coffee", url: "/products/search" },
+                { title: "Soft Drinks", url: "/products/search" },
+                { title: "Baking", url: "/products/search" },
+                { title: "Flour", url: "/products/search" },
+                { title: "Sugar", url: "/products/search" },
+                { title: "Baking Mixes", url: "/products/search" },
               ],
             },
             {
               title: "Meat & Seafood",
               child: [
-                { title: "Fresh Meat", url: "/market-1" },
-                { title: "Seafood", url: "/market-1" },
+                { title: "Fresh Meat", url: "/products/search" },
+                { title: "Seafood", url: "/products/search" },
               ],
             },
             {
               title: "Dairy",
               child: [
-                { title: "Milk", url: "/market-1" },
-                { title: "Cheese", url: "/market-1" },
-                { title: "Eggs", url: "/market-1" },
+                { title: "Milk", url: "/products/search" },
+                { title: "Cheese", url: "/products/search" },
+                { title: "Eggs", url: "/products/search" },
               ],
             },
             {
               title: "Frozen Foods",
               child: [
-                { title: "Vegetables", url: "/market-1" },
-                { title: "Meats", url: "/market-1" },
-                { title: "Desserts", url: "/market-1" },
+                { title: "Vegetables", url: "/products/search" },
+                { title: "Meats", url: "/products/search" },
+                { title: "Desserts", url: "/products/search" },
               ],
             },
           ],
@@ -540,45 +540,45 @@ const CATEGORIES_DATA = [
             {
               title: "Fitness Equipment",
               child: [
-                { title: "Cardio Machines", url: "/market-1" },
-                { title: "Treadmills", url: "/market-1" },
-                { title: "Exercise Bikes", url: "/market-1" },
-                { title: "Strength Training", url: "/market-1" },
-                { title: "Dumbbells", url: "/market-1" },
-                { title: "Weight Benches", url: "/market-1" },
-                { title: "Fitness Accessories", url: "/market-1" },
-                { title: "Yoga Mats", url: "/market-1" },
-                { title: "Resistance Bands", url: "/market-1" },
+                { title: "Cardio Machines", url: "/products/search" },
+                { title: "Treadmills", url: "/products/search" },
+                { title: "Exercise Bikes", url: "/products/search" },
+                { title: "Strength Training", url: "/products/search" },
+                { title: "Dumbbells", url: "/products/search" },
+                { title: "Weight Benches", url: "/products/search" },
+                { title: "Fitness Accessories", url: "/products/search" },
+                { title: "Yoga Mats", url: "/products/search" },
+                { title: "Resistance Bands", url: "/products/search" },
               ],
             },
             {
               title: "Outdoor Recreation",
               child: [
-                { title: "Camping", url: "/market-1" },
-                { title: "Tents", url: "/market-1" },
-                { title: "Sleeping Bags", url: "/market-1" },
-                { title: "Backpacks", url: "/market-1" },
-                { title: "Hiking", url: "/market-1" },
-                { title: "Boots", url: "/market-1" },
-                { title: "Poles", url: "/market-1" },
-                { title: "Gear", url: "/market-1" },
-                { title: "Water Sports", url: "/market-1" },
-                { title: "Kayaks", url: "/market-1" },
-                { title: "Life Jackets", url: "/market-1" },
+                { title: "Camping", url: "/products/search" },
+                { title: "Tents", url: "/products/search" },
+                { title: "Sleeping Bags", url: "/products/search" },
+                { title: "Backpacks", url: "/products/search" },
+                { title: "Hiking", url: "/products/search" },
+                { title: "Boots", url: "/products/search" },
+                { title: "Poles", url: "/products/search" },
+                { title: "Gear", url: "/products/search" },
+                { title: "Water Sports", url: "/products/search" },
+                { title: "Kayaks", url: "/products/search" },
+                { title: "Life Jackets", url: "/products/search" },
               ],
             },
             {
               title: "Team Sports",
               child: [
-                { title: "Soccer", url: "/market-1" },
-                { title: "Balls", url: "/market-1" },
-                { title: "Apparel", url: "/market-1" },
-                { title: "Basketball", url: "/market-1" },
-                { title: "Balls", url: "/market-1" },
-                { title: "Shoes", url: "/market-1" },
-                { title: "Tennis", url: "/market-1" },
-                { title: "Rackets", url: "/market-1" },
-                { title: "Balls", url: "/market-1" },
+                { title: "Soccer", url: "/products/search" },
+                { title: "Balls", url: "/products/search" },
+                { title: "Apparel", url: "/products/search" },
+                { title: "Basketball", url: "/products/search" },
+                { title: "Balls", url: "/products/search" },
+                { title: "Shoes", url: "/products/search" },
+                { title: "Tennis", url: "/products/search" },
+                { title: "Rackets", url: "/products/search" },
+                { title: "Balls", url: "/products/search" },
               ],
             },
           ],
@@ -591,21 +591,21 @@ const CATEGORIES_DATA = [
             {
               title: "Vehicle Parts & Accessories",
               child: [
-                { title: "Car Electronics", url: "/market-1" },
-                { title: "GPS", url: "/market-1" },
-                { title: "Stereos", url: "/market-1" },
-                { title: "Tools & Equipment", url: "/market-1" },
-                { title: "Wrenches", url: "/market-1" },
-                { title: "Jacks", url: "/market-1" },
-                { title: "Replacement Parts", url: "/market-1" },
-                { title: "Brakes", url: "/market-1" },
-                { title: "Batteries", url: "/market-1" },
-                { title: "Interior Accessories", url: "/market-1" },
-                { title: "Seat Covers", url: "/market-1" },
-                { title: "Floor Mats", url: "/market-1" },
-                { title: "Exterior Accessories", url: "/market-1" },
-                { title: "Car Covers", url: "/market-1" },
-                { title: "Bike Racks", url: "/market-1" },
+                { title: "Car Electronics", url: "/products/search" },
+                { title: "GPS", url: "/products/search" },
+                { title: "Stereos", url: "/products/search" },
+                { title: "Tools & Equipment", url: "/products/search" },
+                { title: "Wrenches", url: "/products/search" },
+                { title: "Jacks", url: "/products/search" },
+                { title: "Replacement Parts", url: "/products/search" },
+                { title: "Brakes", url: "/products/search" },
+                { title: "Batteries", url: "/products/search" },
+                { title: "Interior Accessories", url: "/products/search" },
+                { title: "Seat Covers", url: "/products/search" },
+                { title: "Floor Mats", url: "/products/search" },
+                { title: "Exterior Accessories", url: "/products/search" },
+                { title: "Car Covers", url: "/products/search" },
+                { title: "Bike Racks", url: "/products/search" },
               ],
             },
           ],
@@ -618,27 +618,27 @@ const CATEGORIES_DATA = [
             {
               title: "Mobility Aids",
               child: [
-                { title: "Wheelchairs", url: "/market-1" },
-                { title: "Walkers", url: "/market-1" },
-                { title: "Canes", url: "/market-1" },
-                { title: "Mobility Scooters", url: "/market-1" },
+                { title: "Wheelchairs", url: "/products/search" },
+                { title: "Walkers", url: "/products/search" },
+                { title: "Canes", url: "/products/search" },
+                { title: "Mobility Scooters", url: "/products/search" },
               ],
             },
             {
               title: "Daily Living Aids",
               child: [
-                { title: "Dressing Aids", url: "/market-1" },
-                { title: "Eating Aids", url: "/market-1" },
-                { title: "Bathing Aids", url: "/market-1" },
-                { title: "Communication Aids", url: "/market-1" },
+                { title: "Dressing Aids", url: "/products/search" },
+                { title: "Eating Aids", url: "/products/search" },
+                { title: "Bathing Aids", url: "/products/search" },
+                { title: "Communication Aids", url: "/products/search" },
               ],
             },
             {
               title: "Accessibility Equipment",
               child: [
-                { title: "Ramps", url: "/market-1" },
-                { title: "Lifts", url: "/market-1" },
-                { title: "Accessible Furniture", url: "/market-1" },
+                { title: "Ramps", url: "/products/search" },
+                { title: "Lifts", url: "/products/search" },
+                { title: "Accessible Furniture", url: "/products/search" },
               ],
             },
           ],
@@ -651,27 +651,27 @@ const CATEGORIES_DATA = [
             {
               title: "Maternity Clothing",
               child: [
-                { title: "Dresses", url: "/market-1" },
-                { title: "Tops", url: "/market-1" },
-                { title: "Bottoms", url: "/market-1" },
+                { title: "Dresses", url: "/products/search" },
+                { title: "Tops", url: "/products/search" },
+                { title: "Bottoms", url: "/products/search" },
               ],
             },
             {
               title: "Prenatal Care",
               child: [
-                { title: "Vitamins", url: "/market-1" },
-                { title: "Support Bands", url: "/market-1" },
-                { title: "Pregnancy Pillows", url: "/market-1" },
-                { title: "Skincare", url: "/market-1" },
+                { title: "Vitamins", url: "/products/search" },
+                { title: "Support Bands", url: "/products/search" },
+                { title: "Pregnancy Pillows", url: "/products/search" },
+                { title: "Skincare", url: "/products/search" },
               ],
             },
             {
               title: "Baby Essentials",
               child: [
-                { title: "Clothing", url: "/market-1" },
-                { title: "Diapers", url: "/market-1" },
-                { title: "Feeding", url: "/market-1" },
-                { title: "Nursery", url: "/market-1" },
+                { title: "Clothing", url: "/products/search" },
+                { title: "Diapers", url: "/products/search" },
+                { title: "Feeding", url: "/products/search" },
+                { title: "Nursery", url: "/products/search" },
               ],
             },
           ],
@@ -684,26 +684,26 @@ const CATEGORIES_DATA = [
             {
               title: "Health & Wellness",
               child: [
-                { title: "Supplements", url: "/market-1" },
-                { title: "Monitors", url: "/market-1" },
-                { title: "Mobility Aids", url: "/market-1" },
-                { title: "Vision & Hearing Aids", url: "/market-1" },
+                { title: "Supplements", url: "/products/search" },
+                { title: "Monitors", url: "/products/search" },
+                { title: "Mobility Aids", url: "/products/search" },
+                { title: "Vision & Hearing Aids", url: "/products/search" },
               ],
             },
             {
               title: "Comfort & Care",
               child: [
-                { title: "Recliners", url: "/market-1" },
-                { title: "Cushions", url: "/market-1" },
-                { title: "Adjustable Beds", url: "/market-1" },
-                { title: "Daily Living Aids", url: "/market-1" },
+                { title: "Recliners", url: "/products/search" },
+                { title: "Cushions", url: "/products/search" },
+                { title: "Adjustable Beds", url: "/products/search" },
+                { title: "Daily Living Aids", url: "/products/search" },
               ],
             },
             {
               title: "Recreation & Leisure",
               child: [
-                { title: "Puzzles", url: "/market-1" },
-                { title: "Books", url: "/market-1" },
+                { title: "Puzzles", url: "/products/search" },
+                { title: "Books", url: "/products/search" },
               ],
             },
           ],

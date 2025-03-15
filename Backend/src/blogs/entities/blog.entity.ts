@@ -62,6 +62,11 @@ export class Blog {
 
   @Column()
   @IsNotEmpty()
+  @IsUrl()
+  author_url: string;
+
+  @Column()
+  @IsNotEmpty()
   @IsString()
   tag: string;
 

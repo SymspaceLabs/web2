@@ -1,7 +1,7 @@
 import { Box, useMediaQuery, Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { LogoWithTitle } from './components';
-import { LazyImage } from '../lazy-image';
+import LogoWithTitle from '../LogoWithTitle';
 import { FlexColCenter } from '../flex-box';
+import { LazyImage } from '../lazy-image';
 
 const ComingSoonDialog = ({ open }) => {
     const isMobile = useMediaQuery('(max-width:600px)');

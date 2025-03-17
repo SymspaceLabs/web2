@@ -51,5 +51,35 @@ export const styles = {
       color: '#FFF',
       border: '2px solid white',
     },
+  },
+  textBubbleContainer : { 
+    display: "flex",
+    flexWrap: "wrap",
+    gap: { xs: 2, sm: 3 },
+    py: 2,
+    width: "100%",
+    justifyContent: "space-between",
+  },
+  textBubble : {
+    textAlign:'center',
+    alignItems:'center',
+    alignContent:'center',
+    maxWidth:{xs:'150px', sm:'250px', md:'500px'},
+    py: {xs:1, sm:2},
+    px: {xs:1, sm:3},
+    mb: {xs:0, sm:2},
+    fontFamily: 'Elemental End',
+    textTransform: 'lowercase',
+    background: 'rgba(255, 255, 255, 0.35)',
+    fontSize: {xs:'8px', sm:'14px'},
+    boxShadow: `
+      inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
+      inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
+      inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
+      inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
+      inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
+    `,
+    borderRadius: '80px',
+    color: '#fff'
   }
 };

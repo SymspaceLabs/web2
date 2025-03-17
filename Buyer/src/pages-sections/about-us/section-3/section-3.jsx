@@ -1,36 +1,28 @@
 "use client";
 
-import { Button, Box, Container, Typography, useMediaQuery } from "@mui/material";
-import { FlexBox } from '@/components/flex-box';
-import { LazyImage } from '@/components/lazy-image';
+// =============================================================================
+// Open Roles Section
+// =============================================================================
 
-const companyLogos = [
-  { 
-    src: "/assets/images/global-impact/company-2.png",
-    url: "https://www.techstars.com/",
-    alt: "Company 1"
-  },
-  { 
-    src: "/assets/images/contact-us/company-1.png",
-    url: "https://j2x.space/",
-    alt: "Company 2"
-  }
-];
+import { FlexBox } from '@/components/flex-box';
+import { COMPANIES_DATA } from "@/data/companies";
+import { LazyImage } from '@/components/lazy-image';
+import { Button, Box, Container, Typography } from "@mui/material";
+
+// =============================================================================
 
 export default function Section3() {
-  const isMobile = useMediaQuery('(max-width:600px)');
-
   return (
     <Container sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
       <Box sx={{ width: '100%', maxWidth: '1400px' }}>
         <Typography sx={{ py: 5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff', wordSpacing: '10px' }}>
           backed by industry leaders
         </Typography>
-        <Box py={isMobile ? 2 : 10} px={isMobile ? 3 : 10} sx={cardStyle}>
-          <FlexBox flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between' gap={2} alignItems="center">
+        <Box py={{xs:2, sm:10}} px={{xs:3, sm:10}} sx={cardStyle}>
+          <FlexBox flexDirection={{xs:'column', sm:'row'}} justifyContent='space-between' gap={2} alignItems="center">
             {/* Mapping through company logos */}
-            {companyLogos.map((company, index) => (
-              <Box key={index} sx={{ width: isMobile ? '75%' : '25%' }}>
+            {COMPANIES_DATA.map((company, index) => (
+              <Box key={index} sx={{ width: {xs:'75%', sm:'25%'} }}>
                 <a href={company.url} target="_blank" rel="noopener noreferrer">
                   <LazyImage src={company.src} width={150} height={150} alt={company.alt} />
                 </a>

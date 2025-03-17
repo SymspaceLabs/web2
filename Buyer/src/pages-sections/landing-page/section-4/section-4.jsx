@@ -1,18 +1,8 @@
 "use client";
 
-/**
- * Section4 Component
- *
- * Features:
- * - Displays a title and description introducing the concept of AR marketplaces.
- * - Provides a carousel of products, allowing users to explore various categories.
- *
- * Usage:
- * - This component can be integrated into an e-commerce landing page to highlight trending products.
- * - Products data can be dynamically fetched and passed as props to the `Content` component.
- */
-
-
+// ============================================================
+// Section4 Carousal section
+// ============================================================
 
 import Link from "next/link"; // Used for navigation.
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
@@ -26,6 +16,8 @@ import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
 import { Typography, Container, IconButton, Box, useMediaQuery } from "@mui/material";
 
+// ============================================================
+
 
 // Fade-in animation variants
 const fadeIn = {
@@ -34,7 +26,7 @@ const fadeIn = {
 };
 
 
-export default async function Section4() {
+export default function Section4() {
     // Extract carousel-related functionality from the custom hook.
     const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -89,8 +81,6 @@ export default async function Section4() {
                     borderRadius: '15px',
                     alignItems: "center",
                     gap:1,
-                    // flexDirection: "column",
-                    // justifyContent: "center",
                     width: isMobile ? 85 : 160, // Set fixed width for scroll
                     flexShrink: 0, // Prevents items from shrinking
                     scrollSnapAlign: "start",

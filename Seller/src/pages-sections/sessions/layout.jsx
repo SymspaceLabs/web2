@@ -14,10 +14,9 @@ import BoxLink from "./components/box-link";
 import LoginBottom from "./components/login-bottom";
 import { styles } from "./styles";
 import { usePathname } from "next/navigation";
-import { Span } from "../../components/Typography";
 import { LazyImage } from "../../components/lazy-image";
 import { FlexBox, FlexRowCenter } from "../../components/flex-box";
-import { Button, Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import LogoWithTitle from "../../components/LogoWithTitle";
 
 // ==============================================================
@@ -53,10 +52,9 @@ export default function AuthLayout({ children }) {
   // Partner registration page
   if (pathname === "/register") {
     TITLE = (
-      <LogoWithTitle
-        title="Simulate Reality Together"
-        subTitle="Create an account using your email"
-      />
+      <LogoWithTitle subTitle="Create an account using your email">
+        Simulate Reality Together
+      </LogoWithTitle>
     );
 
     BOTTOM_CONTENT = (
@@ -126,7 +124,7 @@ export default function AuthLayout({ children }) {
         width={500}
         height={500}
         sx={{ width: "35%" }}
-        src="/assets/images/3d-mailbox.png"
+        src="/assets/images/auth/3d-mailbox.png"
       />
     );
 

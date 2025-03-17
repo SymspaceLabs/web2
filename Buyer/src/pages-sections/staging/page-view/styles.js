@@ -37,16 +37,28 @@ export const styles = {
       color: '#FFF',
     },
   },
-  textBubbleStyle : {
-    py: 2,
-    cursor: 'pointer',
-    mb: 2,
+  textBubbleContainer : { 
+    py: 3,
+    display: "flex",
+    flexWrap: "wrap",
+    width: "100%",
+    justifyContent: {xs:"space-between", sm:'center'},
+    gap: { xs: 2, sm: 3 },
+  },
+  textBubble : {
+    textAlign: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    maxWidth: { xs:180, sm:'250px', md:'500px'},
+    minWidth: 100,
+    minHeight: 40,
+    py: {xs:1, sm:2},
+    px: {xs:2, sm:3},
+    mb: {xs:0, sm:2},
     fontFamily: 'Elemental End',
     textTransform: 'lowercase',
-    '&:hover': {
-      background: 'rgba(3, 102, 254, 0.6)',
-    },
     background: 'rgba(255, 255, 255, 0.35)',
+    fontSize: {xs:'8px', sm:'14px'},
     boxShadow: `
       inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
       inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
@@ -55,8 +67,10 @@ export const styles = {
       inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
     `,
     borderRadius: '80px',
-    px:3,
-    color: '#fff'
+    color: '#fff',
+    '&:hover': {
+      background: 'rgba(3, 102, 254, 0.6)',
+    },
   },
   glassCard : {
     filter: 'drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.25))',
@@ -82,7 +96,7 @@ export const styles = {
     textTransform: 'lowercase',
     fontSize: 11,
     color:'#FFF',
-    px:2,
+    px: 2,
     border:'1px solid rgba(255,255,255,0.2)',
     ":hover" : {
       background:'linear-gradient(94.44deg, #666666 29%, #000000 100%)',

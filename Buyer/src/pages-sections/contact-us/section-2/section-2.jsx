@@ -123,7 +123,7 @@ export default function Section2() {
                   alt="furniture shop"
                   width={25}
                   height={25}
-                  src="/assets/images/sparkler.png"
+                  src="/assets/images/sparkler-white.png"
                 />
               </Box>
             </Button>

@@ -10,14 +10,14 @@
  */
 
 
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { FlexBox } from "../../../components/flex-box";
-import { useSnackbar } from "../../../contexts/SnackbarContext";
-import { PartnerSignUpForm } from "../../../components/forms";
-import { AuthSubmitButton } from "../../../components/custom-buttons";
-import { BoxLink } from '../../../pages-sections/sessions/components';
-import { Span } from '../../../components/Typography';
+import { useRouter } from "next/navigation";
+import { Span } from '@/components/Typography';
+import { FlexBox } from "@/components/flex-box";
+import { PartnerSignUpForm } from "@/components/forms";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { AuthSubmitButton } from "@/components/custom-buttons";
+import { BoxLink } from '@/pages-sections/sessions/components';
 
 const RegisterPartnerPageView = () => {
   const { showSnackbar } = useSnackbar();
@@ -52,6 +52,7 @@ const RegisterPartnerPageView = () => {
 
   // Form submission handler
   const handleSubmit = async () => {
+
     const body = {
       firstName,
       lastName,
@@ -63,6 +64,7 @@ const RegisterPartnerPageView = () => {
       password,
       role: "seller"
     }
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup-seller`,

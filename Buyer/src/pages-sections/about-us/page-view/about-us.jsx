@@ -1,5 +1,9 @@
 "use client";
 
+// ===========================================================================
+// About Us Page Sections
+// ===========================================================================
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -12,12 +16,14 @@ import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 
+// ===========================================================================
+
 export default async function AboutUsPageView() {
   
-  {/* This code helps for scroll to section */}
+  {/* This code helps for scroll to a particular section */}
   useEffect(() => {
-    // Check if the URL has a hash (e.g., #benefits)
-    const hash = window.location.hash;
+    const hash = window.location.hash; // Check if the URL has a hash (e.g., #benefits)
+    
     if (hash) {
       const id = hash.replace("#", "");
       const element = document.getElementById(id);

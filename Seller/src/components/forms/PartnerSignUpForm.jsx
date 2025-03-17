@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@mui/material';
-import { FlexBox } from '../../components/flex-box';
-import { SymPasswordInput, SymTextField } from '../../components/custom-inputs';
+import { FlexBox } from '@/components/flex-box';
+import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
 
 function PartnerSignUpForm ({
     firstName,

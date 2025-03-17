@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { config } from 'dotenv';
+import { AppModule } from './app.module';
+import { NestFactory } from '@nestjs/core';
 import { SeederService } from './database/seeders/seeder.service';
 
 config();
@@ -12,7 +12,7 @@ async function bootstrap() {
   await seeder.seed();
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.BUYER_URL, process.env.SELLER_URL,],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

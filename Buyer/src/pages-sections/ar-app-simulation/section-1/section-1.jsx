@@ -103,7 +103,7 @@ export default function Section1() {
 
         {/* Button group */}
         <Box sx={styles.buttonGroup}>
-          <Button sx={styles.filledButton} onClick={() => router.push('/register-partner')}>
+          <Button sx={styles.filledButton} onClick={() => router.push(`${process.env.NEXT_PUBLIC_SELLER_URL}/register`)}>
             Join as Business
           </Button>
           <Button sx={styles.outlinedButton} onClick={handleShowEmailInput}>

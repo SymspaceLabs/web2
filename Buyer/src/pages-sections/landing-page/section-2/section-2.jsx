@@ -1,8 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
+import { styles } from '../page-view/styles';
 import { Container, Box, Card } from '@mui/material';
 import { FlexBox, FlexColCenter } from '@/components/flex-box';
-import { motion } from "framer-motion";
 
 export default function Section2() {
   return (
@@ -42,9 +43,9 @@ export default function Section2() {
               viewport={{ once: true }}
               style={{ height: "100%" }} // Ensures motion.div spans full height
             >
-              <FlexBox sx={textBubbleContainerStyle}>
+              <FlexBox sx={styles.textBubbleContainer}>
                 {benefits.map((benefit,index) => (
-                  <Box key={index} sx={textBubbleStyle}>
+                  <Box key={index} sx={styles.textBubble}>
                     {benefit}
                   </Box>
                 ))}
@@ -105,37 +106,4 @@ const benefits = [
   'accessibility awareness',
   'digital staging'
 ];
-
-const textBubbleContainerStyle = { 
-  display: "flex",
-  flexWrap: "wrap",  // Allows pills to move to the next row when needed
-  gap: { xs: 2, sm: 3 },
-  py: 2,
-  width: "100%",
-  justifyContent: "space-between", // Ensures pills fill the row as much as possible
-};
-
-
-const textBubbleStyle = {
-  textAlign:'center',
-  alignItems:'center',
-  alignContent:'center',
-  maxWidth:{xs:'150px', sm:'250px', md:'500px'},
-  py: {xs:1, sm:2},
-  px: {xs:1, sm:3},
-  mb: {xs:0, sm:2},
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  background: 'rgba(255, 255, 255, 0.35)',
-  fontSize: {xs:'8px', sm:'14px'},
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  borderRadius: '80px',
-  color: '#fff'
-}
 

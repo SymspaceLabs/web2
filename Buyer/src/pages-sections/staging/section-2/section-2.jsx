@@ -16,14 +16,14 @@ export default function Section2() {
         viewport={{ once: true }}
         style={{ height: "100%" }} // Ensures motion.div spans full height
       >
-        <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:4 }}>
+        <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:5}, gap:{xs:2, sm:4} }}>
           <Typography sx={styles.header}>
             bring empty spaces to life
           </Typography>
           <Typography sx={styles.subheader}>
             Imagine, Customize, and Furnish with Augmented Reality.
           </Typography>
-          <Link href="/register-partner" passHref>
+          <Link href={`${process.env.NEXT_PUBLIC_SELLER_URL}/register`} passHref>
             <Button sx={styles.outlinedBtn}>
               start staging now
             </Button>

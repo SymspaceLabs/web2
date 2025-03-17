@@ -20,7 +20,7 @@ export default function Section4() {
         {/* Card & Image Side-by-Side */}
         <FlexBox
           sx={{
-            flexDirection: { xs: "column", sm: "row" },
+            flexDirection: { xs: "column-reverse", sm: "row" },
             alignItems: "center",
             width: "100%",
             gap: 3,

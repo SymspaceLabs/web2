@@ -1,29 +1,22 @@
+// =========================================================
+// Cart Sidebar
+// =========================================================
+
 import { useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider"; // GLOBAL CUSTOM HOOK
+import { Box, Divider } from "@mui/material";
+import { currency } from "@/lib"; // CUSTOM DATA MODEL
 
-import useCart from "../../hooks/useCart"; // LOCAL CUSTOM COMPONENTS
-
+import useCart from "@/hooks/useCart"; // LOCAL CUSTOM COMPONENTS
+import Scrollbar from "@/components/scrollbar"; // CUSTOM UTILS LIBRARY FUNCTION
 import TopHeader from "./components/top-header";
 import MiniCartItem from "./components/cart-item";
 import EmptyCartView from "./components/empty-view";
 import BottomActions from "./components/bottom-actions"; // GLOBAL CUSTOM COMPONENT
 
-import Scrollbar from "../../components/scrollbar"; // CUSTOM UTILS LIBRARY FUNCTION
-
-import { currency } from "../../lib"; // CUSTOM DATA MODEL
-
 // =========================================================
-export default function MiniCart({
-  toggleSidenav
-}) {
-  const {
-    push
-  } = useRouter();
-  const {
-    state,
-    dispatch
-  } = useCart();
+export default function MiniCart({ toggleSidenav }) {
+  const { push } = useRouter();
+  const { state, dispatch } = useCart();
   const cartList = state.cart;
 
   const handleCartAmountChange = (amount, product) => () => {
@@ -44,14 +37,17 @@ export default function MiniCart({
     push(path);
   };
 
-  return <Box width="100%" minWidth={380}>
+  return (
+    <Box width="100%" minWidth={380} sx={glassBg}>
+      
       {/* HEADING SECTION */}
       <TopHeader toggle={toggleSidenav} total={cartList.length} />
 
+      {/* DIVIDER */}
       <Divider />
 
+      {/* CART ITEM LIST */}
       <Box height={`calc(100vh - ${cartList.length ? "207px" : "75px"})`}>
-        {/* CART ITEM LIST */}
         {cartList.length > 0 ? <Scrollbar>
             {cartList.map(item => <MiniCartItem item={item} key={item.id} handleCartAmountChange={handleCartAmountChange} />)}
           </Scrollbar> : <EmptyCartView />}
@@ -59,5 +55,11 @@ export default function MiniCart({
 
       {/* CART BOTTOM ACTION BUTTONS */}
       {cartList.length > 0 ? <BottomActions total={currency(getTotalPrice())} handleNavigate={handleNavigate} /> : null}
-    </Box>;
+    </Box>
+  );
+}
+
+const glassBg = {
+  background: 'rgba(255, 255, 255, 0.4)',
+  backdropFilter: 'blur(10.0285px)',
 }

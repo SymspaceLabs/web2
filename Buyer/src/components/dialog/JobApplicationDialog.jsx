@@ -1,16 +1,21 @@
 "use client"
 
-import React, { useState, useEffect, useMemo } from "react";
-import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+// =========================================================
+// Job Application Form 
+// =========================================================
+
+import { useState, useEffect, useMemo } from "react";
+import { IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { LogoWithTitle } from './components';
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import JobForm from '../forms/JobForm';
 import { useAuth } from "@/contexts/AuthContext";
 
+// =========================================================
+
 const JobApplicationDialog = ({ open, onClose, job }) => {
 
-    const isMobile = useMediaQuery('(max-width:600px)');
     const { showSnackbar } = useSnackbar();
     const { isAuthenticated } = useAuth();
 
@@ -133,7 +138,7 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                     width: "100%", // Ensure responsiveness
                     backgroundColor: "rgba(63, 103, 166, 0.8)",
                     backdropFilter: 'blur(10px)',
-                    borderRadius: isMobile ? "20px" : "40px",
+                    borderRadius: {xs:'20px', sm:'40px'},
                     boxShadow:
                         "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
                 },
@@ -143,7 +148,6 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                 <LogoWithTitle
                     title="Get started"
                     subTitle="Fill out the form and attach your resume so we can contact you. At Symspace, you can be sure about making positive change."
-                    isMobile={isMobile}
                 />
                 <IconButton
                     onClick={onClose}
@@ -190,7 +194,7 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                 </Box>
             </DialogContent>
 
-            <DialogActions sx={{ display: "flex", justifyContent: "space-between", padding: isMobile? 2 : "35px" }}>
+            <DialogActions sx={{ display: "flex", justifyContent: "space-between", padding: {xs:2, sm:"35px"} }}>
                 <Box sx={{width:'100%', p:'10px' }}>
                     <Button 
                         sx={buttonStyles} 

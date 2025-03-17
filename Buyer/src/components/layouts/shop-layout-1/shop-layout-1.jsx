@@ -14,6 +14,8 @@ import LoginCartButtons from "@/components/header/components/login-cart-buttons"
 import useHeader from "@/components/header/hooks/use-header";
 import DialogDrawer from "@/components/header/components/dialog-drawer";
 import { Footer } from "@/components/footer";
+import { DrawerRight } from "@/components/drawer";
+import SymRightDrawer from "@/components/header/components/drawer-right";
 
 /**
  *  USED IN:
@@ -57,8 +59,17 @@ export default function ShopLayout1({
       {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar />
 
-      {/* LOGIN POPUP */}
-      <DialogDrawer dialogOpen={dialogOpen} sidenavOpen={sidenavOpen} toggleDialog={toggleDialog} toggleSidenav={toggleSidenav} />
+      {/* LOGIN DIALOG */}
+      <DialogDrawer
+        dialogOpen={dialogOpen} 
+        toggleDialog={toggleDialog}
+      />
+
+      {/* SHOPPING CART SIDE DRAWER */}
+      <SymRightDrawer
+        sidenavOpen={sidenavOpen}
+        toggleSidenav={toggleSidenav}
+      />
 
       <Footer />
     </Fragment>

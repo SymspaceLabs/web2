@@ -28,18 +28,11 @@ export default function Section5() {
           <Typography sx={styles.header}>
             furnish  Homes  with  augmented reality
           </Typography>
-          <FlexBox
-              justifyContent="center"
-              gap={3}
-              width="100%"
-              sx={{
-                flexDirection: { xs: "column", sm: "row" }, // Column for mobile (xs), row for larger screens
-                gap: { xs: 2, sm: 3 }, // Smaller gap for mobile
-              }}
-            >
-            {benefits.slice(0, 3).map((benefit) => (
+          <FlexBox sx={{...styles.textBubbleContainer }}>
+            {benefits.slice(0, 3).map((benefit, index) => (
               <Box
-                sx={styles.textBubbleStyle}
+                key={index}
+                sx={{ ...styles.textBubble, maxWidth: { xs:180, sm:'250px', md:'500px'} }}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >
                 {benefit.title}

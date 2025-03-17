@@ -42,7 +42,7 @@ const navbarNavigation = [
     child: [
       {
         title: "Become a partner",
-        url: "/register-partner"
+        url: `${process.env.NEXT_PUBLIC_SELLER_URL}/register`
       }, {
         title: "Pricing & Packages",
         url: "/ar-for-business#pricing"

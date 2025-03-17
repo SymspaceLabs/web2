@@ -37,8 +37,9 @@ export default function Section3() {
               gap: { xs: 2, sm: 3 }, // Smaller gap for mobile
             }}
           >
-            {benefits.slice(0, 3).map((benefit) => (
+            {benefits.slice(0, 3).map((benefit,index) => (
               <Box
+                key={index}
                 sx={textBubbleStyle}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >

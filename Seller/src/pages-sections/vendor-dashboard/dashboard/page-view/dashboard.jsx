@@ -19,7 +19,7 @@ import CustomerService from "../../../../icons/CustomerService";
 import { IconButton, Typography } from "@mui/material";
 import { ChevronRight } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM HOOK
-import ComingSoonDialog from '../../../../components/dialog/ComingSoonDialog'
+import ComingSoonDialog from '../../../../components/custom-dialogs/ComingSoonDialog'
 
 const DashboardPageView = () => {
   const [cardList, setCardList] = useState([]);

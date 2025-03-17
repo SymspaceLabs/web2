@@ -6,84 +6,55 @@
  * 
  */
 
-import { useState, useRef } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Badge from "@mui/material/Badge";
-import { IconButton, MenuItem, Menu, Box } from "@mui/material";
+import { useState } from 'react';
+import { styles } from './styles';
+import { useRouter } from 'next/navigation';
+import { FlexBox } from "@/components/flex-box";
+import { useAuth } from '@/contexts/AuthContext';
+import { PiShoppingCartSimpleBold } from "react-icons/pi";
+import { IconButton, MenuItem, Badge } from "@mui/material";
+import { ChildNavListWrapper } from '@/components/navbar/styles';
+import useCart from "@/hooks/useCart";
+import BazaarCard from "@/components/BazaarCard";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import ShoppingBagOutlined from "../../../icons/ShoppingBagOutlined";
-import useCart from "../../../hooks/useCart";
-import { useAuth } from '../../../contexts/AuthContext';
-import React from 'react';
-import { styles } from './styles';
 
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
-import { FlexBox } from "@/components/flex-box";
-import BazaarCard from "@/components/BazaarCard";
-import Link from "next/link";
-import { ChildNavListWrapper } from '@/components/navbar/styles';
-// Import the new GoogleLoginButton component
 
 export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
   const { state } = useCart();
   const ICON_COLOR = { color: "grey.600" };
-  const { isAuthenticated, user, logout, handleAuthResponse } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  // const open = Boolean(anchorEl);
-  const processedLogin = useRef(false); 
-
-  const handleClose = () => setAnchorEl(null);
-
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleLogin = () => {
-    handleMenuClose();
     toggleDialog();
   };
 
   const handleSignUp = () => {
-    handleMenuClose();
     router.push('/register');
   };
 
-  const handleLoginRoute = () => {
-    handleMenuClose();    
-    toggleDialog();
-  };
-
   const handleProfile = () => {
-    handleMenuClose();
     router.push('/profile');
   };
 
   const handleLogout = () => {
     logout();
-    handleMenuClose();
   };
 
   return (
     <FlexBox alignItems="center">
       {/* Favorite Icon Button */}
-      <IconButton onClick={toggleDialog}>
+      <IconButton onClick={toggleSidenav}>
         <FavoriteBorderIcon sx={ICON_COLOR} />
       </IconButton>
 
-      {/* Shopping Bag Icon Button */}
+      {/* Shopping Cart Icon Button */}
       <Badge badgeContent={state.cart.length} color="primary">
         <IconButton onClick={toggleSidenav}>
-          <ShoppingBagOutlined sx={ICON_COLOR} />
+          <PiShoppingCartSimpleBold color="#7D879C"  />
         </IconButton>
       </Badge>
 
@@ -130,7 +101,7 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
           >
             {!isAuthenticated ? (
               <>
-                <MenuItem onClick={handleLoginRoute} sx={{ ...styles.text, color: "#fff" }}>
+                <MenuItem onClick={handleLogin} sx={{ ...styles.text, color: "#fff" }}>
                   Sign in
                 </MenuItem>
                 <MenuItem onClick={handleSignUp} sx={{ ...styles.text, color: "#fff" }}>

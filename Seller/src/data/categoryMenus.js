@@ -1000,11 +1000,9 @@ export const categoryMenus = [
                     { title: 'Balls' },
                     { title: 'Apparel' },
                     { title: 'Basketball' },
-                    { title: 'Balls' },
                     { title: 'Shoes' },
                     { title: 'Tennis' },
                     { title: 'Rackets' },
-                    { title: 'Balls' },
                 ]
             }]
         }]

@@ -1,9 +1,9 @@
-import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import axios from 'axios';
 import { useState } from "react";
 import CloseIcon from '@mui/icons-material/Close';
-import axios from 'axios';
-import { Preferences, LogoWithTitle, Measurements, DOB } from './components';
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { Preferences, LogoWithTitle, Measurements, DOB } from './components';
+import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 
 const OnboardingDialog = ({ open, onClose, user }) => {

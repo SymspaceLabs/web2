@@ -1158,9 +1158,6 @@ export const categoryMenus = [
                 { title: 'Basketball' ,
                   href: "/products/search/Casual"
                 },
-                { title: 'Balls' ,
-                  href: "/products/search/Casual"
-                },
                 { title: 'Shoes' ,
                   href: "/products/search/Casual"
                 },
@@ -1168,9 +1165,6 @@ export const categoryMenus = [
                   href: "/products/search/Casual"
                 },
                 { title: 'Rackets' ,
-                  href: "/products/search/Casual"
-                },
-                { title: 'Balls' ,
                   href: "/products/search/Casual"
                 },
             ]

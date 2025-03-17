@@ -1,26 +1,23 @@
 "use client";
 
-/**
- * 
- * A component that renders a modal dialog for .
- *   - user login 
- *   - side drawer (mini cart)
- * 
- */
-// ==============================================================
-import { useState, Fragment } from "react";
+// =========================================================
+// A component that renders a modal dialog for .
+// - user login 
+// - side drawer (mini cart)
+// =========================================================
+
+import { Fragment } from "react";
 import { LogoWithTitle } from "@/components";
 import { styled } from '@mui/material/styles';
 import { SocialButtons } from "./SocialButtons";
-import { MiniCart } from "@/components/mini-cart";
+import { Box, Dialog, Card } from '@mui/material';
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
-import { Box, Snackbar, Alert, Dialog, Drawer, Card } from '@mui/material';
+
 // ==============================================================
 
 export default function DialogDrawer(props) {  
   const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = props;
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   return (
     <Fragment>
@@ -48,7 +45,7 @@ export default function DialogDrawer(props) {
             <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
               <Wrapper>
                 <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
-                <LoginPageView closeDialog={toggleDialog} setSnackbarOpen={setSnackbarOpen} />
+                <LoginPageView closeDialog={toggleDialog} />
                 <SocialButtons />
                 <LoginBottom />
               </Wrapper>
@@ -58,21 +55,17 @@ export default function DialogDrawer(props) {
       </Dialog>
 
       {/* Side Navigation Drawer for MiniCart */}
-      <Drawer open={sidenavOpen} anchor="right" onClose={toggleSidenav} sx={{ zIndex: 9999 }}>
-        <MiniCart toggleSidenav={toggleSidenav} />
-      </Drawer>
-
-      {/* Snackbar Notification */}
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        onClose={() => setSnackbarOpen(false)}
+      {/* <Drawer
+        open={sidenavOpen}
+        anchor="right"
+        onClose={toggleSidenav}
+        sx={{ zIndex: 9999 }}
       >
-        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%' }}>
-          Signin Successful!
-        </Alert>
-      </Snackbar>
+        <MiniCart
+          toggleSidenav={toggleSidenav}
+        />
+      </Drawer> */}
+
     </Fragment>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
-import { Button, Box, Typography, Card, Container } from '@mui/material';
-import { FlexColCenter, FlexBox, FlexRowCenter } from "@/components/flex-box";
 import { LazyImage } from '@/components/lazy-image';
-import Link from 'next/link';
+import { Button, Box, Typography, Container } from '@mui/material';
+import { FlexColCenter, FlexBox, FlexRowCenter } from "@/components/flex-box";
 
 export default function Section3() {
 
@@ -17,7 +17,7 @@ export default function Section3() {
   };
 
   return (
-    <Container sx={{ py: {xs:2, sm:5} }}>
+    <Container sx={{ py: {xs:2, sm:5}, zIndex:999 }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -25,25 +25,18 @@ export default function Section3() {
         viewport={{ once: true }}
         style={{ height: "100%" }}
       >
-        <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:4 }}>
+        <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:3}, gap:{xs:2, sm:4} }}>
           <Typography sx={styles.header}>
             customize, configure & tour spaces in real-time
           </Typography>
           <Typography sx={styles.subheader}>
             Transform blueprints into interactive AR environments. Adjust materials, layout, and visual aesthetics in real-time.
           </Typography>
-          <FlexBox
-              justifyContent="center"
-              gap={3}
-              width="100%"
-              sx={{
-                flexDirection: { xs: "column", sm: "row" }, // Column for mobile (xs), row for larger screens
-                gap: { xs: 2, sm: 3 }, // Smaller gap for mobile
-              }}
-            >
-            {benefits.slice(0, 3).map((benefit) => (
+          <FlexBox sx={styles.textBubbleContainer}>
+            {benefits.map((benefit, index) => (
               <Box
-                sx={styles.textBubbleStyle}
+                key={index}
+                sx={styles.textBubble}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >
                 {benefit.title}

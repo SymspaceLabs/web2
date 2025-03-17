@@ -470,11 +470,9 @@ export const categoriesSeedData = [
           { name: "Balls", id: "7b946045-4001-4cd6-8c4d-13e86da47426" },
           { name: "Apparel", id: "e6ef6e1f-73c2-4639-bd4f-2b05a30b1c5a" },
           { name: "Basketball", id: "88eeb0f8-b473-4e66-aed5-4a022b2c37c4" },
-          { name: "Balls", id: "e7a40b16-b6c1-4b24-b28b-024eaf108de4" },
           { name: "Shoes", id: "6273cc4b-bc2e-4c55-88d8-5af4185291c2" },
           { name: "Tennis", id: "e045c3ab-73e2-4d4f-b32e-1e8f1f67d77b" },
           { name: "Rackets", id: "c25cba42-78ea-4f5e-83af-2827bc320c16" },
-          { name: "Balls", id: "23e2a1b8-c883-4e58-9b3c-d93bbdca5b08" }
         ]
       }
     ]

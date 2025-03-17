@@ -1,3 +1,7 @@
+// ==============================================================
+//  AR Real Estate Pages Section
+// ==============================================================
+
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 import { FlexColCenter } from "@/components/flex-box";
@@ -9,7 +13,7 @@ import Section5 from "../section-5";
 import Section6 from "../section-6";
 import Section7 from "../section-7";
 
-
+// ==============================================================
 
 export default async function StagingPageView() {
   return (

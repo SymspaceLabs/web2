@@ -42,7 +42,8 @@ export default function ProductSearchPageView({ slug }) {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products?category=${slug}`);
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products?category=${slug}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
         if (!response.ok) throw new Error("Failed to fetch products");
         const data = await response.json();
         setProducts(data);

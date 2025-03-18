@@ -1,5 +1,11 @@
+// ==================================================================
 // PAGE VIEW COMPONENT
-import { ProductSearchPageView } from "../../../../../pages-sections/product-details/page-view";
+// ==================================================================
+
+import { ProductSearchPageView } from "@/pages-sections/product-details/page-view";
+
+// ==================================================================
+
 export const metadata = {
   title: "Product Search - Symspace E-commerce",
   description: `Symspace is an E-commerce website.`,
@@ -9,6 +15,9 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
+
+// ==================================================================
+
 export default async function ProductSearch({
   params
 }) {

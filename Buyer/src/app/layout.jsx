@@ -27,7 +27,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className={elementalEnd.variable}>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/assets/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
           `}
         </style>
       </head>
-      <body className={elementalEnd.className}>
+      <body>
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
           <AuthProvider>
               <SnackbarProvider>

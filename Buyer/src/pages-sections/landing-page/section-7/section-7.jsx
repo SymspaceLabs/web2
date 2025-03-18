@@ -22,7 +22,7 @@ export default function Section6() {
             <Grid container spacing={4} alignItems="stretch" sx={{ height: '100%' }}>
               <Grid item xs={12} md={6}>
                 <FlexCol sx={{ gap: 4, height: '100%' }}>
-                  <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#fff', fontSize: {xs:20, sm:64}, textAlign:{xs:'center', sm:'left'} }}>
+                  <Typography sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}>
                     3D Repository
                   </Typography>
                   <Typography sx={{ maxWidth:'550px', color: '#FFF', fontSize: { xs: 12, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
@@ -55,22 +55,4 @@ export default function Section6() {
       </motion.div>
     </Grid>
   );
-}
-
-const outlinedButton = {
-  fontWeight: 400,
-  minWidth: 175,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  color: '#fff',
-  borderRadius: '50px',
-  border: '2px solid white',
-  py: {xs:1, sm:2},
-  px: 3,
-  fontSize: 12,
-  transition: 'all 0.3s ease-in-out', // Smooth transition effect
-  ':hover': {
-    background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
-    color: '#000',
-  },
 }

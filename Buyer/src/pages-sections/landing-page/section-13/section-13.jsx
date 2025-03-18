@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { styles } from "../page-view/styles";
 import { FlexBox } from "@/components/flex-box";
 import { LazyImage } from '@/components/lazy-image';
 import { calculateDiscount, currency } from "@/lib";
@@ -60,8 +61,7 @@ export default function Section12() {
                   <Tab key={item.slug} label={item.title} value={item.slug}
                     sx={{
                       textTransform: "none",
-                      fontFamily: "'Elemental End', sans-serif",
-                      textTransform: "lowercase",
+                      ...styles.elementalEndFont,
                       fontWeight: 400,
                       fontSize: { xs: 10, sm: 18 },
                       color: "#BDBDBD",

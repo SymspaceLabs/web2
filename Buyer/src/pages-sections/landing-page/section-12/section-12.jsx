@@ -6,8 +6,8 @@ import { Box, Card, CardContent, Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FlexBox, FlexCol } from '@/components/flex-box';
+import { styles } from '../page-view/styles';
 import Link from 'next/link';
-
 
 /**
  * Section11 Component
@@ -102,7 +102,7 @@ export const CustomCard1 = ({ number, description }) => {
       }}
     >
         <FlexBox sx={{ px: {xs:1, sm:3}, pt: {xs:3, sm:20}, pb: 3, flexDirection: {xs:'row', sm:'column'}, alignItems: 'center', justifyContent: {xs:'space-between', sm:'center'}, height: '100%', gap: {sm:'50px'} }}>
-          <Typography component="div" sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#000', fontSize: {xs:40, sm:100} }}>
+          <Typography component="div" sx={{ ...styles.elementalEndFont, color: '#000', fontSize: {xs:40, sm:100} }}>
             {currentNumber}%
           </Typography>
           <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: {xs:10, sm:24}, fontWeight: 500, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
@@ -114,6 +114,7 @@ export const CustomCard1 = ({ number, description }) => {
               <Button
                 className="fadeInBtn"
                 sx={{
+                  ...styles.elementalEndFont,
                   opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
                   transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
                   transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
@@ -123,9 +124,6 @@ export const CustomCard1 = ({ number, description }) => {
                   border: '2px solid black',
                   color: 'black',
                   fontSize: {xs:8, sm:12},
-                  fontFamily: 'Elemental End',
-                  textTransform: 'lowercase',
-                  fontWeight: 500,
                   ':hover': {
                     background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
                     color: '#FFF',
@@ -173,15 +171,7 @@ export const CustomCard2 = () => {
           px: { xs: 2, sm: 10 },
         }}
       >
-        <Typography
-          component="div"
-          sx={{
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
-            color: '#000',
-            fontSize: { xs: '20px', sm: '64px' },
-          }}
-        >
+        <Typography sx={{ ...styles.sectionHeader, color: '#000' }}>
           AR Visuals
         </Typography>
         <Typography
@@ -211,9 +201,7 @@ export const CustomCard2 = () => {
                 border: '2px solid black',
                 color: 'black',
                 fontSize: {xs:8, sm:12},
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
-                fontWeight: 500,
+                ...styles.elementalEndFont,
                 ':hover': {
                   background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
                   color: '#FFF',

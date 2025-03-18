@@ -6,6 +6,7 @@ import { LazyImage } from '@/components/lazy-image';
 import { Paragraph } from "@/components/Typography"; 
 import { Box, Typography, Button, TextField, Container} from "@mui/material";
 import styled from "@mui/material/styles/styled";
+import { styles } from "./styles";
 
 export default function EmailBanner() {
   const [showInput, setShowInput] = useState(false);
@@ -79,7 +80,7 @@ export default function EmailBanner() {
             />
             <div className="content">
               <Typography
-                sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}
+                sx={styles.elementalEndFont}
                 mt={3}
                 mb={1}
                 lineHeight={1.2}
@@ -88,9 +89,9 @@ export default function EmailBanner() {
                 stay up to date
               </Typography>
 
-              <Paragraph mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
+              <Typography fontFamily="Helvetica" mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
                 Get updates on new partnered brands, products, <br /> and technology.
-              </Paragraph>
+              </Typography >
 
               {!showInput && (
                 <Button
@@ -110,8 +111,7 @@ export default function EmailBanner() {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "'Elemental End', sans-serif",
-                      textTransform: "lowercase",
+                      ...styles.elementalEndFont,
                       fontSize: 12,
                     }}
                   >
@@ -194,8 +194,7 @@ export default function EmailBanner() {
                         borderRadius: "50px",
                         color: isSubmitted ? "#000" : "#fff",
                         padding: "6px 12px",
-                        fontFamily: "'Elemental End', sans-serif",
-                        textTransform: "lowercase",
+                        ...styles.elementalEndFont,
                         "&:hover": {
                           background: isSubmitted
                             ? "#f0f0f0"

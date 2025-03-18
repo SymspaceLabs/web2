@@ -1,11 +1,9 @@
 "use client"
 
-import React from 'react';
 import { styled } from "@mui/system";
 import { Box, Typography } from "@mui/material";
 import { FlexBox } from "@/components/flex-box";
 import { LazyImage } from "@/components/lazy-image";
-import { ImageWrapper } from "@/pages-sections/landing-page/section-15/styles";
 
 const TestimonialWrapper = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
@@ -35,9 +33,9 @@ const TestimonialCard = ({ testimonial }) => {
             {comment}
           </Typography>
           <FlexBox gap={2} alignItems="center">
-            <ImageWrapper>
+            <Box sx={imageWrapper}>
               <LazyImage src={user.avatar} width={50} height={50} alt="User" />
-            </ImageWrapper>
+            </Box>
             <Typography fontFamily="Helvetica" fontSize={18}>
               {user.name}
             </Typography>
@@ -47,3 +45,13 @@ const TestimonialCard = ({ testimonial }) => {
 }
 
 export default TestimonialCard
+
+const imageWrapper =  {
+  width: 75,
+  height: 75,
+  flexShrink: 0,
+  display: "flex",
+  overflow: "hidden",
+  borderRadius: "50%",
+  border: "2px solid white"
+};

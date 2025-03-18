@@ -6,6 +6,7 @@
 
 import Link from "next/link"; // Used for navigation.
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
+import { styles } from "../page-view/styles";
 import ArrowForward from "@mui/icons-material/ArrowForward"; // Material-UI forward arrow icon.
 import ArrowBack from "@mui/icons-material/ArrowBack"; // Material-UI back arrow icon.
 import { motion } from "framer-motion"; // Import Framer Motion
@@ -37,7 +38,7 @@ export default function Section4() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
             {/* Header with title, description, and carousel navigation buttons */}
             <FlexBetween sx={{ py: { xs:2, sm:5 } }}>
-              <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase", fontSize: { xs: 20, sm: 24 }, textAlign: {xs:'center'} }}>
+              <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 20, sm: 24 }, textAlign: {xs:'center'} }}>
                 Augmented Reality Marketplaces
               </Typography>
     
@@ -97,8 +98,7 @@ export default function Section4() {
                   {/* Product title */}
                   <H6
                     sx={{
-                      fontFamily: "'Elemental End', sans-serif",
-                      textTransform: "lowercase",
+                      ...styles.sectionHeader,
                       fontSize: { xs:8, sm:12 },
                       color: "#fff",
                       textAlign: "center",
@@ -135,15 +135,15 @@ export default function Section4() {
                           sx={{ width: "40px", height: "40px" }}
                           src={item.thumbnail}
                         />
-                        <H6
+                        <Typography
                           sx={{
-                            fontFamily: "'Elemental End', sans-serif",
-                            textTransform: "lowercase",
+                            ...styles.sectionHeader,
+                            fontSize: 18,
                             color: "#fff",
                           }}
                         >
                           {item.title}
-                        </H6>
+                        </Typography>
                       </FlexBox>
                     </Link>
                   </motion.div>

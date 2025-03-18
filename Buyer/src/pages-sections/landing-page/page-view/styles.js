@@ -1,5 +1,31 @@
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+
+const elementalEndFont = `${elementalEnd.style.fontFamily}, sans-serif`
+
 export const styles = {
-   gradientBtn : {
+  heroHeader: {
+    fontFamily: elementalEndFont,
+    fontSize: { xs: 48, sm: 60, md: 100 },
+    color: '#fff'
+  },
+  sectionHeader: {
+      fontFamily: elementalEndFont,
+      textTransform:'lowercase',
+      fontSize: { xs: 20, sm: 64 },
+      color:'#FFF', 
+  },
+  elementalEndFont : {
+    fontFamily: elementalEndFont,
+    textTransform:'lowercase',
+    fontWeight: 500,
+  },
+  gradientBtnText: {
+    fontFamily: elementalEndFont,
+    textTransform: 'lowercase',
+    fontSize: { xs: 10, sm: 16 },
+    fontWeight: 500
+  },
+  gradientBtn : {
     flex:{xs:1, sm:0},
     gap: 1,
     minWidth: { sm:250 },
@@ -19,7 +45,7 @@ export const styles = {
     height:'100%',
     flex:{xs:1, sm:0},
     minWidth: { sm:250 },
-    fontFamily: 'Elemental End',
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
     textTransform: 'lowercase',
     fontWeight: 500,
     color: '#fff',
@@ -38,7 +64,7 @@ export const styles = {
     border:'2px solid black',
     fontWeight: 400,
     minWidth: 175,
-    fontFamily: 'Elemental End',
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
     textTransform: 'lowercase',
     color: '#000',
     borderRadius: '50px',
@@ -68,7 +94,7 @@ export const styles = {
     py: {xs:1, sm:2},
     px: {xs:1, sm:3},
     mb: {xs:0, sm:2},
-    fontFamily: 'Elemental End',
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
     textTransform: 'lowercase',
     background: 'rgba(255, 255, 255, 0.35)',
     fontSize: {xs:'8px', sm:'14px'},

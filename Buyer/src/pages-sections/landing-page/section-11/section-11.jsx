@@ -19,7 +19,7 @@ export default function Section10() {
           style={{ height: "100%" }} // Ensures motion.div spans full height
         >
           <FlexCol sx={{ gap: 3, py: 10, textAlign: 'center', alignItems: 'center' }}>
-            <Typography fontFamily='Elemental End' textTransform='lowercase' color='#FFF' sx={{fontSize: { xs:20, sm:64 }, textAlign:{xs:'center', sm:'left'} }}  width="100%" maxWidth="1200px">
+            <Typography sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}  width="100%" maxWidth="1200px">
               Our Focus
             </Typography>
             <Typography 
@@ -45,22 +45,4 @@ export default function Section10() {
       </Container>
     </Grid>
   );
-}
-
-const outlinedButton = {
-  fontWeight: 400,
-  minWidth: 175,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  color: '#fff',
-  borderRadius: '50px',
-  border: '2px solid white',
-  py: {xs:1, sm:2},
-  px: 3,
-  fontSize: 12,
-  transition: 'all 0.3s ease-in-out', // Smooth transition effect
-  ':hover': {
-    background: 'linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%);',
-    color: '#000',
-  },
 }

@@ -1,7 +1,8 @@
+import Link from 'next/link';
+import { styles } from '../page-view/styles';
 import { LazyImage } from '@/components/lazy-image';
 import { Box, Typography, Button } from '@mui/material';
 import { FlexBox, FlexColCenter } from '@/components/flex-box';
-import Link from 'next/link';
 
 export const Card1 = () => {
   return (
@@ -70,11 +71,10 @@ export const Card1 = () => {
       >
         <Typography
           sx={{
+            ...styles.elementalEndFont,
             alignSelf: 'stretch',
             color: '#000',
             fontSize: { xs: 15, sm: 25 },
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
           }}
         >
           Environmental Impact
@@ -178,12 +178,11 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
       >
         <Typography
           sx={{
+            ...styles.elementalEndFont,
             lineHeight: 1.5,
             alignSelf: 'stretch',
             color: textColor,
             fontSize: { xs: 8.5, sm: 20 },
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
             wordWrap: 'break-word',
             fontWeight: 500
           }}
@@ -299,12 +298,11 @@ export const Card3 = () => {
           >
             <Typography
               sx={{
+                ...styles.elementalEndFont,
                 lineHeight: 1,
                 alignSelf: 'stretch',
                 color: 'black',
                 fontSize: { xs: 15, sm: 25 },
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
                 wordWrap: 'break-word',
               }}
             >
@@ -376,8 +374,7 @@ const btnStyle = (color = "#000") => ({
     textAlign: 'center',
     color,
     fontSize: { xs: 10, sm: 16 },
-    fontFamily: 'Elemental End',
-    textTransform: 'lowercase',
+    ...styles.elementalEndFont,
     fontWeight: 500,
     "&:hover": {
       bgcolor: color,

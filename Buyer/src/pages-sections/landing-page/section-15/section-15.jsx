@@ -1,15 +1,13 @@
 "use client";
 
-/**
- * Section13 Component - Displays a testimonial section with a heading, description, 
- * and a list of testimonials. Each testimonial is rendered in a card format.
- * 
- * @returns {JSX.Element} Rendered Section13 component.
- */
+// =========================================================================
+// Section 13 Component - Displays a testimonial section with a heading, description, 
+// ==========================================================================
 
-import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
 import MarqueeeSlider from "./MarqueeeSlider";
+import { Box, Typography } from "@mui/material";
 import { TESTIMONIALS } from "@/data/testimonial";
 
 export default function Section13() {
@@ -27,7 +25,7 @@ export default function Section13() {
           <Typography fontSize="16px" sx={{ color: "#434167" }}>
             What everyone is saying
           </Typography>
-          <Typography sx={{ pb: "25px" }} fontSize={{ xs: 20, sm: 40 }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
+          <Typography sx={{ ...styles.elementalEndFont, fontSize:{xs:20,sm:40}, pb: "25px" }} >
             trusted by users globally
           </Typography>
         </Box>

@@ -13,6 +13,7 @@
 import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
 import { LazyImage } from '@/components/lazy-image';
 import { FlexBox } from '@/components/flex-box';
+import { styles } from '../page-view/styles';
 import { motion } from "framer-motion"; // Importing framer-motion
 import Link from 'next/link';
 
@@ -28,7 +29,7 @@ export default function Section8() {
         <Container>
           <FlexBox flexDirection='column' gap={5} sx={{ textAlign: 'center', alignItems: 'center' }}>
             {/* Section Title */}
-            <Typography fontFamily='Elemental End' color='#191F28' sx={{fontSize: {xs:20, sm:64} }}>
+            <Typography sx={{...styles.sectionHeader, color:'#191F28' }}>
               3d simulation
             </Typography>
 
@@ -57,8 +58,7 @@ export default function Section8() {
                 <Button
                   sx={{
                     gap: 1,
-                    fontFamily: "'Elemental End', sans-serif",
-                    textTransform:"lowercase",
+                    ...styles.elementalEndFont,
                     color: "#353535",
                     borderRadius: "50px",
                     py: {xs:1, sm:2},

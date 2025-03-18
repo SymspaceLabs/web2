@@ -1,7 +1,7 @@
 "use client";
 
-import { keyframes, styled } from "@mui/system";
 import { Box } from "@mui/material";
+import { keyframes, styled } from "@mui/system";
 import TestimonialCard from "@/components/cards/TestimonialCard";
 
 const marqueeAnimation = keyframes`

@@ -17,7 +17,7 @@ export default function Section3() {
         style={{ height: "100%" }} // Ensures motion.div spans full height
       >
         <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:4 }}>
-          <Typography sx={{fontFamily: 'Elemental End', textTransform:'lowercase', color: '#FFF', fontSize:  { xs: 20, sm: 64 }, }}>
+          <Typography sx={{ ...styles.sectionHeader, color: '#FFF' }}>
             Future of Retail
           </Typography>
           <Typography sx={{fontFamily: 'Helvetica', color: '#fff', fontSize: { xs:12, sm:18 }, textAlign: 'justify', maxWidth: 1200, lineHeight: { xs:1.5, sm:2 } }}>

@@ -5,6 +5,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 import { FAQS } from "@/data/faqs";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
 import { FlexBox } from "@/components/flex-box";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 
@@ -49,15 +50,14 @@ export default function Section15() {
       >
         <Container>
           <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
-            <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase" color="#fff"  >
+            <Typography sx={styles.sectionHeader}>
               FAQs
             </Typography>
             <Link href="/faq" target="blank" >
               <Typography
                 sx={{ 
-                  color: 'rgba(255,255,255,0.5)', 
-                  fontFamily: "'Elemental End', sans-serif", 
-                  textTransform: 'lowercase', 
+                  ...styles.elementalEndFont,
+                  color: 'rgba(255,255,255,0.5)',  
                   textDecoration: 'none', 
                   fontSize:{xs:10},
                   '&:hover': { 
@@ -81,7 +81,7 @@ export default function Section15() {
                   sx={accordionStyles}
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <Typography color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" sx={{fontSize:{xs:10, sm:18}}} >
+                    <Typography sx={{...styles.elementalEndFont, fontSize:{xs:10, sm:18}, color: "#FFF" }} >
                       {faq.question}
                     </Typography>
                   </AccordionSummary>

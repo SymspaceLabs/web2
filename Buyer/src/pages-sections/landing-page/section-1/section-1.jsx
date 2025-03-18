@@ -29,7 +29,7 @@ export default function Section1() {
                   AI Powered AR Commerce
                 </Typography>
                 
-                <Typography sx={{fontFamily:'Elemental End' , fontSize: { xs: 48, sm: 60, md: 100 }, color: '#fff' }}>
+                <Typography sx={styles.heroHeader}>
                   SYMSPACE
                 </Typography>
                 
@@ -40,7 +40,7 @@ export default function Section1() {
                 <FlexBox sx={{ gap: '15px', py: {xs:2, sm:5} }}>
                   <Link href="/register" passHref>
                     <Button sx={styles.gradientBtn}>
-                      <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', fontSize: { xs: 10, sm: 16 }, fontWeight: 500 }}>
+                      <Typography sx={styles.gradientBtnText}>
                         Get Started
                       </Typography>
                       <FlexColCenter sx={{ width: { xs: 15, sm: 35 } }}>

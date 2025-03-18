@@ -26,7 +26,7 @@ export default function Section5() {
           style={{ height: "100%" }} // Ensures motion.div spans full height
         >
           <FlexColCenter gap={5} sx={{ py: { xs: 0, sm: 10 }, textAlign: "center" }}>
-            <Typography  sx={{ fontFamily: "'Elemental End', sans-serif", fontSize: { xs: 18, sm: 64 }, color: "#FFF" }}>
+            <Typography  sx={{ ...styles.sectionHeader, fontSize: { xs: 18, sm: 64 } }}>
               Convenient & Comfortable
             </Typography>
 

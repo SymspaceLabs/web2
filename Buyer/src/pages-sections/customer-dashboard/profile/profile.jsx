@@ -1,21 +1,26 @@
 "use client";
 
+// =======================================================
+// Profile Page
+// =======================================================
+
 import { useEffect, useState } from "react";
-import ProfilePicUpload from "./profile-pic-upload";
+import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
 import { ProfileForm } from "@/components/forms";
-import { Card, Button, useMediaQuery } from "@mui/material";
-import { FlexBox } from "@/components/flex-box";
-import axios from "axios";
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { Card, Button, useMediaQuery } from "@mui/material";
+
+import axios from "axios";
+import ProfilePicUpload from "./profile-pic-upload";
 
 const Profile = ({ isEdit = true }) => {
   const { user } = useAuth();
   const { showSnackbar } = useSnackbar();
+  
   const [loading, setLoading] = useState(true);
-
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
+  const [firstName, setFirstName] = useState(user?.firstName);
+  const [lastName, setLastName] = useState(user?.lastName);
   const [dob, setDob] = useState();
 
   const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));

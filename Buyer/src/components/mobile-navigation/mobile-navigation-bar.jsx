@@ -1,11 +1,14 @@
 "use client";
 
+// ===========================================================
+// Mobile Navbar
+// ===========================================================
+
+import useCart from "@/hooks/useCart";
 import { Badge, useMediaQuery } from "@mui/material";
-
-import useCart from "@/hooks/useCart"; // STYLED COMPONENTS
 import { MOBILE_NAVIGATION } from "@/data/mobileNavigation";
-
 import { iconStyle, StyledNavLink, Wrapper } from "./styles";
+
 export default function MobileNavigationBar() {
   const {
     state

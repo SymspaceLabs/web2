@@ -1,5 +1,9 @@
 "use client";
 
+// ===========================================================
+// Mobile Navbar
+// ===========================================================
+
 import { Badge, useMediaQuery } from "@mui/material";
 
 import useCart from "@/hooks/useCart"; // STYLED COMPONENTS

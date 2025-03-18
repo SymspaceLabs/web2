@@ -27,7 +27,8 @@ const StyledNavLink = styled(NavLink)({
   fontSize: "13px",
   alignItems: "center",
   flexDirection: "column",
-  justifyContent: "center"
+  justifyContent: "center",
+  fontFamily:'Helvetica'
 });
 const StyledBox = styled("div")(({
   theme

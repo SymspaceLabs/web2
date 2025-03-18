@@ -1,20 +1,22 @@
 "use client";
 
+// ==============================================================
+// Shop Layout 1
+// ==============================================================
+
 import { Navbar } from "@/components/navbar";
 import { Fragment, useCallback, useState } from "react";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
 import { FlexBox } from "@/components/flex-box";
+import { SearchInput } from "@/components/search-box";
+import { Footer } from "@/components/footer";
 
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
-import { SearchInput } from "@/components/search-box";
-
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 import useHeader from "@/components/header/hooks/use-header";
 import DialogDrawer from "@/components/header/components/dialog-drawer";
-import { Footer } from "@/components/footer";
-import { DrawerRight } from "@/components/drawer";
 import SymRightDrawer from "@/components/header/components/drawer-right";
 
 /**

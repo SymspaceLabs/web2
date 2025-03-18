@@ -1,4 +1,10 @@
+// =============================================================
+// AR Real Estate Page
+// =============================================================
+
 import StagingPageView from "@/pages-sections/staging/page-view";
+
+// =============================================================
 
 export const metadata = {
   title: "AR Real Estate",

@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@mui/material';
 import { FlexBox } from '@/components/flex-box';
 import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
 
@@ -24,7 +23,6 @@ function PartnerSignUpForm ({
     ein,
     setEin
 }) {
-    const isMobile = useMediaQuery('(max-width:600px)');
     
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);
@@ -66,25 +64,25 @@ function PartnerSignUpForm ({
             <SymTextField title="Business Email" value={email} placeholder="Email" onChange={handleEmailChange} />
 
             {/* FIRST & LAST NAME */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="First Name" value={firstName} placeholder="First Name" onChange={handleFirstNameChange} />
                 <SymTextField title="Last Name" value={lastName} placeholder="Last Name" onChange={handleLastNameChange} />
             </FlexBox>
 
             {/* ENTITY NAME & WEBSITE */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="Entity Name" value={businessName} placeholder="Business Name" onChange={handleBusinessNameChange} />
                 <SymTextField title="Website" value={website} placeholder="Website" onChange={handleWebsiteChange} />
             </FlexBox>
 
             {/* PASSWORD */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymPasswordInput title="Password" value={password} placeholder="Password" onChange={handlePasswordChange} error={retypeError} />
                 <SymPasswordInput title="Retype Password" value={retypePassword} placeholder="Retype Password" onChange={handleRetypePasswordChange} error={retypeError} />
             </FlexBox>
 
             {/* BUSINESS LOCATION & EIN */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="Business Location" value={location} placeholder="City, State" onChange={handleLocationChange} />
                 <SymTextField title="Employer Identification Number" value={ein} placeholder="EIN" onChange={handleEinChange} />
             </FlexBox>

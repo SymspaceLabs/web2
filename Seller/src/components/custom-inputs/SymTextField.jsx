@@ -1,9 +1,16 @@
+// ============================================================
+// Custom Text Input
+// ============================================================
+
 import { FlexBox } from "../flex-box";
-import { Small } from "../Typography";
-import { Box, TextField, Typography } from "@mui/material";
+import { InfoOutlined } from "@mui/icons-material";
+import { TextField, Typography , Tooltip} from "@mui/material";
+
+// ============================================================
 
 const SymTextField = ({
     title,
+    toolTipText , // Tooltip text prop
     value,
     onChange,
     multiline = false,
@@ -13,9 +20,17 @@ const SymTextField = ({
 }) => {
   return (
     <FlexBox flexDirection="column" flex={1}>
-        <Typography color="white" mb={0.5} textAlign="left">
-            {title}
-        </Typography>
+        <FlexBox gap={1}>
+            <Typography color="white" mb={0.5} textAlign="left" fontFamily="Elemental End" textTransform="lowercase">
+                {title}
+            </Typography>
+            {toolTipText && (
+                <Tooltip title={toolTipText} arrow>
+                    <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                </Tooltip>
+            )}
+        </FlexBox>
+
         <TextField
             value={value}
             onChange={onChange}
@@ -29,7 +44,7 @@ const SymTextField = ({
             sx={{
                 background: '#000',
                 borderRadius: '5px',
-                color: '#fff',
+                color: '#fff'
             }}
         />
     </FlexBox>

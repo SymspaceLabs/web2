@@ -27,9 +27,8 @@ const LogoWithTitle = ({ children, subTitle }) => {
                         textAlign: 'center',
                         fontSize: {xs:10, sm:14}
                     }}
-                >
-                    {subTitle}
-                </Typography>
+                    dangerouslySetInnerHTML={{ __html: subTitle }}
+                />
             }
             
         </FlexRowCenter>

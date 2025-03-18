@@ -28,7 +28,7 @@ const navbarNavigation = [
           url: "/ar-app-simulation#user_testimonials"
         }]
       }, {
-        title: "Staging Furniture",
+        title: "AR Real Estate",
         url: "/ar-real-estate"
       }
     ]

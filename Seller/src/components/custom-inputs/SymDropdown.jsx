@@ -1,7 +1,6 @@
 import React from 'react';
 import { FlexBox } from '../flex-box';
-import { Small } from '../Typography';
-import { Select, MenuItem, ListItemText } from '@mui/material';
+import { Select, MenuItem, ListItemText, Typography } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const SymDropdown = ({
@@ -14,9 +13,9 @@ const SymDropdown = ({
 
     return (
         <FlexBox flexDirection="column" sx={{ flex:1, minWidth: "100px" }}>
-            <Small color="white" mb={0.5}>
+            <Typography color="white" mb={0.5} fontFamily="Elemental End" textTransform="lowercase">
                 {title}
-            </Small>
+            </Typography>
             <Select
                 value={value}
                 onChange={onChange}

@@ -1,5 +1,12 @@
+// ==============================================================
+// Loading Page
+// ==============================================================
+
 import CircularProgress from "@mui/material/CircularProgress";
 import { FlexRowCenter } from "@/components/flex-box";
+
+// ==============================================================
+
 
 const Loading = () => {
   return (

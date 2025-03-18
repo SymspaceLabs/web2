@@ -10,7 +10,7 @@ import AboutLinks from "./components/about-links";
 
 export default function Footer() {
   return (
-    <Box component="footer" bgcolor="#000" pt={12}>
+    <Box component="footer" bgcolor="#000" pt={12} fontFamily="Helvetica">
       <Container>
         <Grid container spacing={3}>
           <Grid item lg={4} md={4} sm={6} xs={12}>

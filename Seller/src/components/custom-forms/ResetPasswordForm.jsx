@@ -1,5 +1,5 @@
-import { FlexBox } from '../../components/flex-box';
-import { SymPasswordInput } from '../../components/custom-inputs';
+import { FlexBox } from '../flex-box';
+import { SymPasswordInput } from '../custom-inputs';
 
 function ResetPasswordForm ({
     password,

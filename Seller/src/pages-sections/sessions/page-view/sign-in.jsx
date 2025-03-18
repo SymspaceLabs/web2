@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from '../../../contexts/AuthContext';
 import { useRouter } from "next/navigation";
 import { FlexColCenter } from "../../../components/flex-box";
-import { LoginForm } from '../../../components/forms';
+import { LoginForm } from '../../../components/custom-forms';
 import { useSnackbar } from "../../../contexts/SnackbarContext";
 import { AuthSubmitButton } from "../../../components/custom-buttons";
 

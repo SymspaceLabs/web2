@@ -62,7 +62,7 @@ export default function Section1() {
             </Grid>
 
             {/* Right content: Promotional video */}
-            <Grid item xs={12} md={6} sx={{ zIndex: 2 }}>
+            <Grid item xs={12} md={6} sx={{ zIndex: 2, display: { xs: "none", md: "block" } }}>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}

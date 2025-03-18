@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function Section4() {
   return (
-    <Container sx={{ py: {xs:2, sm:5} }}>
+    <Container py={{xs:2, sm:5}} zIndex={1}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

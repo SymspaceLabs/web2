@@ -9,7 +9,7 @@ import PricingTable from "@/components/pricing-table/pricingTable";
 
 export default function Section6() {
   return (
-    <Box width="100%">
+    <Box width="100%" zIndex={1}>
       <Container sx={{ py: {xs:2, sm:5} }}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}

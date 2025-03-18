@@ -14,7 +14,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
-import { PartnerSignUpForm } from "@/components/forms";
+import { PartnerSignUpForm } from "@/components/custom-forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { AuthSubmitButton } from "@/components/custom-buttons";
 import { BoxLink } from '@/pages-sections/sessions/components';

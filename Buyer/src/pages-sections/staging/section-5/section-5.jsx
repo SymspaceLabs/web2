@@ -16,7 +16,7 @@ export default function Section5() {
   };
 
   return (
-    <Container sx={{ py: {xs:2, sm:5} }}>
+    <Container sx={{ py: {xs:2, sm:5} }} zIndex={1}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

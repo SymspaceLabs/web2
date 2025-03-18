@@ -1,5 +1,9 @@
+// ==============================================================
+// Index Page
+// ==============================================================
 import ShopLayout1 from "@/components/layouts/shop-layout-1";
 import LandingPageView from "@/pages-sections/landing-page/page-view";
+// ==============================================================
 
 export const metadata = {
   title: "SYMSPACE",
@@ -10,6 +14,8 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
+
+// ==============================================================
 
 export default function IndexPage() {
   return (

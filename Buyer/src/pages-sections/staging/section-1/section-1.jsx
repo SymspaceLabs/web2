@@ -14,7 +14,7 @@ export default function Section1() {
     <>
       {
         isMobile ? 
-        <Box p={2}>
+        <Box p={2} zIndex={1}>
           <motion.div
             initial={{ opacity: 0, y: 50 }} // Start from below with opacity 0
             animate={{ opacity: 1, y: 0 }} // Fade in while moving up

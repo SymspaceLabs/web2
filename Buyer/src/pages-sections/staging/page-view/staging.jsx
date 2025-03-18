@@ -21,35 +21,35 @@ export default async function StagingPageView() {
       {/* GRADIENT CIRCLES */}
       {/* Blob 1: Hero Section Left */}
       <BlobBox top={0} left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top={0} left="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top={0} left="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 2: Hero Section Right */}
       <BlobBox top="15%" right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="15%" right="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="15%" right="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 3: Hero Section left */}
       <BlobBox top="25%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="25%" left="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="25%" left="-10%"  background="#0366FE"  /> {/* BLUE */}
 
       {/* Blob 4: Hero Section left */}
       <BlobBox top="35%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="35%" left="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="35%" left="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 5: Hero Section Right */}
       <BlobBox top="50%" right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="50%" right="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="50%" right="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 6: Hero Section left */}
       <BlobBox top="65%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="65%" left="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="65%" left="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 7: Hero Section left */}
       <BlobBox top="75%" right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="75%" right="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="75%" right="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 8: Hero Section left */}
       <BlobBox top="90%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="90%" left="-10%"  background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="90%" left="-10%"  background="#0366FE" /> {/* BLUE */}
 
       {/* CONTENT */}
       <FlexColCenter sx={{ width:'100%' }}>

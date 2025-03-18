@@ -1,24 +1,41 @@
-"use client"
+"use client";
+import localFont from "next/font/local";
+import ThemeProvider from "@/theme/theme-provider"; // Your custom ThemeProvider
+import { ThemeProvider as MUIThemeProvider, createTheme } from "@mui/material/styles"; // Rename MUI's ThemeProvider
+
+// Load Custom Font (.ttf)
+export const elementalEnd = localFont({
+  src: "../../public/fonts/elemental-end.ttf",
+  weight: "400",
+  style: "normal",
+  variable: "--font-custom",
+});
+
+// Create MUI Theme with Custom Font
+const theme = createTheme({
+  typography: {
+    fontFamily: "'Elemental End', sans-serif",
+  },
+});
 
 import "@/i18n";
 import RTL from "@/components/rtl";
-import ThemeProvider from "@/theme/theme-provider"; // PRODUCT CART PROVIDER
-import CartProvider from "@/contexts/CartContext"; // SITE SETTINGS PROVIDER
-import SettingsProvider from "@/contexts/SettingContext"; // GLOBAL CUSTOM COMPONENTS
-import ProgressBar from "@/components/progress"; // IMPORT i18n SUPPORT FILE
+import CartProvider from "@/contexts/CartContext";
+import SettingsProvider from "@/contexts/SettingContext";
+import ProgressBar from "@/components/progress";
 import SnackbarProvider from "@/contexts/SnackbarContext";
-import { AuthProvider } from "@/contexts/AuthContext"
-import { GoogleOAuthProvider } from '@react-oauth/google';
+import { AuthProvider } from "@/contexts/AuthContext";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-export default function RootLayout({children}) {
+export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={elementalEnd.variable}>
       <head>
         <link rel="icon" href="/assets/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#ffffff" />
         <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js" async></script>
-        <script src="https://accounts.google.com/gsi/client" async defer ></script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
         <style>
           {`
             .css-1ix0aqo-MuiSnackbar-root {
@@ -26,23 +43,24 @@ export default function RootLayout({children}) {
             }
           `}
         </style>
-
       </head>
-      <body>
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-            <AuthProvider>
-              <ThemeProvider>
-                <SnackbarProvider>
-                  <CartProvider>
-                    <SettingsProvider>
-                          <ProgressBar />
-                          <RTL>{children}</RTL>
-                    </SettingsProvider>
-                  </CartProvider>
-                </SnackbarProvider>
-              </ThemeProvider>
-            </AuthProvider>
-          </GoogleOAuthProvider>
+      <body className={elementalEnd.className}>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+          <AuthProvider>
+            <MUIThemeProvider theme={theme}>
+              <SnackbarProvider>
+                <CartProvider>
+                  <SettingsProvider>
+                    <ThemeProvider> {/* Your custom ThemeProvider */}
+                      <ProgressBar />
+                      <RTL>{children}</RTL>
+                    </ThemeProvider>
+                  </SettingsProvider>
+                </CartProvider>
+              </SnackbarProvider>
+            </MUIThemeProvider>
+          </AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

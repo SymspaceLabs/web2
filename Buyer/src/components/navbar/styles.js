@@ -3,8 +3,8 @@ import Button from "@mui/material/Button";
 import styled from "@mui/material/styles/styled";
 import Container from "@mui/material/Container"; // GLOBAL CUSTOM COMPONENTS
 
-import { NavLink } from "../../components/nav-link";
-import BazaarCard from "../../components/BazaarCard"; // COMMON STYLED OBJECT
+import { NavLink } from "@/components/nav-link";
+import BazaarCard from "@/components/BazaarCard"; // COMMON STYLED OBJECT
 
 export const NAV_LINK_STYLES = {
   color:'#6A6B6B',
@@ -16,7 +16,8 @@ export const NAV_LINK_STYLES = {
   },
   "&:last-child": {
     marginRight: 0
-  }
+  },
+  fontFamily:'Helvetica'
 };
 export const StyledNavLink = styled(NavLink)({ ...NAV_LINK_STYLES });
 
@@ -50,7 +51,6 @@ export const ParentNavItem = styled("div", {
   paddingLeft: 8,
   display: "none",
   position: "absolute",
-  // [theme.breakpoints.down(1640)]: { right: "100%", left: "auto", paddingRight: 8 }
   ...(right && {
     right: "100%",
     left: "auto",

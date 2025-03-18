@@ -1,6 +1,12 @@
-import { Small } from "../Typography";
+// ============================================================
+// Custom Date Picker Input
+// ============================================================
+
+import { FlexBox } from "../flex-box";
+import { TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TextField } from "@mui/material";
+
+// ============================================================
 
 const SymDatePicker = ({
     title,
@@ -9,10 +15,10 @@ const SymDatePicker = ({
     isEdit=true
 }) => {
   return (
-    <>
-        <Small color="white" textAlign="left">
+    <FlexBox flexDirection="column" flex={1}>
+        <Typography color="white" mb={0.5} textAlign="left">
             {title}
-        </Small>
+        </Typography>
         <DatePicker
             value={value}
             onChange={onChange}
@@ -35,7 +41,7 @@ const SymDatePicker = ({
                 },
             }}
         />
-    </>
+    </FlexBox>
   )
 }
 

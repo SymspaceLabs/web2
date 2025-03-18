@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { FlexBox } from "../flex-box";
 
-function PlanToggle({ onChange, value, title, theme }) {
+function PlanToggle({ onChange, value, title, subtitle, theme }) {
   const [selected, setSelected] = useState(value);
 
   const handleToggle = (value) => {
@@ -35,7 +35,8 @@ function PlanToggle({ onChange, value, title, theme }) {
             marginTop: { xs: "10px", sm: "0" }, // Add margin on mobile to separate from toggle
           }}
         >
-          <strong>Save 15%</strong> on yearly plan!
+          {subtitle}
+          {/* <strong>Save 15%</strong> on yearly plan! */}
         </Typography>
 
         {/* Toggle button */}
@@ -78,7 +79,7 @@ function PlanToggle({ onChange, value, title, theme }) {
               justifyContent: "center",
               alignItems: "center",
               color: selected === "yearly" ? "#fff" : "#A1A1AA",
-              fontWeight: selected === "yearly" ? "bold" : "normal",
+              fontWeight: "bold",
               padding: "10px 0",
             }}
             onClick={() => handleToggle("yearly")}

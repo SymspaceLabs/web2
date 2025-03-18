@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { SymDatePicker, SymTextField } from "../../components/custom-inputs";
-import FlexBox from "../../components/flex-box/flex-box";
+import { SymDatePicker, SymTextField } from "../custom-inputs";
+import FlexBox from "../flex-box/flex-box";
 import useMediaQuery from "@mui/material/useMediaQuery"; // GLOBAL CUSTOM COMPONENTS
 
 const ProfileForm = ({ 

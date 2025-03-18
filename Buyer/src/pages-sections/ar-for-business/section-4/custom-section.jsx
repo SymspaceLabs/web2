@@ -1,4 +1,5 @@
 import { Box, Grid, Card, Typography, Button } from '@mui/material';
+import { styles } from '../page-view/styles';
 import Link from 'next/link';
 
 export default function CustomSection({ title, subTitle, btnText, btnUrl, children, invert=false }) {
@@ -53,12 +54,12 @@ const BlogCard = ({ title, subTitle, btnText, btnUrl }) => {
         backdropFilter: 'blur(6.5px)',
         WebkitBackdropFilter: 'blur(6.5px)',
         border: '1px solid rgba(255, 255, 255, 1)',
-        position: 'relative', // Ensure the Card is positioned relatively
-        overflow: 'hidden',   // Ensure overflow is hidden to contain child elements
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection:'column', gap:'25px' }}>
-        <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', fontSize: 21, color:'#2F2F2F' }}>
+        <Typography sx={{ ...styles.elementalEndFont, fontSize: 21, color:'#2F2F2F' }}>
           {title}
         </Typography>
         <Typography sx={{ fontFamily: 'Helvetica', fontSize: 16, color:'#434167' }}>
@@ -70,8 +71,7 @@ const BlogCard = ({ title, subTitle, btnText, btnUrl }) => {
               sx={{ 
                 background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', 
                 borderRadius:'30px',
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
+                ...styles.elementalEndFont,
                 fontSize: 11,
                 color:'#2F2F2F',
                 px:2,

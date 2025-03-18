@@ -1,24 +1,15 @@
 "use client"
 
-/**
- * Section6 Component
- *
- * This component displays a promotional section highlighting the ability to generate 3D models
- * of retail products. It includes a header, subheader, and a call-to-action button styled
- * with a gradient background.
- *
- * Features:
- * - Visually engaging typography styled with custom fonts and colors.
- * - A "Beta Access" button with an icon and gradient styling.
- * - Uses styled-components for custom layout and design consistency.
- * 
- */
+// =======================================================
+// Section 6 Banner Component
+// ======================================================
 
 import { useState } from "react";
 import { RootStyle } from "./styles";
-import { Box, Container, Typography, Button, TextField } from '@mui/material';
-import { LazyImage } from "@/components/lazy-image";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
+import { LazyImage } from "@/components/lazy-image";
+import { Box, Container, Typography, Button, TextField } from '@mui/material';
 
 export default function Section6() {
   // Animation variants
@@ -86,9 +77,8 @@ export default function Section6() {
             {/* Main Header */}
             <Typography
               sx={{
-                fontSize: '36px',
-                fontFamily: 'Elemental End',
-                textTransform: 'lowercase',
+                ...styles.elementalEndFont,
+                fontSize: {xs:'20px', sm:'36px'},
                 color: '#fff',
               }}
             >
@@ -99,7 +89,7 @@ export default function Section6() {
             <Typography
               sx={{
                 fontFamily: 'Helvetica',
-                fontSize: 18,
+                fontSize: {xs:'14px', sm:'18px'},
                 marginBottom: "1rem",
                 color: '#fff',
               }}

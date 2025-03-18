@@ -36,10 +36,12 @@ export default function PlanCard({ plan, theme }) {
       }
       <Card
         sx={{
+          minHeight: {xs:"500px", sm:"650px"}, // Guarantees a base height
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           flexGrow: 1,  // Makes the card expand
+          width:'100%',
           height: "100%",  // Ensures all cards match the tallest one
           border: plan.isPopular ? "3px solid #2563EB" : "1px solid rgba(255, 255, 255, 1)",
           filter: "drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.25))",

@@ -1,18 +1,9 @@
 "use client";
 
-/**
- * LandingPageView Component
- *
- * This component serves as the main layout for the landing page of the application.
- * It incorporates multiple sections imported from local custom section components.
- *
- * 
- * Structure:
- * - Hero Section: Highlights the main feature or attraction.
- * - Application Section: Introduces the core application.
- * - Carousel Section: Displays a rotating showcase.
- * 
-*/
+// =======================================================
+// Landing Page Pages Section
+// =======================================================
+
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 import Section1 from "../section-1";

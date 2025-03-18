@@ -1,41 +1,30 @@
 "use client";
 
-/**
- * Section5 Component
- *
- * This component renders a pricing section with toggleable billing cycles and multiple plans.
- * It includes an animated background, a header, and a grid layout for displaying plan details.
- *
- * Features:
- * - Users can toggle between "monthly" and "yearly" billing cycles.
- * - Each plan dynamically updates pricing based on the selected billing cycle.
- * 
- */
+// =======================================================
+// Section 5 Component
+// ======================================================
 
 import { motion } from "framer-motion";
+import { styles } from '../page-view/styles';
+import { AR_FOR_BUSINESS_PLANS } from "@/data/pricing";
 import { Box, Container, Typography } from "@mui/material";
 import PricingTable from "@/components/pricing-table/pricingTable";
-import { AR_FOR_BUSINESS_PLANS } from "@/data/pricing";
+import { FlexCol } from "@/components/flex-box";
 
 export default function Section5() {
 
   return (
     <Box sx={{ py: 8 }} id="pricing">
       <Container>
-        <Box
-          sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-              pb: 10,
-          }}
-        >
+        <FlexCol sx={{ justifyContent: "space-between", alignItems: "center", pb: {xs:2,sm:10},}}>
           {/* Main Header */}
           <Box sx={{ textAlign: "center" }}>
               <Typography
-                  fontSize={{ sm: 34, xs: 28 }}
-                  sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}
+                  sx={{
+                    ...styles.elementalEndFont,
+                    fontSize: { sm: 20, xs: 28 },
+                    wordSpacing: '5px'
+                  }}
               >
                   revolutionize shopping. simplify and save.
               </Typography>
@@ -50,7 +39,7 @@ export default function Section5() {
                   Choose the perfect plan for your business needs
               </Typography>
           </Box>            
-        </Box>
+        </FlexCol>
         <PricingTable plans={AR_FOR_BUSINESS_PLANS} />
 
       </Container>

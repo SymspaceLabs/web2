@@ -1,21 +1,15 @@
 "use client";
 
+// =======================================================
+// Section 2 Component
+// ======================================================
+
 import { motion } from "framer-motion";
+import { PARTNERS } from "@/data/partners";
+import { styles } from '../page-view/styles';
 import { FlexBox } from "@/components/flex-box";
 import { keyframes, styled } from "@mui/system";
 import { Box, Container, Typography } from "@mui/material";
-
-/**
- * Section2 Component
- *
- * This component renders a section showcasing trusted partners' logos in a continuously scrolling animation.
- * - Includes a title and subtitle for context.
- * - Displays company logos in a scrolling horizontal layout.
- * - The logos are animated using keyframes for a smooth infinite scroll effect.
- * - Styled using Material-UI and custom keyframes animation.
- *
- * @returns {JSX.Element} Rendered section with scrolling company logos.
- */
 
 // Keyframes for the scrolling animation
 const scrollAnimation = keyframes`
@@ -35,14 +29,6 @@ const CompanyLogo = styled("img")({
 });
 
 // Array of company logo URLs
-const companies = [
-  "/assets/images/companies/1.png",
-  "/assets/images/companies/2.png",
-  "/assets/images/companies/3.png",
-  "/assets/images/companies/4.png",
-  "/assets/images/companies/5.png",
-  "/assets/images/companies/6.png",
-];
 
 export default function Section2() {
   return (
@@ -58,13 +44,12 @@ export default function Section2() {
           {/* Title of the section */}
           <Typography
             sx={{
+              ...styles.elementalEndFont,
+              fontSize: { xs: 30, sm: 32 },
               textAlign: "center",
               color: "#4E4E4E",
               pt: 8,
               pb: 1,
-              fontFamily: "'Elemental End', sans-serif",
-              textTransform: "lowercase",
-              fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
             }}
           >
             trusted by all our partners
@@ -77,7 +62,7 @@ export default function Section2() {
               color: "#4E4E4E",
               pb: 3,
               fontFamily: "Helvetica",
-              fontSize: 12,
+              fontSize: 16,
             }}
           >
             We work with the world's biggest organizations, brands, and marketplaces.
@@ -87,7 +72,7 @@ export default function Section2() {
           <FlexBox sx={{ width: "100%", position: "relative", marginTop: "20px" }}>
             <ScrollWrapper>
               {/* Duplicate the logo array to ensure smooth looping */}
-              {companies.concat(companies).map((logo, index) => (
+              {PARTNERS.concat(PARTNERS).map((logo, index) => (
                 <CompanyLogo key={index} src={logo} alt="Company Logo" />
               ))}
             </ScrollWrapper>

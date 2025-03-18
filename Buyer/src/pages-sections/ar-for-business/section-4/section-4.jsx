@@ -1,20 +1,11 @@
 "use client";
 
-/**
- * Section4 Component
- *
- * This component renders a section showcasing 3D product and AR trial room features.
- * It utilizes Material-UI for styling and responsiveness. The section is divided into multiple rows,
- * each featuring a `BlogCard` component paired with a video, and incorporates styled "BlobBox" elements
- * for a dynamic visual effect.
- *
- * Key Features:
- * - Dynamic content rendering with videos and descriptive cards.
- * - Visual design enhanced with animated blob elements.
- * - Mobile-responsive typography and layout.
- */
+// =======================================================
+// Section 4 Component
+// ======================================================
 
 import { Box, Container, Typography } from '@mui/material';
+import { styles } from '../page-view/styles';
 import CustomSection from './custom-section';
 import { motion } from "framer-motion";
 
@@ -26,16 +17,17 @@ const fadeInVariant = {
 
 export default function Section4() {
   return (
-    <Box id="benefits">
+    <Box id="benefits" sx={{ zIndex:2 }}>
       <Container>
         {/* Section header */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography
-              fontSize={{ sm: 34, xs: 28 }}
-              fontFamily="'Elemental End', sans-serif"
-              textTransform="lowercase"
-              textAlign="center"
+              sx={{
+                ...styles.elementalEndFont,
+                fontSize:{ sm: 34, xs: 28 },
+                textAlign:"center"
+              }}
             >
               revolutionize Shopping
             </Typography>

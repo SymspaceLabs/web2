@@ -1,17 +1,13 @@
+// =======================================================
+// Section 3 Component
+// ======================================================
+
 import { Box, Container, Typography, Grid } from "@mui/material";
+import { styles } from "../page-view/styles";
 import { motion } from "framer-motion"; // Import Framer Motion
 import BlogCard from "./blog-card"; // API FUNCTIONS
 
-/**
- * Section4 Component
- *
- * This component renders a section that highlights engagement statistics using blog cards.
- * - Includes a title to emphasize customer engagement.
- * - Dynamically displays a grid of blog cards using mock data (`blogs` array).
- * - Each blog card showcases a key statistic and accompanying subtitle.
- *
- * @returns {JSX.Element} Rendered section with a title and grid of blog cards.
- */
+// ======================================================
 
 // Animation variants
 const fadeInVariant = {
@@ -27,7 +23,7 @@ const staggerContainer = {
   },
 };
 
-export default function Section4() {
+export default function Section3() {
   return (
     <motion.div
       initial="hidden"
@@ -41,13 +37,12 @@ export default function Section4() {
           <motion.div variants={fadeInVariant}>
             <Typography
               sx={{
+                ...styles.elementalEndFont,
+                fontSize: {xs:28, sm:48},
                 textAlign: "center",
                 color: "#000",
                 pt: 8,
                 pb: 3,
-                fontFamily: "'Elemental End', sans-serif",
-                textTransform: "lowercase",
-                fontSize: {xs:28, sm:48},
               }}
             >
               engage your customers

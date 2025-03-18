@@ -11,7 +11,7 @@ const PricingTable = ({plans, title, theme='light'}) => {
     };
 
     return (
-        <FlexCol gap={{ xs:0, sm:"75px" }}>
+        <FlexCol gap={{ xs:5, sm:"75px" }}>
             {/* TOGGLE */}
             <PlanToggle
                 title={title}
@@ -22,13 +22,17 @@ const PricingTable = ({plans, title, theme='light'}) => {
             />
 
             {/* TABLE */}
-            <Grid container spacing={4} justifyContent="center" alignItems="stretch">
+            <Grid container spacing={4} alignItems="stretch">
                 {plans(billingCycle).map((plan) => (
-                    <Grid item xs={12} sm={6} md={3} key={plan.title} sx={{ display: "flex" }}>
-                        <PlanCard plan={plan} theme={theme} />                        
+                    <Grid item xs={12} sm={6} md={3} key={plan.title} >
+                        <PlanCard plan={plan} theme={theme} />
                     </Grid>
                 ))}
             </Grid>
+
+
+
+
 
         </FlexCol>
     )

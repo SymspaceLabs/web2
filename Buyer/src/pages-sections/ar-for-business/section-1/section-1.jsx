@@ -1,24 +1,13 @@
-/**
- * Section1 Component
- *
- * This component renders the hero section for the SYMSPACE platform. It includes:
- * - A call-to-action headline encouraging users to sell more with SYMSPACE.
- * - A promotional offer for the initial 100 partners.
- * - A button to sign up for the service.
- * - A decorative BlobBox for visual enhancement.
- * - A responsive layout with content and an optional image container.
- *
- * The component leverages Material-UI for layout and styling, with custom styles applied.
- *
- * @returns {JSX.Element} Rendered hero section
- */
-
 "use client";
 
-import React from 'react';
-import { Box, Container, Typography, Button, Grid, useTheme } from '@mui/material';
-import { motion } from "framer-motion"; // Import Framer Motion
+// =======================================================
+// Section 1 Component
+// ======================================================
+
+import { motion } from "framer-motion";
+import { styles } from '../page-view/styles';
 import { FlexBox } from '@/components/flex-box';
+import { Box, Container, Typography, Button, Grid, useTheme } from '@mui/material';
 
 export default function Section1() {
   return (
@@ -36,7 +25,7 @@ export default function Section1() {
               {/* Left column: Text content */}
               <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
                 {/* Headline */}
-                <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 30, md: 40, lg: 50, xl: 60 }, color: '#4E4E4E' }}>
+                <Typography sx={{ ...styles.sectionHeader, color: '#4E4E4E' }}>
                   sell more <br /> with SYMSPACE
                 </Typography>
 
@@ -47,7 +36,7 @@ export default function Section1() {
 
                 {/* Button group */}
                 <FlexBox sx={{ pt: 2.5 }}>
-                  <Button variant="outlined" sx={outlinedButton}>
+                  <Button sx={styles.gradientBtn}>
                     sign up
                   </Button>
                 </FlexBox>

@@ -1,24 +1,14 @@
 'use client';
 
+// =======================================================
+// Blog Card For State Ticker
+// ======================================================
+
 import { useEffect, useState, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
+import { styles } from "../page-view/styles";
 
-/**
- * BlogCard Component
- *
- * This component displays a percentage-based count and a subtitle, with an animated counting effect when the card enters the viewport.
- * - The `title` prop determines the target count value.
- * - The `subTitle` prop provides a description or additional context below the count.
- * - Uses the Intersection Observer API to detect when the card is visible in the viewport and triggers the counting animation.
- *
- * Props:
- * - `title` (string): The target count value to animate towards, expressed as a percentage (e.g., "94").
- * - `subTitle` (string): The descriptive text displayed below the count.
- *
- * @param {string} title - The target percentage value for the count animation.
- * @param {string} subTitle - The subtitle text displayed below the count.
- * @returns {JSX.Element} Rendered BlogCard component.
- */
+// ======================================================
 
 export default function BlogCard({ title, subTitle }) {
   const [count, setCount] = useState(0); // Current count for the animation
@@ -84,11 +74,10 @@ export default function BlogCard({ title, subTitle }) {
       {/* Animated count displayed as a percentage */}
       <Typography
         sx={{
-          fontFamily: 'Elemental End',
-          textTransform: 'lowercase',
-          fontSize: 96,
-          color: '#2F2F2F',
+          ...styles.elementalEndFont,
           textAlign: 'center',
+          color: '#2F2F2F',
+          fontSize: 96,
         }}
       >
         {count}%

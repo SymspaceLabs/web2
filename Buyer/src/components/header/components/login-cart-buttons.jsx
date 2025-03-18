@@ -20,7 +20,7 @@ import PersonOutline from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 
-export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
+export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleFavouriteOpen }) {
   const { state } = useCart();
   const ICON_COLOR = { color: "grey.600" };
   const { isAuthenticated, user, logout } = useAuth();
@@ -47,13 +47,13 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
   return (
     <FlexBox alignItems="center">
       {/* Favorite Icon Button */}
-      <IconButton onClick={toggleSidenav}>
+      <IconButton onClick={toggleFavouriteOpen}>
         <FavoriteBorderIcon sx={ICON_COLOR} />
       </IconButton>
 
       {/* Shopping Cart Icon Button */}
       <Badge badgeContent={state.cart.length} color="primary">
-        <IconButton onClick={toggleSidenav}>
+        <IconButton onClick={toggleCartOpen}>
           <PiShoppingCartSimpleBold color="#7D879C"  />
         </IconButton>
       </Badge>

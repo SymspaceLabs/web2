@@ -5,42 +5,45 @@
 // ==============================================================
 
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { FlexBox } from "@/components/flex-box";
+import { MiniCart } from "@/components/mini-cart";
+import { MiniFavorite } from "@/components/favourites";
+import { SearchInput } from "@/components/search-box";
 import { Fragment, useCallback, useState } from "react";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
-import { FlexBox } from "@/components/flex-box";
-import { SearchInput } from "@/components/search-box";
-import { Footer } from "@/components/footer";
 
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
-import NavigationList from "@/components/navbar/nav-list/nav-list";
-import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 import useHeader from "@/components/header/hooks/use-header";
+import NavigationList from "@/components/navbar/nav-list/nav-list";
 import DialogDrawer from "@/components/header/components/dialog-drawer";
 import SymRightDrawer from "@/components/header/components/drawer-right";
+import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 
-/**
- *  USED IN:
- *  Landing Page
- */
-
-export default function ShopLayout1({
-  children
-}) {
+export default function ShopLayout1({children}) {
   const [isFixed, setIsFixed] = useState(false);
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {
     dialogOpen,
-    sidenavOpen,
     toggleDialog,
-    toggleSidenav
+
+    cartOpen,
+    toggleCartOpen,
+
+    favouriteOpen,
+    toggleFavouriteOpen
   } = useHeader();
 
   const HEADER_SLOT = (
     <FlexBox width="90%" alignItems="center" justifyContent="space-between">
       <NavigationList />
       <SearchInput btn={false} mxWidth="350px" />
-      <LoginCartButtons toggleDialog={toggleDialog} toggleSidenav={toggleSidenav} />
+      <LoginCartButtons
+        toggleDialog={toggleDialog}
+        toggleCartOpen={toggleCartOpen}
+        toggleFavouriteOpen={toggleFavouriteOpen}
+      />
     </FlexBox>
   );
 
@@ -69,9 +72,23 @@ export default function ShopLayout1({
 
       {/* SHOPPING CART SIDE DRAWER */}
       <SymRightDrawer
-        sidenavOpen={sidenavOpen}
-        toggleSidenav={toggleSidenav}
-      />
+        sidenavOpen={cartOpen}
+        toggleSidenav={toggleCartOpen}
+      >
+        <MiniCart
+          toggleSidenav={toggleCartOpen}
+        />
+      </SymRightDrawer>
+
+      {/* FAVOURITES SIDE DRAWER */}
+      <SymRightDrawer
+        sidenavOpen={favouriteOpen}
+        toggleSidenav={toggleFavouriteOpen}
+      >
+        <MiniFavorite
+          toggleSidenav={toggleFavouriteOpen}
+        />
+      </SymRightDrawer>
 
       <Footer />
     </Fragment>

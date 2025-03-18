@@ -4,12 +4,11 @@
 
 import { Fragment } from "react";
 import { Drawer } from '@mui/material';
-import { MiniCart } from "@/components/mini-cart";
 
 // ==============================================================
 
 export default function SymRightDrawer(props) {  
-  const { sidenavOpen, toggleSidenav } = props;
+  const { sidenavOpen, toggleSidenav, children } = props;
 
   return (
     <Fragment>
@@ -26,9 +25,7 @@ export default function SymRightDrawer(props) {
           }
         }}
       >
-        <MiniCart
-          toggleSidenav={toggleSidenav}
-        />
+        {children}
       </Drawer>
 
     </Fragment>

@@ -1,7 +1,6 @@
 "use client";
 import localFont from "next/font/local";
 import ThemeProvider from "@/theme/theme-provider"; // Your custom ThemeProvider
-import { ThemeProvider as MUIThemeProvider, createTheme } from "@mui/material/styles"; // Rename MUI's ThemeProvider
 
 // Load Custom Font (.ttf)
 const elementalEnd = localFont({
@@ -10,13 +9,6 @@ const elementalEnd = localFont({
   style: 'normal',
   display: 'swap',
   variable: '--font-elemental-end' // Optional CSS variable
-});
-
-// Create MUI Theme with Custom Font
-const theme = createTheme({
-  typography: {
-    fontFamily: "'Elemental End', sans-serif",
-  },
 });
 
 import "@/i18n";
@@ -48,7 +40,6 @@ export default function RootLayout({ children }) {
       <body className={elementalEnd.className}>
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
           <AuthProvider>
-            <MUIThemeProvider theme={theme}>
               <SnackbarProvider>
                 <CartProvider>
                   <SettingsProvider>
@@ -59,7 +50,6 @@ export default function RootLayout({ children }) {
                   </SettingsProvider>
                 </CartProvider>
               </SnackbarProvider>
-            </MUIThemeProvider>
           </AuthProvider>
         </GoogleOAuthProvider>
       </body>

@@ -1,8 +1,10 @@
-import React from 'react';
+"use client"
+
 import { FlexBox } from '../flex-box';
 import { Small } from '../Typography';
-import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
+import { useState, useEffect } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
 
 const SymMultiSelectDropdown = ({
     title,
@@ -14,6 +16,12 @@ const SymMultiSelectDropdown = ({
     isEdit,
 }) => {
     const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
+
+    const [menuContainer, setMenuContainer] = useState(null);
+
+    useEffect(() => {
+        setMenuContainer(document.getElementById('root'));
+    }, []);
 
     return (
         <FlexBox
@@ -57,7 +65,7 @@ const SymMultiSelectDropdown = ({
                     },
                 }}
                 MenuProps={{
-                    container: document.getElementById('root'), // Adjust this to your app's root container ID
+                    container: menuContainer, // Adjust this to your app's root container ID
                     disablePortal: false, // Ensures the dropdown is not restricted by parent stacking context
                     PaperProps: {
                         sx: {

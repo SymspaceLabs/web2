@@ -1,8 +1,16 @@
-import React, { useState, useEffect } from 'react';
+"use client"
+
+// =================================================================================
+// Preference Form Used in Profile
+// =================================================================================
+
+import { useState, useEffect } from 'react';
 import { TitleCard } from '../dialog/components';
 import SymMultiSelectDropdown from "@/components/custom-inputs/SymMultiSelectDropdown";
 import cardStyle from "@/pages-sections/customer-dashboard/preferences/styles";
-import { FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Box, Typography } from "@mui/material";
+import { FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Box } from "@mui/material";
+
+// =================================================================================
 
 const PreferenceForm = ({
     gender,
@@ -28,10 +36,17 @@ const PreferenceForm = ({
     sidebar=false,
 }) => {
 
-    const [genderData, setGenderData] = useState("");
+    const [genderData, setGenderData] = useState(gender || "male");
+
 
     useEffect(() => {
-      setGenderData(gender); // Populate gender on component mount
+      if(gender){
+        setGenderData(gender);
+      } else {
+        setGenderData("male");
+      }
+      
+    
     }, [gender]);
 
     const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));

@@ -1,6 +1,7 @@
 "use client";
 import localFont from "next/font/local";
 import ThemeProvider from "@/theme/theme-provider"; // Your custom ThemeProvider
+import "@/styles/globals.css";
 
 // Load Custom Font (.ttf)
 const elementalEnd = localFont({

@@ -79,7 +79,7 @@ export default function EmailBanner() {
             />
             <div className="content">
               <Typography
-                sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}
+                sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}
                 mt={3}
                 mb={1}
                 lineHeight={1.2}
@@ -110,7 +110,7 @@ export default function EmailBanner() {
                 >
                   <Typography
                     sx={{
-                      fontFamily: "Elemental End",
+                      fontFamily: "'Elemental End', sans-serif",
                       textTransform: "lowercase",
                       fontSize: 12,
                     }}
@@ -194,7 +194,7 @@ export default function EmailBanner() {
                         borderRadius: "50px",
                         color: isSubmitted ? "#000" : "#fff",
                         padding: "6px 12px",
-                        fontFamily: "Elemental End",
+                        fontFamily: "'Elemental End', sans-serif",
                         textTransform: "lowercase",
                         "&:hover": {
                           background: isSubmitted

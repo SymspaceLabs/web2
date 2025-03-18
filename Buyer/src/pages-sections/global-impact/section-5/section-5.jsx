@@ -15,7 +15,7 @@ export default async function Section5() {
         <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#fff" }}>
           What everyone is saying
         </Typography>
-        <Typography sx={{ pb: "25px", color: "#fff" }} fontSize={{ xs: 28, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase">
+        <Typography sx={{ pb: "25px", color: "#fff" }} fontSize={{ xs: 28, sm: 40 }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
           communities and collaborations
         </Typography>
       </Box>

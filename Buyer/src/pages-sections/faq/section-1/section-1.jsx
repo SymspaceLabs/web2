@@ -43,14 +43,14 @@ export default function Section1() {
       >
         <Container>
           <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
-            <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="Elemental End" textTransform="lowercase" color="#fff"  >
+            <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase" color="#fff"  >
               FAQs
             </Typography>
             {/* <Link href="/faqs" target="blank" >
               <Typography
                 sx={{ 
                   color: 'rgba(255,255,255,0.5)', 
-                  fontFamily: "Elemental End", 
+                  fontFamily: "'Elemental End', sans-serif", 
                   textTransform: 'lowercase', 
                   textDecoration: 'none', 
                   fontSize:{xs:10},
@@ -75,7 +75,7 @@ export default function Section1() {
                   sx={accordionStyles}
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <Typography color="#fff" fontFamily="Elemental End" textTransform="lowercase" sx={{fontSize:{xs:10, sm:18}}} >
+                    <Typography color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" sx={{fontSize:{xs:10, sm:18}}} >
                       {faq.question}
                     </Typography>
                   </AccordionSummary>

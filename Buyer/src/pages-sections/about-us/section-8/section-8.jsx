@@ -72,7 +72,7 @@ export default function Section8() {
           />
           <div className="content">
             <Typography
-              sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}
+              sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}
               mt={3}
               mb={1}
               lineHeight={1.2}
@@ -104,7 +104,7 @@ export default function Section8() {
               >
                 <Typography
                   sx={{
-                    fontFamily: "Elemental End",
+                    fontFamily: "'Elemental End', sans-serif",
                     textTransform: "lowercase",
                     fontSize: 12,
                   }}

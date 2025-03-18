@@ -59,7 +59,7 @@ export default function Section5() {
         <Typography
           sx={{ pb: "25px" }}
           fontSize={{ xs: 28, sm: 40 }}
-          fontFamily="Elemental End"
+          fontFamily="'Elemental End', sans-serif"
           textTransform="lowercase"
         >
           trusted&nbsp;&nbsp;by&nbsp;&nbsp;users&nbsp;&nbsp;globally

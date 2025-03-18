@@ -73,7 +73,7 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 onDrop={handleDrop}
             >
                 <CloudUploadIcon style={{ color: '#fff', fontSize: 22 }} />
-                <Typography fontFamily="Elemental End" color="#fff" height={10}>
+                <Typography fontFamily="'Elemental End', sans-serif" color="#fff" height={10}>
                     {isDragging ? "Drop files here" : "Upload files"}
                 </Typography>
             </FlexBox>

@@ -188,7 +188,7 @@ const JobCard = ({ job }) => {
         {job.location}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontFamily="Elemental End" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+      <Typography color="#fff" fontFamily="'Elemental End', sans-serif" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
         {job.title}
       </Typography>
       <FlexBox justifyContent="flex-end">

@@ -17,7 +17,7 @@ export default function TopHeader({ toggle, total }) {
         <PiShoppingCartSimpleBold color="#FFF" size="1.5em"  />
 
         {/* Shopping Cart Item Count */}
-        <Typography lineHeight={0} fontWeight={500} fontFamily="Elemental End" color="#FFF">
+        <Typography lineHeight={0} fontWeight={500} fontFamily="'Elemental End', sans-serif" color="#FFF">
           {total}  <span style={{fontSize:'10px'}}>items</span>
         </Typography>
       </FlexBox>

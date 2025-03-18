@@ -60,7 +60,7 @@ export default function Section12() {
                   <Tab key={item.slug} label={item.title} value={item.slug}
                     sx={{
                       textTransform: "none",
-                      fontFamily: "Elemental End",
+                      fontFamily: "'Elemental End', sans-serif",
                       textTransform: "lowercase",
                       fontWeight: 400,
                       fontSize: { xs: 10, sm: 18 },

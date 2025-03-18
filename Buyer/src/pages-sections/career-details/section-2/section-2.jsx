@@ -32,7 +32,7 @@ const ContentBox = ({ title, content }) => {
     <Box sx={{ width: "100%" }}>
       <Typography
         sx={{
-          fontFamily: "Elemental End",
+          fontFamily: "'Elemental End', sans-serif",
           textTransform: "lowercase",
           fontSize: { xs: 25, sm: 35 },
           color: "#fff",

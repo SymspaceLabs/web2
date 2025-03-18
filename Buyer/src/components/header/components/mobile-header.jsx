@@ -80,7 +80,7 @@ export default function MobileHeader() {
         <Box width="auto" padding={2} height="100vh">
           <FlexBetween mb={1}>
             <Typography
-              fontFamily="Elemental End" 
+              fontFamily="'Elemental End', sans-serif" 
               textTransform="lowercase"
               color="#FFF"
               fontSize={15}

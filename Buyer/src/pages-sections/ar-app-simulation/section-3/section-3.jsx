@@ -30,7 +30,7 @@ export default function Section3() {
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography
           fontSize={{ xs: 20, sm: 40 }}
-          fontFamily="Elemental End"
+          fontFamily="'Elemental End', sans-serif"
           textTransform="lowercase"
           textAlign="center"
           mb={4}
@@ -107,7 +107,7 @@ export default function Section3() {
                   minHeight: '200px',
                 }}
               >
-                <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase">
+                <Typography variant="h6" fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
                   {activeBenefit.header}
                 </Typography>
                 <Typography variant="h6" sx={{ fontSize: { xs: 12, sm: 18 } }}>

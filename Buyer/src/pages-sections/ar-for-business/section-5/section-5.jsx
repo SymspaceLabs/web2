@@ -35,7 +35,7 @@ export default function Section5() {
           <Box sx={{ textAlign: "center" }}>
               <Typography
                   fontSize={{ sm: 34, xs: 28 }}
-                  sx={{ fontFamily: "Elemental End", textTransform: "lowercase" }}
+                  sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}
               >
                   revolutionize shopping. simplify and save.
               </Typography>

@@ -27,7 +27,7 @@ export default function Section13() {
           <Typography fontSize="16px" sx={{ color: "#434167" }}>
             What everyone is saying
           </Typography>
-          <Typography sx={{ pb: "25px" }} fontSize={{ xs: 20, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase">
+          <Typography sx={{ pb: "25px" }} fontSize={{ xs: 20, sm: 40 }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
             trusted by users globally
           </Typography>
         </Box>

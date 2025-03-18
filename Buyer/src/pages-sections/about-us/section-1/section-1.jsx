@@ -86,7 +86,7 @@ const GlassCard = ({content, url}) => {
       tabIndex={0} // Makes it focusable for keyboard users
       onKeyPress={(e) => e.key === "Enter" && handleClick()} // Allows Enter key to trigger click
     >
-      <Typography fontFamily="Elemental End" color="#fff" sx={{ fontSize:{xs:'10px', sm:'14px'} }}>
+      <Typography fontFamily="'Elemental End', sans-serif" color="#fff" sx={{ fontSize:{xs:'10px', sm:'14px'} }}>
         {content}
       </Typography>
       <ArrowForwardIosIcon fontSize="small" sx={{ color: "#fff" }} />

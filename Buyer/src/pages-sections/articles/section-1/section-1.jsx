@@ -71,7 +71,7 @@ export default function Section1() {
     <FlexColCenter sx={{ py: { xs: 2, sm: 5 } }}>
       <FlexCol sx={{ alignItems: "center", maxWidth:'1400px', width:'100%', px:{xs:2, sm:0} }}>
         <FlexBox flexDirection={isMobile ? "column" : "row"} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2} alignItems="center">
-          <Typography sx={{ fontFamily: "Elemental End", textTransform:'lowercase', fontSize: { xs: 25, sm: 50 }, color: "#fff" }}>
+          <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform:'lowercase', fontSize: { xs: 25, sm: 50 }, color: "#fff" }}>
             Press Releases
           </Typography>
           <TextField
@@ -154,7 +154,7 @@ const CardWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const btnStyle = {
-  fontFamily: "Elemental End",
+  fontFamily: "'Elemental End', sans-serif",
   textTransform: "lowercase",
   fontSize: 10,
   px: 3,

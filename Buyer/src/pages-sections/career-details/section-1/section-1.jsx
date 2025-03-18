@@ -72,7 +72,7 @@ const CardWrapper = styled(Box)(({ theme }) => ({
 const JobCard = ({ title, value }) => {
   return (
     <CardWrapper>
-      <Typography color="#000" fontFamily="Elemental End" fontSize={20} sx={{ py:1 }}>
+      <Typography color="#000" fontFamily="'Elemental End', sans-serif" fontSize={20} sx={{ py:1 }}>
         {title}
       </Typography>
       <Box sx={{ borderTop:'1px solid black'}} />

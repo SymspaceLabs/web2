@@ -101,7 +101,7 @@ export default function Section2({
           <Grid container p={5} alignItems="center">
             {/* Left Content */}
             <Grid item xs={12} md={6} sx={{ textAlign: 'center', mb: { xs: 5, md: 0 } }}>
-              <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="Elemental End" textTransform="lowercase">
+              <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
                 get in touch
               </Typography>
 
@@ -154,7 +154,7 @@ export default function Section2({
               alt="User"
             />
           </Box>
-          <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="Elemental End" textTransform="lowercase" textAlign="center">
+          <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" textAlign="center">
             thank you for reaching out!
           </Typography>
           <Typography fontFamily="Helvetica" fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{  xs: 14, sm: 16 }}>

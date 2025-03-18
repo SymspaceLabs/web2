@@ -15,7 +15,7 @@ export default function Section3() {
     <Box sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography fontSize={{ xs: 20, sm: 40 }}
-          fontFamily="Elemental End"
+          fontFamily="'Elemental End', sans-serif"
           textTransform="lowercase"
           textAlign="center"
           mb={4}
@@ -69,7 +69,7 @@ export default function Section3() {
 
 
         <Card sx={cardStyle}>
-          <Typography variant="h6" fontFamily="Elemental End" textTransform="lowercase" color="#fff" sx={{ fontSize: { xs: 20, sm: 32 } }}>
+          <Typography variant="h6" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" color="#fff" sx={{ fontSize: { xs: 20, sm: 32 } }}>
             {activeBenefit.header}
           </Typography>
           <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>

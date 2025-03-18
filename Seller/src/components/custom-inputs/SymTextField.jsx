@@ -21,7 +21,7 @@ const SymTextField = ({
   return (
     <FlexBox flexDirection="column" flex={1}>
         <FlexBox gap={1}>
-            <Typography color="white" mb={0.5} textAlign="left" fontFamily="Elemental End" textTransform="lowercase">
+            <Typography color="white" mb={0.5} textAlign="left" fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
                 {title}
             </Typography>
             {toolTipText && (

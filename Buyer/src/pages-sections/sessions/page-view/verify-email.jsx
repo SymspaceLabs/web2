@@ -80,7 +80,7 @@ const VerifyEmailPage = () => {
           sx={{
             fontSize: '16px',
             fontWeight: 500,
-            fontFamily: "Elemental End",
+            fontFamily: "'Elemental End', sans-serif",
             textTransform: "lowercase",
             background: "#000",
             color: "#fff",
@@ -102,7 +102,7 @@ const VerifyEmailPage = () => {
           sx={{
             fontSize: '16px',
             fontWeight: 500,
-            fontFamily: "Elemental End",
+            fontFamily: "'Elemental End', sans-serif",
             textTransform: "lowercase",
             background: "transparent",
             border: "2px solid black",

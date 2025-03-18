@@ -11,7 +11,7 @@ const TextBubble = ({ positionStyles, children }) => {
         p: { xs: 1, md:1.5, sm: 2 },
         borderRadius: "50px",
         textAlign: "center",
-        fontFamily: "Elemental End",
+        fontFamily: "'Elemental End', sans-serif",
         textTransform: "lowercase",
         fontSize: { xs: "8px", sm: "12px" },
         ...positionStyles, // Custom position styles passed as props
@@ -83,7 +83,7 @@ export default function Section4() {
         <Box>
           <Typography
             fontSize={{ xs: 28, sm: 40 }}
-            fontFamily="Elemental End"
+            fontFamily="'Elemental End', sans-serif"
             textTransform="lowercase"
             textAlign="center"
           >
@@ -115,7 +115,7 @@ export default function Section4() {
               "linear-gradient(180deg, #000000 0%, rgba(104, 104, 104, 0.6) 100%)",
             borderRadius: "20px",
             color: "white", // Ensures the text is visible on the dark gradient
-            fontFamily: "Elemental End",
+            fontFamily: "'Elemental End', sans-serif",
             textTransform: "lowercase",
             fontSize: "16px",
             fontWeight: "bold",
@@ -132,7 +132,7 @@ export default function Section4() {
         <Box>
           <Typography
             fontSize={{ xs: 28, sm: 40 }}
-            fontFamily="Elemental End"
+            fontFamily="'Elemental End', sans-serif"
             textTransform="lowercase"
             textAlign="center"
           >
@@ -159,7 +159,7 @@ export default function Section4() {
               background: "linear-gradient(180deg, #3084FF 0%, #1D4F99 100%)",
               borderRadius: "20px",
               color: "white", // Ensures the text is visible on the dark gradient
-              fontFamily: "Elemental End",
+              fontFamily: "'Elemental End', sans-serif",
               textTransform:'lowercase',
               fontSize: "16px",
               fontWeight: "bold",

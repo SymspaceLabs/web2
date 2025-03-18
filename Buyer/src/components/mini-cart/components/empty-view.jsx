@@ -14,7 +14,7 @@ export default function EmptyCartView() {
 
       <FlexColCenter gap={2}>
         {/* EMPTY CART TEXT */}
-        <Typography fontFamily="Elemental End" fontSize={15} mt={2} color="#FFF" textAlign="center" maxWidth={200}>
+        <Typography fontFamily="'Elemental End', sans-serif" fontSize={15} mt={2} color="#FFF" textAlign="center" maxWidth={200}>
           your cart is empty
         </Typography>
 

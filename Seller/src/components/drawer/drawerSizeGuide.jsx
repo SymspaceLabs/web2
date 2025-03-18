@@ -133,7 +133,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
         <FlexBox gap={1} alignItems="center" color="secondary.main">
           <Typography
             sx={{
-              fontFamily: "Elemental End",
+              fontFamily: "'Elemental End', sans-serif",
               textTransform: "lowercase",
               color: "#353535",
               fontSize: "18px",
@@ -217,7 +217,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
               Complete the details below so we can offer better-tailored and
               personalized services
             </Typography>
-            <Typography sx={{ fontFamily: "Elemental End", color: "#fff" }}>
+            <Typography sx={{ fontFamily: "'Elemental End', sans-serif", color: "#fff" }}>
               To access personalized sizing features
             </Typography>
             <Button

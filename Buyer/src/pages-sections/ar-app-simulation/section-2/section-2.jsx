@@ -21,7 +21,7 @@ export default function Section2() {
         >
           <Typography
             fontSize={{ xs: 28, sm: 40 }}
-            fontFamily="Elemental End"
+            fontFamily="'Elemental End', sans-serif"
             textTransform="lowercase"
             textAlign="center"
           >

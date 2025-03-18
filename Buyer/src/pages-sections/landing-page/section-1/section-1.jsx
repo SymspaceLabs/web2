@@ -1,12 +1,15 @@
 "use client";
+// ===================================================================
+// Landing Page Hero Section 
+// ===================================================================
+import Link from "next/link"; // Import Link
 
 import { Box, Container, Typography, Button, Grid } from "@mui/material";
 import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { LazyImage } from '@/components/lazy-image';
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
-import Link from "next/link"; // Import Link
-import { elementalEnd } from "@/app/layout";
+// import { elementalEnd } from "@/app/layout";
 
 export default function Section1() {
   return (
@@ -27,7 +30,7 @@ export default function Section1() {
                   AI Powered AR Commerce
                 </Typography>
                 
-                <Typography sx={{fontFamily: `${elementalEnd.style.fontFamily}, sans-serif` , fontSize: { xs: 48, sm: 60, md: 100 }, color: '#fff' }}>
+                <Typography sx={{fontFamily: "'Elemental End', sans-serif" , fontSize: { xs: 48, sm: 60, md: 100 }, color: '#fff' }}>
                   SYMSPACE
                 </Typography>
                 

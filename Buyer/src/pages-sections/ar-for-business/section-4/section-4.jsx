@@ -33,7 +33,7 @@ export default function Section4() {
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography
               fontSize={{ sm: 34, xs: 28 }}
-              fontFamily="Elemental End"
+              fontFamily="'Elemental End', sans-serif"
               textTransform="lowercase"
               textAlign="center"
             >
@@ -41,7 +41,7 @@ export default function Section4() {
             </Typography>
             <Typography
               fontSize={{ sm: 34, xs: 28 }}
-              fontFamily="Elemental End"
+              fontFamily="'Elemental End', sans-serif"
               textTransform="lowercase"
               textAlign="center"
             >

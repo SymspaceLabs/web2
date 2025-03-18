@@ -4,11 +4,12 @@ import ThemeProvider from "@/theme/theme-provider"; // Your custom ThemeProvider
 import { ThemeProvider as MUIThemeProvider, createTheme } from "@mui/material/styles"; // Rename MUI's ThemeProvider
 
 // Load Custom Font (.ttf)
-export const elementalEnd = localFont({
+const elementalEnd = localFont({
   src: "../../public/fonts/elemental-end.ttf",
-  weight: "400",
-  style: "normal",
-  variable: "--font-custom",
+  weight: '400',
+  style: 'normal',
+  display: 'swap',
+  variable: '--font-elemental-end' // Optional CSS variable
 });
 
 // Create MUI Theme with Custom Font

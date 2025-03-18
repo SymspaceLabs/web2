@@ -51,7 +51,7 @@ export default function Section5() {
                   />
                   {/* staff title */}
                   <FlexBox flexDirection="column" alignItems="center" gap={1}>
-                    <Typography sx={{ fontFamily: "Elemental End", textTransform: "lowercase", color: "#fff" }}>
+                    <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase", color: "#fff" }}>
                       {staff.title}
                     </Typography>
                     <Typography color="#fff">

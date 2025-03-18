@@ -40,7 +40,7 @@ export default function Section4() {
 
           {/* Right Side Image */}
           <FlexColCenter sx={styles.glassCard} gap='25px'>
-            <Typography sx={{ fontFamily: "Elemental End", textTransform:'lowercase', fontWeight: 500, color: "#fff", fontSize: { xs: 12, sm: 32 } }}>
+            <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform:'lowercase', fontWeight: 500, color: "#fff", fontSize: { xs: 12, sm: 32 } }}>
               Make every Space Your Own with SYMSPACE
             </Typography>
             <Typography sx={{ fontFamily: "Helvetica", fontWeight: '300', color: "#fff", fontSize: { xs: 12, sm: 24 } }}>

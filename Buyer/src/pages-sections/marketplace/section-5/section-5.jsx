@@ -34,7 +34,7 @@ export default function Section5() {
               sm: 34,
               xs: 28,
             }}
-            fontFamily="Elemental End"
+            fontFamily="'Elemental End', sans-serif"
             textTransform="lowercase"
           >
             Best Seller Products

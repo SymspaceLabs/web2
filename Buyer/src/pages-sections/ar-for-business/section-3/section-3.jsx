@@ -45,7 +45,7 @@ export default function Section4() {
                 color: "#000",
                 pt: 8,
                 pb: 3,
-                fontFamily: "Elemental End",
+                fontFamily: "'Elemental End', sans-serif",
                 textTransform: "lowercase",
                 fontSize: {xs:28, sm:48},
               }}

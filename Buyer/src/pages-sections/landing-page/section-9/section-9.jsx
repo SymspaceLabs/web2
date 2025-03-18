@@ -57,7 +57,7 @@ export default function Section8() {
                 <Button
                   sx={{
                     gap: 1,
-                    fontFamily: "Elemental End",
+                    fontFamily: "'Elemental End', sans-serif",
                     textTransform:"lowercase",
                     color: "#353535",
                     borderRadius: "50px",

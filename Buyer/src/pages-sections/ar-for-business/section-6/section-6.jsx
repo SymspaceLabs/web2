@@ -211,7 +211,7 @@ export default function Section6() {
                       borderRadius: "50px",
                       color: isSubmitted ? "#000" : "#fff",
                       padding: "6px 12px",
-                      fontFamily: "Elemental End",
+                      fontFamily: "'Elemental End', sans-serif",
                       textTransform: "lowercase",
                       "&:hover": {
                         background: isSubmitted

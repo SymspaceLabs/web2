@@ -21,7 +21,7 @@ export default function Section4() {
   return (
     <Box id="features" sx={{ py: { xs: 2, sm: 5 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography fontSize={{ xs: 20, sm: 40 }} fontFamily="Elemental End" textTransform="lowercase" textAlign="center" mb={4} color="white">
+        <Typography fontSize={{ xs: 20, sm: 40 }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase" textAlign="center" mb={4} color="white">
           environmental &nbsp;Impact
         </Typography>
         <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px' }, textAlign:'center', lineHeight: {xs:'20px', sm:'35px'} }}>

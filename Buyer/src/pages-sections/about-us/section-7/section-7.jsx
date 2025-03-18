@@ -110,7 +110,7 @@ const BlogCard = ({ blog }) => {
         {blog.handle_url_title}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontFamily="Elemental End" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+      <Typography color="#fff" fontFamily="'Elemental End', sans-serif" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
         {blog.title}
       </Typography>
     </CardWrapper>

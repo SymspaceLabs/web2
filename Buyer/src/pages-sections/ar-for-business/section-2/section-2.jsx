@@ -62,7 +62,7 @@ export default function Section2() {
               color: "#4E4E4E",
               pt: 8,
               pb: 1,
-              fontFamily: "Elemental End",
+              fontFamily: "'Elemental End', sans-serif",
               textTransform: "lowercase",
               fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
             }}

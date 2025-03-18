@@ -27,7 +27,7 @@ function NavigationList() {
 
               <CategoryMenuButton onClick={e => handler(e)}>
                 <IoGrid size="1.3em" color="#fff" />
-                <Paragraph color="#fff" fontFamily="Elemental End" fontWeight="600">
+                <Paragraph color="#fff" fontFamily="'Elemental End', sans-serif" fontWeight="600">
                   Categories
                 </Paragraph>
               </CategoryMenuButton>
@@ -43,7 +43,7 @@ function NavigationList() {
         if (nav.url) {
           return (
             <NavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
-              <MenuItem sx={{ fontFamily: "Elemental End", textTransform:'lowercase' }}>
+              <MenuItem sx={{ fontFamily: "'Elemental End', sans-serif", textTransform:'lowercase' }}>
                 {nav.title}
               </MenuItem>
             </NavLink>

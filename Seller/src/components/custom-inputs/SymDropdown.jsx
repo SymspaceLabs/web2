@@ -13,7 +13,7 @@ const SymDropdown = ({
 
     return (
         <FlexBox flexDirection="column" sx={{ flex:1, minWidth: "100px" }}>
-            <Typography color="white" mb={0.5} fontFamily="Elemental End" textTransform="lowercase">
+            <Typography color="white" mb={0.5} fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
                 {title}
             </Typography>
             <Select

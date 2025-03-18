@@ -4,8 +4,8 @@ import React, { useRef, useState } from "react";
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { motion, useInView } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";
-import Link from "next/link";
 import { styles } from "../page-view/styles";
+import Link from "next/link";
 
 export default function Section6() {
   const ref = useRef(null);
@@ -36,7 +36,7 @@ export default function Section6() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color: '#000', fontSize: { xs: 20, sm: 64 }, px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
+                <Typography sx={{ ...styles.sectionHeader, color: '#000', px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
                   Application
                 </Typography>
 
@@ -44,7 +44,7 @@ export default function Section6() {
                   Optimized for user experience, our AR application allows consumers to leverage various advanced AR features to trial products like never before. Consumers are able to augment 3D products realistically in their own space, providing a virtual trial room experience for clothes, furniture, and more. The Symspace app goes beyond visualization by offering near-precise sizing recommendations, reducing returns, and increasing consumer confidence levels.
                 </Typography>
 
-                <FlexBox sx={{ pt:2, display: 'flex', justifyContent: {xs:'center', sm:'flex-start'},}}>
+                <FlexBox sx={{ pt:2, justifyContent: {xs:'center', sm:'flex-start'} }}>
                   <Link href="/ar-app-simulation" passHref>
                     <Button sx={styles.outlinedLightBtn}>
                       Learn More

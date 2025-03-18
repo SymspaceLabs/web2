@@ -4,7 +4,7 @@
 
 import { FlexRowCenter } from "@/components/flex-box";
 import { Typography } from "@mui/material";
-
+import { styles } from "./styles";
 // =========================================================
 
 const LogoWithTitle = ({ title, subTitle }) => {
@@ -14,8 +14,7 @@ const LogoWithTitle = ({ title, subTitle }) => {
             <Typography
                 sx={{
                     lineHeight: 1.25,
-                    fontFamily: 'Elemental End',
-                    textTransform: 'lowercase',
+                    ...styles.elementalEndFont,
                     color: '#fff',
                     fontSize: {xs:16, sm:24},
                     textAlign: 'center',

@@ -8,6 +8,7 @@ import { H6 } from "../Typography";
 import Link from "next/link";
 import axios from "axios";
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { elementalEndFont } from "../styles";
 
 const DrawerRight = ({ toggleSidenav, headerTitle }) => {
   const { isAuthenticated, user } = useAuth();
@@ -99,7 +100,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/onboarding/user/${user.id}`);
         const { measurement, preference } = response.data;
-        console.log(measurement.height);
+
         setHeight({
           cm: measurement.height,
           feet: Math.floor(measurement.height / 30.48),
@@ -133,9 +134,9 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
         <FlexBox gap={1} alignItems="center" color="secondary.main">
           <Typography
             sx={{
-              fontFamily: "'Elemental End', sans-serif",
+              fontFamily: elementalEndFont,
               textTransform: "lowercase",
-              color: "#353535",
+              color: "#FFF",
               fontSize: "18px",
             }}
           >

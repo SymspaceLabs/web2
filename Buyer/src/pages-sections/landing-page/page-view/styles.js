@@ -6,18 +6,18 @@ export const styles = {
   heroHeader: {
     fontFamily: elementalEndFont,
     fontSize: { xs: 48, sm: 60, md: 100 },
-    color: '#fff'
+    color: '#FFF'
   },
   sectionHeader: {
       fontFamily: elementalEndFont,
       textTransform:'lowercase',
       fontSize: { xs: 20, sm: 64 },
-      color:'#FFF', 
+      color:'#FFF'
   },
   elementalEndFont : {
     fontFamily: elementalEndFont,
     textTransform:'lowercase',
-    fontWeight: 500,
+    fontWeight: 500
   },
   gradientBtnText: {
     fontFamily: elementalEndFont,
@@ -70,7 +70,7 @@ export const styles = {
     borderRadius: '50px',
     py: {xs:1, sm:2},
     px: 3,
-    fontSize: 12,
+    fontSize: { xs:10, sm:16 },
     transition: 'all 0.3s ease-in-out', // Smooth transition effect
     ':hover': {
       background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',

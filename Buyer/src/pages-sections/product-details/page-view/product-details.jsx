@@ -1,14 +1,8 @@
 "use client"
 
-/**
- * `ProductDetailsPageView` is a React functional component that serves as the 
- * main container for displaying detailed information about a product.
- * 
- * Props:
- * - `product`: The product data passed to `ProductIntro` component.
- * This component is designed with Material-UI for responsive styling.
- * 
- */
+// ==========================================================
+// Product Details Page
+// ==========================================================
 
 // Material-UI components
 import { useEffect, useState } from "react";

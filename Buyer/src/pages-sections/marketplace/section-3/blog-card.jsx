@@ -1,6 +1,7 @@
 import { Box, Card } from '@mui/material';
 import { H3 } from '@/components/Typography';
 import { LazyImage } from '@/components/lazy-image';
+import { styles } from '../page-view/styles';
 
 export default function BlogCard({ title, image, textColor="#000" }) {
   return (
@@ -18,9 +19,8 @@ export default function BlogCard({ title, image, textColor="#000" }) {
       <Box sx={{ position: 'relative', zIndex: 1, textAlign: 'center', color: '#fff' }}>
         <H3
           sx={{
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
-            fontSize: { xs: 21, sm: 21, md: 21, lg: 21, xl: 21 },
+            ...styles.elementalEndFont,
+            fontSize: 21,
             color:textColor
           }}
         >

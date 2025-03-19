@@ -1,7 +1,13 @@
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+
+export const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
+
 const buttonDark = {
-    fontFamily: 'Elemental End',
-    textTransform: 'lowercase',
-    fontWeight: 500,
+    ...elementalEndFont,
     borderRadius: 32,
     padding: ".5rem 1.5rem",
     background: 'rgba(255,255,255,0.1)',
@@ -16,6 +22,11 @@ const buttonDark = {
 };
 
 export const styles = {
+    elementalEndFont : {
+        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+        textTransform:'lowercase',
+        fontWeight: 500
+    },
     buttonDark,
     buttonLight: {
         ...buttonDark,

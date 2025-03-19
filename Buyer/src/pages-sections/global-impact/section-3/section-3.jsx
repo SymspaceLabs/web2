@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Box, Container, Typography, Card } from '@mui/material';
+// =================================================================
+// Section 3
+// =================================================================
+
+import { useState } from 'react';
 import { FlexBox } from '@/components/flex-box';
+import { Box, Container, Typography, Card } from '@mui/material';
+import { styles } from '../page-view/styles';
 
 export default function Section3() {
   const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
@@ -15,8 +20,7 @@ export default function Section3() {
     <Box sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography fontSize={{ xs: 20, sm: 40 }}
-          fontFamily="'Elemental End', sans-serif"
-          textTransform="lowercase"
+          sx={styles.elementalEndFont}
           textAlign="center"
           mb={4}
           color="#fff"
@@ -40,7 +44,7 @@ export default function Section3() {
             {benefits.slice(0, 3).map((benefit,index) => (
               <Box
                 key={index}
-                sx={textBubbleStyle}
+                sx={styles.textBubbleStyle}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >
                 {benefit.title}
@@ -58,7 +62,7 @@ export default function Section3() {
           >
             {benefits.slice(3, 6).map((benefit) => (
               <Box
-                sx={textBubbleStyle}
+                sx={styles.textBubbleStyle}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >
                 {benefit.title}
@@ -68,8 +72,8 @@ export default function Section3() {
         </FlexBox>
 
 
-        <Card sx={cardStyle}>
-          <Typography variant="h6" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" color="#fff" sx={{ fontSize: { xs: 20, sm: 32 } }}>
+        <Card sx={styles.cardStyle}>
+          <Typography color="#fff" sx={{ ...styles.elementalEndFont, fontSize: { xs: 20, sm: 32 } }}>
             {activeBenefit.header}
           </Typography>
           <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>
@@ -123,47 +127,3 @@ const benefits = [
     bullet: 'Information Technology & Innovation Foundation highlighted that AR/VR technologies can serve as assistive tools, making physical environments more accessible for individuals with disabilities'
   },
 ];
-
-const cardStyle = {
-  filter: 'drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.25))',
-  borderRadius: '50px',
-  position: 'relative',
-  width: '100%',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  backdropFilter: 'blur(10.0285px)',
-  background: 'rgba(255, 255, 255, 0.35)',
-  p:{ xs:5, sm:10 },
-  display:'flex',
-  flexDirection:'column',
-  gap:'10px',
-  mt:5,
-  width:{ xs:'100%', sm:'75%' }
-}
-
-const textBubbleStyle = {
-  py: 2,
-  cursor: 'pointer',
-  mb: 2,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  '&:hover': {
-    background: 'rgba(3, 102, 254, 0.6)',
-  },
-  background: 'rgba(255, 255, 255, 0.35)',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  borderRadius: '80px',
-  px:3,
-  color: '#fff'
-}

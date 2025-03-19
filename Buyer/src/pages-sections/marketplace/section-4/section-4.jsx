@@ -1,10 +1,6 @@
-/**
- * Section4 Component
- * This component renders a section showcasing a list of blogs in a grid layout
- * with a heading and a button for navigating to categories.
- * 
- * @returns {JSX.Element} A styled section with blog cards.
- */
+// =======================================================
+// Section 4 Component
+// =======================================================
 
 import BlogCard from "../section-3/blog-card";
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
@@ -22,9 +18,8 @@ export default function Section4() {
             textAlign: 'center',
             color: '#fff',
             py:3,
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
-            fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
+            ...styles.elementalEndFont,
+            fontSize: 30,
           }}
         >
           Shop Men

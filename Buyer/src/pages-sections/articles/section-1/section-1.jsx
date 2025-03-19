@@ -21,7 +21,7 @@ import styled from "@mui/material/styles/styled";
 import SearchIcon from "@mui/icons-material/Search";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { RiArrowRightSLine } from "react-icons/ri";
-
+import { styles } from "../page-view/styles";
 
 export default function Section1() {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -71,7 +71,7 @@ export default function Section1() {
     <FlexColCenter sx={{ py: { xs: 2, sm: 5 } }}>
       <FlexCol sx={{ alignItems: "center", maxWidth:'1400px', width:'100%', px:{xs:2, sm:0} }}>
         <FlexBox flexDirection={isMobile ? "column" : "row"} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2} alignItems="center">
-          <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform:'lowercase', fontSize: { xs: 25, sm: 50 }, color: "#fff" }}>
+          <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 50 }, color: "#fff" }}>
             Press Releases
           </Typography>
           <TextField
@@ -153,18 +153,6 @@ const CardWrapper = styled(Box)(({ theme }) => ({
   gap: 3,
 }));
 
-const btnStyle = {
-  fontFamily: "'Elemental End', sans-serif",
-  textTransform: "lowercase",
-  fontSize: 10,
-  px: 3,
-  background: "#000",
-  border: "2px solid white",
-  borderRadius: "50px",
-  color: "#fff",
-  fontWeight: 400,
-  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-};
 
 const BlogCard = ({ blog }) => {
   const router = useRouter();
@@ -189,7 +177,7 @@ const BlogCard = ({ blog }) => {
         {blog.content}
       </Typography>
       <FlexBox justifyContent="flex-end" sx={{ pt: 5 }}>
-        <Button onClick={handleCardClick} sx={btnStyle}>
+        <Button onClick={handleCardClick} sx={styles.cardBtn}>
           Read More
         </Button>
       </FlexBox>

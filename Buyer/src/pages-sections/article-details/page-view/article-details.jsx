@@ -1,13 +1,32 @@
+'use client'
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
 import { BlobBox } from "@/components/BlobBox";
 
-export default async function ArticlePageView({ slug }) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blogs/slug/${slug}`);
-  const article = await response.json();
+export default function ArticlePageView({ slug }) {
+  const [article, setArticle] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!article) {
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/blogs/slug/${slug}`);
+        const data = await response.json();
+        setArticle(data);
+      } catch (error) {
+        console.error("Failed to fetch article:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticle();
+  }, [slug]);
+
+  if (loading) {
     return <div>Loading...</div>; // Or a loading spinner
   }
 

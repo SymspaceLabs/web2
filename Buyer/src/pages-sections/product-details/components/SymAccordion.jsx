@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { H1, H6, Paragraph } from "../../../components/Typography";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import styles from '../styles';
 
 const SymAccordion = ({title,content}) => {
   return (
@@ -22,11 +23,9 @@ const SymAccordion = ({title,content}) => {
         >
           <H1 
             sx={{
-              fontFamily: 'Elemental End',
+              ...styles.elementalEndFont,
               fontSize: '24px',
               color: '#353535',
-              fontWeight: 400,
-              textTransform: 'lowercase'
             }}
           >
             {title}

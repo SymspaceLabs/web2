@@ -7,11 +7,24 @@ export const elementalEndFont = {
 }
 
 export const styles = {
-    cardTitle: {
+    elementalEndFont,
+    banner : {
+        background: 'rgba(255, 255, 255, 0.35)',
+        boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
+                    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
+                    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
+                    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
+                    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
+        backdropFilter: 'blur(10.0285px)',
+        borderRadius:'40px',
+        py:{ xs:3, sm:8 },
+        px:{ xs:3, sm:8 },
+    },
+    bannerTitle: {
         pb:1,
         fontSize:{ xs:20, sm:40 },
         color:"#fff",
-        fontWeight:700
+        ...elementalEndFont
     },
     buttonDark : {
         width: "100%", 
@@ -29,18 +42,6 @@ export const styles = {
             background: ' linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
         }
-    },
-    glassCard : {
-        width:'100%',
-        maxWidth:'1200px',
-        background: 'rgba(255, 255, 255, 0.35)',
-        boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-                    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-                    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-                    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-                    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
-        backdropFilter: 'blur(10.0285px)',
-        borderRadius: "30px",
     },
     bannerButton : { 
         ...elementalEndFont,

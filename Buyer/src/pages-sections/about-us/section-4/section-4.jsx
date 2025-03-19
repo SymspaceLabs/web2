@@ -1,6 +1,11 @@
 "use client";
 
+// =============================================================================
+// Section 4 - Core Values -  About Us 
+// =============================================================================
+
 import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { styles } from "../page-view/styles";
 
 export default function Section4() {
 
@@ -30,7 +35,7 @@ export default function Section4() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{sm:10} }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ py:5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
+        <Typography sx={{ py:5, ...styles.elementalEndFont, fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
           Our Core Values
         </Typography>
         <Grid container spacing={3}>
@@ -41,7 +46,7 @@ export default function Section4() {
                 <TableBody>
                   {rows.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Elemental End', fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
+                      <TableCell sx={{ p:{xs:1, sm:4}, ...styles.elementalEndFont, fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
                         {row.title}
                       </TableCell>
                       <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, textAlign:'justify' }}>

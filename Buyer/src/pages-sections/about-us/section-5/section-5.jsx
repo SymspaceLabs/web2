@@ -1,6 +1,11 @@
 "use client";
 
+// =============================================================================
+// Section 5 - Team -  About Us 
+// =============================================================================
+
 import Link from "next/link"; // Used for navigation.
+import { styles } from "../page-view/styles";
 import { IconButton, Box, Container, Typography } from "@mui/material";
 import { FlexBox } from "@/components/flex-box"; // Custom utility for flexible layouts.
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
@@ -20,7 +25,7 @@ export default function Section5() {
         <Box sx={{ width:'100%', maxWidth:'1400px' }}>
           <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
             {/* Section title */}
-            <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+            <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
               our leadership team
             </Typography>
 
@@ -51,7 +56,7 @@ export default function Section5() {
                   />
                   {/* staff title */}
                   <FlexBox flexDirection="column" alignItems="center" gap={1}>
-                    <Typography sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase", color: "#fff" }}>
+                    <Typography sx={{ ...styles.elementalEndFont, color: "#fff" }}>
                       {staff.title}
                     </Typography>
                     <Typography color="#fff">

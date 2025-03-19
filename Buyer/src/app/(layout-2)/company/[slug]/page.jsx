@@ -1,4 +1,9 @@
-import FurnitureOnePageView from "../../../../pages-sections/company/page-view";
+// ==============================================================
+// Company Page
+// ==============================================================
+
+import { CompanyPageView } from "@/pages-sections/company/page-view";
+
 export const metadata = {
   title: "Company Page",
   description: `Symspace is an E-commerce website.`,
@@ -8,7 +13,7 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default async function FurnitureShop({params}) {
-  const { slug } = await params;
-  return <FurnitureOnePageView slug={slug} />;
+
+export default function CompanyPage({params}) {
+  return <CompanyPageView slug={params.slug} />;
 }

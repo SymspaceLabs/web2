@@ -1,14 +1,13 @@
 "use client"
 
-import { motion } from "framer-motion";
 import { useState } from "react";
-import { LazyImage } from '@/components/lazy-image';
-import { Paragraph } from "@/components/Typography"; 
-import { Box, Typography, Button, TextField, Container} from "@mui/material";
+import { styles } from "../styles";
+import { motion } from "framer-motion";
 import styled from "@mui/material/styles/styled";
-import { styles } from "./styles";
+import { LazyImage } from '@/components/lazy-image';
+import { Box, Typography, Button, TextField, Container} from "@mui/material";
 
-export default function EmailBanner() {
+export default function EmailBanner({title}) {
   const [showInput, setShowInput] = useState(false);
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -61,7 +60,7 @@ export default function EmailBanner() {
   };
   
   return (
-    <Box sx={{ background:'#FFF' }}>
+    <Box>
       <motion.div
         component={Box}
         initial={{ opacity: 0, y: 30 }}
@@ -86,11 +85,11 @@ export default function EmailBanner() {
                 lineHeight={1.2}
                 fontSize={{ xs: 20, sm: 40 }}
               >
-                stay up to date
+                {title}
               </Typography>
 
               <Typography fontFamily="Helvetica" mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
-                Get updates on new partnered brands, products, <br /> and technology.
+                Get updates on new partnered brands, products, and technology.
               </Typography >
 
               {!showInput && (

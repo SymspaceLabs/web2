@@ -1,13 +1,18 @@
 "use client"
 
-import React, { useState, useEffect } from 'react';
+// ==============================================================
+// Section 3 || Careers Page
+// ==============================================================
+
+import { useState, useEffect } from 'react';
 import { Box, Container, Grid, Checkbox, ListItemText, InputAdornment, Typography, Divider, TextField, MenuItem, Select, useMediaQuery, FormControl } from '@mui/material';
-import styled from "@mui/material/styles/styled";
 import { FlexBox } from '@/components/flex-box';
 import { useRouter } from 'next/navigation';
 import SearchIcon from '@mui/icons-material/Search';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import EastIcon from '@mui/icons-material/East';
+import styled from "@mui/material/styles/styled";
+import { styles } from '../page-view/styles';
 
 export default function Section3() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -60,7 +65,7 @@ export default function Section3() {
     <Box id="open-roles" sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FlexBox flexDirection={isMobile? 'column': 'row'} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2}>
-          <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+          <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
             open roles
           </Typography>
           <FlexBox gap={2} flexDirection={isMobile? 'column': 'row'}>
@@ -188,7 +193,7 @@ const JobCard = ({ job }) => {
         {job.location}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontFamily="'Elemental End', sans-serif" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+      <Typography color="#fff" fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
         {job.title}
       </Typography>
       <FlexBox justifyContent="flex-end">

@@ -1,6 +1,11 @@
 "use client";
 
+// ===========================================================
+// Section 5
+// ===========================================================
+
 import { useEffect, useRef } from "react";
+import { styles } from "../page-view/styles";
 import { Box, Typography } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
 import { TESTIMONIALS } from "@/data/testimonial";
@@ -57,12 +62,14 @@ export default function Section5() {
           What everyone is saying
         </Typography>
         <Typography
-          sx={{ pb: "25px" }}
+          sx={{ 
+            ...styles.elementalEndFont,
+            wordSpacing:'10px',
+            pb: "25px",
+          }}
           fontSize={{ xs: 28, sm: 40 }}
-          fontFamily="'Elemental End', sans-serif"
-          textTransform="lowercase"
         >
-          trusted&nbsp;&nbsp;by&nbsp;&nbsp;users&nbsp;&nbsp;globally
+          trusted by users globally
         </Typography>
       </Box>
 

@@ -1,3 +1,7 @@
+// ==========================================================
+// Section 3
+// ==========================================================
+
 import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { H2 } from "@/components/Typography"; // Local custom Typography component
 import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
@@ -5,15 +9,6 @@ import BlogCard from "./blog-card"; // Blog card component
 import { motion } from "framer-motion"; // Import Framer Motion
 import { styles } from '../page-view/styles';
 
-/**
- * Section3 Component
- * 
- * Displays a section with a header, a grid of product cards, 
- * and a call-to-action button. The section is themed with 
- * a light blue background and utilizes Material-UI for styling.
- * 
- * @returns {JSX.Element} - Rendered Section3 component
- */
 export default async function Section3() {
   return (
     <Box sx={{py: {xs:2, sm:10} }}>
@@ -23,9 +18,8 @@ export default async function Section3() {
             textAlign: 'center',
             color: '#000',
             py:3,
-            fontFamily: 'Elemental End',
-            textTransform: 'lowercase',
-            fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
+            ...styles.elementalEndFont,
+            fontSize: 30,
           }}
         >
           Shop Women

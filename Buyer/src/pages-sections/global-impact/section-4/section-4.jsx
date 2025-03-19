@@ -1,7 +1,12 @@
 "use client";
 
+// =================================================================
+// Section 4
+// =================================================================
+
 import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, Grid, List, ListItem, ListItemText } from '@mui/material';
+import { styles } from '../page-view/styles';
 
 export default function Section4() {
   const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
@@ -21,7 +26,7 @@ export default function Section4() {
   return (
     <Box id="features" sx={{ py: { xs: 2, sm: 5 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography fontSize={{ xs: 20, sm: 40 }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase" textAlign="center" mb={4} color="white">
+        <Typography fontSize={{ xs: 20, sm: 40 }} sx={{ ...styles.elementalEndFont }} textAlign="center" mb={4} color="white">
           environmental &nbsp;Impact
         </Typography>
         <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px' }, textAlign:'center', lineHeight: {xs:'20px', sm:'35px'} }}>
@@ -37,14 +42,17 @@ export default function Section4() {
                     key={index}
                     button
                     onMouseEnter={() => handleBenefitChange(benefit)}
-                    sx={textBubbleStyle}
+                    sx={{
+                      ...styles.textBubbleStyle,
+                      textAlign:'center',
+                      maxWidth:'100%'
+                    }}
                   >
                     <ListItemText
                       primary={benefit.title}
                       sx={{
                         '& .MuiListItemText-primary': {
-                          fontFamily: 'Elemental End',
-                          textTransform: 'lowercase',
+                          ...styles.elementalEndFont,
                         },
                       }}
                     />
@@ -59,8 +67,8 @@ export default function Section4() {
                 sx={{
                   position: 'relative',
                   zIndex: 2,
-                  borderRadius: '15px', // Optional rounded corners
-                  backgroundColor: '#000', // Background placeholder color
+                  borderRadius: '15px',
+                  backgroundColor: '#000',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -118,51 +126,3 @@ const benefits = [
     video: '/assets/videos/global-impact/3d-product-ads.mp4'
   }
 ];
-
-const cardStyle = {
-  filter: 'drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.25))',
-  borderRadius: '50px',
-  position: 'relative',
-  maxWidth: { xs: '100%', sm: '600px', md: '1200px' },
-  width: '100%',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  backdropFilter: 'blur(10.0285px)',
-  background: 'rgba(255, 255, 255, 0.35)',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  gap: '5px',
-  minHeight: '200px',
-  minWidth: { sm:'1000px' },
-  overflow: 'hidden',
-};
-
-const textBubbleStyle = {
-  py: 2,
-  cursor: 'pointer',
-  mb: 2,
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  '&:hover': {
-    background: 'rgba(3, 102, 254, 0.6)',
-  },
-  background: 'rgba(255, 255, 255, 0.35)',
-  boxShadow: `
-    inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-    inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-    inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-    inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
-  `,
-  borderRadius: '80px',
-  px: 3,
-  color: '#fff',
-  textAlign:'center',
-  maxWidth:'100%'
-};

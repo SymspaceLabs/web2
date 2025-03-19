@@ -1,8 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card, useMediaQuery } from '@mui/material';
+// ===========================================================
+// Section 3
+// ===========================================================
+
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { styles } from '../page-view/styles';
+import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card, useMediaQuery } from '@mui/material';
 
 export default function Section3() {
   const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
@@ -30,12 +35,11 @@ export default function Section3() {
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Typography
           fontSize={{ xs: 20, sm: 40 }}
-          fontFamily="'Elemental End', sans-serif"
-          textTransform="lowercase"
+          sx={styles.elementalEndFont}
           textAlign="center"
           mb={4}
         >
-          an&nbsp;&nbsp;app&nbsp;&nbsp;that&nbsp;&nbsp;redefines <br /> ar&nbsp;&nbsp;shopping
+          an app that redefines <br /> ar shopping
         </Typography>
 
         <Card
@@ -82,8 +86,7 @@ export default function Section3() {
                       primary={benefit.title}
                       sx={{
                         '& .MuiListItemText-primary': {
-                          fontFamily: 'Elemental End',
-                          textTransform: 'lowercase',
+                          ...styles.elementalEndFont
                         },
                       }}
                     />
@@ -107,7 +110,7 @@ export default function Section3() {
                   minHeight: '200px',
                 }}
               >
-                <Typography variant="h6" fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
+                <Typography variant="h6" sx={{...styles.elementalEndFont}} >
                   {activeBenefit.header}
                 </Typography>
                 <Typography variant="h6" sx={{ fontSize: { xs: 12, sm: 18 } }}>

@@ -32,9 +32,7 @@ export default function SideNavbar({
               </BorderBox>
             </Box>
 
-            {
-          /* CATEGORY/NAV LIST */
-        }
+            {/* CATEGORY/NAV LIST */}
             {nav.categoryItem.map((item, ind) => {
           if (item.child) {
             return <Accordion item={item} handleSelect={handleSelect} key={ind} />;

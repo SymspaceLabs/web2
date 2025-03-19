@@ -1,5 +1,9 @@
 import AboutUsPageView from "@/pages-sections/about-us/page-view";
 
+// ==============================================================
+// About Us Page
+// ==============================================================
+
 export const metadata = {
   title: "About Us",
   description: `Symspace is an E-commerce website.`,

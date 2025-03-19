@@ -8,6 +8,7 @@ import { LazyImage } from "@/components/lazy-image";
 import { SocialLinks } from "@/components/footer/components";
 import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { Box, Typography, Grid, Button, Container } from "@mui/material";
+import { styles } from '../page-view/styles';
 
 export default function Section2({
   isSubmitted,
@@ -34,12 +35,10 @@ export default function Section2({
   }, [firstName, lastName, email, topic, message]);
 
   const buttonStyles = useMemo(() => ({
-      fontFamily:'Elemental End',
-      textTransform:'lowercase',
-      fontWeight: 'bold',
-      background: isValid
-          ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
-          : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
+    ...styles.elementalEndFont,
+    background: isValid
+        ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
+        : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
       boxShadow: "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
       backdropFilter: "blur(50px)",
       borderRadius: "12px",
@@ -101,7 +100,7 @@ export default function Section2({
           <Grid container p={5} alignItems="center">
             {/* Left Content */}
             <Grid item xs={12} md={6} sx={{ textAlign: 'center', mb: { xs: 5, md: 0 } }}>
-              <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase">
+              <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" sx={{...styles.elementalEndFont}}>
                 get in touch
               </Typography>
 
@@ -154,7 +153,7 @@ export default function Section2({
               alt="User"
             />
           </Box>
-          <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" textAlign="center">
+          <Typography fontSize={{ sm: 40, xs: 30 }} lineHeight={1.2} color="#fff" sx={{...styles.elementalEndFont,}} textAlign="center">
             thank you for reaching out!
           </Typography>
           <Typography fontFamily="Helvetica" fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{  xs: 14, sm: 16 }}>
@@ -163,7 +162,7 @@ export default function Section2({
           <Typography fontFamily="Helvetica" fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{  xs: 14, sm: 16 }}>
             In the mean time, check out our resources.
           </Typography>
-          <Button sx={{ mt:5, fontFamily:'Elemental End', textTransform:'lowercase', background:'#fff', color:'#000', borderRadius:'50px', px:4, py:2, width: { xs: "100%", sm: "auto" }, }}>
+          <Button sx={{ mt:5, ...styles.elementalEndFont, background:'#fff', color:'#000', borderRadius:'50px', px:4, py:2, width: { xs: "100%", sm: "auto" }, }}>
             Resources
           </Button>
           <Typography fontFamily="Helvetica" fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{  xs: 14, sm: 16 }}>

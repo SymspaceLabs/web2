@@ -1,16 +1,22 @@
 "use client";
 
+// =============================================================================
+// Section 7 - Press Releases -  About Us Section
+// =============================================================================
+
 import { useState, useEffect } from "react";
-import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
+import { styles } from "../page-view/styles";
+import { useRouter } from 'next/navigation';
+import { FlexBox } from '@/components/flex-box';
+import { BsArrowUpRight } from "react-icons/bs";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
+import { LazyImage } from "@/components/lazy-image";
+import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
+
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import styled from "@mui/material/styles/styled";
-import { useRouter } from 'next/navigation';
-import { LazyImage } from "@/components/lazy-image";
-import { FlexBox } from '@/components/flex-box';
-import { BsArrowUpRight } from "react-icons/bs";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -37,7 +43,7 @@ export default function Section6() {
 
           {/* Section title */}
           <FlexBox alignItems="center" gap={2}>
-            <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+            <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
               press releases
             </Typography>
             <IconButton onClick={() => window.open('/press-releases', '_blank')}>
@@ -110,7 +116,7 @@ const BlogCard = ({ blog }) => {
         {blog.handle_url_title}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontFamily="'Elemental End', sans-serif" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+      <Typography color="#fff"  fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
         {blog.title}
       </Typography>
     </CardWrapper>

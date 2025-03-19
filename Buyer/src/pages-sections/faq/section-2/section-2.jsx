@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Box } from "@mui/material";
-import Banner from "@/components/Banner";
+import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section2() {
   return (
@@ -15,9 +15,9 @@ export default function Section2() {
         viewport={{ once: true }}
         style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
       >
-        <Banner
+        <GlassBanner
           title="get in touch"
-          description="Learn more about our vision to help those who need it most."
+          subtitle="Learn more about our vision to help those who need it most."
           btnText="contact us"
           btnUrl="/contact-us"
         />

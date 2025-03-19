@@ -4,6 +4,11 @@
 // About Us Page Sections
 // ===========================================================================
 
+
+import { useEffect } from "react";
+import { Box } from "@mui/material";
+import { BlobBox } from "@/components/BlobBox";
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -12,13 +17,9 @@ import Section5 from "../section-5";
 import Section6 from "../section-6";
 import Section7 from "../section-7";
 import Section8 from "../section-8";
-import { useEffect } from "react";
-import { Box } from "@mui/material";
-import { BlobBox } from "@/components/BlobBox";
-
 // ===========================================================================
 
-export default async function AboutUsPageView() {
+export default function AboutUsPageView() {
   
   {/* This code helps for scroll to a particular section */}
   useEffect(() => {

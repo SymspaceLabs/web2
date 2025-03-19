@@ -1,13 +1,14 @@
 "use client";
 
+// =================================================================
+// Section 1
+// =================================================================
+
 import { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Button, useTheme, TextField } from '@mui/material';
-import { section1Styles } from './styles';
+import { styles } from '../page-view/styles';
 
 export default function Section1() {
-  const theme = useTheme();
-  const styles = section1Styles(theme);
-
   const [email, setEmail] = useState('');
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -82,7 +83,7 @@ export default function Section1() {
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Headline */}
-        <Typography sx={{ fontFamily: 'Elemental End', color: '#fff', fontSize: { xs: 20, sm: 35, md: 60 } }}>
+        <Typography sx={{ ...styles.elementalEndFont, color: '#fff', fontSize: { xs: 20, sm: 35, md: 60 } }}>
           Shaping  the  future  of<br /> accessible  ar  Commerce
         </Typography>
 
@@ -157,8 +158,7 @@ export default function Section1() {
                   borderRadius: '50px',
                   color: isSubmitted ? '#000' : '#fff',
                   padding: '6px 12px',
-                  fontFamily: 'Elemental End',
-                  textTransform: 'lowercase',
+                  ...styles.elementalEndFont,
                   '&:hover': {
                     background: isSubmitted
                       ? '#f0f0f0'

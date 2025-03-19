@@ -1,6 +1,11 @@
 "use client";
 
-import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+// ===========================================================================
+// Section 2 - About Us
+// ===========================================================================
+
+import { Box, Container, Typography } from "@mui/material";
+import { styles } from "../page-view/styles";
 
 export default function Section2() {
 
@@ -30,7 +35,7 @@ export default function Section2() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ borderBottom:'1px solid white', py:1, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+        <Typography sx={{ borderBottom:'1px solid white', py:1, ...styles.elementalEndFont, fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
           our  Mission
         </Typography>
         <Box sx={{ maxWidth:'1200px', pt:4}}>

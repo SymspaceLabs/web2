@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion";
-import { EmailBanner } from "@/components";
 import { Box, Container} from "@mui/material";
+import { EmailBanner } from "@/components/custom-banner";
 
 export default function Section16() {
   return (
@@ -15,8 +15,10 @@ export default function Section16() {
         viewport={{ once: true }}
         style={{ width: "100%", overflow: "hidden" }}
       >
-        <Container sx={{ py: 10 }}>
-          <EmailBanner />
+        <Container sx={{ py: {xs:0, sm:10} }}>
+          <EmailBanner
+            title="stay up to date"
+          />
         </Container>
       </motion.div>
     </Box>

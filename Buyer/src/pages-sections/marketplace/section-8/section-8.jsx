@@ -1,3 +1,7 @@
+// ===================================================================
+// Section 8 
+// ===================================================================
+
 import { motion } from "framer-motion";
 import { BlackBox, YellowBox } from "./styles"; // CUSTOM STYLES
 import { FlexBox } from "@/components/flex-box"; // STYLED COMPONENT
@@ -5,17 +9,6 @@ import { LazyImage } from "@/components/lazy-image";
 import { H2, Paragraph } from "@/components/Typography"; // STYLED COMPONENTS FOR TEXT
 import { Container, Typography, Button, Grid } from "@mui/material"; // MUI COMPONENTS
 import { styles } from "../page-view/styles";
-
-/**
- * Section8 Component
- * This component displays a modern section with AR and AI themes, featuring three highlighted panels.
- * It uses Material-UI (MUI) components, styled components, and custom styles to create an engaging layout.
- * 
- * Features:
- * - Two text blocks with call-to-action buttons, styled in distinct color schemes.
- * - A central card highlighting AI-generated 3D product functionality with an image and button.
- * - Fully responsive grid layout.
- */
 
 const fadeIn = {
   hidden: { opacity: 0, y: 50 },

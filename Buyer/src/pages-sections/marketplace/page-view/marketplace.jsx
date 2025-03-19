@@ -1,10 +1,9 @@
 "use client";
 
-/**
- * MarketplacePageView is the main component for rendering the marketplace view.
- * It checks user authentication and onboarding status to display an onboarding dialog when necessary.
- * The page consists of multiple sections for various features such as sliders, catalogs, and 3D animations.
- */
+// ======================================================================
+// Marketplace Page
+// - It checks user authentication and onboarding status to display an onboarding dialog when necessary
+// ======================================================================
 
 import { useState, useEffect } from "react";
 import Section1 from "../section-1";

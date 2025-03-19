@@ -1,3 +1,7 @@
+// ==============================================================
+// Careers Page
+// ==============================================================
+
 import CareersPageView from "@/pages-sections/careers/page-view";
 
 export const metadata = {

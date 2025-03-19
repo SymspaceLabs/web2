@@ -1,8 +1,13 @@
 "use client";
 
-import { Box, Container, Typography, useMediaQuery } from "@mui/material";
+// ===========================================================
+// Section 2
+// ===========================================================
+
 import Image from "next/image";
+import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import { ParallaxProvider, Parallax } from "react-scroll-parallax";
+import { styles } from "../page-view/styles";
 
 export default function Section2() {
   const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screens
@@ -20,12 +25,15 @@ export default function Section2() {
           }}
         >
           <Typography
-            fontSize={{ xs: 28, sm: 40 }}
-            fontFamily="'Elemental End', sans-serif"
-            textTransform="lowercase"
-            textAlign="center"
+            sx={{
+              ...styles.elementalEndFont,
+              color: '#4E4E4E',
+              wordSpacing:'10px',
+              fontSize:{ xs: 28, sm: 40 },
+              textAlign:"center"
+            }}
           >
-            revolutionizing&nbsp;&nbsp;shopping 
+            revolutionizing shopping 
           </Typography>
           <Typography
             sx={{

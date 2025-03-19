@@ -1,14 +1,6 @@
-/**
- * Section1 Component
- * 
- * This component renders a responsive grid of promotional cards highlighting AR shopping features.
- * Each card contains a title, description, button, and an image showcasing AR shopping capabilities.
- * 
- * Dependencies:
- * - Next.js Image component for optimized image rendering.
- * - Material UI components (Grid, Box, Stack) for layout.
- * - Custom styled components and assets for styling.
- */
+// ======================================================================
+// Section1 Component
+// ======================================================================
 
 import Image from "next/image";
 import { motion } from "framer-motion";

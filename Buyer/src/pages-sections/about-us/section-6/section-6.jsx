@@ -1,7 +1,11 @@
 "use client";
 
+// =============================================================================
+// Section 6 - Open Roles -  About Us Section
+// =============================================================================
+
 import { useState, useEffect } from "react";
-import { IconButton, Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { useRouter } from 'next/navigation';
 import { FlexBox } from '@/components/flex-box';
@@ -11,6 +15,7 @@ import useCarousel from "./useCarousel"; // Custom hook for carousel functionali
 import styled from "@mui/material/styles/styled";
 import EastIcon from '@mui/icons-material/East';
 import { BsArrowUpRight } from "react-icons/bs";
+import { styles } from "../page-view/styles";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -47,7 +52,7 @@ export default function Section6() {
           <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
             {/* Section title */}
             <FlexBox alignItems="center" gap={2}>
-              <Typography sx={{ fontFamily: 'Elemental End', fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+              <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
                 open roles
               </Typography>
               <IconButton onClick={() => window.open('/careers#open-roles', '_blank')}>
@@ -119,7 +124,7 @@ const JobCard = ({ job }) => {
         {job.location}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontFamily="'Elemental End', sans-serif" fontSize={18} sx={{ py: 2, textTransform: 'lowercase' }}>
+      <Typography color="#fff" fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
         {job.title}
       </Typography>
       <FlexBox justifyContent="flex-end">

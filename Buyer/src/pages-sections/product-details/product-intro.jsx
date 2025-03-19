@@ -1,36 +1,27 @@
 "use client";
 
-/**
- * ProductIntro Component
- *
- * This component displays a product's detailed information, including a 3D model or image gallery,
- * product details (price, name, variants), and user-interactive features such as selecting colors,
- * sizes, and adding items to the cart. It also includes functionality to toggle a favorite icon
- * and navigate product images.
- *
- */
+// ==============================================================================
+// Product Intro Component
+// - displays a product's detailed information
+// ==============================================================================
 
 import Link from "next/link";
 import { useState } from "react";
-
-import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
-
-import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-
+import { currency } from "@/lib";
+import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, H2, H6 } from "@/components/Typography";
 import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
-import { currency } from "@/lib";
+import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
+import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
 import HandBagCanvas from "../../components/HandBagCanvas";
 import SymAccordion from "./components/SymAccordion"
-import { DrawerRight } from "@/components/drawer";
-import { elementalEndFont } from "@/components/styles";
+import styles from "./styles";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -216,7 +207,7 @@ export default function ProductIntro({ product }) {
             </H6>
             
             {/* PRODUCT NAME */}
-            <H1 sx={{ fontFamily: elementalEndFont, fontSize:40,  color: '#000', textTransform: 'lowercase', }} mb={1}>
+            <H1 sx={{ ...styles.elementalEndFont, fontSize:40, color: '#000' }} mb={1}>
               {name}
             </H1>
 
@@ -313,7 +304,7 @@ export default function ProductIntro({ product }) {
             </FlexBox>
 
               <FlexBox justifyContent="flex-end" >
-                <Button onClick={()=>setSidenavOpen(true)} sx={{ fontSize:8, padding: "8px", borderRadius: "50px", background:'#52647D', fontFamily: elementalEndFont, color:'#fff', textTransform: 'lowercase', fontWeight: 400 }} color="primary" variant="contained">
+                <Button onClick={()=>setSidenavOpen(true)} sx={{ fontSize:8, padding: "8px", borderRadius: "50px", background:'#52647D', ...styles.elementalEndFont, color:'#fff' }} color="primary" variant="contained">
                   Size chart
                 </Button>
               </FlexBox>
@@ -321,11 +312,11 @@ export default function ProductIntro({ product }) {
 
             {/* ADD TO CART BUTTON */}
             <FlexBox alignItems="center" gap={1}  mb={2} mt={2}>
-              <Button sx={{ padding: "16px 56px", border: "1px solid #000000", borderRadius: "50px", background:'transparent', fontFamily: elementalEndFont, color:'#000', textTransform: 'lowercase', fontWeight: 400 }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
+              <Button sx={{ padding: "16px 56px", border: "1px solid #000000", borderRadius: "50px", background:'transparent', ...styles.elementalEndFont, color:'#000' }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
                 Add to Cart
               </Button>
 
-              <Button sx={{ padding: "16px 56px", borderRadius: "50px", background:'#000', fontFamily: elementalEndFont, color:'#fff', textTransform: 'lowercase', fontWeight: 400 }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
+              <Button sx={{ padding: "16px 56px", borderRadius: "50px", background:'#000', ...styles.elementalEndFont, color:'#fff' }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
                 Buy now
               </Button>
             </FlexBox>

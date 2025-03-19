@@ -1,5 +1,9 @@
 "use client";
 
+// ==============================================================
+// Careers Page
+// ==============================================================
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -8,7 +12,7 @@ import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 
-export default async function CareersPageView() {
+export default function CareersPageView() {
 
   {/* This code helps for scroll to section */}
   useEffect(() => {
@@ -31,20 +35,20 @@ export default async function CareersPageView() {
       
       {/* GRADIENT CIRCLES */}
       {/* Blob 1: Hero Section Left */}
-      <BlobBox top={0} right="5%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top={0} right="5%" background="#0366FE" /> {/* BLUE */}
       
       {/* Blob 2: Open Roles Left */}
       <BlobBox top="45%" left={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="45%" left="5%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="45%" left="5%" background="#0366FE"  /> {/* BLUE */}
 
       {/* Blob 3: Open Roles Right */}
-      <BlobBox top="60%" right="5%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="60%" right="5%" background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 4: Open Roles Middle */}
-      <BlobBox top="75%" right="40%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="75%" right="40%" background="#0366FE" /> {/* BLUE */}
 
       {/* Blob 5: Open Roles Left */}
-      <BlobBox top="80%" left="0%" background="#0366FE" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="80%" left="0%" background="#0366FE" /> {/* BLUE */}
 
 
       {/* CONTENT */}

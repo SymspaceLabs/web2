@@ -12,6 +12,7 @@ import { RootStyle } from "./styles";
 import { Box, Container, Typography, Button, TextField } from '@mui/material';
 import { LazyImage } from "@/components/lazy-image";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
 
 
 export default function Section6() {
@@ -111,8 +112,7 @@ export default function Section6() {
                   {/* Button text */}
                   <Typography
                     sx={{
-                      fontFamily: 'Elemental End',
-                      textTransform: 'lowercase',
+                      ...styles.elementalEndFont,
                       fontSize: 12,
                     }}
                   >

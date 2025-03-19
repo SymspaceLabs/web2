@@ -1,5 +1,9 @@
 "use client";
 
+// =======================================================================
+// Section 5
+// ========================================================================
+
 import Link from "next/link";
 import { useState } from "react";
 import { FlexRowCenter, FlexBox } from "@/components/flex-box";
@@ -8,16 +12,8 @@ import { calculateDiscount } from "@/lib";
 import { Box, Container, Typography, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 import { LazyImage } from "@/components/lazy-image";
+import { styles } from "../page-view/styles";
 
-/**
- * Section5 Component
- *
- * This component manages and displays a list of products. 
- * The product data is initialized with a predefined set of static data (`data`).
- * It uses React's `useState` to manage the state of the products and passes them 
- * to the `Content` component for rendering.
- *
- */
 
 export default function Section5() {
   // State to hold the list of products; initialized with static data
@@ -30,12 +26,8 @@ export default function Section5() {
       <FlexRowCenter mt={10} mb={5}>
         <div>
           <H2
-            fontSize={{
-              sm: 34,
-              xs: 28,
-            }}
-            fontFamily="'Elemental End', sans-serif"
-            textTransform="lowercase"
+            fontSize={{ sm: 34, xs: 28 }}
+            sx={styles.elementalEndFont}
           >
             Best Seller Products
           </H2>

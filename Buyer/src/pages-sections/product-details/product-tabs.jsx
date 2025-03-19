@@ -8,6 +8,7 @@ import styled from "@mui/material/styles/styled";
 
 import ProductReview from "./product-review";
 import ProductDescription from "./product-description";
+import styles from "./styles";
 
 // STYLED COMPONENT
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -17,10 +18,8 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.text.disabled}`,
   "& .inner-tab": {
     minHeight: 40,
-    fontWeight: 600,
-    textTransform: "lowercase",
-    fontFamily: 'Elemental End',
-    fontSize: '24px'
+    fontSize: '24px',
+    ...styles.elementalEndFont,
   }
 }));
 

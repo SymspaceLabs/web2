@@ -3,14 +3,16 @@ import HeroCarousel from "./carousel"; // STYLED COMPONENTS
 
 import { Wrapper } from "./styles"; // API FUNCTIONS
 
-export default async function Section1({company}) {
+export default function Section1({company}) {
 
-  return <Wrapper id="carouselBox">
+  return (
+    <Wrapper id="carouselBox">
       <HeroCarousel
          mainCarouselData={mainCarouselData}
          company={company}
       />
-    </Wrapper>;
+    </Wrapper>
+  );
 }
 
 const mainCarouselData = [{

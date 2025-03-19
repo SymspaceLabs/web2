@@ -1,1 +1,1 @@
-export { default } from "./company";
+export { default as CompanyPageView } from './company'

@@ -1,12 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
+// ==============================================================
+// Section 4 || Careers Page
+// ==============================================================
+
 import { Box } from "@mui/material";
-import Banner from "@/components/Banner";
+import { motion } from "framer-motion";
+import { GlassBanner } from "@/components/custom-banner";
+import { FlexColCenter } from '@/components/flex-box';
 
 export default function Section4() {
   return (
-    <Box sx={{ width: "100%", py: { xs:2, sm:10 }, zIndex:2 }}>
+    <FlexColCenter sx={{ py:10, px:{xs:2, sm:0} }}>
       <motion.div
         component={Box} // Makes motion.div behave like a Box
         initial={{ opacity: 0, y: 30 }}
@@ -15,13 +20,13 @@ export default function Section4() {
         viewport={{ once: true }}
         style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
       >
-        <Banner
+        <GlassBanner 
           title="get in touch"
-          description="Learn more about our vision to help those who need it most."
+          subtitle="Learn more about our vision to help those who need it most."
           btnText="contact us"
           btnUrl="/contact-us"
         />
       </motion.div>
-    </Box>
+    </FlexColCenter>
   );
 }

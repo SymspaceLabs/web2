@@ -1,11 +1,14 @@
 "use client";
 
+// =================================================================
+// Section 2
+// =================================================================
+
 import { useEffect, useState, useRef } from 'react';
-import { Box, Container, Typography, Grid, useMediaQuery, Card, CardContent } from "@mui/material";
+import { Box, Container, Typography, Grid } from "@mui/material";
+import { styles } from '../page-view/styles';
 
 export default function Section2() {
-  const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screens
-
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Container>
@@ -40,7 +43,7 @@ const blogs = [
 function BlogCard({ title, subTitle }) {
   const [count, setCount] = useState(0); // Current count for the animation
   const [isVisible, setIsVisible] = useState(false); // Tracks if the card is visible in the viewport
-  const cardRef = useRef(null); // Reference for the card element to observe
+  const cardRef = useRef(null); 
 
   useEffect(() => {
     // Observer callback to check if the card is in the viewport
@@ -58,7 +61,7 @@ function BlogCard({ title, subTitle }) {
     });
 
     if (cardRef.current) {
-      observer.observe(cardRef.current); // Start observing the card element
+      observer.observe(cardRef.current);
     }
 
     return () => observer.disconnect(); // Cleanup observer when the component unmounts
@@ -105,8 +108,7 @@ function BlogCard({ title, subTitle }) {
     >
       <Typography
         sx={{
-          fontFamily: 'Elemental End',
-          textTransform: 'lowercase',
+          ...styles.elementalEndFont,
           fontSize: 96,
           color: '#fff',
           textAlign: 'center',

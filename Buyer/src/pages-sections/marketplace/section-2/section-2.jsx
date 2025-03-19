@@ -19,6 +19,7 @@ import { Carousel } from "@/components/carousel";
 import { StyledGrid } from "./styles";
 import { motion } from "framer-motion"; // Import Framer Motion
 import Link from "next/link";
+import { elementalEndFont } from "../page-view/styles";
 
 export default function Section2() {
   // State to hold the list of blogs fetched from the API
@@ -57,13 +58,12 @@ export default function Section2() {
             {/* Section heading */}
             <Typography
               sx={{
+                ...elementalEndFont,
                 textAlign: "center",
                 color: "#000",
                 pt: 8,
                 pb: 3,
-                fontFamily: "'Elemental End', sans-serif",
-                textTransform: "lowercase",
-                fontSize: { xs: 30, sm: 30, md: 30, lg: 30, xl: 30 },
+                fontSize: 30,
               }}
             >
               Trending News
@@ -103,8 +103,7 @@ export default function Section2() {
                         <Button
                           sx={{
                             color: "#fff",
-                            fontFamily: "'Elemental End', sans-serif",
-                            textTransform: "lowercase",
+                            ...elementalEndFont,
                             background: "rgba(255, 255, 255, 0.01)",
                             border: "0.9px solid rgba(255, 255, 255, 0.3)",
                             backdropFilter: "blur(13.515px)",

@@ -14,7 +14,7 @@ import { StyledContainer } from "./styles"; // Styled component for layout styli
  * Includes a list of products displayed via the Section4 component.
  *
  */
-export default async function Section2({ products }) {
+export default function Section2({ products }) {
   const ref = useRef(); // Ref to track the height of the main content area
   const [sidebarHeight, setSidebarHeight] = useState(0); // State to store the sidebar height
 

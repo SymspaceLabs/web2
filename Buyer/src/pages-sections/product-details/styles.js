@@ -1,51 +1,60 @@
-// styles.js
-const styles = {
-    iconButton: {
-      position: "absolute",
-      zIndex: 1,
-      backgroundColor: "white",
-    },
-    favoriteIconButton: {
-      position: "absolute",
-      top: 8,
-      right: 8,
-      zIndex: 2,
-    },
-    selectedImageContainer: {
-      justifyContent: "center",
-      alignItems: "center",
-      position: "relative",
-      mb: 6,
-    },
-    colorButton: (selectedColor, color) => ({
-      width: 40,
-      height: 40,
-      borderRadius: "50%",
-      backgroundColor: color,
-      border: selectedColor === color ? "3px solid black" : "1px solid grey",
-      margin: "0 5px",
-    }),
-    sizeButton: {
-      padding: "16px 9px",
-      border: "1px solid #000000",
-      borderRadius: "8px",
-      fontFamily: 'Helvetica',
-      fontWeight: 700,
-      fontSize: '14px',
-      color: '#000',
-      flexGrow: 1,
-      width: '100%',
-    },
-    sizeChartButton: {
-      fontSize: 8,
-      padding: "8px",
-      borderRadius: "50px",
-      background: '#52647D',
-      fontFamily: 'Elemental End',
-      color: '#fff',
-      textTransform: 'lowercase',
-      fontWeight: 400,
-    },
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+
+const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
+
+
+export const styles = {
+  elementalEndFont,
+  iconButton: {
+    position: "absolute",
+    zIndex: 1,
+    backgroundColor: "white",
+  },
+  favoriteIconButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    zIndex: 2,
+  },
+  selectedImageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    mb: 6,
+  },
+  colorButton: (selectedColor, color) => ({
+    width: 40,
+    height: 40,
+    borderRadius: "50%",
+    backgroundColor: color,
+    border: selectedColor === color ? "3px solid black" : "1px solid grey",
+    margin: "0 5px",
+  }),
+  sizeButton: {
+    padding: "16px 9px",
+    border: "1px solid #000000",
+    borderRadius: "8px",
+    fontFamily: 'Helvetica',
+    fontWeight: 700,
+    fontSize: '14px',
+    color: '#000',
+    flexGrow: 1,
+    width: '100%',
+  },
+  sizeChartButton: {
+    fontSize: 8,
+    padding: "8px",
+    borderRadius: "50px",
+    background: '#52647D',
+    fontFamily: 'Elemental End',
+    color: '#fff',
+    textTransform: 'lowercase',
+    fontWeight: 400,
+  },
     addToCartButton: {
       padding: "16px 56px",
       border: "1px solid #000000",

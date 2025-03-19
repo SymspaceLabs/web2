@@ -1,10 +1,12 @@
+"use client"
+
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 
 
-export default async function ArticlesPageView() {
+export default function ArticlesPageView() {
 
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>

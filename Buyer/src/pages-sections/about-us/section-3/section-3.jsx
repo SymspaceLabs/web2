@@ -1,9 +1,10 @@
 "use client";
 
 // =============================================================================
-// Open Roles Section
+// Section 3 - Partners Section -  About Us 
 // =============================================================================
 
+import { styles } from '../page-view/styles';
 import { FlexBox } from '@/components/flex-box';
 import { COMPANIES_DATA } from "@/data/companies";
 import { LazyImage } from '@/components/lazy-image';
@@ -15,7 +16,7 @@ export default function Section3() {
   return (
     <Container sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
       <Box sx={{ width: '100%', maxWidth: '1400px' }}>
-        <Typography sx={{ py: 5, fontFamily: 'Elemental End', fontSize: { xs: 25, sm: 35 }, color: '#fff', wordSpacing: '10px' }}>
+        <Typography sx={{ py: 5, ...styles.elementalEndFont, fontSize: { xs: 25, sm: 35 }, color: '#fff', wordSpacing: '10px' }}>
           backed by industry leaders
         </Typography>
         <Box py={{xs:2, sm:10}} px={{xs:3, sm:10}} sx={cardStyle}>
@@ -31,7 +32,7 @@ export default function Section3() {
             
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <Button sx={{
-                fontFamily: 'Elemental End',
+                ...styles.elementalEndFont,
                 background: 'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
                 borderRadius: '50px',
                 px: 8,

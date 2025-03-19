@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { Box, Typography, Button, useTheme, TextField } from '@mui/material';
-import { section1Styles } from './styles';
-import { useRouter } from 'next/navigation';
+// ===================================================================
+// Section 1
+// ===================================================================
+
 import BlobBox from './blobBox';
+import { useRouter } from 'next/navigation';
+import { styles } from '../page-view/styles';
+import { useState, useRef, useEffect } from 'react';
+import { Box, Typography, Button, TextField } from '@mui/material';
 import AppStore from '@/components/footer/components/app-store';
 
 export default function Section1() {
-  const theme = useTheme();
-  const styles = section1Styles(theme);
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -115,41 +117,6 @@ export default function Section1() {
         <Box py={3}>
           <AppStore onClick={handleImageClick} />
         </Box>
-        {/* <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '1.5rem',
-            marginTop: '2rem',
-            width:'100%'
-          }}
-        >
-          <Box
-            component="div"
-            onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer', width: { xs: '30%', sm: 'auto' } }}
-          >
-            <LazyImage
-              alt="App Store"
-              width={292}
-              height={195}
-              src="/assets/images/app-download/app-store.png"
-            />
-          </Box>
-          <Box
-            component="div"
-            onClick={() => handleImageClick()}
-            sx={{ cursor: 'pointer', width: { xs: '35%', sm: 'auto' }  }}
-          >
-            <LazyImage
-              alt="Play Store"
-              width={292}
-              height={195}
-              src="/assets/images/app-download/play-store.png"
-            />
-          </Box>
-        </Box> */}
 
         {/* Email Input with Animation */}
         {showEmailInput && (
@@ -208,8 +175,7 @@ export default function Section1() {
                   borderRadius: '50px',
                   color: isSubmitted ? '#000' : '#fff',
                   padding: '6px 12px',
-                  fontFamily: 'Elemental End',
-                  textTransform: 'lowercase',
+                  ...styles.elementalEndFont,
                   '&:hover': {
                     background: isSubmitted
                       ? '#f0f0f0'

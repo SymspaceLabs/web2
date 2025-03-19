@@ -5,8 +5,8 @@
 // ==========================================================
 
 import { motion } from "framer-motion";
-import { EmailBanner } from "@/components";
 import { Box, Container} from "@mui/material";
+import { EmailBanner } from "@/components/custom-banner";
 
 export default function Section6() {
   return (

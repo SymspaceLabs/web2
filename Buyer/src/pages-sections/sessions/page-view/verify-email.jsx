@@ -17,6 +17,7 @@ import { useSearchParams, useRouter } from "next/navigation"; // Import Next.js 
 import { FlexBox } from "@/components/flex-box"; // Import custom FlexBox component
 import { Button, Typography } from "@mui/material"; // Import Material-UI components
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { styles } from "./styles";
 
 const VerifyEmailPage = () => {
   const searchParams = useSearchParams();
@@ -75,41 +76,17 @@ const VerifyEmailPage = () => {
           pt: { xs: 2, sm: 5 },
         }}
       >
-        <Button
-          onClick={handleResend}
-          sx={{
-            fontSize: '16px',
-            fontWeight: 500,
-            fontFamily: "'Elemental End', sans-serif",
-            textTransform: "lowercase",
-            background: "#000",
-            color: "#fff",
-            width: "100%",
-            border: "2px solid transparent",
-            py: 1,
-            borderRadius: '12px',
-            ":hover": {
-              background: "#fff",
-              color: "#000",
-              border: "2px solid black",
-            },
-          }}
-        >
+        <Button sx={styles.btn} onClick={handleResend}>
           Resend Email
         </Button>
         <Button
           onClick={handleGoToSite}
           sx={{
-            fontSize: '16px',
-            fontWeight: 500,
-            fontFamily: "'Elemental End', sans-serif",
-            textTransform: "lowercase",
+            ...styles.btn,
             background: "transparent",
             border: "2px solid black",
             color: "#000",
-            width: "100%",
             py: 2,
-            borderRadius: '12px',
             ":hover": {
               background: "#fff",
               color: "#000",

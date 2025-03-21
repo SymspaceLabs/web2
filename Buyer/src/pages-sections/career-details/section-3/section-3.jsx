@@ -1,5 +1,7 @@
 import { Box, Container, Button, Typography } from '@mui/material';
 import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
+import { H1 } from '@/components/Typography';
+import { styles } from '../page-view/styles';
 
 export default function Section3() {
   return (
@@ -7,15 +9,15 @@ export default function Section3() {
       <Box sx={cardStyle}>
         <FlexBox sx={{ flexDirection:{xs:'column', sm:'row'}, justifyContent:'space-between', gap:2 }}>
           <FlexCol gap={2}>
-            <Typography fontFamily='Elemental End' sx={{ fontSize: {xs:30,sm:40} }} color="#fff">
+            <H1 fontSize={{xs:30, sm:40}} color="#FFF">
               how to apply
-            </Typography>
+            </H1>
             <Typography fontFamily='Helvetica' sx={{ fontSize: {xs:18,sm:24}, maxWidth:'850px' }} color="#fff" >
               Attach your resume and cover letter detailing your relevant experience and why you are interested in joining SYMSPACE
             </Typography>
           </FlexCol>
           <FlexColCenter>
-            <Button sx={{ fontFamily: 'Elemental End', background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)', borderRadius: '50px', px:12.5, py:2, color: '#fff', fontSize:'20px', textTransform:'lowercase', fontWeight:400, border:'1px solid #FFF' }}>
+            <Button sx={styles.btn2}>
               Apply
             </Button>
           </FlexColCenter>

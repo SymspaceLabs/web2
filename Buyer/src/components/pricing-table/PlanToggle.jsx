@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { styles } from "./styles";
+import { H1 } from "../Typography";
 import { FlexBox } from "../flex-box";
+import { Box, Typography } from "@mui/material";
 
 function PlanToggle({ onChange, value, title, subtitle, theme }) {
   const [selected, setSelected] = useState(value);
@@ -13,9 +15,9 @@ function PlanToggle({ onChange, value, title, subtitle, theme }) {
   return (
     <FlexBox flexDirection={{xs: "column", sm: "row"}} justifyContent="space-between" alignItems="center" gap={2}>
       {/* LEFT  */}
-      <Typography sx={{ color:'#FFF', fontFamily:'Elemental End', textTransform:'lowercase', fontSize: { xs:12, sm:24 }, textAlign:{ xs:'center', sm:'left' } }}>
+      <H1 color='#FFF' fontSize={{xs:12, sm:24}} textAlign={{xs:'center', sm:'left'}}>
         {title}
-      </Typography>
+      </H1>
 
       {/* RIGHT  */}
       <Box
@@ -36,69 +38,35 @@ function PlanToggle({ onChange, value, title, subtitle, theme }) {
           }}
         >
           {subtitle}
-          {/* <strong>Save 15%</strong> on yearly plan! */}
         </Typography>
 
         {/* Toggle button */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "25px",
-            overflow: "hidden",
-            width: "200px",
-            height: "50px",
-            border: "1px solid #E4E4E7",
-            position: "relative",
-            background:'#FFF'
-          }}
-        >
+        <Box sx={styles.planToggleBg}>
+          
+          {/* Plan Highlight */}
           <Box
             sx={{
-              position: "absolute",
-              top: 0,
-              left: selected === "yearly" ? 0 : "50%",
-              width: "50%",
-              height: "100%",
-              backgroundColor: "#2563EB",
-              border: "5px solid white",
-              borderRadius: "50px",
-              transition: "left 0.3s ease",
-              zIndex: 1,
+              ...styles.planToggleHighlight,
+              left: selected === "yearly" ? 0 : "50%"
             }}
           />
-          <Box
+
+          {/* Yearly Plan */}
+          <Box 
             sx={{
-              zIndex: 2,
-              width: "50%",
-              height: "100%",
-              textAlign: "center",
-              cursor: "pointer",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              ...styles.planCard,
               color: selected === "yearly" ? "#fff" : "#A1A1AA",
-              fontWeight: "bold",
-              padding: "10px 0",
             }}
             onClick={() => handleToggle("yearly")}
           >
             Yearly
           </Box>
+
+          {/* Monthly Plan */}
           <Box
             sx={{
-              zIndex: 2,
-              width: "50%",
-              height: "100%",
-              textAlign: "center",
-              cursor: "pointer",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              ...styles.planCard,
               color: selected === "monthly" ? "#fff" : "#A1A1AA",
-              fontWeight: 'bold',
-              padding: "10px 0",
             }}
             onClick={() => handleToggle("monthly")}
           >

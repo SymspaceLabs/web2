@@ -10,7 +10,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import BoxLink from "./components/box-link";
+import BoxLink from "../../components/BoxLink";
 import LoginBottom from "./components/login-bottom";
 import { styles } from "./styles";
 import { usePathname } from "next/navigation";

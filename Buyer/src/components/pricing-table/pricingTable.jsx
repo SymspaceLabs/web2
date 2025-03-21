@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import { FlexCol } from "../flex-box";
 import PlanCard from './PlanCard';
 import PlanToggle from './PlanToggle';
@@ -29,10 +29,6 @@ const PricingTable = ({plans, title, theme='light'}) => {
                     </Grid>
                 ))}
             </Grid>
-
-
-
-
 
         </FlexCol>
     )

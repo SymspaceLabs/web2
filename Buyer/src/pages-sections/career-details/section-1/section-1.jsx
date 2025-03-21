@@ -1,8 +1,10 @@
 "use client";
 
+import styled from "@mui/material/styles/styled";
 import { FlexBox } from "@/components/flex-box";
 import { Link, Breadcrumbs, Button, Box, Container, Divider, Typography, Grid } from "@mui/material";
-import styled from "@mui/material/styles/styled";
+import { H1 } from "@/components/Typography";
+import { styles } from "../page-view/styles";
 
 export default function Section1({job, toggleDialog}) {
   return (
@@ -18,10 +20,10 @@ export default function Section1({job, toggleDialog}) {
           </Typography>
         </Breadcrumbs>
         <FlexBox gap={3} justifyContent="space-between" sx={{ py:5, flexDirection:{xs:'column', sm:'row'}, alignItems:{xs:'left', sm:"center"} }} >
-          <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', fontSize: { xs: 25, sm: 50 }, color: '#fff' }}>
+          <H1 fontSize={{xs:25, sm:50}} color='#FFF'>
             {job.title}
-          </Typography>
-          <Button onClick={toggleDialog} sx={{ fontFamily: 'Elemental End', background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)', borderRadius: '25px', px:10, py:2.5, color: '#fff', fontSize:'20px', textTransform:'lowercase', fontWeight:400 }}>
+          </H1>
+          <Button sx={styles.btn} onClick={toggleDialog}>
             Apply
           </Button>
         </FlexBox>
@@ -72,9 +74,9 @@ const CardWrapper = styled(Box)(({ theme }) => ({
 const JobCard = ({ title, value }) => {
   return (
     <CardWrapper>
-      <Typography color="#000" fontFamily="'Elemental End', sans-serif" fontSize={20} sx={{ py:1 }}>
+      <H1 fontSize={20} py={1} color='#000'>
         {title}
-      </Typography>
+      </H1>
       <Box sx={{ borderTop:'1px solid black'}} />
       <Typography color="#000" fontFamily="Helvetica" fontSize={20} fontWeight={400} sx={{ py:3 }}>
         {value}

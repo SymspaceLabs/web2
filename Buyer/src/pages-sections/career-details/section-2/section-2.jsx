@@ -1,5 +1,6 @@
 "use client";
 
+import { H1 } from "@/components/Typography";
 import { Box, Container, Divider, Typography } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm"; // For extended Markdown support (e.g., bullet points, tables)
@@ -30,16 +31,9 @@ const ContentBox = ({ title, content }) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Typography
-        sx={{
-          fontFamily: "'Elemental End', sans-serif",
-          textTransform: "lowercase",
-          fontSize: { xs: 25, sm: 35 },
-          color: "#fff",
-        }}
-      >
+      <H1 fontSize={{xs:25, sm:35}} color="#FFF">
         {title}
-      </Typography>
+      </H1>
       <Divider />
       <Box
         sx={{

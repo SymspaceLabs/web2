@@ -2,6 +2,7 @@ import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery"; // GLOBAL CUSTOM COMPONENTS
 import { Typography } from "@mui/material";
 import { ProfileForm } from "@/components/forms";
+import { H1 } from "@/components/Typography";
 
 // ==============================================================
 export default function UserInfo({ user, isEdit = true }) {
@@ -26,9 +27,9 @@ export default function UserInfo({ user, isEdit = true }) {
   }
   return (
     <Card sx={[cardStyle, {flexDirection:'column'}]}>
-      <Typography sx={{ fontFamily:'Elemental End', textTransform:'lowercase', width:'100%', fontSize:'24px'}}>
+      <H1 width='100%' fontSize='24px'>
         Bio
-      </Typography>
+      </H1>
       <Typography sx={{ width:'100%', fontSize:'12px'}}>
         Tell us about yourself to personalize your experience.
       </Typography>

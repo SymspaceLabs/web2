@@ -84,16 +84,3 @@ function JobForm ({
 }
 
 export default JobForm;
-
-const fileCardStyle = {
-    width: '100%',
-    p: 1, 
-    borderRadius: '8px',
-    boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
-    fontFamily: 'Elemental End',
-    background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
-    color: '#fff',
-    fontSize:'20px',
-    fontWeight:400,
-    border:'1px solid #FFF'
-}

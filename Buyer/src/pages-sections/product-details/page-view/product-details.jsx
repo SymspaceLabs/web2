@@ -13,8 +13,6 @@ import ProductTabs from "../product-tabs";
 import ProductIntro from "../product-intro";
 import { BlobBox } from "@/components/BlobBox";
 
-
-
 export default function ProductDetailsPageView({slug}) {
 
   const [product, setProduct] = useState(null);

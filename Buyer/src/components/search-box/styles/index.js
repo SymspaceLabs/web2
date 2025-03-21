@@ -1,8 +1,15 @@
-import Card from "@mui/material/Card";
+import { Card } from "@mui/material";
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+import { FlexBox } from "@/components/flex-box";
 import styled from "@mui/material/styles/styled";
 import SearchOutlined from "@mui/icons-material/SearchOutlined"; // GLOBAL CUSTOM COMPONENT
 
-import FlexBox from "../../../components/flex-box/flex-box";
+export const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
+
 export const SearchOutlinedIcon = styled(SearchOutlined)(({
   theme
 }) => ({
@@ -21,8 +28,6 @@ export const DropDownHandler = styled(FlexBox)(({
   theme
 }) => ({
   whiteSpace: "pre",
-  // borderTopRightRadius: 300,
-  // borderBottomRightRadius: 300,
   borderLeft: `1px solid ${theme.palette.grey[400]}`,
   [theme.breakpoints.down("xs")]: {
     display: "none"

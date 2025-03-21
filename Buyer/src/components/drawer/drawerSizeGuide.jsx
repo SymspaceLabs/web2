@@ -4,7 +4,7 @@ import { useMediaQuery, Box, Typography, Button } from "@mui/material";
 import { FlexBox } from "../flex-box";
 import { useAuth } from "@/contexts/AuthContext";
 import { MeasurementForm, PreferenceForm } from "../forms";
-import { H6 } from "../Typography";
+import { H1, H6 } from "../Typography";
 import Link from "next/link";
 import axios from "axios";
 import { useSnackbar } from "@/contexts/SnackbarContext";
@@ -218,9 +218,9 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
               Complete the details below so we can offer better-tailored and
               personalized services
             </Typography>
-            <Typography sx={{ fontFamily: "'Elemental End', sans-serif", color: "#fff" }}>
+            <H1 color="#FFF">
               To access personalized sizing features
-            </Typography>
+            </H1>
             <Button
               sx={{
                 padding: "8px 24px",

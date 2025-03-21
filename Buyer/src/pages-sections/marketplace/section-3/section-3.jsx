@@ -9,7 +9,7 @@ import BlogCard from "./blog-card"; // Blog card component
 import { motion } from "framer-motion"; // Import Framer Motion
 import { styles } from '../page-view/styles';
 
-export default async function Section3() {
+export default function Section3() {
   return (
     <Box sx={{py: {xs:2, sm:10} }}>
       <Container sx={{ borderRadius:'50px', py: 2, background: '#E0F0FD' }}>

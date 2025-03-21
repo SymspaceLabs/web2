@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
+import {Box, Tab, Tabs} from "@mui/material";
 import styled from "@mui/material/styles/styled";
 
 import ProductReview from "./product-review";
@@ -18,7 +16,7 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.text.disabled}`,
   "& .inner-tab": {
     minHeight: 40,
-    fontSize: '24px',
+    fontSize: {xs:'16px', sm:'24px'},
     ...styles.elementalEndFont,
   }
 }));
@@ -46,12 +44,10 @@ export default function ProductTabs() {
           style: { backgroundColor: '#353535' }
         }}
       >
-        <Tab
+        <Tab 
           className="inner-tab"
           label="Description"
-          sx={{
-            color: selectedOption === 0 ? '#353535' : 'grey'
-          }}
+          color={ selectedOption === 0 ? '#353535' : 'grey'}
         />
         <Tab
           className="inner-tab"

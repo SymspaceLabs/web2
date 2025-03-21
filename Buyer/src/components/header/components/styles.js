@@ -1,3 +1,11 @@
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+
+export const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
+
 export const styles = {
   paper: {
     elevation: 0,
@@ -8,7 +16,7 @@ export const styles = {
     overflow: "hidden",
     border: "1px solid",
     borderColor: "grey.200",
-    fontFamily: 'Elemental End',
+    ...elementalEndFont,
     color: '#fff',
     background: 'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
     "& .MuiMenuItem-root:hover": {
@@ -17,8 +25,7 @@ export const styles = {
     }
   },
   text: {
-    fontFamily:'Elemental End',
-    textTransform:'lowercase',
+    ...elementalEndFont,
     color: "#fff",
     "& .MuiMenuItem-root:hover": {
       color: "#fff",

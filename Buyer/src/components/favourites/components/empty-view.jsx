@@ -1,9 +1,11 @@
 // EMPTY CART
 
-import Image from "next/image"; // GLOBAL CUSTOM COMPONENTS
-import { FlexColCenter } from "@/components/flex-box";
-import { Typography, Button } from "@mui/material";
 import Link from "next/link";
+import Image from "next/image"; // GLOBAL CUSTOM COMPONENTS
+import { Button } from "@mui/material";
+import { H1 } from "@/components/Typography";
+import { FlexColCenter } from "@/components/flex-box";
+import { styles } from "@/components/styles";
 
 export default function EmptyCartView() {
   return (
@@ -14,9 +16,9 @@ export default function EmptyCartView() {
 
       <FlexColCenter gap={2}>
         {/* EMPTY CART TEXT */}
-        <Typography fontFamily="'Elemental End', sans-serif" fontSize={15} mt={2} color="#FFF" textAlign="center" maxWidth={200}>
-          save  to  favorites
-        </Typography>
+        <H1 fontSize={15} mt={2} color="#FFF" textAlign="center" maxWidth={200}>
+          save to favorites
+        </H1>
 
         {/* Button Goes To AR Marketplace */}
         <Link href="/marketplace">
@@ -33,10 +35,8 @@ export default function EmptyCartView() {
 }
 
 const btn = {
-  fontFamily:'Elemental End',
-  textTransform:'lowercase',
-  color: '#FFF',
-  fontWeight:500,
+    ...styles.elementalEndFont, 
+    color: '#FFF',
   fontSize: 12,
   px:3,
   background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',

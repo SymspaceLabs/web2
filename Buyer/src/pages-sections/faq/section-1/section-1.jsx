@@ -7,6 +7,7 @@ import { FAQS } from "@/data/faqs";
 import { motion } from "framer-motion";
 import { FlexBox } from "@/components/flex-box";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { H1 } from "@/components/Typography";
 
 export default function Section1() {
   const [expanded, setExpanded] = useState(false);
@@ -43,26 +44,9 @@ export default function Section1() {
       >
         <Container>
           <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
-            <Typography sx={{ fontSize:{xs:20, sm:50} }} fontFamily="'Elemental End', sans-serif" textTransform="lowercase" color="#fff"  >
+            <H1 fontSize={{xs:20, sm:50}} color="#FFF">
               FAQs
-            </Typography>
-            {/* <Link href="/faqs" target="blank" >
-              <Typography
-                sx={{ 
-                  color: 'rgba(255,255,255,0.5)', 
-                  fontFamily: "'Elemental End', sans-serif", 
-                  textTransform: 'lowercase', 
-                  textDecoration: 'none', 
-                  fontSize:{xs:10},
-                  '&:hover': { 
-                    color: '#FFF',
-                    textDecoration: 'underline',
-                  } 
-                }}
-              >
-                More FAQS
-              </Typography>
-            </Link> */}
+            </H1>
           </FlexBox>
 
 
@@ -75,9 +59,9 @@ export default function Section1() {
                   sx={accordionStyles}
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <Typography color="#fff" fontFamily="'Elemental End', sans-serif" textTransform="lowercase" sx={{fontSize:{xs:10, sm:18}}} >
+                    <H1 fontSize={{xs:10, sm:18}} color="#FFF">
                       {faq.question}
-                    </Typography>
+                    </H1>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography variant="body1" sx={{ color: "#fff" }}>

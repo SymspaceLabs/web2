@@ -1,71 +1,112 @@
-import { Divider, useMediaQuery } from '@mui/material';
+
 import { FlexBox } from '@/components/flex-box';
-import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
+import { SymDivider } from '@/components/custom-inputs';
 import BasicInfoForm from '@/components/custom-forms/onboarding/BasicInfoForm';
 import ContactForm from '@/components/custom-forms/onboarding/ContactForm';
 
 function Form1 ({
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
     email,
     setEmail,
-    businessName,
-    setBusinessName,
+    entityName,
+    setEntityName,
+    legalName,
+    setLegalName,
+    ein,
+    setEin,
     website,
     setWebsite,
-    password,
-    setPassword,
-    retypePassword,
-    setRetypePassword,
-    retypeError,
-    setRetypeError,
-    location,
-    setLocation,
-    ein,
-    setEin
+    address1,
+    setAddress1,
+    address2,
+    setAddress2,
+    city,
+    setCity,
+    state,
+    setState,
+    country,
+    setCountry,
+    zip,
+    setZip,
+    gmv,
+    setGmv,
+    category,
+    setCategory,
 }) {
-    const isMobile = useMediaQuery('(max-width:600px)');
-    
-    const handleFirstNameChange = (event) => setFirstName(event.target.value);
-    const handleLastNameChange = (event) => setLastName(event.target.value);
-    const handleEmailChange = (event) => setEmail(event.target.value);
-    const handleBusinessNameChange = (event) => setBusinessName(event.target.value);
-    const handleWebsiteChange = (event) => setWebsite(event.target.value);
 
-    const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-    
-        if (retypePassword && newPassword !== retypePassword) {
-            setRetypeError("Passwords do not match");
-        } else {
-            setRetypeError("");
-        }
-    };
-    
-    const handleRetypePasswordChange = (e) => {
-        const newRetypePassword = e.target.value;
-        setRetypePassword(newRetypePassword);
-    
-        if (password && newRetypePassword !== password) {
-            setRetypeError("Passwords do not match");
-        } else {
-            setRetypeError("");
-        }
-    };
-
-    const handleLocationChange = (event) => setLocation(event.target.value);
-    const handleEinChange = (event) => setEin(event.target.value);
-
-    
-    
+    const handleSubmit = async () => {
+        const requestBody = {
+            email,
+            entityName,
+            legalName,
+            ein,
+            website,
+            address1,
+            address2,
+            city,
+            state,
+            country,
+            zip,
+            gmv,
+            category,
+        };
+        try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/onboarding/seller/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody),
+              }
+            );
+      
+            const data = await response.json();
+        
+            if (!response.ok) {  
+              // Show error notification 
+              // showSnackbar(data.message,"error")
+            } else {
+              // Show success notification and redirect
+              // showSnackbar(data.message, "success");
+            }
+          } catch (error) {
+            console.error('Error during Signin:', error);
+          }
+    }
+       
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
+            <BasicInfoForm
+                email={email}
+                setEmail={setEmail}
+                entityName={entityName}
+                setEntityName={setEntityName}
+                legalName={legalName}
+                setLegalName={setLegalName}
+                ein={ein}
+                setEin={setEin}
+                website={website}
+                setWebsite={setWebsite}
+                address1={address1}
+                setAddress1={setAddress1}
+                address2={address2}
+                setAddress2={setAddress2}
+                city={city}
+                setCity={setCity}
+                state={state}
+                setState={setState}
+                country={country}
+                setCountry={setCountry}
+                zip={zip}
+                setZip={setZip}
+                gmv={gmv}
+                setGmv={setGmv}
+                category={category}
+                setCategory={setCategory}
 
-            <BasicInfoForm />
-            <Divider />
+            />
+            <SymDivider
+                title="Primary Contact"
+                toolTipText="The Primary contact person is the person who has access to the Selling on Symspace payment account, provides the registration information on behalf of the account holder (the registered seller) and initiates transactions such as disbursements and refunds. Actions taken by the Primary point of contact are deemed to be taken by the account holder."
+            />
             <ContactForm />
 
         </FlexBox>

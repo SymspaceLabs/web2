@@ -1,6 +1,6 @@
 
 import { FlexBetween, FlexBox } from "../../../components/flex-box";
-import { H3, H5, Paragraph, Small } from "../../../components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
+import { H1, H3, H5, Paragraph, Small } from "../../../components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
 
 import { currency } from "../../../lib"; // CUSTOM DATA MODEL
 import { Box, Card, Grid, Avatar, Typography } from "@mui/material";
@@ -33,12 +33,12 @@ export default function UserAnalytics({
               <Avatar alt={user.firstName} src={user.avatar} sx={{ height: 100, width: 100 }} />
               <FlexBetween flexWrap="wrap" flex={1}>
                 <div>
-                  <Typography sx={{ fontSize:'24px',  fontFamily:'Elemental End', textTransform:'lowercase'  }}>
+                  <H1 fontSize='24px'>
                     {`${user.firstName} ${user.lastName}`}
-                  </Typography>
-                  <Typography sx={{ fontSize:'12px',  fontFamily:'Elemental End', textTransform:'lowercase'  }}>
+                  </H1>
+                  <H1 fontSize='12px'>
                     SYMSPACE points earned
-                  </Typography>
+                  </H1>
 
                   <FlexBox alignItems="center" gap={1}>
                     <Paragraph color="#fff">SYMPS</Paragraph>

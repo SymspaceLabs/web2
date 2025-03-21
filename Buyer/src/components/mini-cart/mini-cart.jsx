@@ -53,8 +53,13 @@ export default function MiniCart({ toggleSidenav }) {
           </Scrollbar> : <EmptyCartView />}
       </Box>
 
-      {/* CART BOTTOM ACTION BUTTONS */}
-      {cartList.length > 0 ? <BottomActions total={currency(getTotalPrice())} handleNavigate={handleNavigate} /> : null}
+      {/* CART BOTTOM ACTION BUTTONS (Always fixed at the bottom) */}
+      {cartList.length > 0 && (
+        <Box sx={{ position: "sticky", bottom: 0, zIndex: 10 }}>
+          <BottomActions total={currency(getTotalPrice())} handleNavigate={handleNavigate} />
+        </Box>
+      )}
+    
     </Box>
   );
 }

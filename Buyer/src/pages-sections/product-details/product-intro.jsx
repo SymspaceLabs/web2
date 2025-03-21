@@ -11,7 +11,7 @@ import { currency } from "@/lib";
 import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, H2, H6 } from "@/components/Typography";
-import { FlexBox, FlexRowCenter } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
+import { FlexBox, FlexCol, FlexRowCenter } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
@@ -20,7 +20,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import HandBagCanvas from "../../components/HandBagCanvas";
-import SymAccordion from "./components/SymAccordion"
+import { SymAccordion } from "@/components/custom-components"
 import styles from "./styles";
 
 // ================================================================
@@ -62,7 +62,7 @@ export default function ProductIntro({ product }) {
   const handleCartAmountChange = amount => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, qty: amount, name, imgUrl: thumbnail,  id, slug }
+      payload: { price, qty: amount, name, imgUrl: images[0].url,  id, slug }
     });
   };
 
@@ -198,16 +198,17 @@ export default function ProductIntro({ product }) {
         {/* PRODUCT INFO AREA */}
         <Grid item md={6} xs={12} alignItems="center">
           {/* Card 1 */}
-          <Box sx={{ p:5, boxSizing: 'border-box', background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: "30px" }}>
+          <FlexCol gap={1.5} sx={styles.productCard}>
+            
             {/* PRODUCT BRAND */}
-            <H6 sx={{ fontFamily: 'Helvetica', fontSize: 16, textDecoration: 'underline', color: '#0366FE', fontWeight: 400 }}>
+            <H6 sx={{ fontFamily: 'Helvetica', fontSize: {xs:12, sm:16}, textDecoration: 'underline', color: '#0366FE', fontWeight: 400 }}>
               <Link href={`/company/${company?.slug}`} passHref target="_blank">
                 {company.businessName}
               </Link>
             </H6>
             
-            {/* PRODUCT NAME */}
-            <H1 sx={{ ...styles.elementalEndFont, fontSize:40, color: '#000' }} mb={1}>
+            {/* PRODUCT TITLE */}
+            <H1 fontSize={{xs:20, sm:40}} color='#000' mb={1}>
               {name}
             </H1>
 
@@ -227,15 +228,12 @@ export default function ProductIntro({ product }) {
               </H6>
             </FlexBox>
 
-
-            {/* PRODUCT VARIANTS */}
-
             {/*Color*/}
-            <FlexBox alignItems="center" gap={1}  mb={2}>
-                <H6 mb={1} sx={{fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535'}}>
-                  Select Color
-                </H6>
-
+            <FlexBox alignItems={{xs:'left', sm:"center"}} flexDirection={{xs:'column', sm:'row'}} gap={1} mb={2}>
+              <H6 mb={1} sx={{fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535'}}>
+                Select Color
+              </H6>
+              <FlexBox>
                 {colors.map((color) => (
                   <Button
                     key={color.id}
@@ -253,74 +251,69 @@ export default function ProductIntro({ product }) {
                     }}
                   />
                 ))}
+              </FlexBox>
             </FlexBox>
 
             {/*Size*/}
-            <FlexBox gap={1} mb={2} sx={{ alignItems: 'center' }}>
-              <H6 
-                mb={1} 
-                sx={{
-                  fontFamily: 'Helvetica', 
-                  fontWeight: 400, 
-                  fontSize: '24px', 
-                  color: '#353535',
-                }}>
-                Size
-              </H6>
-
-              <FormControl sx={{ flexGrow: 1, width:'100%' }}>
-                <InputLabel id="size-select-label">Size</InputLabel>
-                <Select
-                  labelId="size-select-label"
-                  id="size-select"
-                  value={selectedSize}
-                  label="Size"
-                  onChange={handleSizeSelect}
-                  fullWidth
+            <FlexCol>
+              <FlexBox gap={1} mb={2} sx={{ alignItems: {xs:'left', sm:'center'} }} flexDirection={{xs:'column', sm:'row'}}>
+                  <H6 mb={1} sx={{ fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535' }}>
+                    Size
+                  </H6>
+                  <FormControl sx={{ flexGrow: 1, width:'100%' }}>
+                    <InputLabel id="size-select-label">Size</InputLabel>
+                    <Select
+                      labelId="size-select-label"
+                      id="size-select"
+                      value={selectedSize}
+                      label="Size"
+                      onChange={handleSizeSelect}
+                      fullWidth
+                    >
+                      {sizes.map((size) => (
+                        <MenuItem key={size.id} value={size.size}>
+                          {size.size}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                <Button
+                  onClick={()=>setSidenavOpen(true)}
+                  sx={{
+                    padding: "16px 9px",
+                    border: "1px solid #000000",
+                    borderRadius: "8px",
+                    fontFamily: 'Helvetica',
+                    fontWeight: 700,
+                    fontSize: '14px',
+                    color: '#000',
+                    flexGrow: 1,
+                    width:'100%'
+                  }}
                 >
-                  {sizes.map((size) => (
-                    <MenuItem key={size.id} value={size.size}>
-                      {size.size}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                  Personalized Sizing
+                </Button>
+              </FlexBox>
 
-              <Button
-                onClick={()=>setSidenavOpen(true)}
-                sx={{
-                  padding: "16px 9px",
-                  border: "1px solid #000000",
-                  borderRadius: "8px",
-                  fontFamily: 'Helvetica',
-                  fontWeight: 700,
-                  fontSize: '14px',
-                  color: '#000',
-                  flexGrow: 1,
-                  width:'100%'
-                }}>
-                Personalized Sizing
-              </Button>
-            </FlexBox>
-
+              {/* SIZE CHART */}
               <FlexBox justifyContent="flex-end" >
-                <Button onClick={()=>setSidenavOpen(true)} sx={{ fontSize:8, padding: "8px", borderRadius: "50px", background:'#52647D', ...styles.elementalEndFont, color:'#fff' }} color="primary" variant="contained">
+                <Button sx={styles.sizeChart} onClick={()=>setSidenavOpen(true)}>
                   Size chart
                 </Button>
               </FlexBox>
+            </FlexCol>
             
-
             {/* ADD TO CART BUTTON */}
-            <FlexBox alignItems="center" gap={1}  mb={2} mt={2}>
-              <Button sx={{ padding: "16px 56px", border: "1px solid #000000", borderRadius: "50px", background:'transparent', ...styles.elementalEndFont, color:'#000' }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
+            <FlexBox alignItems="center" gap={1} flexDirection={{xs:'column', sm:'row'}} mb={2} mt={2} maxWidth={{sm:'450px'}}>
+              <Button sx={styles.addToCartButton} onClick={handleCartAmountChange(1)}>
                 Add to Cart
               </Button>
 
-              <Button sx={{ padding: "16px 56px", borderRadius: "50px", background:'#000', ...styles.elementalEndFont, color:'#fff' }} color="primary" variant="contained" onClick={handleCartAmountChange(1)}>
+              <Button sx={styles.buyNowButton} onClick={handleCartAmountChange(1)}>
                 Buy now
               </Button>
             </FlexBox>
-          </Box>
+          </FlexCol>
 
           <SymAccordion
             title="Product Details"

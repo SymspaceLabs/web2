@@ -6,7 +6,7 @@ import ArrowRight from "@mui/icons-material/ArrowRight"; // GLOBAL CUSTOM HOOKS
 
 import useOverflowDetect from "@/hooks/useOverflowDetect"; // GLOBAL CUSTOM COMPONENTS
 
-import { Span } from "@/components/Typography";
+import { H1 } from "@/components/Typography";
 import BazaarCard from "@/components/BazaarCard"; // GLOBAL CUSTOM HOOK
 
 import useSettings from "@/hooks/useSettings"; // STYLED COMPONENTS
@@ -32,9 +32,9 @@ export default function NavItemChild({
       
       {/* Parent */}
       <MenuItem color="grey.700">
-        <Span flex="1 1 0" sx={{ fontFamily:'Elemental End', textTransform:'lowercase' }}>
+        <H1 flex="1 1 0" >
           {nav.title}
-        </Span>
+        </H1>
         {settings.direction === "ltr" ? <ArrowRight fontSize="small" /> : <ArrowLeft fontSize="small" />}
       </MenuItem>
 

@@ -4,12 +4,12 @@
 // Section 1 - About Us
 // ===========================================================================
 
-import { Box, Typography, Container } from '@mui/material';
-import { LazyImage } from '@/components/lazy-image';
-import { FlexBox } from '@/components/flex-box';
 import { useRouter } from "next/navigation";
+import { H1 } from '@/components/Typography';
+import { Box, Container } from '@mui/material';
+import { FlexBox } from '@/components/flex-box';
+import { LazyImage } from '@/components/lazy-image';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { styles } from '../page-view/styles';
 
 export default function Section1() {
 
@@ -31,9 +31,9 @@ export default function Section1() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 45 }, color: '#fff', wordSpacing: "10px", }}>
+        <H1 fontSize={{xs:25,sm:45}} color='#FFF' wordSpacing="10px">
           simulating reality with technology that brings spaces to life
-        </Typography>
+        </H1>
 
         <FlexBox sx={{ flexDirection:{ xs:'column', sm:'row' }, justifyContent: { xs:'center', sm:'space-between' }, mt:{ xs:0, sm:-6 } }} alignItems="center">
           <FlexBox flexDirection="column" gap={2}>
@@ -87,13 +87,13 @@ const GlassCard = ({content, url}) => {
       sx={cardStyle}
       gap={3}
       onClick={handleClick}
-      role="button" // Accessibility enhancement
-      tabIndex={0} // Makes it focusable for keyboard users
-      onKeyPress={(e) => e.key === "Enter" && handleClick()} // Allows Enter key to trigger click
+      role="button"
+      tabIndex={0}
+      onKeyPress={(e) => e.key === "Enter" && handleClick()}
     >
-      <Typography color="#fff" sx={{ ...styles.elementalEndFont, fontSize:{xs:'10px', sm:'14px'} }}>
+      <H1 color="#fff" fontSize={{xs:'10px',sm:'14px'}}>
         {content}
-      </Typography>
+      </H1>
       <ArrowForwardIosIcon fontSize="small" sx={{ color: "#fff" }} />
     </FlexBox>
   )

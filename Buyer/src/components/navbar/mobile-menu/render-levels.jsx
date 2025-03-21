@@ -3,14 +3,17 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMore from "@mui/icons-material/ExpandMore"; // GLOBAL CUSTOM COMPONENTS
 
-import { H6 } from "../../../components/Typography";
-import { NavLink } from "../../../components/nav-link";
+import { H6 } from "@/components/Typography";
+import { NavLink } from "@/components/nav-link";
 const ACCORDION_STYLES = {
   "&:not(:last-child)": {
     borderBottom: 0
   },
   "&:before": {
     display: "none"
+  },
+  "&.MuiPaper-root": {
+    backgroundColor: "transparent",
   }
 };
 const ACCORDION_SUMMARY_STYLES = {
@@ -26,6 +29,9 @@ const ACCORDION_SUMMARY_STYLES = {
     "& .MuiSvgIcon-root": {
       color: "primary.main"
     }
+  },
+  "&.MuiPaper-root": {
+    backgroundColor: "transparent",
   }
 };
 export const renderLevels = (data, handleClose) => {
@@ -33,7 +39,9 @@ export const renderLevels = (data, handleClose) => {
     if (item.child) {
       return <Accordion square key={index} elevation={0} disableGutters sx={ACCORDION_STYLES}>
           <AccordionSummary expandIcon={<ExpandMore />} sx={ACCORDION_SUMMARY_STYLES}>
-            <H6>{item.title}</H6>
+            <H6 color="#FFF">
+              {item.title}
+            </H6>
           </AccordionSummary>
 
           <Box mx={2}>{renderLevels(item.child, handleClose)}</Box>
@@ -42,12 +50,14 @@ export const renderLevels = (data, handleClose) => {
 
     if (item.extLink) {
       return <H6 key={index} py={1}>
-          <NavLink href={item.url}>{item.title}</NavLink>
+          <NavLink href={item.url} color="#FFF">
+            {item.title}
+          </NavLink>
         </H6>;
     }
 
     return <Box key={index} py={1}>
-        <NavLink href={item.url} onClick={handleClose}>
+        <NavLink href={item.url} onClick={handleClose} color="#FFF">
           {item.title}
         </NavLink>
       </Box>;

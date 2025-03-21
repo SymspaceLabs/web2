@@ -84,10 +84,10 @@ export default function Section12() {
                 justifyContent: { xs: "flex-start", sm: "flex-start" }, // Align to left
               }}
             >
-              {products.map((product) => (
+              {products.map((product,index) => (
                 <Grid
                   item
-                  key={product.id}
+                  key={index}
                   lg={3} md={4} sm={6} xs={12} // Max 4 per row on desktop
                   sx={{
                     flex: { xs: "0 0 auto", sm: "1 1 auto" }, 

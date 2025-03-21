@@ -1,6 +1,6 @@
-import { Paragraph } from "@/components/Typography";
+import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
-import { CategoryMenuButton } from "./styles";
+import { CategoryMenuButton, elementalEndFont } from "./styles";
 import { ChildNavListWrapper } from "./styles";
 import { NavLink } from "../nav-link";
 import { MenuItem } from "@mui/material";
@@ -27,9 +27,9 @@ function NavigationList() {
 
               <CategoryMenuButton onClick={e => handler(e)}>
                 <IoGrid size="1.3em" color="#fff" />
-                <Paragraph color="#fff" fontFamily="'Elemental End', sans-serif" fontWeight="600">
+                <H1 color="#fff">
                   Categories
-                </Paragraph>
+                </H1>
               </CategoryMenuButton>
 
               <ChildNavListWrapper className="child-nav-item">
@@ -43,7 +43,7 @@ function NavigationList() {
         if (nav.url) {
           return (
             <NavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
-              <MenuItem sx={{ fontFamily: "'Elemental End', sans-serif", textTransform:'lowercase' }}>
+              <MenuItem sx={elementalEndFont}>
                 {nav.title}
               </MenuItem>
             </NavLink>

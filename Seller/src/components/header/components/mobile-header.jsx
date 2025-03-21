@@ -9,7 +9,7 @@ import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
 
 import Icon from "@/icons"; // LOCAL CUSTOM COMPONENTS
 
-import DialogDrawer from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
+import SymDialog from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
 
 import Image from "@/components/BazaarImage";
 import { SearchInput } from "@/components/search-box";
@@ -100,7 +100,7 @@ export default function MobileHeader() {
       </Drawer>
 
       {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-      <DialogDrawer
+      <SymDialog
         dialogOpen={dialogOpen}
         sidenavOpen={sidenavOpen}
         toggleDialog={toggleDialog}

@@ -17,7 +17,7 @@ import { LoginPageView } from "../../../pages-sections/sessions/page-view";
 import { Box, Snackbar, Alert, Dialog, Drawer, Card } from '@mui/material';
 // ==============================================================
 
-export default function DialogDrawer(props) {  
+export default function SymDialog(props) {  
   const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = props;
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 

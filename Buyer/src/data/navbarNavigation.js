@@ -1,3 +1,9 @@
+// ============================================================
+//  Navigation Menu used in:
+//  - navbar
+//  - mobile navigation
+// ============================================================
+
 const navbarNavigation = [
   // MARKETPLACE
   {
@@ -11,7 +17,6 @@ const navbarNavigation = [
   // AR FOR BUSINESS
   {
     title: "AR for Business",
-    url: '/ar-for-business',
     megaMenu: false,
     megaMenuWithSub: false,
     child: [
@@ -30,6 +35,9 @@ const navbarNavigation = [
       }, {
         title: "AR Real Estate",
         url: "/ar-real-estate"
+      }, {
+        title: "Sell on Symspace",
+        url: "/ar-for-business"
       }
     ]
   }, 

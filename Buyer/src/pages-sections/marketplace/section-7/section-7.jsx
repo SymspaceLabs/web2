@@ -15,17 +15,33 @@ import { calculateDiscount } from "@/lib";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { LazyImage } from "@/components/lazy-image";
 import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 
 export default function Section7() {
   // Simulated product data
   const [products, setProducts] = useState(data);
+
+  const cardData = [
+    {
+      btnText:'Shop More',
+      cardHeader:'Selected for you'
+    },
+    {
+      btnText:'Shop New Arrivals',
+      cardHeader:'New Arrivals'
+    },
+    {
+      btnText:'Shop Sale',
+      cardHeader:'Today’s deals'
+    }
+  ]
 
   return (
     <Box sx={{ py: 5 }}>
       <Container>
         <Grid container spacing={4} justifyContent="center">
           {/* Render three identical cards */}
-          {['Shop More', 'Shop New Arrivals', 'Shop Sale'].map((_, index) => (
+          {cardData.map((data, index) => (
             <Grid item xs={12} sm={4} key={index}>
               {/* Motion wrapper for fade-in animation */}
               <motion.div
@@ -45,18 +61,14 @@ export default function Section7() {
                 >
                   <CardContent>
                     {/* Section Title */}
-                    <Typography
-                      sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: 36, fontWeight: 700, py: 2 }}
-                      variant="h5"
-                      component="div"
-                    >
-                      Selected for you
-                    </Typography>
+                    <H1 textAlign="center" color="#FFF" fontSize={24} py={3}>
+                      {data.cardHeader}
+                    </H1>
 
                     {/* Products Grid */}
                     <Grid container spacing={2}>
-                      {products.slice(0, 4).map((product) => (
-                        <Grid item lg={6} md={6} sm={6} xs={12} key={product.id}>
+                      {products.slice(0, 4).map((product,index) => (
+                        <Grid item lg={6} md={6} sm={6} xs={12} key={index}>
                           <Link href={`/products/${product.slug}`} passHref>
                             <FlexBox
                               flexDirection="column"
@@ -117,7 +129,7 @@ export default function Section7() {
                     {/* Contact Button */}
                     <FlexBox justifyContent="center">
                       <Button sx={styles.buttonLight}>
-                        {_}
+                        {data.btnText}
                       </Button>
                     </FlexBox>
                   </CardContent>

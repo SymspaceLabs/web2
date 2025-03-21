@@ -46,10 +46,23 @@ export const styles = {
     },
     buttonGradient: {
         ...buttonDark,
+        width:'100%',
         border: '2px solid transparent',
         background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
         ':hover': { 
           border: '2px solid white',
         },
+        maxWidth: { xs: '100%', sm: 250 }
+    },
+    bentoBoxCard : {
+        maxHeight:'600px',
+        overflow:'hidden',
+        padding: {xs:"2.2rem", sm:"3rem"},
+        gap: {xs:2, sm:2.5},
+        color: "white",
+        borderRadius: {xs:10, sm:15},
+        position: "relative",
+        height: "100%"
+
     }
 };

@@ -10,7 +10,7 @@ import { TextField, Typography , Tooltip} from "@mui/material";
 
 const SymTextField = ({
     title,
-    toolTipText , // Tooltip text prop
+    toolTipText,
     value,
     onChange,
     multiline = false,

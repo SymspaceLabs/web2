@@ -53,19 +53,3 @@ export default function Section1() {
     </Box>
   );
 }
-
-
-const outlinedButton = {
-  background: '#000',
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
-  color: '#fff',
-  borderRadius: '50px',
-  py: 2,
-  px: 7.5,
-  transition: 'all 0.3s ease-in-out', // Smooth transition effect
-  ':hover': {
-    background: '#fff',
-    color: '#000',
-  },
-}

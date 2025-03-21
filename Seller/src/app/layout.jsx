@@ -1,5 +1,21 @@
 "use client"
 
+// ================================================================
+//  Layout File
+// ================================================================
+
+import localFont from "next/font/local";
+
+// Load Custom Font (.ttf)
+export const elementalEnd = localFont({
+  src: "../../public/fonts/elemental-end.ttf",
+  weight: '400',
+  style: 'normal',
+  display: 'swap',
+  variable: '--font-elemental-end' // Optional CSS variable
+});
+
+
 import "../i18n";
 import RTL from "../components/rtl";
 import ThemeProvider from "../theme/theme-provider"; // PRODUCT CART PROVIDER

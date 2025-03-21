@@ -2,6 +2,8 @@ import { Box, Card, Typography, Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { LazyImage } from "@/components/lazy-image";
 import { FlexRowCenter } from "../flex-box";
+import { H1 } from "../Typography";
+import { styles } from "./styles";
 
 export default function PlanCard({ plan, theme }) {
   return (
@@ -53,9 +55,9 @@ export default function PlanCard({ plan, theme }) {
         }}
       >
         <Box sx={{ position: "relative", p:4 }}>
-          <Typography sx={{ fontFamily:'Elemental End', textTransform:'lowercase', fontSize: 20, color: theme=='dark'?'#FFF':'#000' }}>
+          <H1 sx={{ fontSize: 20, color: theme=='dark'?'#FFF':'#000' }}>
             {plan.title}
-          </Typography>
+          </H1>
           <Typography sx={{ fontSize: 14, color: theme=='dark'?'#FFF':'#000' }}>
             {plan.subTitle}
           </Typography>
@@ -80,24 +82,7 @@ export default function PlanCard({ plan, theme }) {
               {plan.title!=="Starter" ? "+ $"+`${plan.credit} `+ "Each Additional Credit" : <>&nbsp;</> }
             </Typography>:<></>
           }
-          <Button
-            sx={{
-              boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-              fontFamily: 'Elemental End',
-              textTransform: 'lowercase',
-              fontWeight: 500,
-              my: 5,
-              borderRadius: "50px",
-              py: 1.5,
-              background: "#2563EB",
-              color: "#fff",
-              border: "2px solid #FFF",
-              "&:hover": {
-                background: "linear-gradient(94.44deg, #666666 29%, #000000 100%)",
-              },
-            }}
-            fullWidth
-          >
+          <Button fullWidth sx={styles.getStartedBtn}>
             Get Started
           </Button>
           <Typography

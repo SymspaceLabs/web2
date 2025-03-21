@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import BoxLink from "./box-link";
+import BoxLink from "../../../components/BoxLink";
 import { FlexRowCenter } from "../../../components/flex-box";
 import { Span } from "../../../components/Typography";
 

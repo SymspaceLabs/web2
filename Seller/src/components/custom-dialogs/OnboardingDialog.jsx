@@ -1,19 +1,31 @@
+// ===================================================================
+// Onboarding Dialog
+// ===================================================================
+
 import { useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import { FlexColCenter, FlexBox, FlexCol } from '@/components/flex-box';
-import { OnboardingMultiStepForm } from '../multi-step-forms';
-import { IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, Typography, Box } from '@mui/material';
 import LazyImage from '../LazyImage';
 import { useAuth } from '@/contexts/AuthContext';
+import CloseIcon from '@mui/icons-material/Close';
+import { SymProgressbar } from "@/components/custom-components";
+import { FlexColCenter, FlexBox, FlexCol } from '@/components/flex-box';
+import { OnboardingMultiStepForm } from '@/components/multi-step-forms';
+import { IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, Typography, Box, DialogActions } from '@mui/material';
+import WelcomeCard from './WelcomeCard';
+
+// ===================================================================
 
 const OnboardingDialog = () => {
-    const [open, setOpen] = useState(true);
     const { user } = useAuth();
+
+    const [open, setOpen] = useState(true);
     const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
 
     const handleClose = () => setOpen(false);
     const handleContinue = () => setStep((prev) => prev + 1);
     const handleBack = () => setStep((prev) => prev - 1);
+
+    // Milestone labels
+    const milestoneLabels = ["business", "billing", "survey", "review & Submit", ""];
 
 
     // Media query to detect mobile screens
@@ -40,6 +52,11 @@ const OnboardingDialog = () => {
             }}
         >
             <DialogTitle sx={{ position: "relative" }}>
+                {/* Progress Bar */}
+                {step > 0 && (
+                    <SymProgressbar milestoneLabels={milestoneLabels} step={step} />
+                )}
+
                 <IconButton
                     onClick={handleClose}
                     sx={{
@@ -60,40 +77,30 @@ const OnboardingDialog = () => {
             <DialogContent sx={{ p: { xs: 0, sm: '25px' } }}>
                 <FlexCol gap={3}>
                     {/* Show WelcomeDialog if step is 0 */}
-                    {step === 0 ? (
-                        <>
-                            <DialogTitle sx={{ pt: { xs: 3, sm: 5 }, pb: { xs: 3, sm: 5 } }}>
-                                <FlexColCenter>
-                                    <Box width={250}>
-                                        <LazyImage src="/assets/images/dashboard/welcome.png" width={500} height={500} />
-                                    </Box>
-                                </FlexColCenter>
-                                <FlexColCenter gap={2}>
-                                    <Typography sx={styles.titleHeader}>congrats, {user.firstName}!</Typography>
-                                    <Typography sx={{ ...styles.titleHeader, fontSize: 32 }}>you're officially a seller</Typography>
-                                    <Typography sx={styles.subtitle}>
-                                        We’re excited to have you join our community and AR marketplace.<br />
-                                        Continue to complete setting up your business prior to listing products
-                                    </Typography>
-                                </FlexColCenter>
-                            </DialogTitle>
-                        </>
-                    ) : (
-                        <OnboardingMultiStepForm step={step} />
+                    {step === 0 ? <WelcomeCard />
+                    : (
+                        <OnboardingMultiStepForm 
+                            step={step}
+                            handleContinue={handleContinue}
+                            handleBack={handleBack}
+                        />
                     )}
-                    <FlexBox justifyContent={step > 1 ? "space-between" : "flex-end"  }>
-                        {
-                            step > 0 && <Button sx={styles.btn} onClick={handleBack}>
-                                Back
-                            </Button>
-                        }
-                        
-                        <Button sx={styles.btn} onClick={handleContinue}>
-                            Continue
-                        </Button>
-                    </FlexBox>
                 </FlexCol>
             </DialogContent>
+
+            <DialogActions>
+                <FlexBox justifyContent={step > 1 ? "space-between" : "flex-end"  }>
+                    {
+                        step > 0 && <Button sx={styles.btn} onClick={handleBack}>
+                            Back
+                        </Button>
+                    }
+                    
+                    <Button sx={styles.btn} onClick={handleContinue}>
+                        Continue
+                    </Button>
+                </FlexBox>
+            </DialogActions>
         </Dialog>
     );
 };

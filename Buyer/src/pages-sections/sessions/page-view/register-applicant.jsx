@@ -1,22 +1,14 @@
 "use client";
 
-
-/**
- * RegisterPageView Component
- * 
- * This component provides a registration form for users to create an account as a seller. 
- * It includes fields for user details such as first name, last name, email, business name, 
- * website, password, and a retype password. The form validates inputs using Yup schema, 
- * and upon submission, sends the data to the backend for account creation.
- */
-
-
+// =====================================================================
+// Register Applicant Page
+// =====================================================================
 
 import React, { useState, useMemo } from "react";
 import { Box, Button } from '@mui/material';
 import JobForm from "@/components/forms/JobForm";
 import { useAuth } from "@/contexts/AuthContext";
-
+import { styles } from "./styles";
 
 const RegisterApplicantPageView = () => {
 
@@ -37,9 +29,7 @@ const RegisterApplicantPageView = () => {
 
 
   const buttonStyles = useMemo(() => ({
-    fontFamily:'Elemental End',
-    textTransform:'lowercase',
-    fontWeight: 'bold',
+    ...styles.elementalEndFont,
     background: isValid
         ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
         : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
@@ -57,50 +47,9 @@ const RegisterApplicantPageView = () => {
   }), [isValid]);
 
   const handleSubmit = async () => {
-  //   setLoading(true);
-
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/contact-us`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({
-  //         firstName,
-  //         lastName,
-  //         email,
-  //         topic,
-  //         message
-  //       }),
-  //     });
-
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       showSnackbar("Your enquiry has been received!", "success");
-  //       clearForm();
-
-  //     } else {
-  //       showSnackbar(data.message, "error");
-  //     }
-  //   } catch (error) {
-  //     showSnackbar('Network error. Please try again.', "error");
-  //   }
-
-  //   setLoading(false);
+  
   };
 
-  // useEffect(() => {
-  //   setIsValid(
-  //       firstName && 
-  //       lastName && 
-  //       email && 
-  //       password &&
-  //       repeatPassword &&
-  //       linkedin &&
-  //       role &&
-  //       comments &&
-  //       isChecked
-  //   );
-  // }, [firstName, lastName, email, password, repeatPassword, linkedin, role, comments, isChecked]);
 
 
 

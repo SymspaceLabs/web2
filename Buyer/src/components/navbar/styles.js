@@ -1,10 +1,16 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import styled from "@mui/material/styles/styled";
-import Container from "@mui/material/Container"; // GLOBAL CUSTOM COMPONENTS
 
-import { NavLink } from "@/components/nav-link";
+import styled from "@mui/material/styles/styled";
 import BazaarCard from "@/components/BazaarCard"; // COMMON STYLED OBJECT
+
+import { elementalEnd } from "@/app/layout"; // Calling custom font
+import { NavLink } from "@/components/nav-link";
+import { Box, Button, Container } from "@mui/material";
+
+export const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
 
 export const NAV_LINK_STYLES = {
   color:'#6A6B6B',

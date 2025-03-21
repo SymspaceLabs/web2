@@ -17,8 +17,8 @@ import Sticky from "@/components/sticky";
 import Header from "@/components/header";
 import useHeader from "@/components/header/hooks/use-header";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
-import DialogDrawer from "@/components/header/components/dialog-drawer";
-import SymRightDrawer from "@/components/header/components/drawer-right";
+import SymDialog from "@/components/custom-dialog/SymDialog";
+import { SymDrawer } from "@/components/custom-drawer";
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 
 export default function ShopLayout1({children}) {
@@ -65,32 +65,34 @@ export default function ShopLayout1({children}) {
       <MobileNavigationBar />
 
       {/* LOGIN DIALOG */}
-      <DialogDrawer
+      <SymDialog
         dialogOpen={dialogOpen} 
         toggleDialog={toggleDialog}
       />
 
       {/* SHOPPING CART SIDE DRAWER */}
-      <SymRightDrawer
-        sidenavOpen={cartOpen}
-        toggleSidenav={toggleCartOpen}
+      <SymDrawer
+        open={cartOpen}
+        toggleOpen={toggleCartOpen}
       >
         <MiniCart
           toggleSidenav={toggleCartOpen}
         />
-      </SymRightDrawer>
+      </SymDrawer>
 
       {/* FAVOURITES SIDE DRAWER */}
-      <SymRightDrawer
-        sidenavOpen={favouriteOpen}
-        toggleSidenav={toggleFavouriteOpen}
+      <SymDrawer
+        open={favouriteOpen}
+        toggleOpen={toggleFavouriteOpen}
       >
         <MiniFavorite
           toggleSidenav={toggleFavouriteOpen}
         />
-      </SymRightDrawer>
+      </SymDrawer>
 
+      {/* Footer Component */}
       <Footer />
+      
     </Fragment>
   );
 }

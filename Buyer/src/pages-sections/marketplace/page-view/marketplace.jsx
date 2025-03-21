@@ -6,6 +6,8 @@
 // ======================================================================
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import OnboardingDialog from "@/components/dialog/OnboardingDialog";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -15,8 +17,6 @@ import Section6 from "../section-6";
 import Section7 from "../section-7";
 import Section8 from "../section-8";
 import Section9 from "../section-9";
-import { useAuth } from "@/contexts/AuthContext";
-import OnboardingDialog from "@/components/dialog/OnboardingDialog";
 
 export default function MarketplacePageView() {
   const [showPopup, setShowPopup] = useState(false);

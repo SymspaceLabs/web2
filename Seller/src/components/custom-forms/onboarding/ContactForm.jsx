@@ -1,5 +1,6 @@
+import { Span } from '@/components/Typography';
 import { FlexBox } from '@/components/flex-box';
-import { SymPasswordInput, SymTextField, SymDatePicker } from '@/components/custom-inputs';
+import { SymCheckbox, SymTextField, SymDatePicker } from '@/components/custom-inputs';
 
 function ContactForm ({
     firstName,
@@ -27,7 +28,10 @@ function ContactForm ({
     location,
     setLocation,
     ein,
-    setEin
+    setEin,
+
+    isChecked,
+    setIsChecked,
 }) {
    
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
@@ -66,6 +70,7 @@ function ContactForm ({
 
     const handleLocationChange = (event) => setLocation(event.target.value);
     const handleEinChange = (event) => setEin(event.target.value);
+    const handleAgreementChange = (event) => setIsChecked(event.target.checked);
 
     
     
@@ -85,6 +90,11 @@ function ContactForm ({
                 <SymTextField title="Business Phone Number" value={businessPhone} placeholder="Business Phone Number" onChange={handleBusinessPhoneChange} />
             </FlexBox>
 
+            {/* CHECKBOX */}
+            <SymCheckbox onChange={handleAgreementChange} checked={isChecked} toolTipText={toolTipText.owner} content={<Span display={{ color:'#fff', sm: "inline-block" }}>
+                By checking the box, you confirm the Primary Contact is a beneficial owner of the business</Span>}
+            />
+
         </FlexBox>
     );
 }
@@ -94,5 +104,5 @@ export default ContactForm;
 const toolTipText = {
     contactPerson: 'The Primary contact person is the person who has access to the Selling on Symspace payment account, provides the registration information on behalf of the account holder (the registered seller) and initiates transactions such as disbursements and refunds. Actions taken by the Primary point of contact are deemed to be taken by the account holder.',
     gmv: 'Average Annual Gross Merchandise Value (GMV) is the total value of all goods sold on a platform over a year on average, before any deductions for fees, discounts, or returns.',
-    owener: 'A beneficial owner is a natural person who directly or indirectly owns more than 25% of the shares or voting rights of the business, or that own the business via other means. If no individual qualifies under the criteria mentioned then any individual who holds the position of senior manager is considered a beneficial owner.'
+    owner: 'A beneficial owner is a natural person who directly or indirectly owns more than 25% of the shares or voting rights of the business, or that own the business via other means. If no individual qualifies under the criteria mentioned then any individual who holds the position of senior manager is considered a beneficial owner.'
 }

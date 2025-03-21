@@ -7,8 +7,10 @@
 import { useState } from "react";
 import { RootStyle } from "./styles";
 import { motion } from "framer-motion";
+import { H1 } from "@/components/Typography";
 import { styles } from "../page-view/styles";
 import { LazyImage } from "@/components/lazy-image";
+import { FlexColCenter } from "@/components/flex-box";
 import { Box, Container, Typography, Button, TextField } from '@mui/material';
 
 export default function Section6() {
@@ -75,15 +77,9 @@ export default function Section6() {
         <RootStyle>
           <Box sx={{ p: 5 }}>
             {/* Main Header */}
-            <Typography
-              sx={{
-                ...styles.elementalEndFont,
-                fontSize: {xs:'20px', sm:'36px'},
-                color: '#fff',
-              }}
-            >
+            <H1 fontSize={{xs:'20px', sm:'36px'}} color='#fff'>
               generate 3d models<br /> of any retail product
-            </Typography>
+            </H1>
 
             {/* Subheader */}
             <Typography
@@ -113,33 +109,19 @@ export default function Section6() {
                 }}
               >
                 {/* Button Text */}
-                <Typography
-                  sx={{
-                    fontFamily: 'Elemental End',
-                    textTransform: 'lowercase',
-                    fontSize: 12,
-                  }}
-                >
+                <H1 fontSize={12}>
                   Beta Access
-                </Typography>
+                </H1>
 
                 {/* Icon inside the Button */}
-                <Box
-                  sx={{
-                    width: '35px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+                <FlexColCenter width='35px' alignItems='center'>
                   <LazyImage
                     alt="furniture shop"
                     width={25}
                     height={25}
                     src="/assets/images/sparkler-white.png"
                   />
-                </Box>
+                </FlexColCenter>
               </Button>
             )}
 
@@ -201,8 +183,7 @@ export default function Section6() {
                       borderRadius: "50px",
                       color: isSubmitted ? "#000" : "#fff",
                       padding: "6px 12px",
-                      fontFamily: "'Elemental End', sans-serif",
-                      textTransform: "lowercase",
+                      ...styles.elementalEndFont,
                       "&:hover": {
                         background: isSubmitted
                           ? "#f0f0f0"

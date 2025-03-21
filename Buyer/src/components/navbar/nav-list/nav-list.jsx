@@ -1,6 +1,6 @@
 import { NavLink } from "@/components/nav-link";
 import { FlexBox } from "@/components/flex-box";
-import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper } from "../styles"; // DATA TYPES
+import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper, elementalEndFont } from "../styles"; // DATA TYPES
 import Link from "next/link"; // MUI
 import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
 import navigation from "@/data/navbarNavigation"; // STYLED COMPONENTS
@@ -84,7 +84,7 @@ export default function NavigationList() {
         if (nav.url) {
           return (
             <NavLink href={nav.url} key={nav.title} >
-              <MenuItem sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}>
+              <MenuItem sx={elementalEndFont}>
                 {nav.title}
               </MenuItem>
             </NavLink>
@@ -99,8 +99,7 @@ export default function NavigationList() {
               key={nav.title} 
               sx={{ 
                 background:'#000',
-                fontFamily: "'Elemental End', sans-serif",
-                textTransform: "lowercase"
+                ...elementalEndFont,
               }}>
               {renderNestedNav(nav.child)}
             </NavItemChild>

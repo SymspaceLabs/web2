@@ -2,24 +2,24 @@
 //  Header For Side Drawer
 // ==============================================================
 
-import { IconButton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { FlexBetween, FlexBox } from "@/components/flex-box"; // CUSTOM ICON COMPONENT
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import Clear from "@mui/icons-material/Clear"; // LOCAL CUSTOM COMPONENTS
+import { H1 } from "@/components/Typography";
 
 // ==============================================================
 export default function TopHeader({ toggle, total }) {
   return (
     <FlexBetween px={3} height={74} sx={bg}>
       <FlexBox gap={1} alignItems="center">
-
         {/* Shopping Cart Icon */}
         <PiShoppingCartSimpleBold color="#FFF" size="1.5em"  />
 
         {/* Shopping Cart Item Count */}
-        <Typography lineHeight={0} fontWeight={500} fontFamily="'Elemental End', sans-serif" color="#FFF">
-          {total}  <span style={{fontSize:'10px'}}>items</span>
-        </Typography>
+        <H1 lineHeight={0} color="#FFF">
+          {total}<span style={{fontSize:'10px'}}>items</span>
+        </H1>
       </FlexBox>
 
       {/* Close Button */}

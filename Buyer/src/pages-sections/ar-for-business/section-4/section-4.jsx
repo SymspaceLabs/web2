@@ -8,6 +8,7 @@ import { Box, Container, Typography } from '@mui/material';
 import { styles } from '../page-view/styles';
 import CustomSection from './custom-section';
 import { motion } from "framer-motion";
+import { H1 } from '@/components/Typography';
 
 // Animation variants
 const fadeInVariant = {
@@ -22,23 +23,12 @@ export default function Section4() {
         {/* Section header */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Typography
-              sx={{
-                ...styles.elementalEndFont,
-                fontSize:{ sm: 34, xs: 28 },
-                textAlign:"center"
-              }}
-            >
+            <H1 fontSize={{ sm: 34, xs: 28 }} textAlign="center">
               revolutionize Shopping
-            </Typography>
-            <Typography
-              fontSize={{ sm: 34, xs: 28 }}
-              fontFamily="'Elemental End', sans-serif"
-              textTransform="lowercase"
-              textAlign="center"
-            >
+            </H1>
+            <H1 fontSize={{ sm: 34, xs: 28 }} textAlign="center">
               3d products & ar trial room
-            </Typography>
+            </H1>
           </Box>
         </motion.div>
 

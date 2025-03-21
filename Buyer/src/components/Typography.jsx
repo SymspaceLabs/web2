@@ -1,8 +1,10 @@
 "use client";
+// ==============================================================
 
-import Box from "@mui/material/Box";
+import clsx from "clsx";
+import { elementalEnd } from "@/app/layout";
+import { Typography, Box } from "@mui/material";
 import styled from "@mui/material/styles/styled";
-import clsx from "clsx"; // ==============================================================
 
 // ==============================================================
 const StyledBox = styled(Box, {
@@ -15,21 +17,36 @@ const StyledBox = styled(Box, {
     textOverflow: "ellipsis"
   })
 }));
-export function H1(props) {
-  const {
-    ellipsis,
-    children,
-    className,
-    ...others
-  } = props;
-  return <StyledBox fontSize={30} component="h1" fontWeight={700} ellipsis={ellipsis ? 1 : 0} {...className && {
-    className: clsx({
-      [className]: true
-    })
-  }} {...others}>
+
+export function H1({
+  children,
+  ...props
+}) {
+  return (
+    <Typography
+      {...props}
+      fontFamily={`${elementalEnd.style.fontFamily}, sans-serif`}
+      textTransform='lowercase'
+      fontWeight={500}
+    >
       {children}
-    </StyledBox>;
+    </Typography>);
 }
+
+export function Paragraph({
+  children,
+  ...props
+}) {
+  return (
+    <Typography
+      {...props}
+      fontFamily="Helvetica"
+      fontWeight={500}
+    >
+      {children}
+    </Typography>);
+}
+
 export function H2(props) {
   const {
     ellipsis,
@@ -105,21 +122,21 @@ export function H6(props) {
       {children}
     </StyledBox>;
 }
-export function Paragraph(props) {
-  const {
-    ellipsis,
-    children,
-    className,
-    ...others
-  } = props;
-  return <StyledBox   fontSize={14} component="p" fontWeight={400} ellipsis={ellipsis ? 1 : 0} {...className && {
-    className: clsx({
-      [className]: true
-    })
-  }} {...others}>
-      {children}
-    </StyledBox>;
-}
+// export function Paragraph(props) {
+//   const {
+//     ellipsis,
+//     children,
+//     className,
+//     ...others
+//   } = props;
+//   return <StyledBox   fontSize={14} component="p" fontWeight={400} ellipsis={ellipsis ? 1 : 0} {...className && {
+//     className: clsx({
+//       [className]: true
+//     })
+//   }} {...others}>
+//       {children}
+//     </StyledBox>;
+// }
 export function Small(props) {
   const {
     ellipsis = false,

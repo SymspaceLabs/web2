@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 // MUI
-import { Tooltip } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 
 // GLOBAL CUSTOM COMPONENTS
 import SearchInput from "@/components/SearchInput";
@@ -14,8 +14,11 @@ import OverlayScrollbar from "@/components/overlay-scrollbar";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
 import { HeaderCart, HeaderLogin } from "@/components/header";
 import { MobileMenu } from "@/components/navbar/mobile-menu";
-import { HeaderSearch, MobileHeader } from "@/components/header/mobile-header";
+import { HeaderSearch } from "@/components/header/mobile-header";
 import renderChild from "./render-child";
+import { FlexBox, FlexBetween } from "@/components/flex-box";
+import Link from "next/link";
+import Image from "next/image";
 
 // STYLES
 import { CategoryListItem, StyledRoot } from "./styles";
@@ -74,3 +77,27 @@ export default function MobileCategoriesPageView({
       <MobileNavigationBar navigation={mobileNavigation.version1} />
     </StyledRoot>;
 }
+
+function MobileHeader({children}) {
+  return <FlexBetween width="100%">{children}</FlexBetween>;
+}
+
+MobileHeader.Left = ({
+  children
+}) => {
+  return <Box flex={1}>{children}</Box>;
+};
+MobileHeader.Logo = ({
+  logoUrl
+}) => {
+  return <Link href="/">
+      <Image width={60} height={44} src={logoUrl} alt="logo" />
+    </Link>;
+};
+MobileHeader.Right = ({
+  children
+}) => {
+  return <FlexBox justifyContent="end" flex={1}>
+      {children}
+    </FlexBox>;
+};

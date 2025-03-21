@@ -43,7 +43,7 @@ export const StyledRoot = styled("div")(({
       display: "block",
       transition: "all 0.2s",
       paddingBlock: theme.spacing(0.5),
-      ":hover": {
+      "&:hover": {
         color: theme.palette.primary.main
       }
     }

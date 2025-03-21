@@ -9,7 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"; // MUI ICON COMPONENTS
 import { Menu } from "@mui/icons-material"; // GLOBAL CUSTOM COMPONENTS
 
 import SideNav from "../../components/side-nav";
-import { H2 } from "../../components/Typography";
+import { H1, H2 } from "../../components/Typography";
 import FlexBox from "../../components/flex-box/flex-box";
 import { Navigation } from "../../components/layouts/customer-dashboard";
 import { IconButton, Typography } from "@mui/material"; // STYLED COMPONENT
@@ -59,9 +59,9 @@ export default function DashboardHeader({
         <FlexBox alignItems="center" gap={1.5}>
           {Icon && <Icon sx={{ color: "white", fontSize: "30px" }} />}
 
-          <Typography color="#fff" fontSize="24px" sx={{ fontFamily:'Elemental End', textTransform:'lowercase' }}>
+          <H1 color="#fff" fontSize="24px">
             {title}
-          </Typography>
+          </H1>
         </FlexBox>
 
         <div className="sidenav">

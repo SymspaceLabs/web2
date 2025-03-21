@@ -3,7 +3,8 @@ import { FlexBox } from "../flex-box";
 import { Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Span, Small } from "../Typography";
+import { Span, Small, H1 } from "../Typography";
+import { styles } from "../styles";
 
 const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
     const fileInputRef = useRef(null);
@@ -73,9 +74,9 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 onDrop={handleDrop}
             >
                 <CloudUploadIcon style={{ color: '#fff', fontSize: 22 }} />
-                <Typography fontFamily="'Elemental End', sans-serif" color="#fff" height={10}>
+                <H1 color="#fff" height={10}>
                     {isDragging ? "Drop files here" : "Upload files"}
-                </Typography>
+                </H1>
             </FlexBox>
 
             {uploadedFile.length > 0 && (
@@ -98,14 +99,13 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
 export default SymMultiFileUploader;
 
 const fileCardStyle = {
+    ...styles.elementalEndFont,
     width: '100%',
     p: 1, 
     borderRadius: '8px',
     boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
-    fontFamily: 'Elemental End',
     background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
     color: '#fff',
     fontSize:'20px',
-    fontWeight:400,
     border:'1px solid #FFF'
 };

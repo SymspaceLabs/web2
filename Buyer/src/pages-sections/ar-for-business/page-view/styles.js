@@ -1,8 +1,13 @@
 import { elementalEnd } from "@/app/layout"; // Calling custom font
 
-const elementalEndFont = `${elementalEnd.style.fontFamily}, sans-serif`
+export const elementalEndFont = {
+  fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+  textTransform:'lowercase',
+  fontWeight: 500
+}
 
 export const styles = {
+    elementalEndFont,
     sectionHeader: {
         fontFamily: elementalEndFont,
         textTransform:'lowercase',

@@ -1,8 +1,14 @@
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM COMPONENT
+import { elementalEnd } from "@/app/layout"; // Calling custom font
 
-import BazaarCard from "../../../components/BazaarCard";
+export const elementalEndFont = {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+    textTransform:'lowercase',
+    fontWeight: 500
+}
+
+import { List, ListItem } from "@mui/material";
+import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM COMPONENT
+import BazaarCard from "@/components/BazaarCard";
 
 const Wrapper = styled("div")(({
   theme
@@ -55,11 +61,9 @@ const CategoryListItem = styled(ListItem, {
   theme,
   active
 }) => ({
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
+  ...elementalEndFont,
   padding: "1rem 1.5rem",
   color:'#000',
-  // transition: "all 0.3s",
   justifyContent: "space-between",
   border:'1px solid #BDBDBD',
   ...(active && {

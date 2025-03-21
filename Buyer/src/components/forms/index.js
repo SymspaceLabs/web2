@@ -1,4 +1,5 @@
 export {default as OtpForm} from "./OtpForm";
+export {default as JobForm} from "./JobForm";
 export {default as LoginForm} from "./LoginForm";
 export {default as SignUpForm} from "./SignUpForm";
 export {default as ProfileForm} from "./ProfileForm";

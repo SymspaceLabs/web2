@@ -1,24 +1,24 @@
 "use client";
 
 // =========================================================
-// A component that renders a modal dialog for .
+// SymDialog | Custom Dialog Component for:
 // - user login 
-// - side drawer (mini cart)
 // =========================================================
 
 import { Fragment } from "react";
 import { LogoWithTitle } from "@/components";
 import { styled } from '@mui/material/styles';
-import { SocialButtons } from "./SocialButtons";
+import { SocialButtons } from "../header/components/SocialButtons";
 import { Box, Dialog, Card } from '@mui/material';
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 
 // ==============================================================
 
-export default function DialogDrawer(props) {  
-  const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = props;
-
+export default function SymDialog({ 
+  dialogOpen, 
+  toggleDialog
+}) {  
   return (
     <Fragment>
       
@@ -53,19 +53,6 @@ export default function DialogDrawer(props) {
           </Box>
         </Box>
       </Dialog>
-
-      {/* Side Navigation Drawer for MiniCart */}
-      {/* <Drawer
-        open={sidenavOpen}
-        anchor="right"
-        onClose={toggleSidenav}
-        sx={{ zIndex: 9999 }}
-      >
-        <MiniCart
-          toggleSidenav={toggleSidenav}
-        />
-      </Drawer> */}
-
     </Fragment>
   );
 }

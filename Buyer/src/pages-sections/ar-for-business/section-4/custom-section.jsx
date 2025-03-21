@@ -1,6 +1,7 @@
 import { Box, Grid, Card, Typography, Button } from '@mui/material';
 import { styles } from '../page-view/styles';
 import Link from 'next/link';
+import { H1 } from '@/components/Typography';
 
 export default function CustomSection({ title, subTitle, btnText, btnUrl, children, invert=false }) {
   return (
@@ -59,9 +60,9 @@ const BlogCard = ({ title, subTitle, btnText, btnUrl }) => {
       }}
     >
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection:'column', gap:'25px' }}>
-        <Typography sx={{ ...styles.elementalEndFont, fontSize: 21, color:'#2F2F2F' }}>
+        <H1 fontSize={21} color='#2F2F2F'>
           {title}
-        </Typography>
+        </H1>
         <Typography sx={{ fontFamily: 'Helvetica', fontSize: 16, color:'#434167' }}>
           {subTitle}
         </Typography>

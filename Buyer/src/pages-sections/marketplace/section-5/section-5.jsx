@@ -6,13 +6,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { FlexRowCenter, FlexBox } from "@/components/flex-box";
-import { H2, Paragraph } from "@/components/Typography";
-import { calculateDiscount } from "@/lib";
-import { Box, Container, Typography, Grid } from "@mui/material";
 import { motion } from "framer-motion";
-import { LazyImage } from "@/components/lazy-image";
+import { calculateDiscount } from "@/lib";
 import { styles } from "../page-view/styles";
+import { LazyImage } from "@/components/lazy-image";
+import { H2, Paragraph } from "@/components/Typography";
+import { FlexRowCenter, FlexBox } from "@/components/flex-box";
+import { Box, Container, Typography, Grid } from "@mui/material";
 
 
 export default function Section5() {
@@ -87,8 +87,8 @@ export default function Section5() {
               zIndex: 1,
             }}
           >
-            {products.map((product) => (
-              <Grid item lg={3} md={4} sm={6} xs={12} key={product.id}>
+            {products.map((product, index) => (
+              <Grid item lg={3} md={4} sm={6} xs={12} key={index}>
                 <Link href={`/products/${product.slug}`} passHref>
                   <FlexBox
                     flexDirection="column"
@@ -211,7 +211,7 @@ const data = [
       type: "new-arrival"
     }
   }, {
-    id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76901",
+    id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76902",
     slug: "hand-bag",
     brand:'Xandevera',
     shop: {
@@ -259,7 +259,7 @@ const data = [
       type: "new-arrival"
     }
   }, {
-  id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76901",
+  id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76903",
   slug: "wood-tool",
   shop: {
     id: "584323a3-059a-4990-8498-aa4fac9f22a7",
@@ -307,7 +307,7 @@ const data = [
     type: "new-arrival"
   }
   }, {
-  id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76902",
+  id: "8b9f5a78-0dbb-4dd3-a718-aa7342b76904",
   slug: "brown-single",
   brand:'Company A',
   shop: {

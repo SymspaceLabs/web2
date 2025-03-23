@@ -1,5 +1,5 @@
 // ==============================================================
-//  FAQ Page Sections
+//  Terms & Conditions Page Sections
 // ==============================================================
 
 import { Box } from "@mui/material";
@@ -9,7 +9,7 @@ import Section1 from "../section-1";
 import Section2 from "../section-2";
 
 // ==============================================================
-export default function FaqPageView() {
+export default function TermsPageView() {
   return (
     <FlexRowCenter sx={{ position: 'relative', overflow: 'hidden', background: '#1F1F1F' }}>
       {/* GRADIENT CIRCLES */}
@@ -17,7 +17,7 @@ export default function FaqPageView() {
 
       {/* CONTENT */}
       <Box sx={{ zIndex:1, width:'100%' }}>
-        <Section1 />  {/* FAQs  */}
+        <Section1 />  {/* Terms  */}
         <Section2 />  {/* BANNER  */}
       </Box>
     </FlexRowCenter>

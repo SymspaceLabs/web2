@@ -1,7 +1,6 @@
-import FaqPageView from "@/pages-sections/faq/page-view";
-
+import TermsPageView from "@/pages-sections/terms/page-view";
 export const metadata = {
-  title: "FAQs",
+  title: "Terms  & Conditions",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "UI-LIB",
@@ -10,6 +9,6 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default function Faq() {
-  return <FaqPageView />;
+export default function Terms() {
+  return <TermsPageView />;
 }

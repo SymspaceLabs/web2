@@ -6,6 +6,7 @@ import { IconButton } from "@mui/material";
 import { FlexBetween, FlexBox } from "@/components/flex-box"; // CUSTOM ICON COMPONENT
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import Clear from "@mui/icons-material/Clear"; // LOCAL CUSTOM COMPONENTS
+import { H1 } from "@/components/Typography";
 
 // ==============================================================
 export default function TopHeader({ toggle, total }) {

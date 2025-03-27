@@ -1,10 +1,11 @@
 "use client";
-
-import Card from "@mui/material/Card";
-import styled from "@mui/material/styles/styled"; // ===============================================
-
 // ===============================================
-const BazaarCard = styled(Card, {
+//  Used For Dropdown Bg
+// ===============================================
+import Card from "@mui/material/Card";
+import styled from "@mui/material/styles/styled";
+// ===============================================
+const SymCard = styled(Card, {
   shouldForwardProp: prop => prop !== "hoverEffect"
 })(({
   theme,
@@ -21,4 +22,4 @@ const BazaarCard = styled(Card, {
     })
   }
 }));
-export default BazaarCard;
+export default SymCard;

@@ -2,7 +2,7 @@ import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 export default function HeaderLogin() {
-  return <IconButton LinkComponent={Link} href="/login">
+  return <IconButton LinkComponent={Link} href="/sign-in">
       <AccountCircleOutlined sx={{
       color: "grey.600"
     }} />

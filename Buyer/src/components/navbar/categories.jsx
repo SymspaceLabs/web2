@@ -6,7 +6,7 @@ import { NavLink } from "../nav-link";
 import { MenuItem } from "@mui/material";
 import { IoGrid } from "react-icons/io5";
 import NavItemChild from "./nav-list/nav-item-child";
-import BazaarCard from "../BazaarCard";
+import SymCard from "../custom-components/SymCard";
 import styled from "@mui/material/styles/styled";
 import CATEGORIES_DATA from "@/data/categories"
 
@@ -33,9 +33,9 @@ function NavigationList() {
               </CategoryMenuButton>
 
               <ChildNavListWrapper className="child-nav-item">
-                <BazaarCard elevation={3} sx={{ mt: 2.5, py: 1, minWidth: 100 }}>
+                <SymCard elevation={3} sx={{ mt: 2.5, py: 1, minWidth: 100 }}>
                   {renderNestedNav(nav.child)}
-                </BazaarCard>
+                </SymCard>
               </ChildNavListWrapper>
             </FlexBox>;
         }

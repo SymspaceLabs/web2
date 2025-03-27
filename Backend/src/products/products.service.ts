@@ -65,7 +65,7 @@ export class ProductsService {
         throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
       }
     
-      const slug = `${companyEntity.businessName.toLowerCase().replace(/\s+/g, '-')}-${name.toLowerCase().replace(/\s+/g, '-')}`;
+      const slug = `${companyEntity.entityName.toLowerCase().replace(/\s+/g, '-')}-${name.toLowerCase().replace(/\s+/g, '-')}`;
     
       const product = this.productRepository.create({
         ...productData,
@@ -196,7 +196,7 @@ export class ProductsService {
     // Update slug if name or company changes
     if (name || company) {
       const updatedCompany = product.company || (await this.companiesRepository.findOne({ where: { id: company } }));
-      product.slug = `${updatedCompany.businessName.toLowerCase().replace(/\s+/g, '-')}-${(name || product.name).toLowerCase().replace(/\s+/g, '-')}`;
+      product.slug = `${updatedCompany.entityName.toLowerCase().replace(/\s+/g, '-')}-${(name || product.name).toLowerCase().replace(/\s+/g, '-')}`;
     }
   
     // Update name

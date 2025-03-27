@@ -7,7 +7,7 @@ import ArrowRight from "@mui/icons-material/ArrowRight"; // GLOBAL CUSTOM HOOKS
 import useOverflowDetect from "@/hooks/useOverflowDetect"; // GLOBAL CUSTOM COMPONENTS
 
 import { Span } from "@/components/Typography";
-import BazaarCard from "@/components/BazaarCard"; // GLOBAL CUSTOM HOOK
+import SymCard from "@/components/SymCard"; // GLOBAL CUSTOM HOOK
 
 import useSettings from "@/hooks/useSettings"; // STYLED COMPONENTS
 
@@ -39,9 +39,9 @@ export default function NavItemChild({
       </MenuItem>
 
       <ParentNavItem ref={elementRef} left={isLeftOverflowing} right={isRightOverflowing} className="parent-nav-item">
-        <BazaarCard elevation={3} sx={{ py: "0.5rem", minWidth: 180 }}>
+        <SymCard elevation={3} sx={{ py: "0.5rem", minWidth: 180 }}>
           {children}
-        </BazaarCard>
+        </SymCard>
       </ParentNavItem>
     </ParentNav>
   );

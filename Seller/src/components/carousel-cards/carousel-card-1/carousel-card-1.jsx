@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button"; // GLOBAL CUSTOM COMPONENTS
 
-import BazaarImage from "components/BazaarImage";
+import SymImage from "components/SymImage";
 import { Paragraph } from "components/Typography"; // STYLED COMPONENT
 
 import { StyledRoot } from "./styles"; // ==================================================
@@ -34,7 +34,7 @@ export default function CarouselCard1({
         </Grid>
 
         <Grid item xl={8} md={7} sm={6} xs={12}>
-          <BazaarImage src={imgUrl} alt="apple-watch-1" sx={{
+          <SymImage src={imgUrl} alt="apple-watch-1" sx={{
           mx: "auto",
           maxHeight: 400,
           display: "block",

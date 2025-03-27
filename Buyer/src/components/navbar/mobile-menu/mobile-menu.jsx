@@ -1,5 +1,5 @@
 // =================================================================
-// Mobile Menu
+// Mobile Sidebar Menu | Hamburger Menu
 // =================================================================
 
 import { Fragment, useState } from "react";

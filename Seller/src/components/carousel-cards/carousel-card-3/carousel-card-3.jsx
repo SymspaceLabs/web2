@@ -1,6 +1,6 @@
 import Link from "next/link"; // GLOBAL CUSTOM COMPONENTS
 
-import BazaarImage from "components/BazaarImage";
+import SymImage from "components/SymImage";
 import { H2, Paragraph } from "components/Typography"; // STYLED COMPONENTS
 
 import { ContentWrapper, LinkText, RootStyled } from "./styles"; // CUSTOM DATA MODEL
@@ -24,6 +24,6 @@ export default function CarouselCard3({
         </Link>
       </ContentWrapper>
 
-      <BazaarImage width="100%" src={product.thumbnail} alt="shoes" />
+      <SymImage width="100%" src={product.thumbnail} alt="shoes" />
     </RootStyled>;
 }

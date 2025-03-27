@@ -1,9 +1,9 @@
 // ==========================================================
-// Section 3
+// Section 3 Shop Women
 // ==========================================================
 
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { H2 } from "@/components/Typography"; // Local custom Typography component
+import { Box, Container, Button, Grid } from '@mui/material';
+import { H1 } from "@/components/Typography"; // Local custom Typography component
 import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
 import BlogCard from "./blog-card"; // Blog card component
 import { motion } from "framer-motion"; // Import Framer Motion
@@ -11,24 +11,16 @@ import { styles } from '../page-view/styles';
 
 export default function Section3() {
   return (
-    <Box sx={{py: {xs:2, sm:10} }}>
-      <Container sx={{ borderRadius:'50px', py: 2, background: '#E0F0FD' }}>
-        <H2
-          sx={{
-            textAlign: 'center',
-            color: '#000',
-            py:3,
-            ...styles.elementalEndFont,
-            fontSize: 30,
-          }}
-        >
+    <Box sx={{ py: {xs:2, sm:10}, px: {xs:2} }}>
+      <Container sx={{ borderRadius:{xs:'30px', sm:'50px'}, py: 2, background: '#E0F0FD' }}>
+        <H1 fontSize={{xs:20, sm:30}} py={3} color='#000' textAlign='center'>
           Shop Women
-        </H2>
+        </H1>
 
         {/* Grid to display product cards */}
-        <Grid container spacing={3}>
+        <Grid container spacing={{xs:1, sm:3}}>
           {products.map((item, index) => (
-            <Grid item lg={4} md={8} xs={12} key={item.id}>
+            <Grid item lg={4} md={4} xs={4} key={item.id}>
               {/* Motion wrapper for fade-in animation */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

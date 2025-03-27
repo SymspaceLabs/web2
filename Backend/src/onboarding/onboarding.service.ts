@@ -22,9 +22,7 @@ export class OnboardingService {
     // Fetch the user by ID
     const user = await this.usersRepository.findOne({ where: { id: userId } });
   
-    if (!user) {
-      return { message: 'User not found' };
-    }
+    if (!user) return { message: 'User not found' };
   
     const { measurement, preference, dob } = createOnboardingDto;
   

@@ -1,34 +1,27 @@
 // =======================================================
-// Section 4 Component
+// Section 4 Shop Men
 // =======================================================
 
+import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 import BlogCard from "../section-3/blog-card";
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
-import { motion } from "framer-motion"; // Import Framer Motion
-import { styles } from '../page-view/styles';
+import { Box, Container, Button, Grid } from '@mui/material';
 
 export default function Section4() {
   return (
-    <Box>
-      <Container sx={{  borderRadius:'50px', py: 2, background: '#353535' }}>
+    <Box sx={{ px: {xs:2} }}>
+      <Container sx={{ borderRadius:{xs:'30px', sm:'50px'}, py: 2, background: '#353535' }}>
         {/* Section heading */}
-        <Typography
-          sx={{
-            textAlign: 'center',
-            color: '#fff',
-            py:3,
-            ...styles.elementalEndFont,
-            fontSize: 30,
-          }}
-        >
+        <H1 fontSize={{xs:20, sm:30}} py={3} color='#FFF' textAlign='center'>
           Shop Men
-        </Typography>
+        </H1>
 
         {/* Grid layout for blog cards */}
-        <Grid container spacing={3}>
+        <Grid container spacing={{xs:1, sm:3}}>
           {blogs.map((blog,index) => (
-            <Grid item lg={4} md={8} xs={12} key={blog.id}>
+            <Grid item lg={4} md={4} xs={4} key={blog.id}>
               {/* Motion wrapper for fade-in animation */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

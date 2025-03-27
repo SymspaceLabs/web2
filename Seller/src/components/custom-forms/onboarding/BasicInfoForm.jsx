@@ -112,7 +112,7 @@ const toolTipText = {
     ein: 'An Employer Identification Number (EIN) is a nine-digit number that IRS assigns to a business entity. EINs allow the IRS to easily identify businesses for tax reporting purposes.',
     address : 'Registered Business Address: Registered business address’ i.e. this address represents your primary place of business (e.g. head office or branch) which will be displayed on your public seller profile page.',
     gmv: 'Average Annual Gross Merchandise Value (GMV) is the total value of all goods sold on a platform over a year on average, before any deductions for fees, discounts, or returns.',
-    owener: 'A beneficial owner is a natural person who directly or indirectly owns more than 25% of the shares or voting rights of the business, or that own the business via other means. If no individual qualifies under the criteria mentioned then any individual who holds the position of senior manager is considered a beneficial owner.'
+    owner: 'A beneficial owner is a natural person who directly or indirectly owns more than 25% of the shares or voting rights of the business, or that own the business via other means. If no individual qualifies under the criteria mentioned then any individual who holds the position of senior manager is considered a beneficial owner.'
 
 
 }

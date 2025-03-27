@@ -63,7 +63,7 @@ const darkBtn = {
     color:'#FFF',
     background:'#000',
     border:'2px solid white',
-    '&hover' : {
+    '&:hover' : {
         background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',
     }
   }

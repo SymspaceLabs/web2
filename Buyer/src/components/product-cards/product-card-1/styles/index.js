@@ -1,7 +1,7 @@
 import styled from "@mui/material/styles/styled"; // GLOBAL CUSTOM COMPONENT
 
-import BazaarCard from "../../../../components/BazaarCard";
-export const StyledBazaarCard = styled(BazaarCard)({
+import SymCard from "../../../custom-components/SymCard";
+export const StyledBazaarCard = styled(SymCard)({
   height: "100%",
   margin: "auto",
   display: "flex",

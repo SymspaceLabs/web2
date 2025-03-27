@@ -2,22 +2,26 @@
 // Mobile Header
 // =================================================================
 
+import Icon from "@/icons";
 import Link from "next/link";
 import { Fragment } from "react";
 import { Box, IconButton } from "@mui/material";
 import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
-import Icon from "@/icons"; // LOCAL CUSTOM COMPONENTS
 import { SymDialog } from "@/components/custom-dialog";
 
-import Image from "@/components/BazaarImage";
-import { SearchInput } from "@/components/search-box";
-import { MobileMenu } from "@/components/navbar/mobile-menu";
-import { FlexBetween, FlexBox } from "@/components/flex-box"; // GLOBAL CUSTOM HOOK
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
-import useHeader from "../hooks/use-header";
+import useHeader from "../hooks/use-header"; // GLOBAL CUSTOM HOOK
 import { H1 } from "@/components/Typography";
 import { SymDrawer } from "@/components/custom-drawer";
+import { HeaderLogin } from "@/components/header";
+
+import { SearchInput } from "@/components/search-box";
+import { MobileMenu } from "@/components/navbar/mobile-menu";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
+// LOCAL CUSTOM COMPONENTS
+import { FlexBetween, FlexBox } from "@/components/flex-box"; 
+import { SymImage } from "@/components/custom-components";
+
 
 export default function MobileHeader() {
 
@@ -41,18 +45,24 @@ export default function MobileHeader() {
 
         {/* MIDDLE CONTENT - LOGO */}
         <Link href="/">
-          <Image height={35} src="/assets/images/logo_without_text.svg" alt="logo" />
+          <SymImage height={35} src="/assets/images/logo_without_text.svg" alt="logo" />
         </Link>
 
         {/* RIGHT CONTENT - LOGIN, CART, SEARCH BUTTON */}
         <FlexBox justifyContent="end" flex={1}>
+
+          {/* SEARCH ICON */}
           <IconButton onClick={toggleSearchBar}>
             <Icon.Search sx={ICON_STYLE} />
           </IconButton>
 
+          {/* FAVOURITE ICON */}
           <IconButton onClick={toggleDialog}>
             <FavoriteBorderIcon sx={{ color: "grey.600" }} />
           </IconButton>
+
+          {/* AVATAR ICON */}
+          <HeaderLogin />
 
         </FlexBox>
       </FlexBetween>
@@ -79,34 +89,3 @@ export default function MobileHeader() {
     </Fragment>
   );
 }
-
-// import Link from "next/link";
-// import Image from "next/image";
-// import Box from "@mui/material/Box";
-
-// GLOBAL CUSTOM COMPONENTS
-// import { FlexBetween, FlexBox } from "components/flex-box";
-
-// export default function MobileHeader({children}) {
-//   return <FlexBetween width="100%">{children}</FlexBetween>;
-// }
-
-// MobileHeader.Left = ({
-//   children
-// }) => {
-//   return <Box flex={1}>{children}</Box>;
-// };
-// MobileHeader.Logo = ({
-//   logoUrl
-// }) => {
-//   return <Link href="/">
-//       <Image width={60} height={44} src={logoUrl} alt="logo" />
-//     </Link>;
-// };
-// MobileHeader.Right = ({
-//   children
-// }) => {
-//   return <FlexBox justifyContent="end" flex={1}>
-//       {children}
-//     </FlexBox>;
-// };

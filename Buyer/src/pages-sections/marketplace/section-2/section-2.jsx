@@ -1,25 +1,19 @@
 "use client";
 
-/**
- * Section2 Component
- * 
- * This component fetches and displays a list of blogs in a carousel format.
- * Each blog links to its corresponding article. 
- * Designed using Material-UI and a custom Carousel component.
- * 
- * Features:
- * - Fetches blog data from an API.
- * - Displays blogs with titles, images, and links.
- * - Responsive and styled using MUI components.
- */
+// ===============================================================
+// Section 2 News & Articles
+// ===============================================================
 
-import { useState, useEffect } from "react";
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
-import { Carousel } from "@/components/carousel";
-import { StyledGrid } from "./styles";
-import { motion } from "framer-motion"; // Import Framer Motion
 import Link from "next/link";
+import { StyledGrid } from "./styles";
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { H1 } from "@/components/Typography";
+import { Carousel } from "@/components/carousel";
 import { elementalEndFont } from "../page-view/styles";
+import { Box, Container, Button, Grid } from "@mui/material";
+
+// ===============================================================
 
 export default function Section2() {
   // State to hold the list of blogs fetched from the API
@@ -56,18 +50,9 @@ export default function Section2() {
             viewport={{ once: true, amount: 0.3 }} 
           >
             {/* Section heading */}
-            <Typography
-              sx={{
-                ...elementalEndFont,
-                textAlign: "center",
-                color: "#000",
-                pt: 8,
-                pb: 3,
-                fontSize: 30,
-              }}
-            >
+            <H1 textAlign="center" color="#000" pt={8} pb={3} fontSize={{xs:20,sm:30}}>
               Trending News
-            </Typography>
+            </H1>
             
             {/* Carousel to display blogs */}
             <Carousel dots autoplay adaptiveHeight arrows={true} spaceBetween={1} slidesToShow={2}>

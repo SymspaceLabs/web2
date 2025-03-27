@@ -2,15 +2,15 @@
 // Welcome Card
 // ==================================================
 
-import { Box, Dialog, DialogContent, DialogTitle, Button, useMediaQuery, Typography } from '@mui/material';
-import { FlexBox, FlexColCenter } from '@/components/flex-box';
+import { Box, DialogTitle, Typography } from '@mui/material';
+import { FlexColCenter } from '@/components/flex-box';
 import { LazyImage } from '@/components/lazy-image';
 import { useAuth } from '@/contexts/AuthContext';
 
 // ==================================================
 
 const WelcomeCard = ({ open }) => {
-    const isMobile = useMediaQuery('(max-width:600px)');
+
     const { user } = useAuth();
     
     return (
@@ -28,7 +28,7 @@ const WelcomeCard = ({ open }) => {
                     Continue to complete setting up your business prior to listing products
                 </Typography>
             </FlexColCenter>
-                            </DialogTitle>
+        </DialogTitle>
     );
 };
 

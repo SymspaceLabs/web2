@@ -12,7 +12,7 @@ import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
 import { FlexBox } from "@/components/flex-box";
 import { Carousel } from "@/components/carousel";
-import BazaarImage from "@/components/BazaarImage";
+import SymImage from "@/components/SymImage";
 import { H1, H2, H3, H6, Paragraph } from "@/components/Typography"; // LOCAL CUSTOM HOOKS
 
 import useCart from "@/hooks/useCart"; // CUSTOM UTILS LIBRARY FUNCTION
@@ -58,7 +58,7 @@ export default function ProductViewDialog(props) {
               color: "primary.main",
               backgroundColor: "transparent"
             }}>
-                {product.imgGroup.map((item, index) => <BazaarImage key={index} src={item} alt="product" sx={{
+                {product.imgGroup.map((item, index) => <SymImage key={index} src={item} alt="product" sx={{
                 mx: "auto",
                 width: "100%",
                 objectFit: "contain",

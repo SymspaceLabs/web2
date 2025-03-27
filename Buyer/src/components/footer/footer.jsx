@@ -43,20 +43,6 @@ export default function Footer() {
             <CustomerCareLinks isDark={false} />
           </Grid>
 
-          {/* CONTACT INFORMATION */}
-          {/* <Grid item lg={3} md={3} sm={6} xs={12}>
-            <Heading>Contact Us</Heading>
-
-            <Paragraph py={0.6}>
-              70 Washington Square South, New York, NY 10012, United States
-            </Paragraph>
-
-            <Paragraph py={0.6}>Email: contacts@symspacelabs.com</Paragraph>
-
-            <Paragraph py={0.6} mb={2}>
-              Phone: +1 1123 456 780
-            </Paragraph>
-          </Grid> */}
         </Grid>
 
         <Box component={Divider} mt={{ md: 8, xs: 3 }} />

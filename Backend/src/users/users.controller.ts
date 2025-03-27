@@ -13,10 +13,7 @@ import User from './entities/user.entity';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestChangeEmailDto } from './dto/request-change-email.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ChangeEmailDto } from './dto/change-email.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {

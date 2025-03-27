@@ -1,10 +1,12 @@
 "use client";
 
+import clsx from "clsx"; // STYLED COMPONENT
 import Link from "next/link";
+import { elementalEnd } from "@/app/layout";
 import { usePathname } from "next/navigation";
 import styled from "@mui/material/styles/styled";
-import clsx from "clsx"; // STYLED COMPONENT
 
+// Second Navbar's Menu Style
 const StyledLink = styled(Link, {
   shouldForwardProp: prop => prop !== "active"
 })(({
@@ -15,7 +17,7 @@ const StyledLink = styled(Link, {
   transition: "color 150ms ease-in-out",
   color: active ? theme.palette.primary.main : "inherit",
   "&:hover": {
-    color: `#fff`
+    color: '#FFF'
   }
 })); // ==============================================================
 

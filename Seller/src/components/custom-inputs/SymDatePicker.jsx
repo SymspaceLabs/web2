@@ -5,6 +5,7 @@
 import { FlexBox } from "../flex-box";
 import { TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { H1 } from "../Typography";
 
 // ============================================================
 
@@ -16,9 +17,9 @@ const SymDatePicker = ({
 }) => {
   return (
     <FlexBox flexDirection="column" flex={1}>
-        <Typography color="white" mb={0.5} textAlign="left">
-            {title}
-        </Typography>
+        <H1 color="white" mb={0.5} >
+           {title}   
+        </H1>
         <DatePicker
             value={value}
             onChange={onChange}

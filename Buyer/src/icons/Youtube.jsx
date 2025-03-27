@@ -2,8 +2,8 @@
 
 import createSvgIcon from "@mui/material/utils/createSvgIcon";
 const YouTube = createSvgIcon(
-  <svg fill="currentColor" viewBox="0 0 24 24">
-    <path d="M23.5 6.6c-.3-1.2-1.2-2.1-2.4-2.4C18.8 4 12 4 12 4s-6.8 0-9.1.2c-1.2.3-2.1 1.2-2.4 2.4C0 8.9 0 12 0 12s0 3.1.4 5.4c.3 1.2 1.2 2.1 2.4 2.4C5.2 20 12 20 12 20s6.8 0 9.1-.2c1.2-.3 2.1-1.2 2.4-2.4.4-2.3.4-5.4.4-5.4s0-3.1-.4-5.4zM9.6 15.2V8.8l6.4 3.2-6.4 3.2z" />
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5949 4.45999C21.5421 4.71353 22.2865 5.45785 22.54 6.40501C22.9982 8.12002 23 11.7004 23 11.7004C23 11.7004 23 15.2807 22.54 16.9957C22.2865 17.9429 21.5421 18.6872 20.5949 18.9407C18.88 19.4007 12 19.4007 12 19.4007C12 19.4007 5.12002 19.4007 3.405 18.9407C2.45785 18.6872 1.71353 17.9429 1.45999 16.9957C1 15.2807 1 11.7004 1 11.7004C1 11.7004 1 8.12002 1.45999 6.40501C1.71353 5.45785 2.45785 4.71353 3.405 4.45999C5.12002 4 12 4 12 4C12 4 18.88 4 20.5949 4.45999ZM15.5134 11.7007L9.79788 15.0003V8.40101L15.5134 11.7007Z" fill="#ffffff"></path> </g>
   </svg>,
   "YouTube"
 );

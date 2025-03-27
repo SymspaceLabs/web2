@@ -3,7 +3,7 @@ import Button from "@mui/material/Button"; // MUI ICON COMPONENT
 
 import Favorite from "@mui/icons-material/Favorite"; // GLOBAL CUSTOM COMPONENTS
 
-import BazaarImage from "components/BazaarImage";
+import SymImage from "@/components/custom-components/SymImage";
 import { Countdown } from "components/countdown";
 import FlexBox from "components/flex-box/flex-box";
 import { H2, H3, H4, Paragraph } from "components/Typography"; // STYLED COMPONENT
@@ -18,7 +18,7 @@ export default function CarouselCard2({
 }) {
   return <Grid container alignItems="center">
       <Grid item lg={6} md={5} sm={12} xs={12}>
-        <BazaarImage src={imgUrl} alt="xiaomi-watch-1" sx={{
+        <SymImage src={imgUrl} alt="xiaomi-watch-1" sx={{
         display: "block",
         mx: "auto",
         maxWidth: "100%",

@@ -11,7 +11,7 @@ import Icon from "@/icons"; // LOCAL CUSTOM COMPONENTS
 
 import SymDialog from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
 
-import Image from "@/components/BazaarImage";
+import Image from "@/components/SymImage";
 import { SearchInput } from "@/components/search-box";
 import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { FlexBetween, FlexBox } from "@/components/flex-box"; // GLOBAL CUSTOM HOOK

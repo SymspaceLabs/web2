@@ -32,6 +32,10 @@ import { ContactUsModule } from './contact-us/contact-us.module';
 import { JobApplicationsModule } from './job-applications/job-applications.module';
 import { ResumesModule } from './resumes/resumes.module';
 import { UploadModule } from './upload/upload.module';
+import { SellerOnboardingModule } from './seller-onboarding/seller-onboarding.module';
+import { BanksModule } from './banks/banks.module';
+import { CreditCardsModule } from './credit-cards/credit-cards.module';
+import { BillingAddressesModule } from './billing-addresses/billing-addresses.module';
 
 @Module({
   imports: [
@@ -80,6 +84,10 @@ import { UploadModule } from './upload/upload.module';
     JobApplicationsModule,
     ResumesModule,
     UploadModule,
+    SellerOnboardingModule,
+    BanksModule,
+    CreditCardsModule,
+    BillingAddressesModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

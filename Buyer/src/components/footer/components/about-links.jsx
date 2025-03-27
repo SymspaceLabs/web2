@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Heading, StyledLink } from "../styles";
+import { StyledLink } from "../styles";
 import { ABOUT_LINKS } from "../data"; // ==============================================================
 import { H1 } from "@/components/Typography";
 

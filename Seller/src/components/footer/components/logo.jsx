@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import AppStore from "./app-store";
-import Image from "../../BazaarImage";
+import Image from "../../SymImage";
 import { Paragraph } from "../../Typography";
 export default function LogoSection() {
   return <Fragment>

@@ -109,7 +109,7 @@ const RegisterPageView = () => {
 
       {/* Checkbox */}
       <Span display={{ color:'#fff', sm: "inline-block" }}>
-          By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/legal#terms" />, <BoxLink title="Privacy Policy" href="/legal#privacy-policy" /> and <BoxLink title="Cookies" href="/legal#cookies" />. You may receive SMS Notifications from us and can opt out any time.
+          By clicking Sign Up, you agree to our <BoxLink title="Terms" href="/terms-and-conditions#terms" />, <BoxLink title="Privacy Policy" href="/terms-and-conditions#privacy-policy" /> and <BoxLink title="Cookies" href="/terms-and-conditions#privacy-policy" />. You may receive SMS Notifications from us and can opt out any time.
       </Span>     
     </FlexBox>
   );

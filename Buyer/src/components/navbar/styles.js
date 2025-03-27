@@ -1,6 +1,6 @@
 
 import styled from "@mui/material/styles/styled";
-import BazaarCard from "@/components/BazaarCard"; // COMMON STYLED OBJECT
+import SymCard from "@/components/custom-components/SymCard"; // COMMON STYLED OBJECT
 
 import { elementalEnd } from "@/app/layout"; // Calling custom font
 import { NavLink } from "@/components/nav-link";
@@ -25,7 +25,28 @@ export const NAV_LINK_STYLES = {
   },
   fontFamily:'Helvetica'
 };
-export const StyledNavLink = styled(NavLink)({ ...NAV_LINK_STYLES });
+
+export const StyledNavLink = styled(NavLink, {
+  shouldForwardProp: prop => prop !== "active"
+})(({
+  theme,
+  active
+}) => ({ 
+  color:'#6A6B6B',
+  fontWeight: 'bold',
+  cursor: "pointer",
+  transition: "color 150ms ease-in-out",
+  "&:hover": {
+    color: "#FFF"
+  },
+  "&:last-child": {
+    marginRight: 0
+  },
+  fontFamily:'Helvetica',
+  ...(active && {
+    color: "#FFF",
+  })
+}));
 
 export const ParentNav = styled(Box, {
   shouldForwardProp: prop => prop !== "active"
@@ -63,7 +84,7 @@ export const ParentNavItem = styled("div", {
     paddingRight: 8
   })
 }));
-export const NavBarWrapper = styled(BazaarCard, {
+export const NavBarWrapper = styled(SymCard, {
   shouldForwardProp: prop => prop !== "border"
 })(({
   bg,

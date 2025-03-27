@@ -18,7 +18,6 @@ import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { MailchimpService } from '../mailchimp/mailchimp.service';
 import { Company } from 'src/companies/entities/company.entity';
-import { HttpService } from '@nestjs/axios';
 import { RedisService } from '../redis/redis.service';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
@@ -45,7 +44,6 @@ export class AuthService {
     private jwtService: JwtService,
     private redisService: RedisService,
     private readonly mailchimpService: MailchimpService,
-    private readonly httpService: HttpService,
   ) {}
 
   private appleClient = jwksClient({
@@ -139,7 +137,7 @@ export class AuthService {
       signUpDto;
   
     const existingUser = await this.usersRepository.findOne({
-      where: { email },
+      where: { email }, relations: ['company']
     });
   
     if (existingUser) {
@@ -167,7 +165,7 @@ export class AuthService {
     if (role === 'seller') {
       const company = this.companiesRepository.create({
         userId: user.id,
-        businessName,
+        entityName: businessName,
         website,
         location,
         ein
@@ -248,7 +246,7 @@ export class AuthService {
     if (role === 'seller') {
       const company = this.companiesRepository.create({
         userId: user.id,
-        businessName,
+        entityName: businessName,
         website,
       });
       await this.companiesRepository.save(company);
@@ -276,7 +274,9 @@ export class AuthService {
     const { email, otp } = verifyOtpDto;
 
     // Find the user
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({
+      where: { email }, relations: ['company']
+    });
 
     if (!user) {
         throw new NotFoundException('User not found.');
@@ -315,6 +315,7 @@ export class AuthService {
             lastName: user.lastName,
             role: user.role,
             isOnboardingFormFilled: user.isOnboardingFormFilled,
+            company : user.company,
         },
     };
   }
@@ -388,8 +389,8 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<{ message:string, accessToken: string; user: any }> {
     const { email, password } = loginDto;
 
-    const user = await this.usersRepository.findOne({
-      where: { email },
+    const user =  await this.usersRepository.findOne({
+      where: { email }, relations: ['company']
     });
 
     if (!user) {
@@ -427,6 +428,7 @@ export class AuthService {
         lastName: user.lastName,
         role: user.role,
         isOnboardingFormFilled: user.isOnboardingFormFilled,
+        company: user.company
       },
     };
   }

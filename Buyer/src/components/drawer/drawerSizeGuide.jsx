@@ -1,14 +1,16 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useMediaQuery, Box, Typography, Button } from "@mui/material";
-import { FlexBox } from "../flex-box";
-import { useAuth } from "@/contexts/AuthContext";
-import { MeasurementForm, PreferenceForm } from "../forms";
-import { H1, H6 } from "../Typography";
-import Link from "next/link";
+
+
 import axios from "axios";
+import Link from "next/link";
+import { styles } from "./styles";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { H1, H6, Paragraph } from "../Typography";
+import { useCallback, useState, useEffect } from "react";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { elementalEndFont } from "../styles";
+import { MeasurementForm, PreferenceForm } from "../forms";
+import { FlexBox, FlexCol, FlexColCenter } from "../flex-box";
+import { useMediaQuery, Box, Button } from "@mui/material";
 
 const DrawerRight = ({ toggleSidenav, headerTitle }) => {
   const { isAuthenticated, user } = useAuth();
@@ -19,7 +21,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
 
   {/* Preferences */}
   const [gender, setGender] = useState();
-  const [styles, setStyles] = useState([]);
+  const [stylesData, setStylesData] = useState([]);
   const [fits, setFits] = useState([]);
   const [colors, setColors] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -46,7 +48,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
 
   const handleNavigate = useCallback(
     async (path) => {
-      await push(path);
+      push(path);
       toggleSidenav();
     },
     [push, toggleSidenav]
@@ -65,7 +67,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
           "bottoms":bottoms,
           "outerwears": outerwears,
           "accessories": accessories,
-          "styles": styles,
+          "styles": stylesData,
           "fits": fits,
           "brands": brands,
           "colors": colors
@@ -85,13 +87,11 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
       } else {
         // alert("Failed to create onboarding. Please try again.");
       }
-      
+
     }  catch (error) {
         console.error("Error creating onboarding:", error);
         // alert("An error occurred while creating onboarding.");
     }
-
-
   };
 
   useEffect(() => {
@@ -112,7 +112,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
         });
         setIsMetric(measurement.metric);
         setGender(preference.gender);
-        setStyles(preference.styles);
+        setStylesData(preference.styles);
         setFits(preference.fits);
         setColors(preference.colors);
         setTops(preference.tops);
@@ -130,18 +130,11 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
     <Box sx={{ width: "100%", maxWidth: 380, minWidth: 380 }}>
       
       {/* HEADING SECTION */}
-      <FlexBox sx={headerCard}>
+      <FlexBox sx={styles.headerCard}>
         <FlexBox gap={1} alignItems="center" color="secondary.main">
-          <Typography
-            sx={{
-              fontFamily: elementalEndFont,
-              textTransform: "lowercase",
-              color: "#FFF",
-              fontSize: "18px",
-            }}
-          >
+          <H1 color="#FFF" fontSize="18px">
             {headerTitle}
-          </Typography>
+          </H1>
         </FlexBox>
       </FlexBox>
 
@@ -149,10 +142,10 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
       {isAuthenticated ? (
         // Post-Authenticated Content
         <Box height="calc(100vh - 75px)" sx={{ padding: "10px" }}>
-          <Typography sx={{ color: "#fff" }}>
+          <Paragraph color="#FFF">
             Welcome back! Explore your personalized features here.
-          </Typography>
-          <FlexBox flexDirection="column" sx={{ padding: 1, background: 'transparent' }}>
+          </Paragraph>
+          <FlexCol flexDirection="column" sx={{ padding: 1, background: 'transparent' }}>
             <MeasurementForm
               setIsMetric={setIsMetric}
               isMetric={isMetric}
@@ -166,8 +159,8 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
             <PreferenceForm
               gender={gender}
               setGender={setGender}
-              styles={styles}
-              setStyles={setStyles}
+              styles={stylesData}
+              setStylesData={setStylesData}
               setFits={setFits}
               fits={fits}
               colors={colors}
@@ -186,60 +179,33 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
               isMobile={isMobile}
               isEdit={true}
             />
-          </FlexBox>
-          <FlexBox justifyContent="center" flexDirection="column" alignItems="center" gap="10px" sx={{ mt:2, width:'100%' }}>
-            <Button
-              onClick={handleSaveChanges}
-              variant="contained"
-              color="primary"
-              sx={{ 
-                marginTop: "20px",
-                p: "10px",
-                width:'100%',
-                borderRadius:'50px',
-                background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)'
-              }}
-            >
+          </FlexCol>
+          <FlexColCenter alignItems="center" gap="10px" mt={2} width='100%'>
+            <Button onClick={handleSaveChanges} sx={styles.blueBtn}>
               Save settings
             </Button>
             <H6 sx={{ fontFamily: 'Helvetica', fontSize: 12, color: '#fff', fontWeight: 400, ":hover": { textDecoration: 'underline' } }}>
-              <Link href="#" passHref>
+              <Link href="/contact-us" passHref>
                 Contact Us
               </Link>
             </H6>
-          </FlexBox>
-
+          </FlexColCenter>
         </Box>
       ) : (
         // Pre-Authenticated Content
         <Box height="calc(100vh - 75px)" sx={{ padding: "10px" }}>
           <FlexBox flexDirection="column" gap={2}>
-            <Typography sx={{ color: "#fff" }}>
+            <Paragraph color="#FFF">
               Complete the details below so we can offer better-tailored and
               personalized services
-            </Typography>
+            </Paragraph>
             <H1 color="#FFF">
               To access personalized sizing features
             </H1>
-            <Button
-              sx={{
-                padding: "8px 24px",
-                background:
-                  "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
-                color: "#fff",
-              }}
-              onClick={() => handleNavigate("/sign-in")}
-            >
+            <Button sx={styles.darkBtn} onClick={() => handleNavigate("/sign-in")}>
               Sign In
             </Button>
-            <Button
-              sx={{
-                padding: "8px 24px",
-                background: "#000",
-                color: "#fff",
-              }}
-              onClick={() => handleNavigate("/signup")}
-            >
+            <Button sx={styles.blueBtn} onClick={() => handleNavigate("/signup")}>
               Sign Up
             </Button>
           </FlexBox>
@@ -250,12 +216,3 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
 };
 
 export default DrawerRight;
-
-const headerCard = {
-  px: 2,
-  justifyContent: "center",
-  height: 74,
-  borderRadius: "15px",
-  background:
-    "linear-gradient(117.54deg, rgba(255, 255, 255, 0.95) -19.85%, rgba(245, 245, 245, 0.6) 4.2%, rgba(240, 240, 240, 0.5) 13.88%, rgba(230, 230, 230, 0.4) 27.98%, rgba(225, 225, 225, 0.35) 37.8%, rgba(220, 220, 220, 0.3) 44.38%, rgba(215, 215, 215, 0.25) 50.54%, rgba(210, 210, 210, 0.2) 60.21%)",
-};

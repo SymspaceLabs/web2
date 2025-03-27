@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import styled from "@mui/material/styles/styled"; // ===============================================
 
 // ===============================================
-const BazaarCard = styled(Card, {
+const SymCard = styled(Card, {
   shouldForwardProp: prop => prop !== "hoverEffect"
 })(({
   theme,
@@ -21,4 +21,4 @@ const BazaarCard = styled(Card, {
     })
   }
 }));
-export default BazaarCard;
+export default SymCard;

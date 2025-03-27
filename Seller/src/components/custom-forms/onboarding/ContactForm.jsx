@@ -1,3 +1,7 @@
+// ==================================================================================
+// Contact Form in Onboarding Multi Step Form
+// ==================================================================================
+
 import { Span } from '@/components/Typography';
 import { FlexBox } from '@/components/flex-box';
 import { SymCheckbox, SymTextField, SymDatePicker } from '@/components/custom-inputs';
@@ -9,70 +13,20 @@ function ContactForm ({
     setLastName,
     dob,
     setDob,
-
     phone, 
     setPhone,
     businessPhone, 
     setBusinessPhone,
-
-    businessName,
-    setBusinessName,
-    website,
-    setWebsite,
-    password,
-    setPassword,
-    retypePassword,
-    setRetypePassword,
-    retypeError,
-    setRetypeError,
-    location,
-    setLocation,
-    ein,
-    setEin,
-
     isChecked,
     setIsChecked,
 }) {
    
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);
-    const handleDobChange = (event) => setDob(event.target.value);
-
+    const handleDobChange = (date) => setDob(date);
     const handlePhoneChange = (event) => setPhone(event.target.value);
     const handleBusinessPhoneChange = (event) => setBusinessPhone(event.target.value);
-
-
-
-    const handleBusinessNameChange = (event) => setBusinessName(event.target.value);
-    const handleWebsiteChange = (event) => setWebsite(event.target.value);
-
-    const handlePasswordChange = (e) => {
-        const newPassword = e.target.value;
-        setPassword(newPassword);
-    
-        if (retypePassword && newPassword !== retypePassword) {
-            setRetypeError("Passwords do not match");
-        } else {
-            setRetypeError("");
-        }
-    };
-    
-    const handleRetypePasswordChange = (e) => {
-        const newRetypePassword = e.target.value;
-        setRetypePassword(newRetypePassword);
-    
-        if (password && newRetypePassword !== password) {
-            setRetypeError("Passwords do not match");
-        } else {
-            setRetypeError("");
-        }
-    };
-
-    const handleLocationChange = (event) => setLocation(event.target.value);
-    const handleEinChange = (event) => setEin(event.target.value);
     const handleAgreementChange = (event) => setIsChecked(event.target.checked);
-
-    
     
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>

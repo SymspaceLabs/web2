@@ -1,7 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 import { Measurement } from 'src/measurements/entities/measurement.entity';
 import { Preference } from 'src/preferences/entities/preference.entity';
+import { Bank } from 'src/banks/entities/bank.entity';
+import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
+import { BillingAddress } from 'src/billing-addresses/entities/billing-address.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -63,12 +66,28 @@ export class User {
 
   @Column({ default: false })
   isOnboardingFormFilled: boolean;
+  
+  @Column({ default: false })
+  isSellerOnboardingFormFilled1: boolean;
 
   @Column({ nullable: true })
   otp?: string;
 
   @Column({ type: 'timestamp', nullable: true })
   otpExpiresAt?: Date;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @OneToMany(() => Bank, (bank) => bank.user, { cascade: true })
+  banks: Bank[];
+
+  @OneToMany(() => CreditCard, (creditCard) => creditCard.user)
+  creditCards: CreditCard[];
+
+  @OneToMany(() => BillingAddress, (billingAddress) => billingAddress.user)
+  billingAddresses: BillingAddress[];
+
   
 }
 

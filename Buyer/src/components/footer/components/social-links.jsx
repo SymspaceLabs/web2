@@ -1,11 +1,9 @@
 "use client";
 
-import IconButton from "@mui/material/IconButton";
+import { IconButton } from "@mui/material";
 import styled from "@mui/material/styles/styled"; // GLOBAL CUSTOM COMPONENT
-
-import FlexBox from "../../flex-box/flex-box"; // DATA
-
-import { SOCIAL_ICON_LINKS } from "../data"; // STYLED COMPONENTS
+import { FlexBox } from "@/components/flex-box"; 
+import { SOCIAL_ICON_LINKS } from "../data"; // DATA
 
 const StyledIconButton = styled(IconButton, {
   shouldForwardProp: prop => prop !== "variant"
@@ -16,11 +14,7 @@ const StyledIconButton = styled(IconButton, {
   margin: 4,
   fontSize: 16,
   padding: "10px",
-  ...(variant === "light" && {
-    // backgroundColor: "rgba(0,0,0,0.2)"
-  }),
   ...(variant === "dark" && {
-    // backgroundColor: theme.palette.grey[700],
     ":hover": {
       backgroundColor: theme.palette.grey[800]
     }
@@ -33,16 +27,16 @@ const StyledIconButton = styled(IconButton, {
 // ==============================================================
 export default function SocialLinks({
   variant = "light",
-  noBg= false
 }) {
-  return <FlexBox className="flex" mx={-0.625}>
-      {SOCIAL_ICON_LINKS.map(({
-      Icon,
-      url
-    }, ind) => <a href={url} target="_blank" rel="noreferrer noopenner" key={ind}>
+  return (
+    <FlexBox className="flex" mx={-0.625}>
+      {SOCIAL_ICON_LINKS.map(({Icon,url}, ind) => (
+        <a href={url} target="_blank" rel="noreferrer noopenner" key={ind}>
           <StyledIconButton variant={variant}>
             <Icon fontSize="inherit" className="icon" />
           </StyledIconButton>
-        </a>)}
-    </FlexBox>;
+        </a>
+      ))}
+    </FlexBox>
+  );
 }

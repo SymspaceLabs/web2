@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TextField, InputAdornment, IconButton, FormHelperText, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FlexBox } from "../flex-box";
+import { H1 } from "../Typography";
 
 const SymPasswordInput = ({
     title,
@@ -39,9 +40,9 @@ const SymPasswordInput = ({
 
     return (
         <FlexBox flexDirection="column" flex={1}>
-            <Typography color="white" mb={0.5}  textAlign="left">
+            <H1 color="white" mb={0.5} textAlign="left" >
                 {title}
-            </Typography>
+            </H1>
             <TextField
                 type={showPassword ? "text" : "password"}
                 value={value}

@@ -1,5 +1,5 @@
 /**
- * Section6 Component
+ *  Component
  *
  * This component renders a promotional section with a headline, 
  * a description, a call-to-action button for beta access, and an image. 
@@ -7,12 +7,17 @@
  *
  */
 
+// ============================================================================
+// Section 6 Banner
+// ============================================================================
+
 import { useState } from "react";
-import { RootStyle } from "./styles";
 import { Box, Container, Typography, Button, TextField } from '@mui/material';
 import { LazyImage } from "@/components/lazy-image";
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
+import { H1, Paragraph } from "@/components/Typography";
+import { FlexCol } from "@/components/flex-box";
 
 
 export default function Section6() {
@@ -68,7 +73,7 @@ export default function Section6() {
     };
     
   return (
-    <Box>
+    <Box py={{sm:10}}>
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -76,23 +81,21 @@ export default function Section6() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          <RootStyle>
+          <Box sx={banner}>
             {/* Content area for text and call-to-action button */}
-            <div className="content">
+            
+            <FlexCol gap={2}>
+
               {/* Section headline */}
-              <h2>
+              <Paragraph fontWeight={700} fontSize={{xs:'20px', sm:'48px'}} color="#FFF" lineHeight={1.25}>
                 Augment Products whenever.<br /> From wherever.
-              </h2>
+              </Paragraph>
+
               {/* Section description */}
-              <Typography 
-                sx={{
-                  fontFamily: 'Helvetica',
-                  fontSize: 16,
-                  marginBottom: "1rem",
-                }}
-              >
+              <Paragraph fontSize={{xs:'12px', sm:'16px'}} color="#FFF" mb="1rem">
                 Sign up today.
-              </Typography>
+              </Paragraph>
+
 
               {/* Call-to-action button for beta access */}
               {!showInput && (
@@ -107,17 +110,13 @@ export default function Section6() {
                     py: 2,
                     px: 2,
                     background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
+                    maxWidth:{xs:'100%', sm:'250px'}
                   }}
                 >
                   {/* Button text */}
-                  <Typography
-                    sx={{
-                      ...styles.elementalEndFont,
-                      fontSize: 12,
-                    }}
-                  >
+                  <H1 fontSize={12}>
                     Beta Access
-                  </Typography>
+                  </H1>
                   {/* Sparkler icon inside the button */}
                   <Box
                     sx={{
@@ -206,26 +205,47 @@ export default function Section6() {
                       {isSubmitted ? "✔️" : "Submit"}
                     </Button>
                   </Box>
-                  <Typography sx={{ py:1, px:3, color:'red' }}>
+                  <Paragraph py={1} px={3} color="red">
                     {error}
-                  </Typography>
+                  </Paragraph>
                 </>
               )}
-            </div>
+            </FlexCol>
 
             {/* Image wrapper to display the promotional image */}
-            <div className="img-wrapper">
+            <Box sx={imageWrapper}>
               <LazyImage
                 src="/assets/images/background/banner-img.png"
                 alt="Watch"
                 width={500}
                 height={500}
               />
-            </div>
-          </RootStyle>
+            </Box>
+          </Box>
         </motion.div>
       </Container>
     </Box>
 
   );
+}
+
+const imageWrapper = {
+  zIndex: 1,
+  right: 10,
+  top: '50%',
+  transform: 'translateY(-50%)',
+  width: "70%",
+  display: {xs:"none", sm:"flex"},
+  position: "absolute"
+}
+
+const banner = {
+  borderRadius: {xs:'30px', sm:'65px'},
+  py: {xs:3, sm:"4.5rem"},
+  px: {xs:3, sm:"4.5rem"},
+  position: "relative",
+  backgroundImage: "url(/assets/images/background/banner-bg.png)",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  backgroundPosition: "top center",
 }

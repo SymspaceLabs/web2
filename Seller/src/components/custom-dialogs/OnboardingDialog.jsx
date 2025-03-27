@@ -2,34 +2,76 @@
 // Onboarding Dialog
 // ===================================================================
 
-import { useState } from 'react';
-import LazyImage from '../LazyImage';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import CloseIcon from '@mui/icons-material/Close';
+import { FlexBox, FlexCol } from '@/components/flex-box';
 import { SymProgressbar } from "@/components/custom-components";
-import { FlexColCenter, FlexBox, FlexCol } from '@/components/flex-box';
 import { OnboardingMultiStepForm } from '@/components/multi-step-forms';
-import { IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, Typography, Box, DialogActions } from '@mui/material';
-import WelcomeCard from './WelcomeCard';
+import { IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, DialogActions } from '@mui/material';
 
 // ===================================================================
 
 const OnboardingDialog = () => {
-    const { user } = useAuth();
 
+    const { user } = useAuth();
+    const [userData, setUserData] = useState();
+    const [formData, setFormData] = useState();
     const [open, setOpen] = useState(true);
     const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
+    const [isChecked, setIsChecked] = useState(false); // 0 for WelcomeDialog, 1+ for Onboarding
+
+    useEffect(() => {
+        const fetchUser = async () => {
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`);
+            const data = await response.json();
+            setUserData(data);
+          } catch (error) {
+            console.error("Error fetching blogs:", error);
+          }
+        };
+        fetchUser();
+    }, [step]);
+
 
     const handleClose = () => setOpen(false);
-    const handleContinue = () => setStep((prev) => prev + 1);
-    const handleBack = () => setStep((prev) => prev - 1);
+    const handleContinue = () => {
+        if (step == 1) {
+            if(isChecked) {
+                setStep((prev) => prev + 1)
+            }
+        } else {
+            setStep((prev) => prev + 1);
+        }
+
+        handleSubmit();
+        setFormData({});
+
+    };
+    const handleBack = () => {
+        setFormData({});
+        setStep((prev) => prev - 1);
+    };
+
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/seller-onboarding/${user.id}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) throw new Error("Failed to save data");
+            console.log("Data saved successfully:", await response.json());
+        } catch (error) {
+            console.error("Error saving data:", error.message);
+        }
+    };
 
     // Milestone labels
     const milestoneLabels = ["business", "billing", "survey", "review & Submit", ""];
-
-
-    // Media query to detect mobile screens
-    const isMobile = useMediaQuery('(max-width:600px)');
     
     return (
         <Dialog
@@ -43,7 +85,7 @@ const OnboardingDialog = () => {
                     background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
                     boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
                     backdropFilter: 'blur(12px)',
-                    borderRadius: isMobile ? "20px" : "50px",
+                    borderRadius: useMediaQuery('(max-width:600px)') ? "20px" : "50px",
                     paddingBottom: 5,
                     paddingTop: 5,
                     paddingLeft: 5,
@@ -76,15 +118,15 @@ const OnboardingDialog = () => {
 
             <DialogContent sx={{ p: { xs: 0, sm: '25px' } }}>
                 <FlexCol gap={3}>
-                    {/* Show WelcomeDialog if step is 0 */}
-                    {step === 0 ? <WelcomeCard />
-                    : (
-                        <OnboardingMultiStepForm 
-                            step={step}
-                            handleContinue={handleContinue}
-                            handleBack={handleBack}
-                        />
-                    )}
+                    <OnboardingMultiStepForm 
+                        step={step}
+                        handleContinue={handleContinue}
+                        handleBack={handleBack}
+                        user={userData}
+                        setFormData={setFormData}
+                        isChecked={isChecked}
+                        setIsChecked={setIsChecked}
+                    />
                 </FlexCol>
             </DialogContent>
 

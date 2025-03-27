@@ -50,7 +50,7 @@ export default function ShopLayout1({children}) {
   return (
     <Fragment>
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
-        {/* HEADER */}
+        {/* TOP HEADER */}
         <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
 
         {/* CATEGORY NAVBAR */}

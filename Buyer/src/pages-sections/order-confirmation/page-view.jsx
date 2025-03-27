@@ -6,10 +6,10 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import styled from "@mui/material/styles/styled"; // GLOBAL CUSTOM COMPONENTS
 
-import BazaarCard from "components/BazaarCard";
+import SymCard from "@/components/custom-components/SymCard";
 import { H1, Paragraph } from "components/Typography"; // STYLED COMPONENT
 
-const Wrapper = styled(BazaarCard)({
+const Wrapper = styled(SymCard)({
   margin: "auto",
   padding: "3rem",
   maxWidth: "630px",

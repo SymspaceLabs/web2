@@ -6,7 +6,7 @@ import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
-import Image from "components/BazaarImage";
+import Image from "@/components/custom-components/SymImage";
 import { Span } from "components/Typography";
 import { FlexBox } from "components/flex-box"; // GLOBAL CUSTOM HOOK
 

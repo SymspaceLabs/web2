@@ -4,7 +4,7 @@ import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper } from "../styles";
 import Link from "next/link"; // MUI
 import MenuItem from "@mui/material/MenuItem"; // MUI ICON COMPONENTS
 import navigation from "@/data/navbarNavigation"; // STYLED COMPONENTS
-import BazaarCard from "@/components/BazaarCard"; // LOCAL CUSTOM COMPONENTS
+import SymCard from "@/components/SymCard"; // LOCAL CUSTOM COMPONENTS
 import NavItemChild from "./nav-item-child";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; // GLOBAL CUSTOM COMPONENTS
 
@@ -22,7 +22,7 @@ export default function NavigationList() {
               </FlexBox>
 
               <ChildNavListWrapper className="child-nav-item">
-                <BazaarCard
+                <SymCard
                   elevation={3}
                   sx={{
                     mt: 2.5,
@@ -38,7 +38,7 @@ export default function NavigationList() {
                   }}
                 >
                   {renderNestedNav(nav.child)}
-                </BazaarCard>
+                </SymCard>
               </ChildNavListWrapper>
             </FlexBox>
           );
@@ -59,7 +59,7 @@ export default function NavigationList() {
               </FlexBox>
 
               <ChildNavListWrapper className="child-nav-item">
-                <BazaarCard
+                <SymCard
                   elevation={3}
                   sx={{
                     mt: 2.5,
@@ -74,7 +74,7 @@ export default function NavigationList() {
                   }}
                 >
                   {renderNestedNav(nav.child)}
-                </BazaarCard>
+                </SymCard>
               </ChildNavListWrapper>
             </FlexBox>;
         }

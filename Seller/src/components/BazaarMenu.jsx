@@ -1,7 +1,7 @@
 import { Children, cloneElement, Fragment, useState } from "react";
 import Menu from "@mui/material/Menu";
 // ===============================================================
-export default function BazaarMenu({
+export default function SymMenu({
   open,
   handler,
   children,

@@ -1,5 +1,13 @@
 "use client";
 
+// ==============================================================
+
+
+// ==============================================================
+
+import Link from "next/link";
+import Image from "next/image";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,19 +25,11 @@ import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { HeaderSearch } from "@/components/header/mobile-header";
 import renderChild from "./render-child";
 import { FlexBox, FlexBetween } from "@/components/flex-box";
-import Link from "next/link";
-import Image from "next/image";
 
 // STYLES
 import { CategoryListItem, StyledRoot } from "./styles";
 
 // TYPES
-
-
-// ==============================================================
-
-
-// ==============================================================
 
 export default function MobileCategoriesPageView({
   data

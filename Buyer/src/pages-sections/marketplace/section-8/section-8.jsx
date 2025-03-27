@@ -42,7 +42,7 @@ export default function Section8() {
 
                   <FlexBox justifyContent="end">
                     <Link href="/contact-us">
-                      <Button sx={styles.buttonLight}>
+                      <Button sx={styles.buttonLight2}>
                         Contact Us
                       </Button>
                     </Link>
@@ -69,7 +69,7 @@ export default function Section8() {
                   {/* Button */}
                   <FlexBox justifyContent="end">
                     <Link href="/contact-us">
-                      <Button sx={styles.buttonLight2}>
+                      <Button sx={styles.buttonLight}>
                         Contact Us
                       </Button>
                     </Link>

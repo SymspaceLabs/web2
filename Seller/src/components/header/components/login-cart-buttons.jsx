@@ -20,7 +20,7 @@ import { styles } from './styles';
 
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 import { FlexBox } from "@/components/flex-box";
-import BazaarCard from "@/components/BazaarCard";
+import SymCard from "@/components/SymCard";
 import Link from "next/link";
 import { ChildNavListWrapper } from '@/components/navbar/styles';
 // Import the new GoogleLoginButton component
@@ -112,7 +112,7 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
           sx={{ display: open ? "block" : "none" }}
           slotProps={{ paper: styles.paper }}
         >
-          <BazaarCard
+          <SymCard
             elevation={3}
             sx={{
               ...styles.paper,
@@ -148,7 +148,7 @@ export default function LoginCartButtons({ toggleDialog, toggleSidenav }) {
                 </MenuItem>
               </>
             )}
-          </BazaarCard>
+          </SymCard>
 
         </ChildNavListWrapper>
       </FlexBox>

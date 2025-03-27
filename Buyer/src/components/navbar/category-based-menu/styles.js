@@ -8,7 +8,7 @@ export const elementalEndFont = {
 
 import { List, ListItem } from "@mui/material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM COMPONENT
-import BazaarCard from "@/components/BazaarCard";
+import SymCard from "@/components/custom-components/SymCard";
 
 const Wrapper = styled("div")(({
   theme
@@ -38,7 +38,7 @@ const MenusContainer = styled("div")({
   position: "absolute"
 });
 
-const StyledCard = styled(BazaarCard)({
+const StyledCard = styled(SymCard)({
   marginTop: 12,
   height: "100%",
   display: "flex",

@@ -36,8 +36,8 @@ const navbarNavigation = [
         title: "AR Real Estate",
         url: "/ar-real-estate"
       }, {
-        title: "Sell on Symspace",
-        url: "/ar-for-business"
+        title: "Services",
+        url: "/sell-on-symspace"
       }
     ]
   }, 

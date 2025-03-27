@@ -15,7 +15,7 @@ import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { IconButton, MenuItem, Badge } from "@mui/material";
 import { ChildNavListWrapper } from '@/components/navbar/styles';
 import useCart from "@/hooks/useCart";
-import BazaarCard from "@/components/BazaarCard";
+import SymCard from "@/components/custom-components/SymCard";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
@@ -83,7 +83,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
           sx={{ display: open ? "block" : "none" }}
           slotProps={{ paper: styles.paper }}
         >
-          <BazaarCard
+          <SymCard
             elevation={3}
             sx={{
               ...styles.paper,
@@ -119,7 +119,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
                 </MenuItem>
               </>
             )}
-          </BazaarCard>
+          </SymCard>
 
         </ChildNavListWrapper>
       </FlexBox>

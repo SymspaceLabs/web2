@@ -24,7 +24,17 @@ export default function Navbar({
             {/* <NavigationList /> */}
             <FlexBox justifyContent="space-between" width="80%">
               {categories.map((item, index)=> (
-                  <StyledNavLink href="" key={index} sx={{ fontWeight:500, color:bg=='dark'?'#FFF':'#' }}>
+                  <StyledNavLink 
+                    href="" 
+                    key={index} 
+                    sx={{ 
+                      fontWeight:500,
+                      color:bg=='dark'?'#FFF':'#',
+                      "&:hover": { 
+                        color: "#0366FE" //BLUE
+                      }
+                    }}
+                  >
                     {item}
                   </StyledNavLink>
                 ))

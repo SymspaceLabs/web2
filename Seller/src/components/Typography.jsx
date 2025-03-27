@@ -24,10 +24,10 @@ export function H1({
 }) {
   return (
     <Typography
-      {...props}
       fontFamily={`${elementalEnd.style.fontFamily}, sans-serif`}
       textTransform='lowercase'
       fontWeight={500}
+      {...props}
     >
       {children}
     </Typography>);

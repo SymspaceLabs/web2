@@ -18,8 +18,10 @@ const SymTextField = ({
     rows = 4,  // Default number of rows
     isEdit = true,
     placeholder="",
-    charLimit=false
+    charLimit= false,
+    type = 'text',
 }) => {
+
   return (
     <FlexBox flexDirection="column" flex={1}>
         <FlexBox gap={1}>
@@ -44,13 +46,25 @@ const SymTextField = ({
                 style: { color: '#fff' },
             }}
             inputProps={{
-                maxLength: typeof charLimit === "number" ? charLimit : undefined, // Only apply if it's a number
-                style: { color: '#fff' },
+                // inputMode: type=='number' ? "numeric" : undefined,
+                // pattern: type=='number' ? "[0-9]*" : undefined,
+                maxLength: charLimit ? charLimit : undefined,
+                style: { color: "#fff" },
             }}
+            type={type}
             sx={{
-                background: '#000',
-                borderRadius: '5px',
-                color: '#fff'
+                background: "#000",
+                borderRadius: "5px",
+                color: "#fff",
+                // Hides the increment/decrement buttons in all browsers
+                "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
+                  {
+                    WebkitAppearance: "none",
+                    margin: 0,
+                  },
+                "& input[type=number]": {
+                  MozAppearance: "textfield", // Firefox
+                },
             }}
         />
     </FlexBox>

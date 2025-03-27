@@ -10,7 +10,7 @@ import { LoginForm } from '@/components/forms';
 import { useAuth } from '@/contexts/AuthContext';
 import { FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { AuthSubmitButton } from "@/components/custom-buttons";
+import { SymSubmitButton } from "@/components/custom-buttons";
 
 // =========================================================
 
@@ -83,11 +83,9 @@ const LoginPageView = ({ closeDialog }) => {
       /> 
 
       {/* Submit Button */}
-      <AuthSubmitButton
-        title="Sign In"
-        isValid={isValid}
-        onClick={handleSubmit}
-      />
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+        Sign In
+      </SymSubmitButton>
 
     </FlexColCenter>
   );

@@ -78,13 +78,13 @@ function PartnerSignUpForm ({
             {/* PASSWORD */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymPasswordInput title="Password" value={password} placeholder="Password" onChange={handlePasswordChange} error={retypeError} />
-                <SymPasswordInput title="Retype Password" value={retypePassword} placeholder="Retype Password" onChange={handleRetypePasswordChange} error={retypeError} />
+                <SymPasswordInput title="Re-type Password" value={retypePassword} placeholder="Retype Password" onChange={handleRetypePasswordChange} error={retypeError} />
             </FlexBox>
 
             {/* BUSINESS LOCATION & EIN */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="Business Location" value={location} placeholder="City, State" onChange={handleLocationChange} />
-                <SymTextField title="Employer Identification Number" value={ein} placeholder="EIN" onChange={handleEinChange} />
+                <SymTextField title="EIN" value={ein} placeholder="Employer Identification Number" onChange={handleEinChange} type="number" />
             </FlexBox>
 
         </FlexBox>

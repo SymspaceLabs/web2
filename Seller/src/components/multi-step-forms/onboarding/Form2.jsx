@@ -32,12 +32,12 @@ function Form2 ({
     const [cardHolderName, setCardHolderName] = useState(user?.creditCards[0]?.cardHolderName);
 
     // BILLING ADDRESS
-    const [address1, setAddress1] = useState(user?.billingAddresses[0].address1);
-    const [address2, setAddress2] = useState(user?.billingAddresses[0].address2);
-    const [city, setCity] = useState(user?.billingAddresses[0].city);
-    const [state, setState] = useState(user?.billingAddresses[0].state);
-    const [country, setCountry] = useState(user?.billingAddresses[0].country);
-    const [zip, setZip] = useState(user?.billingAddresses[0].zip);
+    const [address1, setAddress1] = useState(user?.billingAddresses[0]?.address1);
+    const [address2, setAddress2] = useState(user?.billingAddresses[0]?.address2);
+    const [city, setCity] = useState(user?.billingAddresses[0]?.city);
+    const [state, setState] = useState(user?.billingAddresses[0]?.state);
+    const [country, setCountry] = useState(user?.billingAddresses[0]?.country);
+    const [zip, setZip] = useState(user?.billingAddresses[0]?.zip);
     
     useEffect(() => {
         // CREDIT CARD
@@ -55,12 +55,12 @@ function Form2 ({
         setCardHolderName(user?.creditCards[0]?.cardHolderName || "");
 
         // BILLING ADDRESS
-        setAddress1(user?.billingAddresses[0].address1 || "");
-        setAddress2(user?.billingAddresses[0].address2 || "");
-        setCity(user?.billingAddresses[0].city || "");
-        setState(user?.billingAddresses[0].state || "");
-        setCountry(user?.billingAddresses[0].country || "");
-        setZip(user?.billingAddresses[0].zip || "");
+        setAddress1(user?.billingAddresses[0]?.address1 || "");
+        setAddress2(user?.billingAddresses[0]?.address2 || "");
+        setCity(user?.billingAddresses[0]?.city || "");
+        setState(user?.billingAddresses[0]?.state || "");
+        setCountry(user?.billingAddresses[0]?.country || "");
+        setZip(user?.billingAddresses[0]?.zip || "");
     
     }, [user]); // Depend on `user` so it updates after submission
 

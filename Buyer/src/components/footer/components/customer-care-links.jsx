@@ -13,8 +13,8 @@ export default function CustomerCareLinks({
         Partner With Us
       </H1>
 
-      {CUSTOMER_CARE_LINKS.map((item, ind) => <StyledLink isDark={isDark} href="/" key={ind}>
-          {item}
+      {CUSTOMER_CARE_LINKS.map((item, ind) => <StyledLink isDark={isDark} href={item.url} key={ind}>
+          {item.title}
         </StyledLink>)}
     </Fragment>
   );

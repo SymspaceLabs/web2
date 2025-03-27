@@ -188,7 +188,7 @@ export const CustomCard2 = () => {
           Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
         </Typography>
         <FlexBox>
-          <Link  href="/ar-for-business#benefits" passHref>
+          <Link  href="/sell-on-symspace#benefits" passHref>
             <Button
               className="fadeInBtn"
               sx={{

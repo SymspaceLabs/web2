@@ -1,23 +1,18 @@
 "use client";
 
-/**
- * LoginPageView Component
- * 
- * This component renders a login form for user authentication. It uses Formik for form handling,
- * Material UI for UI components, and integrates password visibility toggling and snackbar notifications.
- * It redirects users based on their role after successful login.
- * 
- * Props:
- * - closeDialog: A callback function to close the dialog containing this component.
- **/
+// ==============================================================
+// Sign In Page View
+// ==============================================================
 
 import { useState, useEffect } from "react";
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from "next/navigation";
-import { FlexColCenter } from "../../../components/flex-box";
-import { LoginForm } from '../../../components/custom-forms';
-import { useSnackbar } from "../../../contexts/SnackbarContext";
-import { AuthSubmitButton } from "../../../components/custom-buttons";
+import { FlexColCenter } from "@/components/flex-box";
+import { LoginForm } from '@/components/custom-forms';
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { SymSubmitButton } from "@/components/custom-buttons";
+
+// ==============================================================
 
 const LoginPageView = ({ closeDialog }) => {
   const router = useRouter();
@@ -87,11 +82,9 @@ const LoginPageView = ({ closeDialog }) => {
       /> 
 
       {/* Submit Button */}
-      <AuthSubmitButton
-        title="Sign In"
-        isValid={isValid}
-        onClick={handleSubmit}
-      />
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+        Sign In
+      </SymSubmitButton>
 
     </FlexColCenter>
   );

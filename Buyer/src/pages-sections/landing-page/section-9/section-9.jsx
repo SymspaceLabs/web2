@@ -54,7 +54,7 @@ export default function Section8() {
 
             {/* Call-to-action button */}
             <Box sx={{ width: "100%" }}>
-              <Link href="/ar-for-business#benefits" passHref>
+              <Link href="/sell-on-symspace#benefits" passHref>
                 <Button
                   sx={{
                     gap: 1,

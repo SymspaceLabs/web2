@@ -1,14 +1,8 @@
 "use client";
 
-/**
- * RegisterPartnerPageView Component
- * 
- * This component provides a registration form for users to create an account as a seller. 
- * It includes fields for user details such as first name, last name, email, business name, 
- * website, password, and a retype password. The form validates inputs using Yup schema, 
- * and upon submission, sends the data to the backend for account creation.
- */
-
+// =======================================================================
+// Register Seller Page View
+// =======================================================================
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -16,8 +10,10 @@ import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
 import { PartnerSignUpForm } from "@/components/custom-forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { AuthSubmitButton } from "@/components/custom-buttons";
+import { SymSubmitButton} from "@/components/custom-buttons";
 import { BoxLink } from '@/pages-sections/sessions/components';
+
+// =======================================================================
 
 const RegisterPartnerPageView = () => {
   const { showSnackbar } = useSnackbar();
@@ -31,25 +27,28 @@ const RegisterPartnerPageView = () => {
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState(''); 
   const [retypeError, setRetypeError] = useState("");
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
   const [location, setLocation] = useState('');
-  const [ein, setEin] = useState('');
+  const [ein, setEin] = useState(null);
+
 
   useEffect(() => {
     const passwordIsValid = password.length >= 8 && /[!@#$%^&*(),.?":{}|<>]/.test(password);
     const passwordMatch = retypePassword === password;
-    
+
+    const isEinFilled = (ein !== null)?true:false;
     setIsValid(
       firstName &&
       lastName &&
       email &&
-      location &&
-      ein &&
       passwordIsValid &&
-      passwordMatch
+      passwordMatch &&
+      location &&
+      isEinFilled 
     );
-  }, [firstName, lastName, email, password, location, ein, retypePassword]);
 
+  }, [firstName, lastName, email, password, location, ein, retypePassword]);
+    
   // Form submission handler
   const handleSubmit = async () => {
 
@@ -117,11 +116,9 @@ const RegisterPartnerPageView = () => {
       />
 
       {/* Submit Button */}
-      <AuthSubmitButton
-        title="Sign Up"
-        isValid={isValid}
-        onClick={handleSubmit}
-      />
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+        Sign Up
+      </SymSubmitButton>
 
       {/* Checkbox */}
       <Span display={{ color:'#fff', sm: "inline-block" }}>

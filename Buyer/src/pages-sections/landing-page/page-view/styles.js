@@ -3,11 +3,6 @@ import { elementalEnd } from "@/app/layout"; // Calling custom font
 const elementalEndFont = `${elementalEnd.style.fontFamily}, sans-serif`
 
 export const styles = {
-  heroHeader: {
-    fontFamily: elementalEndFont,
-    fontSize: { xs: 48, sm: 60, md: 100 },
-    color: '#FFF'
-  },
   sectionHeader: {
       fontFamily: elementalEndFont,
       textTransform:'lowercase',
@@ -17,12 +12,6 @@ export const styles = {
   elementalEndFont : {
     fontFamily: elementalEndFont,
     textTransform:'lowercase',
-    fontWeight: 500
-  },
-  gradientBtnText: {
-    fontFamily: elementalEndFont,
-    textTransform: 'lowercase',
-    fontSize: { xs: 10, sm: 16 },
     fontWeight: 500
   },
   gradientBtn : {
@@ -45,9 +34,6 @@ export const styles = {
     height:'100%',
     flex:{xs:1, sm:0},
     minWidth: { sm:250 },
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform: 'lowercase',
-    fontWeight: 500,
     color: '#fff',
     borderRadius: '50px',
     border: '2px solid white',

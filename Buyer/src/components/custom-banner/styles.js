@@ -20,12 +20,6 @@ export const styles = {
         py:{ xs:3, sm:8 },
         px:{ xs:3, sm:8 },
     },
-    bannerTitle: {
-        pb:1,
-        fontSize:{ xs:20, sm:40 },
-        color:"#fff",
-        ...elementalEndFont
-    },
     buttonDark : {
         width: "100%", 
         maxWidth: {xs:'100%', sm:250},
@@ -51,7 +45,8 @@ export const styles = {
         py:1.5,
         color: '#fff',
         fontSize:{ xs:12, sm:14 },
-        border:'1px solid #FFF'
+        border:'1px solid #FFF',
+        minWidth:{sm:'200px'}
     }
 
 };

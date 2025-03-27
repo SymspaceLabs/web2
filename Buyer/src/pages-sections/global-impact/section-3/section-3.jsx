@@ -5,9 +5,10 @@
 // =================================================================
 
 import { useState } from 'react';
-import { FlexBox } from '@/components/flex-box';
-import { Box, Container, Typography, Card } from '@mui/material';
 import { styles } from '../page-view/styles';
+import { Box, Container, Card } from '@mui/material';
+import { FlexBox, FlexCol } from '@/components/flex-box';
+import { H1, Paragraph } from '@/components/Typography';
 
 export default function Section3() {
   const [activeBenefit, setActiveBenefit] = useState(benefits[0]);
@@ -19,19 +20,14 @@ export default function Section3() {
   return (
     <Box sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography fontSize={{ xs: 20, sm: 40 }}
-          sx={styles.elementalEndFont}
-          textAlign="center"
-          mb={4}
-          color="#fff"
-        >
+        <H1 fontSize={{ xs: 20, sm: 40 }} textAlign="center" mb={4} color="#FFF">
           breaking barriers
-        </Typography>
-        <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px' }, textAlign:'center', lineHeight:'20px' }}>
+        </H1>
+        <Paragraph sx={{ mb: '2rem', color: '#FFF', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px' }, textAlign:'center', lineHeight:'20px' }}>
           We are a more inclusive platform revolutionizing the way many people shop. Our technology assists everyone regardless of their age, gender, or disability. We believe technology should work for everyone, not just some, that’s why we’re perfecting a whole new approach. Where innovation meets accessibility—so no one is left behind.
-        </Typography>
+        </Paragraph>
 
-        <FlexBox flexDirection="column" width="100%">
+        <FlexCol width="100%">
           <FlexBox
             justifyContent="center"
             gap={3}
@@ -42,12 +38,10 @@ export default function Section3() {
             }}
           >
             {benefits.slice(0, 3).map((benefit,index) => (
-              <Box
-                key={index}
-                sx={styles.textBubbleStyle}
-                onMouseEnter={() => handleBenefitChange(benefit)}
-              >
-                {benefit.title}
+              <Box key={index} sx={styles.textBubble} onMouseEnter={() => handleBenefitChange(benefit)}>
+                <H1 color="#FFF" fontSize={12}>
+                  {benefit.title}
+                </H1>
               </Box>
             ))}
           </FlexBox>
@@ -61,27 +55,25 @@ export default function Section3() {
             }}
           >
             {benefits.slice(3, 6).map((benefit) => (
-              <Box
-                sx={styles.textBubbleStyle}
-                onMouseEnter={() => handleBenefitChange(benefit)}
-              >
-                {benefit.title}
+              <Box sx={styles.textBubble} onMouseEnter={() => handleBenefitChange(benefit)}>
+                <H1 color="#FFF" fontSize={12}>
+                  {benefit.title}
+                </H1>
               </Box>
             ))}
           </FlexBox>
-        </FlexBox>
-
+        </FlexCol>
 
         <Card sx={styles.cardStyle}>
-          <Typography color="#fff" sx={{ ...styles.elementalEndFont, fontSize: { xs: 20, sm: 32 } }}>
+          <H1 color="#FFF" fontSize={{xs:20, sm:32}}>
             {activeBenefit.header}
-          </Typography>
-          <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>
+          </H1>
+          <Paragraph color="#FFF" fontSize={{xs:12, sm:24}}>
             {activeBenefit.content}
-          </Typography>
-          <Typography sx={{ fontFamily:"Helvetica", fontWeight:'300', color:"#fff", fontSize: { xs: 12, sm: 24 } }}>
+          </Paragraph>
+          <Paragraph color="#FFF" fontSize={{xs:12, sm:24}}>
             •&nbsp;&nbsp;{activeBenefit.bullet}
-          </Typography>
+          </Paragraph>
         </Card>
 
       </Container>

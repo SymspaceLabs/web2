@@ -16,7 +16,7 @@ export default function Section1() {
   const items = [
     {
       content:'improving conversion for businesses',
-      url:'/ar-for-business'
+      url:'/sell-on-symspace'
     },
     {
       content:'enhancing real estate experiences',

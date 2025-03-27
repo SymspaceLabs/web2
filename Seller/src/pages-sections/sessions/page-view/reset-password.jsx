@@ -20,7 +20,7 @@ import { FlexColCenter } from '../../../components/flex-box';
 import { ResetPasswordForm } from "../../../components/custom-forms";
 import { useSnackbar } from "../../../contexts/SnackbarContext";
 import { useSearchParams, useRouter } from "next/navigation";
-import { AuthSubmitButton } from '../../../components/custom-buttons';
+import { SymSubmitButton } from '../../../components/custom-buttons';
 
 const ResetPassword = () => {
   
@@ -94,11 +94,9 @@ const ResetPassword = () => {
         />
 
         {/* Submit Button */}
-        <AuthSubmitButton
-          title="Submit"
-          isValid={isValid}
-          onClick={handleSubmit}
-        />
+        <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+          Submit
+        </SymSubmitButton>
         
       </FlexColCenter>
   );

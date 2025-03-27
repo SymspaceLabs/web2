@@ -7,7 +7,7 @@ import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { OtpForm } from "@/components/forms";
 import { useAuth } from '@/contexts/AuthContext';
-import { AuthSubmitButton } from "@/components/custom-buttons";
+import { SymSubmitButton } from "@/components/custom-buttons";
 
 const OtpPageView = () => {
   const { showSnackbar } = useSnackbar();
@@ -120,14 +120,15 @@ const OtpPageView = () => {
         <Typography color="#FFF">
           Didn’t receive the Code?
         </Typography>
-        <AuthSubmitButton
-          title={loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : 
-            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+        <SymSubmitButton
           isValid={!(cooldown > 0) && !loading}
           disabled={cooldown > 0 || loading}
           onClick={handleResendCode}
           loading={loading}
-        />
+        >
+          {loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : 
+            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+        </SymSubmitButton>
       </FlexColCenter>
 
 

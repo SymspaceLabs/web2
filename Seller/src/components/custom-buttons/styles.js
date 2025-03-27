@@ -1,11 +1,11 @@
-import { Button } from "@mui/material";
-
-const AuthSubmitButton = ({ isValid, onClick, title, loading }) => {
-  return (
-    <Button
-      sx={{
-        fontFamily: "Helvetica",
-        fontWeight: "bold",
+export const btnStyle = ({isValid}) => {
+    return (
+      {
+        width:'100%',
+        py:1.5,
+        fontWeight: 500,
+        textTransform:'lowercase',
+        fontSize:{xs:14, sm:18},
         background: !isValid
           ? "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)"
           : "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
@@ -21,17 +21,6 @@ const AuthSubmitButton = ({ isValid, onClick, title, loading }) => {
             ? "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)"
             : "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
         },
-      }}
-      fullWidth
-      type="submit"
-      color="primary"
-      variant="contained"
-      size="large"
-      onClick={onClick}
-    >
-      {title}
-    </Button>
-  );
-};
-
-export default AuthSubmitButton;
+      }
+    )
+  }

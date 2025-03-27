@@ -30,7 +30,7 @@ export default function Section6() {
                   </Typography>
                   {/* Call-to-action button */}
                   <FlexBox sx={{ pt:{sm:5}, justifyContent:{xs:'center', sm:'left'} }}>
-                    <Link href="/ar-for-business#benefits" passHref>
+                    <Link href="/sell-on-symspace#benefits" passHref>
                       <Button sx={styles.outlinedBtn}>
                         Explore
                       </Button>

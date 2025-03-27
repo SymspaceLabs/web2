@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { FlexCol } from '@/components/flex-box';
 import { ForgotPasswordForm } from '@/components/forms';
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { AuthSubmitButton } from '@/components/custom-buttons';
+import { SymSubmitButton } from '@/components/custom-buttons';
 
 /**
  * ForgotPasswordPage Component
@@ -65,11 +65,9 @@ const ForgotPasswordPage = () => {
       />
 
       {/* BUTTON */}
-      <AuthSubmitButton
-        title="Reset Password"
-        isValid={isValid}
-        onClick={handleSubmit}
-      />
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+        Reset Password
+      </SymSubmitButton>
     </FlexCol>
   );
 };

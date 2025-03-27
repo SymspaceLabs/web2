@@ -40,6 +40,30 @@ function Form1 ({
   const [phone, setPhone] = useState(user?.phone);
 
   useEffect(() => {
+    // Company
+    setEmail(user?.email) || "";
+    setEntityName(user?.company.entityName) || "";
+    setLegalName(user?.company.legalName) || "";
+    setEin(user?.company.ein) || "";
+    setWebsite(user?.company.website) || "";
+    setAddress1(user?.company.address1) || "";
+    setAddress2(user?.company.address2) || "";
+    setCity(user?.company.city) || "";
+    setState(user?.company.state) || "";
+    setCountry(user?.company.country) || "";
+    setZip(user?.company.zip) || "";
+    setGmv(user?.company.gmv) || "";
+    setCategory(user?.company.category) || "";
+    setBusinessPhone(user?.company.businessPhone || "")
+
+    // Basic Info
+    setFirstName(user?.firstName || "")
+    setLastName(user?.lastName || "")
+    setDob(user?.dob || "")
+    setPhone(user?.phone) || "";
+  }, [user]);
+
+  useEffect(() => {
     setIsChecked(user?.isSellerOnboardingFormFilled1 ?? false)
   }, [isChecked])
   

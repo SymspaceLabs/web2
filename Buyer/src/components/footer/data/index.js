@@ -7,8 +7,50 @@ import Facebook from "@/icons/Facebook";
 import Instagram from "@/icons/Instagram";
 import PlayStore from "@/icons/PlayStore";
 import AppleStore from "@/icons/AppleStore";
-export const ABOUT_LINKS = ["Careers", "Our Stores", "Our Cares", "Terms & Conditions", "Privacy Policy"];
-export const CUSTOMER_CARE_LINKS = ["Help Center", "Track Your Order", "Corporate & Bulk Purchasing", "Returns & Refunds"];
+export const ABOUT_LINKS = [
+  {
+    title:'About Us',
+    url:'/about-us'
+  },
+  {
+    title:'Careers',
+    url:'/careers'
+  },
+  {
+    title:'Press Releases',
+    url:'/press-releases'
+  },
+  {
+    title:'Global Impact',
+    url:'/global-impact'
+  },
+  {
+    title:'Contact Us',
+    url:'/contact-us'
+  }
+];
+export const CUSTOMER_CARE_LINKS = [
+  {
+    title:'Sell On Symspace',
+    url:'/sell-on-symspace'
+  },
+  {
+    title:'Services',
+    url:'/sell-on-symspace'
+  },
+  {
+    title:'Increase Sales',
+    url:'/sell-on-symspace'
+  },
+  {
+    title:'Terms & Conditions',
+    url:'/terms-and-conditions#terms'
+  },
+  {
+    title:'FAQs',
+    url:'/faq'
+  }
+];
 export const SOCIAL_ICON_LINKS = [{
   Icon: Instagram,
   url: "https://www.instagram.com/uilibofficial/"

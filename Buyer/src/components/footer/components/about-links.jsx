@@ -12,8 +12,8 @@ export default function AboutLinks({isDark}) {
       </H1>
 
       <div>
-        {ABOUT_LINKS.map((item, ind) => <StyledLink isDark={isDark} href="/" key={ind}>
-            {item}
+        {ABOUT_LINKS.map((item, ind) => <StyledLink isDark={isDark} href={item.url} key={ind}>
+            {item.title}
           </StyledLink>)}
       </div>
     </Fragment>

@@ -16,7 +16,7 @@ import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
 import { SignUpForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { AuthSubmitButton } from "@/components/custom-buttons";
+import { SymSubmitButton } from "@/components/custom-buttons";
 import { BoxLink } from '@/pages-sections/sessions/components';
 
 
@@ -101,11 +101,9 @@ const RegisterPageView = () => {
       />
 
       {/* Submit Button */}
-      <AuthSubmitButton
-        title="Sign Up"
-        isValid={isValid}
-        onClick={handleSubmit}
-      />     
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+        Sign Up
+      </SymSubmitButton>
 
       {/* Checkbox */}
       <Span display={{ color:'#fff', sm: "inline-block" }}>

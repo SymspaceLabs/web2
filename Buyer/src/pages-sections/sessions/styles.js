@@ -31,9 +31,7 @@ export const styles = {
   registerButton : {
     color: '#fff',
     borderRadius: '12px',
-    fontFamily: 'Helvetica',
-    fontWeight: 700,
-    fontSize: { xs: '16px', sm: '22px' }, // Mobile-specific font size
+    fontSize: { xs: '14px', sm: '18px' }, // Mobile-specific font size
     backdropFilter: 'blur(50px)',
     py: 1.5,
     background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',

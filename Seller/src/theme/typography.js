@@ -1,3 +1,5 @@
+import { elementalEnd } from "@/app/layout";
+
 export const fontSize = 14;
 export const typography = {
   fontSize,
@@ -8,5 +10,9 @@ export const typography = {
   },
   body2: {
     fontSize
+  },
+  button : {
+    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+
   }
 };

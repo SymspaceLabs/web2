@@ -5,12 +5,14 @@
 // =================================================================
 
 import { useEffect, useState, useRef } from 'react';
-import { Box, Container, Typography, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import { styles } from '../page-view/styles';
+import { H1, Paragraph } from '@/components/Typography';
+import { FlexRowCenter } from '@/components/flex-box';
 
 export default function Section2() {
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <FlexRowCenter alignItems="center">
       <Container>
         <Grid container spacing={3}>
           {blogs.map(blog => (
@@ -20,7 +22,7 @@ export default function Section2() {
           ))}
         </Grid>
       </Container>
-    </Box>
+    </FlexRowCenter>
   );
 }
 
@@ -91,42 +93,16 @@ function BlogCard({ title, subTitle }) {
   }, [isVisible, title]);
 
   return (
-    <Box
-      ref={cardRef}
-      sx={{
-        p: 5,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '400px',
-        background: "linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)",
-        boxShadow: "0px 1px 24px -1px rgba(0, 0, 0, 0.18)",
-        backdropFilter: "blur(10px)",
-        borderRadius: "30px"
-      }}
-    >
-      <Typography
-        sx={{
-          ...styles.elementalEndFont,
-          fontSize: 96,
-          color: '#fff',
-          textAlign: 'center',
-        }}
-      >
+    <Box ref={cardRef} sx={styles.glassCard}>
+      {/* Title */}
+      <H1 fontSize={96} color='#FFF' textAlign='center'>
         {count}%
-      </Typography>
-      {/* Subtitle for additional context */}
-      <Typography
-        sx={{
-          fontFamily: 'Helvetica',
-          fontSize: 24,
-          color: '#fff',
-          textAlign: 'center',
-        }}
-      >
+      </H1>
+
+      {/* Subtitle */}
+      <Paragraph fontSize={24} color='#FFF' textAlign='center'>
         {subTitle}
-      </Typography>
+      </Paragraph>
     </Box>
   );
 }

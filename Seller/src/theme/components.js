@@ -1,8 +1,16 @@
-import { dark, grey, primary, secondary, success } from "./theme-colors";
-import { typography } from "./typography";
-import { classes } from "./utils"; // ========================================================
+// ===================================================================
+// Global Style For
+// - MUI Button
+// - MUI Typography
+// - MUI Textfield
+// ===================================================================
 
-// =========================================================
+import { elementalEnd } from "@/app/layout";
+import { dark, grey, primary, secondary, success } from "./theme-colors";
+import { classes } from "./utils";
+
+// ===================================================================
+
 export const components = {
   MuiCssBaseline: {
     styleOverrides: {
@@ -20,7 +28,6 @@ export const components = {
       },
       button: {
         fontSize: 14,
-        fontFamily: typography.fontFamily
       },
       ".MuiRating-sizeSmall": {
         fontSize: "20px"
@@ -104,6 +111,9 @@ export const components = {
       })
     }
   },
+          
+  // MUI BUTTON
+  // THIS IS WHERE THE FONT STYLE OF MUI BUTTON IS CONFIGURED
   MuiButton: {
     styleOverrides: {
       root: ({
@@ -111,9 +121,10 @@ export const components = {
       }) => ({
         minWidth: 0,
         minHeight: 0,
-        fontWeight: 600,
+        fontWeight: 500,
         borderRadius: "6px",
-        textTransform: "capitalize",
+        textTransform: "lowercase",
+        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
         ...(ownerState.color === "info" && {
           borderRadius: "8px"
         }),

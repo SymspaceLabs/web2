@@ -8,5 +8,5 @@ export const typography = {
   },
   body2: {
     fontSize
-  }
+  },
 };

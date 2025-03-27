@@ -1,4 +1,8 @@
-import { RegisterPartnerPageView } from "../../../pages-sections/sessions/page-view";
+// =======================================================
+// Register Seller Page
+// =======================================================
+
+import { RegisterPartnerPageView } from "@/pages-sections/sessions/page-view";
 
 export const metadata = {
   title: "Register Partner",

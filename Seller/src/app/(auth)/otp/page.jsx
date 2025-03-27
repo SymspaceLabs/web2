@@ -1,4 +1,8 @@
-import { OtpPageView } from "../../../pages-sections/sessions/page-view";
+// =======================================================
+// OTP Page
+// =======================================================
+
+import { OtpPageView } from "@/pages-sections/sessions/page-view";
 
 export const metadata = {
   title: "OTP",

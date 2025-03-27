@@ -4,8 +4,8 @@
     <title>Group</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fill-rule="evenodd">
-        <g id="color-icons" transform="translate(-761.000000, -115.000000)" fill-rule="nonzero">
+    <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+        <g id="color-icons" transform="translate(-761.000000, -115.000000)" fillRule="nonzero">
             <g id="Capa_4" transform="translate(110.000000, 107.000000)">
                 <g id="Group" transform="translate(648.000000, 8.000000)">
                     <path d="M119,198.1 C116.8,198.1 114.5,197.6 112.5,196.6 C104.8,193 101.5,183.8 105.1,176 L136.3,109.6 C139.9,101.9 149.1,98.6 156.9,102.2 C164.6,105.8 167.9,115 164.3,122.8 L133.1,189.2 C131.4,192.9 128.2,195.7 124.4,197.1 C122.6,197.8 120.8,198.1 119,198.1 Z M150.3,107.9 C147.1,107.9 144.1,109.7 142.6,112.8 L111.4,179.2 C109.4,183.4 111.2,188.5 115.5,190.4 C117.5,191.4 119.8,191.5 122,190.7 C124.1,189.9 125.8,188.4 126.8,186.4 L158,120 C160,115.8 158.2,110.7 153.9,108.8 C152.7,108.1 151.5,107.9 150.3,107.9 Z" id="Shape" fill="#EEEEEE"></path>

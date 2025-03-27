@@ -1,14 +1,18 @@
 "use client";
+
 // ===================================================================
 // Landing Page Hero Section 
 // ===================================================================
-import Link from "next/link"; // Import Link
 
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
-import { FlexBox, FlexColCenter } from "@/components/flex-box";
-import { LazyImage } from '@/components/lazy-image';
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
+import { LazyImage } from '@/components/lazy-image';
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, Grid } from "@mui/material";
+import { FlexBox, FlexColCenter } from "@/components/flex-box";
+
+// ===================================================================
 
 export default function Section1() {
   return (
@@ -25,24 +29,24 @@ export default function Section1() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Typography sx={{ color: 'rgba(255,255,255,0.7)', fontSize: {xs:18, sm:28}, mb:{xs:-1, sm:-3}, fontWeight: 'bold' }}>
-                  AI Powered AR Commerce
-                </Typography>
+                <Paragraph sx={{ color: 'rgba(255,255,255,0.7)', fontSize: {xs:18, sm:28}, mb:{xs:-1, sm:-3}, fontWeight: 'bold' }}>
+                   AI Powered AR Commerce
+                </Paragraph>
                 
-                <Typography sx={styles.heroHeader}>
+                <H1 fontSize={{xs:48, sm:60, md:100}} color='#FFF'>
                   SYMSPACE
-                </Typography>
+                </H1>
                 
-                <Typography sx={{ fontSize: {xs:11, sm:20}, color: '#fff' }}>
+                <Paragraph fontSize={{xs:11, sm:20}} color='#FFF'>
                   Revolutionize your shopping experience through Augmented Reality.
-                </Typography>
+                </Paragraph>
 
                 <FlexBox sx={{ gap: '15px', py: {xs:2, sm:5} }}>
                   <Link href="/register" passHref>
                     <Button sx={styles.gradientBtn}>
-                      <Typography sx={styles.gradientBtnText}>
+                      <H1 fontSize={{xs:10, sm:16}}>
                         Get Started
-                      </Typography>
+                      </H1>
                       <FlexColCenter sx={{ width: { xs: 15, sm: 35 } }}>
                         <LazyImage
                           alt="furniture shop"

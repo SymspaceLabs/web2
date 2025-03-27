@@ -4,28 +4,30 @@
 
 import Link from 'next/link';
 import { styles } from './styles';
-import { FlexBox, FlexColCenter } from '@/components/flex-box';
-import { Box, Button, Container, Typography } from '@mui/material';
+import { H1, Paragraph } from '../Typography';
+import { Box, Button } from '@mui/material';
+import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 
 export default function GlassBanner({
     title,
     subtitle,
     btnText,
-    btnUrl
+    btnUrl,
+    sx
 }) {
   return (
-    <Container sx={{ maxWidth:'1000px'}}>
+    <Box sx={{ width:'100%', ...sx}}>
         <Box sx={styles.banner}>
             <FlexBox flexDirection={{ xs:'column', sm:'row' }} justifyContent='space-between' gap={2}>
-                <Box sx={{ display:'flex', flexDirection:'column', gap:2}}>
-                <Typography sx={styles.bannerTitle}>
-                    {title}
-                </Typography>
-                <Typography fontSize={{ xs:14, sm:18 }} color="#fff" sx={{ maxWidth:'850px' }}>
-                    {subtitle}
-                </Typography>
-                </Box>
-                <FlexColCenter sx={{ maxWidth:{xs:'100%', sm:'250px'} }}>
+                <FlexCol>
+                    <H1 fontSize={{xs:20, sm:40}} color="#FFF" pb={1} >
+                        {title}
+                    </H1>
+                    <Paragraph fontSize={{ xs:14, sm:18 }} color="#FFF" sx={{ maxWidth:'850px' }}>
+                        {subtitle}
+                    </Paragraph>
+                </FlexCol>
+                <FlexColCenter sx={{ maxWidth:{xs:'100%', sm:'350px'} }}>
                     <Link href={btnUrl} passHref>
                         <Button sx={styles.bannerButton}>
                             {btnText}
@@ -34,6 +36,6 @@ export default function GlassBanner({
                 </FlexColCenter>
             </FlexBox>
         </Box>
-    </Container>
+    </Box>
   );
 };

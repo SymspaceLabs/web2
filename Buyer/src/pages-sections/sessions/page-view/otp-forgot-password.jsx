@@ -5,7 +5,7 @@ import { OtpForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { Typography, CircularProgress } from "@mui/material";
 import { useSearchParams, useRouter } from "next/navigation";
-import { AuthSubmitButton } from "@/components/custom-buttons";
+import { SymSubmitButton } from "@/components/custom-buttons";
 import { FlexBox, FlexColCenter } from "@/components/flex-box";
 
 const OtpForgotPasswordPageView = () => {
@@ -105,20 +105,6 @@ const OtpForgotPasswordPageView = () => {
       </Typography>
 
       <OtpForm onVerifyOtp={setOtp} />
-
-      {/* <FlexColCenter paddingTop={2} gap={2}>
-        <Typography color="#FFF">
-          Didn’t receive the Code?
-        </Typography>
-        <AuthSubmitButton
-          title={loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : 
-            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
-          isValid={!(cooldown > 0) && !loading}
-          disabled={cooldown > 0 || loading}
-          onClick={handleResendCode}
-          loading={loading}
-        />
-      </FlexColCenter> */}
 
     </FlexBox>
   );

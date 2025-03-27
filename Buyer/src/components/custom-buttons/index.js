@@ -1,3 +1,1 @@
-import AuthSubmitButton from "./AuthSubmitButton";
-
-export {AuthSubmitButton};
+export {default as SymSubmitButton} from "./SymSubmitButton";

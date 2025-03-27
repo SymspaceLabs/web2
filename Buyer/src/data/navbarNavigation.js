@@ -53,7 +53,7 @@ const navbarNavigation = [
         url: `${process.env.NEXT_PUBLIC_SELLER_URL}/register`
       }, {
         title: "Pricing & Packages",
-        url: "/ar-for-business#pricing"
+        url: "/sell-on-symspace#pricing"
       },
     ]
   }, 

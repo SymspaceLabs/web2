@@ -162,7 +162,7 @@ export default function ProductIntro({ product }) {
               >
                 <Avatar
                   alt="3D Model"
-                  src="/path-to-3d-thumbnail.png" // Replace with an appropriate 3D model thumbnail
+                  src="/assets/images/products/3d/3d-thumbnail.png" // Replace with an appropriate 3D model thumbnail
                   variant="square"
                   sx={{ height: 40 }}
                 />

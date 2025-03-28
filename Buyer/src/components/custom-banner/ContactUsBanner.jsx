@@ -6,6 +6,7 @@ import styled from "@mui/material/styles/styled";
 import { LazyImage } from '@/components/lazy-image';
 import { Box, Typography, Button, Container} from "@mui/material";
 import Link from "next/link";
+import { H1, Paragraph } from "../Typography";
 
 export default function ContactUsBanner({title, subtitle}) {  
   return (
@@ -27,19 +28,13 @@ export default function ContactUsBanner({title, subtitle}) {
               height={500}
             />
             <div className="content">
-              <Typography
-                sx={styles.elementalEndFont}
-                mt={3}
-                mb={1}
-                lineHeight={1.2}
-                fontSize={{ xs: 20, sm: 40 }}
-              >
+              <H1 mt={{sm:3}} mb={1} lineHeight={1.2} fontSize={{ xs: 20, sm: 40 }}>
                 {title}
-              </Typography>
+              </H1>
 
-              <Typography fontFamily="Helvetica" mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
+              <Paragraph mb={3} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
                 {subtitle}
-              </Typography >
+              </Paragraph >
 
             <Link href="/contact-us">
                 <Button sx={darkBtn}>
@@ -55,9 +50,8 @@ export default function ContactUsBanner({title, subtitle}) {
 }
 
 const darkBtn = {
-    ...styles.elementalEndFont,
     px:2,
-    py:2,
+    py:{xs:1, sm:2},
     borderRadius:'50px',
     boxShadow: '0px 4px 4px 3px rgba(0, 0, 0, 0.25)',
     color:'#FFF',

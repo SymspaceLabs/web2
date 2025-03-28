@@ -6,6 +6,7 @@
 
 import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 
 export default function Section4() {
 
@@ -35,9 +36,9 @@ export default function Section4() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{sm:10} }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ py:5, ...styles.elementalEndFont, fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
+        <H1 py={5} fontSize={{ xs: 25, sm: 40 }} color='#FFF'>
           Our Core Values
-        </Typography>
+        </H1>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TableContainer>
@@ -46,10 +47,12 @@ export default function Section4() {
                 <TableBody>
                   {rows.map((row, index) => (
                     <TableRow key={index}>
-                      <TableCell sx={{ p:{xs:1, sm:4}, ...styles.elementalEndFont, fontSize: { xs: 10, sm: 30 }, color: '#fff' }}>
-                        {row.title}
+                      <TableCell p={{xs:1, sm:4}}>
+                        <H1 fontSize={{ xs: 10, sm: 30 }} color='#FFF'>
+                          {row.title}
+                        </H1>
                       </TableCell>
-                      <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 8, sm: 20 }, textAlign:'justify' }}>
+                      <TableCell sx={{ p:{xs:1, sm:4}, fontFamily: 'Helvetica', color: '#fff', fontWeight:300, fontSize: { xs: 12, sm: 20 }, textAlign:'justify' }}>
                         {row.description}
                       </TableCell>
                     </TableRow>

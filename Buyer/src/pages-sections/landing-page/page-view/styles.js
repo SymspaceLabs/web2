@@ -9,6 +9,13 @@ export const styles = {
       fontSize: { xs: 20, sm: 64 },
       color:'#FFF'
   },
+  sectionParagraph : {
+    color: '#fff',
+    fontSize: { xs:12, sm:18 },
+    textAlign: 'justify',
+    maxWidth: 1200,
+    lineHeight: { xs:1.5, sm:2 } 
+  },
   elementalEndFont : {
     fontFamily: elementalEndFont,
     textTransform:'lowercase',

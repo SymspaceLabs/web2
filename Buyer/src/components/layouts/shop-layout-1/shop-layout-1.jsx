@@ -21,7 +21,7 @@ import SymDialog from "@/components/custom-dialog/SymDialog";
 import { SymDrawer } from "@/components/custom-drawer";
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 
-export default function ShopLayout1({children}) {
+export default function ShopLayout1({children, noFooter=false}) {
   const [isFixed, setIsFixed] = useState(false);
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {
@@ -91,7 +91,10 @@ export default function ShopLayout1({children}) {
       </SymDrawer>
 
       {/* Footer Component */}
-      <Footer />
+      {
+        !noFooter && <Footer />
+      }
+      
       
     </Fragment>
   );

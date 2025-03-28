@@ -5,18 +5,18 @@
 // =============================================================================
 
 import { useState, useEffect } from "react";
-import { styles } from "../page-view/styles";
 import { useRouter } from 'next/navigation';
 import { FlexBox } from '@/components/flex-box';
 import { BsArrowUpRight } from "react-icons/bs";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { LazyImage } from "@/components/lazy-image";
-import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
+import { IconButton, Box, Container, Divider } from "@mui/material";
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import styled from "@mui/material/styles/styled";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -37,15 +37,15 @@ export default function Section6() {
   }, []);
   
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', pb:4 }}>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', pb:{sm:4} }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
+        <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:{sm:5} }}>
 
           {/* Section title */}
           <FlexBox alignItems="center" gap={2}>
-            <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+            <H1 fontSize={{ xs: 24, sm: 35 }} color='#FFF' wordSpacing='10px'>
               press releases
-            </Typography>
+            </H1>
             <IconButton onClick={() => window.open('/press-releases', '_blank')}>
               <BsArrowUpRight color="#fff" size="1.35em" />
             </IconButton>
@@ -112,13 +112,13 @@ const BlogCard = ({ blog }) => {
         <LazyImage src={blog.image} width={500} height={500} alt="blog-image" sx={{ height: "150px", width: "100%", objectFit: "cover" }} />
       </Box>
 
-      <Typography color="#fff" fontFamily="Helvetica" fontSize={16} sx={{ py: 1 }}>
+      <Paragraph color="#fff" fontSize={16} py={1}>
         {blog.handle_url_title}
-      </Typography>
+      </Paragraph>
       <Divider />
-      <Typography color="#fff"  fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
+      <H1 color="#fff" fontSize={18} py={2}>
         {blog.title}
-      </Typography>
+      </H1>
     </CardWrapper>
   );
 };

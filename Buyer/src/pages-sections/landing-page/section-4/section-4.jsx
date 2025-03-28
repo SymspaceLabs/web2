@@ -12,13 +12,12 @@ import ArrowBack from "@mui/icons-material/ArrowBack"; // Material-UI back arrow
 import { motion } from "framer-motion"; // Import Framer Motion
 import { FlexBox, FlexColCenter } from "@/components/flex-box"; // Custom utility for flexible layouts.
 import { LazyImage } from '@/components/lazy-image';
-import { H6 } from "@/components/Typography"; // Custom typography component.
+import { H1, H6 } from "@/components/Typography"; // Custom typography component.
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
 import { Typography, Container, IconButton, Box, useMediaQuery } from "@mui/material";
 
 // ============================================================
-
 
 // Fade-in animation variants
 const fadeIn = {
@@ -26,24 +25,23 @@ const fadeIn = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
-
 export default function Section4() {
     // Extract carousel-related functionality from the custom hook.
     const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
     const isMobile = useMediaQuery('(max-width:600px)');
 
     return (
-      <Box sx={{ background:'#FFF'}}>
-        <Container sx={{ py: { xs:3, md:10 } }}>
+      <Box sx={{ background:'#FFF' }}>
+        <Container sx={{ py: { xs:3, md:10 }}}>
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
             {/* Header with title, description, and carousel navigation buttons */}
-            <FlexBetween sx={{ py: { xs:2, sm:5 } }}>
-              <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 20, sm: 24 }, textAlign: {xs:'center'} }}>
+            <FlexBetween sx={{ py: { xs:2, sm:5 }, position:'relative' }}>
+              <H1 fontSize={{xs:20, sm:24}} textAlign={{xs:'center'}} zIndex={1}>
                 Augmented Reality Marketplaces
-              </Typography>
+              </H1>
     
               {/* Navigation buttons for the carousel */}
-              <Box sx={{ display: {xs:'none', sm:'block'}}}>
+              <Box sx={{ display: {xs:'none', sm:'block'}, zIndex:1 }}>
                 <IconButton onClick={handlePrev}>
                   <ArrowBack fontSize="small" />
                 </IconButton>
@@ -63,6 +61,7 @@ export default function Section4() {
             {/* Horizontally Scrollable Cards */}
           <FlexBox
             sx={{
+              position:'relative' ,
               display: {xs:'flex', sm:'none'},
               gap: 2,
               overflowX: "auto",
@@ -73,7 +72,7 @@ export default function Section4() {
             }}
           >
             {categories.map((item,index) => (
-              <Link key={index} href={`/products/search/${item.slug}`} passHref>
+              <Link key={index} href={`/products/search/${item.slug}`} passHref zIndex={1}>
                 {/* Product card */}
                 <FlexColCenter
                   sx={{

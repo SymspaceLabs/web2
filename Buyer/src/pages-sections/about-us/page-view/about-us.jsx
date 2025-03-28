@@ -67,7 +67,7 @@ export default function AboutUsPageView() {
       <Box sx={{ zIndex:1, width:'100%' }}>
         <Section1 />  {/* HERO  */}
         <Section2 />  {/* OUR MISSION */}
-        <Section3 />  {/* OPEN ROLES */}
+        <Section3 />  {/* INDUSTRY LEADERS */}
         <Section4 />  {/* CORE VALUES */}
         <Section5 />  {/* TEAM */}
         <Section6 />  {/* OPEN ROLES */}

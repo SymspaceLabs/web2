@@ -7,12 +7,10 @@ const elementalEndFont = {
 }
 
 const button = {
-  ...elementalEndFont,
   py: 2,
   border: "2px solid #000",
   borderRadius: "50px",
 }
-
 
 export const styles = {
   elementalEndFont,
@@ -31,7 +29,9 @@ export const styles = {
     background: 'transparent',
     color: '#000',
     '&:hover' : {
-      background: '#FFF',
+      background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+      color:'#FFF',
+      border: "2px solid #FFF",
     }
   },
   buyNowButton: {
@@ -40,8 +40,9 @@ export const styles = {
     background: '#000',
     color: '#FFF',
     '&:hover' : {
-      background: '#FFF',
-      color: '#000',
+      background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+      color: '#FFF',
+      border: "2px solid #FFF",
     }
   },
   sizeChart : {
@@ -99,16 +100,15 @@ export const styles = {
     ...elementalEndFont,
     color: '#fff',
   },
-
-    productInfoBox: {
-      p: 5,
-      boxSizing: 'border-box',
-      background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
-      boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
-      backdropFilter: 'blur(12px)',
-      borderRadius: "30px",
-    },
-  };
+  productInfoBox: {
+    p: 5,
+    boxSizing: 'border-box',
+    background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
+    boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: "30px",
+  },
+};
   
-  export default styles;
+export default styles;
   

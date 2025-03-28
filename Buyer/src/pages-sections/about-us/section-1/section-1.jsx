@@ -31,10 +31,9 @@ export default function Section1() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1400px' }}>
-        <H1 fontSize={{xs:25,sm:45}} color='#FFF' wordSpacing="10px">
+        <H1 fontSize={{xs:25,sm:45}} color='#FFF' wordSpacing="10px" pb={3}>
           simulating reality with technology that brings spaces to life
         </H1>
-
         <FlexBox sx={{ flexDirection:{ xs:'column', sm:'row' }, justifyContent: { xs:'center', sm:'space-between' }, mt:{ xs:0, sm:-6 } }} alignItems="center">
           <FlexBox flexDirection="column" gap={2}>
             {

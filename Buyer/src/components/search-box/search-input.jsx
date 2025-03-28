@@ -52,10 +52,48 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
       mx="auto" 
       {...{ref: parentRef}}
     >
-      <TextField fullWidth variant="outlined" placeholder="Searching for..." onChange={handleSearch} InputProps={INPUT_PROPS} />
+      {/* <TextField fullWidth variant="outlined" placeholder="Searching for..." onChange={handleSearch} InputProps={INPUT_PROPS} /> */}
+      <TextField 
+        fullWidth 
+        variant="outlined" 
+        placeholder="Searching for..." 
+        onChange={handleSearch} 
+        InputProps={getInputProps(btn)} 
+      />
+
 
       {/* SHOW SEARCH RESULT LIST */}
       {resultList.length > 0 ? <SearchResult results={resultList} /> : null}
     </Box>
   );
 }
+
+const getInputProps = (btn) => ({
+  sx: {
+    borderRadius: "50px",
+    height: 44,
+    paddingRight: 0,
+    overflow: "hidden",
+    backgroundColor: "grey.200",
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: 0,
+    },
+  },
+  endAdornment: btn ? (
+    <Button
+      disableElevation
+      sx={{
+        px: "1.5rem",
+        height: "100%",
+        borderRadius: "50px",
+        fontSize: 11,
+        color: "#FFF",
+        background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
+        border: "5px solid #FFF",
+      }}
+    >
+      Search
+    </Button>
+  ) : null,
+  startAdornment: <SearchOutlinedIcon fontSize="small" />,
+});

@@ -3,8 +3,8 @@ import Button from "@mui/material/Button"; // MUI ICON COMPONENTS
 import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
-import { H5 } from "../../../../components/Typography";
-import { FlexBetween, FlexBox } from "../../../../components/flex-box"; // ==============================================================
+import { H5 } from "@/components/Typography";
+import { FlexBetween, FlexBox } from "@/components/flex-box"; // ==============================================================
 
 // ==============================================================
 export default function AddToCartButton({

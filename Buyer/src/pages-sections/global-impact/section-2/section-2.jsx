@@ -95,12 +95,12 @@ function BlogCard({ title, subTitle }) {
   return (
     <Box ref={cardRef} sx={styles.glassCard}>
       {/* Title */}
-      <H1 fontSize={96} color='#FFF' textAlign='center'>
+      <H1 fontSize={{xs:30, sm:96}} color='#FFF' textAlign='center'>
         {count}%
       </H1>
 
       {/* Subtitle */}
-      <Paragraph fontSize={24} color='#FFF' textAlign='center'>
+      <Paragraph fontSize={{xs:14, sm:24}} color='#FFF' textAlign='center'>
         {subTitle}
       </Paragraph>
     </Box>

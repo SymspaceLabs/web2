@@ -18,7 +18,7 @@ export default function Section3() {
   };
 
   return (
-    <Box sx={{ py: { xs: 2, sm: 20 } }}>
+    <Box sx={{ py: { xs: 5, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <H1 fontSize={{ xs: 20, sm: 40 }} textAlign="center" mb={4} color="#FFF">
           breaking barriers
@@ -52,6 +52,7 @@ export default function Section3() {
             sx={{
               flexDirection: { xs: "column", sm: "row" }, // Same responsive behavior
               gap: { xs: 2, sm: 3 },
+              pt: { xs:3 }
             }}
           >
             {benefits.slice(3, 6).map((benefit) => (

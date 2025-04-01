@@ -26,14 +26,14 @@ function NavigationList() {
           return <FlexBox sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } }}} key={nav.title} alignItems="center" position="relative" flexDirection="column" >
 
               <CategoryMenuButton onClick={e => handler(e)}>
-                <IoGrid size="1.3em" color="#fff" />
-                <H1 color="#fff">
+                <IoGrid size="1.3em" color="#FFF" />
+                <H1 color="#FFF">
                   Categories
                 </H1>
               </CategoryMenuButton>
 
               <ChildNavListWrapper className="child-nav-item">
-                <SymCard elevation={3} sx={{ mt: 2.5, py: 1, minWidth: 100 }}>
+                <SymCard elevation={3} sx={{ mt: 2.5, ml: 20, border:'1px solid #FFF', py: 1, minWidth: 100 }}>
                   {renderNestedNav(nav.child)}
                 </SymCard>
               </ChildNavListWrapper>

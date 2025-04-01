@@ -15,7 +15,7 @@ const StyledLink = styled(Link, {
 }) => ({
   position: "relative",
   transition: "color 150ms ease-in-out",
-  color: active ? theme.palette.primary.main : "inherit",
+  color: active ? theme.palette.primary.main : "#FFF",
   "&:hover": {
     color: '#FFF'
   }

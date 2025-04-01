@@ -72,7 +72,7 @@ export default function Section4() {
             }}
           >
             {categories.map((item,index) => (
-              <Link key={index} href={`/products/search/${item.slug}`} passHref zIndex={1}>
+              <Link key={index} href={`/products/search/${item.slug}`} passHref sx={{ zIndex:1 }}>
                 {/* Product card */}
                 <FlexColCenter
                   sx={{

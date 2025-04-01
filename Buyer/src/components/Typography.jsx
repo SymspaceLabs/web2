@@ -33,6 +33,20 @@ export function H1({
     </Typography>);
 }
 
+export function H2({
+  children,
+  ...props
+}) {
+  return (
+    <Typography
+      fontFamily="Helvetica"
+      fontWeight={700}
+      {...props}
+    >
+      {children}
+    </Typography>);
+}
+
 export function Paragraph({
   children,
   ...props
@@ -47,21 +61,22 @@ export function Paragraph({
     </Typography>);
 }
 
-export function H2(props) {
-  const {
-    ellipsis,
-    children,
-    className,
-    ...others
-  } = props;
-  return <StyledBox fontSize={25} component="h2" fontWeight={700} ellipsis={ellipsis ? 1 : 0} {...className && {
-    className: clsx({
-      [className]: true
-    })
-  }} {...others}>
-      {children}
-    </StyledBox>;
-}
+// export function H2(props) {
+//   const {
+//     ellipsis,
+//     children,
+//     className,
+//     ...others
+//   } = props;
+//   return <StyledBox fontSize={25} component="h2" fontWeight={700} ellipsis={ellipsis ? 1 : 0} {...className && {
+//     className: clsx({
+//       [className]: true
+//     })
+//   }} {...others}>
+//       {children}
+//     </StyledBox>;
+// }
+
 export function H3(props) {
   const {
     ellipsis,

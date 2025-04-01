@@ -1,11 +1,14 @@
+// ==================================================
 // EMPTY CART
+// ==================================================
 
-import Image from "next/image"; // GLOBAL CUSTOM COMPONENTS
-import { FlexColCenter } from "@/components/flex-box";
-import { Button } from "@mui/material";
 import Link from "next/link";
-import { styles } from "@/components/styles";
+import Image from "next/image";
+import { Button } from "@mui/material";
 import { H1 } from "@/components/Typography";
+import { FlexColCenter } from "@/components/flex-box";
+
+// ==================================================
 
 export default function EmptyCartView() {
   return (
@@ -26,16 +29,12 @@ export default function EmptyCartView() {
             Start shopping
           </Button>
         </Link>
-
       </FlexColCenter>
-
-
     </FlexColCenter>
   );
 }
 
 const btn = {
-  ...styles.elementalEndFont, 
   color: '#FFF',
   fontSize: 12,
   px:3,

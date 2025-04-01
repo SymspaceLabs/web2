@@ -20,16 +20,10 @@ export default function SymDrawer(props) {
         open={open}
         anchor={anchor}
         onClose={toggleOpen}
-        // sx={{ zIndex: 9999,
-        //   "& .MuiDrawer-paper": {
-        //     backgroundColor: "transparent",
-        //     boxShadow: "none", // Removes shadow if needed
-        //   }
-        // }}
         PaperProps={{
           sx: {
             zIndex: 9999,
-            background: 'rgba(255, 255, 255, 0.5)',
+            background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(50px)',
           },
         }}

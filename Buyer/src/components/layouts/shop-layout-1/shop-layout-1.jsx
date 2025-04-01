@@ -49,6 +49,8 @@ export default function ShopLayout1({children, noFooter=false}) {
 
   return (
     <Fragment>
+
+      {/* TOP NAVBAR */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
         {/* TOP HEADER */}
         <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
@@ -62,6 +64,7 @@ export default function ShopLayout1({children, noFooter=false}) {
       {children}
 
       {/* SMALL DEVICE BOTTOM NAVIGATION */}
+      {/* BOTTOM NAVBAR */}
       <MobileNavigationBar />
 
       {/* LOGIN DIALOG */}

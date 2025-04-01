@@ -27,7 +27,7 @@ export default function MobileMenu() {
             <Box px={5} py={8} maxWidth={500} margin="auto" position="relative" height="100%">
               {/* CLOSE BUTTON */}
               <IconButton onClick={handleClose} sx={{position: "absolute",right: 30,top: 15}}>
-                <Clear fontSize="small" />
+                <Clear fontSize="small" sx={{color:"#FFF"}} />
               </IconButton>
 
               {/* MULTI LEVEL MENU RENDER */}

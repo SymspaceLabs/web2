@@ -13,11 +13,17 @@ export default function Navbar({
   elevation = 2,
   hideCategories = false
 }) {
-  return <NavBarWrapper hoverEffect={false} elevation={elevation} border={0}>
-      {hideCategories ? <InnerContainer sx={{ justifyContent: "center"}}>
-          <NavigationList />
-        </InnerContainer> : <InnerContainer>
-
+  return (
+    <NavBarWrapper hoverEffect={false} elevation={elevation} border={0}>
+      {hideCategories ? 
+        (
+          <InnerContainer sx={{ justifyContent: "center"}}>
+            <NavigationList />
+          </InnerContainer>
+        )
+        : 
+        (
+          <InnerContainer>
             {/* CATEGORY DROPDOWN */}
             <Categories />
 
@@ -40,8 +46,11 @@ export default function Navbar({
                 ))
               }
             </FlexBox>
-        </InnerContainer>}
-    </NavBarWrapper>;
+          </InnerContainer>
+        )
+      }
+    </NavBarWrapper>
+  );
 }
 
 const categories = [

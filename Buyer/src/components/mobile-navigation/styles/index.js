@@ -6,6 +6,7 @@ import { layoutConstant } from "../../../utils/constants"; // STYLED COMPONENTS
 const Wrapper = styled("div")(({
   theme
 }) => ({
+
   left: 0,
   right: 0,
   bottom: 0,
@@ -14,12 +15,18 @@ const Wrapper = styled("div")(({
   justifyContent: "space-around",
   zIndex: theme.zIndex.drawer + 1,
   height: layoutConstant.mobileNavHeight,
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: "0px 1px 4px 3px rgba(0, 0, 0, 0.1)",
   "@media only screen and (max-width: 900px)": {
     display: "flex",
-    width: "100vw"
-  }
+    width: "100vw",
+    background: 'rgba(255, 255, 255, 0.5)',
+  },
+
+  //Glassmorphic Style
+  borderRadius: '45.0463px 45.0463px 0px 0px',
+  backdropFilter: 'blur(36.037px)',
+  boxShadow: '0px -4.50463px 27.0278px rgba(41, 39, 130, 0.1), inset 0px 0.900926px 0.450463px rgba(255, 255, 255, 0.5)',
+  backgroundBlendMode: 'overlay',
+  
 }));
 const StyledNavLink = styled(NavLink)({
   flex: "1 1 0",

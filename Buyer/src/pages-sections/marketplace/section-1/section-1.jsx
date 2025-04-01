@@ -10,7 +10,7 @@ import { styles } from "../page-view/styles";
 
 export default function Section1() {
   return (
-    <Container sx={{ py:10 }}>
+    <Container sx={{ py:{xs:5, sm:10} }}>
       <Grid container spacing={3}>
         
         {/* Card 1 */}
@@ -24,10 +24,10 @@ export default function Section1() {
           >
             <Box sx={{ ...contentWrapper, background: "#353535", height: "100%" }}>
               <Box padding={4} pb={0}>
-                <Paragraph sx={{ fontFamily: "Helvetica" }} mb={1} fontSize={{ xl: 20, md: 18, xs: 16 }}>
+                <Paragraph mb={1} fontSize={{ xl: 20, md: 18, xs: 16 }}>
                   Enhance your everyday life
                 </Paragraph>
-                <H2 sx={{ fontFamily: "Helvetica" }} lineHeight={1.2} mb={2} fontSize={{ xl: 30, md: 30, xs: 28 }}>
+                <H2 lineHeight={1.2} mb={2} fontSize={{ xl: 30, md: 30, xs: 28 }}>
                   AR Shopping for
                   <br />
                   Homebound Convenience

@@ -10,14 +10,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import BoxLink from "../../components/BoxLink";
+import BoxLink from "@/components/BoxLink";
 import LoginBottom from "./components/login-bottom";
 import { styles } from "./styles";
 import { usePathname } from "next/navigation";
-import { LazyImage } from "../../components/lazy-image";
-import { FlexBox, FlexRowCenter } from "../../components/flex-box";
+import { LazyImage } from "@/components/lazy-image";
+import { FlexBox, FlexRowCenter } from "@/components/flex-box";
 import { Box, Typography } from "@mui/material";
-import LogoWithTitle from "../../components/LogoWithTitle";
+import LogoWithTitle from "@/components/LogoWithTitle";
 
 // ==============================================================
 
@@ -32,10 +32,9 @@ export default function AuthLayout({ children }) {
   if (pathname === "/sign-in") {
 
     TITLE = (
-      <LogoWithTitle
-        title="Continue your Journey"
-        subTitle="Log in to an existing account using your email"
-      />
+      <LogoWithTitle subTitle="Log in to an existing account using your email">
+        Continue your Journey
+      </LogoWithTitle>
     );
 
     BOTTOM_CONTENT = (
@@ -80,7 +79,9 @@ export default function AuthLayout({ children }) {
         </Box>
       </FlexRowCenter>
     );
-    TITLE = <LogoWithTitle title="Get started" subTitle="Fill out the form and attach your resume so we can contact you. At Symspace, you can be sure about making positive change." />;
+    TITLE = <LogoWithTitle subTitle="Fill out the form and attach your resume so we can contact you. At Symspace, you can be sure about making positive change.">
+      Get started
+    </LogoWithTitle>;
 
   }
 
@@ -99,9 +100,11 @@ export default function AuthLayout({ children }) {
 
     TITLE = (
       <LogoWithTitle
-        title="Verify your e-mail to finish signing up"
+        title=""
         subTitle={false}
-      />
+      >
+        Verify your e-mail to finish signing up
+      </LogoWithTitle>
     );
 
     BOTTOM_CONTENT = (
@@ -130,9 +133,10 @@ export default function AuthLayout({ children }) {
 
     TITLE = (
       <LogoWithTitle
-        title="check your email"
         subTitle='You’re almost there! Enter the 6-digit code we just sent to your email to continue. If you don’t see it, you may need to check your spam folder.'
-      />
+      >
+        check your email
+      </LogoWithTitle>
     );
 
     BOTTOM_CONTENT = (
@@ -162,9 +166,10 @@ export default function AuthLayout({ children }) {
 
     TITLE = (
       <LogoWithTitle
-        title="Forgot your password?"
         subTitle="No worries! Enter the email address associated with your SYMSPACE account, and we'll send you instructions on how to create a new password."
-      />
+      >
+        Forgot your password?
+      </LogoWithTitle>
     );
 
 
@@ -195,10 +200,9 @@ export default function AuthLayout({ children }) {
     );
 
     TITLE = (
-      <LogoWithTitle
-        title="Reset Password"
-        subTitle="Enter a new password"
-      />
+      <LogoWithTitle subTitle="Enter a new password">
+        Reset Password
+      </LogoWithTitle>
     );
 
     BOTTOM_CONTENT = (
@@ -213,14 +217,12 @@ export default function AuthLayout({ children }) {
 
   }
 
-  // Responsive Card Style
-
   return (
     <FlexBox sx={styles.mainContainer}>
       {/* LOGO */}
       <FlexBox sx={{ zIndex: 2, py:3 }}>
-        <Link href="/">
-          <Image 
+        <Link href={process.env.NEXT_PUBLIC_BUYER_URL}>
+          <Image
             width={250} 
             height={250} 
             src="/assets/images/logos/Logo.svg" 

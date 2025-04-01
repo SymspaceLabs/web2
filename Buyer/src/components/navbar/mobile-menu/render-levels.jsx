@@ -58,7 +58,7 @@ export const renderLevels = (data, handleClose) => {
     if (item.extLink) {
       return (
         <H1 key={index} py={1}>
-          <NavLink href={item.url} color="#FFF">
+          <NavLink href={item.url}>
             {item.title}
           </NavLink>
         </H1>

@@ -7,7 +7,6 @@ export const elementalEndFont = {
 }
 
 const buttonDark = {
-    ...elementalEndFont,
     borderRadius: 32,
     padding: ".5rem 1.5rem",
     background: 'rgba(255,255,255,0.1)',

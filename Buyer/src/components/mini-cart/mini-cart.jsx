@@ -41,7 +41,7 @@ export default function MiniCart({ toggleSidenav }) {
     <Box width="100%" minWidth={380} sx={glassBg}>
       
       {/* HEADING SECTION */}
-      <TopHeader toggle={toggleSidenav} total={cartList.length} />
+      <TopHeader toggle={toggleSidenav} total={cartList.reduce((acc, item) => acc + item.qty, 0)} />
 
       {/* DIVIDER */}
       <Divider />

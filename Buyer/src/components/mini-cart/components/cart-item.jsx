@@ -30,11 +30,27 @@ export default function MiniCartItem({
           </Paragraph>
         </Link>
 
-        <Paragraph color="#FFF" mt={0.5}>
-          {currency(item.qty * item.price)} x {item.qty}
-        </Paragraph>
+        <FlexBox gap={2}>
+          <Paragraph mt={0.5} color='#5B5B5B' sx={{textDecoration:'line-through'}}>
+            {currency(item.salePrice)}
+          </Paragraph>
+          <Paragraph color="#FFF" mt={0.5}>
+            {currency(item.qty * item.price)}
+          </Paragraph>
+        </FlexBox>
+        
         <FlexBox alignItems="center" gap={1} pt={1} >
-          <Box sx={{ width: 20, height: 20, borderRadius: '50%', background: '#000' }}/>
+          <Box 
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              background: item.selectedColor
+            }}
+          />
+          <H1 color="#FFF" mt={0.5}>
+            {item.selectedSize}
+          </H1>
           <H1 color="#FFF" mt={0.5}>
             QTY : {item.qty}
           </H1>

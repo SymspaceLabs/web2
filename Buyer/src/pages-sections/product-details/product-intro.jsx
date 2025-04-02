@@ -10,18 +10,18 @@ import { useState } from "react";
 import { currency } from "@/lib";
 import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
-import { H1, H2, H6 } from "@/components/Typography";
-import { FlexBox, FlexCol, FlexRowCenter } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
+import { H1, Paragraph } from "@/components/Typography";
+import { SymAccordion } from "@/components/custom-components"
+import { FlexBox, FlexCol, FlexRowCenter } from "@/components/flex-box";
 import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
+import styles from "./styles";
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
+import HandBagCanvas from "@/components/HandBagCanvas";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import HandBagCanvas from "../../components/HandBagCanvas";
-import { SymAccordion } from "@/components/custom-components"
-import styles from "./styles";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -42,7 +42,7 @@ export default function ProductIntro({ product }) {
   } = product || {};
 
   // State hooks for selected options and toggles
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState(colors[0].code);
   const [selectedSize, setSelectedSize] = useState(sizes[0].size);
   const [isFavorited, setIsFavorited] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -62,9 +62,20 @@ export default function ProductIntro({ product }) {
   const handleCartAmountChange = amount => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, qty: amount, name, imgUrl: images[0].url,  id, slug }
+      payload: { 
+        price, 
+        qty: amount, 
+        name, 
+        imgUrl: images[0].url,  
+        id, 
+        slug,
+        selectedColor,
+        selectedSize,
+        salePrice
+      }
     });
   };
+  
 
     // Updates the selected image based on the thumbnail clicked
     const handleImageClick = ind => () => setSelectedImage(ind);
@@ -81,19 +92,12 @@ export default function ProductIntro({ product }) {
         <Grid item md={6} xs={12} alignItems="center">
           {/* Hero Image */}
           <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
-          <IconButton 
-            onClick={() => setSelectedImage((prev) => 
-              prev > 0 ? prev - 1 : images?.length
-            )}
-            style={{
-              position: "absolute",
-              left: 0,
-              zIndex: 1,
-              backgroundColor: "white",
-            }}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
+            <IconButton 
+              onClick={() => setSelectedImage((prev) => prev > 0 ? prev - 1 : images?.length)}
+              style={{ position: "absolute", left: 0, zIndex: 1, backgroundColor: "white" }}
+            >
+              <ArrowBackIosIcon />
+            </IconButton>
 
             {selectedImage === 0 ? (                               
                <HandBagCanvas />
@@ -201,11 +205,11 @@ export default function ProductIntro({ product }) {
           <FlexCol gap={1.5} sx={styles.productCard}>
             
             {/* PRODUCT BRAND */}
-            <H6 sx={{ fontFamily: 'Helvetica', fontSize: {xs:12, sm:16}, textDecoration: 'underline', color: '#0366FE', fontWeight: 400 }}>
+            <Paragraph sx={{ fontSize: {xs:12, sm:16}, textDecoration: 'underline', color: '#0366FE' }}>
               <Link href={`/company/${company?.slug}`} passHref target="_blank">
                 {company.businessName}
               </Link>
-            </H6>
+            </Paragraph>
             
             {/* PRODUCT TITLE */}
             <H1 fontSize={{xs:20, sm:40}} color='#000' mb={1}>
@@ -215,24 +219,24 @@ export default function ProductIntro({ product }) {
             {/* PRODUCT RATING */}
             <FlexBox alignItems="center" gap={1} mb={2}>
               <Rating color="warn" value={4} readOnly />
-              <H6 sx={{ fontFamily: 'Helvetica', fontWeight: 400 }} lineHeight="1">(50)</H6>
+              <Paragraph lineHeight="1">(50)</Paragraph>
             </FlexBox>
 
             {/* PRICE & STOCK */}
             <FlexBox alignItems="center" gap={1} mb={2}>
-              <H2 color="primary.main" mb={0.5} lineHeight="1" sx={{ fontFamily: 'Helvetica', fontWeight: 700, fontSize: "32px", color: '#000000' }}>
+              <Paragraph sx={styles.price}>
                 {currency(price)}
-              </H2>
-              <H6 sx={{ fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#A0A0A0', textDecoration: 'line-through' }} lineHeight="1">
+              </Paragraph>
+              <Paragraph sx={styles.strikethrough}>
                 {currency(salePrice)}
-              </H6>
+              </Paragraph>
             </FlexBox>
 
             {/*Color*/}
             <FlexBox alignItems={{xs:'left', sm:"center"}} flexDirection={{xs:'column', sm:'row'}} gap={1} mb={2}>
-              <H6 mb={1} sx={{fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535'}}>
+              <Paragraph mb={1} fontSize='24px' color='#353535'>
                 Select Color
-              </H6>
+              </Paragraph>
               <FlexBox>
                 {colors.map((color) => (
                   <Button
@@ -246,7 +250,7 @@ export default function ProductIntro({ product }) {
                       border: selectedColor === color.code ? '3px solid black' : '1px solid grey',
                       margin: '0 5px',
                       '&:hover': {
-                        backgroundColor: color.code, // Maintain the same color on hover
+                        backgroundColor: color.code,
                       },
                     }}
                   />
@@ -257,9 +261,9 @@ export default function ProductIntro({ product }) {
             {/*Size*/}
             <FlexCol>
               <FlexBox gap={1} mb={2} sx={{ alignItems: {xs:'left', sm:'center'} }} flexDirection={{xs:'column', sm:'row'}}>
-                  <H6 mb={1} sx={{ fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535' }}>
+                  <Paragraph mb={1} sx={{ fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535' }}>
                     Size
-                  </H6>
+                  </Paragraph>
                   <FormControl sx={{ flexGrow: 1, width:'100%' }}>
                     <InputLabel id="size-select-label">Size</InputLabel>
                     <Select
@@ -277,20 +281,7 @@ export default function ProductIntro({ product }) {
                       ))}
                     </Select>
                   </FormControl>
-                <Button
-                  onClick={()=>setSidenavOpen(true)}
-                  sx={{
-                    padding: "16px 9px",
-                    border: "1px solid #000000",
-                    borderRadius: "8px",
-                    fontFamily: 'Helvetica',
-                    fontWeight: 700,
-                    fontSize: '14px',
-                    color: '#000',
-                    flexGrow: 1,
-                    width:'100%'
-                  }}
-                >
+                <Button sx={styles.personalised} onClick={()=>setSidenavOpen(true)}>
                   Personalized Sizing
                 </Button>
               </FlexBox>
@@ -360,6 +351,5 @@ export default function ProductIntro({ product }) {
         </Drawer>
       </Box>
     </>
-    
   );
 }

@@ -60,10 +60,10 @@ export class Blog {
   @IsUrl()
   article_source_url: string;
 
-  @Column()
+  @Column({ length: 1000 })
   @IsNotEmpty()
   @IsUrl()
-  author_url: string;
+  author_url: string;  
 
   @Column()
   @IsNotEmpty()

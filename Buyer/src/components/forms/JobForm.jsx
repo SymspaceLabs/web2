@@ -4,7 +4,6 @@ import SymDropdown from '@/components/custom-inputs/SymDropdown';
 import SymCheckbox from '@/components/custom-inputs/SymCheckbox';
 import { Span } from '../Typography';
 import BoxLink from '@/pages-sections/sessions/components/box-link';
-import { useMediaQuery } from '@mui/material';
 
 function JobForm ({
     email,
@@ -29,7 +28,6 @@ function JobForm ({
     setIsChecked,
     isAuthenticated
 }) {
-    const isMobile = useMediaQuery('(max-width:600px)');
     
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);
@@ -47,21 +45,21 @@ function JobForm ({
             <SymTextField title="Email" value={email} placeholder="Email" onChange={handleEmailChange} />
 
             {/* ROW 2 */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="First Name" value={firstName} placeholder="First Name" onChange={handleFirstNameChange} />
                 <SymTextField title="Last Name" value={lastName} placeholder="Last Name" onChange={handleLastNameChange} />
             </FlexBox>
 
             {/* ROW 3 */}
             {!isAuthenticated &&
-                <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+                <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                     <SymTextField title="Password" value={password} placeholder="******" onChange={handlePasswordChange} />
                     <SymTextField title="Repeat password" value={repeatPassword} placeholder="******" onChange={handleRepeatPasswordChange} />
                 </FlexBox>
             }
             
             {/* ROW 4 */}
-            <FlexBox justifyContent="center" flexDirection={isMobile? "column" : "row"} gap={3} width="100%">
+            <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="LinkedIn" value={linkedInUrl} placeholder="Linkedin URL" onChange={handleLinkedInChange} />
                 <SymDropdown title="Role" value={role} onChange={handleRoleChange} options={["Option 1","Option 2"]} isEdit={true} />
             </FlexBox>

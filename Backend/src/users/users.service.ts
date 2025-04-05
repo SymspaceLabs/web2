@@ -31,7 +31,7 @@ export class UsersService {
       where: {
         id: id,
       },
-      relations: ['measurement', 'company', 'banks', 'creditCards', 'billingAddresses'],
+      relations: ['measurement', 'company', 'banks', 'creditCards', 'billingAddresses', 'survey', 'files'],
     });
     if (user) {
       return user;

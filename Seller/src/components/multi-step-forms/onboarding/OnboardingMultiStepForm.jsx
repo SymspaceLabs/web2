@@ -2,8 +2,11 @@
 // Onboarding Multi Step Form
 // ===================================================================
 
+import CongratsCard from './CongratsCard';
 import Form1 from './Form1';
 import Form2 from './Form2';
+import Form3 from './Form3';
+import Form4 from './Form4';
 import WelcomeCard from './WelcomeCard';
 import { FlexBox } from '@/components/flex-box';
 
@@ -12,7 +15,9 @@ const OnboardingMultiStepForm = ({
     user,
     setFormData,
     setIsChecked,
-    isChecked
+    isChecked,
+    uploadedFile,
+    setUploadedFile
 }) => {
 
     return (
@@ -37,8 +42,29 @@ const OnboardingMultiStepForm = ({
                     step={step}
                 />
             }
-            {/* {step === 3 && <Form3 /> }
-            {step === 4 && <Form4 /> } */}
+            {step === 3 && 
+                <Form3
+                    setFormData={setFormData}
+                    user={user}
+                    step={step}
+                />
+            }
+           
+            {step === 4 && 
+                <Form4
+                    setFormData={setFormData}
+                    user={user}
+                    step={step}
+                    uploadedFile={uploadedFile}
+                    setUploadedFile={setUploadedFile}
+                /> 
+            }
+
+            {/* Show Congrats, step==0 */}
+            {step === 5 && 
+                <CongratsCard />
+            } 
+
         </FlexBox>
     );
 }

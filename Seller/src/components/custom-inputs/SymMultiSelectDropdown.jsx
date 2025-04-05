@@ -1,6 +1,6 @@
 import React from 'react';
 import { FlexBox } from '../flex-box';
-import { Small } from '../Typography';
+import { H1 } from '../Typography';
 import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
@@ -9,9 +9,7 @@ const SymMultiSelectDropdown = ({
     selectedValue,
     handleChange,
     options,
-    isBrand = false,
-    isColor = false,
-    isEdit,
+    isEdit=true,
 }) => {
     const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
 
@@ -19,9 +17,7 @@ const SymMultiSelectDropdown = ({
         <FlexBox
             flexDirection="column"
             sx={{
-                // flex: "1 1 calc(25% - 16px)",
-                // maxWidth: "calc(25% - 16px)",
-                flex:1,
+                flex: 1,
                 minWidth: "100px",
                 padding: 0,
                 margin: 0,
@@ -31,9 +27,9 @@ const SymMultiSelectDropdown = ({
                 }),
             }}
         >
-            <Small color="white" mb={0.5}>
+            <H1 color="white" mb={0.5}>
                 {title}
-            </Small>
+            </H1>
             <Select
                 multiple
                 value={Array.isArray(selectedValue) ? selectedValue : []} // Ensure value is an array
@@ -71,40 +67,17 @@ const SymMultiSelectDropdown = ({
                 disabled={!isEdit} // Disable the Select if isEdit is false
                 renderValue={(selected) => {
                     if (!selected || selected.length === 0) {
-                        return "Select options";
+                        return <em>Select options</em>; // Ensures a valid UI fallback
                     }
-                    return selected
-                        .map((id) => {
-                            const item = options.find((option) => option.id === id);
-                            return item ? item.label : id;
-                        })
-                        .join(", ");
+                    return selected.join(", "); // Displays selected options correctly
                 }}
             >
-                {options.map((item) => {
-                    const valueKey = isBrand || isColor ? item.id : item;
-                    return (
-                        <MenuItem key={valueKey} value={valueKey}>
-                            <Checkbox checked={(selectedValue ?? []).includes(valueKey)} />
-                            {isColor ? (
-                                <Box display="flex" alignItems="center">
-                                    <Box
-                                        sx={{
-                                            width: 16,
-                                            height: 8,
-                                            borderRadius: "50%",
-                                            backgroundColor: item.value,
-                                            marginRight: "8px",
-                                        }}
-                                    />
-                                    <ListItemText primary={item.label} />
-                                </Box>
-                            ) : (
-                                <ListItemText primary={isBrand ? item.label : item} />
-                            )}
-                        </MenuItem>
-                    );
-                })}
+                {options.map((item) => (
+                    <MenuItem key={item} value={item}>
+                        <Checkbox checked={(selectedValue ?? []).includes(item)} />
+                        <ListItemText primary={item} />
+                    </MenuItem>
+                ))}
             </Select>
         </FlexBox>
     );

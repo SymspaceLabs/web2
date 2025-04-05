@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { FlexBox, FlexCol } from '@/components/flex-box';
 import { SymProgressbar } from "@/components/custom-components";
 import { OnboardingMultiStepForm } from '@/components/multi-step-forms';
-import { IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, DialogActions } from '@mui/material';
+import { CircularProgress, IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, DialogActions } from '@mui/material';
 
 // ===================================================================
 
@@ -20,6 +20,9 @@ const OnboardingDialog = () => {
     const [open, setOpen] = useState(true);
     const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
     const [isChecked, setIsChecked] = useState(false); // 0 for WelcomeDialog, 1+ for Onboarding
+    const [uploadedFile, setUploadedFile] = useState([]); // Used For Form4 (File Uploader)
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -36,39 +39,93 @@ const OnboardingDialog = () => {
 
 
     const handleClose = () => setOpen(false);
-    const handleContinue = () => {
-        if (step == 1) {
-            if(isChecked) {
-                setStep((prev) => prev + 1)
-            }
-        } else {
+    const handleContinue = async () => {
+        if (loading) return; // Prevent multiple clicks
+
+        if (step === 1 && !isChecked) return;
+
+        setLoading(true); // Start loading
+
+        try {
+            await handleSubmit(); // Wait for API response
             setStep((prev) => prev + 1);
+            setFormData({});
+        } catch (error) {
+            console.error("Error in submission:", error);
+        } finally {
+            setLoading(false); // Stop loading
         }
 
-        handleSubmit();
-        setFormData({});
-
     };
+
     const handleBack = () => {
         setFormData({});
         setStep((prev) => prev - 1);
     };
 
-
     const handleSubmit = async () => {
+        console.log(formData);
+    
+        let updatedFormData = { ...formData };
+        const newUploadedFiles = [];
+    
         try {
+            //FILE UPLOADING SERVICE
+            const validFiles = uploadedFile.filter((file) => file); // remove null/undefined/empty
+
+            if (validFiles.length > 0) {
+                const uploadPromises = validFiles.map(async (file) => {
+                    const fileData = new FormData();
+                    fileData.append("file", file);
+
+                    const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/image`, {
+                        method: "POST",
+                        body: fileData,
+                    });
+
+                    if (!uploadResponse.ok) {
+                        throw new Error("Failed to upload a file.");
+                    }
+
+                    const { url } = await uploadResponse.json();
+                    return { url };
+                });
+
+                const uploadedFiles = await Promise.all(uploadPromises);
+                newUploadedFiles.push(...uploadedFiles);
+                const existingFiles = formData.files || [];
+                const allFiles = [...existingFiles, ...newUploadedFiles].filter(f => f && f.url);
+    
+                updatedFormData = {
+                    ...formData,
+                    file: allFiles,
+                };
+        
+                delete updatedFormData.files;
+            }
+
+            if(step !== 4){
+                delete updatedFormData.file;
+            }
+
+
+            // DATA SAVING SERVICE
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/seller-onboarding/${user.id}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatedFormData),
             });
-
+    
             if (!response.ok) throw new Error("Failed to save data");
+    
             console.log("Data saved successfully:", await response.json());
         } catch (error) {
-            console.error("Error saving data:", error.message);
+            console.error("Error:", error.message);
         }
     };
+    
+    
+    
 
     // Milestone labels
     const milestoneLabels = ["business", "billing", "survey", "review & Submit", ""];
@@ -95,7 +152,7 @@ const OnboardingDialog = () => {
         >
             <DialogTitle sx={{ position: "relative" }}>
                 {/* Progress Bar */}
-                {step > 0 && (
+                {(step > 0 && step < 5 ) && (
                     <SymProgressbar milestoneLabels={milestoneLabels} step={step} />
                 )}
 
@@ -126,6 +183,8 @@ const OnboardingDialog = () => {
                         setFormData={setFormData}
                         isChecked={isChecked}
                         setIsChecked={setIsChecked}
+                        uploadedFile={uploadedFile}
+                        setUploadedFile={setUploadedFile}
                     />
                 </FlexCol>
             </DialogContent>
@@ -133,14 +192,15 @@ const OnboardingDialog = () => {
             <DialogActions>
                 <FlexBox justifyContent={step > 1 ? "space-between" : "flex-end"  }>
                     {
-                        step > 0 && <Button sx={styles.btn} onClick={handleBack}>
+                        (step > 0 && step < 5) &&  <Button sx={styles.btn} onClick={handleBack}>
                             Back
                         </Button>
                     }
-                    
-                    <Button sx={styles.btn} onClick={handleContinue}>
-                        Continue
-                    </Button>
+                    {
+                        step < 5 && <Button sx={styles.btn} onClick={handleContinue}>
+                            {loading ?  <CircularProgress size={24}  color="inherit" /> : "Continue"}
+                        </Button>
+                    }
                 </FlexBox>
             </DialogActions>
         </Dialog>

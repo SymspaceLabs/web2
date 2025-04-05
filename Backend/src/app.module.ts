@@ -36,6 +36,8 @@ import { SellerOnboardingModule } from './seller-onboarding/seller-onboarding.mo
 import { BanksModule } from './banks/banks.module';
 import { CreditCardsModule } from './credit-cards/credit-cards.module';
 import { BillingAddressesModule } from './billing-addresses/billing-addresses.module';
+import { SurveysModule } from './surveys/surveys.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -88,6 +90,8 @@ import { BillingAddressesModule } from './billing-addresses/billing-addresses.mo
     BanksModule,
     CreditCardsModule,
     BillingAddressesModule,
+    SurveysModule,
+    FilesModule,
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

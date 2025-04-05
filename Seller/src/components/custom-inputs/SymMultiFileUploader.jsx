@@ -1,9 +1,15 @@
-import React, { useRef, useState } from "react";
+//============================================================
+// Custom Multi File Uploader
+//============================================================
+
 import { FlexBox } from "../flex-box";
+import { Span, H1 } from "../Typography";
 import { Typography } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import React, { useRef, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Span, Small } from "../Typography";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+
+//============================================================
 
 const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
     const fileInputRef = useRef(null);
@@ -43,9 +49,9 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
 
     return (
         <FlexBox flexDirection="column" gap={1}>
-            <Small color="white" mb={0.5}>
+            <H1 color="white" mb={0.5}>
                 {title}
-            </Small>
+            </H1>
             <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -78,11 +84,13 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 </Typography>
             </FlexBox>
 
-            {uploadedFile.length > 0 && (
+            {uploadedFile?.length > 0 && (
                 <FlexBox flexDirection="column" gap={2}>
-                    {uploadedFile.map((file, index) => (
+                    {uploadedFile?.map((file, index) => (
                         <FlexBox key={index} justifyContent="space-between" alignItems="center" sx={fileCardStyle}>
-                            <Span sx={{ fontSize: '14px', fontFamily: 'Helvetica' }}>{file.name}</Span>
+                            <H1 fontSize='14px'>
+                                {file?.name || file?.url}
+                            </H1>
                             <DeleteIcon 
                                 onClick={() => handleRemoveFile(index)}
                                 sx={{ color: '#fff', cursor: 'pointer', fontSize: 22 }}

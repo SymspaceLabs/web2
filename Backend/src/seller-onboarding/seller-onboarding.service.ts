@@ -8,6 +8,8 @@ import { Company } from 'src/companies/entities/company.entity';
 import { Bank } from 'src/banks/entities/bank.entity';
 import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
 import { BillingAddress } from 'src/billing-addresses/entities/billing-address.entity';
+import { Survey } from 'src/surveys/entities/survey.entity';
+import { File } from 'src/files/entities/file.entity';
 
 @Injectable()
 export class SellerOnboardingService {
@@ -18,6 +20,9 @@ export class SellerOnboardingService {
     @InjectRepository(Bank) private readonly bankRepository: Repository<Bank>,
     @InjectRepository(CreditCard) private readonly creditCardRepository: Repository<CreditCard>,
     @InjectRepository(BillingAddress) private readonly billingAddressRepository: Repository<BillingAddress>,
+    @InjectRepository(Survey) private readonly surveyRepository: Repository<Survey>,
+    @InjectRepository(File) private readonly fileRepository: Repository<File>,
+
   ) {}
 
   async create(createOnboardingDto: CreateSellerOnboardingDto, userId: string): Promise<{ status: string; message: string, data : any}> {
@@ -27,6 +32,8 @@ export class SellerOnboardingService {
       bankInfo,
       creditCard,
       billingAddress,
+      survey,
+      file
     } = createOnboardingDto;
 
       // 1. User Data
@@ -97,7 +104,6 @@ export class SellerOnboardingService {
         }
       }
       
-
       // 5. Billing Address
       // Update or Create Billing Address
       if (billingAddress) {
@@ -113,6 +119,53 @@ export class SellerOnboardingService {
         }
       }
 
+      // 6. Billing Address
+      // Update or Create Survey
+      // Check if a survey already exists for this user
+      if (survey) {
+        let existingSurvey = await this.surveyRepository.findOne({ where: { user: { id: existingUser.id } } });
+    
+        // No need to stringify the challenges array now
+        const surveyData = {
+            ...survey,
+            challenges: survey.challenges || [],
+            painPoints: survey.painPoints || [],
+            arOutcome: survey.arOutcome || [],
+            envision: survey.envision || [],
+            seekFunction: survey.seekFunction || [],
+            criteria: survey.criteria || [],
+        };
+    
+        if (existingSurvey) {
+            Object.assign(existingSurvey, surveyData);
+            await this.surveyRepository.save(existingSurvey);
+        } else {
+            const newSurvey = this.surveyRepository.create({
+                user: { id: existingUser.id },
+                ...surveyData,
+            });
+            await this.surveyRepository.save(newSurvey);
+        }
+      }
+
+      // 7. Files
+      // Handle file data
+      if (file && Array.isArray(file)) {
+          // Delete all existing files
+          await this.fileRepository.delete({ user: existingUser });
+
+          // Insert new files
+          for (const fileObj of file) {
+              if (fileObj.url) {
+                  const newFile = this.fileRepository.create({
+                      user: existingUser,
+                      url: fileObj.url,
+                  });
+                  await this.fileRepository.save(newFile);
+              }
+          }
+      }
+
       return {
         status: 'success',
         message: 'Form data saved successfully',
@@ -122,9 +175,10 @@ export class SellerOnboardingService {
           bankInfo,
           creditCard,
           billingAddress,
+          survey,
+          file
         },
       };
-
   };
 
   findAll() {

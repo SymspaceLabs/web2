@@ -5,6 +5,8 @@ import { Preference } from 'src/preferences/entities/preference.entity';
 import { Bank } from 'src/banks/entities/bank.entity';
 import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
 import { BillingAddress } from 'src/billing-addresses/entities/billing-address.entity';
+import { Survey } from 'src/surveys/entities/survey.entity';
+import { File } from 'src/files/entities/file.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -88,7 +90,12 @@ export class User {
   @OneToMany(() => BillingAddress, (billingAddress) => billingAddress.user)
   billingAddresses: BillingAddress[];
 
-  
+  @OneToOne(() => Survey, (survey) => survey.user)
+  survey: Survey;
+
+  @OneToMany(() => File, (file) => file.user)
+  files: File[];
+
 }
 
 export default User;

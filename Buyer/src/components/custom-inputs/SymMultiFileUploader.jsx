@@ -44,9 +44,9 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
 
     return (
         <FlexBox flexDirection="column" gap={1}>
-            <Small color="white" mb={0.5}>
-                {title}
-            </Small>
+            <H1 color="white" mb={0.5}>
+                {title}  
+            </H1>
             <input 
                 type="file" 
                 ref={fileInputRef} 
@@ -83,7 +83,9 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 <FlexBox flexDirection="column" gap={2}>
                     {uploadedFile.map((file, index) => (
                         <FlexBox key={index} justifyContent="space-between" alignItems="center" sx={fileCardStyle}>
-                            <Span sx={{ fontSize: '14px', fontFamily: 'Helvetica' }}>{file.name}</Span>
+                            <H1 color="#FFF" fontSize='14px'>
+                                {file.name}  
+                            </H1>
                             <DeleteIcon 
                                 onClick={() => handleRemoveFile(index)}
                                 sx={{ color: '#fff', cursor: 'pointer', fontSize: 22 }}
@@ -99,7 +101,6 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
 export default SymMultiFileUploader;
 
 const fileCardStyle = {
-    ...styles.elementalEndFont,
     width: '100%',
     p: 1, 
     borderRadius: '8px',

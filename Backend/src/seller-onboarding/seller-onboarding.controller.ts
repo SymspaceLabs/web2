@@ -12,23 +12,5 @@ export class SellerOnboardingController {
     return this.sellerOnboardingService.create(createSellerOnboardingDto, id);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.sellerOnboardingService.findAll();
-  // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.sellerOnboardingService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateSellerOnboardingDto: UpdateSellerOnboardingDto) {
-  //   return this.sellerOnboardingService.update(+id, updateSellerOnboardingDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.sellerOnboardingService.remove(+id);
-  // }
 }

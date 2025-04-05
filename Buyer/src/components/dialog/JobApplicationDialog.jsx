@@ -96,7 +96,6 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
     };    
 
     const buttonStyles = useMemo(() => ({
-    ...styles.elementalEndFont,
     background: isValid
         ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
         : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",

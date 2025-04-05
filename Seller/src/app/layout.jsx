@@ -28,11 +28,11 @@ const ProtectedLayout = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.replace("/sign-in"); // Redirect to authentication page
-    }
-  }, [isAuthenticated, loading, pathname, router]);
+  // useEffect(() => {
+  //   if (!loading && !isAuthenticated) {
+  //     router.replace("/sign-in");
+  //   }
+  // }, [isAuthenticated, loading, pathname, router]);
 
   return children;
 };

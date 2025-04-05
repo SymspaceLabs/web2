@@ -7,11 +7,12 @@ export default function BoxLink({
   href,
   title,
   textColor='#fff',
-  fw=600
+  // fw=600,
+  children
 }) {
   return (
-    <Box sx={{color:textColor}} href={href} component={Link} fontWeight={fw} borderColor="#fff" borderBottom="1px solid">
-      {title}
+    <Box sx={{color:textColor}} href={href} component={Link} borderColor="#fff" borderBottom="1px solid">
+      {children}
     </Box>
   );
 }

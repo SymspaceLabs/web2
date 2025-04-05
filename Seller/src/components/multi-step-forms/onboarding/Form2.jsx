@@ -49,8 +49,8 @@ function Form2 ({
 
         // CREDIT CARD
         setCardNo(user?.creditCards[0]?.cardNo || "");
-        setExpiryMonth(user?.creditCards[0]?.expiryMonth || "");
-        setExpiryYear(user?.creditCards[0]?.expiryYear || "");
+        setExpiryMonth(user?.creditCards[0]?.expiryMonth || null);
+        setExpiryYear(user?.creditCards[0]?.expiryYear || null);
         setCvv(user?.creditCards[0]?.cvv || "");
         setCardHolderName(user?.creditCards[0]?.cardHolderName || "");
 

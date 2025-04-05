@@ -6,10 +6,12 @@ import { Box, DialogTitle, Typography } from '@mui/material';
 import { FlexColCenter } from '@/components/flex-box';
 import { LazyImage } from '@/components/lazy-image';
 import { useAuth } from '@/contexts/AuthContext';
+import { H1, Paragraph } from '@/components/Typography';
+import BoxLink from '@/components/BoxLink';
 
 // ==================================================
 
-const WelcomeCard = ({ open }) => {
+const CongratsCard = ({ open }) => {
 
     const { user } = useAuth();
     
@@ -17,28 +19,29 @@ const WelcomeCard = ({ open }) => {
         <DialogTitle sx={{ pt: { xs: 3, sm: 5 }, pb: { xs: 3, sm: 5 } }}>
             <FlexColCenter>
                 <Box width={250}>
-                    <LazyImage src="/assets/images/onboarding/welcome.png" width={500} height={500} />
+                    <LazyImage src="/assets/images/onboarding/congrats.png" width={500} height={500} />
                 </Box>
             </FlexColCenter>
             <FlexColCenter gap={2}>
-                <Typography sx={styles.titleHeader}>congrats, {user.firstName}!</Typography>
-                <Typography sx={{ ...styles.titleHeader, fontSize: 32 }}>you're officially a seller</Typography>
-                <Typography sx={styles.subtitle}>
-                    We’re excited to have you join our community and AR marketplace.<br />
-                    Continue to complete setting up your business prior to listing products
-                </Typography>
+                <H1 sx={styles.titleHeader}>
+                    congrats, {user.firstName}!
+                </H1>
+                <H1 sx={{ ...styles.titleHeader, fontSize: 32 }}>
+                    you’ve completed registering <br/> your business
+                </H1>
+                <Paragraph sx={styles.subtitle}>
+                    Set up your Business Store on Symspace’s platform <BoxLink href="/sign-in">here</BoxLink> .
+                </Paragraph>
             </FlexColCenter>
         </DialogTitle>
     );
 };
 
-export default WelcomeCard;
+export default CongratsCard;
 
 const styles = {
     titleHeader : {
         lineHeight: 1.25,
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
         color: '#fff',
         fontSize: {xs:16, sm:40},
         textAlign: 'center',
@@ -49,6 +52,5 @@ const styles = {
         color: '#FFF',
         fontSize: {xs:16, sm:20},
         textAlign: 'center',
-        fontWeight:400,
     }
 }

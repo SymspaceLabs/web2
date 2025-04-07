@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   Unique,
 } from 'typeorm';
-import { IsNotEmpty, IsString, IsNumber, IsUrl, Length } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsUrl, Length, IsOptional } from 'class-validator';
 
 @Entity()
 @Unique(['slug'])
@@ -60,10 +60,10 @@ export class Blog {
   @IsUrl()
   article_source_url: string;
 
-  @Column({ length: 1000 })
-  @IsNotEmpty()
+  @Column({ nullable: true, length: 1000 })
+  @IsOptional()
   @IsUrl()
-  author_url: string;  
+  author_url?: string;  
 
   @Column()
   @IsNotEmpty()

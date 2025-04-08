@@ -59,7 +59,7 @@ export default function AuthLayout({ children }) {
     BOTTOM_CONTENT = (
       <FlexRowCenter sx={{ fontFamily: 'Helvetica', color: '#fff', flexDirection: 'column' }} gap={1} mt={3}>
         <Box sx={{ pt: 2, pb: 5 }}>
-          Already have an account? <BoxLink title="Sign in" href="/sign-in" />
+          Already have an account? <BoxLink href="/sign-in">Sign in</BoxLink>
         </Box>
       </FlexRowCenter>
     );
@@ -75,7 +75,7 @@ export default function AuthLayout({ children }) {
     BOTTOM_CONTENT = (
       <FlexRowCenter sx={{ fontFamily: 'Helvetica', color: '#fff', flexDirection: 'column' }} gap={1} mt={3}>
         <Box sx={{ pt: 2, pb: 5 }}>
-          Already have an account? <BoxLink title="Sign in" href="/sign-in" />
+          Already have an account? <BoxLink href="/sign-in">Sign in</BoxLink>
         </Box>
       </FlexRowCenter>
     );

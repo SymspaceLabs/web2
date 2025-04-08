@@ -1,15 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
-import localFont from "next/font/local";
-import { useRouter, usePathname } from "next/navigation";
-
 import "../i18n";
+import { useEffect } from "react";
 import RTL from "../components/rtl";
-import ThemeProvider from "../theme/theme-provider";
-import CartProvider from "../contexts/CartContext";
-import SettingsProvider from "../contexts/SettingContext";
+import localFont from "next/font/local";
 import ProgressBar from "../components/progress";
+import CartProvider from "../contexts/CartContext";
+import ThemeProvider from "../theme/theme-provider";
+import { useRouter, usePathname } from "next/navigation";
+import SettingsProvider from "../contexts/SettingContext";
 import SnackbarProvider from "../contexts/SnackbarContext";
 import { AuthProvider, useAuth } from "../contexts/AuthContext";
 
@@ -28,14 +27,27 @@ const ProtectedLayout = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  // List of routes that don't require authentication
+  const publicRoutes = [
+    "/forgot-password",
+    "/otp",
+    "/otp-forgot-password",
+    "/register",
+    "/reset-password",
+    "/sign-in",
+    "/verification-success",
+    "/verify-email",
+  ];
+
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!loading && !isAuthenticated && !publicRoutes.includes(pathname)) {
       router.replace("/sign-in");
     }
   }, [isAuthenticated, loading, pathname, router]);
 
   return children;
 };
+
 
 export default function RootLayout({ children }) {
   return (

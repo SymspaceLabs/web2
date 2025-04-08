@@ -22,6 +22,12 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { FlexBetween, FlexBox } from "@/components/flex-box"; 
 import { SymImage } from "@/components/custom-components";
 
+import { LogoWithTitle } from "@/components";
+import { SocialButtons } from "../header/components/SocialButtons";
+import { LoginBottom } from "@/pages-sections/sessions/components";
+import { LoginPageView } from "@/pages-sections/sessions/page-view";
+
+
 
 export default function MobileHeader() {
 
@@ -84,7 +90,20 @@ export default function MobileHeader() {
 
 
       {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-      <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog} />
+      <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
+        <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+          <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
+            <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
+              <Wrapper>
+                <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
+                <LoginPageView closeDialog={toggleDialog} />
+                <SocialButtons />
+                <LoginBottom />
+              </Wrapper>
+            </Box>
+          </Box>
+        </Box>
+      </SymDialog>
 
     </Fragment>
   );

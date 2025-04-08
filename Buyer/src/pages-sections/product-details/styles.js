@@ -63,7 +63,6 @@ export const styles = {
     padding: "16px 9px",
     border: "1px solid #000000",
     borderRadius: "8px",
-    fontWeight: 700,
     fontSize: '14px',
     color: '#000',
     flexGrow: 1,

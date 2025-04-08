@@ -22,6 +22,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { SymDialog } from "@/components/custom-dialog";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -43,9 +44,11 @@ export default function ProductIntro({ product }) {
 
   // State hooks for selected options and toggles
   const [selectedColor, setSelectedColor] = useState(colors[0].code);
-  const [selectedSize, setSelectedSize] = useState(sizes[0].size);
+  const [selectedSize, setSelectedSize] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [sizeError, setSizeError] = useState(false);
+
 
   const { state, dispatch } = useCart();
 
@@ -60,6 +63,13 @@ export default function ProductIntro({ product }) {
 
   // Changes the cart amount based on user action
   const handleCartAmountChange = amount => () => {
+    if (!selectedSize) {
+      setSizeError(true);
+      return;
+    }
+  
+    setSizeError(false);
+
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: { 
@@ -76,14 +86,12 @@ export default function ProductIntro({ product }) {
     });
   };
   
-
-    // Updates the selected image based on the thumbnail clicked
-    const handleImageClick = ind => () => setSelectedImage(ind);
-
+  // Updates the selected image based on the thumbnail clicked
+  const handleImageClick = ind => () => setSelectedImage(ind);
 
   const [sidenavOpen, setSidenavOpen] = useState();
   const toggleSidenav = () => setSidenavOpen(state => !state);
-
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>
@@ -145,12 +153,7 @@ export default function ProductIntro({ product }) {
           </FlexBox>
 
           {/* Thumbnails */}
-          <FlexBox
-            overflow="auto"
-            display="flex"
-            justifyContent="center"
-            gap={1} // Space between thumbnails
-          >
+          <FlexRowCenter overflow="auto" gap={1}>
             <>
               {/* 3D Model Thumbnail */}
               <FlexRowCenter
@@ -187,16 +190,16 @@ export default function ProductIntro({ product }) {
                     onClick={() => setSelectedImage(ind + 1)}
                     borderColor={selectedImage === ind + 1 ? "primary.main" : "grey.400"}
                   >
-                    <Avatar
+                    <LazyImage
                       alt="product"
+                      width={500}
+                      height={500}
                       src={image.url}
-                      variant="square"
-                      sx={{ height: 40 }}
                     />
                   </FlexRowCenter>
                 ))}
             </>
-          </FlexBox>
+          </FlexRowCenter>
         </Grid>
 
         {/* PRODUCT INFO AREA */}
@@ -261,26 +264,35 @@ export default function ProductIntro({ product }) {
             {/*Size*/}
             <FlexCol>
               <FlexBox gap={1} mb={2} sx={{ alignItems: {xs:'left', sm:'center'} }} flexDirection={{xs:'column', sm:'row'}}>
-                  <Paragraph mb={1} sx={{ fontFamily: 'Helvetica', fontWeight: 400, fontSize: '24px', color: '#353535' }}>
-                    Size
-                  </Paragraph>
-                  <FormControl sx={{ flexGrow: 1, width:'100%' }}>
-                    <InputLabel id="size-select-label">Size</InputLabel>
-                    <Select
-                      labelId="size-select-label"
-                      id="size-select"
-                      value={selectedSize}
-                      label="Size"
-                      onChange={handleSizeSelect}
-                      fullWidth
-                    >
-                      {sizes.map((size) => (
-                        <MenuItem key={size.id} value={size.size}>
-                          {size.size}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                <FormControl sx={{ flexGrow: 1, width: '100%' }} error={sizeError}>
+                  <Select
+                    value={selectedSize}
+                    onChange={(e) => {
+                      setSelectedSize(e.target.value);
+                      setSizeError(false); // Clear error on select
+                    }}
+                    fullWidth
+                    displayEmpty
+                    sx={{
+                      borderRadius: "5px",
+                      width: "100%",
+                      height: '100%',
+                      paddingTop: '0px',
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: sizeError ? "red" : undefined,
+                      },
+                    }}
+                  >
+                    <MenuItem value="" disabled>
+                      <em>Select a size</em>
+                    </MenuItem>
+                    {sizes.map((size) => (
+                      <MenuItem key={size.id} value={size.size}>
+                        {size.size}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <Button sx={styles.personalised} onClick={()=>setSidenavOpen(true)}>
                   Personalized Sizing
                 </Button>
@@ -288,14 +300,14 @@ export default function ProductIntro({ product }) {
 
               {/* SIZE CHART */}
               <FlexBox justifyContent="flex-end" >
-                <Button sx={styles.sizeChart} onClick={()=>setSidenavOpen(true)}>
+                <Button sx={styles.sizeChart} onClick={()=>setOpenModal(true)}>
                   Size chart
                 </Button>
               </FlexBox>
             </FlexCol>
             
             {/* ADD TO CART BUTTON */}
-            <FlexBox alignItems="center" gap={1} flexDirection={{xs:'column', sm:'row'}} mb={2} mt={2} maxWidth={{sm:'450px'}}>
+            <FlexBox alignItems="center" gap={5} flexDirection={{xs:'column', sm:'row'}} mb={2} mt={2} >
               <Button sx={styles.addToCartButton} onClick={handleCartAmountChange(1)}>
                 Add to Cart
               </Button>
@@ -350,6 +362,14 @@ export default function ProductIntro({ product }) {
           />
         </Drawer>
       </Box>
+
+      {/* Size Chart Dialog */}
+      <SymDialog
+        dialogOpen={openModal} 
+        toggleDialog={() => setOpenModal(state => !state)}
+      >
+        
+      </SymDialog>
     </>
   );
 }

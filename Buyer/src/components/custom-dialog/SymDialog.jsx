@@ -17,7 +17,8 @@ import { LoginPageView } from "@/pages-sections/sessions/page-view";
 
 export default function SymDialog({ 
   dialogOpen, 
-  toggleDialog
+  toggleDialog,
+  children
 }) {  
   return (
     <Fragment>
@@ -40,7 +41,8 @@ export default function SymDialog({
         onClose={toggleDialog} 
         sx={{ zIndex: 9999 }}
       >
-        <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+        {/* {children} */}
+        {/* <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
           <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
             <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
               <Wrapper>
@@ -51,7 +53,7 @@ export default function SymDialog({
               </Wrapper>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
       </Dialog>
     </Fragment>
   );

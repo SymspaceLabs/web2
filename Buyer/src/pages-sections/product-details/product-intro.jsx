@@ -40,6 +40,7 @@ export default function ProductIntro({ product }) {
     thumbnail,
     company,
     sizeFit,
+    sizeChart
   } = product || {};
 
   // State hooks for selected options and toggles
@@ -378,6 +379,11 @@ export default function ProductIntro({ product }) {
         dialogOpen={openModal} 
         toggleDialog={() => setOpenModal(state => !state)}
       >
+        <LazyImage
+          src={sizeChart}
+          width={500}
+          height={500}
+        />
         
       </SymDialog>
     </>

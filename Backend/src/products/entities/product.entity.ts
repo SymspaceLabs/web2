@@ -84,6 +84,9 @@ export class Product {
   })
   sizes: ProductSize[];
 
+  @Column()
+  sizeChart: string;
+
 
   // @Column({ nullable: true })
   // threeDModel?: string;

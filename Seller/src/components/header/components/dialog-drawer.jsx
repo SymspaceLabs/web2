@@ -1,12 +1,9 @@
 "use client";
 
-/**
- * 
- * A component that renders a modal dialog for .
- *   - user login 
- *   - side drawer (mini cart)
- * 
- */
+// ==============================================================
+// A component that renders a modal dialog for .
+//   - user login 
+//   - side drawer (mini cart)
 // ==============================================================
 import { useState, Fragment } from "react";
 import { LogoWithTitle } from "../../../components";
@@ -17,7 +14,7 @@ import { LoginPageView } from "../../../pages-sections/sessions/page-view";
 import { Box, Snackbar, Alert, Dialog, Drawer, Card } from '@mui/material';
 // ==============================================================
 
-export default function SymDialog(props) {  
+export default function DialogDrawer(props) {  
   const { dialogOpen, sidenavOpen, toggleDialog, toggleSidenav } = props;
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -84,7 +81,7 @@ const googleStyle = {
   color: "white"
 };
 
-const Wrapper = styled(Card)(({ theme }) => ({
+export const Wrapper = styled(Card)(({ theme }) => ({
   padding: "2rem 3rem",
   background: 'transparent',
 

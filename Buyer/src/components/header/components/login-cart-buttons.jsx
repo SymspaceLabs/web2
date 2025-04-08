@@ -22,6 +22,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleFavouriteOpen }) {
   const { state } = useCart();
+  const cartList = state.cart;
+
   const ICON_COLOR = { color: "grey.600" };
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -52,7 +54,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
       </IconButton>
 
       {/* Shopping Cart Icon Button */}
-      <Badge badgeContent={state.cart.length} color="primary">
+      <Badge badgeContent={cartList.reduce((acc, item) => acc + item.qty, 0)} color="primary">
         <IconButton onClick={toggleCartOpen}>
           <PiShoppingCartSimpleBold color="#7D879C"  />
         </IconButton>

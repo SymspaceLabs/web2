@@ -1,15 +1,20 @@
-import Link from "next/link";
-import { Box, Button, Avatar, IconButton, Typography } from "@mui/material";
+// ==============================================================
+// Cart Item
+// ==============================================================
 
+import Link from "next/link";
 import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
+import LazyImage from "@/components/LazyImage";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
-import { FlexBox, FlexCol } from "@/components/flex-box";
 import { currency } from "@/lib"; // CUSTOM DATA MODEL
 import { H1, Paragraph } from "@/components/Typography";
+import { Box, Button, Typography } from "@mui/material";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 
 // ==============================================================
+
 export default function MiniCartItem({
   item,
   handleCartAmountChange
@@ -19,7 +24,7 @@ export default function MiniCartItem({
       
       {/* Product Image */}
       <Link href={`/products/${item.slug}`}>
-        <Avatar alt={item.name} src={item.imgUrl} sx={{mx: 1,width: 75,height: 75, m:0}} />
+        <LazyImage alt={item.name} src={item.imgUrl} width={50} height={50} sx={{mx: 1,width: 75,height: 75, m:0}} />
       </Link>
 
       {/* Product Info */}
@@ -35,7 +40,7 @@ export default function MiniCartItem({
             {currency(item.salePrice)}
           </Paragraph>
           <Paragraph color="#FFF" mt={0.5}>
-            {currency(item.qty * item.price)}
+            {currency(item.price)}
           </Paragraph>
         </FlexBox>
         

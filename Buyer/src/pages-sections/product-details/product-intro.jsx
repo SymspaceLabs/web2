@@ -70,19 +70,29 @@ export default function ProductIntro({ product }) {
   
     setSizeError(false);
 
+    // Check if the item already exists in the cart (matching by id + color + size)
+    const existingItem = state.cart.find(
+      (item) =>
+        item.id === id &&
+        item.selectedColor === selectedColor &&
+        item.selectedSize === selectedSize
+    );
+
+    const newQty = existingItem ? existingItem.qty + amount : amount;
+
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { 
-        price, 
-        qty: amount, 
-        name, 
-        imgUrl: images[0].url,  
-        id, 
+      payload: {
+        price,
+        qty: newQty,
+        name,
+        imgUrl: images[0].url,
+        id,
         slug,
         selectedColor,
         selectedSize,
-        salePrice
-      }
+        salePrice,
+      },
     });
   };
   
@@ -208,9 +218,9 @@ export default function ProductIntro({ product }) {
           <FlexCol gap={1.5} sx={styles.productCard}>
             
             {/* PRODUCT BRAND */}
-            <Paragraph sx={{ fontSize: {xs:12, sm:16}, textDecoration: 'underline', color: '#0366FE' }}>
+            <Paragraph sx={{ fontSize: {xs:12, sm:16}, color: '#0366FE', textTransform:'uppercase', '&:hover': {textDecoration:'underline'} }}>
               <Link href={`/company/${company?.slug}`} passHref target="_blank">
-                {company.businessName}
+                {company.entityName}
               </Link>
             </Paragraph>
             
@@ -274,7 +284,7 @@ export default function ProductIntro({ product }) {
                     fullWidth
                     displayEmpty
                     sx={{
-                      borderRadius: "5px",
+                      borderRadius: "25px",
                       width: "100%",
                       height: '100%',
                       paddingTop: '0px',

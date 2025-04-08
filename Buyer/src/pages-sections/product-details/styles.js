@@ -62,7 +62,7 @@ export const styles = {
   personalised: {
     padding: "16px 9px",
     border: "1px solid #000000",
-    borderRadius: "8px",
+    borderRadius: "50px",
     fontSize: '14px',
     color: '#000',
     flexGrow: 1,

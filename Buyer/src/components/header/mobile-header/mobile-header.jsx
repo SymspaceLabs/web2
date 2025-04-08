@@ -23,7 +23,7 @@ import { FlexBetween, FlexBox } from "@/components/flex-box";
 import { SymImage } from "@/components/custom-components";
 
 import { LogoWithTitle } from "@/components";
-import { SocialButtons } from "../header/components/SocialButtons";
+// import { SocialButtons } from "../header/components/SocialButtons";
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 

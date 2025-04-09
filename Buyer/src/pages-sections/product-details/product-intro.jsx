@@ -384,7 +384,6 @@ export default function ProductIntro({ product }) {
           width={500}
           height={500}
         />
-        
       </SymDialog>
     </>
   );

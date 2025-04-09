@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Container,
   Grid,
   InputAdornment,
   Typography,
@@ -22,14 +21,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 
 export default function Section1() {
   const isMobile = useMediaQuery("(max-width:600px)");
+    const blogsPerPage = 6; // Number of blogs per page
+
   const [blogs, setBlogs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 6; // Number of blogs per page
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -71,9 +72,9 @@ export default function Section1() {
     <FlexColCenter sx={{ py: { xs: 2, sm: 5 } }}>
       <FlexCol sx={{ alignItems: "center", maxWidth:'1400px', width:'100%', px:{xs:2, sm:0} }}>
         <FlexBox flexDirection={isMobile ? "column" : "row"} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2} alignItems="center">
-          <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 50 }, color: "#fff" }}>
+          <H1 fontSize={{xs:25, sm:50}} color="#FFF">
             Press Releases
-          </Typography>
+          </H1>
           <TextField
             variant="outlined"
             placeholder="Job title, skill, keyword"
@@ -147,7 +148,7 @@ const CardWrapper = styled(Box)(({ theme }) => ({
   borderRadius: "40px",
   padding: "25px",
   width: "100%",
-  height: "auto",
+  height: "500px",
   display: "flex",
   flexDirection: "column",
   gap: 3,
@@ -163,7 +164,7 @@ const BlogCard = ({ blog }) => {
 
   return (
     <CardWrapper>
-      <Box sx={{ maxHeight: "200px", overflow: "hidden", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px" }}>
+      <Box sx={{ height: "200px", overflow: "hidden", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "20px" }}>
         <LazyImage src={blog.image} width={500} height={500} alt="blog-image" sx={{ height: "200px", width: "100%", objectFit: "cover" }} />
       </Box>
       <Typography fontWeight={600} color="#fff" fontFamily="Helvetica" fontSize={20} sx={{ py: 1 }}>

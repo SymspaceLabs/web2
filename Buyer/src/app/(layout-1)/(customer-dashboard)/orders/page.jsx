@@ -3,7 +3,7 @@ import { OrdersPageView } from "../../../../pages-sections/customer-dashboard/or
 export const metadata = {
   title: "Orders  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
-  authors: [{ name: "UI-LIB", url: "https://symspacelabs.com" }],
+  authors: [{ name: "SYMSPACE LABS", url: "https://symspacelabs.com" }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"],
 };
 

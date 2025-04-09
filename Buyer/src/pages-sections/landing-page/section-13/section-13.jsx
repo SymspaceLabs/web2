@@ -126,7 +126,7 @@ export default function Section12() {
                             {currency(calculateDiscount(product.price, 0))}
                           </Typography>
                           <Typography sx={{ fontFamily: "Helvetica", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 500, textDecoration: "line-through" }}>
-                            {currency(calculateDiscount(product.price, 0))}
+                            {currency(calculateDiscount(product.salePrice, 0))}
                           </Typography>
                         </FlexBox>
                       </Box>

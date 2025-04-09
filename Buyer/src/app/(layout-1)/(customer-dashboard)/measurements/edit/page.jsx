@@ -5,7 +5,7 @@ export const metadata = {
   title: "Measurements",
   description: `Symspace is an E-commerce website.`,
   authors: [{
-    name: "UI-LIB",
+    name: "SYMSPACE LABS",
     url: "https://symspacelabs.com"
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]

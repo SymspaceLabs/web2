@@ -4,12 +4,11 @@ import Section1 from "../section-1";
 import Section2 from "../section-2";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
-
+import { FlexRowCenter } from "@/components/flex-box";
 
 export default function ArticlesPageView() {
-
   return (
-    <Box sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F', display: 'flex', justifyContent: 'center' }}>
+    <FlexRowCenter sx={{ position: 'relative', overflow: 'hidden', backgroundColor: '#1F1F1F' }}>
       {/* GRADIENT CIRCLES */}
       {/* Blob 1: Hero Section Left */}
       <BlobBox top="-5%" left="-10%" background="#0366FE" widthHeight='750px' displayNoneMobile={true} /> {/* BLUE */}
@@ -34,6 +33,6 @@ export default function ArticlesPageView() {
         <Section1 />
         <Section2 />
       </Box>
-    </Box>
+    </FlexRowCenter>
   );
 }

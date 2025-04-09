@@ -53,19 +53,19 @@ export const CUSTOMER_CARE_LINKS = [
 ];
 export const SOCIAL_ICON_LINKS = [{
   Icon: Instagram,
-  url: "https://www.instagram.com/uilibofficial/"
+  url: "https://www.instagram.com/symspacelabs/"
 }, {
   Icon: LinkedIn,
-  url: "https://www.google.com/search?q=ui-lib.com"
+  url: "https://www.linkedin.com/company/symspace/"
 }, {
   Icon: Youtube,
-  url: "https://www.youtube.com/channel/UCsIyD-TSO1wQFz-n2Y4i3Rg"
+  url: "https://www.youtube.com/@SymspaceLabs"
 }, {
   Icon: Facebook,
-  url: "https://www.facebook.com/UILibOfficial"
+  url: "https://www.facebook.com/profile.php?id=100086581636416"
 }, {
   Icon: Twitter,
-  url: "https://twitter.com/uilibofficial"
+  url: "https://x.com/symspacelabs"
 },];
 export const PLAY_APP_STORE_DATA = [{
   url: "/",

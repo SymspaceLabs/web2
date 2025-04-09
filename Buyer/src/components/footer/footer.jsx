@@ -14,7 +14,7 @@ import CustomerCareLinks from "./components/customer-care-links";
 
 export default function Footer() {
   return (
-    <Box component="footer" bgcolor="#000" pt={12} fontFamily="Helvetica">
+    <Box component="footer" bgcolor="#000" pt={12} pb={5} fontFamily="Helvetica">
       <Container>
         <Grid container spacing={3}>
 
@@ -33,12 +33,12 @@ export default function Footer() {
             </FlexCol>
           </Grid>
 
-          {/* ABOUT US LINKS */}
+          {/* Get To Know Us Links */}
           <Grid item lg={3} md={3} sm={6} xs={12}>
             <AboutLinks isDark={false} />
           </Grid>
 
-          {/* CUSTOMER CARE LINKS */}
+          {/* Partner With Us Links */}
           <Grid item lg={3} md={3} sm={6} xs={12}>
             <CustomerCareLinks isDark={false} />
           </Grid>

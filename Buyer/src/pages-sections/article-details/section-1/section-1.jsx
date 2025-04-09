@@ -53,7 +53,7 @@ export default function Section1({ article }) {
                   textColor='#0044ff'
                   fw={500}
                   title={article.author}
-                  href={`https://${article.author_url}`}
+                  href={article.author_url}
                 />
               </Typography>
               <Typography color="#fff" fontSize={{xs:14, sm:18}}>
@@ -62,7 +62,7 @@ export default function Section1({ article }) {
             </FlexCol>
 
             <Box sx={{ flexGrow: 1, display: "flex", justifyContent: {xs:'flex-start', sm:"flex-end"}, width:"100%", pt:{xs:5, sm:0} }}>
-              <a href={`https://${article.article_source_url}`}>
+              <a href={article.article_source_url}>
                 <Button sx={styles.buttonDark}>
                   Original Post
                 </Button>

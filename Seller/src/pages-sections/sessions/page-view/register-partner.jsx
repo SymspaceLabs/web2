@@ -122,7 +122,7 @@ const RegisterPartnerPageView = () => {
 
       {/* Checkbox */}
       <Span display={{ color:'#fff', sm: "inline-block" }}>
-        By clicking Sign Up, you agree to our <BoxLink href="/terms-and-conditions#terms">Terms</BoxLink>, <BoxLink href="/terms-and-conditions#privacy">Privacy Policy</BoxLink> and <BoxLink href="/terms-and-conditions#cookies">Cookies</BoxLink>. You may receive SMS Notifications from us and can opt out any time.
+        By clicking Sign Up, you agree to our <BoxLink href={`${process.env.NEXT_PUBLIC_BUYER_URL}/terms-and-conditions#terms`}>Terms</BoxLink>, <BoxLink href={`${process.env.NEXT_PUBLIC_BUYER_URL}/terms-and-conditions#privacy`}>Privacy Policy</BoxLink> and <BoxLink href={`${process.env.NEXT_PUBLIC_BUYER_URL}/terms-and-conditions#cookies`}>Cookies</BoxLink>. You may receive SMS Notifications from us and can opt out any time.
       </Span> 
     </FlexBox>
   )

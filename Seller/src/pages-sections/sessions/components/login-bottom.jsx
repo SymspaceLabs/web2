@@ -10,7 +10,9 @@ export default function LoginBottom() {
           <Span lineHeight={1} sx={{color:'#fff'}}>
             Don&apos;t have an account?
           </Span>
-        <BoxLink title="Sign Up" href="/register" />
+        <BoxLink href="/register">
+          Sign Up
+        </BoxLink>
       </FlexRowCenter>
     </Fragment>
   );

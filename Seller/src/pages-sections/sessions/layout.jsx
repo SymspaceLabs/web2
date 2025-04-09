@@ -109,7 +109,7 @@ export default function AuthLayout({ children }) {
 
     BOTTOM_CONTENT = (
       <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
-        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+        Need help? <BoxLink href="/contact-us">Contact Us</BoxLink>
       </Typography>
     )
 
@@ -141,7 +141,7 @@ export default function AuthLayout({ children }) {
 
     BOTTOM_CONTENT = (
       <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
-        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+        Need help? <BoxLink href="/contact-us">Contact Us</BoxLink>
       </Typography>
     )
 
@@ -175,7 +175,7 @@ export default function AuthLayout({ children }) {
 
     BOTTOM_CONTENT = (
       <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
-        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+        Need help? <BoxLink href="/contact-us">Contact Us</BoxLink>
       </Typography>
     )
 
@@ -207,7 +207,7 @@ export default function AuthLayout({ children }) {
 
     BOTTOM_CONTENT = (
       <Typography sx={{ fontFamily:'Helvetica', color:'#FFF', pb:10, pt:5, textAlign:'center', fontSize:{xs:'12px', sm:'14px'} }}>
-        Need help? <BoxLink title="Contact Us" href="/contact-us" />
+        Need help? <BoxLink href="/contact-us">Contact Us</BoxLink>
       </Typography>
     )
 

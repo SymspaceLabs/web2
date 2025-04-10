@@ -15,6 +15,9 @@ export class ProductImage {
   @Column({ nullable: true })
   altText: string;
 
+  @Column({ default: 0 })
+  sortOrder: number;
+
   @ManyToOne(() => Product, (product) => product.images, {
     onDelete: 'CASCADE',
   })

@@ -22,7 +22,7 @@ export default function SymDialog({
         PaperProps={{ 
           style: { 
             background: 'rgba(255, 255, 255, 0.39)', 
-            borderRadius: '50px', 
+            borderRadius: '40px', 
             boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)', 
             backdropFilter: 'blur(7.2px)', 
             WebkitBackdropFilter: 'blur(7.2px)', 

@@ -13,7 +13,7 @@ import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
 import { SymAccordion } from "@/components/custom-components"
 import { FlexBox, FlexCol, FlexRowCenter } from "@/components/flex-box";
-import { Box, Button, Select, MenuItem, FormControl, InputLabel, Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
+import { Box, Button, Select, MenuItem, FormControl, Tooltip , Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
 
 import styles from "./styles";
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
@@ -54,7 +54,9 @@ export default function ProductIntro({ product }) {
   const { state, dispatch } = useCart();
 
   // Toggles the favorite status of the product
-  const toggleFavorite = () => setIsFavorited(!isFavorited);
+  const toggleFavorite = () => {
+    setIsFavorited(!isFavorited)
+  };
 
   // Updates the selected color
   const handleColorSelect = (color) => setSelectedColor(color);
@@ -96,7 +98,7 @@ export default function ProductIntro({ product }) {
       },
     });
   };
-  
+ 
   // Updates the selected image based on the thumbnail clicked
   const handleImageClick = ind => () => setSelectedImage(ind);
 
@@ -253,21 +255,22 @@ export default function ProductIntro({ product }) {
               </Paragraph>
               <FlexBox>
                 {colors.map((color) => (
-                  <Button
-                    key={color.id}
-                    onClick={() => handleColorSelect(color.code)}
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: '50%',
-                      backgroundColor: color.code,
-                      border: selectedColor === color.code ? '3px solid black' : '1px solid grey',
-                      margin: '0 5px',
-                      '&:hover': {
+                  <Tooltip key={color.id} title={color.name || color.code} arrow>
+                    <Button
+                      onClick={() => handleColorSelect(color.code)}
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: '50%',
                         backgroundColor: color.code,
-                      },
-                    }}
-                  />
+                        border: selectedColor === color.code ? '3px solid black' : '1px solid grey',
+                        margin: '0 5px',
+                        '&:hover': {
+                          backgroundColor: color.code,
+                        },
+                      }}
+                    />
+                  </Tooltip>
                 ))}
               </FlexBox>
             </FlexBox>

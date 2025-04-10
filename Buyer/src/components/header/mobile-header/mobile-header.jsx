@@ -5,7 +5,7 @@
 import Icon from "@/icons";
 import Link from "next/link";
 import { Fragment } from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Card } from "@mui/material";
 import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
 import { SymDialog } from "@/components/custom-dialog";
 
@@ -26,6 +26,7 @@ import { LogoWithTitle } from "@/components";
 // import { SocialButtons } from "../header/components/SocialButtons";
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
+import { styled } from '@mui/material/styles';
 
 
 
@@ -108,3 +109,36 @@ export default function MobileHeader() {
     </Fragment>
   );
 }
+
+
+const fbStyle = {
+  background: "#3B5998",
+  color: "white"
+};
+const googleStyle = {
+  background: "#4285F4",
+  color: "white"
+};
+
+const Wrapper = styled(Card)(({ theme }) => ({
+  padding: "2rem 3rem",
+  background: 'transparent',
+
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+    padding: "2rem 2rem", // Mobile-specific padding
+  },
+  ".facebookButton": {
+    marginBottom: 10,
+    ...fbStyle,
+    "&:hover": fbStyle,
+  },
+  ".googleButton": {
+    ...googleStyle,
+    "&:hover": googleStyle,
+  },
+  ".agreement": {
+    marginTop: 12,
+    marginBottom: 24,
+  },
+}));

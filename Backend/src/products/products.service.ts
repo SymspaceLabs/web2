@@ -4,12 +4,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
-import { MinioService } from '../MinioModule/minio.service';
 import { ProductImage } from '../product-images/entities/product-image.entity';
-import { ProductVariantEntity } from '../product-variant/entities/product-variant.entity';
-import { ProductVariantPropertyEntity } from '../product-variant-property/entities/product-variant-property.entity';
-import { PriceEntity } from '../price/entities/price.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
@@ -18,21 +13,12 @@ import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item
 
 @Injectable()
 export class ProductsService {
-  companyRepository: any;
-  // private productVariantEntity = [];
 
   constructor(
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
-    @InjectRepository(ProductImage) private productImageRepository: Repository<ProductImage>,
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
 
-    // @InjectRepository(ProductVariantEntity)
-    // private productVariantEntityRepository: Repository<ProductVariantEntity>,
-    // @InjectRepository(ProductVariantPropertyEntity)
-    // private productVariantPropertyEntityRepository: Repository<ProductVariantPropertyEntity>,
-    // @InjectRepository(PriceEntity)
-    // private priceEntityRepository: Repository<PriceEntity>,
   ) {}
 
     async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -77,12 +63,14 @@ export class ProductsService {
     
       // Process images
       if (images && images.length) {
-        product.images = images.map((imageUrl) => {
+        product.images = images.map((imageUrl, index) => {
           const productImage = new ProductImage();
           productImage.url = imageUrl;
+          productImage.sortOrder = index; // 👈 store the order
           return productImage;
         });
       }
+      
 
       // Process colors
       if (colors && colors.length) {
@@ -105,12 +93,14 @@ export class ProductsService {
 
       // Process sizes
       if (sizes && sizes.length) {
-        product.sizes = sizes.map((size) => {
+        product.sizes = sizes.map((size, index) => {
           const productSize = new ProductSize();
           productSize.size = size;
+          productSize.sortOrder = index; // 👈 this defines the sort order from the body
           return productSize;
         });
       }
+
     
       return await this.productRepository.save(product);
     }
@@ -122,20 +112,38 @@ export class ProductsService {
     }
 
 
-    async findBySlug(slug: string): Promise<Product> {
-      const product = await this.productRepository.findOne({
-        where: { slug },
-        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
-      });
-
-      if (!product) {
-        throw new NotFoundException(`Product with slug ${slug} not found`);
-      }
-
-      return product;
+  async findBySlug(slug: string): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: { slug },
+      relations: [
+        'company',
+        'images',
+        'colors',
+        'sizes',
+        'subcategoryItem',
+        'subcategoryItem.subcategory',
+        'subcategoryItem.subcategory.category',
+      ],
+    });
+  
+    if (!product) {
+      throw new NotFoundException(`Product with slug ${slug} not found`);
     }
   
+    // Sort sizes by sortOrder before returning
+    if (product.sizes) {
+      product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
+    }
+
+    // Sort sizes by sortOrder before returning
+    if (product.images) {
+      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+
+    }
   
+    return product;
+  }
+   
   async findOne(productId: string): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id: productId },
@@ -208,13 +216,11 @@ export class ProductsService {
     Object.assign(product, productData);
   
     // Update images
-    if (images) {
-      if (!Array.isArray(images)) {
-        throw new TypeError('images must be an array');
-      }
-      product.images = images.map((imageUrl) => {
+    if (images && images.length) {
+      product.images = images.map((imageUrl, index) => {
         const productImage = new ProductImage();
         productImage.url = imageUrl;
+        productImage.sortOrder = index; // 👈 store the order
         return productImage;
       });
     }
@@ -239,10 +245,11 @@ export class ProductsService {
     }
   
     // Update sizes
-    if (sizes) {
-      product.sizes = sizes.map((size) => {
+    if (sizes && sizes.length) {
+      product.sizes = sizes.map((size, index) => {
         const productSize = new ProductSize();
         productSize.size = size;
+        productSize.sortOrder = index; // 👈 this defines the sort order from the body
         return productSize;
       });
     }
@@ -250,71 +257,6 @@ export class ProductsService {
     // Save the updated product
     return await this.productRepository.save(product);
   }
-  
-  
-
-  // async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
-  //   const product = await this.productRepository.findOne({
-  //     where: { id },
-  //     relations: ['company', 'subcategoryItem', 'images'],
-  //   });
-  
-  //   if (!product) {
-  //     throw new NotFoundException(`Product with ID ${id} not found`);
-  //   }
-  
-  //   const { company: companyId, subcategoryItem: subcategoryItemId, images, ...otherUpdates } = updateProductDto;
-  
-  //   // Resolve `company` relation
-  //   if (companyId) {
-  //     const company = await this.companyRepository.findOne({
-  //       where: { id: companyId },
-  //     });
-  
-  //     if (!company) {
-  //       throw new NotFoundException(`Company with ID ${companyId} not found`);
-  //     }
-  
-  //     product.company = company;
-  //   }
-  
-  //   // Resolve `subcategoryItem` relation
-  //   if (subcategoryItemId) {
-  //     const subcategoryItem = await this.subcategoryItemRepository.findOne({
-  //       where: { id: subcategoryItemId },
-  //     });
-  
-  //     if (!subcategoryItem) {
-  //       throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
-  //     }
-  
-  //     product.subcategoryItem = subcategoryItem;
-  //   }
-  
-  //   // Handle images
-  //   if (images) {
-  //     if (product.images?.length > 0) {
-  //       await this.productImageRepository.remove(product.images);
-  //     }
-  
-  //     const newImages = images.map((url) =>
-  //       this.productImageRepository.create({
-  //         url,
-  //         altText: '',
-  //         product,
-  //       }),
-  //     );
-  
-  //     await this.productImageRepository.save(newImages);
-  //     product.images = newImages;
-  //   }
-  
-  //   // Merge scalar fields into the product entity
-  //   const updatedProduct = this.productRepository.merge(product, otherUpdates);
-  
-  //   // Save the updated product
-  //   return await this.productRepository.save(updatedProduct);
-  // }
   
 
   async remove(id: string): Promise<{ message: string; product: Product }> {

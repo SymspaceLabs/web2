@@ -110,10 +110,20 @@ export default function Section12() {
                     >
                       <LazyImage
                         alt="product images"
-                        width={380}
-                        height={379}
+                        width={355}
+                        height={355}
                         src={product.images?.[0]?.url || "/placeholder.png"}
+                        style={{
+                          objectFit: "cover",
+                          objectPosition: "center",
+                          maxHeight: "355px",
+                          width: "100%",
+                          height: "355px",
+                          borderTopLeftRadius: '12px',
+                          borderTopRightRadius: '12px',
+                        }}
                       />
+
                       <Box sx={{ px: { xs: 1.5, sm: 4 }, pb: 4 }}>
                         <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: { xs: 10, sm: 18 }, fontWeight: 500 }}>
                           {product.name}

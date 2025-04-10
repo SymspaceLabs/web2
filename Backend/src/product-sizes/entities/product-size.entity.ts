@@ -9,6 +9,9 @@ export class ProductSize {
   @Column()
   size: string;
 
+  @Column({ type: 'int', default: 0 })
+  sortOrder: number;
+
   @ManyToOne(() => Product, (product) => product.sizes, {
     onDelete: 'CASCADE',
   })

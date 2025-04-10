@@ -1,7 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne } from 'typeorm';
 import { ProductImage } from 'src/product-images/entities/product-image.entity';
-import { Stock } from 'src/stock/entities/stock.entity';
-import { ProductVariantEntity } from '../../product-variant/entities/product-variant.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
@@ -31,9 +29,6 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   price: number;
 
-  // @Column()
-  // category: string;
-
   @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products)
   subcategoryItem: SubcategoryItem;
 
@@ -50,7 +45,7 @@ export class Product {
   })
   images: ProductImage[];
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   description: string;
 
   @Column({

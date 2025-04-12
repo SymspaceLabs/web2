@@ -1,120 +1,135 @@
+
 import Link from "next/link"; // MUI
-
-import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete"; // GLOBAL CUSTOM HOOK
-
 import useCart from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 
 import { Span } from "components/Typography";
-import { FlexBetween, FlexBox } from "components/flex-box"; // DUMMY CUSTOM DATA
+import { FlexBetween, FlexBox, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
 
 import countryList from "data/countryList"; // CUSTOM UTILS LIBRARY FUNCTION
-
+import { Autocomplete, TextField, MenuItem, Card, Button, Divider } from "@mui/material";
 import { currency } from "lib";
+import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
+import { useState } from "react";
+
 export default function CheckoutForm() {
-  const {
-    state
-  } = useCart();
+  
+  const { state: cartState } = useCart();
+  const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
-  const getTotalPrice = () => state.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+  const STATE_LIST = [
+    "New York", 
+    "Chicago"
+  ];
 
-  const STATE_LIST = [{
-    value: "new-york",
-    label: "New York"
-  }, {
-    value: "chicago",
-    label: "Chicago"
-  }];
-  return <Card sx={{
-    padding: 3
-  }}>
-      <FlexBetween mb={2}>
-        <Span color="grey.600">Total:</Span>
+  const [promo, setPromo] = useState("");
+  const [country, setCountry] = useState(null);
+  const [state, setState] = useState(null);
+  const [zipCode, setZipCode] = useState(null);
 
-        <Span fontSize={18} fontWeight={600} lineHeight="1">
-          {currency(getTotalPrice())}
+  return (
+    <Card sx={{ background:'rgba(255, 255, 255, 0.1)', p:3 }}>
+
+      <FlexCol gap={2} pb={3}>
+        <FlexBetween>
+          <Span color="#FFF" fontSize={18} fontWeight={600}>
+            Total
+          </Span>
+          <Span color="#FFF" fontSize={18} fontWeight={600} lineHeight="1">
+            {currency(getTotalPrice())}
+          </Span>
+        </FlexBetween>
+
+        <Divider />
+
+        {/* APPLY VOUCHER TEXT FIELD */}
+        <SymTextField
+          placeholder="Promo Code"
+          value={promo}
+          onChange={(e) => setPromo(e.target.value)}
+        />
+        <Button
+          fullWidth
+          sx={{
+            py: 1,
+            borderRadius:'50px',
+            border:'2px solid #0366FE',
+            color:'#0366FE',
+            '&:hover': {
+              background:'#0366FE',
+              color:'#FFF'
+            }
+          }}
+        >
+          Apply Promo Code
+        </Button>
+        <Divider />
+
+      </FlexCol>
+
+      <FlexCol gap={1}>
+        <Span color="#FFF" fontSize={18} fontWeight={600}>
+          Shipping Estimates
         </Span>
-      </FlexBetween>
+        
+        {/* COUNTRY TEXT FIELD */}
+        <SymAutoComplete
+          placeholder="Country"
+          value={country}
+          onChange={(val) => setCountry(val)}
+          options={countryList}
+        />
 
-      <Divider sx={{
-      mb: 2
-    }} />
+        {/* STATE/CITY TEXT FIELD */}
+        <SymDropdown
+          placeholder="State"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          options={STATE_LIST}
+        />
 
-      <FlexBox alignItems="center" columnGap={1} mb={2}>
-        <Span fontWeight="600">Additional Comments</Span>
+        {/* ZIP-CODE TEXT FIELD */}
+        <SymTextField
+          placeholder="Zip code"
+          value={zipCode}
+          onChange={(e)=>setZipCode(e.target.value)}
+        />
 
-        <Span p="6px 10px" fontSize={12} lineHeight="1" borderRadius="3px" color="primary.main" bgcolor="primary.light">
-          Note
-        </Span>
-      </FlexBox>
+        <Button
+          fullWidth
+          sx={{
+            py: 1,
+            borderRadius:'50px',
+            border:'2px solid #0366FE',
+            color:'#0366FE',
+            '&:hover': {
+              background:'#0366FE',
+              color:'#FFF'
+            }
+          }}
+        >
+          Calculate Shipping
+        </Button>
 
-      {
-      /* COMMENTS TEXT FIELD */
-    }
-      <TextField variant="outlined" rows={6} fullWidth multiline />
+        <Button
+          fullWidth
+          href="/checkout"
+          // LinkComponent={Link}
+          sx={{
+            py: 1,
+            borderRadius:'50px',
+            border:'2px solid #FFF',
+            background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+            color:'#FFF',
+            '&:hover': {
+              background:'transaparent',
+            }
+          }}
+        >
+          Check Out Now
+        </Button>
+      </FlexCol>
+      
 
-      <Divider sx={{
-      mb: 2
-    }} />
-
-      {
-      /* APPLY VOUCHER TEXT FIELD */
-    }
-      <TextField fullWidth size="small" label="Voucher" variant="outlined" placeholder="Voucher" />
-
-      <Button variant="outlined" color="primary" fullWidth sx={{
-      mt: 2,
-      mb: 4
-    }}>
-        Apply Voucher
-      </Button>
-
-      <Divider sx={{
-      mb: 2
-    }} />
-
-      <Span fontWeight={600} mb={2} display="block">
-        Shipping Estimates
-      </Span>
-
-      {
-      /* COUNTRY TEXT FIELD */
-    }
-      <Autocomplete fullWidth sx={{
-      mb: 2
-    }} options={countryList} renderInput={params => <TextField {...params} size="small" label="Country" variant="outlined" placeholder="Select Country" />} />
-
-      {
-      /* STATE/CITY TEXT FIELD */
-    }
-      <TextField select fullWidth size="small" label="State" variant="outlined" placeholder="Select State" defaultValue="new-york">
-        {STATE_LIST.map(({
-        label,
-        value
-      }) => <MenuItem value={value} key={label}>
-            {label}
-          </MenuItem>)}
-      </TextField>
-
-      {
-      /* ZIP-CODE TEXT FIELD */
-    }
-      <TextField fullWidth size="small" label="Zip Code" placeholder="3100" variant="outlined" sx={{
-      mt: 2
-    }} />
-
-      <Button variant="outlined" color="primary" fullWidth sx={{
-      my: 2
-    }}>
-        Calculate Shipping
-      </Button>
-
-      <Button fullWidth color="primary" href="/checkout" variant="contained" LinkComponent={Link}>
-        Checkout Now
-      </Button>
-    </Card>;
+    </Card>
+  );
 }

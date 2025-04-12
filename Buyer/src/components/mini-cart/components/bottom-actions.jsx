@@ -14,22 +14,11 @@ export default function BottomActions({
 }) {
   return (
     <FlexColCenter p={2.5} gap={1}>
-      <Button 
-        fullWidth 
-        sx={btn}
-        onClick={handleNavigate("/checkout-alternative")}
-      >
+      <Button fullWidth sx={btn} onClick={handleNavigate("/checkout-alternative")}>
         Checkout Now ({total})
       </Button>
 
-      <Button 
-        fullWidth 
-        sx={{
-          ...btn,
-          background:'transparent'
-        }}
-        onClick={handleNavigate("/cart")}
-      >
+      <Button fullWidth sx={{ ...btn, background:'transparent'}} onClick={handleNavigate("/cart")}>
         View Cart
       </Button>
     </FlexColCenter>
@@ -37,7 +26,6 @@ export default function BottomActions({
 }
 
 const btn = { 
-  ...styles.elementalEndFont, 
   height: "50px",
   color:'#FFF',
   background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',

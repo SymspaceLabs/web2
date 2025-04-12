@@ -32,16 +32,7 @@ export default function ProductViewDialog(props) {
   } = useCart();
   const cartItem = state.cart.find(item => item.id === product.id);
 
-  const handleCartAmountChange = amount => () => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { ...product,
-        qty: amount,
-        name: product.title,
-        imgUrl: product.imgGroup[0]
-      }
-    });
-  };
+  const handleCartAmountChange = amount => () => {};
 
   return <Dialog open={openDialog} maxWidth={false} onClose={handleCloseDialog} sx={{
     zIndex: 1501

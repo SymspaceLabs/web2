@@ -1,6 +1,5 @@
 import { FlexBox } from "../flex-box";
-import { Small } from "../Typography";
-import { Box, TextField, Typography } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 const SymTextField = ({
     title,

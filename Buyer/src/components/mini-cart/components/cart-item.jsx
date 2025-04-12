@@ -1,5 +1,6 @@
 // ==============================================================
-// Cart Item
+// Cart Item used in 
+// - cart drawer
 // ==============================================================
 
 import Link from "next/link";
@@ -60,7 +61,6 @@ export default function MiniCartItem({
             QTY : {item.qty}
           </H1>
         </FlexBox>
-        
       </FlexCol>
       
       <FlexCol alignItems="flex-end" gap={1} maxWidth={100}>
@@ -76,7 +76,7 @@ export default function MiniCartItem({
   );
 }
 
-const CountControlButtons = ({item,handleCartAmountChange}) => {
+const CountControlButtons = ({item, handleCartAmountChange}) => {
   return (
     <FlexBox alignItems="center" justifyContent="flex-end" gap={1}>
       <Button disabled={item.qty === 1} onClick={handleCartAmountChange(item.qty - 1, item)} 

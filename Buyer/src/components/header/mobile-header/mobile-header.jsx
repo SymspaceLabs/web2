@@ -27,7 +27,7 @@ import { LogoWithTitle } from "@/components";
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 import { styled } from '@mui/material/styles';
-
+import { SocialButtons } from "../components/SocialButtons";
 
 
 export default function MobileHeader() {

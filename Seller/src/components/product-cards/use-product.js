@@ -16,11 +16,6 @@ export default function useProduct(slug) {
   const toggleDialog = useCallback(() => setOpenModal(open => !open), []);
 
   const handleCartAmountChange = (product, type) => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: product
-    }); // SHOW ALERT PRODUCT ADDED OR REMOVE
-
     if (type === "remove") enqueueSnackbar("Remove from Cart", {
       variant: "error"
     });else enqueueSnackbar("Added to Cart", {

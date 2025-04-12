@@ -1,5 +1,5 @@
 // =========================================================
-// Cart Sidebar
+// Cart Drawer
 // =========================================================
 
 import { useRouter } from "next/navigation";
@@ -22,9 +22,7 @@ export default function MiniCart({ toggleSidenav }) {
   const handleCartAmountChange = (amount, product) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { ...product,
-        qty: amount
-      }
+      payload: { ...product, qty: amount }
     });
   };
 

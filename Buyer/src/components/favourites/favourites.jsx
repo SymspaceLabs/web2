@@ -12,24 +12,31 @@ import TopHeader from "./components/top-header";
 import MiniCartItem from "./components/cart-item";
 import EmptyCartView from "./components/empty-view";
 import BottomActions from "./components/bottom-actions"; // GLOBAL CUSTOM COMPONENT
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 // =========================================================
 export default function MiniFavorite({ toggleSidenav }) {
   const { push } = useRouter();
-  const { state, dispatch } = useCart();
-  const cartList = state.cart;
 
-  const handleCartAmountChange = (amount, product) => () => {
-    dispatch({
+  const { state: favState } = useFavorites();
+  const { dispatch: cartDispatch } = useCart();
+
+
+  const handleAddToCart = (product) => {
+    cartDispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { ...product,
-        qty: amount
-      }
+      payload: {
+        id: product.id,
+        qty: 1,
+        price: product.price,
+        name: product.name,
+        imgUrl: product.images[0].url,
+        slug: product.slug,
+        selectedColor: product.colors?.[0]?.code || "Default",
+        selectedSize: product.sizes?.[0]?.size || "M",
+        salePrice: product.salePrice,
+      },
     });
-  };
-
-  const getTotalPrice = () => {
-    return cartList.reduce((acc, item) => acc + item.price * item.qty, 0);
   };
 
   const handleNavigate = path => () => {
@@ -41,20 +48,20 @@ export default function MiniFavorite({ toggleSidenav }) {
     <Box width="100%" minWidth={380} sx={glassBg}>
       
       {/* HEADING SECTION */}
-      <TopHeader toggle={toggleSidenav} total={cartList.length} />
+      <TopHeader toggle={toggleSidenav} total={favState.favorites.length} />
 
       {/* DIVIDER */}
       <Divider />
 
       {/* CART ITEM LIST */}
-      <Box height={`calc(100vh - ${cartList.length ? "207px" : "75px"})`}>
-        {cartList.length > 0 ? <Scrollbar>
-            {cartList.map(item => <MiniCartItem item={item} key={item.id} handleCartAmountChange={handleCartAmountChange} />)}
+      <Box height={`calc(100vh - ${favState.favorites.length ? "207px" : "75px"})`}>
+        {favState.favorites.length > 0 ? <Scrollbar>
+            {favState.favorites.map(item => <MiniCartItem item={item} key={item.id} />)}
           </Scrollbar> : <EmptyCartView />}
       </Box>
 
       {/* CART BOTTOM ACTION BUTTONS */}
-      {cartList.length > 0 ? <BottomActions total={currency(getTotalPrice())} handleNavigate={handleNavigate} /> : null}
+      {/* {favState.favorites.length > 0 ? <BottomActions total={currency(getTotalPrice())} handleNavigate={handleNavigate} /> : null} */}
     </Box>
   );
 }

@@ -10,24 +10,27 @@ const SymDropdown = ({
     onChange,
     options,
     isEdit = true,
-    light=false
+    light = false,
+    placeholder = "",
 }) => {
-
     return (
-        <FlexBox flexDirection="column" sx={{ flex:1, minWidth: "100px" }}>
+        <FlexBox flexDirection="column" sx={{ flex: 1, minWidth: "100px" }}>
             <H2 color="white" mb={0.5}>
-                {title}  
+                {title}
             </H2>
             <Select
                 value={value}
                 onChange={onChange}
                 displayEmpty
+                renderValue={
+                    value !== "" ? undefined : () => <em style={{ color: 'rgba(255,255,255,0.4)' }}>{placeholder}</em>
+                }
                 sx={{
-                    background: light? 'transparent':  "#000",
-                    borderRadius: "5px",
-                    color: value=""? "rgba(255, 255, 255, 0.1)": "#fff",
-                    width: "100%",
-                    height:'37px',
+                    background: light ? 'transparent' : '#000',
+                    borderRadius: '5px',
+                    color: value === "" ? 'rgba(255,255,255,0.4)' : '#fff',
+                    width: '100%',
+                    height: '37px',
                     paddingTop: '0px',
                     "& .MuiPopover-root": {
                         zIndex: 1400,
@@ -42,9 +45,8 @@ const SymDropdown = ({
                 IconComponent={ArrowDropDownIcon}
                 disabled={!isEdit}
             >
-                {/* Placeholder option */}
-                <MenuItem value="" disabled >
-                    <em>Select an option</em>
+                <MenuItem value="" disabled>
+                    <em>{placeholder}</em>
                 </MenuItem>
 
                 {options.map((item) => (
@@ -53,7 +55,6 @@ const SymDropdown = ({
                     </MenuItem>
                 ))}
             </Select>
-
         </FlexBox>
     );
 };

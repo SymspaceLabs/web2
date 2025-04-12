@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Box, Container } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container"; // LOCAL CUSTOM COMPONENT
 
 import Stepper from "./stepper";
+
 const STEPPER_LIST = [{
   title: "Cart",
   disabled: false
@@ -19,6 +19,7 @@ const STEPPER_LIST = [{
   title: "Review",
   disabled: true
 }];
+
 export default function PageStepper({
   children
 }) {
@@ -67,14 +68,21 @@ export default function PageStepper({
         break;
     }
   }, [pathname]);
-  return <Container className="mt-2 mb-2">
-      <Box mb={3} display={{
-      sm: "block",
-      xs: "none"
-    }}>
-        <Stepper stepperList={STEPPER_LIST} selectedStep={selectedStep} onChange={handleStepChange} />
-      </Box>
 
-      {children}
-    </Container>;
+  return (
+    <Box sx={{ background:'#8C8C8C', width:'100%', py:5 }}>
+      <Container>
+        <Box mb={3} display={{sm: "block",xs: "none"}}>
+          <Stepper
+            stepperList={STEPPER_LIST}
+            selectedStep={selectedStep}
+            onChange={handleStepChange}
+          />
+        </Box>
+
+        {children}
+      </Container>
+    </Box>
+
+  );
 }

@@ -36,7 +36,7 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx"
-  ],
+, "../Buyer/src/contexts/FavoritesContext.jsx"  ],
   "exclude": [
     "node_modules"
   ]

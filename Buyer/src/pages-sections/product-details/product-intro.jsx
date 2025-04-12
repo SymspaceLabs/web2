@@ -23,6 +23,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { SymDialog } from "@/components/custom-dialog";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -43,10 +44,13 @@ export default function ProductIntro({ product }) {
     sizeChart
   } = product || {};
 
+  const { state: favState, dispatch: favDispatch } = useFavorites();
+
+
   // State hooks for selected options and toggles
   const [selectedColor, setSelectedColor] = useState(colors[0].code);
   const [selectedSize, setSelectedSize] = useState("");
-  const [isFavorited, setIsFavorited] = useState(false);
+  // const [isFavorited, setIsFavorited] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [sizeError, setSizeError] = useState(false);
 
@@ -54,8 +58,17 @@ export default function ProductIntro({ product }) {
   const { state, dispatch } = useCart();
 
   // Toggles the favorite status of the product
+  // const toggleFavorite = () => {
+  //   setIsFavorited(!isFavorited)
+  // };
+
+  const isFavorited = favState.favorites.some((item) => item.id === product.id);
+
   const toggleFavorite = () => {
-    setIsFavorited(!isFavorited)
+    favDispatch({
+      type: "TOGGLE_FAVORITE",
+      payload: product,
+    });
   };
 
   // Updates the selected color
@@ -109,11 +122,12 @@ export default function ProductIntro({ product }) {
   return (
     <>
       <Grid container spacing={3} justifyContent="space-around">
+        
         { /* IMAGE GALLERY AREA */}
         <Grid item md={6} xs={12} alignItems="center">
           {/* Hero Image */}
           <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
-            <IconButton 
+            <IconButton
               onClick={() => setSelectedImage((prev) => prev > 0 ? prev - 1 : images?.length)}
               style={{ position: "absolute", left: 0, zIndex: 1, backgroundColor: "white" }}
             >
@@ -170,6 +184,7 @@ export default function ProductIntro({ product }) {
             <>
               {/* 3D Model Thumbnail */}
               <FlexRowCenter
+                padding={1}
                 width={64}
                 height={64}
                 minWidth={64}
@@ -180,11 +195,11 @@ export default function ProductIntro({ product }) {
                 onClick={() => setSelectedImage(0)} // 0 for 3D model
                 borderColor={selectedImage === 0 ? "primary.main" : "grey.400"}
               >
-                <Avatar
+                <LazyImage
                   alt="3D Model"
-                  src="/assets/images/products/3d/3d-thumbnail.png" // Replace with an appropriate 3D model thumbnail
-                  variant="square"
-                  sx={{ height: 40 }}
+                  width={500}
+                  height={500}
+                  src="/assets/images/products/3d/3d-thumbnail.png"
                 />
               </FlexRowCenter>
 
@@ -355,6 +370,7 @@ export default function ProductIntro({ product }) {
          
         </Grid>
       </Grid>
+
       <Box sx={{ background:'transparent' }}>
         <Drawer
           open={sidenavOpen}

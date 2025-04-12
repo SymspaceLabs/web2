@@ -19,6 +19,7 @@ export const elementalEnd = localFont({
 import "@/i18n";
 import RTL from "@/components/rtl";
 import CartProvider from "@/contexts/CartContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import SettingsProvider from "@/contexts/SettingContext";
 import ProgressBar from "@/components/progress";
 import SnackbarProvider from "@/contexts/SnackbarContext";
@@ -46,14 +47,16 @@ export default function RootLayout({ children }) {
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
           <AuthProvider>
               <SnackbarProvider>
-                <CartProvider>
-                  <SettingsProvider>
-                    <ThemeProvider> {/* Your custom ThemeProvider */}
-                      <ProgressBar />
-                      <RTL>{children}</RTL>
-                    </ThemeProvider>
-                  </SettingsProvider>
-                </CartProvider>
+                <FavoritesProvider>
+                  <CartProvider>
+                    <SettingsProvider>
+                      <ThemeProvider> {/* Your custom ThemeProvider */}
+                        <ProgressBar />
+                        <RTL>{children}</RTL>
+                      </ThemeProvider>
+                    </SettingsProvider>
+                  </CartProvider>
+                </FavoritesProvider>
               </SnackbarProvider>
           </AuthProvider>
         </GoogleOAuthProvider>

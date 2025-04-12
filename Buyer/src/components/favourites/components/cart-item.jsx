@@ -1,72 +1,108 @@
-import Link from "next/link";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton"; // MUI ICON COMPONENTS
+// ==============================================================
+// Cart Item
+// ==============================================================
 
+import Link from "next/link";
 import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
+import LazyImage from "@/components/LazyImage";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
-import { FlexBox } from "../../../components/flex-box";
-import { H6, Tiny } from "../../../components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
-
-import { currency } from "../../../lib"; // CUSTOM DATA MODEL
+import { currency } from "@/lib"; // CUSTOM DATA MODEL
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Button, Typography } from "@mui/material";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 
 // ==============================================================
-export default function MiniCartItem({
-  item,
-  handleCartAmountChange
-}) {
-  return <FlexBox py={2} px={2.5} key={item.id} alignItems="center" borderBottom="1px solid" borderColor="divider">
-      <FlexBox alignItems="center" flexDirection="column">
-        <Button size="small" color="primary" variant="outlined" onClick={handleCartAmountChange(item.qty + 1, item)} sx={{
-        height: 28,
-        width: 28,
-        borderRadius: 50
-      }}>
-          <Add fontSize="small" />
-        </Button>
 
-        <H6 my="3px">{item.qty}</H6>
-
-        <Button size="small" color="primary" variant="outlined" disabled={item.qty === 1} onClick={handleCartAmountChange(item.qty - 1, item)} sx={{
-        height: 28,
-        width: 28,
-        borderRadius: 50
-      }}>
-          <Remove fontSize="small" />
-        </Button>
-      </FlexBox>
-
-      <Link href={`/products/${item.id}`}>
-        <Avatar alt={item.name} src={item.imgUrl} sx={{
-        mx: 1,
-        width: 75,
-        height: 75
-      }} />
+export default function MiniCartItem({item}) {
+  return (
+    <FlexBox py={2} px={2.5} key={item.id} alignItems="center" borderBottom="1px solid" borderColor="divider">
+      
+      {/* Product Image */}
+      <Link href={`/products/${item.slug}`}>
+        <LazyImage alt={item.name} src={item.imgUrl} width={50} height={50} sx={{mx: 1,width: 75,height: 75, m:0}} />
       </Link>
 
-      <Box flex="1" textOverflow="ellipsis" whiteSpace="nowrap" overflow="hidden">
+      {/* Product Info */}
+      <FlexCol height="100%">
         <Link href={`/products/${item.slug}`}>
-          <H6 ellipsis className="title">
+          <Paragraph color="#FFF">
             {item.name}
-          </H6>
+          </Paragraph>
         </Link>
 
-        <Tiny color="grey.600">
-          {currency(item.price)} x {item.qty}
-        </Tiny>
+        <FlexBox gap={2}>
+          <Paragraph mt={0.5} color='#5B5B5B' sx={{textDecoration:'line-through'}}>
+            {currency(item.salePrice)}
+          </Paragraph>
+          <Paragraph color="#FFF" mt={0.5}>
+            {currency(item.price)}
+          </Paragraph>
+        </FlexBox>
+        
+        <FlexBox alignItems="center" gap={1} pt={1} >
+          <Box 
+            sx={{
+              width: 20,
+              height: 20,
+              borderRadius: '50%',
+              background: item.selectedColor
+            }}
+          />
+          <H1 color="#FFF" mt={0.5}>
+            {item.selectedSize}
+          </H1>
+          <H1 color="#FFF" mt={0.5}>
+            QTY : {item.qty}
+          </H1>
+        </FlexBox>
+        
+      </FlexCol>
+      
+      <FlexCol alignItems="flex-end" gap={1} maxWidth={100}>
+        <Button  sx={{ height: 28, width: 28 }}>
+          <Close fontSize="small" sx={{color:"#FFF"}} />
+        </Button>
+        <CountControlButtons
+          item={item}
+        />
+      </FlexCol>
+    </FlexBox>
+  );
+}
 
-        <H6 color="primary.main" mt={0.5}>
-          {currency(item.qty * item.price)}
-        </H6>
-      </Box>
+const CountControlButtons = ({item}) => {
+  return (
+    <FlexBox alignItems="center" justifyContent="flex-end" gap={1}>
+      <Button disabled={item.qty === 1} sx={{ 
+          height: 28,
+          width: 28,
+          borderRadius: '10px',
+          color:'#FFF',
+          border:'1px solid white',
+        }}
+      >
+        <Remove fontSize="small" />
+      </Button>
 
-      <IconButton size="small" onClick={handleCartAmountChange(0, item)} sx={{
-      marginLeft: 2.5
-    }}>
-        <Close fontSize="small" />
-      </IconButton>
-    </FlexBox>;
+      <Typography fontFamily="Helvetica" color="#FFF">
+        {item.qty}
+      </Typography>
+
+      <Button 
+        sx={{ 
+          height: 28,
+          width: 28,
+          borderRadius: '10px',
+          color:'#FFF',
+          border:'1px solid white',
+          background:'#0366FE'
+        }}
+      >
+        <Add fontSize="small" />
+      </Button>
+
+  </FlexBox>
+  )
 }

@@ -18,12 +18,14 @@ import useCart from "@/hooks/useCart";
 import SymCard from "@/components/custom-components/SymCard";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
+import { useFavorites } from '@/contexts/FavoritesContext';
 
 export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleFavouriteOpen }) {
   const { state } = useCart();
   const cartList = state.cart;
 
+  const { state: favState } = useFavorites();
+  
   const ICON_COLOR = { color: "grey.600" };
   const { isAuthenticated, user, logout } = useAuth();
 
@@ -49,9 +51,12 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
   return (
     <FlexBox alignItems="center">
       {/* Favorite Icon Button */}
-      <IconButton onClick={toggleFavouriteOpen}>
-        <FavoriteBorderIcon sx={ICON_COLOR} />
-      </IconButton>
+      <Badge badgeContent={favState.favorites.length} color="primary">
+        <IconButton onClick={toggleFavouriteOpen}>
+          <FavoriteBorderIcon sx={ICON_COLOR} />
+        </IconButton>
+      </Badge>
+
 
       {/* Shopping Cart Icon Button */}
       <Badge badgeContent={cartList.reduce((acc, item) => acc + item.qty, 0)} color="primary">

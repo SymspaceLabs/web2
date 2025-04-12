@@ -97,30 +97,21 @@ export default function ShopLayout1({children, noFooter=false}) {
       </SymDialog>
 
       {/* SHOPPING CART SIDE DRAWER */}
-      <SymDrawer
-        open={cartOpen}
-        toggleOpen={toggleCartOpen}
-      >
+      <SymDrawer open={cartOpen} toggleOpen={toggleCartOpen}>
         <MiniCart
           toggleSidenav={toggleCartOpen}
         />
       </SymDrawer>
 
       {/* FAVOURITES SIDE DRAWER */}
-      <SymDrawer
-        open={favouriteOpen}
-        toggleOpen={toggleFavouriteOpen}
-      >
+      <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>
         <MiniFavorite
           toggleSidenav={toggleFavouriteOpen}
         />
       </SymDrawer>
 
       {/* Footer Component */}
-      {
-        !noFooter && <Footer />
-      }
-      
+      { !noFooter && <Footer /> }
       
     </Fragment>
   );

@@ -16,7 +16,7 @@ export default function Section2() {
           viewport={{ once: true }}
           style={{ height: "100%" }} // Ensures motion.div spans full height
         >
-          <GraphicsCard sx={{ border: '5px solid', borderColor: 'grey.300', maxWidth: "1400px", mx: "auto" }}>
+          <GraphicsCard sx={{ display: { xs: "none", sm: "block" }, border: '5px solid', borderColor: 'grey.300', maxWidth: "1400px", mx: "auto" }}>
             <video
               playsInline
               width="100%"

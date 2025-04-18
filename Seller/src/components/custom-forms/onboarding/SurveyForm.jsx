@@ -1,5 +1,11 @@
+// =============================================================
+// Bank Account Form
+// =============================================================
+
 import { FlexBox } from '@/components/flex-box';
 import { SymTextField, SymDropdown, SymRadio, SymMultiSelectDropdown } from '@/components/custom-inputs';
+
+// =============================================================
 
 function SurveyForm ({
     industry,
@@ -53,12 +59,12 @@ function SurveyForm ({
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
-            {/* Acc No || Routing No || Wire Routing No */}
             <SymDropdown
                 title="What is your company's primary industry?"
                 value={industry} placeholder="Select an Option"
                 onChange={(e) => setIndustry(e.target.value)}
                 options={options.industry}
+                hasOthersOption={true}
             />
 
             <SymDropdown
@@ -67,6 +73,7 @@ function SurveyForm ({
                 placeholder="Select an Option"
                 onChange={(e) => setRole(e.target.value)}
                 options={options.role}
+                hasOthersOption={true}
             />
 
             <SymDropdown
@@ -96,6 +103,7 @@ function SurveyForm ({
                 selectedValue={Array.isArray(challenges) ? challenges : (challenges ? JSON.parse(challenges) : [])}
                 handleChange={(e) => setChallenges(e.target.value)}
                 options={options.challenges ?? []}
+                hasOthersOption={true}
             />
 
             <SymMultiSelectDropdown
@@ -169,6 +177,7 @@ function SurveyForm ({
                 selectedValue={Array.isArray(envision) ? envision : JSON.parse(envision || "[]")} 
                 handleChange={(e) => setEnvision(e.target.value)} 
                 options={options.envision ?? []}
+                hasOthersOption={true}
             />
 
             <SymMultiSelectDropdown
@@ -176,6 +185,7 @@ function SurveyForm ({
                 selectedValue={Array.isArray(seekFunction) ? seekFunction : JSON.parse(seekFunction || "[]")} 
                 handleChange={(e) => setSeekFunction(e.target.value)} 
                 options={options.seekFunction ?? []}
+                hasOthersOption={true}
             />
 
             <SymRadio 
@@ -197,6 +207,7 @@ function SurveyForm ({
                 selectedValue={Array.isArray(criteria) ? criteria : JSON.parse(criteria || "[]")} 
                 handleChange={(e) => setCriteria(e.target.value)} 
                 options={options.criteria ?? []}
+                hasOthersOption={true}
             />
 
             <SymDropdown
@@ -205,6 +216,7 @@ function SurveyForm ({
                 placeholder="Select an Option"
                 onChange={(e) => setConcerns(e.target.value)}
                 options={options.concerns}
+                hasOthersOption={true}
             />
 
             <SymDropdown
@@ -218,7 +230,7 @@ function SurveyForm ({
             <SymTextField
                 title="Do you have any specific questions, comments, or ideas about AR integration with symspace?"
                 value={question}
-                placeholder="Select an Option"
+                placeholder="Elaborate on questions, comments, or ideas"
                 onChange={(e) => setQuestion(e.target.value)}
             />
 
@@ -238,14 +250,14 @@ const options = {
         "Beauty & Cosmetics",
         "Automotive & Accessories",
         "Retail & E-commerce",
-        "Other (please specify)",
+        // "Other (please specify)",
     ],
     role : [
         'Founder / C-Suite',
         'Marketing Team ',
         'Product Team',
         'Sales Team',
-        'Other (please specify)'
+        // 'Other (please specify)'
         
     ],
     employees : [
@@ -261,7 +273,7 @@ const options = {
         'Difficulty showcasing products online',
         'Low customer engagement with product pages',
         'Limited access to 3D models or AR experiences',
-        'Other (please specify)',
+        // 'Other (please specify)',
     ],
     painPoints : [
         'High return costs impacting profitability',
@@ -301,14 +313,14 @@ const options = {
         'Interactive AR experiences for consumer engagement & marketing campaigns',
         'Reducing returns with AR sizing recommendations',
         'Expanding product marketing to underserved communities ',
-        'Other (please specify)',
+        // 'Other (please specify)',
     ],
     seekFunction : [
         'True-to-size product visualization',
         'AI-powered sizing recommendations',
         'Custom branding for AR experiences',
         'Integration with existing online store',
-        'Other (please specify)',
+        // 'Other (please specify)',
     ],
     criteria : [
         'Ease of integration',
@@ -316,7 +328,7 @@ const options = {
         'Customer experience improvement',
         'Profitability from AR integration',
         'Scalability and flexibility',
-        'Other (please specify)',
+        // 'Other (please specify)',
     ],
     concerns : [
         'High implementation costs',
@@ -324,7 +336,7 @@ const options = {
         'Unclear return on investment (ROI)',
         'Concern about customer adoption of AR',
         'Integration complexity with our current system',
-        'Other (please specify)',
+        // 'Other (please specify)',
     ],
     upcoming : [
         'Yes, within the next 3 months',
@@ -335,7 +347,4 @@ const options = {
         "Yes",
         "No"
     ],
-    gmv : [
-
-    ]
 }

@@ -16,6 +16,7 @@ import styled from "@mui/material/styles/styled";
 import EastIcon from '@mui/icons-material/East';
 import { BsArrowUpRight } from "react-icons/bs";
 import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -52,9 +53,9 @@ export default function Section6() {
           <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
             {/* Section title */}
             <FlexBox alignItems="center" gap={2}>
-              <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+              <H1 sx={{  fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
                 open roles
-              </Typography>
+              </H1>
               <IconButton onClick={() => window.open('/careers#open-roles', '_blank')}>
                 <BsArrowUpRight color="#fff" size="1.35em" />
               </IconButton>
@@ -124,9 +125,9 @@ const JobCard = ({ job }) => {
         {job.location}
       </Typography>
       <Divider />
-      <Typography color="#fff" fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
+      <H1 color="#fff" fontSize={18} sx={{ py: 2 }}>
         {job.title}
-      </Typography>
+      </H1>
       <FlexBox justifyContent="flex-end">
         <EastIcon sx={{ color:'#fff' }} />
       </FlexBox>

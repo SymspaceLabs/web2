@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import styled from "@mui/material/styles/styled";
 import CategoryList from "./category-list"; // STYLED COMPONENT
-import CategoryBasedMenu from "../navbar/category-based-menu/category-based-menu";
 
 const Wrapper = styled("div", {
   shouldForwardProp: prop => prop !== "open"

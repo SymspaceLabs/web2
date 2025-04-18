@@ -22,7 +22,7 @@ const SymRadio = ({ options, selectedValue, onChange, title }) => {
                                     color: "white",
                                     "&.Mui-checked": {
                                         color: "white",
-                                        backgroundColor: "black",
+                                        backgroundColor: "#0366FE",
                                         borderRadius: "50%",
                                         padding: "4px",
                                     },

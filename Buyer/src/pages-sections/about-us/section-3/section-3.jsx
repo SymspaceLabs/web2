@@ -4,12 +4,13 @@
 // Section 3 - Partners Section -  About Us 
 // =============================================================================
 
-import { FlexBox } from '@/components/flex-box';
+import Link from 'next/link';
+import { styles } from '../page-view/styles';
+import { H1 } from '@/components/Typography';
 import { COMPANIES_DATA } from "@/data/companies";
 import { LazyImage } from '@/components/lazy-image';
 import { Button, Box, Container } from "@mui/material";
-import { H1 } from '@/components/Typography';
-import { styles } from '../page-view/styles';
+import { FlexBox, FlexColCenter } from '@/components/flex-box';
 
 // =============================================================================
 
@@ -32,21 +33,13 @@ export default function Section3() {
               </Box>
             ))}
             
-            <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Button sx={{
-                background: 'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
-                borderRadius: '50px',
-                px: 8,
-                py: 2,
-                color: '#fff',
-                fontSize: {xs:'14px', sm:'20px'},
-                textTransform: 'lowercase',
-                fontWeight: 400,
-                border: '1px solid #FFF'
-              }}>
-                get in touch
-              </Button>
-            </Box>
+            <FlexColCenter>
+              <Link href='/contact-us' passHref>
+                <Button sx={styles.glassCardBtn}>
+                  get in touch
+                </Button>
+              </Link>
+            </FlexColCenter>
           </FlexBox>
         </Box>
       </Box>

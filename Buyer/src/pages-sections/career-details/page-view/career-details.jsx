@@ -5,8 +5,6 @@ import { Box } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
-import { BlobBox2 } from "./blobBox2";
-import { BlobBox } from "./blobBox";
 import JobApplicationDialog from "@/components/dialog/JobApplicationDialog";
 
 export default function CareerDetailsPageView({ jobId }) {
@@ -26,7 +24,10 @@ export default function CareerDetailsPageView({ jobId }) {
     fetchJob();
   }, [jobId]);
 
-  const toggleDialog = () => setDialogOpen((state) => !state);
+  const toggleDialog = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+    setDialogOpen((state) => !state)
+  };
 
   if (!job) return <p>Loading...</p>;
 
@@ -44,7 +45,7 @@ export default function CareerDetailsPageView({ jobId }) {
       <Box sx={{ zIndex: 1, width: "100%" }}>
         <Section1 job={job} toggleDialog={toggleDialog} />
         <Section2 job={job} />
-        <Section3 />
+        <Section3 toggleDialog={toggleDialog} />
       </Box>
 
       {/* Dialog */}

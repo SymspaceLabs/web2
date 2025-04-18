@@ -4,6 +4,7 @@
 // Landing Page Pages Section
 // =======================================================
 
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { BlobBox } from "@/components/BlobBox";
 import Section1 from "../section-1";
@@ -25,6 +26,20 @@ import Section16 from "../section-16";
 
 
 export default function LandingPageView() {
+  
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const element = document.getElementById(hash.replace("#", ""));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100); // slight delay ensures page layout is ready
+      }
+    }
+  }, []);
+  
+  
   return (
     <Box sx={{ position:'relative', overflow:'hidden' }}>
       

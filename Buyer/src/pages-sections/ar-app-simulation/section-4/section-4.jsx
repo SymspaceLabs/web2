@@ -7,6 +7,8 @@
 import Image from "next/image";
 import { styles } from "../page-view/styles";
 import { Box, Container, Typography, Button } from "@mui/material";
+import { H1, Paragraph } from "@/components/Typography";
+import Link from "next/link";
 
 export default function Section4() {
   return (
@@ -67,40 +69,23 @@ export default function Section4() {
 
         {/* TITLE & SUBTITLE */}
         <Box>
-          <Typography
-            fontSize={{ xs: 28, sm: 40 }}
-            sx={styles.elementalEndFont}
-            textAlign="center"
-          >
+          <H1 fontSize={{ xs: 28, sm: 40 }} textAlign="center">
             personalized experience
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: "16px",
-              pb: "25px",
-              color: "#434167",
-              fontFamily: "Helvetica",
-              textAlign: "center",
-            }}
-          >
+          </H1>
+          <Paragraph sx={{ fontSize: "16px", pb: "25px", color: "#434167", textAlign: "center",}}>
             We curate customized shopping experiences from product sizes, user
             preferences, and interests.
             <br />
             It’s time for a seamless solution, especially for those unable to
             travel in-store or prefer not to.
-          </Typography>
+          </Paragraph>
         </Box>
 
         {/* TITLE & SUBTITLE 2 */}
         <Box>
-          <Typography
-            fontSize={{ xs: 28, sm: 40 }}
-            sx={styles.elementalEndFont}
-            textAlign="center"
-            wordSpacing="10px"
-          >
+          <H1 fontSize={{ xs: 28, sm: 40 }} textAlign="center" wordSpacing="10px" >
             easily manage products
-          </Typography>
+          </H1>
           <Typography
             sx={{
               fontSize: "16px",
@@ -114,24 +99,12 @@ export default function Section4() {
           </Typography>
         </Box>
 
-        <Button
-          sx={{
-              boxSizing: "border-box",
-              py:2,
-              px:5,
-              background: "linear-gradient(180deg, #3084FF 0%, #1D4F99 100%)",
-              borderRadius: "20px",
-              color: "white", // Ensures the text is visible on the dark gradient
-              ...styles.elementalEndFont,
-              fontSize: "16px",
-              "&:hover": {
-                background: "linear-gradient(180deg, #1D4F99 0%, #3084FF 100%)",
-              },
-          }}
-          
-        >
-          learn more
-        </Button>
+        <Link href="/#3d-repository" passHref>
+          <Button sx={styles.learnMoreBtn} >
+            learn more
+          </Button>
+        </Link>
+
 
         {/* IMAGE WITH TEXT BUBBLES 2 */}
         <Box
@@ -200,9 +173,8 @@ export default function Section4() {
 
 const TextBubble = ({ positionStyles, children }) => {
   return (
-    <Typography
+    <H1
       sx={{
-        ...styles.elementalEndFont,
         position: "absolute",
         background: "white",
         filter: "drop-shadow(0px 5px 50px rgba(0, 0, 0, 0.4))",
@@ -214,7 +186,7 @@ const TextBubble = ({ positionStyles, children }) => {
       }}
     >
       {children}
-    </Typography>
+    </H1>
   );
 };
 

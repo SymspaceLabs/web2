@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
+import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
 
 class CreateProductVariantPropertyDto {
   @IsString()
@@ -20,16 +21,6 @@ class CreateProductVariantPropertyDto {
 class CreatePriceDto {
   @IsNumber()
   amount: number;
-}
-
-class CreateProductVariantDto {
-  @ValidateNested({ each: true })
-  @Type(() => CreateProductVariantPropertyDto)
-  properties: CreateProductVariantPropertyDto[];
-
-  @ValidateNested({ each: true })
-  @Type(() => CreatePriceDto)
-  prices: CreatePriceDto[];
 }
 
 export class CreateProductDto {
@@ -83,6 +74,10 @@ export class CreateProductDto {
   @IsOptional()
   sizes?: string[];
 
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductVariantDto)
+  variants: CreateProductVariantDto[];
 
   // @IsString()
   // @IsNotEmpty()
@@ -104,10 +99,6 @@ export class CreateProductDto {
   // @IsOptional()
   // color?: string[];
 
-  // @IsNumber()
-  // @IsOptional()
-  // quantity?: number;
-
   // @IsString()
   // @IsOptional()
   // type?: 'dynamic' | 'static';
@@ -120,8 +111,4 @@ export class CreateProductDto {
   // @IsOptional()
   // productFitting?: 'True to Size' | 'Runs Small' | 'Runs Big';
 
-  // @IsArray()
-  // @ValidateNested({ each: true })
-  // @Type(() => CreateProductVariantDto)
-  // variants: CreateProductVariantDto[];
 }

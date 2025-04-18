@@ -1,13 +1,4 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 export const styles = {
-    elementalEndFont,
     glassCard : {
         background: 'rgba(255, 255, 255, 0.35)',
         boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
@@ -19,6 +10,20 @@ export const styles = {
         borderRadius: "40px",
         py: { xs:5, sm:10},
         px: { xs:3, sm:10}
-    }
+    },
+    glassCardBtn: {
+        background: 'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
+        borderRadius: '50px',
+        px: 8,
+        py: 2,
+        color: '#fff',
+        fontSize: {xs:'14px', sm:'20px'},
+        textTransform: 'lowercase',
+        fontWeight: 400,
+        border: '1px solid #FFF',
+        '&:hover' : {
+            background: '#000'
+        }
+      }
     
 };

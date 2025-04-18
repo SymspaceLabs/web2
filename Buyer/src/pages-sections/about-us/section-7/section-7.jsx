@@ -12,11 +12,11 @@ import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { LazyImage } from "@/components/lazy-image";
 import { IconButton, Box, Container, Divider } from "@mui/material";
 
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
 import styled from "@mui/material/styles/styled";
 import { H1, Paragraph } from "@/components/Typography";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function Section6() {
   const { carouselRef, responsive, handleNext, handlePrev } = useCarousel();
@@ -116,9 +116,9 @@ const BlogCard = ({ blog }) => {
         {blog.handle_url_title}
       </Paragraph>
       <Divider />
-      <H1 color="#fff" fontSize={18} py={2}>
+      <Paragraph color="#fff" fontSize={18} py={2}>
         {blog.title}
-      </H1>
+      </Paragraph>
     </CardWrapper>
   );
 };

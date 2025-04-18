@@ -1,5 +1,12 @@
+// =========================================================
+// Basic Info Form
+// =========================================================
+
+import countryList from '@/data/countryList';
 import { FlexBox } from '@/components/flex-box';
-import { SymDropdown, SymTextField } from '@/components/custom-inputs';
+import { SymDropdown, SymTextField, SymAutoComplete } from '@/components/custom-inputs';
+
+// =========================================================
 
 function BasicInfoForm ({
     email,
@@ -12,12 +19,10 @@ function BasicInfoForm ({
     setEin,
     website,
     setWebsite,
-
     address1,
     setAddress1,
     address2,
     setAddress2,
-
     city,
     setCity,
     state,
@@ -26,66 +31,54 @@ function BasicInfoForm ({
     setCountry,
     zip,
     setZip,
-
     gmv,
     setGmv,
-
     category,
     setCategory
-
 }) {
        
-    const handleEmailChange = (event) => setEmail(event.target.value);
-    const handleEntityNameChange = (event) => setEntityName(event.target.value);
-    const handleLegalNameChange = (event) => setLegalName(event.target.value);
-    const handleEinChange = (event) => setEin(event.target.value);
-    const handleWebsiteChange = (event) => setWebsite(event.target.value);
-    const handleAddress1Change = (event) => setAddress1(event.target.value);
-    const handleAddress2Change = (event) => setAddress2(event.target.value);
-    const handleCityChange = (event) => setCity(event.target.value);
-    const handleStateChange = (event) => setState(event.target.value);
-    const handleCountryChange = (event) => setCountry(event.target.value);
-    const handleZipChange = (event) => setZip(event.target.value);
-    const handleGmvChange = (event) => setGmv(event.target.value);
-    const handleCategoryChange = (event) => setCategory(event.target.value);
-
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
             {/* EMAIL */}
-            <SymTextField title="Business Email" value={email} placeholder="Email" onChange={handleEmailChange} />
+            <SymTextField title="Business Email" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
 
             {/* ENTITY NAME || LEGAL NAME || EIN || WEBSITE */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Entity Name" value={entityName} placeholder="Entity DBA Name" onChange={handleEntityNameChange} toolTipText={toolTipText.entityName} />
-                <SymTextField title="Entity Legal Name" value={legalName} placeholder="Entity Legal Name" onChange={handleLegalNameChange} toolTipText={toolTipText.legalName} />
-                <SymTextField title="EIN" value={ein} placeholder="EIN" onChange={handleEinChange} toolTipText={toolTipText.ein} />
-                <SymTextField title="Website" value={website} placeholder="Website" onChange={handleWebsiteChange} />
+                <SymTextField title="Entity Name" value={entityName} placeholder="Entity DBA Name" onChange={(e) => setEntityName(e.target.value)} toolTipText={toolTipText.entityName} />
+                <SymTextField title="Entity Legal Name" value={legalName} placeholder="Entity Legal Name" onChange={(e) => setLegalName(e.target.value)} toolTipText={toolTipText.legalName} />
+                <SymTextField title="EIN" value={ein} placeholder="EIN" onChange={(e) => setEin(e.target.value)} toolTipText={toolTipText.ein} />
+                <SymTextField title="Website" value={website} placeholder="Website" onChange={(e) => setWebsite(e.target.value)} />
             </FlexBox>
 
             {/* Address Line 1 */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Business Address" value={address1} placeholder="Business Address" onChange={handleAddress1Change} toolTipText={toolTipText.address} />
+                <SymTextField title="Business Address" value={address1} placeholder="Business Address" onChange={(e) => setAddress1(e.target.value)} toolTipText={toolTipText.address} />
             </FlexBox>
 
             {/* Address Line 2 */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Business AddressLine 2 (Optional)" value={address2} placeholder="Business Address Line 2" onChange={handleAddress2Change} />
+                <SymTextField title="Business AddressLine 2 (Optional)" value={address2} placeholder="Business Address Line 2" onChange={(e) => setAddress2(e.target.value)} />
             </FlexBox>
 
             {/* City || State || Country || ZIP code */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="City" value={city} placeholder="City" onChange={handleCityChange} />
-                <SymTextField title="State" value={state} placeholder="State" onChange={handleStateChange} />
-                <SymTextField title="Country" value={country} placeholder="Country" onChange={handleCountryChange} />
-                <SymTextField title="Zip" value={zip} placeholder="Zip" onChange={handleZipChange} />
+                <SymTextField title="City" value={city} placeholder="City" onChange={(e) => setCity(e.target.value)} />
+                <SymTextField title="State" value={state} placeholder="State" onChange={(e) => setState(e.target.value)} />
+                <SymAutoComplete
+                    title="Country"
+                    placeholder="Country"
+                    value={countryList.find((item) => item.value === country)}
+                    onChange={(val) => setCountry(val?.value ?? "")}
+                    options={countryList}
+                />
+                <SymTextField title="Zip Code" value={zip} placeholder="Zip Code" onChange={(e) => setZip(e.target.value)} />
             </FlexBox>
 
             {/* GMV || Category */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymDropdown title="Average Gross Merchandise Value (GMV)" value={gmv} placeholder="GMV" onChange={handleGmvChange} options={options.gmv}  toolTipText={toolTipText.gmv}  />
-                <SymDropdown title="Highest Performing Category" value={category} onChange={handleCategoryChange} options={["Option 1","Option 2"]} />
-                
+                <SymDropdown title="Average Gross Merchandise Value (GMV)" value={gmv} placeholder="GMV" onChange={(e) => setGmv(e.target.value)} options={options.gmv}  toolTipText={toolTipText.gmv}  />
+                <SymDropdown title="Highest Performing Category" value={category} onChange={(e) => setCategory(e.target.value)} options={options.topPerformingCategory} />
             </FlexBox>
 
         </FlexBox>
@@ -103,6 +96,78 @@ const options = {
         "$100,001 - $500,000",
         "$500,001 - $1,000,000",
         "$1,000,001 and above",
+    ],
+    topPerformingCategory : [
+        "Dresses",
+        "Tops",
+        "Shirts",
+        "Bottoms",
+        "Outerwear",
+        "Activewear",
+        "Intimates",
+        "Shoes",
+        "Skincare",
+        "Moisturizers",
+        "Cleansers",
+        "Serums",
+        "Masks",
+        "Haircare",
+        "Shampoos",
+        "Conditioners",
+        "Hair Treatments",
+        "Styling Tools",
+        "Makeup",
+        "Foundations",
+        "Lipsticks",
+        "Eyeshadows",
+        "Mascaras",
+        "Blushes",
+        "Makeup Tools",
+        "Concealers",
+        "Powders",
+        "Eyeliners",
+        "Brow Products",
+        "Fragrances",
+        "Perfumes",
+        "Body Sprays",
+        "Vitamins & Supplements",
+        "Medical Equipment",
+        "Fitness Equipment",
+        "Health Monitors",
+        "Oral Care",
+        "Toothbrushes",
+        "Toothpaste",
+        "Bath & Body",
+        "Body Wash",
+        "Lotions",
+        "Hand Sanitizers",
+        "Shaving & Hair Removal",
+        "Razors",
+        "Shaving Cream",
+        "Hair Removal Devices",
+        "Diapers",
+        "Disposable Diapers",
+        "Cloth Diapers",
+        "Feeding",
+        "Bottles",
+        "Breastfeeding Accessories",
+        "Baby Gear",
+        "Strollers",
+        "Car Seats",
+        "Carriers",
+        "Nursery",
+        "Cribs",
+        "Changing Tables",
+        "Baby Monitors",
+        "Educational",
+        "Learning Toys",
+        "Fitness Equipment",
+        "Outdoor Recreation",
+        "Team Sports",
+        "Vehicle Parts & Accessories",
+        "Mobility Aids",
+        "Daily Living Aids",
+        "Accessibility Equipment"
     ]
 }
 

@@ -4,6 +4,7 @@ import { LazyImage } from "@/components/lazy-image";
 import { FlexRowCenter } from "../flex-box";
 import { H1 } from "../Typography";
 import { styles } from "./styles";
+import Link from "next/link";
 
 export default function PlanCard({ plan, theme }) {
   return (
@@ -82,9 +83,12 @@ export default function PlanCard({ plan, theme }) {
               {plan.title!=="Starter" ? "+ $"+`${plan.credit} `+ "Each Additional Credit" : <>&nbsp;</> }
             </Typography>:<></>
           }
-          <Button fullWidth sx={styles.getStartedBtn}>
-            Get Started
-          </Button>
+          <Link href="/register" passHref>
+            <Button fullWidth sx={styles.getStartedBtn}>
+              Get Started
+            </Button>
+          </Link>
+
           <Typography
             sx={{ fontWeight: "bold", fontSize: "16px", color: theme=='dark'?'#FFF':'#000' }}
           >

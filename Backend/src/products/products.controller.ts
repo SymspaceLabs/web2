@@ -9,6 +9,7 @@ import {
   ParseFilePipe,
   Patch,
   Post,
+  Put,
   Res,
   UploadedFiles,
   UseInterceptors,
@@ -27,9 +28,19 @@ export class ProductsController {
   ) {}
 
   @Post()
-  async createProduct(@Body() createProductDto: CreateProductDto) {
-    return await this.productsService.create(createProductDto);
+  async create(@Body() body: CreateProductDto) {
+    return this.productsService.upsert(undefined, body);
   }
+  
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() body: CreateProductDto) {
+    return this.productsService.upsert(id, body);
+  }  
+
+  // @Post()
+  // async createProduct(@Body() createProductDto: CreateProductDto) {
+  //   return await this.productsService.create(createProductDto);
+  // }
 
   @Get()
   async getAllProducts() {
@@ -47,13 +58,8 @@ export class ProductsController {
     return 
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
-  }
-
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
 

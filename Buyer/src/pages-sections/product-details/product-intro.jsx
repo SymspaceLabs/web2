@@ -46,28 +46,34 @@ export default function ProductIntro({ product }) {
 
   const { state: favState, dispatch: favDispatch } = useFavorites();
 
-
   // State hooks for selected options and toggles
   const [selectedColor, setSelectedColor] = useState(colors[0].code);
   const [selectedSize, setSelectedSize] = useState("");
-  // const [isFavorited, setIsFavorited] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [sizeError, setSizeError] = useState(false);
-
-
   const { state, dispatch } = useCart();
-
-  // Toggles the favorite status of the product
-  // const toggleFavorite = () => {
-  //   setIsFavorited(!isFavorited)
-  // };
 
   const isFavorited = favState.favorites.some((item) => item.id === product.id);
 
   const toggleFavorite = () => {
     favDispatch({
       type: "TOGGLE_FAVORITE",
-      payload: product,
+      payload: {
+        price,
+        name,
+        salePrice,
+        imgUrl: images[0].url,
+        id,
+        slug,
+        sizes: sizes.map(size => ({
+          label: size.size,
+          value: size.id
+        })),
+        colors: colors.map(color => ({
+          label: color.name,
+          value: color.code
+        })),
+      },
     });
   };
 
@@ -108,6 +114,10 @@ export default function ProductIntro({ product }) {
         selectedColor,
         selectedSize,
         salePrice,
+        sizes: sizes.map(size => ({
+          label: size.size,
+          value: size.id
+        })),
       },
     });
   };

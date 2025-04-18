@@ -46,8 +46,6 @@ const SymTextField = ({
                 style: { color: '#fff' },
             }}
             inputProps={{
-                // inputMode: type=='number' ? "numeric" : undefined,
-                // pattern: type=='number' ? "[0-9]*" : undefined,
                 maxLength: charLimit ? charLimit : undefined,
                 style: { color: "#fff" },
             }}

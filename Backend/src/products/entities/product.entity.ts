@@ -5,6 +5,7 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
+import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 
 
 export enum ProductStatus {
@@ -81,6 +82,10 @@ export class Product {
 
   @Column()
   sizeChart: string;
+
+  @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
+  variants: ProductVariant[];
+
 
 
   // @Column({ nullable: true })

@@ -27,6 +27,8 @@ const SymDatePicker = ({
             slots={{ textField: TextField }}
             slotProps={{
                 textField: {
+                error: false, // Only set to true if there's an actual error
+                helperText: "", // Optional, or provide a message when there's an error
                 sx: {
                     backgroundColor: "#000", // Input background
                     color: "#fff", // Input text color

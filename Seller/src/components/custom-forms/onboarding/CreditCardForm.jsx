@@ -49,6 +49,7 @@ export default CreditCardForm;
 const toolTipText = {
     entityName : 'Entity Name is the DBA “Doing Business As” name the entity is using to conduct business under for marketing and branding purposes. This can be different from the entity’s legal name.',
     accountHolderName : 'Entity Legal Name is the official name of the business entity, as registered with the relevant authorities (e.g., state, county) and appears on official documents like articles of incorporation or organization.',
+    cvv: 'How to find the CVV? Visa, Mastercard, Discover, and UnionPay display the three-digit CVV number on the back of the card, to the right of the signature.'
 
 
 }

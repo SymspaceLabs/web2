@@ -6,6 +6,7 @@
 
 import { Box, Container, Typography } from "@mui/material";
 import { styles } from "../page-view/styles";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section2() {
 
@@ -35,19 +36,19 @@ export default function Section2() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
       <Box sx={{ width:'100%', maxWidth:'1400px' }}>
-        <Typography sx={{ borderBottom:'1px solid white', py:1, ...styles.elementalEndFont, fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+        <H1 sx={{ borderBottom:'1px solid white', py:1, fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
           our  Mission
-        </Typography>
+        </H1>
         <Box sx={{ maxWidth:'1200px', pt:4}}>
-          <Typography sx={{ pb:3, fontFamily: 'Helvetica', fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
+          <Paragraph sx={{ pb:3, fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
             We envision a future where anyone, anywhere can experience products in the real-world—conveniently, confidently, and comfortably.
-          </Typography>
-          <Typography sx={{ pb:3, fontFamily: 'Helvetica', fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
+          </Paragraph>
+          <Paragraph sx={{ pb:3, fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
             At Symspace, we bridge the gap between physical and virtual shopping, redefining digital commerce and real estate staging with AI-driven 3D modeling and AR solutions. Our mission is to make shopping and staging more accessible, immersive, and efficient for brands, retailers, and consumers.
-          </Typography>
-          <Typography sx={{ pb:3, fontFamily: 'Helvetica', fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
+          </Paragraph>
+          <Paragraph sx={{ pb:3, fontSize: { xs: 15, sm: 20 }, color: '#fff', textAlign:'justify' }}>
             By prioritizing inclusivity, innovation, and sustainability, we empower persons with disabilities, expectant mothers, veterans, and homebound individuals to interact with true-to-size AR products, transforming how they shop and experience spaces. At the same time, we help businesses reduce returns, lower costs, and optimize inventory through 3D visuals and AR trial rooms.
-          </Typography>
+          </Paragraph>
         </Box>        
       </Box>
     </Container>

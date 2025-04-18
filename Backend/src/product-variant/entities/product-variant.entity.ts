@@ -1,23 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+} from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
-import { ProductVariantPropertyEntity } from 'src/product-variant-property/entities/product-variant-property.entity';
-import { PriceEntity } from 'src/price/entities/price.entity';
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
+import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 
 @Entity()
-export class ProductVariantEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class ProductVariant {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  // @ManyToOne(() => Product, (product) => product.variants)
-  // product: Product;
+  @ManyToOne(() => Product, (product) => product.variants, {
+    onDelete: 'CASCADE',
+  })
+  product: Product;
 
-  // @OneToMany(
-  //   () => ProductVariantPropertyEntity,
-  //   (variantProperty) => variantProperty.variant,
-  //   { cascade: true },
-  // )
-  // properties: ProductVariantPropertyEntity[];
+  // Optional color
+  @ManyToOne(() => ProductColor, { eager: true, nullable: true })
+  color?: ProductColor;
 
-  // @OneToMany(() => PriceEntity, (price) => price.variant, { cascade: true })
-  // prices: PriceEntity[];
+  // Optional size
+  @ManyToOne(() => ProductSize, { eager: true, nullable: true })
+  size?: ProductSize;
+
+  @Column({ type: 'float' })
+  price: number;
+
+  @Column({ type: 'int' })
+  stock: number;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @Column({ nullable: true })
+  sku?: string;
 }

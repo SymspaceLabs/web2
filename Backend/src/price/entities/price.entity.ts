@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { ProductVariantEntity } from 'src/product-variant/entities/product-variant.entity';
+// import { ProductVariantEntity } from 'src/product-variant/entities/product-variant.entity';
 
 @Entity()
 export class PriceEntity {

@@ -1,12 +1,11 @@
 "use client"
 
-import { styles } from "../styles";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import styled from "@mui/material/styles/styled";
 import { LazyImage } from '@/components/lazy-image';
-import { Box, Typography, Button, Container} from "@mui/material";
-import Link from "next/link";
 import { H1, Paragraph } from "../Typography";
+import { Box, Typography, Button, Container} from "@mui/material";
 
 export default function ContactUsBanner({title, subtitle}) {  
   return (
@@ -36,7 +35,7 @@ export default function ContactUsBanner({title, subtitle}) {
                 {subtitle}
               </Paragraph >
 
-            <Link href="/contact-us">
+            <Link href="/contact-us" passHref>
                 <Button sx={darkBtn}>
                     Contact Us
                 </Button>

@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import RTL from "../components/rtl";
 import localFont from "next/font/local";
 import ProgressBar from "../components/progress";
-import CartProvider from "../contexts/CartContext";
 import ThemeProvider from "../theme/theme-provider";
 import { useRouter, usePathname } from "next/navigation";
 import SettingsProvider from "../contexts/SettingContext";
@@ -66,14 +65,12 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ThemeProvider>
             <SnackbarProvider>
-              <CartProvider>
                 <SettingsProvider>
                   <ProgressBar />
                   <ProtectedLayout>
                     <RTL>{children}</RTL>
                   </ProtectedLayout>
                 </SettingsProvider>
-              </CartProvider>
             </SnackbarProvider>
           </ThemeProvider>
         </AuthProvider>

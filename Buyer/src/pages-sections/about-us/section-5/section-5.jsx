@@ -5,14 +5,14 @@
 // =============================================================================
 
 import Link from "next/link"; // Used for navigation.
-import { styles } from "../page-view/styles";
-import { IconButton, Box, Container, Typography } from "@mui/material";
+import { IconButton, Box, Container } from "@mui/material";
 import { FlexBox } from "@/components/flex-box"; // Custom utility for flexible layouts.
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { LazyImage } from "@/components/lazy-image";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import useCarousel from "./useCarousel"; // Custom hook for carousel functionality.
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section5() {
 
@@ -25,9 +25,9 @@ export default function Section5() {
         <Box sx={{ width:'100%', maxWidth:'1400px' }}>
           <FlexBox alignItems="center" justifyContent="space-between" mt={10} mb={3} sx={{ py:5 }}>
             {/* Section title */}
-            <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
+            <H1 sx={{ fontSize: { xs: 24, sm: 35 }, color: '#fff', wordSpacing:'10px' }}>
               our leadership team
-            </Typography>
+            </H1>
 
             {/* Navigation buttons for the carousel */}
             <FlexBox justifyContent="space-between" maxWidth="90px" >
@@ -56,12 +56,12 @@ export default function Section5() {
                   />
                   {/* staff title */}
                   <FlexBox flexDirection="column" alignItems="center" gap={1}>
-                    <Typography sx={{ ...styles.elementalEndFont, color: "#fff" }}>
+                    <H1 sx={{ color: "#fff" }}>
                       {staff.title}
-                    </Typography>
-                    <Typography color="#fff">
+                    </H1>
+                    <Paragraph color="#fff">
                       {staff.role}
-                    </Typography>
+                    </Paragraph>
                   </FlexBox>
                 </FlexBox>
               </Link>

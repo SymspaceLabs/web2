@@ -30,7 +30,6 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
     const [role, setRole] = useState(job.title);
     const [comments, setComments] = useState('');
     const [uploadedFile, setUploadedFile] = useState('');
-    const [isChecked, setIsChecked] = useState(false);
     const [isValid, setIsValid] = useState(true);
 
     const handleSubmit = async () => {
@@ -118,11 +117,9 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
             lastName && 
             email && 
             linkedInUrl &&
-            role &&
-            comments &&
-            isChecked
+            role
         );
-    }, [firstName, lastName, email, linkedInUrl, role, comments, isChecked]);
+    }, [firstName, lastName, email, linkedInUrl, role, comments]);
     
       
     return (
@@ -136,7 +133,7 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                     width: "100%", // Ensure responsiveness
                     backgroundColor: "rgba(63, 103, 166, 0.8)",
                     backdropFilter: 'blur(10px)',
-                    borderRadius: {xs:'20px', sm:'40px'},
+                    borderRadius: '40px',
                     boxShadow:
                         "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
                 },
@@ -185,8 +182,6 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                         setComments={setComments}
                         uploadedFile={uploadedFile}
                         setUploadedFile={setUploadedFile}
-                        isChecked={isChecked}
-                        setIsChecked={setIsChecked}
                         isAuthenticated={isAuthenticated}
                     />
                 </Box>

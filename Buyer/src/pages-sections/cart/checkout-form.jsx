@@ -1,12 +1,12 @@
 
-import Link from "next/link"; // MUI
+
 import useCart from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 
 import { Span } from "components/Typography";
 import { FlexBetween, FlexBox, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
 
 import countryList from "data/countryList"; // CUSTOM UTILS LIBRARY FUNCTION
-import { Autocomplete, TextField, MenuItem, Card, Button, Divider } from "@mui/material";
+import { Card, Button, Divider } from "@mui/material";
 import { currency } from "lib";
 import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
 import { useState } from "react";

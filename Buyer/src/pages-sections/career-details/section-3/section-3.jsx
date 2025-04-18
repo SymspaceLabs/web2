@@ -3,7 +3,7 @@ import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 import { H1 } from '@/components/Typography';
 import { styles } from '../page-view/styles';
 
-export default function Section3() {
+export default function Section3({toggleDialog}) {
   return (
     <Container sx={{ py:5 }}>
       <Box sx={cardStyle}>
@@ -17,9 +17,9 @@ export default function Section3() {
             </Typography>
           </FlexCol>
           <FlexColCenter>
-            <Button sx={styles.btn2}>
-              Apply
-            </Button>
+              <Button sx={styles.btn2} onClick={toggleDialog}>
+                Apply
+              </Button>
           </FlexColCenter>
         </FlexBox>
       </Box>

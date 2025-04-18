@@ -7,11 +7,6 @@ export const elementalEndFont = {
 }
 
 export const styles = {
-    elementalEndFont : {
-        ...elementalEndFont,
-        textTransform:'lowercase',
-        fontWeight: 500
-    },
     rootGrid: {
         position: 'relative',
         background: '#fff',
@@ -26,7 +21,6 @@ export const styles = {
         zIndex: 2,
       },
       title: {
-        ...elementalEndFont,
         color: '#fff',
         fontSize: { xs: 50, sm: 50, md: 96 },
       },
@@ -42,7 +36,6 @@ export const styles = {
         flexDirection: {xs:'column', sm:'row'},  // Default for desktop view
       },
       filledButton: {
-        ...elementalEndFont,
         fontSize:'16px',
         background: '#000',
         color: '#fff',
@@ -60,7 +53,6 @@ export const styles = {
       outlinedButton: {
         fontSize:'16px',
         background: 'transparent',
-        ...elementalEndFont,
         color: '#000',
         borderRadius: '50px',
         border:'2px solid black',
@@ -74,7 +66,6 @@ export const styles = {
         },
       },    
       buttonText: {
-        ...elementalEndFont,
         fontSize: 16,
       },
       imageBox: {
@@ -90,5 +81,17 @@ export const styles = {
         position: 'relative',
         minHeight: '500px', // Added minHeight
       },
+      learnMoreBtn : {
+          boxSizing: "border-box",
+          py:2,
+          px:5,
+          background: "linear-gradient(180deg, #3084FF 0%, #1D4F99 100%)",
+          borderRadius: "20px",
+          color: "white", // Ensures the text is visible on the dark gradient
+          fontSize: "16px",
+          "&:hover": {
+            background: "linear-gradient(180deg, #1D4F99 0%, #3084FF 100%)",
+          },
+      }
     
 };

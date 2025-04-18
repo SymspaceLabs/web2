@@ -29,8 +29,8 @@ function Form1 ({
   const [state, setState] = useState(user?.company.state);
   const [country, setCountry] = useState(user?.company.country);
   const [zip, setZip] = useState(user?.company.zip);
-  const [gmv, setGmv] = useState(user?.company.gmv);
-  const [category, setCategory] = useState(user?.company.category);
+  const [gmv, setGmv] = useState(user?.company.gmv || "");
+  const [category, setCategory] = useState(user?.company.category || "");
   const [businessPhone, setBusinessPhone] = useState(user?.company.businessPhone)
 
   // Basic Info
@@ -41,26 +41,26 @@ function Form1 ({
 
   useEffect(() => {
     // Company
-    setEmail(user?.email) || "";
-    setEntityName(user?.company.entityName) || "";
-    setLegalName(user?.company.legalName) || "";
-    setEin(user?.company.ein) || "";
-    setWebsite(user?.company.website) || "";
-    setAddress1(user?.company.address1) || "";
-    setAddress2(user?.company.address2) || "";
-    setCity(user?.company.city) || "";
-    setState(user?.company.state) || "";
-    setCountry(user?.company.country) || "";
-    setZip(user?.company.zip) || "";
-    setGmv(user?.company.gmv) || "";
-    setCategory(user?.company.category) || "";
+    setEmail(user?.email || "");
+    setEntityName(user?.company.entityName || "");
+    setLegalName(user?.company.legalName || "");
+    setEin(user?.company.ein || "");
+    setWebsite(user?.company.website || "");
+    setAddress1(user?.company.address1 || "");
+    setAddress2(user?.company.address2 || "");
+    setCity(user?.company.city || "");
+    setState(user?.company.state || "");
+    setCountry(user?.company.country || "");
+    setZip(user?.company.zip || "");
+    setGmv(user?.company.gmv || "");
+    setCategory(user?.company.category  || "");
     setBusinessPhone(user?.company.businessPhone || "")
 
     // Basic Info
     setFirstName(user?.firstName || "")
     setLastName(user?.lastName || "")
     setDob(user?.dob || "")
-    setPhone(user?.phone) || "";
+    setPhone(user?.phone || "");
   }, [user]);
 
   useEffect(() => {
@@ -87,7 +87,7 @@ function Form1 ({
         address2,
         city,
         state,
-        country,
+        country: country.value,
         zip,
         gmv,
         category,

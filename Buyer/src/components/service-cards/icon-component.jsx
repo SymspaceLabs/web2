@@ -6,8 +6,9 @@ import appIcons from "@/icons"; // =============================================
 // ==============================================================
 export default function IconComponent({
   icon,
+  isActive,
   ...props
 }) {
   const Icon = appIcons[icon];
-  return <Icon {...props} />;
+  return <Icon sx={{ fontSize: 24, color: isActive ? "#007BFF" : "#FFF" }} {...props} />;
 }

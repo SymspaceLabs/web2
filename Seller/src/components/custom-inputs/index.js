@@ -7,3 +7,4 @@ export { default as SymDatePicker } from "./SymDatePicker";
 export { default as SymPasswordInput } from "./SymPasswordInput";
 export { default as SymMultiFileUploader } from "./SymMultiFileUploader";
 export { default as SymMultiSelectDropdown } from "./SymMultiSelectDropdown";
+export {default as SymAutoComplete} from "./SymAutoComplete";

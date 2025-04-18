@@ -16,7 +16,6 @@ import Section5 from "../section-5";
 import Section6 from "../section-6";
 import Section7 from "../section-7";
 import Section8 from "../section-8";
-import Section9 from "../section-9";
 
 export default function MarketplacePageView() {
   const [showPopup, setShowPopup] = useState(false);

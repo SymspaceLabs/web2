@@ -10,16 +10,17 @@ export const StyledRoot = styled("div")(({
     right: 0,
     position: "fixed",
     padding: "0.5rem 1rem",
-    backgroundColor: theme.palette.background.paper
   },
   "& .category-list": {
     left: 0,
     position: "fixed",
     overflowY: "auto",
-    background: theme.palette.grey[100],
+    background:'rgba(0,0,0,0.3)',
     top: layoutConstant.mobileHeaderHeight,
-    bottom: layoutConstant.mobileNavHeight,
-    borderRight: `1px solid ${theme.palette.grey[300]}`
+    bottom: 0,
+    borderRight: `1px solid ${theme.palette.grey[300]}`,
+    paddingBottom:'150px'
+
   },
   "& .container": {
     left: "80px",
@@ -28,8 +29,10 @@ export const StyledRoot = styled("div")(({
     overflowY: "auto",
     padding: "0.75rem 1.25rem",
     top: layoutConstant.mobileHeaderHeight,
-    bottom: layoutConstant.mobileNavHeight,
+    bottom: 0,
+    background:'rgba(0,0,0,0.3)',
     "& .child-categories": {
+      background:'rgba(0,0,0,0.05)',
       paddingLeft: theme.spacing(2),
       marginBottom: theme.spacing(1),
       borderLeft: `1px solid ${theme.palette.grey[300]}`,

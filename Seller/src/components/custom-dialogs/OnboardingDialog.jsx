@@ -58,9 +58,18 @@ const OnboardingDialog = () => {
 
     };
 
-    const handleBack = () => {
+    const handleBack = async () => {
         setFormData({});
-        setStep((prev) => prev - 1);
+        try {
+            await handleSubmit(); // Wait for API response
+            setStep((prev) => prev - 1);
+            setFormData({});
+        } catch (error) {
+            console.error("Error in submission:", error);
+        } finally {
+            setLoading(false); // Stop loading
+        }
+        
     };
 
     const handleSubmit = async () => {
@@ -163,7 +172,6 @@ const OnboardingDialog = () => {
                         top: 15,
                         right: 25,
                         color: "#ffffff",
-                        backgroundColor: "rgba(0,0,0,0.5)",
                         "&:hover": {
                             backgroundColor: "rgba(0,0,0,0.7)",
                         },
@@ -190,16 +198,23 @@ const OnboardingDialog = () => {
             </DialogContent>
 
             <DialogActions>
-                <FlexBox justifyContent={step > 1 ? "space-between" : "flex-end"  }>
+                <FlexBox p={3} width="100%" justifyContent={step > 1 ? "space-between" : "flex-end"  }>
                     {
-                        (step > 0 && step < 5) &&  <Button sx={styles.btn} onClick={handleBack}>
+                        (step > 1 && step < 5) &&  <Button sx={styles.btn} onClick={handleBack}>
                             Back
                         </Button>
                     }
                     {
-                        step < 5 && <Button sx={styles.btn} onClick={handleContinue}>
-                            {loading ?  <CircularProgress size={24}  color="inherit" /> : "Continue"}
-                        </Button>
+                        step < 5 && (
+                            <Button sx={styles.btn} onClick={handleContinue}>
+                                {loading ? (
+                                    <CircularProgress size={24} color="inherit" />
+                                ) : (
+                                    step === 0 ? "Continue" : "Continue"
+                                )}
+                            </Button>
+
+                        )
                     }
                 </FlexBox>
             </DialogActions>

@@ -6,3 +6,5 @@ export {default as SymDropdown} from "./SymDropdown";
 export {default as SymCheckbox} from "./SymCheckbox";
 export {default as SymPasswordInput} from "./SymPasswordInput";
 export {default as SymAutoComplete} from "./SymAutoComplete";
+export {default as SymColorDropdown} from "./SymColorDropdown";
+export {default as SymRoundedDropdown} from "./SymRoundedDropdown";

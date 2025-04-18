@@ -1,5 +1,11 @@
+// =============================================================
+// Bank Account Form
+// =============================================================
+
 import { FlexBox } from '@/components/flex-box';
 import { SymTextField } from '@/components/custom-inputs';
+
+// =============================================================
 
 function BankAccountForm ({
     accountNo,
@@ -12,29 +18,22 @@ function BankAccountForm ({
     setBankName,
     accHolderName,
     setAccHolderName,
-
 }) {
        
-    const handleAccountNoChange = (event) => setAccountNo(event.target.value);
-    const handleRoutingNoChange = (event) => setRoutingNo(event.target.value);
-    const handleWireRoutingNoChange = (event) => setWireRoutingNo(event.target.value);
-    const handleBankNameChange = (event) => setBankName(event.target.value);
-    const handleAccHolderNameChange = (event) => setAccHolderName(event.target.value);
-    
     return (
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
-            {/* Acc No || Routing No || Wire Routing No */}
+            {/* Acc Number || Routing Number || Wire Routing Number */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Account Number" value={accountNo} placeholder="Account Number" onChange={handleAccountNoChange} toolTipText={toolTipText.accountNo} />
-                <SymTextField title="Routing Number" value={routingNo} placeholder="Routing No" onChange={handleRoutingNoChange} toolTipText={toolTipText.routingNo} />
-                <SymTextField title="Wire Routing Number" value={wireRoutingNo} placeholder="Wire routing number" onChange={handleWireRoutingNoChange} toolTipText={toolTipText.wireRoutingNo} />
+                <SymTextField title="Account Number" value={accountNo} placeholder="Account Number" onChange={(e) => setAccountNo(e.target.value)} toolTipText={toolTipText.accountNo} />
+                <SymTextField title="Routing Number" value={routingNo} placeholder="Routing Number" onChange={(e) => setRoutingNo(e.target.value)} toolTipText={toolTipText.routingNo} />
+                <SymTextField title="Wire Routing Number" value={wireRoutingNo} placeholder="Wire Routing Number" onChange={(e) => setWireRoutingNo(e.target.value)} toolTipText={toolTipText.wireRoutingNo} />
             </FlexBox>
 
-            {/* Bank NAME || Acc Holder Name */}
+            {/* Bank Name || Acc Holder Name */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Bank Name" value={bankName} placeholder="Bank Name" onChange={handleBankNameChange} toolTipText={toolTipText.bankName} />
-                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Entity Legal Name" onChange={handleAccHolderNameChange} toolTipText={toolTipText.accHolderName} />
+                <SymTextField title="Bank Name" value={bankName} placeholder="Bank Name" onChange={(e) => setBankName(e.target.value)} toolTipText={toolTipText.bankName} />
+                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Entity Legal Name" onChange={(e) => setAccHolderName(e.target.value)} toolTipText={toolTipText.accountHolderName} />
             </FlexBox>
 
         </FlexBox>

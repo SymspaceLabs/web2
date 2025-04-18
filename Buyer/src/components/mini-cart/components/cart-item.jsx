@@ -55,7 +55,9 @@ export default function MiniCartItem({
             }}
           />
           <H1 color="#FFF" mt={0.5}>
-            {item.selectedSize}
+            {
+              item.sizes?.find(size => size.value === item.selectedSize)?.label
+            }
           </H1>
           <H1 color="#FFF" mt={0.5}>
             QTY : {item.qty}

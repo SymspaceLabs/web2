@@ -87,7 +87,7 @@ function Form1 ({
         address2,
         city,
         state,
-        country: country.value,
+        country: country?.value,
         zip,
         gmv,
         category,

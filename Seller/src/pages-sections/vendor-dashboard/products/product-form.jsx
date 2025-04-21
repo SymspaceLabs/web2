@@ -8,6 +8,7 @@ import { FlexBox } from "../../../components/flex-box";
 import { UploadImageBox, StyledClear } from "../styles";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { H1 } from "@/components/Typography";
 
 const VALIDATION_SCHEMA = yup.object().shape({
   name: yup.string().required("Name is required!"),
@@ -57,9 +58,9 @@ const ProductForm = props => {
                 {/* Product Name */}
                 <Grid item sm={12} xs={12}>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                    <H1 color='#FFF' mr={1}>
                       Product Name
-                    </Typography>
+                    </H1>
                     <Tooltip title="Enter the product's name">
                       <IconButton>
                         <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -73,7 +74,7 @@ const ProductForm = props => {
                 <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
                   <FormControl sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%', gap: 5 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <FormLabel id="product-type-label" sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff' }}>
+                      <FormLabel id="product-type-label" color='#FFF'>
                         Product Type
                       </FormLabel>
                       <Tooltip title="Select the product type">
@@ -92,9 +93,9 @@ const ProductForm = props => {
                 {/* Dimensions */}
                 <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                    <H1 color='#FFF' mr={1}>
                       Dimensions
-                    </Typography>
+                    </H1>
                     <Tooltip title="Specify the dimensions">
                       <IconButton>
                         <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -107,9 +108,9 @@ const ProductForm = props => {
                 {/* Category */}
                 <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                    <H1 color='#FFF' mr={1}>
                       Category
-                    </Typography>
+                    </H1>
                     <Tooltip title="Choose a category for the product">
                       <IconButton>
                         <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -127,7 +128,7 @@ const ProductForm = props => {
                   <Grid item xs={12} sx={{ mt: 2.5 }}>
                     <FormControl sx={{ width: '100%' }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <FormLabel sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1, }}>
+                        <FormLabel sx={{ color: '#fff', mr: 1 }}>
                           Description
                         </FormLabel>
                         <Tooltip title="Provide a detailed description of the product">
@@ -159,9 +160,9 @@ const ProductForm = props => {
           {/*RIGHT CARD START*/}
           <Grid item sm={4} xs={12}>
             <Card sx={{ mt:2, p: 4, background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)',  borderRadius: '15px'   }}>
-              <Typography sx={{ fontFamily: 'Elemental End', textTransform:'lowercase', color:'#fff', fontSize: 14, pb:2 }} >
+              <H1 sx={{ color:'#fff', fontSize: 14, pb:2 }} >
                 Status
-              </Typography>
+              </H1>
               <Grid container spacing={3}>
                 <Grid item sm={12} xs={12}>
                 <TextField select fullWidth color="info"

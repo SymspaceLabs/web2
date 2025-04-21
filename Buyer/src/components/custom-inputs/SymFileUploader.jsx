@@ -1,12 +1,11 @@
-import React, { useRef, useState } from "react";
+
+import { useRef, useState } from "react";
 import { FlexBox } from "../flex-box";
-import { Typography } from "@mui/material";
+import { H1 } from "../Typography";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Span, Small, H1 } from "../Typography";
-import { styles } from "../styles";
 
-const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
+const SymFileUploader = ({ title, uploadedFile, setUploadedFile, multiple=false }) => {
     const fileInputRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -53,7 +52,7 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 style={{ display: 'none' }} 
                 onChange={handleFileChange} 
                 accept=".pdf,.doc,.docx"
-                multiple
+                multiple={multiple}
             />
 
             <FlexBox 
@@ -98,7 +97,7 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
     );
 };
 
-export default SymMultiFileUploader;
+export default SymFileUploader;
 
 const fileCardStyle = {
     width: '100%',

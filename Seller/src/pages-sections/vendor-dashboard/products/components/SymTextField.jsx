@@ -1,15 +1,20 @@
-import React from 'react'
-import { Box, Typography, Tooltip, IconButton, TextField } from '@mui/material';
-import InfoOutlined from '@mui/icons-material/InfoOutlined';
+// =========================================================
+// Custom Text Field
+// =========================================================
 
+import { Box, Tooltip, IconButton, TextField } from '@mui/material';
+import InfoOutlined from '@mui/icons-material/InfoOutlined';
+import { H1 } from '@/components/Typography';
+
+// =========================================================
 
 const SymTextField = ({ label, name, placeholder, value, onBlur, onChange, error, helperText, multiline=false }) => {
   return (
     <div>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-            <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff' }}>
+            <H1 color='#FFF'>
                 {label}
-            </Typography>
+            </H1>
             <Tooltip title="Enter the product's name">
             <IconButton>
                 <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />

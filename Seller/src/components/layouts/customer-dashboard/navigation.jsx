@@ -10,7 +10,8 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined"; // GLOBAL CUSTOM COMPONENTS
 
 import FlexBox from "../../../components/flex-box/flex-box";
-import { Paragraph, Span } from "../../../components/Typography"; // CUSTOM ICON COMPONENT
+
+import { H1 } from "@/components/Typography";
 
 import CustomerService from "../../../icons/CustomerService"; // STYLED COMPONENTS
 
@@ -22,20 +23,18 @@ export default function Navigation() {
     <MainContainer>
       {MENUS.map(item => <Fragment key={item.title}>
           {item.title && 
-            <Paragraph p="26px 26px 0px 0px" color="white" fontSize={16} sx={{ fontFamily:'Elemental End', textTransform:'lowercase'}}>
+            <H1 p="26px 26px 0px 0px" color="white" fontSize={16}>
               {item.title}
-            </Paragraph>
+            </H1>
           }
           <Divider sx={{ marginBottom:'5px' }} />
           {item.list.map(({ Icon, count, href, title}) => <StyledNavLink href={href} key={title} isCurrentPath={pathname.includes(href)}>
               <FlexBox alignItems="center" gap={1}>
                 <Icon color="inherit" fontSize="small" className="nav-icon" />
-                <Span sx={{ fontFamily:'Elemental End', textTransform:'lowercase', fontSize:'12px', color:'#fff' }}>
+                <H1 fontSize='12px' color='#FFF'>
                   {title}
-                </Span>
+                </H1>
               </FlexBox>
-
-              {/* <Span>{count}</Span> */}
             </StyledNavLink>)
           }
         </Fragment>)}

@@ -1,5 +1,7 @@
-import { FlexBox } from '../flex-box';
-import { SymTextField } from '../custom-inputs';
+
+
+import { FlexBox } from '@/components/flex-box';
+import { SymTextField } from '@/components/custom-inputs';
 
 function ForgotPasswordForm ({ email, setEmail }) {
    

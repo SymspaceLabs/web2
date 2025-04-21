@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { CreateSurveyDto } from 'src/surveys/dto/create-survey.dto';
 import { CreateCreditCardDto } from 'src/credit-cards/dto/create-credit-card.dto';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { CreateFileDto } from 'src/files/dto/create-file.dto';
 
 class BasicInfoDto {
@@ -78,6 +78,10 @@ class CompanyDto {
   @IsString()
   @IsOptional()
   businessPhone?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isOnboardingFormFilled?: boolean;
 }
 
 class BankInfoDto {

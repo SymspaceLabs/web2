@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Autocomplete, Checkbox, Chip, TextField } from '@mui/material';
+import { H1 } from '@/components/Typography';
 
 const SymMultiSelectChip = ({ options, selectedItems, setSelectedItems, label = "Select", allLabel }) => {
 
@@ -34,18 +35,9 @@ const SymMultiSelectChip = ({ options, selectedItems, setSelectedItems, label = 
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-      <Typography
-        sx={{
-          fontFamily: 'Elemental End',
-          textTransform: 'lowercase',
-          color: '#fff',
-          mr: 0.5,
-          minWidth: '100px',
-          textAlign: 'right',
-        }}
-      >
+      <H1 sx={{ color: '#FFF', mr: 0.5, minWidth: '100px', textAlign: 'right' }}>
         {label}
-      </Typography>
+      </H1>
       <Autocomplete
         disableCloseOnSelect
         multiple

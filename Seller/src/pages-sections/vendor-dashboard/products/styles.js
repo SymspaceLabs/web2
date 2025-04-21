@@ -11,13 +11,6 @@ const styles = {
       backdropFilter: 'blur(12px)',
       borderRadius: '15px',
     },
-    statusTypography: {
-      fontFamily: 'Elemental End',
-      textTransform: 'lowercase',
-      color: '#fff',
-      fontSize: 14,
-      pb: 2,
-    },
     gridContainer: {
       pr: 4,
     },

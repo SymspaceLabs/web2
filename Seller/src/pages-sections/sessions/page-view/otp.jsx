@@ -9,7 +9,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Typography, CircularProgress } from "@mui/material";
 import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { OtpForm } from "@/components/custom-forms";
+import { OtpForm } from "@/components/custom-forms/auth";
 import { useAuth } from '@/contexts/AuthContext';
 import { SymSubmitButton } from "@/components/custom-buttons";
 

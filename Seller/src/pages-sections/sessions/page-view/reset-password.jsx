@@ -16,11 +16,12 @@
  */
 
 import { useState, useEffect } from "react";
-import { FlexColCenter } from '../../../components/flex-box';
-import { ResetPasswordForm } from "../../../components/custom-forms";
-import { useSnackbar } from "../../../contexts/SnackbarContext";
+import { FlexColCenter } from '@/components/flex-box';
+import { ResetPasswordForm } from "@/components/custom-forms/auth";
+
+import { useSnackbar } from "@/contexts/SnackbarContext";
 import { useSearchParams, useRouter } from "next/navigation";
-import { SymSubmitButton } from '../../../components/custom-buttons';
+import { SymSubmitButton } from '@/components/custom-buttons';
 
 const ResetPassword = () => {
   

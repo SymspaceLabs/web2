@@ -8,7 +8,6 @@ export const styles = {
     overflow: "hidden",
     border: "1px solid",
     borderColor: "grey.200",
-    fontFamily: 'Elemental End',
     color: '#fff',
     background: 'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
     "& .MuiMenuItem-root:hover": {
@@ -17,7 +16,6 @@ export const styles = {
     }
   },
   text: {
-    fontFamily:'Elemental End',
     textTransform:'lowercase',
     color: "#fff",
     "& .MuiMenuItem-root:hover": {

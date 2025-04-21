@@ -3,6 +3,7 @@
 // - MUI Button
 // - MUI Typography
 // - MUI Textfield
+// - MUI MenuItem
 // ===================================================================
 
 import { elementalEnd } from "@/app/layout";
@@ -78,7 +79,9 @@ export const components = {
     styleOverrides: {
       root: {
         paddingTop: 8,
-        paddingBottom: 8
+        paddingBottom: 8,
+        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+        textTransform: 'lowercase'
       }
     }
   },

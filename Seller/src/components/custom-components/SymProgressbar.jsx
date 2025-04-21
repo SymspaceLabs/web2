@@ -1,4 +1,5 @@
 import { LinearProgress, Box, Typography } from '@mui/material';
+import { H1 } from '../Typography';
 
 const SymProgressbar = ({
     milestoneLabels,
@@ -35,10 +36,9 @@ const SymProgressbar = ({
             {milestoneLabels.map((label, index) => (
                 <Box key={index} sx={{ textAlign: 'center' }}>
                     {/* Milestone Text */}
-                    <Typography 
+                    <H1 
                         variant="caption" 
                         sx={{ 
-                            fontFamily:'Elemental End',
                             color: "#FFF", 
                             fontSize: 12, 
                             mt: 1, 
@@ -47,7 +47,7 @@ const SymProgressbar = ({
                         }}
                     >
                         {label}
-                    </Typography>
+                    </H1>
 
                     {/* Milestone Dot */}
                     <Box sx={{

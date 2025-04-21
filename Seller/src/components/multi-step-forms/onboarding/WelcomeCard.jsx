@@ -6,6 +6,7 @@ import { Box, DialogTitle, Typography } from '@mui/material';
 import { FlexColCenter } from '@/components/flex-box';
 import { LazyImage } from '@/components/lazy-image';
 import { useAuth } from '@/contexts/AuthContext';
+import { H1, Paragraph } from '@/components/Typography';
 
 // ==================================================
 
@@ -21,12 +22,16 @@ const WelcomeCard = ({ open }) => {
                 </Box>
             </FlexColCenter>
             <FlexColCenter gap={2}>
-                <Typography sx={styles.titleHeader}>congrats, {user.firstName}!</Typography>
-                <Typography sx={{ ...styles.titleHeader, fontSize: 32 }}>you're officially a seller</Typography>
-                <Typography sx={styles.subtitle}>
+                <H1 sx={styles.titleHeader}>
+                    congrats, {user.firstName}!
+                </H1>
+                <H1 sx={{ ...styles.titleHeader, fontSize: 32 }}>
+                    you're officially a seller
+                </H1>
+                <Paragraph sx={styles.subtitle}>
                     We’re excited to have you join our community and AR marketplace.<br />
                     Continue to complete setting up your business prior to listing products
-                </Typography>
+                </Paragraph>
             </FlexColCenter>
         </DialogTitle>
     );
@@ -37,8 +42,6 @@ export default WelcomeCard;
 const styles = {
     titleHeader : {
         lineHeight: 1.25,
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
         color: '#fff',
         fontSize: {xs:16, sm:40},
         textAlign: 'center',

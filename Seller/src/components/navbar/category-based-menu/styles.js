@@ -55,11 +55,8 @@ const CategoryListItem = styled(ListItem, {
   theme,
   active
 }) => ({
-  fontFamily: 'Elemental End',
-  textTransform: 'lowercase',
   padding: "1rem 1.5rem",
   color:'#000',
-  // transition: "all 0.3s",
   justifyContent: "space-between",
   border:'1px solid #BDBDBD',
   ...(active && {

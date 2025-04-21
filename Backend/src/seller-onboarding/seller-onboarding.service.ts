@@ -68,6 +68,7 @@ export class SellerOnboardingService {
         existingCompany.gmv = company?.gmv ?? existingCompany.gmv;
         existingCompany.category = company?.category ?? existingCompany.category;
         existingCompany.businessPhone = company?.businessPhone ?? existingCompany.businessPhone;
+        existingCompany.isOnboardingFormFilled = company?.isOnboardingFormFilled ?? existingCompany.isOnboardingFormFilled;
 
 
         // Update existing company

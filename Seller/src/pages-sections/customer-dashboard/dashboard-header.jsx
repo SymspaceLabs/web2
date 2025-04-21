@@ -50,14 +50,6 @@ export default function DashboardHeader({
   return (
     <StyledBox>
       <FlexBox mt={2} className="headerHold">
-        <FlexBox alignItems="center" gap={1.5}>
-          {/* {Icon && <Icon color="primary" />} */}
-
-          {/* <Typography my={0} lineHeight={1} ellipsis sx={{fontFamily:'Elemental End', textTransform:'lowercase', color:'#fff', fontSize:40}}>
-            {title}
-          </Typography> */}
-        </FlexBox>
-
         <div className="sidenav">
           <SideNav position="left" handler={close => <IconButton onClick={close}>
                 <Menu fontSize="small" />

@@ -1,7 +1,6 @@
 import { FlexBox } from '../flex-box';
-import { SymTextField, SymMultiFileUploader } from '@/components/custom-inputs';
+import { SymTextField, SymFileUploader } from '@/components/custom-inputs';
 import SymDropdown from '@/components/custom-inputs/SymDropdown';
-import SymCheckbox from '@/components/custom-inputs/SymCheckbox';
 import { Span } from '../Typography';
 import BoxLink from '@/pages-sections/sessions/components/box-link';
 
@@ -57,10 +56,11 @@ function JobForm ({
             <SymTextField title="Comment" value={comments} placeholder="Enter Comment here" onChange={(e) => setComments(e.target.value)} multiline={true} />
 
             {/* File Upload Field */}
-            <SymMultiFileUploader
+            <SymFileUploader
                 title="Upload Resume"
                 setUploadedFile={setUploadedFile}
                 uploadedFile={uploadedFile}
+                multiple={true}
             />
 
             <Span display={{ color:'#fff', sm: "inline-block" }}>

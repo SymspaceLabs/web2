@@ -12,6 +12,7 @@ import SymMultiSelectChip from './components/SymMultiSelectChip';
 import SymMultiLevelSelect from './components/SymMultiLevelSelect';
 import ColorDialog from './components/ColorDialog';
 import SizeDialog from './components/SizeDialog';
+import { H1 } from "@/components/Typography";
 
 const VALIDATION_SCHEMA = yup.object().shape({
   name: yup.string().required("Name is required!"),
@@ -151,9 +152,9 @@ const ProductForm1 = props => {
                   <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap:2  }}>
                       <Box sx={{ display: 'flex', alignItems: 'center', minWidth:'250px' }}>
-                        <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff' }}>
+                        <H1  color='#FFF'>
                           Product Category 
-                        </Typography>
+                        </H1>
                         <Tooltip title="Choose a category for the product">
                           <IconButton>
                             <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -221,9 +222,9 @@ const ProductForm1 = props => {
                     <Grid item sm={12} xs={12} sx={{ mt: 5 }}>
                       <FlexBox gap={1} flexDirection="column">
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                          <H1 color='#FFF' mr={1}>
                             Category Tags
-                          </Typography>
+                          </H1>
                           <Tooltip title="Choose a category for the product">
                             <IconButton>
                               <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -268,7 +269,7 @@ const ProductForm1 = props => {
                   <Grid item sm={12} xs={12} sx={{ mt: 5 }}>
                     <FlexBox gap={1} flexDirection="column">
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff' }}>
+                        <Typography color='#FFF'>
                           Product Variant
                         </Typography>
                         <Tooltip title="Choose a category for the product">
@@ -280,9 +281,9 @@ const ProductForm1 = props => {
                     
                       {/* Color */}
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1, minWidth: '100px' }}>
+                        <H1  color='#FFF' mr={1} minWidth='100px'>
                           Color
-                        </Typography>
+                        </H1>
                         <Autocomplete
                           disableCloseOnSelect  
                           multiple
@@ -353,8 +354,6 @@ const ProductForm1 = props => {
                           onClick={handleOpenColorDialog}
                           sx={{
                             color: '#fff',
-                            fontFamily: 'Elemental End',
-                            textTransform: 'lowercase',
                             padding: '5px 20px',
                             background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)',
                             boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)',
@@ -370,9 +369,9 @@ const ProductForm1 = props => {
                       
                       {/* Size */}
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1, minWidth: '100px' }}>
+                        <H1 sx={{ color: '#fff', mr: 1, minWidth: '100px' }}>
                           Size
-                        </Typography>
+                        </H1>
                         <Autocomplete
                           disableCloseOnSelect  
                           multiple
@@ -430,8 +429,6 @@ const ProductForm1 = props => {
                           onClick={handleOpenSizeDialog}
                           sx={{
                             color: '#fff',
-                            fontFamily: 'Elemental End',
-                            textTransform: 'lowercase',
                             padding: '5px 20px',
                             background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)',
                             boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)',
@@ -477,17 +474,9 @@ const ProductForm1 = props => {
                   borderRadius: '15px',
                 }}
               >
-                <Typography
-                  sx={{
-                    fontFamily: 'Elemental End',
-                    textTransform: 'lowercase',
-                    color: '#fff',
-                    fontSize: 14,
-                    pb: 2,
-                  }}
-                >
+                <H1 color='#fff' fontSize={14} pb={2} >
                   Status
-                </Typography>
+                </H1>
                 <Grid container spacing={3}>
                   <Grid item sm={12} xs={12}>
                     <TextField

@@ -1,8 +1,9 @@
-import { FlexBox } from '../flex-box';
-import { SymPasswordInput, SymTextField } from '../custom-inputs';
-import { Span } from '../Typography';
-import { FormControlLabel, Checkbox } from "@mui/material";
+
 import Link from 'next/link';
+import { Span } from '@/components/Typography';
+import { FlexBox } from '@/components/flex-box';
+import { FormControlLabel, Checkbox } from "@mui/material";
+import { SymPasswordInput, SymTextField } from '@/components/custom-inputs';
 
 function LoginForm ({
     email,

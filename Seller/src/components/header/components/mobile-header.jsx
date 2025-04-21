@@ -1,3 +1,7 @@
+// ====================================================================
+// Mobile Header
+// ====================================================================
+
 import Link from "next/link";
 import { Fragment } from "react";
 import Box from "@mui/material/Box";
@@ -20,7 +24,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useCart from "@/hooks/useCart"; // LOCAL CUSTOM HOOK
 
 import useHeader from "../hooks/use-header";
-import { Typography } from "@mui/material";
+import { H1 } from "@/components/Typography";
+
+// ====================================================================
+
 export default function MobileHeader() {
   const {
     state
@@ -79,15 +86,13 @@ export default function MobileHeader() {
       >
         <Box width="auto" padding={2} height="100vh">
           <FlexBetween mb={1}>
-            <Typography
-              fontFamily="'Elemental End', sans-serif" 
-              textTransform="lowercase"
+            <H1
               color="#FFF"
               fontSize={15}
               fontWeight={400}
             >
               Search Symspace
-            </Typography>
+            </H1>
 
             <IconButton onClick={toggleSearchBar}>
               <Clear />

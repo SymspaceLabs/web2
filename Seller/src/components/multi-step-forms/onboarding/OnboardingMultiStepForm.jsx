@@ -20,7 +20,8 @@ const OnboardingMultiStepForm = ({
     isChecked,
     uploadedFile,
     setUploadedFile,
-    handleContinue
+    handleContinue,
+    handleOpenStoreDialog
 }) => {
 
     return (
@@ -68,7 +69,9 @@ const OnboardingMultiStepForm = ({
 
             {/* Show Congrats, step==0 */}
             {step === 5 && 
-                <CongratsCard />
+                <CongratsCard
+                    handleOpenStoreDialog={handleOpenStoreDialog}
+                />
             } 
 
         </FlexBox>

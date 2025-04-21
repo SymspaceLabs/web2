@@ -1,5 +1,5 @@
 import { FlexBox } from '@/components/flex-box';
-import { SymMultiFileUploader } from '@/components/custom-inputs';
+import { SymFileUploader } from '@/components/custom-inputs';
 
 function UploadFileForm ({
     uploadedFile,
@@ -10,10 +10,11 @@ function UploadFileForm ({
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
             {/* File Upload Field */}
-            <SymMultiFileUploader
+            <SymFileUploader
                 title=""
                 setUploadedFile={setUploadedFile}
                 uploadedFile={uploadedFile}
+                multiple={true}
             />
 
         </FlexBox>

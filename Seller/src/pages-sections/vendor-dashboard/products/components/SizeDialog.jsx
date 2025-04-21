@@ -1,6 +1,7 @@
 import React from 'react'
 import { TextField, MenuItem, Box, Typography, Button, Tooltip, IconButton, Dialog, DialogTitle,  DialogContent, DialogActions } from "@mui/material";
 import { InfoOutlined } from "@mui/icons-material";
+import { H1 } from '@/components/Typography';
 
 const baseSizes = [
     { name: 'S' },
@@ -27,9 +28,9 @@ const SizeDialog = ({
                 
                 {/* Size name */}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#000' }}>
+                    <H1 sx={{ color: '#000' }}>
                     Size name
-                    </Typography>
+                    </H1>
                     <Tooltip title="Enter the product's name">
                     <IconButton>
                         <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
@@ -40,9 +41,9 @@ const SizeDialog = ({
 
                 {/* Base size */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#000' }}>
+                <H1 sx={{ color: '#000' }}>
                     Base size
-                </Typography>
+                </H1>
                 <Tooltip title="Select a base color">
                     <IconButton>
                     <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
@@ -72,7 +73,7 @@ const SizeDialog = ({
             </DialogContent>
             <DialogActions sx={{ width:'100%'}}>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleAddCustomSize} variant="contained" color="info" type="submit" sx={{ fontFamily:'Elemental End', textTransform:'lowercase', padding: '5px 46px', background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)', boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(50px)', borderRadius: '12px' }}>
+                <Button onClick={handleAddCustomSize} variant="contained" color="info" type="submit" sx={{ padding: '5px 46px', background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)', boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(50px)', borderRadius: '12px' }}>
                     Add
                 </Button>
             </DialogActions>

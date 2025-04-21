@@ -1,14 +1,16 @@
-import Link from "next/link";
-import { Fragment } from "react"; // CUSTOM ICON COMPONENTS
+// ====================================================
+// Left Content
+// ====================================================
 
-import Globe from "@/icons/Globe";
-import Toggle from "@/icons/Toggle"; // LOCAL CUSTOM HOOKS
-
-import { useLayout } from "../dashboard-layout-context"; // STYLED COMPONENTS
-
-import { CustomButton, ToggleWrapper } from "./styles";
-import { Typography } from "@mui/material";
+import { Fragment } from "react";
+import { ToggleWrapper } from "./styles";
+import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLayout } from "../dashboard-layout-context";
+import Toggle from "@/icons/Toggle";
+
+// ====================================================
+
 export default function LeftContent() {
   const {
     handleOpenMobileSidebar
@@ -21,14 +23,9 @@ export default function LeftContent() {
         <Toggle />
       </ToggleWrapper>
 
-      <Typography my={0} lineHeight={1} ellipsis sx={{py:5, fontFamily:'Elemental End', textTransform:'lowercase', color:'#fff', fontSize:40}}>
+      <H1 my={0} lineHeight={1} ellipsis py={5} color='#fff' fontSize={40}>
           Welcome, {user?.firstName}
-      </Typography>
+      </H1>
 
-      {/* <CustomButton LinkComponent={Link} href="/" startIcon={<Globe sx={{
-      color: "grey.900"
-    }} />}>
-        Browse Website
-      </CustomButton> */}
     </Fragment>;
 }

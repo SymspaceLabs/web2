@@ -8,7 +8,6 @@ import Grid from "@mui/material/Grid";
 import Sales from "../sales";
 import Card1 from "../card-1";
 import Analytics from "../analytics";
-import WelcomeCard from "../welcome-card";
 import RecentPurchase from "../recent-purchase";
 import StockOutProducts from "../stock-out-products";
 import DashboardHeader from "../../../customer-dashboard/dashboard-header";
@@ -19,9 +18,17 @@ import { IconButton, Typography } from "@mui/material";
 import { ChevronRight } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM HOOK
 
-import { OnboardingDialog } from "@/components/custom-dialogs";
+import { H1 } from "@/components/Typography";
+import { useAuth } from "@/contexts/AuthContext";
+import { OnboardingDialog, SellerProfileDialog } from "@/components/custom-dialogs";
 
 const DashboardPageView = () => {
+
+  const { user } = useAuth();
+
+  const [onboardingDialogOpen, setOnboardingDialogOpen] = useState(false);
+  const [storeDialogOpen, setStoreDialogOpen] = useState(false);
+  
   const [cardList, setCardList] = useState([]);
   const [stockOutProducts, setStockOutProducts] = useState([]);
   const [recentPurchase, setRecentPurchase] = useState([]);
@@ -30,17 +37,10 @@ const DashboardPageView = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [collapsedAnnouncement, setCollapsedAnnouncement] = useState(true);
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [cardData, stockOutData, recentPurchaseData, ticketData] = await Promise.all([
-          // api.getAllCard(),
-          // api.stockOutProducts(),
-          // api.recentPurchase(),
-          // api2.getBusinessDetailsList()
-        ]);
+        const [cardData, stockOutData, recentPurchaseData, ticketData] = await Promise.all([]);
         setCardList([]);
         setStockOutProducts(stockOutData);
         setRecentPurchase(recentPurchaseData);
@@ -53,14 +53,32 @@ const DashboardPageView = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (user && user.company.isOnboardingFormFilled === false) {
+      setOnboardingDialogOpen(true);
+    }
+  }, [user]);
+  
+
   const handleClick = () => setCollapsed(state => !state);
   const handleAnnouncementToggle = () => setCollapsedAnnouncement(!collapsedAnnouncement);
 
   return (
     <Box>
-      <OnboardingDialog /> {/* Welcome dialog */}
+      
+      {/* Welcome dialog */}
+      <OnboardingDialog
+        open={onboardingDialogOpen}
+        setOpen={setOnboardingDialogOpen}
+        setStoreDialogOpen={setStoreDialogOpen}
+      />
+      
+      {/* Seller Profile Dialog */}
+      <SellerProfileDialog
+        open={storeDialogOpen}
+        setOpen={setStoreDialogOpen}
+      />
 
-      {/* Render various sections of the marketplace */}
       <Box px={0} >
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -69,12 +87,11 @@ const DashboardPageView = () => {
                   <Box sx={{px:4}}>
                     <DashboardHeader />
                     <Box sx={{p:4, background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '15px 15px 0px 0px' }}>
-                      <Typography sx={{fontFamily:'Elemental End', textTransform:'lowercase', fontSize:'24px', color:'#fff'}}>
+                      <H1 fontSize='24px' color='#FFF'>
                         Begin your simulation
-                      </Typography>
+                      </H1>
                     </Box>
                     <Box sx={{p:4, background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius:' 0px 0px 15px 15px;' }}>
-                      {/* {collapsed && tickets.map(item => <TicketCard ticket={item} key={item.id} />)} */}
                       <Box sx={{ display:'flex', justifyContent:'center', width:'100%' }}>
                           <IconButton onClick={handleClick}>
                             <ChevronRightIcon color="disabled" collapsed={collapsed ? 0 : 1} />
@@ -85,9 +102,9 @@ const DashboardPageView = () => {
                   <Box sx={{px:4}}>
                     <DashboardHeader />
                     <Box sx={{p:4, background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '15px 15px 0px 0px' }}>
-                      <Typography sx={{fontFamily:'Elemental End', textTransform:'lowercase', fontSize:'24px', color:'#fff'}}>
+                      <H1 sx={{ fontSize:'24px', color:'#fff'}}>
                         Announcements
-                      </Typography>
+                      </H1>
                     </Box>
                     <Box sx={{p:4, background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius:' 0px 0px 15px 15px;' }}>
                       {collapsedAnnouncement && tickets2.map(item => <TicketCard ticket={item} key={item.id} fontSize="18px" />)}
@@ -101,10 +118,6 @@ const DashboardPageView = () => {
               </Box>
             </Box>
           </Grid>
-
-          {/* <Grid item md={6} xs={12}>
-            <WelcomeCard />
-          </Grid> */}
 
           <Grid container item xs={12} spacing={3}>
             {cardList.map(item => (

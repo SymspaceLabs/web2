@@ -20,8 +20,6 @@ export const StyledRoot = styled("div", {
   // backgroundColor: theme.palette.background.paper,
   top: position === "absolute" ? "calc(100% + 0.7rem)" : "0.5rem",
   backgroundColor: '#3B3B3B',
-  fontFamily:'Elemental End',
-  textTransform:'lowercase',
   color:'#fff',
   border:'1px solid white'
 }));

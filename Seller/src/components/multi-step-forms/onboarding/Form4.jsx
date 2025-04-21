@@ -16,7 +16,6 @@ import UploadFileForm from '@/components/custom-forms/onboarding/UploadFileForm'
 function Form4 ({
     setFormData,
     user,
-    step,
     uploadedFile,
     setUploadedFile,
     handleContinue
@@ -30,7 +29,10 @@ function Form4 ({
     // Update formData whenever state changes
     useEffect(() => {
         setFormData({
-            "files": uploadedFile
+            "files": uploadedFile,
+            "company" : {
+                isOnboardingFormFilled: true,
+            }
         });
     }, [uploadedFile]);
     
@@ -112,8 +114,6 @@ const styles = {
         backdropFilter: 'blur(50px)',
         borderRadius: '30px',
         color: '#FFF',
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
         px: 2,
         fontSize: { xs: 12, sm: 16 },
         fontWeight: 500,

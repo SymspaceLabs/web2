@@ -2,18 +2,19 @@
 // Welcome Card
 // ==================================================
 
-import { Box, DialogTitle, Typography } from '@mui/material';
+import { Box, DialogTitle, Button } from '@mui/material';
 import { FlexColCenter } from '@/components/flex-box';
 import { LazyImage } from '@/components/lazy-image';
 import { useAuth } from '@/contexts/AuthContext';
 import { H1, Paragraph } from '@/components/Typography';
-import BoxLink from '@/components/BoxLink';
 
 // ==================================================
 
-const CongratsCard = ({ open }) => {
+const CongratsCard = ({ handleOpenStoreDialog }) => {
 
     const { user } = useAuth();
+
+    
     
     return (
         <DialogTitle sx={{ pt: { xs: 3, sm: 5 }, pb: { xs: 3, sm: 5 } }}>
@@ -30,8 +31,11 @@ const CongratsCard = ({ open }) => {
                     you’ve completed registering <br/> your business
                 </H1>
                 <Paragraph sx={styles.subtitle}>
-                    Set up your Business Store on Symspace’s platform <BoxLink href="/sign-in">here</BoxLink> .
+                    Begin Setting up your Business on Symspace’s Platform
                 </Paragraph>
+                <Button sx={styles.btn} onClick={handleOpenStoreDialog}>
+                    Store Settings
+                </Button>
             </FlexColCenter>
         </DialogTitle>
     );
@@ -52,5 +56,18 @@ const styles = {
         color: '#FFF',
         fontSize: {xs:16, sm:20},
         textAlign: 'center',
+    },
+    btn: {
+        background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+        boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)',
+        backdropFilter: 'blur(50px)',
+        borderRadius: '30px',
+        color: '#FFF',
+        px: 2,
+        fontSize: { xs: 12, sm: 16 },
+        fontWeight: 500,
+        '&:hover': {
+            background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)'
+        }
     }
 }

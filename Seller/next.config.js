@@ -5,10 +5,8 @@ const nextConfig = {
   publicRuntimeConfig: { theme: "DEFAULT", currency: "USD" },
   images: {
     remotePatterns: [{ protocol: "https", hostname: "ui-lib.com" }],
-    domains: ['waveworld.io'],
-    domains: ['static.vecteezy.com'],
-    domains: ['cdn-images-1.medium.com']
-  }
+    domains: ['154.53.63.170'],
+  },
 };
 
 module.exports = nextConfig;

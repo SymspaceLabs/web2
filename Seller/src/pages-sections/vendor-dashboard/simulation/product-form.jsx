@@ -1,14 +1,19 @@
+// ==================================================================
+// 
+// ==================================================================
+
+import * as yup from "yup"; // GLOBAL CUSTOM COMPONENTS
 import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { Formik } from "formik";
-import * as yup from "yup"; // GLOBAL CUSTOM COMPONENTS
 import { Box, Card, Typography, Button, Grid } from '@mui/material';
 
-import DropZone from "../../../components/DropZone";
-import { FlexBox } from "../../../components/flex-box"; // STYLED COMPONENTS
+import DropZone from "@/components/DropZone";
+import { FlexBox } from "@/components/flex-box"; // STYLED COMPONENTS
 
 import { UploadImageBox, StyledClear } from "../styles"; // FORM FIELDS VALIDATION SCHEMA
+import { H1 } from "@/components/Typography";
 
 const VALIDATION_SCHEMA = yup.object().shape({
   name: yup.string().required("Name is required!"),
@@ -60,17 +65,17 @@ const ProductForm = props => {
 
                       {/*Title*/}
                       <Grid item sm={12} xs={12}>
-                        <Typography sx={{fontFamily:'Elemental End', textTransform:'lowercase', color:'#fff'}}>
+                        <H1 sx={{ color:'#fff'}}>
                           Product Name
-                        </Typography>
+                        </H1>
                         <TextField InputProps={{ style: { backgroundColor: 'white', color:'#000' },}} fullWidth name="name" color="info" size="medium" placeholder="Enter product name" value={values.name} onBlur={handleBlur} onChange={handleChange} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
                       </Grid>
 
                       {/*Description*/}
                       <Grid item xs={12}>
-                        <Typography sx={{fontFamily:'Elemental End', textTransform:'lowercase', color:'#fff'}}>
+                        <H1 sx={{ color:'#fff'}}>
                           Description
-                        </Typography>
+                        </H1>
                         <TextField InputProps={{ style: { backgroundColor: 'white', color:'#000' },}} rows={6} multiline fullWidth color="info" size="medium" name="description" onBlur={handleBlur} onChange={handleChange} placeholder="Enter description" value={values.description} error={!!touched.description && !!errors.description} helperText={touched.description && errors.description} />
                       </Grid>
 

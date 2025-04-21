@@ -1,22 +1,16 @@
 "use client";
 
-/**
- * VerifyEmailPage Component
- * 
- * This component renders a verification page that informs the user about a verification email
- * sent to their email address. Users can resend the verification email or return to the main site.
- * 
- * Features:
- * - Displays email information and instructions to the user.
- * - Allows resending of the verification email with error handling.
- * - Includes navigation back to the main site.
- * - Displays success or error messages using a snackbar.
- */
+// ===============================================================
+// Verify Email Page
+// ===============================================================
 
-import { useSearchParams, useRouter } from "next/navigation"; // Import Next.js navigation hooks
-import { FlexBox } from "../../../components/flex-box"; // Import custom FlexBox component
+import { FlexBox } from "@/components/flex-box"; // Import custom FlexBox component
 import { Button, Typography } from "@mui/material"; // Import Material-UI components
-import { useSnackbar } from "../../../contexts/SnackbarContext";
+import { Paragraph } from "@/components/Typography";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { useSearchParams, useRouter } from "next/navigation"; // Import Next.js navigation hooks
+
+// ===============================================================
 
 const VerifyEmailPage = () => {
   const searchParams = useSearchParams();
@@ -56,14 +50,14 @@ const VerifyEmailPage = () => {
   return (
     <FlexBox flexDirection="column" sx={{ width:'100%', gap:{xs:2, sm:3}, py:{xs:1, sm:2} }}>
       {/* Additional instructions */}
-      <Typography sx={{ textAlign: "center", color: "#fff", fontSize: {xs:10, sm:14}, maxWidth:'750px' }}>
+      <Paragraph sx={{ textAlign: "center", color: "#fff", fontSize: {xs:10, sm:14}, maxWidth:'750px' }}>
         You’re almost there! We sent an email with your verification link to{" "}
         {userEmail}
-      </Typography>
-      <Typography sx={{ textAlign: "center", color: "#fff", fontSize: {xs:10, sm:14}, maxWidth:'750px' }}>
+      </Paragraph>
+      <Paragraph sx={{ textAlign: "center", color: "#fff", fontSize: {xs:10, sm:14}, maxWidth:'750px' }}>
         Click on the link in that email to complete the verification process.
         If you don’t see it, you may need to check your spam folder.
-      </Typography>
+      </Paragraph>
 
       {/* Action buttons for resending email or returning to the site */}
       <FlexBox
@@ -75,26 +69,7 @@ const VerifyEmailPage = () => {
           pt: { xs: 2, sm: 5 },
         }}
       >
-        <Button
-          onClick={handleResend}
-          sx={{
-            fontSize: '16px',
-            fontWeight: 500,
-            fontFamily: "'Elemental End', sans-serif",
-            textTransform: "lowercase",
-            background: "#000",
-            color: "#fff",
-            width: "100%",
-            border: "2px solid transparent",
-            py: 1,
-            borderRadius: '12px',
-            ":hover": {
-              background: "#fff",
-              color: "#000",
-              border: "2px solid black",
-            },
-          }}
-        >
+        <Button onClick={handleResend} sx={styles.btn}>
           Resend Email
         </Button>
         <Button
@@ -102,8 +77,6 @@ const VerifyEmailPage = () => {
           sx={{
             fontSize: '16px',
             fontWeight: 500,
-            fontFamily: "'Elemental End', sans-serif",
-            textTransform: "lowercase",
             background: "transparent",
             border: "2px solid black",
             color: "#000",
@@ -125,3 +98,21 @@ const VerifyEmailPage = () => {
 };
 
 export default VerifyEmailPage;
+
+const styles = {
+    btn : {
+      fontSize: '16px',
+      fontWeight: 500,
+      background: "#000",
+      color: "#fff",
+      width: "100%",
+      border: "2px solid transparent",
+      py: 1,
+      borderRadius: '12px',
+      ":hover": {
+        background: "#fff",
+        color: "#000",
+        border: "2px solid black",
+      },
+    }
+  };

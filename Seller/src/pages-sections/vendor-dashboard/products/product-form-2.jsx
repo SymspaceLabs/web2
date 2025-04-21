@@ -10,6 +10,7 @@ import { UploadImageBox, StyledClear } from "../styles"; // FORM FIELDS VALIDATI
 import { InfoOutlined } from "@mui/icons-material";
 import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
 import DropZone3D from './components/DropZone3D';
+import { H1 } from "@/components/Typography";
 
 // SortableItem component to render each image with label and highlight effect
 const SortableItem = SortableElement(({ file, index, fileIndex, isDragging, selected, handleClick, handleFileDelete }) => (
@@ -161,9 +162,9 @@ const ProductForm2 = props => {
                   {/* IMAGES */}
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                      <H1 color='#FFF' mr={1}>
                         Product Images
-                      </Typography>
+                      </H1>
                       <Tooltip title="Choose a category for the product">
                         <IconButton>
                           <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -191,9 +192,9 @@ const ProductForm2 = props => {
                   {/* 3D MODELS */}
                   <Grid item xs={12}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography sx={{ fontFamily: 'Elemental End', textTransform: 'lowercase', color: '#fff', mr: 1 }}>
+                      <H1 color='#FFF' mr={1}>
                         3D Models
-                      </Typography>
+                      </H1>
                       <Tooltip title="Upload 3D model files like .glb">
                         <IconButton>
                           <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
@@ -212,46 +213,7 @@ const ProductForm2 = props => {
                   </Grid>
                 </Grid>
               </Card>
-            </Grid>
-
-            {/*RIGHT CARD START*/}
-            {/* <Grid item sm={4} xs={12}>
-              <Card sx={styles.rightCard}>
-                <Typography sx={styles.statusTypography}>
-                  Status
-                </Typography>
-                <Grid container spacing={3}>
-                  <Grid item sm={12} xs={12}>
-                    <TextField
-                      select
-                      fullWidth
-                      color="info"
-                      size="medium"
-                      name="status"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.status}
-                      label=""
-                      InputProps={{ style: { backgroundColor: 'white' } }}
-                      SelectProps={{ multiple: false }}
-                      error={!!touched.status && !!errors.status}
-                      helperText={touched.status && errors.status}
-                    >
-                      <MenuItem value="draft">Draft</MenuItem>
-                      <Tooltip title="This option is currently disabled" arrow placement="right">
-                        <span>
-                          <MenuItem value="active" disabled>
-                            Active
-                          </MenuItem>
-                        </span>
-                      </Tooltip>
-                    </TextField>
-                  </Grid>
-                </Grid>
-              </Card>
-            </Grid> */}
-            {/*RIGHT CARD ENDS*/}
-
+            </Grid>          
           </Grid>
         </form>
       )}

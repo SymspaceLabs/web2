@@ -42,8 +42,6 @@ const NavItemButton = styled(ButtonBase, {
   padding: "0 12px 0 16px",
   justifyContent: "flex-start",
   transition: "all 0.15s ease",
-  fontFamily:'Elemental End',
-  textTransform:'lowercase',
   ":hover": {
     background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
     borderRadius: "60px",

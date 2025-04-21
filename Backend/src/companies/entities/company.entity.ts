@@ -84,5 +84,40 @@ export class Company {
   @Column({ nullable: true })
   businessPhone: string;
 
+  @Column({ nullable: true })
+  emailSupport: string;
+
+  @Column({ nullable: true })
+  phoneSupport: string;
+
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
+  tagLine: string;
+
+  @Column({ nullable: true })
+  logo: string;
+
+  @Column({ nullable: true })
+  banner: string;
+
+  @Column({ nullable: true })
+  web: string;
+
+  @Column({ nullable: true })
+  instagram: string;
+
+  @Column({ nullable: true })
+  twitter: string;
+
+  @Column({ nullable: true })
+  youtube: string;
+
+  @Column({ nullable: true })
+  facebook: string;
+
+  @Column({ default: false })
+  isOnboardingFormFilled: boolean;
 
 }

@@ -17,7 +17,7 @@ export default function ButtonPopover() {
  
 
   return <div>
-      <Button sx={{ fontFamily:'Elemental End', fontSize:'', color:'#fff', background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)', border: '1px solid #344767', borderRadius: '8px' }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
+      <Button sx={{ color:'#fff', background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)', border: '1px solid #344767', borderRadius: '8px' }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
         Create New +
       </Button>
 
@@ -34,7 +34,6 @@ export default function ButtonPopover() {
           overflow: "visible",
           border: "1px solid",
           borderColor: "grey.200",
-          fontFamily:'Elemental End',
           color:'#fff',
           background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
           "& .MuiMenuItem-root:hover": {
@@ -59,9 +58,9 @@ export default function ButtonPopover() {
       }
     }}>
 
-        <MenuItem onClick={{}} sx={{fontFamily:'Elemental End', textTransform:'lowercase'}}>Product</MenuItem>
-        <MenuItem sx={{fontFamily:'Elemental End', textTransform:'lowercase'}}>3D Product</MenuItem>
-        <MenuItem sx={{fontFamily:'Elemental End', textTransform:'lowercase'}}>AR Visual</MenuItem>
+        <MenuItem>Product</MenuItem>
+        <MenuItem>3D Product</MenuItem>
+        <MenuItem>AR Visual</MenuItem>
       </Menu>
     </div>;
 }

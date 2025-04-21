@@ -12,12 +12,15 @@ import { CircularProgress, IconButton, Button, Dialog, DialogContent, DialogTitl
 
 // ===================================================================
 
-const OnboardingDialog = () => {
+const OnboardingDialog = ({
+    open,
+    setOpen,
+    setStoreDialogOpen
+}) => {
 
     const { user } = useAuth();
     const [userData, setUserData] = useState();
     const [formData, setFormData] = useState();
-    const [open, setOpen] = useState(true);
     const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
     const [isChecked, setIsChecked] = useState(false); // 0 for WelcomeDialog, 1+ for Onboarding
     const [uploadedFile, setUploadedFile] = useState([]); // Used For Form4 (File Uploader)
@@ -73,8 +76,6 @@ const OnboardingDialog = () => {
     };
 
     const handleSubmit = async () => {
-        console.log(formData);
-    
         let updatedFormData = { ...formData };
         const newUploadedFiles = [];
     
@@ -132,9 +133,11 @@ const OnboardingDialog = () => {
             console.error("Error:", error.message);
         }
     };
-    
-    
-    
+
+    const handleOpenStoreDialog = () => {
+        handleClose();
+        setStoreDialogOpen(true);
+    }
 
     // Milestone labels
     const milestoneLabels = ["business", "billing", "survey", "review & Submit", ""];
@@ -193,6 +196,8 @@ const OnboardingDialog = () => {
                         setIsChecked={setIsChecked}
                         uploadedFile={uploadedFile}
                         setUploadedFile={setUploadedFile}
+                        handleClose={handleClose}
+                        handleOpenStoreDialog={handleOpenStoreDialog}
                     />
                 </FlexCol>
             </DialogContent>
@@ -225,30 +230,12 @@ const OnboardingDialog = () => {
 export default OnboardingDialog;
 
 const styles = {
-    titleHeader: {
-        lineHeight: 1.25,
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
-        color: '#fff',
-        fontSize: { xs: 16, sm: 40 },
-        textAlign: 'center',
-        letterSpacing: '0.05em',
-        wordSpacing: '0.1em',
-    },
-    subtitle: {
-        color: '#FFF',
-        fontSize: { xs: 16, sm: 20 },
-        textAlign: 'center',
-        fontWeight: 400,
-    },
     btn: {
         background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
         boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)',
         backdropFilter: 'blur(50px)',
         borderRadius: '30px',
         color: '#FFF',
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
         px: 2,
         fontSize: { xs: 12, sm: 16 },
         fontWeight: 500,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { OtpForm } from "../../../components/custom-forms";
+import { OtpForm } from "../../../components/custom-forms/auth";
 import { useSnackbar } from "../../../contexts/SnackbarContext";
 import { Typography } from "@mui/material";
 import { useSearchParams, useRouter } from "next/navigation";

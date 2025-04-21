@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
-import { PartnerSignUpForm } from "@/components/custom-forms";
+import { PartnerSignUpForm } from "@/components/custom-forms/auth";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { SymSubmitButton} from "@/components/custom-buttons";
 import { BoxLink } from '@/pages-sections/sessions/components';

@@ -260,8 +260,6 @@ const styles = {
         backdropFilter: 'blur(50px)',
         borderRadius: '30px',
         color: '#FFF',
-        fontFamily: 'Elemental End',
-        textTransform: 'lowercase',
         px: 2,
         fontSize: { xs: 12, sm: 16 },
         fontWeight: 500,

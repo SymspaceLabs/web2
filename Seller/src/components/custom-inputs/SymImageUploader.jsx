@@ -1,23 +1,29 @@
 //============================================================
-// Custom Multi File Uploader
+// Custom Image Uploader
 //============================================================
 
-import { FlexBox } from "../flex-box";
-import { Span, H1 } from "../Typography";
-import { Typography } from "@mui/material";
+import { FlexBox, FlexCol } from "../flex-box";
+import { H1, Paragraph } from "../Typography";
 import React, { useRef, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { LazyImage } from "../lazy-image";
 
 //============================================================
 
-const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
+const SymImageUploader = ({ title, subtitle, uploadedFile, setUploadedFile, multiple=false }) => {
     const fileInputRef = useRef(null);
     const [isDragging, setIsDragging] = useState(false);
 
     const handleFileChange = (event) => {
         const newFiles = Array.from(event.target.files);
-        setUploadedFile((prevFiles) => (Array.isArray(prevFiles) ? [...prevFiles, ...newFiles] : [...newFiles]));
+        if (multiple) {
+            setUploadedFile((prevFiles) =>
+                Array.isArray(prevFiles) ? [...prevFiles, ...newFiles] : [...newFiles]
+            );
+        } else {
+            setUploadedFile([newFiles[0]]);
+        }
     };
 
     const handleUploadClick = () => {
@@ -42,23 +48,34 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
     const handleDrop = (event) => {
         event.preventDefault();
         setIsDragging(false);
-
         const droppedFiles = Array.from(event.dataTransfer.files);
-        setUploadedFile((prevFiles) => (Array.isArray(prevFiles) ? [...prevFiles, ...droppedFiles] : [...droppedFiles]));
+        if (multiple) {
+            setUploadedFile((prevFiles) =>
+                Array.isArray(prevFiles) ? [...prevFiles, ...droppedFiles] : [...droppedFiles]
+            );
+        } else {
+            setUploadedFile([droppedFiles[0]]);
+        }
     };
 
     return (
         <FlexBox flexDirection="column" gap={1}>
-            <H1 color="white" mb={0.5}>
-                {title}
-            </H1>
+            <FlexCol>
+                <H1 color="white" mb={0.5}>
+                    {title}
+                </H1>
+                <Paragraph color="white" mb={0.5}>
+                    {subtitle}
+                </Paragraph>  
+            </FlexCol>
+
             <input 
                 type="file" 
                 ref={fileInputRef} 
                 style={{ display: 'none' }} 
                 onChange={handleFileChange} 
-                accept=".pdf,.doc,.docx"
-                multiple
+                accept="image/*"
+                multiple={multiple}
             />
 
             <FlexBox 
@@ -79,18 +96,33 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
                 onDrop={handleDrop}
             >
                 <CloudUploadIcon style={{ color: '#fff', fontSize: 22 }} />
-                <Typography fontFamily="'Elemental End', sans-serif" color="#fff" height={10}>
+                <H1 color="#fff" height={10}>
                     {isDragging ? "Drop files here" : "Upload files"}
-                </Typography>
+                </H1>
             </FlexBox>
 
             {uploadedFile?.length > 0 && (
                 <FlexBox flexDirection="column" gap={2}>
                     {uploadedFile?.map((file, index) => (
-                        <FlexBox key={index} justifyContent="space-between" alignItems="center" sx={fileCardStyle}>
-                            <H1 fontSize='14px'>
-                                {file?.name || file?.url}
+                        <FlexBox key={index} justifyContent="space-between" alignItems="center" sx={styles.fileCard}>
+                            <LazyImage
+                                // src={URL.createObjectURL(file)}
+                                src={file instanceof File ? URL.createObjectURL(file) : file}
+                                width={500}
+                                height={500}
+                                alt={file?.name}
+                                style={{
+                                    width: '100px',
+                                    height: '100px',
+                                    objectFit: 'cover',
+                                    borderRadius: '8px',
+                                    marginRight: '16px',
+                                }}
+                            />
+                            <H1 fontSize="14px" mb={0.5}>
+                                {file instanceof File ? file.name : file?.split('/').pop()}
                             </H1>
+
                             <DeleteIcon 
                                 onClick={() => handleRemoveFile(index)}
                                 sx={{ color: '#fff', cursor: 'pointer', fontSize: 22 }}
@@ -103,17 +135,17 @@ const SymMultiFileUploader = ({ title, uploadedFile, setUploadedFile }) => {
     );
 };
 
-export default SymMultiFileUploader;
+export default SymImageUploader;
 
-const fileCardStyle = {
-    width: '100%',
-    p: 1, 
-    borderRadius: '8px',
-    boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
-    fontFamily: 'Elemental End',
-    background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
-    color: '#fff',
-    fontSize:'20px',
-    fontWeight:400,
-    border:'1px solid #FFF'
+const styles = {
+    fileCard : {
+        width: '100%',
+        p: 1, 
+        borderRadius: '8px',
+        boxShadow: '0px 2px 10px rgba(0,0,0,0.1)',
+        background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
+        color: '#fff',
+        fontSize:'20px',
+        border:'1px solid #FFF'
+    }
 };

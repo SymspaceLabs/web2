@@ -31,8 +31,6 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
           px: "1.5rem",
           height: "100%",
           borderRadius: "50px",
-          fontFamily: 'Elemental End',
-          textTransform:'lowercase',
           fontSize: 11,
           fontWeight: 400,
           color:'#FFF',

@@ -84,7 +84,7 @@ export default function NavigationList() {
         if (nav.url) {
           return (
             <NavLink href={nav.url} key={nav.title} >
-              <MenuItem sx={{ fontFamily: "'Elemental End', sans-serif", textTransform: "lowercase" }}>
+              <MenuItem>
                 {nav.title}
               </MenuItem>
             </NavLink>
@@ -97,11 +97,8 @@ export default function NavigationList() {
             <NavItemChild 
               nav={nav} 
               key={nav.title} 
-              sx={{ 
-                background:'#000',
-                fontFamily: "'Elemental End', sans-serif",
-                textTransform: "lowercase"
-              }}>
+              sx={{ background:'#000'}}
+            >
               {renderNestedNav(nav.child)}
             </NavItemChild>
           );

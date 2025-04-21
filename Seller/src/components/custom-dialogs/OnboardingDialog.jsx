@@ -42,6 +42,7 @@ const OnboardingDialog = ({
 
 
     const handleClose = () => setOpen(false);
+    
     const handleContinue = async () => {
         if (loading) return; // Prevent multiple clicks
 
@@ -135,7 +136,8 @@ const OnboardingDialog = ({
     };
 
     const handleOpenStoreDialog = () => {
-        handleClose();
+        // console.log("Hello");
+        // handleClose();
         setStoreDialogOpen(true);
     }
 

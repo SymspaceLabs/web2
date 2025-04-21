@@ -2,20 +2,18 @@
 // Welcome Card
 // ==================================================
 
-import { Box, DialogTitle, Button } from '@mui/material';
-import { FlexColCenter } from '@/components/flex-box';
-import { LazyImage } from '@/components/lazy-image';
 import { useAuth } from '@/contexts/AuthContext';
+import { LazyImage } from '@/components/lazy-image';
+import { FlexColCenter } from '@/components/flex-box';
 import { H1, Paragraph } from '@/components/Typography';
+import { Box, DialogTitle, Button } from '@mui/material';
 
 // ==================================================
 
-const CongratsCard = ({ handleOpenStoreDialog }) => {
+const CongratsCard = ({ openStoreDialog }) => {
 
     const { user } = useAuth();
 
-    
-    
     return (
         <DialogTitle sx={{ pt: { xs: 3, sm: 5 }, pb: { xs: 3, sm: 5 } }}>
             <FlexColCenter>
@@ -33,7 +31,7 @@ const CongratsCard = ({ handleOpenStoreDialog }) => {
                 <Paragraph sx={styles.subtitle}>
                     Begin Setting up your Business on Symspace’s Platform
                 </Paragraph>
-                <Button sx={styles.btn} onClick={handleOpenStoreDialog}>
+                <Button sx={styles.btn} onClick={openStoreDialog}>
                     Store Settings
                 </Button>
             </FlexColCenter>

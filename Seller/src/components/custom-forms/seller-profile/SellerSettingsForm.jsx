@@ -3,7 +3,7 @@
 // =========================================================
 
 import { FlexBox } from '@/components/flex-box';
-import { SymImageUploader, SymTextField } from '@/components/custom-inputs';
+import { SymTextField, SymImageUploader } from '@/components/custom-inputs';
 
 // =========================================================
 

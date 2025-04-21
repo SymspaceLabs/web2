@@ -6,6 +6,7 @@ export { default as SymTextField } from "./SymTextField";
 export { default as SymDatePicker } from "./SymDatePicker";
 export { default as SymAutoComplete} from "./SymAutoComplete";
 export { default as SymFileUploader } from "./SymFileUploader";
-export { default as SymImageUploader } from "./SymImageUploader";
+
+export { default as SymImageUploader } from './SymImageUploader'
 export { default as SymPasswordInput } from "./SymPasswordInput";
 export { default as SymMultiSelectDropdown } from "./SymMultiSelectDropdown";

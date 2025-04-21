@@ -14,13 +14,14 @@ import DashboardHeader from "../../../customer-dashboard/dashboard-header";
 import TicketCard from "../../../customer-dashboard/business-details/ticket-card";
 
 // DATA TYPES
-import { IconButton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { ChevronRight } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM HOOK
 
 import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
-import { OnboardingDialog, SellerProfileDialog } from "@/components/custom-dialogs";
+import { OnboardingDialog } from "@/components/custom-dialogs";
+import { SellerProfileDialog } from "@/components/custom-dialogs";
 
 const DashboardPageView = () => {
 

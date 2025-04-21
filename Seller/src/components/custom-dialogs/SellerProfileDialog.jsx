@@ -8,10 +8,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { H1, Paragraph } from '@/components/Typography';
 import { FlexBox, FlexCol } from '@/components/flex-box';
 import { GlassBanner } from '@/components/custom-banner';
-import { SellerSettingsForm } from '@/components/custom-forms/seller-profile';
+
 import { CircularProgress, IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, DialogActions, Divider } from '@mui/material';
 import { useSnackbar } from "@/contexts/SnackbarContext";
-
+import { SellerSettingsForm } from '@/components/custom-forms/seller-profile';
 import CloseIcon from '@mui/icons-material/Close';
 import LazyImage from '@/components/LazyImage';
 
@@ -33,8 +33,8 @@ const SellerProfileDialog = ({
     const [entityName, setEntityName] = useState();
     const [description, setDescription] = useState();
     const [tagLine, setTagLine] = useState();
-    const [uploadedLogo, setUploadedLogo] = useState();
-    const [uploadedBanner, setUploadedBanner] = useState();
+    const [uploadedLogo, setUploadedLogo] = useState([]);
+    const [uploadedBanner, setUploadedBanner] = useState([]);
 
     const [web, setWeb] = useState();
     const [instagram, setInstagram] = useState();
@@ -69,10 +69,6 @@ const SellerProfileDialog = ({
         setTwitter(user?.company?.twitter || "");
         setYoutube(user?.company?.youtube || "");
         setFacebook(user?.company?.facebook || "");
-
-
-
-        
 
     }, [user]);
 
@@ -208,8 +204,7 @@ const SellerProfileDialog = ({
             </DialogTitle>
 
             <DialogContent sx={{ p: { xs: 0, sm: '25px' } }}>
-                <FlexCol gap={3}>
-                    {/* Banner Card 2 */}
+            <FlexCol gap={3}>
                     <GlassBanner sx={{background:'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)'}}>
                         <FlexCol justifyContent='space-between' gap={2}>
                             <H1 fontSize={16} color="#FFF" pb={1} >
@@ -234,7 +229,7 @@ const SellerProfileDialog = ({
                             </FlexCol>
                         </FlexCol>
                     </GlassBanner>
-
+                        
                     <SellerSettingsForm
                         user={userData}
                         entityName={entityName}
@@ -261,7 +256,7 @@ const SellerProfileDialog = ({
                         setYoutube={setYoutube}
                         facebook={facebook}
                         setFacebook={setFacebook}
-                    />
+                    /> {/*  */}
                 </FlexCol>
             </DialogContent>
 

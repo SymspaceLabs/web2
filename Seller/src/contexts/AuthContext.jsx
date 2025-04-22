@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Add loading state
+
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +26,8 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken);
       setIsAuthenticated(true);
     }
+    setLoading(false); // ✅ Mark as done checking
+
   }, []);
 
   const logout = async () => {
@@ -54,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, token, logout, handleAuthResponse }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, token, logout, handleAuthResponse, loading }}>
       {children}
     </AuthContext.Provider>
   );

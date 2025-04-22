@@ -136,8 +136,7 @@ const OnboardingDialog = ({
     };
 
     const handleOpenStoreDialog = () => {
-        // console.log("Hello");
-        // handleClose();
+        handleClose();
         setStoreDialogOpen(true);
     }
 

@@ -22,6 +22,7 @@ import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
 import { OnboardingDialog } from "@/components/custom-dialogs";
 import { SellerProfileDialog } from "@/components/custom-dialogs";
+import SimulationOverlay from "@/components/SimulationOverlay";
 
 const DashboardPageView = () => {
 
@@ -79,6 +80,12 @@ const DashboardPageView = () => {
         open={storeDialogOpen}
         setOpen={setStoreDialogOpen}
       />
+
+      {/* Simulation overlay - only shows when both dialogs are closed */}
+      <SimulationOverlay
+        open={!onboardingDialogOpen && !storeDialogOpen}
+      />
+
 
       <Box px={0} >
         <Grid container spacing={3}>

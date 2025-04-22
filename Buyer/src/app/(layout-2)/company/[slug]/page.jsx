@@ -4,9 +4,11 @@
 
 import { CompanyPageView } from "@/pages-sections/company/page-view";
 
+// ==============================================================
+
 export const metadata = {
-  title: "Company Page",
-  description: `Symspace is an E-commerce website.`,
+  title: 'Company Page',
+  description: 'Symspace is an E-commerce website.',
   authors: [{
     name: "SYMSPACE LABS",
     url: "https://symspacelabs.com"

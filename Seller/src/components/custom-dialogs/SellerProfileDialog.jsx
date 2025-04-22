@@ -256,7 +256,7 @@ const SellerProfileDialog = ({
                         setYoutube={setYoutube}
                         facebook={facebook}
                         setFacebook={setFacebook}
-                    /> {/*  */}
+                    />
                 </FlexCol>
             </DialogContent>
 

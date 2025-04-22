@@ -39,11 +39,13 @@ const ProtectedLayout = ({ children }) => {
   ];
 
   useEffect(() => {
-    if (!loading && !isAuthenticated && !publicRoutes.includes(pathname)) {
+    if (loading) return;
+  
+    if (!isAuthenticated && !publicRoutes.includes(pathname)) {
       router.replace("/sign-in");
     }
   }, [isAuthenticated, loading, pathname, router]);
-
+  
   return children;
 };
 

@@ -90,7 +90,7 @@ export class Company {
   @Column({ nullable: true })
   phoneSupport: string;
 
-  @Column({ nullable: true })
+  @Column('text')
   description: string;
 
   @Column({ nullable: true })

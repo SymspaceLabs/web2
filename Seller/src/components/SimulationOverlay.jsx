@@ -1,8 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import { Backdrop, Box, Typography } from '@mui/material';
+import { Backdrop, Box } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { H1 } from './Typography';
 
 export default function SimulationOverlay({ open }) {
   const message = 'STANDBY AS WE CONTINUE TO DEVELOP THE SIMULATION';
@@ -45,20 +46,9 @@ export default function SimulationOverlay({ open }) {
           width={300}
           height={300}
         />
-        <Typography
-          variant="h6"
-          mt={2}
-          sx={{
-            whiteSpace: 'pre-wrap',
-            fontFamily: 'monospace',
-            letterSpacing: '0.05em',
-          }}
-        >
+        <H1 fontSize={32}>
           {message.slice(0, visibleChars)}
-        </Typography>
-        <Typography variant="body2" mt={1}>
-          NEW CATEGORIES ADDED TO OUR MARKETPLACE
-        </Typography>
+        </H1>
       </Box>
     </Backdrop>
   );

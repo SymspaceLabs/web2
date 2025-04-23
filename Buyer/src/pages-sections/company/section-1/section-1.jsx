@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography, Avatar, Grid, IconButton, Stack, Button, Container } from '@mui/material';
+import { Box, Avatar,  IconButton, Stack, Button } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import FacebookIcon from '@mui/icons-material/Facebook';
@@ -9,7 +9,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import PublicIcon from '@mui/icons-material/Public';
 import { LazyImage } from '@/components/lazy-image';
-import { H1, Paragraph } from '@/components/Typography';
+import { Paragraph } from '@/components/Typography';
 import { FlexBox, FlexCol } from '@/components/flex-box';
 
 export default function Section1({ company }) {
@@ -28,11 +28,11 @@ export default function Section1({ company }) {
 
       {/* Foreground content */}
       <FlexBox sx={styles.descriptionCard}> 
-        <FlexBox sx={{ flexDirection: {xs:'column', sm:'row'}, gap:5, maxWidth:'1500px', width:'100%', mt: '-90px', p:5 }}>
+        <FlexBox sx={{ flexDirection: {xs:'column', sm:'column', md:'row'}, gap:5, maxWidth:'1500px', width:'100%', mt: '-90px', p:5 }}>
 
           <Avatar
             src={company.logo}
-            alt="Wave World Logo"
+            alt="Company Logo"
             sx={{
               width: 200,
               height: 200,
@@ -44,19 +44,18 @@ export default function Section1({ company }) {
 
           <FlexCol gap={5}>
             <Button mt={2} sx={styles.btn}>
-              WAVE WORLD
+              {company.entityName}
             </Button>
             <Paragraph color="#000" sx={{ mb: 2 }}>
-              Wave World aims to leverage Augmented Reality (AR) as our backbone to set ourselves apart from competitors
-              while also providing multifaceted products. Our products embody both present and vintage fashion trends.
+              {company.description}
             </Paragraph>
-            <Paragraph color="#000" sx={{ mb: 2 }}>
-              Innovate. Inspire. Change.
+            <Paragraph color="#000" fontWeight={600} fontSize={{xs:'20px', sm:'24px'}} sx={{ mb: 2 }}>
+              {company.tagLine}
             </Paragraph>
           </FlexCol>
 
-          <FlexCol alignItems="flex-end" gap={5}>
-            <Stack direction="row" justifyContent="flex-end" spacing={2}>
+          <FlexCol alignItems={{xs:"flex-start", sm:"flex-start", md:"flex-end"}} gap={5}>
+            <Stack color={{xs:'#000', sm:"#000", md:"#FFF"}} direction="row" justifyContent="flex-end" spacing={2}>
               <IconButton color="inherit"><PublicIcon /></IconButton>
               <IconButton color="inherit"><InstagramIcon /></IconButton>
               <IconButton color="inherit"><TwitterIcon /></IconButton>
@@ -64,14 +63,14 @@ export default function Section1({ company }) {
               <IconButton color="inherit"><FacebookIcon /></IconButton>
             </Stack>
 
-            <FlexCol alignItems="flex-end" gap={2}>
+            <FlexCol alignItems={{xs:"flex-start", sm:"flex-start", md:"flex-end"}}  gap={2}>
               <Stack direction="row" width="260px" alignItems="center" justifyContent="flex-start" spacing={1} mb={1}>
                   <EmailIcon sx={{ color: '#2196f3' }} />
-                  <Paragraph color="#000">contact@waveworld.io</Paragraph>
+                  <Paragraph color="#000">{company.emailSupport}</Paragraph>
               </Stack>
               <Stack direction="row"  width="260px" alignItems="center" justifyContent="flex-start" spacing={1}>
                 <PhoneIcon sx={{ color: '#4caf50' }} />
-                <Paragraph color="#000">656-245-3321</Paragraph>
+                <Paragraph color="#000">{company.phoneSupport}</Paragraph>
               </Stack>
             </FlexCol>
 
@@ -91,7 +90,11 @@ const styles = {
     background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
     boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)',
     backdropFilter: 'blur(12px)',
-    borderRadius: '80px'
+    borderRadius: '80px',
+    cursor: 'default', // disables the pointer
+    '&:hover': {
+      cursor: 'default',
+    },
   },
   descriptionCard : {
     justifyContent:'center',

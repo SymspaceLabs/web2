@@ -48,7 +48,7 @@ const LoginPageView = ({ closeDialog }) => {
         showSnackbar(data.message, "error");
 
         if (data.statusCode === 413) {
-          router.push('/verify-email');
+          router.push(`/otp?email=${email}`);
           return;
         }
       } else {

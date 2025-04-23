@@ -77,12 +77,15 @@ export default function PlanCard({ plan, theme }) {
               /{plan.basis}
             </Typography>
           </Typography>
-          {
-            plan.credit > 0 ?
-              <Typography sx={{ color: theme=='dark'?'#FFF':'#000' }}>
-              {plan.title!=="Starter" ? "+ $"+`${plan.credit} `+ "Each Additional Credit" : <>&nbsp;</> }
-            </Typography>:<></>
-          }
+          <Box minHeight={20}>
+            {
+              plan.credit > 0 ?
+                <Typography sx={{ color: theme=='dark'?'#FFF':'#000' }}>
+                {plan.title!=="Starter" ? "+ $"+`${plan.credit} `+ "Each Additional Credit" : <>&nbsp;</> }
+              </Typography>:<></>
+            }
+          </Box>
+
           <Link href="/register" passHref>
             <Button fullWidth sx={styles.getStartedBtn}>
               Get Started

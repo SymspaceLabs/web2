@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Product } from 'src/products/entities/product.entity';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 @Entity('companies')
 export class Company {
@@ -90,8 +91,9 @@ export class Company {
   @Column({ nullable: true })
   phoneSupport: string;
 
-  @Column('text')
-  description: string;
+  @Column('text', { nullable: true })
+  @IsString()
+  description: string;  
 
   @Column({ nullable: true })
   tagLine: string;

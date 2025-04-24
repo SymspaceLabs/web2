@@ -1,12 +1,19 @@
 "use client";
 
+// ==================================================
+// Section 3
+// ==================================================
+
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { LazyImage } from '@/components/lazy-image';
-import { Button, Box, Typography, Container } from '@mui/material';
+import { Button, Box, Container } from '@mui/material';
+import { H1, Paragraph } from '@/components/Typography';
 import { FlexColCenter, FlexBox, FlexRowCenter } from "@/components/flex-box";
+
+// ==================================================
 
 export default function Section3() {
 
@@ -26,20 +33,18 @@ export default function Section3() {
         style={{ height: "100%" }}
       >
         <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:3}, gap:{xs:2, sm:4} }}>
-          <Typography sx={styles.header}>
+          <H1 sx={styles.header}>
             customize, configure & tour spaces in real-time
-          </Typography>
-          <Typography sx={styles.subheader}>
+          </H1>
+          <Paragraph sx={styles.subheader}>
             Transform blueprints into interactive AR environments. Adjust materials, layout, and visual aesthetics in real-time.
-          </Typography>
+          </Paragraph>
           <FlexBox sx={styles.textBubbleContainer}>
             {benefits.map((benefit, index) => (
-              <Box
-                key={index}
-                sx={styles.textBubble}
-                onMouseEnter={() => handleBenefitChange(benefit)}
-              >
-                {benefit.title}
+              <Box key={index} sx={styles.textBubble} onMouseEnter={() => handleBenefitChange(benefit)}>
+                <H1 fontSize={{xs:'8px', sm:'14px'}} color="#FFF">
+                  {benefit.title}
+                </H1>
               </Box>
             ))}
           </FlexBox>
@@ -55,12 +60,12 @@ export default function Section3() {
           >
             {/* Left Side Card */}
             <FlexColCenter sx={styles.glassCard} gap='25px'>
-              <Typography sx={{ fontFamily: "Helvetica", fontWeight: '300', color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+              <Paragraph sx={{color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
                 {activeBenefit.content}
-              </Typography>
-              <Typography sx={{ fontFamily: "Helvetica", fontWeight: '300', color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+              </Paragraph>
+              <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
                 {activeBenefit.bullet}
-              </Typography>
+              </Paragraph>
               <FlexRowCenter>
                 <Link href='/'>
                   <Button sx={styles.buttonTransparent} >

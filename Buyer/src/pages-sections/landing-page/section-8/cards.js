@@ -3,12 +3,13 @@ import { styles } from '../page-view/styles';
 import { LazyImage } from '@/components/lazy-image';
 import { Box, Typography, Button } from '@mui/material';
 import { FlexBox, FlexColCenter } from '@/components/flex-box';
+import { H1, Paragraph } from '@/components/Typography';
 
 export const Card1 = () => {
   return (
     <Box
       sx={{
-        py: { xs: 1, sm: 5.5 },
+        py: { xs: 1 },
         px: 4,
         width: '100%',
         height: '100%',
@@ -16,29 +17,23 @@ export const Card1 = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderRadius: { xs: '25px', sm: '50px' },
+        borderRadius: { xs: '25px' },
         gap: 2,
         position: 'relative',
         overflow: 'hidden',
         transition: 'all 0.3s ease',
         // Disable hover effects on mobile
-        '@media (max-width:600px)': {
+        '@media (min-width:600px)': {
+          py: 5.5,
+          borderRadius: { sm: '50px' },
           '&:hover .fadeInBtn': {
-            display: 'none',
-            opacity: 0,
-            transform: 'none',
+            display: 'flex',
+            opacity: 1,
+            transform: 'translateY(0)',
           },
           '&:hover .headerBox': {
-            transform: 'none',
-          }
-        },
-        '&:hover .fadeInBtn': {
-          display: 'flex',
-          opacity: 1,
-          transform: 'translateY(0)',
-        },
-        '&:hover .headerBox': {
-          transform: 'translateY(-10%)',
+            transform: 'translateY(-10%)',
+          },
         },
       }}
     >
@@ -69,22 +64,14 @@ export const Card1 = () => {
           transform: 'translateY(0)',
         }}
       >
-        <Typography
-          sx={{
-            ...styles.elementalEndFont,
-            alignSelf: 'stretch',
-            color: '#000',
-            fontSize: { xs: 15, sm: 25 },
-          }}
-        >
+        <H1 sx={{ alignSelf: 'stretch', color: '#000', fontSize: { xs: 15, sm: 25 } }}>
           Environmental Impact
-        </Typography>
-        <Typography
+        </H1>
+        <Paragraph
           sx={{
             alignSelf: 'stretch',
             color: '#909090',
             fontSize: { xs: 12, sm: 16 },
-            fontFamily: 'Helvetica',
             fontWeight: 700,
             lineHeight: { xs: 1, sm: 1.5 },
             wordWrap: 'break-word',
@@ -92,7 +79,7 @@ export const Card1 = () => {
           }}
         >
           Our technology addresses the implications shopping has on our environment
-        </Typography>
+        </Paragraph>
         <FlexBox 
           sx={{ 
             width: '100%',
@@ -132,16 +119,16 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
       borderRadius: { xs: '25px', sm: "50px" },
       position: "relative",
       overflow: "hidden",
-      '@media (max-width:600px)': {
-          '&:hover .fadeInBtn': {
-            display: 'none',
-            opacity: 0,
-            transform: 'none',
-          },
-          '&:hover .headerBox': {
-            transform: 'none',
-          }
+      '@media (max-width:600px)': { 
+        '&:hover .fadeInBtn': {
+          display: 'none',
+          opacity: 0,
+          transform: 'none',
         },
+        '&:hover .headerBox': {
+          transform: 'none',
+        }
+      },
       '&:hover .fadeInBtn': {
         display: { xs: "flex", sm: "flex" }, // Always visible on mobile
         opacity: { xs: 1, sm: 1 },
@@ -176,25 +163,23 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
           transform: { xs: "none", sm: "translateY(0)" },
         }}
       >
-        <Typography
+        <H1
           sx={{
-            ...styles.elementalEndFont,
             lineHeight: 1.5,
+            minHeight:'26px',
             alignSelf: 'stretch',
             color: textColor,
             fontSize: { xs: 8.5, sm: 20 },
             wordWrap: 'break-word',
-            fontWeight: 500
           }}
         >
           {headerText}
-        </Typography>
-        <Typography
+        </H1>
+        <Paragraph
           sx={{
             alignSelf: 'stretch',
             color: '#909090',
             fontSize: { xs: 12, sm: 16 },
-            fontFamily: 'Helvetica',
             fontWeight: 700,
             lineHeight: { xs: 1, sm: 1.5 },
             wordWrap: 'break-word',
@@ -202,7 +187,7 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
           }}
         >
           {subHeaderText}
-        </Typography>
+        </Paragraph>
       
         <Box sx={{ width: '100%' }}>
           <Link href="/ar-app-simulation" passHref>
@@ -235,16 +220,30 @@ export const Card3 = () => {
           justifyContent: "center",
           overflow: 'hidden',
           position:'relative',
-          '@media (max-width:600px)': {
+          // Disable hover effects on mobile
+          '@media (min-width:600px)': {
+            py: 5.5,
+            borderRadius: { sm: '50px' },
+            height: "100%", 
+            pt: { xs: 4, sm: 14 },
+            pb: { xs: 2, sm: 10 },
+            px: { xs: 2, sm: 5 },
+            display: "flex", 
+            flexDirection: "column", 
+            bgcolor: "#D5D5D5", 
+            borderRadius: {xs:'25px', sm:"50px"}, 
+            justifyContent: "center",
+            overflow: 'hidden',
+            position:'relative',
             '&:hover .fadeInBtn': {
-              display: 'none',
-            opacity: 0,
-            transform: 'none',
+              display: 'flex',
+              opacity: 1,
+              transform: 'translateY(0)',
+            },
+            '&:hover .headerBox': {
+              transform: 'translateY(-10%)',
+            },
           },
-          '&:hover .headerBox': {
-            transform: 'none',
-          }
-        },
       '&:hover .fadeInBtn': {
         display: { xs: "flex", sm: "flex" }, // Always visible on mobile
         opacity: { xs: 1, sm: 1 },
@@ -296,9 +295,8 @@ export const Card3 = () => {
               transform: 'translateY(0)',
             }}
           >
-            <Typography
+            <H1
               sx={{
-                ...styles.elementalEndFont,
                 lineHeight: 1,
                 alignSelf: 'stretch',
                 color: 'black',
@@ -307,13 +305,12 @@ export const Card3 = () => {
               }}
             >
               Underserved Customers
-            </Typography>
-            <Typography
+            </H1>
+            <Paragraph
               sx={{
                 alignSelf: 'stretch',
                 color: '#909090',
                 fontSize: { xs: 12, sm: 16 },
-                fontFamily: 'Helvetica',
                 fontWeight: 700,
                 lineHeight: { xs: 1, sm: 2 },
                 wordWrap: 'break-word',
@@ -323,7 +320,7 @@ export const Card3 = () => {
               }}
             >
               We are committed to empowering underserved communities through Augmented Reality. Our AR platform prioritizes accessibility, ensuring individuals with disabilities, senior citizens, veterans, and expectant mothers have access to convenient shopping experiences. We’re redefining inclusivity with the mission to create a world where technology adapts to the needs of every user.
-            </Typography>
+            </Paragraph>
           </Box>
 
           <FlexBox sx={{ width: '100%', height: {ms:50}, position: 'relative', justifyContent:{xs:'flex-end', sm:'flex-start'} }}>

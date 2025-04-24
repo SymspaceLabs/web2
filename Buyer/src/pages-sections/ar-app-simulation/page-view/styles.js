@@ -1,11 +1,3 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 export const styles = {
     rootGrid: {
         position: 'relative',
@@ -25,7 +17,6 @@ export const styles = {
         fontSize: { xs: 50, sm: 50, md: 96 },
       },
       description: {
-        fontFamily: 'Helvetica',
         color: '#797979',
         fontSize: 18,
       },

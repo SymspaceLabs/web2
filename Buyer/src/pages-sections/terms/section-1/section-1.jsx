@@ -1,12 +1,11 @@
 "use client";
+
 // ==============================================================
 //  Section 1 | Terms 
 // ==============================================================
 
-import { useEffect, useState } from "react";
-// import TERMS  from "@/data/terms";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { styles } from "../page-view/styles";
 import { FlexCol } from "@/components/flex-box";
 import { H1, Paragraph } from "@/components/Typography";
@@ -15,7 +14,7 @@ import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetai
 // ==============================================================
 
 export default function Section1() {
-  const router = useRouter();
+
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -31,7 +30,6 @@ export default function Section1() {
     }
   }, []); 
   
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -47,15 +45,15 @@ export default function Section1() {
         style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
       >
         <Container>
-          <FlexCol py={{xs:1,sm:4}} gap={3}>
+          <FlexCol py={{ xs:2, sm:4 }} gap={3}>
             <H1 fontSize={{xs:20, sm:50}} color="#FFF">
               Legal & policies
             </H1>
             <Divider />
-            <Paragraph fontSize="24px" color="#FFF">
+            <Paragraph fontSize={{xs:'14px', sm:"24px"}} color="#FFF">
               Last Updated: March 21, 2025
             </Paragraph>
-            <Paragraph fontSize="24px" color="#FFF">
+            <Paragraph fontSize={{xs:'14px', sm:"24px"}} color="#FFF">
               Symspace values transparency and clarity. Below you will find detailed policies designed to protect and inform our users, buyers, sellers, and partners. Please carefully review each policy to understand your rights, responsibilities, and how we handle your data and transactions. If you have any questions regarding these policies, feel free to contact us directly.
             </Paragraph>
           </FlexCol>

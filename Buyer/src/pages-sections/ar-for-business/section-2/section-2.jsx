@@ -6,10 +6,10 @@
 
 import { motion } from "framer-motion";
 import { PARTNERS } from "@/data/partners";
-import { styles } from '../page-view/styles';
+import { Box, Container } from "@mui/material";
 import { FlexBox } from "@/components/flex-box";
 import { keyframes, styled } from "@mui/system";
-import { Box, Container, Typography } from "@mui/material";
+import { H1, Paragraph } from "@/components/Typography";
 
 // Keyframes for the scrolling animation
 const scrollAnimation = keyframes`
@@ -28,8 +28,6 @@ const CompanyLogo = styled("img")({
   margin: "0 20px", // Spacing between logos
 });
 
-// Array of company logo URLs
-
 export default function Section2() {
   return (
     <motion.div
@@ -38,35 +36,31 @@ export default function Section2() {
       transition={{ duration: 0.8, ease: "easeOut" }} // Smooth transition
       viewport={{ once: true, amount: 0.2 }} // Ensures it animates when at least 20% is visible
     >
-      <Box sx={{ py: 3 }}>
+      <Box py={3}>
         {/* Container for the section */}
         <Container>
           {/* Title of the section */}
-          <Typography
-            sx={{
-              ...styles.elementalEndFont,
-              fontSize: { xs: 30, sm: 32 },
-              textAlign: "center",
-              color: "#4E4E4E",
-              pt: 8,
-              pb: 1,
-            }}
+          <H1
+            fontSize={{ xs:20, sm:32 }}
+            textAlign= "center"
+            color="#4E4E4E"
+            pt={{ xs: 0, sm: 8 }}
+            pb={ 1}
           >
             trusted by all our partners
-          </Typography>
+          </H1>
 
           {/* Subtitle */}
-          <Typography
+          <Paragraph
             sx={{
               textAlign: "center",
               color: "#4E4E4E",
               pb: 3,
-              fontFamily: "Helvetica",
-              fontSize: 16,
+              fontSize: { xs:12, sm:16 },
             }}
           >
             We work with the world's biggest organizations, brands, and marketplaces.
-          </Typography>
+          </Paragraph>
 
           {/* Scrolling container for company logos */}
           <FlexBox sx={{ width: "100%", position: "relative", marginTop: "20px" }}>

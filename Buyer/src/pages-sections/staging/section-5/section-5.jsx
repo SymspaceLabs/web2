@@ -6,6 +6,7 @@ import { styles } from "../page-view/styles";
 import { LazyImage } from '@/components/lazy-image';
 import { Box, Typography, Container } from '@mui/material';
 import { FlexColCenter, FlexBox } from "@/components/flex-box";
+import { H1 } from '@/components/Typography';
 
 export default function Section5() {
 
@@ -16,7 +17,7 @@ export default function Section5() {
   };
 
   return (
-    <Container sx={{ py: {xs:2, sm:5} }} zIndex={1}>
+    <Container sx={{ py: {xs:2, sm:5}, zIndex: 1 }} >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -25,17 +26,19 @@ export default function Section5() {
         style={{ height: "100%" }}
       >
         <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:4 }}>
-          <Typography sx={styles.header}>
-            furnish  Homes  with  augmented reality
-          </Typography>
+          <H1 sx={styles.header}>
+            furnish Homes with augmented reality
+          </H1>
           <FlexBox sx={{...styles.textBubbleContainer }}>
             {benefits.slice(0, 3).map((benefit, index) => (
-              <Box
+              <Box 
                 key={index}
                 sx={{ ...styles.textBubble, maxWidth: { xs:180, sm:'250px', md:'500px'} }}
                 onMouseEnter={() => handleBenefitChange(benefit)}
               >
-                {benefit.title}
+                <H1 fontSize={{xs:'8px', sm:'14px'}} color="#FFF">
+                  {benefit.title}
+                </H1>
               </Box>
             ))}
           </FlexBox>

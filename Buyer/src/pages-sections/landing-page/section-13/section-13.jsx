@@ -1,13 +1,19 @@
 "use client";
 
+// =============================================================
+// Section 13 Component
+// =============================================================
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { styles } from "../page-view/styles";
-import { FlexBox } from "@/components/flex-box";
-import { LazyImage } from '@/components/lazy-image';
+import { FlexBox, FlexCol } from "@/components/flex-box";
+import { LazyImage } from "@/components/lazy-image";
 import { calculateDiscount, currency } from "@/lib";
-import { Box, Grid, Container, Tabs, Tab, Typography } from "@mui/material";
+import { Paragraph } from "@/components/Typography";
+import { Box, Grid, Container, Tabs, Tab } from "@mui/material";
+
+// =============================================================
 
 export default function Section12() {
   const [activeTab, setActiveTab] = useState("newArrival");
@@ -60,9 +66,6 @@ export default function Section12() {
                 {categories.map((item) => (
                   <Tab key={item.slug} label={item.title} value={item.slug}
                     sx={{
-                      textTransform: "none",
-                      ...styles.elementalEndFont,
-                      fontWeight: 400,
                       fontSize: { xs: 10, sm: 18 },
                       color: "#BDBDBD",
                       "&.Mui-selected": { color: "#FFFFFF" },
@@ -74,82 +77,138 @@ export default function Section12() {
           </Box>
 
           {/* Product List Container */}
-          <Box sx={{ overflowX: { xs: "auto", sm: "visible" }, whiteSpace: "nowrap", pb: 2, pt: 3, pl: 3.5 }}>
+          <Box sx={{ pt: 3, pb: 2 }}>
             <Grid
               container
               spacing={3}
               sx={{
-                display: "flex",
-                flexWrap: { xs: "nowrap", sm: "wrap" }, // Prevent wrapping on mobile, allow on desktop
-                justifyContent: { xs: "flex-start", sm: "flex-start" }, // Align to left
+                justifyContent: "flex-start",
               }}
             >
+
               {products.map((product,index) => (
                 <Grid
                   item
                   key={index}
-                  lg={3} md={4} sm={6} xs={12} // Max 4 per row on desktop
+                  xs={6} sm={4} md={3} lg={3} // Defines the column span per breakpoint
                   sx={{
-                    flex: { xs: "0 0 auto", sm: "1 1 auto" }, 
-                    width: { xs: "35%", sm: "auto" }, 
-                    mr: { xs: 2, sm: 0 }, // Keep spacing for mobile scroll
-                    pl: { xs: "0px !important", sm: "12px !important" }, // Adds left padding for spacing on desktop
-                    pt: { xs: "0px !important", sm: "12px" }, // Adjust top padding for uniform spacing
+                    display: 'flex',
                   }}
                 >
-                  <Link href={`/products/${product.slug}`}>
-                    <FlexBox
-                      flexDirection="column"
+                  <Link href={`/products/${product.slug}`} style={{ width: '100%' }}>
+                    <FlexCol
                       bgcolor="rgba(255, 255, 255, 0.1)"
                       borderRadius={3}
                       mb={2}
                       sx={{
+                        width: '100%', // Ensure card fills its parent
                         transition: "background-color 0.3s ease",
                         "&:hover": { bgcolor: "rgba(255, 255, 255, 0.15)" },
                       }}
                     >
-                      <LazyImage
-                        alt="product images"
-                        width={355}
-                        height={355}
-                        src={product.images?.[0]?.url || "/placeholder.png"}
-                        style={{
-                          objectFit: "cover",
-                          objectPosition: "center",
-                          maxHeight: "355px",
-                          width: "100%",
-                          height: "355px",
-                          borderTopLeftRadius: '12px',
-                          borderTopRightRadius: '12px',
-                        }}
-                      />
+                      <Box sx={{ width: "100%", maxWidth: { xs: "100%", sm: "100%" } }}>
+                        <LazyImage
+                          alt="product images"
+                          width={355}
+                          height={355}
+                          src={product.images?.[0]?.url || "/placeholder.png"}
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                            width: "100%",
+                            height: "auto",
+                            aspectRatio: "1 / 1",
+                            borderTopLeftRadius: '12px',
+                            borderTopRightRadius: '12px',
+                          }}
+                        />
 
+                      </Box>
+                      
+                
                       <Box sx={{ px: { xs: 1.5, sm: 4 }, pb: 4 }}>
-                        <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: { xs: 10, sm: 18 }, fontWeight: 500 }}>
+                        <Paragraph sx={{ color: "#fff", fontSize: { xs: 10, sm: 18 }, fontWeight: 500 }}>
                           {product.name}
-                        </Typography>
-                        <Typography sx={{ fontFamily: "Helvetica", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 400 }}>
+                        </Paragraph>
+                        <Paragraph sx={{ textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 } }}>
                           {product.company.businessName}
-                        </Typography>
+                        </Paragraph>
                         <FlexBox gap={1}>
-                          <Typography sx={{ fontFamily: "Helvetica", color: "#fff", fontSize: { xs: 10, sm: 17 }, fontWeight: 500 }}>
+                          <Paragraph sx={{ color: "#fff", fontSize: { xs: 10, sm: 17 }, fontWeight: 500 }}>
                             {currency(calculateDiscount(product.price, 0))}
-                          </Typography>
-                          <Typography sx={{ fontFamily: "Helvetica", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 500, textDecoration: "line-through" }}>
+                          </Paragraph>
+                          <Paragraph sx={{ color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 500, textDecoration: "line-through" }}>
                             {currency(calculateDiscount(product.salePrice, 0))}
-                          </Typography>
+                          </Paragraph>
                         </FlexBox>
                       </Box>
-                    </FlexBox>
+                    </FlexCol>
                   </Link>
                 </Grid>
+              
+                // <Grid
+                //   item
+                //   key={index}
+                //   lg={3} md={4} sm={6} xs={6} // xs: 2 cards per row
+                //   sx={{
+                //     flex: { xs: "0 0 auto", sm: "1 1 auto" }, 
+                //     width: { xs: "35%", sm: "auto" }, 
+                //     mr: { xs: 2, sm: 0 }, // Keep spacing for mobile scroll
+                //     pl: { xs: "0px !important", sm: "12px !important" }, // Adds left padding for spacing on desktop
+                //     pt: { xs: "0px !important", sm: "12px" }, // Adjust top padding for uniform spacing
+                //   }}
+                // >
+                //   <Link href={`/products/${product.slug}`}>
+                //     <FlexCol
+                //       bgcolor="rgba(255, 255, 255, 0.1)"
+                //       borderRadius={3}
+                //       mb={2}
+                //       sx={{
+                //         width: '100%',
+                //         transition: "background-color 0.3s ease",
+                //         "&:hover": { bgcolor: "rgba(255, 255, 255, 0.15)" },
+                //       }}
+                //     >
+                //       <LazyImage
+                //         alt="product images"
+                //         width={355}
+                //         height={355}
+                //         src={product.images?.[0]?.url || "/placeholder.png"}
+                //         style={{
+                //           objectFit: "cover",
+                //           objectPosition: "center",
+                //           maxHeight: "355px",
+                //           width: "100%",
+                //           height: "355px",
+                //           borderTopLeftRadius: '12px',
+                //           borderTopRightRadius: '12px',
+                //         }}
+                //       />
+
+                //       <Box sx={{ px: { xs: 1.5, sm: 4 }, pb: 4 }}>
+                //         <Paragraph sx={{ color: "#fff", fontSize: { xs: 10, sm: 18 }, fontWeight: 500 }}>
+                //           {product.name}
+                //         </Paragraph>
+                //         <Paragraph sx={{ textTransform: "uppercase", color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 } }}>
+                //           {product.company.businessName}
+                //         </Paragraph>
+                //         <FlexBox gap={1}>
+                //           <Paragraph sx={{ color: "#fff", fontSize: { xs: 10, sm: 17 }, fontWeight: 500 }}>
+                //             {currency(calculateDiscount(product.price, 0))}
+                //           </Paragraph>
+                //           <Paragraph sx={{ color: "rgba(255,255,255,0.5)", fontSize: { xs: 10, sm: 17 }, fontWeight: 500, textDecoration: "line-through" }}>
+                //             {currency(calculateDiscount(product.salePrice, 0))}
+                //           </Paragraph>
+                //         </FlexBox>
+                //       </Box>
+                //     </FlexCol>
+                //   </Link>
+                // </Grid>
               ))}
             </Grid>
           </Box>
         </motion.div>
       </Container>
     </Box>
-
-
   );
 }

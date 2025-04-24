@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { styles } from '../page-view/styles';
+import { H1 } from "@/components/Typography";
 import { Container, Box, Card } from '@mui/material';
 import { FlexBox, FlexColCenter } from '@/components/flex-box';
 
@@ -46,7 +47,9 @@ export default function Section2() {
               <FlexBox sx={styles.textBubbleContainer}>
                 {benefits.map((benefit,index) => (
                   <Box key={index} sx={styles.textBubble}>
-                    {benefit}
+                    <H1 color='#FFF' fontSize={{xs:'8px', sm:'14px'}}>
+                      {benefit}
+                    </H1>
                   </Box>
                 ))}
               </FlexBox>

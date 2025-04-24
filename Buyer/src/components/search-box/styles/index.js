@@ -1,14 +1,7 @@
 import { Card } from "@mui/material";
-import { elementalEnd } from "@/app/layout"; // Calling custom font
 import { FlexBox } from "@/components/flex-box";
 import styled from "@mui/material/styles/styled";
 import SearchOutlined from "@mui/icons-material/SearchOutlined"; // GLOBAL CUSTOM COMPONENT
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
 
 export const SearchOutlinedIcon = styled(SearchOutlined)(({
   theme

@@ -7,7 +7,7 @@ import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section2() {
   return (
-    <FlexColCenter sx={{ py:10, px:{xs:2, sm:0} }}>
+    <FlexColCenter sx={{ py:{ xs:5, sm:10 }, px:{xs:2, sm:0} }}>
       <Container>
         <motion.div
           component={Box} // Makes motion.div behave like a Box

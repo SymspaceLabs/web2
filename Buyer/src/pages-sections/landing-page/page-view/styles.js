@@ -1,11 +1,5 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-const elementalEndFont = `${elementalEnd.style.fontFamily}, sans-serif`
-
 export const styles = {
   sectionHeader: {
-      fontFamily: elementalEndFont,
-      textTransform:'lowercase',
       fontSize: { xs: 20, sm: 64 },
       color:'#FFF'
   },
@@ -15,11 +9,6 @@ export const styles = {
     textAlign: 'justify',
     maxWidth: 1200,
     lineHeight: { xs:1.5, sm:2 } 
-  },
-  elementalEndFont : {
-    fontFamily: elementalEndFont,
-    textTransform:'lowercase',
-    fontWeight: 500
   },
   gradientBtn : {
     flex:{xs:1, sm:0},
@@ -57,8 +46,6 @@ export const styles = {
     border:'2px solid black',
     fontWeight: 400,
     minWidth: 175,
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform: 'lowercase',
     color: '#000',
     borderRadius: '50px',
     py: {xs:1, sm:2},
@@ -87,10 +74,7 @@ export const styles = {
     py: {xs:1, sm:2},
     px: {xs:1, sm:3},
     mb: {xs:0, sm:2},
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform: 'lowercase',
     background: 'rgba(255, 255, 255, 0.35)',
-    fontSize: {xs:'8px', sm:'14px'},
     boxShadow: `
       inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
       inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
@@ -99,6 +83,5 @@ export const styles = {
       inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
     `,
     borderRadius: '80px',
-    color: '#fff'
   }
 };

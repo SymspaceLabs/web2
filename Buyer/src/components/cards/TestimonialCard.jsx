@@ -1,9 +1,10 @@
 "use client"
 
 import { styled } from "@mui/system";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { FlexBox } from "@/components/flex-box";
 import { LazyImage } from "@/components/lazy-image";
+import { Paragraph } from "../Typography";
 
 const TestimonialWrapper = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",
@@ -29,16 +30,16 @@ const TestimonialCard = ({ testimonial }) => {
 
     return (
         <TestimonialWrapper>
-          <Typography fontFamily="Helvetica" fontSize={16} sx={{ wordWrap: "break-word", overflowWrap: "break-word", whiteSpace: "normal" }}>
+          <Paragraph fontSize={16} sx={{ wordWrap: "break-word", overflowWrap: "break-word", whiteSpace: "normal" }}>
             {comment}
-          </Typography>
+          </Paragraph>
           <FlexBox gap={2} alignItems="center">
             <Box sx={imageWrapper}>
               <LazyImage src={user.avatar} width={50} height={50} alt="User" />
             </Box>
-            <Typography fontFamily="Helvetica" fontSize={18}>
+            <Paragraph fontSize={18}>
               {user.name}
-            </Typography>
+            </Paragraph>
           </FlexBox>
         </TestimonialWrapper>
       );

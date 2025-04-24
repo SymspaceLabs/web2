@@ -7,7 +7,8 @@
 import { motion } from "framer-motion";
 import { styles } from '../page-view/styles';
 import { FlexBox } from '@/components/flex-box';
-import { Box, Container, Typography, Button, Grid, useTheme } from '@mui/material';
+import { Box, Container, Button, Grid } from '@mui/material';
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section1() {
   return (
@@ -25,14 +26,14 @@ export default function Section1() {
               {/* Left column: Text content */}
               <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>
                 {/* Headline */}
-                <Typography sx={{ ...styles.sectionHeader, color: '#4E4E4E' }}>
+                <H1 sx={{ ...styles.sectionHeader, color: '#4E4E4E' }}>
                   sell more <br /> with SYMSPACE
-                </Typography>
+                </H1>
 
                 {/* Promotional offer */}
-                <Typography sx={{ color: '#797979', fontSize: {xs:12, sm:18} }}>
+                <Paragraph sx={{ color: '#797979', fontSize: {xs:12, sm:18} }}>
                   *Initial 100 Partners gain 50% more on marketplace sales
-                </Typography>
+                </Paragraph>
 
                 {/* Button group */}
                 <FlexBox sx={{ pt: 2.5 }}>

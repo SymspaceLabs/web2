@@ -1,15 +1,6 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 export const styles = {
     getStartedBtn : {
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        ...elementalEndFont,
         my: 5,
         borderRadius: "50px",
         py: 1.5,

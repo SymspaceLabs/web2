@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { styles } from '../page-view/styles';
 import { Box, Container, Typography, Grid, List, ListItem, ListItemText, Card, useMediaQuery } from '@mui/material';
+import { H1, Paragraph } from '@/components/Typography';
 
 export default function Section3() {
   const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
@@ -33,14 +34,9 @@ export default function Section3() {
   return (
     <Box id="features" sx={{ py: { xs: 2, sm: 20 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography
-          fontSize={{ xs: 20, sm: 40 }}
-          sx={styles.elementalEndFont}
-          textAlign="center"
-          mb={4}
-        >
+        <H1 fontSize={{ xs: 20, sm: 40 }} textAlign="center" mb={4}>
           an app that redefines <br /> ar shopping
-        </Typography>
+        </H1>
 
         <Card
           sx={{
@@ -82,14 +78,9 @@ export default function Section3() {
                       },
                     }}
                   >
-                    <ListItemText
-                      primary={benefit.title}
-                      sx={{
-                        '& .MuiListItemText-primary': {
-                          ...styles.elementalEndFont
-                        },
-                      }}
-                    />
+                    <H1>
+                      {benefit.title}
+                    </H1>
                   </ListItem>
                 ))}
               </List>
@@ -110,12 +101,12 @@ export default function Section3() {
                   minHeight: '200px',
                 }}
               >
-                <Typography variant="h6" sx={{...styles.elementalEndFont}} >
+                <H1>
                   {activeBenefit.header}
-                </Typography>
-                <Typography variant="h6" sx={{ fontSize: { xs: 12, sm: 18 } }}>
+                </H1>
+                <Paragraph fontSize={{ xs: 12, sm: 18 }}>
                   {activeBenefit.content}
-                </Typography>
+                </Paragraph>
               </Box>
             </Grid>
           </Grid>

@@ -1,10 +1,16 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react';
-import { Box, Container, Typography, Grid } from '@mui/material';
+// ====================================================
+// Section 10 | 3D Handbag
+// ====================================================
+
 import { motion, useInView } from 'framer-motion';
-import { sectionStyles } from './styles';
-import HandBagCanvas from '../../../components/HandBagCanvas';
+import { Paragraph } from '@/components/Typography';
+import { useRef, useState, useEffect } from 'react';
+import { Box, Container, Grid } from '@mui/material';
+import HandBagCanvas from '@/components/HandBagCanvas';
+
+// ====================================================
 
 // Define animation variants
 const listItemVariants = {
@@ -56,11 +62,11 @@ export default function Section9() {
   return (
     <Grid sx={{ position:'relative', zIndex:2 }}>
       <Container>
-        <Box sx={sectionStyles.boxContainer}>
+        <Box sx={{ flexGrow: 1, py: 8 }}>
           <Grid container spacing={6} alignItems="center">
             
             {/* Left section: List of features */}
-            <Grid item xs={12} md={6} sx={sectionStyles.leftGridItem}>
+            <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <motion.div
                 ref={leftRef}
                 initial="hidden"
@@ -74,9 +80,9 @@ export default function Section9() {
                     style={{ marginBottom: '16px' }} // Added gap between cards
                   >
                     <Box sx={{ p: {xs:2, sm:5}, background: index % 2 === 0 ? '#D5D5D5' : '#fff', borderRadius: {xs:'20px', sm:'25px'}, textAlign:{xs:'center', sm:'left'} }}>
-                      <Typography sx={{ color: '#000', fontSize: {xs:12, sm:20}, fontWeight: 'bold' }}>
+                      <Paragraph sx={{ color: '#000', fontSize: {xs:12, sm:20}, fontWeight: 'bold' }}>
                         {feature}
-                      </Typography>
+                      </Paragraph>
                     </Box>
                   </motion.div>
                 ))}
@@ -91,7 +97,12 @@ export default function Section9() {
                 animate={rightHasAnimated ? "visible" : "hidden"} // Persistent state
                 variants={rightComponentVariants}
               >
-                <Box sx={sectionStyles.rightGridItem}>
+                <Box
+                  sx={{
+                    minHeight: { xs: '250px', md: '750px' },
+                    maxHeight: { xs: '250px', md: '750px' },
+                  }}
+                >
                   <HandBagCanvas />
                 </Box>
               </motion.div>

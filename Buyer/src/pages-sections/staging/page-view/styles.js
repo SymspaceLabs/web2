@@ -1,12 +1,5 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-const elementalEndFont = `${elementalEnd.style.fontFamily}, sans-serif`
-
-
 export const styles = {
   header: {
-    fontFamily: elementalEndFont,
-    textTransform:'lowercase',
     color: '#FFF',
     fontSize: { xs: 20, sm: 40 },
     maxWidth:'1000px',
@@ -14,7 +7,6 @@ export const styles = {
     wordSpacing:'10px'
   },
   subheader: {
-    fontFamily: 'Helvetica',
     color: '#FFF',
     fontSize: { xs:12, sm:24 },
     textAlign: 'justify',
@@ -27,9 +19,6 @@ export const styles = {
     height:'100%',
     flex:{xs:1, sm:0},
     minWidth: { sm:250 },
-    fontFamily: elementalEndFont,
-    textTransform: 'lowercase',
-    fontWeight: 500,
     color: '#fff',
     borderRadius: '50px',
     border: '2px solid white',
@@ -60,10 +49,7 @@ export const styles = {
     py: {xs:1, sm:2},
     px: {xs:2, sm:3},
     mb: {xs:0, sm:2},
-    fontFamily: elementalEndFont,
-    textTransform: 'lowercase',
     background: 'rgba(255, 255, 255, 0.35)',
-    fontSize: {xs:'8px', sm:'14px'},
     boxShadow: `
       inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
       inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
@@ -72,7 +58,6 @@ export const styles = {
       inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)
     `,
     borderRadius: '80px',
-    color: '#fff',
     '&:hover': {
       background: 'rgba(3, 102, 254, 0.6)',
     },
@@ -97,8 +82,6 @@ export const styles = {
     boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', 
     backdropFilter: 'blur(10px)',
     borderRadius:'30px',
-    fontFamily: elementalEndFont,
-    textTransform: 'lowercase',
     fontSize: 11,
     color:'#FFF',
     px: 2,
@@ -107,10 +90,5 @@ export const styles = {
       background:'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
       border:'1px solid white',
     }
-  },
-  elementalEndFont : {
-    fontFamily: elementalEndFont,
-    textTransform:'lowercase',
-    fontWeight: 500
-  },
+  }
 }

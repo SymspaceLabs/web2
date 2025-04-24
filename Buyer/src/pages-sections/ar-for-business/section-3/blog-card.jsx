@@ -5,8 +5,8 @@
 // ======================================================
 
 import { useEffect, useState, useRef } from 'react';
-import { Box, Typography } from '@mui/material';
-import { styles } from "../page-view/styles";
+import { Box } from '@mui/material';
+import { H1, Paragraph } from '@/components/Typography';
 
 // ======================================================
 
@@ -64,7 +64,7 @@ export default function BlogCard({ title, subTitle }) {
     <Box
       ref={cardRef}
       sx={{
-        p: 5,
+        p: {xs:1, sm:5},
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -72,27 +72,25 @@ export default function BlogCard({ title, subTitle }) {
       }}
     >
       {/* Animated count displayed as a percentage */}
-      <Typography
+      <H1
         sx={{
-          ...styles.elementalEndFont,
           textAlign: 'center',
           color: '#2F2F2F',
-          fontSize: 96,
+          fontSize: { xs:30, sm:96 },
         }}
       >
         {count}%
-      </Typography>
+      </H1>
       {/* Subtitle for additional context */}
-      <Typography
+      <Paragraph
         sx={{
-          fontFamily: 'Helvetica',
-          fontSize: 16,
+          fontSize: { xs:12, sm:16 },
           color: '#909090',
           textAlign: 'center',
         }}
       >
         {subTitle}
-      </Typography>
+      </Paragraph>
     </Box>
   );
 }

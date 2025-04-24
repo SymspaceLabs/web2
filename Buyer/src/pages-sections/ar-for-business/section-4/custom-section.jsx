@@ -1,7 +1,12 @@
-import { Box, Grid, Card, Typography, Button } from '@mui/material';
-import { styles } from '../page-view/styles';
+// ===================================================
+// Custom Section
+// ===================================================
+
 import Link from 'next/link';
-import { H1 } from '@/components/Typography';
+import { Box, Grid, Card, Button } from '@mui/material';
+import { H1, Paragraph } from '@/components/Typography';
+
+// ===================================================
 
 export default function CustomSection({ title, subTitle, btnText, btnUrl, children, invert=false }) {
   return (
@@ -47,8 +52,9 @@ const BlogCard = ({ title, subTitle, btnText, btnUrl }) => {
   return (
     <Card
       sx={{
-        borderRadius: '50px',
-        padding: 5,
+        borderRadius: { xs:'35px', sm:'50px' },
+        py: { xs:3, sm:5 },
+        px: { xs:3, sm:5 },
         maxWidth:'500px',
         background: 'rgba(255, 255, 255, 0.3)',
         boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
@@ -59,20 +65,19 @@ const BlogCard = ({ title, subTitle, btnText, btnUrl }) => {
         overflow: 'hidden',
       }}
     >
-      <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection:'column', gap:'25px' }}>
-        <H1 fontSize={21} color='#2F2F2F'>
+      <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection:'column', gap:{xs:'10px', sm:'25px'} }}>
+        <H1 fontSize={{xs:16, sm:21}} color='#2F2F2F'>
           {title}
         </H1>
-        <Typography sx={{ fontFamily: 'Helvetica', fontSize: 16, color:'#434167' }}>
+        <Paragraph sx={{ fontSize: {xs:12, sm:16}, color:'#434167' }}>
           {subTitle}
-        </Typography>
+        </Paragraph>
         <Box sx={{ display:'flex', justifyContent:'flex-end'}}>
           <Link href={btnUrl}>
             <Button
               sx={{ 
                 background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', 
                 borderRadius:'30px',
-                ...styles.elementalEndFont,
                 fontSize: 11,
                 color:'#2F2F2F',
                 px:2,

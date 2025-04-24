@@ -1,11 +1,18 @@
 "use client"
 
-import React, { useRef, useState } from "react";
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import { motion, useInView } from "framer-motion";
-import { FlexBox } from "@/components/flex-box";
-import { styles } from "../page-view/styles";
+// ========================================================
+// Section 6 | Application
+// ========================================================
+
 import Link from "next/link";
+import React, { useRef } from "react";
+import { styles } from "../page-view/styles";
+import { FlexBox } from "@/components/flex-box";
+import { motion, useInView } from "framer-motion";
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, Grid } from '@mui/material';
+
+// ========================================================
 
 export default function Section6() {
   const ref = useRef(null);
@@ -36,13 +43,13 @@ export default function Section6() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Typography sx={{ ...styles.sectionHeader, color: '#000', px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
+                <H1 sx={{ ...styles.sectionHeader, color: '#000', px: { xs: 2, sm: 0 }, textAlign:{xs:'center', sm:'left'} }}>
                   Application
-                </Typography>
+                </H1>
 
-                <Typography sx={{ py:{xs:2, sm:5}, maxWidth:'1000px', fontFamily: 'Helvetica', color: '#353535', fontSize: { xs: 12, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
+                <Paragraph sx={{ py:{xs:2, sm:5}, maxWidth:'1000px', color: '#353535', fontSize: { xs: 12, sm: 18 }, px: { xs: 2, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
                   Optimized for user experience, our AR application allows consumers to leverage various advanced AR features to trial products like never before. Consumers are able to augment 3D products realistically in their own space, providing a virtual trial room experience for clothes, furniture, and more. The Symspace app goes beyond visualization by offering near-precise sizing recommendations, reducing returns, and increasing consumer confidence levels.
-                </Typography>
+                </Paragraph>
 
                 <FlexBox sx={{ pt:2, justifyContent: {xs:'center', sm:'flex-start'} }}>
                   <Link href="/ar-app-simulation" passHref>

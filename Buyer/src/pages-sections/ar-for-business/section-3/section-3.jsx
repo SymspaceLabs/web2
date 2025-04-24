@@ -2,10 +2,10 @@
 // Section 3 Component
 // ======================================================
 
-import { Box, Container, Typography, Grid } from "@mui/material";
-import { styles } from "../page-view/styles";
-import { motion } from "framer-motion"; // Import Framer Motion
 import BlogCard from "./blog-card"; // API FUNCTIONS
+import { motion } from "framer-motion"; // Import Framer Motion
+import { H1 } from "@/components/Typography";
+import { Box, Container, Grid } from "@mui/material";
 
 // ======================================================
 
@@ -35,18 +35,15 @@ export default function Section3() {
         <Container>
           {/* Title with fade-in effect */}
           <motion.div variants={fadeInVariant}>
-            <Typography
-              sx={{
-                ...styles.elementalEndFont,
-                fontSize: {xs:28, sm:48},
-                textAlign: "center",
-                color: "#000",
-                pt: 8,
-                pb: 3,
-              }}
+            <H1
+              fontSize={{ xs:20, sm:32 }}
+              textAlign="center"
+              color="#000"
+              pt={{xs:0, sm:8}}
+              pb={3}
             >
               engage your customers
-            </Typography>
+            </H1>
           </motion.div>
 
           {/* Blog Cards with staggered animation */}
@@ -57,7 +54,7 @@ export default function Section3() {
             viewport={{ once: true, amount: 0.2 }} // Same viewport setting
           >
             <Grid container spacing={3}>
-              {blogs.map((blog) => (
+              {stats.map((blog) => (
                 <Grid item lg={4} md={8} xs={12} key={blog.id}>
                   <motion.div variants={fadeInVariant}>
                     <BlogCard date={blog.createdAt} title={blog.count} subTitle={blog.subTitle} />
@@ -72,7 +69,7 @@ export default function Section3() {
   );
 }
 
-const blogs = [
+const stats = [
   {
     id: "1",
     count: 94,

@@ -32,6 +32,7 @@ export default function PlanCard({ plan, theme }) {
               src="/assets/images/sparkles.png"
               width={50}
               height={50}
+              alt="sparkles"
             />
           </Box>
           

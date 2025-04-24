@@ -3,9 +3,10 @@
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { FlexColCenter } from "@/components/flex-box";
-import { Typography, Container, Box } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { AR_REAL_ESTATE_PLANS } from "@/data/pricing";
 import PricingTable from "@/components/pricing-table/pricingTable";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section6() {
   return (
@@ -19,12 +20,12 @@ export default function Section6() {
           style={{ height: "100%" }}
         >
           <FlexColCenter sx={{ py:{xs:2, sm:5}, px:{xs:2}, gap:4 }}>
-            <Typography sx={styles.header}>
+            <H1 sx={styles.header}>
               Stage faster. Lease Smarter.
-            </Typography>
-            <Typography sx={styles.subheader}>
+            </H1>
+            <Paragraph sx={styles.subheader}>
               Reduce staging costs by up to 80% and increase rental value by 20% with AR-powered staging.
-            </Typography>
+            </Paragraph>
             
 
             {/* Pricing Table */}

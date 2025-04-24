@@ -10,6 +10,7 @@ import { styles } from '../page-view/styles';
 import { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Button, TextField } from '@mui/material';
 import AppStore from '@/components/footer/components/app-store';
+import { H1, Paragraph } from '@/components/Typography';
 
 export default function Section1() {
   const router = useRouter();
@@ -94,14 +95,14 @@ export default function Section1() {
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Headline */}
-        <Typography sx={styles.title}>
+        <H1 sx={styles.title}>
           SYMSPACE
-        </Typography>
+        </H1>
 
         {/* Promotional Offer */}
-        <Typography sx={{ fontSize: '16px', marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica' }}>
+        <Paragraph sx={{ fontSize: '16px', marginBottom: '2rem', color: '#fff' }}>
           Revolutionizing the shopping experience through Augmented Reality + Artificial Intelligence
-        </Typography>
+        </Paragraph>
 
         {/* Button group */}
         <Box sx={styles.buttonGroup}>

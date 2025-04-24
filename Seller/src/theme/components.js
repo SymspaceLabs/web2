@@ -4,6 +4,7 @@
 // - MUI Typography
 // - MUI Textfield
 // - MUI MenuItem
+// - MUI Tab
 // ===================================================================
 
 import { elementalEnd } from "@/app/layout";
@@ -80,6 +81,14 @@ export const components = {
       root: {
         paddingTop: 8,
         paddingBottom: 8,
+        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+        textTransform: 'lowercase'
+      }
+    }
+  },
+  MuiTab: {
+    styleOverrides: {
+      root: {
         fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
         textTransform: 'lowercase'
       }

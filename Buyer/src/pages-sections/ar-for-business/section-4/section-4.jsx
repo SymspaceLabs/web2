@@ -23,10 +23,10 @@ export default function Section4() {
         {/* Section header */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <H1 fontSize={{ sm: 34, xs: 28 }} textAlign="center">
+            <H1 fontSize={{ xs: 20, sm: 34 }} textAlign="center">
               revolutionize Shopping
             </H1>
-            <H1 fontSize={{ sm: 34, xs: 28 }} textAlign="center">
+            <H1 fontSize={{ xs: 20, sm: 34 }} textAlign="center">
               3d products & ar trial room
             </H1>
           </Box>
@@ -41,16 +41,17 @@ export default function Section4() {
             btnUrl="/"
             invert={false}
           >
-            <video
-              width="50%"
+            {/* <video
+              width="40%"
               height="auto"
               autoPlay
               loop
               muted
-              src="/assets/videos/ar-for-business/black-t-shirt.mp4"
-              poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
+              src="/assets/videos/ar-for-business/model.mp4"
+              poster="/assets/videos/ar-for-business/model.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
-            />
+            /> */}
+
           </CustomSection>
         </motion.div>
 
@@ -86,13 +87,13 @@ export default function Section4() {
             invert={false}
           >
             <video
-              width="50%"
+              width="40%"
               height="auto"
               autoPlay
               loop
               muted
-              src="/assets/videos/ar-for-business/black-t-shirt.mp4"
-              poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
+              src="/assets/videos/ar-for-business/model.mp4"
+              poster="/assets/videos/ar-for-business/model.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
             />
           </CustomSection>

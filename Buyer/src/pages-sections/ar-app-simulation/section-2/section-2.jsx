@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import { ParallaxProvider, Parallax } from "react-scroll-parallax";
 import { styles } from "../page-view/styles";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section2() {
   const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screens
@@ -24,23 +25,14 @@ export default function Section2() {
             py: "50px",
           }}
         >
-          <Typography
-            sx={{
-              ...styles.elementalEndFont,
-              color: '#4E4E4E',
-              wordSpacing:'10px',
-              fontSize:{ xs: 28, sm: 40 },
-              textAlign:"center"
-            }}
-          >
-            revolutionizing shopping 
-          </Typography>
-          <Typography
+          <H1 color='#4E4E4E' fontSize={{ xs: 28, sm: 40 }} textAlign="center">
+            revolutionizing shopping
+          </H1>
+          <Paragraph
             sx={{
               fontSize: "16px",
               py: "25px",
               color: "#434167",
-              fontFamily: "Helvetica",
               textAlign: "center",
             }}
           >
@@ -48,7 +40,7 @@ export default function Section2() {
             cutting-edge AR technology, bringing
             <br /> products to life like never before. Seamless, interactive,
             and built for the next generation of shopping
-          </Typography>
+          </Paragraph>
           <Box
             sx={{
               display: "flex",

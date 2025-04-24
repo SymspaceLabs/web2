@@ -1,25 +1,22 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { Container, Grid } from '@mui/material';
-import { Box, Card, CardContent, Typography, Button } from '@mui/material';
+// =============================================================
+// Section 12 Component
+// =============================================================
+
+import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { styles } from '../page-view/styles';
+import { Container, Grid } from '@mui/material';
+import { H1, Paragraph } from '@/components/Typography';
 import { useInView } from 'react-intersection-observer';
 import { FlexBox, FlexCol } from '@/components/flex-box';
-import { styles } from '../page-view/styles';
-import Link from 'next/link';
+import { Box, Card, CardContent, Button } from '@mui/material';
 
-/**
- * Section11 Component
- *
- * This component displays three distinct cards with information about AR (Augmented Reality) statistics and services.
- * - The first set of cards displays statistics about AR usage and effectiveness.
- * - The second card provides details about AR Visuals, showcasing the company's AR services.
- * - The third card contains a video showcasing an AR visual, enhancing the user experience.
- * 
- * The layout is responsive, with card components adapting to various screen sizes.
- */
-export default function Section11() {
+// =============================================================
+
+export default function Section12() {
   // Array of statistics for the first set of cards
   const cardsData = [
     { number: '90', description: (<>90%+ of Americans use/<br/>would use AR for e-commerce</>), },
@@ -67,12 +64,8 @@ export default function Section11() {
   );
 }
 
-/**
- * CustomCard1 Component
- * 
- * A card displaying a percentage statistic with an animated number counter.
- * The number increases over time, and the card contains a description and a "Learn More" button.
- */
+// CustomCard1 Component
+
 export const CustomCard1 = ({ number, description }) => {
   const [currentNumber, setCurrentNumber] = useState(0);
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
@@ -102,19 +95,18 @@ export const CustomCard1 = ({ number, description }) => {
       }}
     >
         <FlexBox sx={{ px: {xs:1, sm:3}, pt: {xs:3, sm:20}, pb: 3, flexDirection: {xs:'row', sm:'column'}, alignItems: 'center', justifyContent: {xs:'space-between', sm:'center'}, height: '100%', gap: {sm:'50px'} }}>
-          <Typography component="div" sx={{ ...styles.elementalEndFont, color: '#000', fontSize: {xs:40, sm:100} }}>
+          <H1 sx={{  color: '#000', fontSize: {xs:40, sm:100} }}>
             {currentNumber}%
-          </Typography>
-          <Typography sx={{ fontFamily: 'Helvetica', color: '#353535', fontSize: {xs:10, sm:24}, fontWeight: 500, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
+          </H1>
+          <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:24}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
             {description}
-          </Typography>
+          </Paragraph>
           {/* Button with fade-in effect */}
           <FlexBox>
             <Link href="/global-impact" passHref>
               <Button
                 className="fadeInBtn"
                 sx={{
-                  ...styles.elementalEndFont,
                   opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
                   transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
                   transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
@@ -134,19 +126,14 @@ export const CustomCard1 = ({ number, description }) => {
                 Learn More
               </Button>
             </Link>
-
           </FlexBox>
         </FlexBox>
     </Box>
   );
 };
 
-/**
- * CustomCard2 Component
- * 
- * A card that describes AR Visuals and provides information about the company's AR services.
- * Includes a "Contact Us" button to engage users.
- */
+// CustomCard2 Component
+
 export const CustomCard2 = () => {
   return (
     <FlexCol
@@ -171,10 +158,10 @@ export const CustomCard2 = () => {
           px: { xs: 2, sm: 10 },
         }}
       >
-        <Typography sx={{ ...styles.sectionHeader, color: '#000' }}>
+        <H1 sx={{ ...styles.sectionHeader, color: '#000' }}>
           AR Visuals
-        </Typography>
-        <Typography
+        </H1>
+        <Paragraph
           sx={{
             color: '#353535',
             fontSize: { xs: '14px', sm: '24px' },
@@ -186,7 +173,7 @@ export const CustomCard2 = () => {
           We create unique AR experiences for brands helping them bring any idea into reality.
           Augment animated visuals on top of products, displays, or billboards for an immersive marketing medium.
           Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
-        </Typography>
+        </Paragraph>
         <FlexBox>
           <Link  href="/sell-on-symspace#benefits" passHref>
             <Button
@@ -201,7 +188,6 @@ export const CustomCard2 = () => {
                 border: '2px solid black',
                 color: 'black',
                 fontSize: {xs:8, sm:12},
-                ...styles.elementalEndFont,
                 ':hover': {
                   background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
                   color: '#FFF',
@@ -212,7 +198,6 @@ export const CustomCard2 = () => {
               Contact Us
             </Button>
           </Link>
-
           </FlexBox>
       </CardContent>
     </FlexCol>
@@ -220,11 +205,7 @@ export const CustomCard2 = () => {
 };
 
 
-/**
- * CustomCard3 Component
- * 
- * A card that displays a video showcasing AR Visuals. It uses a webm video as a background to display AR content.
- */
+// CustomCard 3 Component
 export const CustomCard3 = () => {
   return (
     <Card sx={{ minWidth: 275, borderRadius: '50px', display: 'flex', flexDirection: 'column', height: {xs:350, sm:580}, overflow: 'hidden' }}>

@@ -1,15 +1,17 @@
 "use client";
 
 // ===========================================================
-// Section 5
+// Section 5 | trusted by users globally | Marquee
 // ===========================================================
 
+import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
-import { styles } from "../page-view/styles";
-import { Box, Typography } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
 import { TESTIMONIALS } from "@/data/testimonial";
+import { H1, Paragraph } from "@/components/Typography";
 import TestimonialCard from "@/components/cards/TestimonialCard";
+
+// ===========================================================
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }
@@ -58,19 +60,12 @@ export default function Section5() {
       }}
     >
       <Box sx={{ width: "100%", maxWidth: "1200px", p: 2 }}>
-        <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#434167" }}>
+        <Paragraph fontSize="16px" color="#434167">
           What everyone is saying
-        </Typography>
-        <Typography
-          sx={{ 
-            ...styles.elementalEndFont,
-            wordSpacing:'10px',
-            pb: "25px",
-          }}
-          fontSize={{ xs: 28, sm: 40 }}
-        >
+        </Paragraph>
+        <H1 sx={{ wordSpacing:'5px' }} pb="25px" fontSize={{ xs: 28, sm: 40 }}>
           trusted by users globally
-        </Typography>
+        </H1>
       </Box>
 
       <MarqueeContainer>

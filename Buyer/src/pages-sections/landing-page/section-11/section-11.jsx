@@ -1,13 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { FlexBox, FlexCol } from "@/components/flex-box";
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
-import { styles } from "../page-view/styles";
+// ====================================================
+// Section 11 | Our Focus
+// ====================================================
+
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
+import { Container, Button, Grid } from "@mui/material";
+import { H1, Paragraph } from "@/components/Typography";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 
+// ====================================================
 
-export default function Section10() {
+export default function Section11() {
   return (
     <Grid sx={{ position:'relative', zIndex:2 }}>
       <Container>
@@ -19,10 +25,10 @@ export default function Section10() {
           style={{ height: "100%" }} // Ensures motion.div spans full height
         >
           <FlexCol sx={{ gap: 3, py: 10, textAlign: 'center', alignItems: 'center' }}>
-            <Typography sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}  width="100%" maxWidth="1200px">
+            <H1 sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}  width="100%" maxWidth="1200px">
               Our Focus
-            </Typography>
-            <Typography 
+            </H1>
+            <Paragraph 
               sx={{ 
                 maxWidth: 1200,
                 color: '#FFF',
@@ -32,7 +38,7 @@ export default function Section10() {
               }}
             >
               We empower individuals with Augmented Reality, while equipping brands with resources to showcase their products in unimaginable ways. Our goal is to revolutionize the end-to-end e-commerce process by creating 3D assets of retail products and enabling consumers to augment these products with enhanced AR functionalities. We offer a sustainable solution that delivers immersive, hyper-realistic, and seamless 3D models coupled with unparalleled AR experiences. Through cutting-edge technologies such as artificial intelligence and augmented reality, we are positioned to transform mere imagination into tangible simulations of reality.
-            </Typography>
+            </Paragraph>
             <FlexBox sx={{ width: '100%', maxWidth: 1200, justifyContent:{xs:'center', sm:'flex-start'}  }}>
               <Link href="/about-us" passHref>
                 <Button variant="outlined" sx={styles.outlinedBtn}>

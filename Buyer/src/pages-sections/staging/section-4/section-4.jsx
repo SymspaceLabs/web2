@@ -1,15 +1,22 @@
 "use client";
 
+// ==================================================
+// Section 4
+// ==================================================
+
+import Link from 'next/link';
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
-import { Button, Typography, Container } from '@mui/material';
-import { FlexColCenter, FlexBox, FlexRowCenter } from "@/components/flex-box";
+import { Button, Container } from '@mui/material';
 import { LazyImage } from '@/components/lazy-image';
-import Link from 'next/link';
+import { H1, Paragraph } from "@/components/Typography";
+import { FlexColCenter, FlexBox, FlexRowCenter } from "@/components/flex-box";
+
+// ==================================================
 
 export default function Section4() {
   return (
-    <Container py={{xs:2, sm:5}} zIndex={1}>
+    <Container sx={{ py: { xs: 2, sm: 5 }, zIndex: 1 }}>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -40,12 +47,12 @@ export default function Section4() {
 
           {/* Right Side Image */}
           <FlexColCenter sx={styles.glassCard} gap='25px'>
-            <Typography sx={{ ...styles.elementalEndFont, color: "#fff", fontSize: { xs: 12, sm: 32 } }}>
+            <H1 sx={{ color: "#fff", fontSize: { xs: 12, sm: 32 } }}>
               Make every Space Your Own with SYMSPACE
-            </Typography>
-            <Typography sx={{ fontFamily: "Helvetica", fontWeight: '300', color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+            </H1>
+            <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
               Customize finishes, layouts, and styles with real-time visualization tools. Adjust style, materials, textures, lighting, and switch between 2D and immersive 3D views to share virtual experiences with others.
-            </Typography>
+            </Paragraph>
             <FlexRowCenter>
               <Link href='/'>
                 <Button sx={styles.buttonTransparent} >

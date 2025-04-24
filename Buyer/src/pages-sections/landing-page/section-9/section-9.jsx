@@ -1,21 +1,18 @@
 "use client";
 
-/**
- * Section8 Component
- *
- * This component showcases the "SYM-AI" 3D modeling SaaS platform with:
- * - A floating image for enhanced visual appeal.
- * - A centralized description of the platform's features.
- * - A call-to-action button encouraging users to learn more.
- *
- * The layout adjusts responsively, and the floating image is hidden on smaller screens.
- */
-import { Box, Container, Typography, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
-import { LazyImage } from '@/components/lazy-image';
-import { FlexBox } from '@/components/flex-box';
-import { styles } from '../page-view/styles';
-import { motion } from "framer-motion"; // Importing framer-motion
+// ===========================================================
+// Section 8 Component
+// ===========================================================
+
 import Link from 'next/link';
+import { motion } from "framer-motion"; // Importing framer-motion
+import { styles } from '../page-view/styles';
+import { FlexBox } from '@/components/flex-box';
+import { LazyImage } from '@/components/lazy-image';
+import { H1, Paragraph } from '@/components/Typography';
+import { Box, Container, Button, Grid } from '@mui/material'; // Importing Material-UI components for layout and styling
+
+// ===========================================================
 
 export default function Section8() {
   return (
@@ -29,12 +26,12 @@ export default function Section8() {
         <Container>
           <FlexBox flexDirection='column' gap={5} sx={{ textAlign: 'center', alignItems: 'center' }}>
             {/* Section Title */}
-            <Typography sx={{...styles.sectionHeader, color:'#191F28' }}>
+            <H1 sx={{...styles.sectionHeader, color:'#191F28' }}>
               3d simulation
-            </Typography>
+            </H1>
 
             {/* Description of the platform */}
-            <Typography
+            <Paragraph
               sx={{
                 color: '#909090',
                 fontSize: { xs: 12, sm: 18 },
@@ -49,7 +46,7 @@ export default function Section8() {
               }}
             >
               Symspace's Generative AI 3D modeling software serves as a tool for brands to gauge traction before all the spending. Create realistic 3D models of your products, then share animated product videos with your community. Within Real Estate, partners are using our platform and iOS application to virtually showcase furniture. We have streamlined our platform to simplify the process for any sized brand looking to launch a new product, improve sales on an existing product, or stage products in unfurnished homes. Our partner portal provides analytics on sales, AR usage, and product interactions. Brands can engage their communities through AR without incurring any manufacturing or inventory costs. Augmented Reality has proven to effectively reduce returns by giving consumers more confidence in their purchases. Customize any 3D product through text, images, object scans, and videos. Save time and resources, while focusing on what matters most- product demand through unique consumer interactions.
-            </Typography>
+            </Paragraph>
 
 
             {/* Call-to-action button */}
@@ -58,7 +55,6 @@ export default function Section8() {
                 <Button
                   sx={{
                     gap: 1,
-                    ...styles.elementalEndFont,
                     color: "#353535",
                     borderRadius: "50px",
                     py: {xs:1, sm:2},
@@ -102,9 +98,7 @@ export default function Section8() {
                   </Box>
                 </Button>
               </Link>
-
             </Box>
-
           </FlexBox>
         </Container>
       </motion.div>

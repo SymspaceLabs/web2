@@ -1,17 +1,24 @@
 "use client"
 
+// ===============================================
+// Email Banner
+// ===============================================
+
 import { useState } from "react";
-import { styles } from "../styles";
 import { motion } from "framer-motion";
+import { H1, Paragraph } from "../Typography";
 import styled from "@mui/material/styles/styled";
 import { LazyImage } from '@/components/lazy-image';
-import { Box, Typography, Button, TextField, Container} from "@mui/material";
+import { Box, Button, TextField, Container } from "@mui/material";
+
+// ===============================================
 
 export default function EmailBanner({title}) {
-  const [showInput, setShowInput] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [showInput, setShowInput] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleBetaAccessClick = () => {
     setShowInput(true);
@@ -78,19 +85,13 @@ export default function EmailBanner({title}) {
               height={500}
             />
             <div className="content">
-              <Typography
-                sx={styles.elementalEndFont}
-                mt={3}
-                mb={1}
-                lineHeight={1.2}
-                fontSize={{ xs: 20, sm: 40 }}
-              >
+              <H1 mt={3} mb={1} lineHeight={1.2} fontSize={{ xs: 20, sm: 40 }}>
                 {title}
-              </Typography>
+              </H1>
 
-              <Typography fontFamily="Helvetica" mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
+              <Paragraph mb={{ xs: 0, sm: 3 }} lineHeight={1.2} fontSize={{ sm: 18, xs: 14 }}>
                 Get updates on new partnered brands, products, and technology.
-              </Typography >
+              </Paragraph >
 
               {!showInput && (
                 <Button
@@ -104,18 +105,12 @@ export default function EmailBanner({title}) {
                     py: 2,
                     px: 4,
                     mt: 4,
-                    background:
-                      "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
+                    background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
                   }}
                 >
-                  <Typography
-                    sx={{
-                      ...styles.elementalEndFont,
-                      fontSize: 12,
-                    }}
-                  >
+                  <H1 fontSize={12}>
                     Beta Access
-                  </Typography>
+                  </H1>
                   <Box
                     sx={{
                       width: "35px",
@@ -193,7 +188,6 @@ export default function EmailBanner({title}) {
                         borderRadius: "50px",
                         color: isSubmitted ? "#000" : "#fff",
                         padding: "6px 12px",
-                        ...styles.elementalEndFont,
                         "&:hover": {
                           background: isSubmitted
                             ? "#f0f0f0"
@@ -204,9 +198,9 @@ export default function EmailBanner({title}) {
                       {isSubmitted ? "✔️" : "Submit"}
                     </Button>
                   </Box>
-                  <Typography sx={{ py:1, px:3, color:'red' }}>
+                  <Paragraph sx={{ py:1, px:3, color:'red' }}>
                     {error}
-                  </Typography>
+                  </Paragraph>
                 </>
                 
               )}

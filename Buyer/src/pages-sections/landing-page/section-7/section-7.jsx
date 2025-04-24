@@ -1,11 +1,18 @@
 "use client"
 
+// ========================================================
+// Section 7 | 3D Repository
+// ========================================================
+
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { LazyImage } from '@/components/lazy-image';
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, Grid } from '@mui/material';
 import { FlexBox, FlexCol, FlexRowCenter } from '@/components/flex-box';
-import { Box, Container, Typography, Button, Grid } from '@mui/material';
-import Link from "next/link";
+
+// ========================================================
 
 export default function Section7() {
   return (
@@ -23,12 +30,12 @@ export default function Section7() {
               <Grid container spacing={4} alignItems="stretch" sx={{ height: '100%' }}>
                 <Grid item xs={12} md={6}>
                   <FlexCol sx={{ gap: 4, height: '100%' }}>
-                    <Typography sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}>
+                    <H1 sx={{ ...styles.sectionHeader, textAlign:{xs:'center', sm:'left'} }}>
                       3D Repository
-                    </Typography>
-                    <Typography sx={{ maxWidth:'550px', color: '#FFF', fontSize: { xs: 12, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
+                    </H1>
+                    <Paragraph sx={{ maxWidth:'550px', color: '#FFF', fontSize: { xs: 12, sm: 18 }, px: { xs: 1, sm: 0 }, textAlign: 'justify', lineHeight: {xs:1.5, sm:2} }}>
                       Generate and store high-quality 3D models of any dynamic or static product from text-prompts, images, weblinks, and object scans. Choose from hundreds of templates to create marketing ad videos. Then allow your consumers to trial these products realistically in our immersive AR marketplace.
-                    </Typography>
+                    </Paragraph>
                     {/* Call-to-action button */}
                     <FlexBox sx={{ pt:{sm:5}, justifyContent:{xs:'center', sm:'left'} }}>
                       <Link href="/sell-on-symspace#benefits" passHref>

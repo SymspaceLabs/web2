@@ -2,7 +2,6 @@
 
 import clsx from "clsx"; // STYLED COMPONENT
 import Link from "next/link";
-import { elementalEnd } from "@/app/layout";
 import { usePathname } from "next/navigation";
 import styled from "@mui/material/styles/styled";
 

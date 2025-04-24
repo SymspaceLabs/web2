@@ -1,9 +1,15 @@
 "use client";
 
+// ========================================================
+// Section 8 | 3D Repository
+// ========================================================
+
 import { motion } from "framer-motion";
 import { Card1, Card2, Card3 } from "./cards";
 import { FlexBox } from "@/components/flex-box";
 import { Box, Grid, Container } from "@mui/material";
+
+// ========================================================
 
 export default function Section8() {
   // Framer Motion fade-in animation

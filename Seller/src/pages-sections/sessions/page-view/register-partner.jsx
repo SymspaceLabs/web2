@@ -79,7 +79,7 @@ const RegisterPartnerPageView = () => {
 
       if (response.ok) {
         showSnackbar(data.message, "success");
-        router.push(`/otp?email=${email}`);
+        router.push(`/verify-otp?email=${email}`);
       } else {
         showSnackbar(data.message, "error");  
       }

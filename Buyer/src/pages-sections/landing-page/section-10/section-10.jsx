@@ -9,6 +9,7 @@ import { Paragraph } from '@/components/Typography';
 import { useRef, useState, useEffect } from 'react';
 import { Box, Container, Grid } from '@mui/material';
 import HandBagCanvas from '@/components/HandBagCanvas';
+import { SymGLTFViewer } from '@/components/custom-components';
 
 // ====================================================
 
@@ -97,14 +98,12 @@ export default function Section9() {
                 animate={rightHasAnimated ? "visible" : "hidden"} // Persistent state
                 variants={rightComponentVariants}
               >
-                <Box
-                  sx={{
-                    minHeight: { xs: '250px', md: '750px' },
-                    maxHeight: { xs: '250px', md: '750px' },
-                  }}
-                >
-                  <HandBagCanvas />
-                </Box>
+                {/* <Box maxHeight={{sm:'850px'}}> */}
+                  <SymGLTFViewer
+                    modelUrl="/models/handBag/scene.gltf"
+                  />
+                  {/* <HandBagCanvas /> */}
+                {/* </Box> */}
               </motion.div>
             </Grid>
           </Grid>

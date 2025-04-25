@@ -119,7 +119,7 @@ export default function AuthLayout({ children }) {
   }
 
   // OTP
-  if (pathname === "/otp" || pathname === '/otp-forgot-password') {
+  if (pathname === "/verify-otp" || pathname === '/otp-forgot-password') {
 
     IMAGE = (
       <LazyImage

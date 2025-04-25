@@ -29,7 +29,7 @@ const ProtectedLayout = ({ children }) => {
   // List of routes that don't require authentication
   const publicRoutes = [
     "/forgot-password",
-    "/otp",
+    "/verify-otp",
     "/otp-forgot-password",
     "/register",
     "/reset-password",

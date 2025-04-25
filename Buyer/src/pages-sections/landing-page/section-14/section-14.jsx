@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { FlexBox } from "@/components/flex-box";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section15() {
   const [expanded, setExpanded] = useState(false);
@@ -15,12 +16,6 @@ export default function Section15() {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-
-  const faqs = [
-    { question: "What is Symspace, and how does it work?", answer: "We accept Visa, MasterCard, PayPal, and Apple Pay." },
-    { question: "How can Symspace help my brand reduce returns and increase sales?", answer: "Shipping typically takes 5-7 business days, depending on your location." },
-    { question: "How accurate is AR sizing for furniture and apparel?", answer: "Yes, we ship to most countries worldwide. Shipping fees may vary." },
-  ];
 
   const accordionStyles = {
     background: "linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)",
@@ -50,13 +45,12 @@ export default function Section15() {
       >
         <Container>
           <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
-            <Typography sx={styles.sectionHeader}>
+            <H1 sx={styles.sectionHeader}>
               FAQs
-            </Typography>
+            </H1>
             <Link href="/faq" target="blank" >
-              <Typography
+              <H1
                 sx={{ 
-                  ...styles.elementalEndFont,
                   color: 'rgba(255,255,255,0.5)',  
                   textDecoration: 'none', 
                   fontSize:{xs:10},
@@ -67,7 +61,7 @@ export default function Section15() {
                 }}
               >
                 More FAQS
-              </Typography>
+              </H1>
             </Link>
           </FlexBox>
 
@@ -81,20 +75,19 @@ export default function Section15() {
                   sx={accordionStyles}
                 >
                   <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <Typography sx={{...styles.elementalEndFont, fontSize:{xs:10, sm:18}, color: "#FFF" }} >
+                    <H1 sx={{ fontSize:{xs:10, sm:18}, color: "#FFF" }} >
                       {faq.question}
-                    </Typography>
+                    </H1>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography variant="body1" sx={{ color: "#fff" }}>
+                    <Paragraph sx={{ color: "#fff" }}>
                       {faq.answer}
-                    </Typography>
+                    </Paragraph>
                   </AccordionDetails>
                 </Accordion>
               </Box>
             </motion.div>
           ))}
-
         </Container>
       </motion.div>
     </Box>

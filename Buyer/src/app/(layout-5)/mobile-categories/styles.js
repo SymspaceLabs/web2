@@ -15,7 +15,7 @@ export const StyledRoot = styled("div")(({
     left: 0,
     position: "fixed",
     overflowY: "auto",
-    background:'rgba(0,0,0,0.3)',
+    background:'rgba(0,0,0,0.1)',
     top: layoutConstant.mobileHeaderHeight,
     bottom: 0,
     borderRight: `1px solid ${theme.palette.grey[300]}`,
@@ -30,7 +30,7 @@ export const StyledRoot = styled("div")(({
     padding: "0.75rem 1.25rem",
     top: layoutConstant.mobileHeaderHeight,
     bottom: 0,
-    background:'rgba(0,0,0,0.3)',
+    background:'rgba(0,0,0,0.1)',
     "& .child-categories": {
       background:'rgba(0,0,0,0.05)',
       paddingLeft: theme.spacing(2),

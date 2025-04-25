@@ -65,7 +65,7 @@ function Form1 ({
 
   useEffect(() => {
     setIsChecked(user?.isSellerOnboardingFormFilled1 ?? false)
-  }, [isChecked])
+  }, [user])
   
 
   // Update formData whenever state changes

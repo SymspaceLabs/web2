@@ -8,7 +8,6 @@ import { FormControlLabel, Checkbox, Tooltip } from '@mui/material';
 
 // ============================================================
 
-
 const SymCheckbox = ({ checked, onChange, content, toolTipText }) => {
     return (
         <FlexBox>

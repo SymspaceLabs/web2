@@ -183,7 +183,8 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
             fontWeight: 700,
             lineHeight: { xs: 1, sm: 1.5 },
             wordWrap: 'break-word',
-            maxWidth: 200
+            maxWidth: 200,
+            minHeight:'26px',
           }}
         >
           {subHeaderText}

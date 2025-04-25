@@ -1,4 +1,7 @@
 "use client";
+// =================================================================
+// Forgot Password Page
+// =================================================================
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -7,16 +10,7 @@ import { ForgotPasswordForm } from '../../../components/custom-forms/auth';
 import { useSnackbar } from "../../../contexts/SnackbarContext";
 import { SymSubmitButton } from '../../../components/custom-buttons';
 
-/**
- * ForgotPasswordPage Component
- * 
- * Renders the Forgot Password page where users can request password reset instructions.
- * 
- * This component includes:
- * - A form for users to submit their email.
- * - Validation using Formik and Yup.
- * - Feedback messages using Material UI Snackbar.
- */
+// =================================================================
 
 const ForgotPasswordPage = () => {
   const { showSnackbar } = useSnackbar();

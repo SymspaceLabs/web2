@@ -4,8 +4,8 @@
 
 import { FlexBox } from "../flex-box";
 import { InfoOutlined } from "@mui/icons-material";
-import { TextField, Tooltip} from "@mui/material";
-import { H1 } from "@/components/Typography";
+import { TextField, Tooltip } from "@mui/material";
+import { H1, Small } from "@/components/Typography";
 
 // ============================================================
 
@@ -21,6 +21,8 @@ const SymTextField = ({
     charLimit= false,
     type = 'text',
 }) => {
+
+  const currentLength = value?.length || 0;
 
   return (
     <FlexBox flexDirection="column" flex={1}>
@@ -65,6 +67,11 @@ const SymTextField = ({
                 },
             }}
         />
+        {charLimit && (
+          <Small color="white" mt={0.5} textAlign="right">
+            {currentLength}/{charLimit}
+          </Small>
+        )}
     </FlexBox>
   )
 }

@@ -17,13 +17,14 @@ import { Box, Button, Select, MenuItem, FormControl, Tooltip , Drawer, Grid, Ava
 
 import styles from "./styles";
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-import HandBagCanvas from "@/components/HandBagCanvas";
+// import HandBagCanvas from "@/components/HandBagCanvas";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { SymDialog } from "@/components/custom-dialog";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { SymGLTFViewer } from "@/components/custom-components";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -143,20 +144,24 @@ export default function ProductIntro({ product }) {
             >
               <ArrowBackIosIcon />
             </IconButton>
-
-            {selectedImage === 0 ? (                               
-               <HandBagCanvas />
-            ) : (
-              <LazyImage 
-                alt={name} 
-                width={300} 
-                height={300} 
-                loading="eager" 
-                src={product.images[selectedImage-1]?.url} 
-                sx={{ objectFit: "contain" }} 
-              />
-            )}
             
+            <Box maxHeight={{sm:'850px'}}>
+              {selectedImage === 0 ? (    
+                <SymGLTFViewer
+                  modelUrl="/models/handBag/scene.gltf"
+                />
+              ) : (
+                  <LazyImage 
+                    alt={name}
+                    width={500} 
+                    height={500} 
+                    loading="eager" 
+                    src={product.images[selectedImage-1]?.url} 
+                    sx={{ objectFit: "contain" }} 
+                  />
+              )}
+            </Box>
+
             <IconButton 
               onClick={() => setSelectedImage((prev) => 
                 prev < images?.length ? prev + 1 : 0 // If last, wrap to 0
@@ -247,7 +252,7 @@ export default function ProductIntro({ product }) {
             
             {/* PRODUCT BRAND */}
             <Paragraph sx={{ fontSize: {xs:12, sm:16}, color: '#0366FE', textTransform:'uppercase', '&:hover': {textDecoration:'underline'} }}>
-              <Link href={`/company/${company?.slug}`} passHref target="_blank">
+              <Link href={`/company/${company?.slug}`} passHref>
                 {company.entityName}
               </Link>
             </Paragraph>

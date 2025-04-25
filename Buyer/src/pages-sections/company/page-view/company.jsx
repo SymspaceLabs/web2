@@ -1,7 +1,7 @@
 "use client"
 
 // ====================================================================
-// Company Pages Section
+// Company Details Page Sections
 // ====================================================================
 
 import Section2 from "../section-2";

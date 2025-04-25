@@ -4,11 +4,11 @@
 // Section 13 Component - Displays a testimonial section with a heading, description, 
 // ==========================================================================
 
+import { Box } from "@mui/material";
 import { motion } from "framer-motion";
-import { styles } from "../page-view/styles";
 import MarqueeeSlider from "./MarqueeeSlider";
-import { Box, Typography } from "@mui/material";
 import { TESTIMONIALS } from "@/data/testimonial";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section13() {
   return (
@@ -22,12 +22,12 @@ export default function Section13() {
     >
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", py: 4, background: "#fff" }}>
         <Box sx={{ width: "100%", maxWidth: "1600px", p: 2 }}>
-          <Typography fontSize="16px" sx={{ color: "#434167" }}>
+          <Paragraph fontSize="16px" sx={{ color: "#434167" }}>
             What everyone is saying
-          </Typography>
-          <Typography sx={{ ...styles.elementalEndFont, fontSize:{xs:20,sm:40}, pb: "25px" }} >
+          </Paragraph>
+          <H1 sx={{ fontSize:{xs:20,sm:40}, pb: "25px" }} >
             trusted by users globally
-          </Typography>
+          </H1>
         </Box>
         <MarqueeeSlider testimonials={TESTIMONIALS} />
       </Box>

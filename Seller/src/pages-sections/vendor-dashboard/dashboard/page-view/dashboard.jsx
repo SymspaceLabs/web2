@@ -30,7 +30,6 @@ const DashboardPageView = () => {
 
   const [onboardingDialogOpen, setOnboardingDialogOpen] = useState(false);
   const [storeDialogOpen, setStoreDialogOpen] = useState(false);
-  
   const [cardList, setCardList] = useState([]);
   const [stockOutProducts, setStockOutProducts] = useState([]);
   const [recentPurchase, setRecentPurchase] = useState([]);
@@ -84,6 +83,7 @@ const DashboardPageView = () => {
       {/* Simulation overlay - only shows when both dialogs are closed */}
       <SimulationOverlay
         open={!onboardingDialogOpen && !storeDialogOpen}
+        setStoreDialogOpen={setStoreDialogOpen}
       />
 
 

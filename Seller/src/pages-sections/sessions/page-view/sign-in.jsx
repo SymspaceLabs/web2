@@ -4,12 +4,12 @@
 // Sign In Page View
 // ==============================================================
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from "next/navigation";
 import { FlexColCenter } from "@/components/flex-box";
-import { LoginForm } from '@/components/custom-forms/auth';
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { LoginForm } from '@/components/custom-forms/auth';
 import { SymSubmitButton } from "@/components/custom-buttons";
 
 // ==============================================================
@@ -48,7 +48,7 @@ const LoginPageView = ({ closeDialog }) => {
         showSnackbar(data.message, "error");
 
         if (data.statusCode === 413) {
-          router.push(`/otp?email=${email}`);
+          router.push(`/verify-otp?email=${email}`);
           return;
         }
       } else {

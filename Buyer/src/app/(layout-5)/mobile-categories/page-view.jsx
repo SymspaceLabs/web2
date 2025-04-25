@@ -1,6 +1,8 @@
 "use client";
 
-// ==============================================================
+// ================================================
+// Mobile Categories
+// ================================================
 
 import { useState } from "react";
 import renderChild from "./render-child";
@@ -9,7 +11,7 @@ import { categoryMenus } from "@/data/navigations";
 import { CategoryListItem, StyledRoot } from "./styles";
 import OverlayScrollbar from "@/components/overlay-scrollbar";
 import IconComponent from "@/components/service-cards/icon-component";
-import { Paragraph } from "@/components/Typography";
+import { H1, Paragraph } from "@/components/Typography";
 import { Box } from "@mui/material";
 
 // ==============================================================
@@ -19,7 +21,7 @@ export default function MobileCategoriesPageView() {
   const [selected, setSelected] = useState(categoryMenus[0]);
   
   return (
-    <Box sx={{ background:'rgba(0,0,0,0.3)' }}>
+    <Box>
       <StyledRoot>
 
         {/* LEFT CATEGORY SCROLLER */}
@@ -34,9 +36,19 @@ export default function MobileCategoriesPageView() {
               }}
             >
               {/* <IconComponent icon={item.icon} className="icon" /> */}
-              <IconComponent icon={item.icon} isActive={selected.title === item.title} className="icon" />
+              <IconComponent
+                icon={item.icon}
+                isActive={selected.title === item.title}
+                className="icon"
+                sx={{color: (selected.title === item.title) ? "#007BFF" : "#000"}}
+              />
 
-              <Paragraph sx={styles.title}>
+              <Paragraph
+                sx={{
+                  ...styles.title,
+                  color: (selected.title === item.title) ? '#007BFF' : '#000',
+                }}
+              >
                 {item.title}
               </Paragraph>
             </CategoryListItem>
@@ -44,6 +56,9 @@ export default function MobileCategoriesPageView() {
         </OverlayScrollbar>
 
         <div className="container">
+          <H1 color="#000" py={1}>
+            {selected.title}
+          </H1>
           {renderChild(selected.children)}
         </div>
       </StyledRoot>
@@ -61,6 +76,5 @@ const styles = {
     textAlign: "center",
     fontSize: "11px",
     lineHeight: "1",
-    color:'#FFF'
   }
 }

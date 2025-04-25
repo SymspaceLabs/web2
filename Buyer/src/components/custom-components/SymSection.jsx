@@ -8,7 +8,7 @@ import { H1, Paragraph } from '@/components/Typography';
 
 // ===================================================
 
-export default function CustomSection({ title, subTitle, btnText, btnUrl, children, invert=false }) {
+export default function SymSection({ title, subTitle, btnText, btnUrl, children, invert=false }) {
   return (
     <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }}>
       {!invert?

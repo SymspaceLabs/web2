@@ -11,7 +11,7 @@ import { GlassBanner } from '@/components/custom-banner';
 
 import { CircularProgress, IconButton, Button, Dialog, DialogContent, DialogTitle, useMediaQuery, DialogActions, Divider } from '@mui/material';
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { SellerSettingsForm } from '@/components/custom-forms/seller-profile';
+import { StoreSettingsForm } from '@/components/custom-forms/seller-profile';
 import CloseIcon from '@mui/icons-material/Close';
 import LazyImage from '@/components/LazyImage';
 
@@ -56,24 +56,26 @@ const SellerProfileDialog = ({
     }, []);
 
     useEffect(() => {
-        setEmailSupport(user?.company?.emailSupport || "");
-        setPhoneSupport(user?.company?.phoneSupport || "");
-        setEntityName(user?.company?.entityName || "");
-        setDescription(user?.company?.description || "");
-        setTagLine(user?.company?.tagLine || "");
-        setUploadedLogo([user?.company?.logo]);
-        setUploadedBanner([user?.company?.banner]);
+        setEmailSupport(userData?.company?.emailSupport || "");
+        setPhoneSupport(userData?.company?.phoneSupport || "");
+        setEntityName(userData?.company?.entityName || "");
+        setDescription(userData?.company?.description || "");
+        setTagLine(userData?.company?.tagLine || "");
+        setUploadedLogo([userData?.company?.logo]);
+        setUploadedBanner([userData?.company?.banner]);
         
-        setWeb(user?.company?.web || "");
-        setInstagram(user?.company?.instagram || "");
-        setTwitter(user?.company?.twitter || "");
-        setYoutube(user?.company?.youtube || "");
-        setFacebook(user?.company?.facebook || "");
+        setWeb(userData?.company?.web || "");
+        setInstagram(userData?.company?.instagram || "");
+        setTwitter(userData?.company?.twitter || "");
+        setYoutube(userData?.company?.youtube || "");
+        setFacebook(userData?.company?.facebook || "");
 
-    }, [user]);
+    }, [userData]);
 
     
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false)
+    };
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -144,7 +146,7 @@ const SellerProfileDialog = ({
             if (!response.ok) {
                 showSnackbar(data.message, "error");
             } else {
-                showSnackbar(data.message, "success");
+                showSnackbar("You've successfully set up your store!", "success");
                 setOpen(false);
             }
     
@@ -230,7 +232,7 @@ const SellerProfileDialog = ({
                         </FlexCol>
                     </GlassBanner>
                         
-                    <SellerSettingsForm
+                    <StoreSettingsForm
                         user={userData}
                         entityName={entityName}
                         setEntityName={setEntityName}

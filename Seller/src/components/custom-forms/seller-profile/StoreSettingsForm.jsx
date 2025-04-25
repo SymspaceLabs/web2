@@ -7,7 +7,7 @@ import { SymTextField, SymImageUploader } from '@/components/custom-inputs';
 
 // =========================================================
 
-function SellerSettingsForm ({
+function StoreSettingsForm ({
     emailSupport,
     setEmailSupport,
     phoneSupport,
@@ -47,10 +47,24 @@ function SellerSettingsForm ({
             <SymTextField title="Entity Name" value={entityName} placeholder="Entity Name to be Displayed" onChange={(e) => setEntityName(e.target.value)} />
 
             {/* Description */}
-            <SymTextField title="Description" value={description} placeholder="Company Description (200 Character Limit)" onChange={(e) => setDescription(e.target.value)} />
+            <SymTextField
+                title="Description"
+                value={description}
+                placeholder="Company Description (200 Character Limit)"
+                onChange={(e) => setDescription(e.target.value)}
+                multiline={true}
+                charLimit={200}
+            />
 
-            {/* Description */}
-            <SymTextField title="Tag Line" value={tagLine} placeholder="Company Tag Line (100 Character Limit)" onChange={(e) => setTagLine(e.target.value)} />
+
+            {/* Tagline */}
+            <SymTextField
+                title="Tag Line"
+                value={tagLine}
+                placeholder="Company Tag Line (100 Character Limit)"
+                onChange={(e) => setTagLine(e.target.value)}
+                charLimit={100}
+            />
 
             {/* Logo Uploader */}
             <SymImageUploader
@@ -69,19 +83,19 @@ function SellerSettingsForm ({
             />
 
             {/* Website */}
-            <SymTextField title="Website" value={web} placeholder="Website link beginning with “https”" onChange={(e) => setWeb(e.target.value)} />
+            <SymTextField title="Website" value={web} placeholder="Website link" onChange={(e) => setWeb(e.target.value)} />
 
             {/* Instagram */}
-            <SymTextField title="Instagram" value={instagram} placeholder="Instagram profile link beginning with “https”" onChange={(e) => setInstagram(e.target.value)} />
+            <SymTextField title="Instagram" value={instagram} placeholder="Instagram profile link" onChange={(e) => setInstagram(e.target.value)} />
 
             {/* Twitter */}
-            <SymTextField title="Twitter" value={twitter} placeholder="twitter profile link beginning with “https”" onChange={(e) => setTwitter(e.target.value)} />
+            <SymTextField title="Twitter" value={twitter} placeholder="Twitter profile link" onChange={(e) => setTwitter(e.target.value)} />
 
             {/* Youtube */}
-            <SymTextField title="Youtube" value={youtube} placeholder="Youtube profile  link beginning with “https”" onChange={(e) => setYoutube(e.target.value)} />
+            <SymTextField title="Youtube" value={youtube} placeholder="Youtube profile link" onChange={(e) => setYoutube(e.target.value)} />
 
             {/* Facebook */}
-            <SymTextField title="Facebook" value={facebook} placeholder="Facebook profile link beginning with “https”" onChange={(e) => setFacebook(e.target.value)} />
+            <SymTextField title="Facebook" value={facebook} placeholder="Facebook profile link" onChange={(e) => setFacebook(e.target.value)} />
 
         
 
@@ -89,4 +103,4 @@ function SellerSettingsForm ({
     );
 }
 
-export default SellerSettingsForm;
+export default StoreSettingsForm;

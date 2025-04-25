@@ -1,14 +1,17 @@
-import Image from "next/image";
-import Box from "@mui/material/Box";
-import useMediaQuery from "@mui/material/useMediaQuery"; // Local CUSTOM COMPONENTS
+// ==============================================
+// Dashboard Sidebar
+// ==============================================
 
+import Image from "next/image";
 import LogoArea from "./logo-area";
+import { SidebarWrapper } from "./styles";
 import LayoutDrawer from "../../layout-drawer";
 import MultiLevelMenu from "./multi-level-menu"; // LOCAL CUSTOM HOOK
-
+import { useMediaQuery, Box } from "@mui/material"; // Local CUSTOM COMPONENTS
 import { useLayout } from "../dashboard-layout-context"; // STYLED COMPONENT
 
-import { SidebarWrapper } from "./styles";
+// ==============================================
+
 export default function DashboardSidebar() {
   const {
     sidebarCompact,
@@ -20,13 +23,14 @@ export default function DashboardSidebar() {
   const downLg = useMediaQuery(theme => theme.breakpoints.down("lg"));
 
   if (downLg) {
-    return <LayoutDrawer open={showMobileSideBar ? true : false} onClose={handleCloseMobileSidebar}>
+    return (
+      <LayoutDrawer open={showMobileSideBar ? true : false} onClose={handleCloseMobileSidebar}>
         <Box p={2} maxHeight={TOP_HEADER_AREA}>
           <Image alt="Logo" width={105} height={50} src="/assets/images/logo.svg" style={{ marginLeft: 8 }} />
         </Box>
-
         <MultiLevelMenu />
-      </LayoutDrawer>;
+      </LayoutDrawer>
+    );
   }
 
   return (

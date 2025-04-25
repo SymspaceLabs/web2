@@ -4,11 +4,11 @@
 // Section 4 Component
 // ======================================================
 
-import { Box, Container, Typography } from '@mui/material';
-import { styles } from '../page-view/styles';
-import CustomSection from './custom-section';
 import { motion } from "framer-motion";
 import { H1 } from '@/components/Typography';
+import { Box, Container } from '@mui/material';
+import { SymSection } from '@/components/custom-components';
+import { SymGLTFViewer } from '@/components/custom-components';
 
 // Animation variants
 const fadeInVariant = {
@@ -34,30 +34,20 @@ export default function Section4() {
 
         {/* Section 1 */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <CustomSection
+          <SymSection
             title="Generate 3d products with visible details"
             subTitle="Migrate your Entire Catalogue into a Centralized 3D Repository to market and gauge product demand prior to manufacturing"
             btnText="Get Started"
             btnUrl="/"
             invert={false}
           >
-            {/* <video
-              width="40%"
-              height="auto"
-              autoPlay
-              loop
-              muted
-              src="/assets/videos/ar-for-business/model.mp4"
-              poster="/assets/videos/ar-for-business/model.mp4"
-              style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
-            /> */}
-
-          </CustomSection>
+            <SymGLTFViewer modelUrl="/models/handBag/scene.gltf" />
+          </SymSection>
         </motion.div>
 
         {/* Section 2 */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <CustomSection
+          <SymSection
             title="3d product ad Videos"
             subTitle="Showcase unique product features through a wide array of video templates to choose from"
             btnText="Contact us"
@@ -74,12 +64,12 @@ export default function Section4() {
               poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
             />
-          </CustomSection>
+          </SymSection>
         </motion.div>
 
         {/* Section 3 */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <CustomSection
+          <SymSection
             title="augmented reality Integration"
             subTitle="Empower customers through an AR Trial Room experience for customers to confidently trial products, receive sizing recommendations, and checkout seamlessly"
             btnText="Learn More"
@@ -96,12 +86,12 @@ export default function Section4() {
               poster="/assets/videos/ar-for-business/model.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
             />
-          </CustomSection>
+          </SymSection>
         </motion.div>
 
         {/* Section 4 */}
         <motion.div variants={fadeInVariant} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <CustomSection
+          <SymSection
             title="Increase conversion & reduce returns"
             subTitle="By improving the customer experience through an immersive and interactive experience, shoppers view  products conveniently and confidently resulting to an  increase in sales and decrease in returns"
             btnText="Learn More"
@@ -118,7 +108,7 @@ export default function Section4() {
               poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
             />
-          </CustomSection>
+          </SymSection>
         </motion.div>
 
       </Container>

@@ -12,9 +12,11 @@ import Image from "@/components/custom-components/SymImage";
 
 import { currency } from "lib";
 import { H1 } from "components/Typography";
-import { Span, Paragraph } from "components/Typography";
 import { FlexBox } from "components/flex-box";
 import { Button, Box, IconButton } from "@mui/material";
+import { Span, Paragraph } from "components/Typography";
+import { LazyImage } from "@/components/lazy-image";
+
 // =========================================================
 
 export default function CartItem({product}) {
@@ -29,7 +31,8 @@ export default function CartItem({product}) {
     qty,
     price,
     imgUrl,
-    slug
+    slug,
+    sizes
   } = product;
 
   const handleCartAmountChange = (amount) => () => {
@@ -41,7 +44,16 @@ export default function CartItem({product}) {
 
   return (
     <Box sx={styles.wrapper}>
-      <Image alt={name} width={140} height={140} display="block" src={imgUrl || "/assets/images/products/iphone-xi.png"} />
+      <Box>
+        <LazyImage
+          alt={name}
+          width={140}
+          height={140}
+          display="block"
+          src={imgUrl || "/assets/images/products/iphone-xi.png"}
+        />
+
+      </Box>
 
       {/* DELETE BUTTON */}
       <IconButton 
@@ -84,7 +96,9 @@ export default function CartItem({product}) {
             }}
           />
           <H1 color="#FFF" mt={0.5}>
-            {selectedSize}
+            {
+              sizes?.find(size => size.value === selectedSize)?.label
+            }
           </H1>
           <H1 color="#FFF" mt={0.5}>
             QTY : {qty}

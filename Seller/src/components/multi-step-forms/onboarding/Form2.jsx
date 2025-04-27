@@ -10,7 +10,7 @@ import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 import CreditCardForm from '@/components/custom-forms/onboarding/CreditCardForm';
 import BankAccountForm from '@/components/custom-forms/onboarding/BankAccountForm';
 import BillingAddressForm from '@/components/custom-forms/onboarding/BillingAddressForm';
-import LazyImage from '@/components/LazyImage';
+import { LazyImage } from "@/components/lazy-image";
 import { SymAccordion } from '@/components/custom-components';
 
 // ======================================================================================

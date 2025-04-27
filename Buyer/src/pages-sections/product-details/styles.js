@@ -1,11 +1,3 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 const button = {
   py: 2,
   border: "2px solid #000",
@@ -13,7 +5,6 @@ const button = {
 }
 
 export const styles = {
-  elementalEndFont,
   productCard : {
     p:5,
     borderRadius: "30px",
@@ -61,7 +52,7 @@ export const styles = {
   },
   personalised: {
     padding: "16px 9px",
-    border: "1px solid #000000",
+    border: "2px solid #000000",
     borderRadius: "50px",
     fontSize: '14px',
     color: '#000',
@@ -119,7 +110,6 @@ export const styles = {
     padding: "8px",
     borderRadius: "50px",
     background: '#52647D',
-    ...elementalEndFont,
     color: '#fff',
   },
   productInfoBox: {

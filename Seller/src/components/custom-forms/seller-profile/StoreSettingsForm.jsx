@@ -54,6 +54,7 @@ function StoreSettingsForm ({
                 onChange={(e) => setDescription(e.target.value)}
                 multiline={true}
                 charLimit={200}
+                showCharlimit={true}
             />
 
 
@@ -64,6 +65,7 @@ function StoreSettingsForm ({
                 placeholder="Company Tag Line (100 Character Limit)"
                 onChange={(e) => setTagLine(e.target.value)}
                 charLimit={100}
+                showCharlimit={true}
             />
 
             {/* Logo Uploader */}

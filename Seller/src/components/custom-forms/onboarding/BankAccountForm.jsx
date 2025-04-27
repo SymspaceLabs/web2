@@ -32,8 +32,8 @@ function BankAccountForm ({
 
             {/* Bank Name || Acc Holder Name */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Bank Name" value={bankName} placeholder="Bank Name" onChange={(e) => setBankName(e.target.value)} toolTipText={toolTipText.bankName} />
-                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Entity Legal Name" onChange={(e) => setAccHolderName(e.target.value)} toolTipText={toolTipText.accountHolderName} />
+                <SymTextField title="Bank Name" value={bankName} placeholder="Bank Name of Checking Account" onChange={(e) => setBankName(e.target.value)} toolTipText={toolTipText.bankName} />
+                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Fullname" onChange={(e) => setAccHolderName(e.target.value)} toolTipText={toolTipText.accountHolderName} />
             </FlexBox>
 
         </FlexBox>

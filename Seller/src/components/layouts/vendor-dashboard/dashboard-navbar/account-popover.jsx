@@ -1,13 +1,15 @@
+// ======================================================
+// Menu Popover | Navbar Dropdown | Navbar Menu
+// ======================================================
+
 import { useState } from "react"; // MUI
-
-import Box from "@mui/material/Box";
-import Menu from "@mui/material/Menu";
-import Avatar from "@mui/material/Avatar";
-import MenuItem from "@mui/material/MenuItem";
 import styled from "@mui/material/styles/styled";
-import IconButton from "@mui/material/IconButton"; // GLOBAL CUSTOM COMPONENTS
+import { useAuth } from '@/contexts/AuthContext';
+import { H6, Small } from "@/components/Typography"; // STYLED COMPONENT
+import { Box, Menu, MenuItem, Avatar, IconButton } from "@mui/material";
 
-import { H6, Small } from "../../../../components/Typography"; // STYLED COMPONENT
+// ======================================================
+
 
 const Divider = styled("div")(({
   theme
@@ -16,15 +18,21 @@ const Divider = styled("div")(({
   border: `1px dashed ${theme.palette.grey[200]}`
 }));
 export default function AccountPopover() {
+  
+  const { logout } = useAuth();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClose = () => setAnchorEl(null);
+  
+  const handleLogout = () => {
+    logout();
+  };
 
-  return <div>
-      <IconButton sx={{
-      padding: 0
-    }} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
+  return (
+    <div>
+      <IconButton sx={{padding: 0}} aria-haspopup="true" onClick={e => setAnchorEl(e.currentTarget)} aria-expanded={open ? "true" : undefined} aria-controls={open ? "account-menu" : undefined}>
         <Avatar alt="Remy Sharp" src="/assets/images/avatars/001-man.svg" />
       </IconButton>
 
@@ -76,7 +84,10 @@ export default function AccountPopover() {
         <MenuItem>My Orders</MenuItem>
         <MenuItem>Settings</MenuItem>
         <Divider />
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>
+          Logout
+        </MenuItem>
       </Menu>
-    </div>;
+    </div>
+  );
 }

@@ -8,7 +8,7 @@ import { H1, Paragraph } from '@/components/Typography';
 import { GlassBanner } from '@/components/custom-banner';
 import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 
-import LazyImage from '@/components/LazyImage';
+import { LazyImage } from "@/components/lazy-image";
 import UploadFileForm from '@/components/custom-forms/onboarding/UploadFileForm';
 
 // ======================================================================================

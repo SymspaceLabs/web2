@@ -105,27 +105,7 @@ export class ProductsService {
           }
       
           const slug = `${companyEntity.entityName.toLowerCase().replace(/\s+/g, '-')}-${name.toLowerCase().replace(/\s+/g, '-')}`;
-      
-          // const productVariants = dto.variants?.map((v) => {
-          //   const variant = new ProductVariant();
-          //   variant.stock = v.stock;
-          //   variant.sku = v.sku;
-          //   variant.price = v.price;
-          
-          //   // If you need to assign relations later (like color/size), do it here
-          //   if (v.colorCode && product.colors?.length) {
-          //     const matchedColor = product.colors.find((c) => c.code === v.colorCode);
-          //     if (matchedColor) variant.color = matchedColor;
-          //   }
-          
-          //   if (v.size && product.sizes?.length) {
-          //     const matchedSize = product.sizes.find((s) => s.size === v.size);
-          //     if (matchedSize) variant.size = matchedSize;
-          //   }
-          
-          //   return variant;
-          // });
-          
+                
           product = this.productRepository.create({
             ...productData,
             name,

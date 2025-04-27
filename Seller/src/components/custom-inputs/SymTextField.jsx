@@ -19,6 +19,7 @@ const SymTextField = ({
     isEdit = true,
     placeholder="",
     charLimit= false,
+    showCharlimit = false,
     type = 'text',
 }) => {
 
@@ -67,7 +68,7 @@ const SymTextField = ({
                 },
             }}
         />
-        {charLimit && (
+        {charLimit && showCharlimit &&  (
           <Small color="white" mt={0.5} textAlign="right">
             {currentLength}/{charLimit}
           </Small>

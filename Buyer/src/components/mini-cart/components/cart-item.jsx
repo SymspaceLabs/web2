@@ -6,7 +6,7 @@
 import Link from "next/link";
 import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
-import LazyImage from "@/components/LazyImage";
+import { LazyImage } from "@/components/lazy-image";
 import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
 
 import { currency } from "@/lib"; // CUSTOM DATA MODEL

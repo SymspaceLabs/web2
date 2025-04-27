@@ -13,7 +13,7 @@ import { CircularProgress, IconButton, Button, Dialog, DialogContent, DialogTitl
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { StoreSettingsForm } from '@/components/custom-forms/seller-profile';
 import CloseIcon from '@mui/icons-material/Close';
-import LazyImage from '@/components/LazyImage';
+import { LazyImage } from "@/components/lazy-image";
 
 // ===================================================================
 

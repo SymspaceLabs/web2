@@ -37,7 +37,6 @@ const SymMultiSelectDropdown = ({
                 displayEmpty
                 sx={{
                     background: "#000",
-                    border: "1px solid #fff",
                     borderRadius: "5px",
                     color: "#fff",
                     width: "100%",
@@ -46,6 +45,10 @@ const SymMultiSelectDropdown = ({
                         paddingRight: '32px', // Add space for the dropdown icon
                         paddingBottom: '8px',
                         paddingLeft: '10px',
+                    },
+                    ".MuiSelect-icon": {
+                        color: "white", // 👈 fix: color the arrow
+                        right: '10px',  // 👈 fix: adjust spacing
                     },
                     "& .MuiPopover-root": {
                         zIndex: 1400, // Higher than the Drawer

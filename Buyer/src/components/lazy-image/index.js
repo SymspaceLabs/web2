@@ -1,3 +1,1 @@
-import LazyImage from "./LazyImage.jsx";
-
-export { LazyImage };
+export {default as LazyImage} from './LazyImage';

@@ -119,6 +119,10 @@ export default function ProductIntro({ product }) {
           label: size.size,
           value: size.id
         })),
+        colors: colors.map(color => ({
+          label: color.name,
+          value: color.code
+        })),
       },
     });
   };
@@ -324,6 +328,7 @@ export default function ProductIntro({ product }) {
                       paddingTop: '0px',
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: sizeError ? "red" : undefined,
+                        borderWidth: "2px",
                       },
                     }}
                   >
@@ -331,7 +336,7 @@ export default function ProductIntro({ product }) {
                       <em>Select a size</em>
                     </MenuItem>
                     {sizes.map((size) => (
-                      <MenuItem key={size.id} value={size.size}>
+                      <MenuItem key={size.id} value={size.id}>
                         {size.size}
                       </MenuItem>
                     ))}

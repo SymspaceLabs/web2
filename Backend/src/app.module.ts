@@ -38,6 +38,7 @@ import { CreditCardsModule } from './credit-cards/credit-cards.module';
 import { BillingAddressesModule } from './billing-addresses/billing-addresses.module';
 import { SurveysModule } from './surveys/surveys.module';
 import { FilesModule } from './files/files.module';
+import { ProductVariantsModule } from './product-variant/product-variants.module';
 
 @Module({
   imports: [
@@ -92,6 +93,7 @@ import { FilesModule } from './files/files.module';
     BillingAddressesModule,
     SurveysModule,
     FilesModule,
+    ProductVariantsModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

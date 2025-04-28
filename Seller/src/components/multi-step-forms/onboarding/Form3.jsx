@@ -19,9 +19,9 @@ function Form3 ({
 }) {
 
     // SURVEY FORM
-    const [industry, setIndustry] = useState(user?.survey?.industry);
-    const [role, setRole] = useState(user?.survey?.role);
-    const [employees, setEmployees] = useState(user?.survey?.employees);
+    const [industry, setIndustry] = useState(user?.survey?.industry || '');
+    const [role, setRole] = useState(user?.survey?.role || '');
+    const [employees, setEmployees] = useState(user?.survey?.employees || '');
     const [avgReturn, setAvgReturn] = useState(user?.survey?.avgReturn);
     const [highReturn, setHighReturn] = useState(user?.survey?.highReturn);
     const [challenges, setChallenges] = useState(user?.survey?.challenges);
@@ -30,17 +30,17 @@ function Form3 ({
     const [gain, setGain] = useState(user?.survey?.gain);
     const [threeDProduct, setThreeDProduct] = useState(user?.survey?.threeDProduct);
     const [integrate3d, setIntegrate3d] = useState(user?.survey?.integrate3d);
-    const [prevAr, setPrevAr] = useState(user?.survey?.prevAr);
+    const [prevAr, setPrevAr] = useState(user?.survey?.prevAr || '');
     const [arOutcome, setArOutcome] = useState(user?.survey?.arOutcome);
-    const [current3d, setCurrent3d] = useState(user?.survey?.current3d);
-    const [generate3d, setGenerate3d] = useState(user?.survey?.generate3d);
+    const [current3d, setCurrent3d] = useState(user?.survey?.current3d || '');
+    const [generate3d, setGenerate3d] = useState(user?.survey?.generate3d || '');
     const [envision, setEnvision] = useState(user?.survey?.envision);
     const [seekFunction, setSeekFunction] = useState(user?.survey?.seekFunction);
     const [moreInformed, setMoreInformed] = useState(user?.survey?.moreInformed);
     const [conversionRate, setConversionRate] = useState(user?.survey?.conversionRate);
     const [criteria, setCriteria] = useState(user?.survey?.criteria);
-    const [concerns, setConcerns] = useState(user?.survey?.concerns);
-    const [upcoming, setUpcoming] = useState(user?.survey?.upcoming);
+    const [concerns, setConcerns] = useState(user?.survey?.concerns || '');
+    const [upcoming, setUpcoming] = useState(user?.survey?.upcoming || '');
     const [question, setQuestion] = useState(user?.survey?.question);
 
     useEffect(() => {

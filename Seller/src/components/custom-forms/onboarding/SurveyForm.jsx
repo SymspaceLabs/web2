@@ -61,7 +61,8 @@ function SurveyForm ({
             
             <SymDropdown
                 title="What is your company's primary industry?"
-                value={industry} placeholder="Select an Option"
+                value={industry}
+                placeholder="Select an Option"
                 onChange={(e) => setIndustry(e.target.value)}
                 options={options.industry}
                 hasOthersOption={true}

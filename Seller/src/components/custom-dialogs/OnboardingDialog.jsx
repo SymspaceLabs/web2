@@ -19,12 +19,12 @@ const OnboardingDialog = ({
 }) => {
 
     const { user } = useAuth();
+    const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
     const [userData, setUserData] = useState();
     const [formData, setFormData] = useState();
-    const [step, setStep] = useState(0); // 0 for WelcomeDialog, 1+ for Onboarding
+    const [loading, setLoading] = useState(false);
     const [isChecked, setIsChecked] = useState(false); // 0 for WelcomeDialog, 1+ for Onboarding
     const [uploadedFile, setUploadedFile] = useState([]); // Used For Form4 (File Uploader)
-    const [loading, setLoading] = useState(false);
 
 
     useEffect(() => {
@@ -119,7 +119,6 @@ const OnboardingDialog = ({
                 delete updatedFormData.file;
             }
 
-
             // DATA SAVING SERVICE
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/seller-onboarding/${user.id}`, {
                 method: "POST",
@@ -156,10 +155,7 @@ const OnboardingDialog = ({
                     boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
                     backdropFilter: 'blur(12px)',
                     borderRadius: useMediaQuery('(max-width:600px)') ? "20px" : "50px",
-                    paddingBottom: 5,
-                    paddingTop: 5,
-                    paddingLeft: 5,
-                    paddingRight: 5,
+                    padding: useMediaQuery('(max-width:600px)') ? 25 : 5,
                 },
             }}
         >

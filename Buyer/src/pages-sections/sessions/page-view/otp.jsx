@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Button, Typography, CircularProgress, Box } from "@mui/material";
+import { Typography, CircularProgress, Box } from "@mui/material";
 import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { OtpForm } from "@/components/forms";

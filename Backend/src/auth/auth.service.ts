@@ -8,6 +8,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
+  ConflictException,
 } from '@nestjs/common';
 import User, { AuthMethod } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -143,7 +144,17 @@ export class AuthService {
     if (existingUser) {
       return { message: 'Email already exists. Please use a different email.' };
     }
+
+    // ✅ CHECK BUSINESS NAME BEFORE SAVING USER
+    const existingCompany = await this.companiesRepository.findOne({
+      where: { entityName: businessName.trim().toLowerCase() },
+    });
+
+    if (existingCompany) {
+      throw new ConflictException('Business name already exists. Please choose another.');
+    }
   
+    // ✅ ONLY THEN continue to save user
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Generate a 6-digit OTP
@@ -162,6 +173,7 @@ export class AuthService {
   
     await this.usersRepository.save(user);
   
+    // ✅ Then create the company
     if (role === 'seller') {
       const company = this.companiesRepository.create({
         userId: user.id,
@@ -195,79 +207,85 @@ export class AuthService {
     signUpDto: SignUpDto,
   ): Promise<{ message: string; token?: string }> {
     
-    const requiredFields = ['firstName', 'lastName', 'email', 'password'];
-    const missingFields = this.validateFields(signUpDto, requiredFields);
-    const { password, email } = signUpDto;
+    try {
+      const requiredFields = ['firstName', 'lastName', 'email', 'password'];
+      const missingFields = this.validateFields(signUpDto, requiredFields);
+      const { password, email } = signUpDto;
+    
+      // Check for missing inputs
+      if (missingFields.length > 0) {
+        throw new UnauthorizedException(
+          `Missing required field(s): ${missingFields.join(', ')}.`,
+        );
+      }
+    
+      // Validate email format
+      if (!validator.isEmail(email)) {
+        throw new HttpException('Invalid email address.', 402); // Custom 402 error
+      }
+    
+      // Validate password format
+      this.validatePasswordFormat(password);
+    
+      const { firstName, lastName, role = 'buyer' } =
+        signUpDto;
+    
+      // ✅ 1. Check if email already exists
+      const existingUser = await this.usersRepository.findOne({
+        where: { email },
+      });
+    
+      if (existingUser) {
+        return { message: 'Email already exists. Please use a different email.' };
+      }
+    
+      // ✅ ONLY THEN continue to save user
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Generate a 6-digit OTP
+      const { otp, otpExpiresAt } = await this.generateOtp();
+    
+      const user = this.usersRepository.create({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        role,
+        otp,
+        otpExpiresAt,
+        isVerified: false, // New column to track verification status
+      });
+    
+      await this.usersRepository.save(user);
+        
+      const token = this.jwtService.sign(
+        { userId: user.id, email: user.email, role: user.role },
+        { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+      );
+    
+      await this.mailchimpService.sendOtpEmail(
+        email,
+        'Your OTP for Account Verification',
+        otp
+      );
+    
+      return {
+        message:
+          'Registration successful. Please check your email to verify your account.',
+        token,
+      };
+    } catch (error) {
+      console.error('Signup error:', error);
   
-    // Check for missing inputs
-    if (missingFields.length > 0) {
-      throw new UnauthorizedException(
-        `Missing required field(s): ${missingFields.join(', ')}.`,
+      if (error instanceof HttpException) {
+        throw error; // rethrow known errors
+      }
+  
+      throw new HttpException(
+        'An unexpected error occurred during signup. Please try again later.',
+        500,
       );
     }
-  
-    // Validate email format
-    if (!validator.isEmail(email)) {
-      throw new HttpException('Invalid email address.', 402); // Custom 402 error
-    }
-  
-    // Validate password format
-    this.validatePasswordFormat(password);
-  
-    const { firstName, lastName, role = 'buyer', businessName, website } =
-      signUpDto;
-  
-    const existingUser = await this.usersRepository.findOne({
-      where: { email },
-    });
-  
-    if (existingUser) {
-      return { message: 'Email already exists. Please use a different email.' };
-    }
-  
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Generate a 6-digit OTP
-    const { otp, otpExpiresAt } = await this.generateOtp();
-  
-    const user = this.usersRepository.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-      role,
-      otp,
-      otpExpiresAt,
-      isVerified: false, // New column to track verification status
-    });
-  
-    await this.usersRepository.save(user);
-  
-    if (role === 'seller') {
-      const company = this.companiesRepository.create({
-        userId: user.id,
-        entityName: businessName,
-        website,
-      });
-      await this.companiesRepository.save(company);
-    }
-  
-    const token = this.jwtService.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      { secret: process.env.JWT_SECRET, expiresIn: '1h' },
-    );
-  
-    await this.mailchimpService.sendOtpEmail(
-      email,
-      'Your OTP for Account Verification',
-      otp
-    );
-  
-    return {
-      message:
-        'Registration successful. Please check your email to verify your account.',
-      token,
-    };
   }
 
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<{ message: string; accessToken: string; user: any }> {

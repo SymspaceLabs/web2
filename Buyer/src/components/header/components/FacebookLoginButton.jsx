@@ -78,8 +78,6 @@ const FacebookSigninButton = () => {
       fullWidth 
       size="large" 
       sx={{
-        fontFamily: 'Helvetica', 
-        fontSize: 12, 
         background: '#1A1D21', 
         color: '#fff', 
         my: 1, 

@@ -1,7 +1,7 @@
 "use client";
 
 // ================================================================
-//  Layout File
+//  Layout File | Root File
 // ================================================================
 
 import localFont from "next/font/local";
@@ -24,7 +24,7 @@ import SettingsProvider from "@/contexts/SettingContext";
 import ProgressBar from "@/components/progress";
 import SnackbarProvider from "@/contexts/SnackbarContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+// import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({ children }) {
   return (
@@ -44,22 +44,20 @@ export default function RootLayout({ children }) {
         </style>
       </head>
       <body>
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-          <AuthProvider>
-              <SnackbarProvider>
-                <FavoritesProvider>
-                  <CartProvider>
-                    <SettingsProvider>
-                      <ThemeProvider> {/* Your custom ThemeProvider */}
-                        <ProgressBar />
-                        <RTL>{children}</RTL>
-                      </ThemeProvider>
-                    </SettingsProvider>
-                  </CartProvider>
-                </FavoritesProvider>
-              </SnackbarProvider>
-          </AuthProvider>
-        </GoogleOAuthProvider>
+        <AuthProvider>
+            <SnackbarProvider>
+              <FavoritesProvider>
+                <CartProvider>
+                  <SettingsProvider>
+                    <ThemeProvider> {/* Your custom ThemeProvider */}
+                      <ProgressBar />
+                      <RTL>{children}</RTL>
+                    </ThemeProvider>
+                  </SettingsProvider>
+                </CartProvider>
+              </FavoritesProvider>
+            </SnackbarProvider>
+        </AuthProvider>
       </body>
     </html>
   );

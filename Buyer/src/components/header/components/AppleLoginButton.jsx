@@ -24,23 +24,16 @@ const AppleSigninButton = () => {
 
   const handleAppleResponse = async (response) => {
     try {
-      console.log("Apple Sign-in Response:", response);
-  
+ 
       // Extract `id_token` from the response
       const { id_token } = response.authorization;
-  
-      // Log the `id_token` for debugging purposes
-      console.log("ID Token:", id_token);
-  
+    
       // Make a POST request to the backend with the `idToken` as the body
       const result = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/apple`,
         { idToken: id_token } // Use key-value pair with consistent casing
       );
-  
-      // Log the backend response for debugging
-      console.log("Login Result:", result.data);
-  
+    
       // Handle the response
       handleAuthResponse(result.data.user, result.data.accessToken);
   

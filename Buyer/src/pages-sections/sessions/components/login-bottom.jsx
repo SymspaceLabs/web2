@@ -8,7 +8,7 @@ export default function LoginBottom() {
     <Fragment>
       <FlexRowCenter gap={1} my={3}>
           <Span lineHeight={1} sx={{color:'#fff'}}>
-            Don&apos;t have an account?
+            Don't have an account?
           </Span>
         <BoxLink title="Sign Up" href="/register" />
       </FlexRowCenter>

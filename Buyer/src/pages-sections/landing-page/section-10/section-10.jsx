@@ -98,12 +98,9 @@ export default function Section9() {
                 animate={rightHasAnimated ? "visible" : "hidden"} // Persistent state
                 variants={rightComponentVariants}
               >
-                {/* <Box maxHeight={{sm:'850px'}}> */}
                   <SymGLTFViewer
                     modelUrl="/models/handBag/scene.gltf"
                   />
-                  {/* <HandBagCanvas /> */}
-                {/* </Box> */}
               </motion.div>
             </Grid>
           </Grid>

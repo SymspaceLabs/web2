@@ -30,14 +30,30 @@ export default function Section1({ company }) {
     <Box sx={{ color: '#fff', minHeight: '400px', pb:10 }}>
 
       {/* BANNER BG */}
-      <Box sx={{ maxHeight:'400px', overflow: 'hidden'  }}>
-        <LazyImage
-          src={company.banner}
-          width={500}
-          height={500}
-          alt="Background Banner"
-        />
+      <Box
+        sx={{
+          minHeight: '300px',
+          maxHeight: '400px',
+          overflow: 'hidden',
+          backgroundColor: company.banner ? 'transparent' : '#e0e0e0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {company.banner ? (
+          <LazyImage
+            src={company.banner}
+            width={500}
+            height={500}
+            alt="Background Banner"
+            style={{ width: '100%', objectFit: 'cover' }}
+          />
+        ) : (
+          <Paragraph color="#555">No Banner Available</Paragraph>
+        )}
       </Box>
+
 
       {/* Foreground content */}
       <FlexBox sx={styles.descriptionCard}> 

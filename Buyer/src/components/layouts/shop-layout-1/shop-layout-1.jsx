@@ -16,7 +16,7 @@ import { MiniFavorite } from "@/components/favourites";
 import { SymDrawer } from "@/components/custom-drawer";
 import { Fragment, useCallback, useState, useEffect } from "react";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
-import OnboardingDialog from "@/components/dialog/OnboardingDialog";
+import { usePathname } from 'next/navigation';
 
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
@@ -28,12 +28,15 @@ import LoginCartButtons from "@/components/header/components/login-cart-buttons"
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
 import { LoginBottom } from "@/pages-sections/sessions/components";
+import OnboardingDialog from "@/components/dialog/OnboardingDialog";
 
 // ==============================================================
 
 export default function ShopLayout1({children, noFooter=false}) {
   const [isFixed, setIsFixed] = useState(false);
   const { isAuthenticated, user } = useAuth();
+  const pathname = usePathname();
+
 
   const [showPopup, setShowPopup] = useState(false);
   
@@ -42,10 +45,8 @@ export default function ShopLayout1({children, noFooter=false}) {
   const {
     dialogOpen,
     toggleDialog,
-
     cartOpen,
     toggleCartOpen,
-
     favouriteOpen,
     toggleFavouriteOpen
   } = useHeader();
@@ -66,6 +67,7 @@ export default function ShopLayout1({children, noFooter=false}) {
       const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
   
       if (
+        pathname === "/marketplace" &&
         isAuthenticated &&
         !user?.isOnboardingFormFilled &&
         isDialogClosed !== "true"

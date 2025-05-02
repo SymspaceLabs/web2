@@ -7,6 +7,7 @@
 import Section2 from "../section-2";
 import Section1 from "../section-1";
 import { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
 
 export default function CompanyPageView({ slug }) {
 
@@ -45,7 +46,7 @@ export default function CompanyPageView({ slug }) {
   if (loading) {
     return (
       <div className="bg-white">
-        <p>Loading company details...</p>
+        <CircularProgress />
       </div>
     );
   }

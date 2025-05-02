@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 @Entity('companies')
 export class Company {
@@ -42,18 +42,6 @@ export class Company {
 
   @Column({ unique: true })
   slug: string;
-
-  // Generate slug before inserting or updating
-  @BeforeInsert()
-  @BeforeUpdate()
-  generateSlug() {
-    if (this.entityName) {
-      this.slug = this.entityName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric characters with hyphens
-        .replace(/^-+|-+$/g, ''); // Trim hyphens at start and end
-    }
-  }
 
   @Column({ nullable: true })
   legalName: string;

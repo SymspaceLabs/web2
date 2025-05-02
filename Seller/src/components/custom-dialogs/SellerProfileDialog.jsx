@@ -53,7 +53,7 @@ const SellerProfileDialog = ({
           }
         };
         fetchUser();
-    }, []);
+    }, [open]);
 
     useEffect(() => {
         setEmailSupport(userData?.company?.emailSupport || "");

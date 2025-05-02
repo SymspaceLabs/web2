@@ -7,6 +7,7 @@ import { FlexBox } from '@/components/flex-box';
 import { SymDivider } from '@/components/custom-inputs';
 import ContactForm from '@/components/custom-forms/onboarding/ContactForm';
 import BasicInfoForm from '@/components/custom-forms/onboarding/BasicInfoForm';
+import countryList from '@/data/countryList';
 
 // =================================================================================
 
@@ -27,7 +28,8 @@ function Form1 ({
   const [address2, setAddress2] = useState(user?.company.address2);
   const [city, setCity] = useState(user?.company.city);
   const [state, setState] = useState(user?.company.state);
-  const [country, setCountry] = useState(user?.company.country);
+  const [country, setCountry] = useState(null);
+
   const [zip, setZip] = useState(user?.company.zip);
   const [gmv, setGmv] = useState(user?.company.gmv || "");
   const [category, setCategory] = useState(user?.company.category || "");
@@ -40,6 +42,11 @@ function Form1 ({
   const [phone, setPhone] = useState(user?.phone);
 
   useEffect(() => {
+  
+    //Set Country
+    const matchedCountry = countryList.find((item) => item.value === user?.company.country);
+    setCountry(matchedCountry || null);
+
     // Company
     setEmail(user?.email || "");
     setEntityName(user?.company.entityName || "");
@@ -50,7 +57,6 @@ function Form1 ({
     setAddress2(user?.company.address2 || "");
     setCity(user?.company.city || "");
     setState(user?.company.state || "");
-    setCountry(user?.company.country || "");
     setZip(user?.company.zip || "");
     setGmv(user?.company.gmv || "");
     setCategory(user?.company.category  || "");
@@ -87,7 +93,7 @@ function Form1 ({
         address2,
         city,
         state,
-        country: country?.value,
+        country: country?.value || "",
         zip,
         gmv,
         category,

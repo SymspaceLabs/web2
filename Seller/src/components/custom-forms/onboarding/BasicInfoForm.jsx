@@ -68,8 +68,8 @@ function BasicInfoForm ({
                 <SymAutoComplete
                     title="Country"
                     placeholder="Country"
-                    value={countryList.find((item) => item.value === country)}
-                    onChange={(val) => setCountry(val?.value ?? "")}
+                    value={country}
+                    onChange={(val) => setCountry(val)}
                     options={countryList}
                 />
                 <SymTextField title="Zip Code" value={zip} placeholder="Zip Code" onChange={(e) => setZip(e.target.value)} />

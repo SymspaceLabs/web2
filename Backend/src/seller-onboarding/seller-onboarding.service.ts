@@ -3,7 +3,7 @@ import { CreateSellerOnboardingDto } from './dto/create-seller-onboarding.dto';
 import { UpdateSellerOnboardingDto } from './dto/update-seller-onboarding.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import User from 'src/users/entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Not, Repository } from 'typeorm';
 import { Company } from 'src/companies/entities/company.entity';
 import { Bank } from 'src/banks/entities/bank.entity';
 import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
@@ -25,7 +25,41 @@ export class SellerOnboardingService {
 
   ) {}
 
-  async create(createOnboardingDto: CreateSellerOnboardingDto, userId: string): Promise<{ status: string; message: string, data : any}> {
+  private async generateUniqueSlug(entityName: string, companyId?: string): Promise<string> {
+    let slugBase = entityName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  
+    let slug = slugBase;
+    let counter = 1;
+  
+    while (true) {
+      const existing = await this.companyRepository.findOne({
+        where: {
+          slug,
+          ...(companyId ? { id: Not(companyId) } : {}) // Skip checking current company if updating
+        },
+      });
+  
+      if (!existing) break;
+  
+      slug = `${slugBase}-${counter++}`;
+    }
+  
+    return slug;
+  }
+  
+  
+
+  async create(
+    createOnboardingDto: CreateSellerOnboardingDto,
+    userId: string
+  ): Promise<{
+      status: string;
+      message: string,
+      data : any
+    }> {
     const { 
       basicInfo, 
       company, 
@@ -70,6 +104,8 @@ export class SellerOnboardingService {
         existingCompany.businessPhone = company?.businessPhone ?? existingCompany.businessPhone;
         existingCompany.isOnboardingFormFilled = company?.isOnboardingFormFilled ?? existingCompany.isOnboardingFormFilled;
 
+        // Generate slug
+        existingCompany.slug = await this.generateUniqueSlug(existingCompany.entityName, existingCompany.id);
 
         // Update existing company
         await this.companyRepository.save(existingCompany);

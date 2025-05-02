@@ -1,8 +1,7 @@
 "use client";
 
+import { Box, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 
 // Local CUSTOM COMPONENTS
 import Sales from "../sales";
@@ -19,17 +18,9 @@ import { ChevronRight } from "@mui/icons-material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM HOOK
 
 import { H1 } from "@/components/Typography";
-import { useAuth } from "@/contexts/AuthContext";
-import { OnboardingDialog } from "@/components/custom-dialogs";
-import { SellerProfileDialog } from "@/components/custom-dialogs";
-import SimulationOverlay from "@/components/SimulationOverlay";
 
 const DashboardPageView = () => {
 
-  const { user } = useAuth();
-
-  const [onboardingDialogOpen, setOnboardingDialogOpen] = useState(false);
-  const [storeDialogOpen, setStoreDialogOpen] = useState(false);
   const [cardList, setCardList] = useState([]);
   const [stockOutProducts, setStockOutProducts] = useState([]);
   const [recentPurchase, setRecentPurchase] = useState([]);
@@ -54,11 +45,6 @@ const DashboardPageView = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (user && user.company.isOnboardingFormFilled === false) {
-      setOnboardingDialogOpen(true);
-    }
-  }, [user]);
   
 
   const handleClick = () => setCollapsed(state => !state);
@@ -66,27 +52,6 @@ const DashboardPageView = () => {
 
   return (
     <Box>
-      
-      {/* Welcome dialog */}
-      <OnboardingDialog
-        open={onboardingDialogOpen}
-        setOpen={setOnboardingDialogOpen}
-        setStoreDialogOpen={setStoreDialogOpen}
-      />
-      
-      {/* Seller Profile Dialog */}
-      <SellerProfileDialog
-        open={storeDialogOpen}
-        setOpen={setStoreDialogOpen}
-      />
-
-      {/* Simulation overlay - only shows when both dialogs are closed */}
-      <SimulationOverlay
-        open={!onboardingDialogOpen && !storeDialogOpen}
-        setStoreDialogOpen={setStoreDialogOpen}
-      />
-
-
       <Box px={0} >
         <Grid container spacing={3}>
           <Grid item xs={12}>

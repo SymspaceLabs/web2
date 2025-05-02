@@ -8,8 +8,6 @@ import { ProductImage } from '../product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
-// import { ProductVariantPropertyEntity } from '../product-variant-property/entities/product-variant-property.entity';
-// import { PriceEntity } from '../price/entities/price.entity';
 
 @Module({
   imports: [

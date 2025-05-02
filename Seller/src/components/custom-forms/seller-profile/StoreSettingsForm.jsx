@@ -50,10 +50,10 @@ function StoreSettingsForm ({
             <SymTextField
                 title="Description"
                 value={description}
-                placeholder="Company Description (200 Character Limit)"
+                placeholder="Company Description (1000 Character Limit)"
                 onChange={(e) => setDescription(e.target.value)}
                 multiline={true}
-                charLimit={200}
+                charLimit={1000}
                 showCharlimit={true}
             />
 

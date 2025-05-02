@@ -1,12 +1,20 @@
-import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { useState } from "react";
-import CloseIcon from '@mui/icons-material/Close';
+// =========================================================
+// Onboarding Dialog
+// =========================================================
+
 import axios from 'axios';
-import { Preferences, LogoWithTitle, Measurements, DOB } from './components';
+import { useState } from "react";
+import { useRouter } from 'next/navigation';
+import CloseIcon from '@mui/icons-material/Close';
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { Preferences, LogoWithTitle, Measurements, DOB } from './components';
+import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 
 const OnboardingDialog = ({ open, onClose, user }) => {
+
+    const router = useRouter();
+    
     const { showSnackbar } = useSnackbar();
 
     const [loading, setLoading] = useState(false);
@@ -41,24 +49,8 @@ const OnboardingDialog = ({ open, onClose, user }) => {
     const [dob, setDob] = useState(null);
 
     const handleSaveSettings = async () => {
-        // Validate inputs
-        if (!height.cm && (!height.feet || !height.inches)) {
-            alert("Please provide a valid height.");
-            return;
-        }
-    
-        if (!weight.kg && !weight.lbs) {
-            alert("Please provide a valid weight.");
-            return;
-        }
-    
-        if (!dob) {
-            alert("Please provide your date of birth.");
-            return;
-        }
     
         // Construct the request body
-
         const requestBody = {
             "measurement" : {
                 "weight":weight.kg,
@@ -112,7 +104,7 @@ const OnboardingDialog = ({ open, onClose, user }) => {
             PaperProps={{
                 style: {
                     backgroundColor: "#888888",
-                    borderRadius: isMobile ? "20px" : "80px",
+                    borderRadius: isMobile ? "20px" : "40px",
                     boxShadow:
                         "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
                 },
@@ -128,12 +120,12 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                     onClick={onClose}
                     sx={{
                         position: "absolute",
-                        top: 15,
-                        right: 25,
+                        top: 10,
+                        right: 15,
                         color: "#ffffff",
-                        backgroundColor: "rgba(0,0,0,0.5)",
+                        background : 'transparent',
                         "&:hover": {
-                            backgroundColor: "rgba(0,0,0,0.7)",
+                            backgroundColor: "rgba(0,0,0,0.5)",
                         },
                     }}
                 >
@@ -187,18 +179,17 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                 <Button
                     variant="outlined"
                     fullWidth
+                    onClick={()=> router.push('/profile')} // Call the save function
                     sx={{
                         fontSize: isMobile? "10px" : "14px",
-                        backgroundColor: "#ffffff",
+                        background: "#FFF",
                         color: "#000000",
-                        border: "1px solid #ccc",
-                        textTransform: "none",
-                        "&:hover": {
-                            backgroundColor: "#f5f5f5",
-                        },
+                        border: "1px solid #CCC",
                         borderRadius:'75px',
-                        paddingBottom:'10px',
-                        paddingTop:'10px',
+                        py:'10px',
+                        "&:hover": {
+                            background: "#F5F5F5",
+                        },
                     }}
                 >
                     Advanced Settings

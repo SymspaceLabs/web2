@@ -2,23 +2,13 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   Patch,
   Post,
-  Put,
-  Res,
-  UploadedFiles,
-  UseInterceptors,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
 import { Product } from './entities/product.entity';
 
 @Controller('products')
@@ -36,11 +26,6 @@ export class ProductsController {
   async update(@Param('id') id: string, @Body() body: CreateProductDto) {
     return this.productsService.upsert(id, body);
   }  
-
-  // @Post()
-  // async createProduct(@Body() createProductDto: CreateProductDto) {
-  //   return await this.productsService.create(createProductDto);
-  // }
 
   @Get()
   async getAllProducts() {

@@ -58,9 +58,10 @@ export class CreateProductDto {
   @Type(() => CreateProductColorDto)
   @IsOptional()
   colors?: CreateProductColorDto[];
-
+  
+  @IsString()
   @IsOptional()
-  model?: { name: string; filePath: string; format?: string };
+  model?: string;
 
   @IsString()
   @IsOptional()
@@ -79,25 +80,6 @@ export class CreateProductDto {
   @Type(() => CreateProductVariantDto)
   variants: CreateProductVariantDto[];
 
-  // @IsString()
-  // @IsNotEmpty()
-  // variantsJson: string;
-
-  // @IsOptional()
-  // @Type(() => Object)
-  // threedmodel?: Express.Multer.File;
-
-  // @IsString()
-  // @IsOptional()
-  // model3D?: string;
-
-  // @IsString()
-  // @IsOptional()
-  // sizeFit?: 'Runs small' | 'True to size' | 'Runs big';
-
-  // @IsArray()
-  // @IsOptional()
-  // color?: string[];
 
   // @IsString()
   // @IsOptional()

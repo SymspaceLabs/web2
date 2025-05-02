@@ -1,10 +1,8 @@
 "use client";
 
-/**
- * Header Icons On the Right
- * 
- * 
- */
+// =============================================================
+// Header Icons On the Right | Account Popover
+// =============================================================
 
 import { useState } from 'react';
 import { styles } from './styles';
@@ -12,13 +10,17 @@ import { useRouter } from 'next/navigation';
 import { FlexBox } from "@/components/flex-box";
 import { useAuth } from '@/contexts/AuthContext';
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
+import { useFavorites } from '@/contexts/FavoritesContext';
 import { IconButton, MenuItem, Badge } from "@mui/material";
 import { ChildNavListWrapper } from '@/components/navbar/styles';
+
 import useCart from "@/hooks/useCart";
 import SymCard from "@/components/custom-components/SymCard";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useFavorites } from '@/contexts/FavoritesContext';
+
+// =============================================================
+
 
 export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleFavouriteOpen }) {
   const { state } = useCart();
@@ -42,6 +44,10 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
 
   const handleProfile = () => {
     router.push('/profile');
+  };
+
+  const handleDashboard = () => {
+    router.push(`${process.env.NEXT_PUBLIC_SELLER_URL}`);
   };
 
   const handleLogout = () => {
@@ -117,10 +123,20 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
               </>
             ) : (
               <>
-                <MenuItem sx={{ ...styles.text, color: "#fff" }}>{user?.email || "User"}</MenuItem>
-                <MenuItem onClick={handleProfile} sx={{ ...styles.text, color: "#fff" }}>
-                  Profile
+                <MenuItem sx={{ ...styles.text, color: "#fff" }}>
+                  {user?.email || "User"}
                 </MenuItem>
+            
+                {user?.role === "buyer" ? (
+                  <MenuItem onClick={handleProfile} sx={{ ...styles.text, color: "#fff" }}>
+                    Profile
+                  </MenuItem>
+                ) : user?.role === "seller" ? (
+                  <MenuItem onClick={handleDashboard} sx={{ ...styles.text, color: "#fff" }}>
+                    Dashboard
+                  </MenuItem>
+                ) : null}
+            
                 <MenuItem onClick={handleLogout} sx={{ ...styles.text, color: "#fff" }}>
                   Logout
                 </MenuItem>

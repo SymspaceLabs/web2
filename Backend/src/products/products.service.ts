@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Company } from 'src/companies/entities/company.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
-import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+// import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
@@ -30,7 +30,6 @@ export class ProductsService {
         company,
         name,
         colors,
-        model,
         sizes,
         subcategoryItem: subcategoryItemId,
         ...productData
@@ -42,7 +41,7 @@ export class ProductsService {
         if (id) {
           product = await this.productRepository.findOne({
             where: { id },
-            relations: ['company', 'images', 'colors', 'model', 'sizes', 'subcategoryItem', 'variants'],
+            relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants'],
           });
       
           if (!product) {
@@ -178,9 +177,17 @@ export class ProductsService {
               variant.product = savedProduct;
         
               const matchedColor = savedProduct.colors.find((c) => c.code === v.colorCode);
+              if (!matchedColor) {
+                throw new BadRequestException(`No matching color for code ${v.colorCode}`);
+              }
+
               if (matchedColor) variant.color = matchedColor;
         
               const matchedSize = savedProduct.sizes.find((s) => s.size === v.size);
+              if (!matchedSize) {
+                throw new BadRequestException(`No matching size for ${v.size}`);
+              }
+
               if (matchedSize) variant.size = matchedSize;
         
               variantsToSave.push(variant);
@@ -217,6 +224,7 @@ export class ProductsService {
           'subcategoryItem',
           'subcategoryItem.subcategory',
           'subcategoryItem.subcategory.category',
+          'variants'
         ],
       });
     

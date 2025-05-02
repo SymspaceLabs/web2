@@ -6,25 +6,18 @@
 // ==============================================================================
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { currency } from "@/lib";
 import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
-import { SymAccordion } from "@/components/custom-components"
-import { FlexBox, FlexCol, FlexRowCenter } from "@/components/flex-box";
-import { Box, Button, Select, MenuItem, FormControl, Tooltip , Drawer, Grid, Avatar, Rating, IconButton } from '@mui/material';
+import { FlexBox, FlexCol } from "@/components/flex-box";
+import { SymAccordion, SymDialog } from "@/components/custom-components"
+import { Box, Button, Select, MenuItem, FormControl, Tooltip , Drawer, Grid, Rating, CircularProgress } from '@mui/material';
 
 import styles from "./styles";
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-// import HandBagCanvas from "@/components/HandBagCanvas";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { SymDialog } from "@/components/custom-dialog";
-import { useFavorites } from "@/contexts/FavoritesContext";
-import { SymGLTFViewer } from "@/components/custom-components";
+import ProductGallery from "./product-gallery";
 
 // ================================================================
 export default function ProductIntro({ product }) {
@@ -39,47 +32,19 @@ export default function ProductIntro({ product }) {
     name, 
     images, 
     slug,
-    thumbnail,
     company,
     sizeFit,
     sizeChart
   } = product || {};
 
-  const { state: favState, dispatch: favDispatch } = useFavorites();
-
   // State hooks for selected options and toggles
-  const [selectedColor, setSelectedColor] = useState(colors[0].code);
+  const [selectedColor, setSelectedColor] = useState(colors[0].id);
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedImage, setSelectedImage] = useState(0);
   const [sizeError, setSizeError] = useState(false);
   const { state, dispatch } = useCart();
 
-  const isFavorited = favState.favorites.some((item) => item.id === product.id);
-
-  const toggleFavorite = () => {
-    favDispatch({
-      type: "TOGGLE_FAVORITE",
-      payload: {
-        price,
-        name,
-        salePrice,
-        imgUrl: images[0].url,
-        id,
-        slug,
-        sizes: sizes.map(size => ({
-          label: size.size,
-          value: size.id
-        })),
-        colors: colors.map(color => ({
-          label: color.name,
-          value: color.code
-        })),
-      },
-    });
-  };
-
   // Updates the selected color
-  const handleColorSelect = (color) => setSelectedColor(color);
+  const handleColorSelect = (colorId) => setSelectedColor(colorId);
 
   // Updates the selected size
   const handleSizeSelect = (event) => setSelectedSize(event.target.value);
@@ -126,13 +91,36 @@ export default function ProductIntro({ product }) {
       },
     });
   };
- 
-  // Updates the selected image based on the thumbnail clicked
-  const handleImageClick = ind => () => setSelectedImage(ind);
 
-  const [sidenavOpen, setSidenavOpen] = useState();
   const toggleSidenav = () => setSidenavOpen(state => !state);
+  const [sidenavOpen, setSidenavOpen] = useState();
   const [openModal, setOpenModal] = useState(false);
+  const [availability, setAvailability] = useState(null); // null | true | false
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
+
+  // THIS FUNCTION FETCHES AVAILABILILTY OF A PRODUCT INSTANTLY
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      if (!selectedSize || !selectedColor) return;
+      setLoadingAvailability(true);
+  
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/product-variants/${id}/availability?colorId=${selectedColor}&sizeId=${selectedSize}`
+        );
+        const data = await res.json();
+        setAvailability(data);
+      } catch (err) {
+        console.error("Error fetching availability", err);
+        setAvailability(null);
+      } finally {
+        setLoadingAvailability(false);
+      }
+    };
+  
+    fetchAvailability();
+  }, [selectedColor, selectedSize]);
+  
 
   return (
     <>
@@ -140,113 +128,8 @@ export default function ProductIntro({ product }) {
         
         { /* IMAGE GALLERY AREA */}
         <Grid item md={6} xs={12} alignItems="center">
-          {/* Hero Image */}
-          <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
-            <IconButton
-              onClick={() => setSelectedImage((prev) => prev > 0 ? prev - 1 : images?.length)}
-              style={{ position: "absolute", left: 0, zIndex: 1, backgroundColor: "white" }}
-            >
-              <ArrowBackIosIcon />
-            </IconButton>
-            
-            <Box maxHeight={{sm:'850px'}}>
-              {selectedImage === 0 ? (    
-                <SymGLTFViewer
-                  modelUrl="/models/handBag/scene.gltf"
-                />
-              ) : (
-                  <LazyImage 
-                    alt={name}
-                    width={500} 
-                    height={500} 
-                    loading="eager" 
-                    src={product.images[selectedImage-1]?.url} 
-                    sx={{ objectFit: "contain" }} 
-                  />
-              )}
-            </Box>
-
-            <IconButton 
-              onClick={() => setSelectedImage((prev) => 
-                prev < images?.length ? prev + 1 : 0 // If last, wrap to 0
-              )}
-              style={{
-                position: "absolute",
-                right: 0,
-                zIndex: 1,
-                backgroundColor: "white",
-              }}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
-
-            {/* Heart Icon */}
-            <IconButton 
-              onClick={toggleFavorite}
-              style={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                zIndex: 2,
-              }}
-            >
-              {isFavorited ? (
-                <FavoriteIcon color="error" />
-              ) : (
-                <FavoriteBorderIcon color="action" />
-              )}
-            </IconButton>
-          </FlexBox>
-
-          {/* Thumbnails */}
-          <FlexRowCenter overflow="auto" gap={1}>
-            <>
-              {/* 3D Model Thumbnail */}
-              <FlexRowCenter
-                padding={1}
-                width={64}
-                height={64}
-                minWidth={64}
-                bgcolor="white"
-                border="1px solid"
-                borderRadius="10px"
-                style={{ cursor: "pointer" }}
-                onClick={() => setSelectedImage(0)} // 0 for 3D model
-                borderColor={selectedImage === 0 ? "primary.main" : "grey.400"}
-              >
-                <LazyImage
-                  alt="3D Model"
-                  width={500}
-                  height={500}
-                  src="/assets/images/products/3d/3d-thumbnail.png"
-                />
-              </FlexRowCenter>
-
-              {/* Image Thumbnails */}
-              {images?.length > 0 &&
-                images.map((image, ind) => (
-                  <FlexRowCenter
-                    key={ind}
-                    width={64}
-                    height={64}
-                    minWidth={64}
-                    bgcolor="white"
-                    border="1px solid"
-                    borderRadius="10px"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setSelectedImage(ind + 1)}
-                    borderColor={selectedImage === ind + 1 ? "primary.main" : "grey.400"}
-                  >
-                    <LazyImage
-                      alt="product"
-                      width={500}
-                      height={500}
-                      src={image.url}
-                    />
-                  </FlexRowCenter>
-                ))}
-            </>
-          </FlexRowCenter>
+          {/* Image Gallery */}
+          <ProductGallery product={product} />
         </Grid>
 
         {/* PRODUCT INFO AREA */}
@@ -280,6 +163,17 @@ export default function ProductIntro({ product }) {
               <Paragraph sx={styles.strikethrough}>
                 {currency(salePrice)}
               </Paragraph>
+
+              {/* Availabilty Status */}
+              {selectedColor && selectedSize && (
+                <Box sx={styles.statusPill}>
+                  <H1 fontSize="14px" color={availability?.statusColor}>
+                    {loadingAvailability ? <CircularProgress size={16} /> : availability?.status}
+                  </H1>
+                </Box>
+              )}
+
+
             </FlexBox>
 
             {/*Color*/}
@@ -291,13 +185,13 @@ export default function ProductIntro({ product }) {
                 {colors.map((color) => (
                   <Tooltip key={color.id} title={color.name || color.code} arrow>
                     <Button
-                      onClick={() => handleColorSelect(color.code)}
+                      onClick={() => handleColorSelect(color.id)}
                       sx={{
                         width: 40,
                         height: 40,
                         borderRadius: '50%',
                         backgroundColor: color.code,
-                        border: selectedColor === color.code ? '3px solid black' : '1px solid grey',
+                        border: selectedColor === color.id ? '3px solid black' : '1px solid grey',
                         margin: '0 5px',
                         '&:hover': {
                           backgroundColor: color.code,
@@ -422,6 +316,7 @@ export default function ProductIntro({ product }) {
           src={sizeChart}
           width={500}
           height={500}
+          alt="size-chart"
         />
       </SymDialog>
     </>

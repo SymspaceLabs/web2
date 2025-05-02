@@ -12,7 +12,7 @@ import ArrowBack from "@mui/icons-material/ArrowBack"; // Material-UI back arrow
 import { motion } from "framer-motion"; // Import Framer Motion
 import { FlexBox, FlexColCenter } from "@/components/flex-box"; // Custom utility for flexible layouts.
 import { LazyImage } from '@/components/lazy-image';
-import { H1, H6 } from "@/components/Typography"; // Custom typography component.
+import { H1 } from "@/components/Typography"; // Custom typography component.
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { FlexBetween } from "@/components/flex-box"; // Custom layout utility.
 import { Typography, Container, IconButton, Box, useMediaQuery } from "@mui/material";
@@ -95,16 +95,9 @@ export default function Section4() {
                     src={item.thumbnail}
                   />
                   {/* Product title */}
-                  <H6
-                    sx={{
-                      ...styles.sectionHeader,
-                      fontSize: { xs:8, sm:12 },
-                      color: "#fff",
-                      textAlign: "center",
-                    }}
-                  >
+                  <H1 fontSize={{ xs:8, sm:12 }} color= "#FFF" textAlign="center">
                     {item.title}
-                  </H6>
+                  </H1>
                 </FlexColCenter>
               </Link>
             ))}

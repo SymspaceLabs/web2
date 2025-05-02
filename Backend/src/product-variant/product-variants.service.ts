@@ -28,25 +28,80 @@ export class ProductVariantsService {
     }));
   }
   
-  
-  async updateStockForVariants(updateList: UpdateVariantStockDto[]) {
-    const results = [];
+  async updateStockForVariants(
+    productId: string,
+    updateList: UpdateVariantStockDto[],
+  ): Promise<{ message: string; updated: { id: string; stock: number }[] }> {
+    const results: { id: string; stock: number; sku: string }[] = [];
 
     for (const { id, stock } of updateList) {
-      const variant = await this.variantRepo.findOne({ where: { id } });
+      // 1. Load the variant along with its product relation
+      const variant = await this.variantRepo.findOne({
+        where: { id },
+        relations: ['product'],
+      });
 
-      if (!variant) {
-        throw new NotFoundException(`Variant with id ${id} not found`);
+      // 2. Check existence and ownership
+      if (!variant || variant.product.id !== productId) {
+        throw new NotFoundException(
+          `Variant with id ${id} for product ${productId} not found`,
+        );
       }
-
+      
+      // 3. Update and save
       variant.stock = stock;
       await this.variantRepo.save(variant);
-      results.push({ id, stock });
-    }
 
-    return { message: 'Stock updated successfully', updated: results };
+      // 4. Include sku in the result
+      results.push({
+        id: variant.id,
+        stock: variant.stock,
+        sku: variant.sku,
+      });
+      }
+
+    return {
+      message: 'Stock updated successfully',
+      updated: results,
+    };
   }
-
-
-
+  
+  async checkAvailability(productId: string, color: string, size: string) {
+    const variant = await this.variantRepo.findOne({
+      where: {
+        product: { id: productId },
+        color: { id: color },
+        size: { id: size },
+      },
+      relations: ['product', 'color', 'size'],
+    });
+  
+    if (!variant) {
+      throw new NotFoundException(
+        `Variant not found for productId="${productId}", color="${color}", size="${size}"`
+      );
+    }
+  
+    // Determine status and color
+    let status = 'Out of stock';
+    let statusColor = 'red';
+  
+    if (variant.stock >= 10) {
+      status = 'In stock';
+      statusColor = 'green';
+    } else if (variant.stock > 0) {
+      status = 'Low stock';
+      statusColor = 'gray';
+    }
+  
+    return {
+      variantId: variant.id,
+      stock: variant.stock,
+      available: variant.stock > 0,
+      status,
+      statusColor,
+    };
+  }
+  
+  
 }

@@ -17,16 +17,10 @@ export default function Section5() {
         <FlexCol sx={{ justifyContent: "space-between", alignItems: "center", pb: {xs:2,sm:10},}}>
           {/* Main Header */}
           <Box sx={{ textAlign: "center" }}>
-              <H1 fontSize={{ sm: 20, xs: 28 }} wordSpacing='5px'>
-                  revolutionize shopping. simplify and save.
+              <H1 fontSize={{ xs: 20 , sm: 28 }} wordSpacing='5px'>
+                  revolutionize shopping. <br/> simplify and save.
               </H1>
-              <Paragraph
-                  sx={{
-                      color: "#18181B",
-                      fontSize: { sm: 16, xs: 14 },
-                      py: 2,
-                  }}
-              >
+              <Paragraph color="#18181B" fontSize={{ sm: 16, xs: 14 }} py={2}>
                   Choose the perfect plan for your business needs
               </Paragraph>
           </Box>            

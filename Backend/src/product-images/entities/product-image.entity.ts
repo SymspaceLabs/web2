@@ -18,6 +18,9 @@ export class ProductImage {
   @Column({ default: 0 })
   sortOrder: number;
 
+  @Column()
+  colorCode: string; // e.g., 'black', 'red', '#ffffff'
+
   @ManyToOne(() => Product, (product) => product.images, {
     onDelete: 'CASCADE',
   })

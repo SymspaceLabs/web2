@@ -33,7 +33,7 @@ function BankAccountForm ({
             {/* Bank Name || Acc Holder Name */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymTextField title="Bank Name" value={bankName} placeholder="Bank Name of Checking Account" onChange={(e) => setBankName(e.target.value)} toolTipText={toolTipText.bankName} />
-                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Fullname" onChange={(e) => setAccHolderName(e.target.value)} toolTipText={toolTipText.accountHolderName} />
+                <SymTextField title="Account Holders Name" value={accHolderName} placeholder="Full Name" onChange={(e) => setAccHolderName(e.target.value)} toolTipText={toolTipText.accountHolderName} />
             </FlexBox>
 
         </FlexBox>
@@ -45,7 +45,7 @@ export default BankAccountForm;
 
 const toolTipText = {
     entityName : 'Entity Name is the DBA “Doing Business As” name the entity is using to conduct business under for marketing and branding purposes. This can be different from the entity’s legal name.',
-    accountHolderName : 'Entity Legal Name is the official name of the business entity, as registered with the relevant authorities (e.g., state, county) and appears on official documents like articles of incorporation or organization.',
+    accountHolderName : 'The Account Holder’s Name can be under an individual or the entity’s name as seen on bank statements/Voided Check',
 
 
 }

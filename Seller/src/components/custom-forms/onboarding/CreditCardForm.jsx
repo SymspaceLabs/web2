@@ -36,7 +36,7 @@ function CreditCardForm ({
 
             {/* Bank Name || Acc Holder Name */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Card Holders Name" value={cardHolderName} placeholder="Card Holder Name" onChange={handleCardHolderNameChange} toolTipText={toolTipText.cardHolderName} />
+                <SymTextField title="Card Holder's Name" value={cardHolderName} placeholder="Full Name" onChange={handleCardHolderNameChange} toolTipText={toolTipText.cardHolderName} />
             </FlexBox>
 
         </FlexBox>

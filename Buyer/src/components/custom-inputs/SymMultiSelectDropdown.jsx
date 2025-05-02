@@ -1,10 +1,16 @@
 "use client"
 
+// ===============================================
+// Custom Multi-select Dropdown Input
+// ===============================================
+
 import { FlexBox } from '../flex-box';
 import { Small } from '../Typography';
 import { useState, useEffect } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
+
+// ===============================================
 
 const SymMultiSelectDropdown = ({
     title,
@@ -56,6 +62,11 @@ const SymMultiSelectDropdown = ({
                         paddingRight: '32px', // Add space for the dropdown icon
                         paddingBottom: '8px',
                         paddingLeft: '10px',
+                    },
+                    // 👇 This ensures the icon appears and is colored correctly
+                    ".MuiSelect-icon": {
+                        color: "#fff",
+                        right: "10px",
                     },
                     "& .MuiPopover-root": {
                         zIndex: 1400, // Higher than the Drawer

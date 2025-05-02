@@ -112,7 +112,10 @@ const Profile = ({ isEdit = true }) => {
 
   return (
     <Card sx={[cardStyle, {flexDirection:'column'}]}>
-      {user && <ProfilePicUpload user={user} />}
+      {user && (
+        <ProfilePicUpload user={user} />
+      )}
+      
       {user && (
         <ProfileForm
           firstName={firstName}
@@ -125,7 +128,7 @@ const Profile = ({ isEdit = true }) => {
         />
       )}
 
-      {isEdit && (
+      {/* {isEdit && (
         <FlexBox justifyContent="flex-end" gap={3} sx={{ width: "100%" }}>
           <Button
             onClick={() => router.push("/measurements")}
@@ -144,7 +147,7 @@ const Profile = ({ isEdit = true }) => {
             Save changes
           </Button>
         </FlexBox>
-      )}
+      )} */}
     </Card>
   );
 };

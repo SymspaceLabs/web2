@@ -1,18 +1,66 @@
 "use client"
 
+// ==============================================================
+// Blue Table Header
+// ==============================================================
+
 import Link from "next/link";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import SideNav from "@/components/side-nav";
+
+import { Menu } from "@mui/icons-material";
+import { H1 } from "@/components/Typography";
 import { styled } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery"; // MUI ICON COMPONENTS
+import { FlexBox } from "@/components/flex-box";
+import { Navigation } from "@/components/layouts/customer-dashboard";
+import { Box, Button, useMediaQuery, IconButton } from "@mui/material";
 
-import { Menu } from "@mui/icons-material"; // GLOBAL CUSTOM COMPONENTS
+// ==============================================================
 
-import SideNav from "../../components/side-nav";
-import { H1, H2 } from "../../components/Typography";
-import FlexBox from "../../components/flex-box/flex-box";
-import { Navigation } from "../../components/layouts/customer-dashboard";
-import { IconButton, Typography } from "@mui/material"; // STYLED COMPONENT
+export default function DashboardHeader({
+  title,
+  buttonText,
+  href,
+  Icon,
+  isEdit=false,
+  handleSave
+}) {
+  const isTablet = useMediaQuery(theme => theme.breakpoints.down(1025));
+  const HEADER_LINK = (
+    <Button
+      sx={styles.btn}
+      href={href}
+      LinkComponent={Link}
+      onClick={handleSave}
+    >
+      {buttonText}
+    </Button>
+  );
+  return (
+    <StyledBox>
+      <FlexBox className="headerHold">
+        <FlexBox alignItems="center" gap={1.5}>
+          {Icon && <Icon sx={{ color: "white", fontSize: "30px" }} />}
+
+          <H1 color="#fff" fontSize="24px">
+            {title}
+          </H1>
+        </FlexBox>
+
+        <div className="sidenav">
+          <SideNav position="left" handler={close => <IconButton onClick={close}>
+                <Menu fontSize="small" />
+              </IconButton>}>
+            <Navigation />
+          </SideNav>
+        </div>
+
+        {!isTablet && buttonText && !isEdit ? HEADER_LINK : null}
+      </FlexBox>
+
+      {isTablet && buttonText ? <Box mt={2}>{HEADER_LINK}</Box> : null}
+    </StyledBox>
+  );
+}
 
 const StyledBox = styled("div")(({ theme }) => ({
   background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
@@ -36,46 +84,17 @@ const StyledBox = styled("div")(({ theme }) => ({
     flexDirection: "column"
   }
 }));
-// ==============================================================
 
-// ==============================================================
-export default function DashboardHeader({
-  title,
-  buttonText,
-  href,
-  Icon,
-  isEdit=false
-}) {
-  const isTablet = useMediaQuery(theme => theme.breakpoints.down(1025));
-  const HEADER_LINK = <Button href={href} color="primary" LinkComponent={Link} sx={{
-    bgcolor: "primary.light",
-    px: 4
-  }}>
-      {buttonText}
-    </Button>;
-  return (
-    <StyledBox>
-      <FlexBox mt={2} className="headerHold">
-        <FlexBox alignItems="center" gap={1.5}>
-          {Icon && <Icon sx={{ color: "white", fontSize: "30px" }} />}
 
-          <H1 color="#fff" fontSize="24px">
-            {title}
-          </H1>
-        </FlexBox>
-
-        <div className="sidenav">
-          <SideNav position="left" handler={close => <IconButton onClick={close}>
-                <Menu fontSize="small" />
-              </IconButton>}>
-            <Navigation />
-          </SideNav>
-        </div>
-
-        {!isTablet && buttonText && !isEdit ? HEADER_LINK : null}
-      </FlexBox>
-
-      {isTablet && buttonText ? <Box mt={2}>{HEADER_LINK}</Box> : null}
-    </StyledBox>
-  );
+const styles = {
+    btn : {
+      background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+      color:"#FFF",
+      px: 4,
+      border: '3px solid #FFF',
+      borderRadius: '12px',
+      '&:hover' : {
+        background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)'
+      }
+    }
 }

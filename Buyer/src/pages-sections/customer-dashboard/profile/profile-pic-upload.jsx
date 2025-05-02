@@ -1,9 +1,13 @@
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import CameraEnhance from "@mui/icons-material/CameraEnhance"; // GLOBAL CUSTOM COMPONENTS
+// ===============================================
+// Profile Pic Uploader
+// ===============================================
 
-import FlexBox from "../../../components/flex-box/flex-box";
+import { FlexBox } from "@/components/flex-box";
+import { Box, Avatar, IconButton } from "@mui/material";
+import CameraEnhance from "@mui/icons-material/CameraEnhance";
+
+// ===============================================
+
 export default function ProfilePicUpload({user}) {
   return (
     <FlexBox alignItems="flex-end" mb={3}>

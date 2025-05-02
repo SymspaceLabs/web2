@@ -1,8 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { ProductImage } from 'src/product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
-import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
@@ -64,10 +63,8 @@ export class Product {
   })
   colors: ProductColor[];
 
-  @OneToOne(() => Product3DModel, (model) => model.product, {
-    cascade: true,
-  })
-  model: Product3DModel;
+  @Column({ type: 'text', nullable: true })
+  model: string;
 
   @Column()
   composition: string;

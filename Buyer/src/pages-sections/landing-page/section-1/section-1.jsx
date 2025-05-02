@@ -68,7 +68,12 @@ export default function Section1() {
             </Grid>
 
             {/* Right content: Promotional video */}
-            <Grid item xs={12} md={6} sx={{ zIndex: 2, display: { xs: "none", md: "block" } }}>
+            <Grid item xs={12} md={6}
+              sx={{
+                justifyContent:'center',
+                zIndex: 2,
+                display: { xs: "none", sm: "none", md: "flex" }
+              }}>
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -76,16 +81,28 @@ export default function Section1() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Box sx={{ textAlign: 'center', zIndex: 2, position: 'relative' }}>
+                <Box
+                  sx={{
+                    position: 'relative',
+
+                    zIndex: 2,
+                    borderRadius: '40px',
+                    overflow: 'hidden',    // important!
+                    width: '100%',
+                    maxWidth: '250px',      // optional: controls size
+                  }}
+                >
                   <video
-                    width="50%"
-                    height="auto"
                     autoPlay
                     loop
                     muted
                     src='/assets/videos/landing-page/hero.mp4'
                     poster='/assets/videos/landing-page/hero.mp4'
-                    style={{ position: "relative", zIndex: 2 }}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      display: 'block',     // removes inline spacing issues
+                    }}
                   />
                 </Box>
               </motion.div>

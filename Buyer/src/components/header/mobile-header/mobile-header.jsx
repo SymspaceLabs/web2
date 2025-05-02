@@ -4,26 +4,24 @@
 
 import Icon from "@/icons";
 import Link from "next/link";
-import { Fragment } from "react";
-import { Box, IconButton, Card } from "@mui/material";
-import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
-import { SymDialog } from "@/components/custom-dialog";
-
 import useHeader from "../hooks/use-header"; // GLOBAL CUSTOM HOOK
-import { H1 } from "@/components/Typography";
-import { SymDrawer } from "@/components/custom-drawer";
-import { HeaderLogin } from "@/components/header";
-
-import { SearchInput } from "@/components/search-box";
-import { MobileMenu } from "@/components/navbar/mobile-menu";
+import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
+import { Fragment } from "react";
+import { H1 } from "@/components/Typography";
+import { HeaderLogin } from "@/components/header";
+import { Box, IconButton, Card } from "@mui/material";
+import { SearchInput } from "@/components/search-box";
+import { SymDrawer } from "@/components/custom-drawer";
+import { SymDialog } from "@/components/custom-components";
+import { MobileMenu } from "@/components/navbar/mobile-menu";
 
 // LOCAL CUSTOM COMPONENTS
 import { FlexBetween, FlexBox } from "@/components/flex-box"; 
 import { SymImage } from "@/components/custom-components";
 
 import { LogoWithTitle } from "@/components";
-// import { SocialButtons } from "../header/components/SocialButtons";
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 import { styled } from '@mui/material/styles';
@@ -44,67 +42,69 @@ export default function MobileHeader() {
   };
   return (
     <Fragment>
-      <FlexBetween width="100%">
-        {/* LEFT CONTENT - NAVIGATION ICON BUTTON */}
-        <Box flex={1}>
-          <MobileMenu />
-        </Box>
+       <FlexBetween width="100%">
+         {/* LEFT CONTENT - NAVIGATION ICON BUTTON */}
+         <Box flex={1}>
+           <MobileMenu />
+         </Box>
 
-        {/* MIDDLE CONTENT - LOGO */}
-        <Link href="/">
-          <SymImage height={35} src="/assets/images/logo_without_text.svg" alt="logo" />
-        </Link>
+         {/* MIDDLE CONTENT - LOGO */}
+         <Link href="/">
+           <SymImage height={35} src="/assets/images/logo_without_text.svg" alt="logo" />
+         </Link>
 
-        {/* RIGHT CONTENT - LOGIN, CART, SEARCH BUTTON */}
-        <FlexBox justifyContent="end" flex={1}>
+         {/* RIGHT CONTENT - LOGIN, CART, SEARCH BUTTON */}
+         <FlexBox justifyContent="end" flex={1}>
 
-          {/* SEARCH ICON */}
-          <IconButton onClick={toggleSearchBar}>
-            <Icon.Search sx={ICON_STYLE} />
-          </IconButton>
+           {/* SEARCH ICON */}
+           <IconButton onClick={toggleSearchBar}>
+             <Icon.Search sx={ICON_STYLE} />
+           </IconButton>
 
-          {/* FAVOURITE ICON */}
-          <IconButton onClick={toggleDialog}>
-            <FavoriteBorderIcon sx={{ color: "grey.600" }} />
-          </IconButton>
+           {/* FAVOURITE ICON */}
+           <IconButton onClick={toggleDialog}>
+             <FavoriteBorderIcon sx={{ color: "grey.600" }} />
+           </IconButton>
 
-          {/* AVATAR ICON */}
-          <HeaderLogin />
+           {/* AVATAR ICON */}
+           <HeaderLogin />
 
-        </FlexBox>
-      </FlexBetween>
+         </FlexBox>
+       </FlexBetween>
 
-      {/* SEARCH DRAWER */}
-      <SymDrawer open={searchBarOpen} toggleOpen={toggleSearchBar} anchor="top">
-        <Box width="auto" padding={2} height="100vh">
-          <FlexBetween mb={1}>
-            <H1 color="#FFF" fontSize={15}>
-              Search Symspace
-            </H1>
-            <IconButton onClick={toggleSearchBar}>
-              <Clear />
-            </IconButton>
-          </FlexBetween>
-          <SearchInput />
-        </Box>
-      </SymDrawer>
+       {/* SEARCH DRAWER */}
+       <SymDrawer open={searchBarOpen} toggleOpen={toggleSearchBar} anchor="top">
+         <Box width="auto" padding={2} height="100vh">
+           <FlexBetween mb={1}>
+             <H1 color="#FFF" fontSize={15}>
+               Search Symspace
+             </H1>
+             <IconButton onClick={toggleSearchBar}>
+               <Clear />
+             </IconButton>
+           </FlexBetween>
+           <SearchInput />
+         </Box>
+       </SymDrawer>
 
 
-      {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-      <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
-        <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
-          <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
-            <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
-              <Wrapper>
-                <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
-                <LoginPageView closeDialog={toggleDialog} />
-                <SocialButtons />
-                <LoginBottom />
-              </Wrapper>
-            </Box>
-          </Box>
-        </Box>
-      </SymDialog>
+       {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
+       <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
+        {/*  
+          <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+           <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
+             <Box style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
+               <Wrapper>
+                 <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
+                 <LoginPageView closeDialog={toggleDialog} />
+                 <SocialButtons />
+                 <LoginBottom />
+               </Wrapper>
+             </Box>
+           </Box>
+         </Box>
+        */}
+       </SymDialog> 
 
     </Fragment>
   );

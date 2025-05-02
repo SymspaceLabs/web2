@@ -5,6 +5,13 @@ const button = {
 }
 
 export const styles = {
+  statusPill: {
+    py: '5px',
+    px: '10px',
+    background: 'linear-gradient(94.91deg, #858585 0%, #FFFFFF 100%)',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+    borderRadius: '100px'
+  },
   productCard : {
     p:5,
     borderRadius: "30px",

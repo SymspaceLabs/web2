@@ -9,18 +9,20 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { styled } from '@mui/material/styles';
 import { FlexBox } from "@/components/flex-box";
+import { useAuth } from "@/contexts/AuthContext";
 import { MiniCart } from "@/components/mini-cart";
 import { SearchInput } from "@/components/search-box";
 import { MiniFavorite } from "@/components/favourites";
 import { SymDrawer } from "@/components/custom-drawer";
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useState, useEffect } from "react";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
+import OnboardingDialog from "@/components/dialog/OnboardingDialog";
 
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
 import LogoWithTitle from "@/components/LogoWithTitle";
 import useHeader from "@/components/header/hooks/use-header";
-import SymDialog from "@/components/custom-dialog/SymDialog";
+import SymDialog from "@/components/custom-components/SymDialog";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
@@ -31,6 +33,11 @@ import { LoginBottom } from "@/pages-sections/sessions/components";
 
 export default function ShopLayout1({children, noFooter=false}) {
   const [isFixed, setIsFixed] = useState(false);
+  const { isAuthenticated, user } = useAuth();
+
+  const [showPopup, setShowPopup] = useState(false);
+  
+ 
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   const {
     dialogOpen,
@@ -55,6 +62,23 @@ export default function ShopLayout1({children, noFooter=false}) {
     </FlexBox>
   );
 
+    useEffect(() => {
+      const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
+  
+      if (
+        isAuthenticated &&
+        !user?.isOnboardingFormFilled &&
+        isDialogClosed !== "true"
+      ) {
+        setShowPopup(true);
+      }
+    }, [user?.isOnboardingFormFilled]);
+
+    const handleClose = () => {
+      setShowPopup(false);
+      localStorage.setItem("onboardingDialogClosed", "true");
+    };
+
   return (
     <Fragment>
 
@@ -76,11 +100,6 @@ export default function ShopLayout1({children, noFooter=false}) {
       <MobileNavigationBar />
 
       {/* LOGIN DIALOG */}
-      {/* <SymDialog
-        dialogOpen={dialogOpen} 
-        toggleDialog={toggleDialog}
-      /> */}
-
       <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
         <Box style={{ width: '100%', maxWidth: 580, height: 885, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
           <Box style={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
@@ -95,6 +114,15 @@ export default function ShopLayout1({children, noFooter=false}) {
           </Box>
         </Box>
       </SymDialog>
+
+      {/* BUYER ONBOARDING DIALOG */}
+      {showPopup && (
+        <OnboardingDialog
+          open={showPopup}
+          onClose={handleClose}
+          user={user}
+        />
+      )}
 
       {/* SHOPPING CART SIDE DRAWER */}
       <SymDrawer open={cartOpen} toggleOpen={toggleCartOpen}>

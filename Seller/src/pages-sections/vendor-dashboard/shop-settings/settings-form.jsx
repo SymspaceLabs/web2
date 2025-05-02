@@ -44,7 +44,21 @@ const SettingsForm = () => {
               <MenuItem value="fashion">Fashion</MenuItem>
             </TextField>
 
-            <TextField rows={6} multiline fullWidth color="info" size="medium" name="description" onBlur={handleBlur} onChange={handleChange} value={values.description} label="Description (optional)" error={Boolean(errors.description && touched.description)} helperText={touched.description && errors.description} />
+            {/* Description */}
+            <TextField
+              rows={6}
+              multiline
+              fullWidth
+              color="info"
+              size="medium"
+              name="description"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              value={values.description}
+              label="Description (optional)"
+              error={Boolean(errors.description && touched.description)}
+              helperText={touched.description && errors.description}
+            />
 
             <TextField color="info" size="medium" name="shopAddress" label="Shop Address" onBlur={handleBlur} onChange={handleChange} value={values.shopAddress} error={Boolean(errors.shopAddress && touched.shopAddress)} helperText={touched.shopAddress && errors.shopAddress} />
 

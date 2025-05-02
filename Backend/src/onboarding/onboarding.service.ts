@@ -24,7 +24,7 @@ export class OnboardingService {
   
     if (!user) return { message: 'User not found' };
   
-    const { measurement, preference, dob } = createOnboardingDto;
+    const { measurement, preference, user: userData   } = createOnboardingDto;
   
     // Step 1: Handle Measurement Data
     let existingMeasurement = await this.measurementRepository.findOne({ where: { user: { id: userId } } });
@@ -33,6 +33,9 @@ export class OnboardingService {
       // Update existing measurement
       existingMeasurement.height = measurement?.height ?? existingMeasurement.height;
       existingMeasurement.weight = measurement?.weight ?? existingMeasurement.weight;
+      existingMeasurement.chest = measurement?.chest ?? existingMeasurement.chest;
+      existingMeasurement.waist = measurement?.waist ?? existingMeasurement.waist;
+      
       
       // Explicitly handle the boolean case for isMetric
       if (measurement?.isMetric !== undefined) {
@@ -46,6 +49,8 @@ export class OnboardingService {
       const newMeasurement = this.measurementRepository.create({
         height: measurement?.height || 0,
         weight: measurement?.weight || 0,
+        chest: measurement?.chest || 0,
+        waist: measurement?.waist || 0,
         isMetric: measurement?.isMetric !== undefined ? measurement.isMetric : true,
         user,
       });
@@ -87,7 +92,9 @@ export class OnboardingService {
     }
   
     // Step 3: Update User Data
-    user.dob = dob ? new Date(dob) : user.dob;
+    user.dob = userData?.dob ? new Date(userData.dob) : user.dob;
+    user.firstName = userData?.firstName ?? user.firstName;
+    user.lastName = userData?.lastName ?? user.lastName;
     user.isOnboardingFormFilled = true;
   
     await this.usersRepository.save(user);

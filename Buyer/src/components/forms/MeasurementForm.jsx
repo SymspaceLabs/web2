@@ -1,9 +1,13 @@
-import React from 'react'
+// =============================================
+// Measurement Form
+// =============================================
+
 import { FlexBox } from '../flex-box';
-import { TitleCard } from '../dialog/components';
 import { Small } from '../Typography';
+import { TitleCard } from '../dialog/components';
 import { Box, TextField, InputAdornment } from "@mui/material";
 
+// =============================================
 
 function MeasurementForm ({
     setIsMetric, 
@@ -62,7 +66,7 @@ function MeasurementForm ({
                 isMobile={isMobile}
             />
 
-            {/** TOGGLE **/}
+            {/* TOGGLE */}
             <FlexBox justifyContent={isMobile || sidebar ? 'flex-start' : 'flex-end'} alignItems="center" mt={2}>
                 <Box sx={{
                     display: "flex",
@@ -122,7 +126,8 @@ function MeasurementForm ({
         </FlexBox>
 
         {/* FORM */}
-        <FlexBox justifyContent={isMobile ? 'center' : 'space-between'}
+        <FlexBox
+            justifyContent={isMobile ? 'center' : 'space-between'}
             flexDirection={isMobile ? 'column' : 'row'}
             gap={isMobile ? 2 : 3}
             mt={3}

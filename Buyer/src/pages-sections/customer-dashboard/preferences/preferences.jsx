@@ -44,32 +44,6 @@ export default function Preferences({ isEdit = true }) {
     })
   }
 
-  const handleSaveChanges = async () => {
-    const requestBody =  {
-      "tops":tops,
-      "bottoms":bottoms,
-      "outerwears":outerwears,
-      "accessories":accessories,
-      "styles":styles,
-      "fits":fits,
-      "brands":brands,
-      "colors":colors,
-      "gender":gender
-    };
-    console.log(requestBody);
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/preferences/user/${user.id}`,
-        requestBody);
-  
-        showSnackbar(response.data.message, "success");
-    } catch (error) {
-      console.error("Error saving changes:", error.response?.data || error.message);
-    }
-  };
-
-
   useEffect(() => {
     // Fetch height and weight data
     const fetchData = async () => {
@@ -89,7 +63,6 @@ export default function Preferences({ isEdit = true }) {
         console.error("Error fetching measurements:", error);
       }
     };
-
     if (isAuthenticated) fetchData();
   }, [isAuthenticated]);
 
@@ -118,7 +91,7 @@ export default function Preferences({ isEdit = true }) {
         isEdit={isEdit}
       />
 
-      {isEdit && (
+      {/* {isEdit && (
         <FlexBox justifyContent="flex-end" gap={3} sx={{width:'100%'}}>
           <Button
               onClick={() => router.push("/measurements")}
@@ -137,7 +110,7 @@ export default function Preferences({ isEdit = true }) {
             Save changes
           </Button>
         </FlexBox>
-      )}
+      )} */}
     </Card>
   );
 }

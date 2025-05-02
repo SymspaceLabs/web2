@@ -73,42 +73,39 @@ export default function Section1({ company }) {
           <FlexCol alignItems={{xs:"flex-start", sm:"flex-start", md:"flex-end"}} gap={5}>
             <FlexBox sx={styles.glassCard} justifyContent="space-between" spacing={2}>
               {company.website &&
-                <Link href={getWebsiteUrl(company.website)} rel="noopener noreferrer">
+                <Link href={getWebsiteUrl(company.website)} rel="noopener noreferrer" target="blank">
                     <IconButton color="inherit">
                       <PublicIcon />
                     </IconButton>
                 </Link>
               }
               {company.instagram && 
-                <Link href={getWebsiteUrl(company.instagram)} rel="noopener noreferrer">
+                <Link href={getWebsiteUrl(company.instagram)} rel="noopener noreferrer" target="blank">
                   <IconButton color="inherit" onClick={() => window.location.href = company.instagram}>
                     <InstagramIcon />
                   </IconButton>
                 </Link>
               }
               {company.twitter &&
-              <Link href={getWebsiteUrl(company.twitter)} rel="noopener noreferrer">
-                  <IconButton color="inherit" onClick={() => window.location.href = company.twitter}>
-                    <TwitterIcon />
-                  </IconButton>
-              </Link>
-
+                <Link href={getWebsiteUrl(company.twitter)} rel="noopener noreferrer" target="blank">
+                    <IconButton color="inherit" onClick={() => window.location.href = company.twitter}>
+                      <TwitterIcon />
+                    </IconButton>
+                </Link>
               }
               {company.youtube &&
-                <Link href={getWebsiteUrl(company.youtube)} rel="noopener noreferrer">
+                <Link href={getWebsiteUrl(company.youtube)} rel="noopener noreferrer" target="blank">
                   <IconButton color="inherit" onClick={() => window.location.href = company.youtube}>
                     <YouTubeIcon />
                   </IconButton>
                 </Link>
-
               }
               {company.facebook && 
-              <Link href={getWebsiteUrl(company.facebook)} rel="noopener noreferrer">
-                <IconButton color="inherit" onClick={() => window.location.href = company.facebook}>
-                  <FacebookIcon />
-                </IconButton>
-              </Link>
-
+                <Link href={getWebsiteUrl(company.facebook)} rel="noopener noreferrer" target="blank">
+                  <IconButton color="inherit" onClick={() => window.location.href = company.facebook}>
+                    <FacebookIcon />
+                  </IconButton>
+                </Link>
               }
             </FlexBox>
 

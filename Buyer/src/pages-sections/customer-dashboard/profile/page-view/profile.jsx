@@ -1,15 +1,16 @@
 "use client";
 
-import PersonOutlined from "@mui/icons-material/PersonOutlined"; // Local CUSTOM COMPONENT
+import { Box, CircularProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+
 import UserInfo from "../user-info";
 import UserAnalytics from "../user-analytics";
 import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
-import { Box } from "@mui/material";
 import Preferences from "../../preferences/preferences";
-import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
 import Measurements from "../../measurements/measurements";
+import PersonOutlined from "@mui/icons-material/PersonOutlined"; // Local CUSTOM COMPONENT
 
 // ============================================================
 export default function ProfilePageView() {
@@ -55,14 +56,19 @@ export default function ProfilePageView() {
   }, [isAuthenticated, router]);
 
   if (isAuthenticated === undefined || user === undefined) {
-    return <div>Loading...</div>;
+    return (
+      <CircularProgress />
+    );
   }
 
   if (!userData) {
-    return <div>Loading...</div>;
+    return (
+      <CircularProgress />
+    );
   }
+  
   return (
-    <Box sx={boxStyle}>
+    <Box sx={styles.boxStyle}>
       <DashboardHeader 
         Icon={PersonOutlined} 
         title="My Profile" 
@@ -78,10 +84,12 @@ export default function ProfilePageView() {
   )
 }
 
-const boxStyle = { 
-  padding:'15px',
-  borderRadius:'15px',
-  background: 'linear-gradient(176.84deg, #B7B7B9 -3.62%, #777777 109.48%)',
-  boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
-  backdropFilter: 'blur(12px)',
+const styles = {
+  boxStyle : { 
+    padding:'15px',
+    borderRadius:'15px',
+    background: 'linear-gradient(176.84deg, #B7B7B9 -3.62%, #777777 109.48%)',
+    boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
+    backdropFilter: 'blur(12px)',
+  }
 }

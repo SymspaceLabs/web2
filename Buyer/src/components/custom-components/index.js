@@ -3,3 +3,4 @@ export {default as SymImage} from './SymImage';
 export {default as SymSection} from './SymSection';
 export {default as SymAccordion} from './SymAccordion';
 export {default as SymGLTFViewer } from './SymGLTFViewer';
+export {default as SymDialog} from './SymDialog';

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Card, Button, useMediaQuery } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Card, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 
-import FlexBox from "../../../components/flex-box/flex-box";
 import { MeasurementForm } from "@/components/forms";
 import { useAuth } from "@/contexts/AuthContext";
 import axios from "axios";
@@ -128,7 +127,7 @@ export default function Measurements({ isEdit = true }) {
         isMobile={isMobile}
         isEdit={isEdit}
       />
-      {isEdit && (
+      {/* {isEdit && (
         <FlexBox justifyContent="flex-end" gap={3} sx={{width:'100%'}}>
           <Button
               onClick={() => router.push("/measurements")}
@@ -147,7 +146,7 @@ export default function Measurements({ isEdit = true }) {
               Save changes
           </Button>
         </FlexBox>
-      )}
+      )} */}
     </Card>
   );
 }

@@ -4,6 +4,7 @@ import { Span } from '../Typography';
 import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { FormControlLabel, Checkbox } from "@mui/material";
 import Link from 'next/link';
+import { fontSize } from '@/theme/typography';
 
 function LoginForm ({
     email,
@@ -46,12 +47,11 @@ function LoginForm ({
                     name="agreement"
                     sx={{ margin: 0 }}
                     onChange={handleAgreementChange}
-                    control={<Checkbox size="small" color="secondary" sx={{ color:'#fff' }} />}
-                    label={<Span sx={{ color:'#fff' }}>Remember me</Span>}
-                />
-                                
+                    control={<Checkbox size="small" color="secondary" sx={{ color:'#fff', p:{ xs:0 }, pr:{ xs:0.5 } }} />}
+                    label={<Span sx={{ color:'#fff', fontSize: { xs:12 }}}>Remember me</Span>}
+                />  
                 <Link href="/forgot-password" passHref>
-                    <Span sx={{ textDecoration: 'underline', cursor: 'pointer', color:'#fff' }}>
+                    <Span sx={{ textDecoration: 'underline', cursor: 'pointer', color:'#fff', fontSize: { xs:12 } }}>
                         Forgot your password?
                     </Span>
                 </Link>

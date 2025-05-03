@@ -18,7 +18,7 @@ export default function TopHeader({ toggle, total }) {
 
         {/* Shopping Cart Item Count */}
         <H1 lineHeight={0} color="#FFF">
-          {total}<span style={{fontSize:'10px'}}>items</span>
+          {total} <span style={{fontSize:'10px'}}>items</span>
         </H1>
       </FlexBox>
 

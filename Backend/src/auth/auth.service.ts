@@ -64,6 +64,26 @@ export class AuthService {
     return missingFields;
   }
 
+  async generateUniqueSlug(
+    entityName: string,
+    companiesRepository: any,
+  ): Promise<string> {
+    const baseSlug = entityName
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-') // replace non-alphanumeric with dash
+      .replace(/^-+|-+$/g, '');    // remove leading/trailing dashes
+  
+    let slug = baseSlug;
+    let counter = 1;
+  
+    while (await companiesRepository.findOne({ where: { slug } })) {
+      slug = `${baseSlug}-${counter++}`;
+    }
+  
+    return slug;
+  }
+  
   private validatePasswordFormat(password: string): void {
     const passwordRegex =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#+])[A-Za-z\d@$!%*?&#+]{8,}$/;
@@ -175,12 +195,15 @@ export class AuthService {
   
     // ✅ Then create the company
     if (role === 'seller') {
+      const slug = await this.generateUniqueSlug(businessName, this.companiesRepository);
+
       const company = this.companiesRepository.create({
         userId: user.id,
         entityName: businessName,
         website,
         location,
-        ein
+        ein,
+        slug,
       });
       await this.companiesRepository.save(company);
     }

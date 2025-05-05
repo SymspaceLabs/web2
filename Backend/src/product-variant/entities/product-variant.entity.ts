@@ -23,8 +23,8 @@ export class ProductVariant {
   color?: ProductColor;
 
   // Optional size
-  @ManyToOne(() => ProductSize, { eager: true, nullable: true })
-  size?: ProductSize;
+  @ManyToOne(() => ProductSize, { eager: true, nullable: true, onDelete: 'CASCADE' })
+  size?: ProductSize;  
 
   @Column({ type: 'float' })
   price: number;

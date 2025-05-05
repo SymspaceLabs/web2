@@ -84,14 +84,15 @@ export class ProductVariantsService {
   
     // Determine status and color
     let status = 'Out of stock';
-    let statusColor = 'red';
+    let statusColor = '#000';
   
     if (variant.stock >= 10) {
-      status = 'In stock';
-      statusColor = 'green';
-    } else if (variant.stock > 0) {
+      // When stock >=10, do not need show any message
+      status = '';
+      statusColor = '';
+    } else if (variant.stock > 0 && variant.stock < 10) {
       status = 'Low stock';
-      statusColor = 'gray';
+      statusColor = '#00B934';
     }
   
     return {

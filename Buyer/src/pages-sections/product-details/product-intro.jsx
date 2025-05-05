@@ -165,14 +165,13 @@ export default function ProductIntro({ product }) {
               </Paragraph>
 
               {/* Availabilty Status */}
-              {selectedColor && selectedSize && (
+              {selectedColor && selectedSize && availability?.stock < 10 && (
                 <Box sx={styles.statusPill}>
                   <H1 fontSize="14px" color={availability?.statusColor}>
                     {loadingAvailability ? <CircularProgress size={16} /> : availability?.status}
                   </H1>
                 </Box>
               )}
-
 
             </FlexBox>
 

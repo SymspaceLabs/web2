@@ -24,6 +24,17 @@ export class ProductsService {
 
   ) {}
 
+  slugify(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/'/g, '')               // remove apostrophes
+      .replace(/\s+/g, '-')            // replace spaces with -
+      .replace(/[^a-z0-9-]/g, '')      // remove anything not alphanumeric or dash
+      .replace(/--+/g, '-')            // collapse multiple dashes
+      .replace(/^-+|-+$/g, '');        // trim leading/trailing dashes
+  }
+  
+
     async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
       const {
         images,
@@ -76,7 +87,7 @@ export class ProductsService {
       
           if (name || company) {
             const updatedCompany = product.company || (await this.companiesRepository.findOne({ where: { id: company } }));
-            product.slug = `${updatedCompany.entityName.toLowerCase().replace(/\s+/g, '-')}-${(name || product.name).toLowerCase().replace(/\s+/g, '-')}`;
+            product.slug = `${this.slugify(updatedCompany.entityName)}-${this.slugify(name || product.name)}`;
           }
       
           if (name) product.name = name;
@@ -103,7 +114,8 @@ export class ProductsService {
             throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
           }
       
-          const slug = `${companyEntity.entityName.toLowerCase().replace(/\s+/g, '-')}-${name.toLowerCase().replace(/\s+/g, '-')}`;
+          const slug = `${this.slugify(companyEntity.entityName)}-${this.slugify(name)}`;
+
                 
           product = this.productRepository.create({
             ...productData,

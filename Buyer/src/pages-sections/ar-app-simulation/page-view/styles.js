@@ -84,5 +84,4 @@ export const styles = {
             background: "linear-gradient(180deg, #1D4F99 0%, #3084FF 100%)",
           },
       }
-    
 };

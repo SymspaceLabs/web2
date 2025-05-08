@@ -1,21 +1,23 @@
 "use client";
 
 // ===========================================================
-// Section 2
+// Section 2 | AR App Simulation
 // ===========================================================
 
 import Image from "next/image";
-import { Box, Container, Typography, useMediaQuery } from "@mui/material";
-import { ParallaxProvider, Parallax } from "react-scroll-parallax";
-import { styles } from "../page-view/styles";
 import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, useMediaQuery } from "@mui/material";
+import { ParallaxProvider, Parallax } from "react-scroll-parallax";
+
+// ===========================================================
 
 export default function Section2() {
-  const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile screens
+  
+  const isMobile = useMediaQuery("(max-width:750px)"); // Detect mobile screens
 
   return (
     <ParallaxProvider>
-      <Box >
+      <Box>
         <Container
           sx={{
             display: "flex",
@@ -45,10 +47,13 @@ export default function Section2() {
             sx={{
               display: "flex",
               flexDirection: { xs: "column", sm: "row" },
-              justifyContent: "center",
+              justifyContent: "space-between",
               alignItems: "center",
-              mt: "150px",
-              gap: 2,
+              mt: { sm:"150px" },
+              gap: 1,
+              maxWidth: {xs:300, sm:900},
+              minWidth: {xs:300, sm:700}
+
             }}
           >
             {isMobile ? (
@@ -60,7 +65,7 @@ export default function Section2() {
                   height={162.5}
                   src="/assets/images/mobile-screens/mobile-screen-1.png"
                   style={{
-                    width: "100%",
+                    width: "75%",
                     height: "auto",
                   }}
                 />
@@ -70,7 +75,7 @@ export default function Section2() {
                   height={162.5}
                   src="/assets/images/mobile-screens/mobile-screen-2.png"
                   style={{
-                    width: "100%",
+                    width: "75%",
                     height: "auto",
                   }}
                 />
@@ -80,7 +85,7 @@ export default function Section2() {
                   height={162.5}
                   src="/assets/images/mobile-screens/mobile-screen-3.png"
                   style={{
-                    width: "100%",
+                    width: "75%",
                     height: "auto",
                   }}
                 />
@@ -88,42 +93,48 @@ export default function Section2() {
             ) : (
               <>
                 {/* Render images with parallax on larger screens */}
-                <Parallax translateY={[-10, 10]}>
-                  <Image
-                    alt="model"
-                    width={250}
-                    height={162.5}
-                    src="/assets/images/mobile-screens/mobile-screen-1.png"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </Parallax>
-                <Parallax translateY={[-15, 30]}>
-                  <Image
-                    alt="model"
-                    width={250}
-                    height={162.5}
-                    src="/assets/images/mobile-screens/mobile-screen-2.png"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </Parallax>
-                <Parallax translateY={[-10, 10]}>
-                  <Image
-                    alt="model"
-                    width={250}
-                    height={162.5}
-                    src="/assets/images/mobile-screens/mobile-screen-3.png"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </Parallax>
+                <Box sx={{ width: { xs:100, sm:225 }, overflow: "visible" }}>
+                  <Parallax translateY={[-10, 10]}>
+                    <Image
+                      alt="model"
+                      width={250}
+                      height={162.5}
+                      src="/assets/images/mobile-screens/mobile-screen-1.png"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </Parallax>
+                </Box>
+                <Box sx={{ width: { xs:100, sm:225 }, overflow: "visible" }}>
+                  <Parallax translateY={[-15, 30]}>
+                    <Image
+                      alt="model"
+                      width={250}
+                      height={162.5}
+                      src="/assets/images/mobile-screens/mobile-screen-2.png"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </Parallax>
+                </Box>
+                <Box sx={{ width: { xs:100, sm:225 }, overflow: "visible" }}>
+                  <Parallax translateY={[-10, 10]}>
+                    <Image
+                      alt="model"
+                      width={250}
+                      height={162.5}
+                      src="/assets/images/mobile-screens/mobile-screen-3.png"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </Parallax>
+                </Box>
               </>
             )}
           </Box>

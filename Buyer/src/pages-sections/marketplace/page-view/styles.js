@@ -1,17 +1,9 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 const buttonDark = {
     borderRadius: 32,
     padding: ".5rem 1.5rem",
     background: 'rgba(255,255,255,0.1)',
     color: '#FFF',
-    fontSize: 16,
+    fontSize: { xs:12, sm:12 },
     ':hover': {
         background: '#373F50',
         color: '#000',
@@ -21,10 +13,22 @@ const buttonDark = {
 };
 
 export const styles = {
-    elementalEndFont : {
-        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-        textTransform:'lowercase',
-        fontWeight: 500
+    sectionHeader: {
+        fontSize: { xs: 20, sm: 34 }
+    },
+    sectionSubHeader: {
+        textAlign: {xs:"left", sm:"center"},
+        color: "grey.600",
+        fontSize: { xs: 14, sm: 16 }
+    },
+    cardTitle: {
+        fontSize: { xs: 26, md: 26 },
+        lineHeight: 1.2,
+        mb: 2
+    },
+    cardSubtitle: {
+        fontSize: { xs: 16, md: 16 },
+        mb: 1
     },
     buttonDark,
     buttonLight: {

@@ -1,12 +1,14 @@
 // ======================================================================
-// Section1 Component
+// Section 1 | Marketplace
 // ======================================================================
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Box, Grid, Container, Button } from "@mui/material";
-import { H2, Paragraph } from "@/components/Typography";
 import { styles } from "../page-view/styles";
+import { H2, Paragraph } from "@/components/Typography";
+import { Box, Grid, Container, Button } from "@mui/material";
+
+// ======================================================================
 
 export default function Section1() {
   return (
@@ -24,10 +26,10 @@ export default function Section1() {
           >
             <Box sx={{ ...contentWrapper, background: "#353535", height: "100%" }}>
               <Box padding={4} pb={0}>
-                <Paragraph mb={1} fontSize={{ xl: 20, md: 18, xs: 16 }}>
+                <Paragraph sx={styles.cardSubtitle}>
                   Enhance your everyday life
                 </Paragraph>
-                <H2 lineHeight={1.2} mb={2} fontSize={{ xl: 30, md: 30, xs: 28 }}>
+                <H2 sx={styles.cardTitle}>
                   AR Shopping for
                   <br />
                   Homebound Convenience
@@ -50,7 +52,6 @@ export default function Section1() {
             </Box>
           </motion.div>
         </Grid>
-
 
         {/* Card 2 */}
         <Grid item lg={4} sm={6} xs={12}>
@@ -76,15 +77,10 @@ export default function Section1() {
               />
               <Box px={4} py={2}>
                 {/* Card Content */}
-                <Paragraph sx={{ color: "#353535" }} mb={1} fontSize={{ md: 20, xs: 18 }}>
+                <Paragraph sx={{...styles.cardSubtitle, color: "#353535" }}>
                   Shop like never before
                 </Paragraph>
-                <H2
-                  sx={{ color: "#353535" }}
-                  lineHeight={1.2}
-                  mb={2}
-                  fontSize={{ xl: 30, md: 30, sm: 30, xs: 28 }}
-                >
+                <H2 sx={{...styles.cardTitle, color: "#353535" }}>
                   Augment Realistic 3D
                   <br />
                   Products
@@ -109,10 +105,10 @@ export default function Section1() {
             <Box  sx={{...contentWrapper, background: "#353535"}}>
               <Box padding={4} pb={{ xl: 6, lg: 5, md: 3, xs: 0 }}>
                 {/* Card Content */}
-                <Paragraph mb={1} fontSize={{ xl: 20, md: 18, xs: 16 }}>
+                <Paragraph sx={styles.cardSubtitle}>
                   Pioneering AR Commerce
                 </Paragraph>
-                <H2 lineHeight={1.2} mb={2} fontSize={{ xl: 30, md: 30, xs: 28 }}>
+                <H2 sx={styles.cardTitle}>
                   Positive Impacts of Mixed
                   <br /> Reality Commerce
                 </H2>

@@ -5,13 +5,13 @@
 // =========================================================
 
 import { useState, useEffect, useMemo } from "react";
-import { IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { LogoWithTitle } from './components';
-import { useSnackbar } from "@/contexts/SnackbarContext";
-import JobForm from '../forms/JobForm';
 import { useAuth } from "@/contexts/AuthContext";
-import { styles } from "./styles";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+
+import JobForm from '../forms/JobForm';
+import CloseIcon from '@mui/icons-material/Close';
 
 // =========================================================
 

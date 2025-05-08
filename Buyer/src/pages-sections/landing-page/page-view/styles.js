@@ -1,6 +1,6 @@
 export const styles = {
   sectionHeader: {
-      fontSize: { xs: 20, sm: 64 },
+      fontSize: { xs: 18, sm: 55 },
       color:'#FFF'
   },
   sectionParagraph : {

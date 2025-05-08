@@ -70,7 +70,6 @@ export default function NavigationList() {
                   selected={nav.url === pathname} // Ensures that the item is selected
                   sx={{
                     color: "#fff",
-                    ...elementalEndFont,
                     "&.Mui-selected": {
                       background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
                       color: "#fff",

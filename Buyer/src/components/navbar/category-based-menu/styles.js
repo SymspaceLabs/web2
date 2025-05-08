@@ -1,11 +1,3 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 import { List, ListItem } from "@mui/material";
 import styled from "@mui/material/styles/styled"; // LOCAL CUSTOM COMPONENT
 import SymCard from "@/components/custom-components/SymCard";

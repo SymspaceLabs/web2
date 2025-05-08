@@ -1,14 +1,18 @@
 "use client";
 
 // =======================================================
-// Section 1 Component
+// Section 1 | AR For Business
 // ======================================================
 
 import { motion } from "framer-motion";
 import { styles } from '../page-view/styles';
 import { FlexBox } from '@/components/flex-box';
-import { Box, Container, Button, Grid } from '@mui/material';
 import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, Grid } from '@mui/material';
+
+import Link from "next/link";
+
+// ======================================================
 
 export default function Section1() {
   return (
@@ -37,9 +41,11 @@ export default function Section1() {
 
                 {/* Button group */}
                 <FlexBox sx={{ pt: 2.5 }}>
-                  <Button sx={styles.gradientBtn}>
-                    sign up
-                  </Button>
+                  <Link href="/register">
+                    <Button sx={styles.gradientBtn}>
+                      sign up
+                    </Button>
+                  </Link>
                 </FlexBox>
               </Grid>
 

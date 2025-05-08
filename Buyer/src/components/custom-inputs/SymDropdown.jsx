@@ -1,62 +1,102 @@
-import React from 'react';
+// =================================================================
+// Custom Dropdown
+// =================================================================
+
+import { H1 } from '../Typography';
 import { FlexBox } from '../flex-box';
-import { Small, H2 } from '../Typography';
-import { Select, MenuItem, ListItemText } from '@mui/material';
+import { Select, MenuItem, ListItemText, TextField } from '@mui/material';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-const SymDropdown = ({
-    title,
-    value,
-    onChange,
-    options,
-    isEdit = true,
-    light = false,
-    placeholder = "",
-}) => {
-    return (
-        <FlexBox flexDirection="column" sx={{ flex: 1, minWidth: "100px" }}>
-            <H2 color="white" mb={0.5}>
-                {title}
-            </H2>
-            <Select
-                value={value}
-                onChange={onChange}
-                displayEmpty
-                renderValue={
-                    value !== "" ? undefined : () => <em style={{ color: 'rgba(255,255,255,0.4)' }}>{placeholder}</em>
-                }
-                sx={{
-                    background: light ? 'transparent' : '#000',
-                    borderRadius: '5px',
-                    color: value === "" ? 'rgba(255,255,255,0.4)' : '#fff',
-                    width: '100%',
-                    height: '37px',
-                    paddingTop: '0px',
-                    "& .MuiPopover-root": {
-                        zIndex: 1400,
-                    },
-                    "& .MuiPaper-root": {
-                        zIndex: 1400,
-                    },
-                    "& .MuiSvgIcon-root": {
-                        color: "#fff",
-                    }
-                }}
-                IconComponent={ArrowDropDownIcon}
-                disabled={!isEdit}
-            >
-                <MenuItem value="" disabled>
-                    <em>{placeholder}</em>
-                </MenuItem>
+// =================================================================
 
-                {options.map((item) => (
-                    <MenuItem key={item} value={item}>
-                        <ListItemText primary={item} />
-                    </MenuItem>
-                ))}
-            </Select>
-        </FlexBox>
-    );
+const SymDropdown = ({
+  title,
+  value,
+  onChange,
+  options,
+  isEdit = true,
+  hasOthersOption = false, // default to false
+}) => {
+  const isOtherSelected = value?.startsWith('Other:');
+
+  return (
+    <FlexBox flexDirection="column" sx={{ flex: 1, minWidth: '100px' }}>
+      <H1 color="white" mb={0.5}>
+        {title}
+      </H1>
+
+      <Select
+        value={isOtherSelected ? 'Other (please specify)' : value}
+        onChange={(e) => {
+          const selected = e.target.value;
+          if (selected === 'Other (please specify)') {
+            onChange({ target: { value: 'Other:' } });
+          } else {
+            onChange({ target: { value: selected } });
+          }
+        }}
+        displayEmpty
+        renderValue={(selected) => {
+          if (selected === '') {
+            return <em style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Select an option</em>;
+          }
+          if (isOtherSelected) {
+            return value.replace('Other:', '') || 'Other (please specify)';
+          }
+          return selected;
+        }}
+        sx={{
+          background: '#000',
+          borderRadius: '5px',
+          color: value === '' ? 'rgba(255, 255, 255, 0.5)' : '#fff',
+          width: '100%',
+          height: '37px',
+          paddingTop: '0px',
+          '& .MuiSvgIcon-root': {
+            color: '#fff',
+          },
+        }}
+        IconComponent={ArrowDropDownIcon}
+        disabled={!isEdit}
+      >
+        <MenuItem value="" disabled>
+          <em>Select an option</em>
+        </MenuItem>
+
+        {options.map((item) => (
+          <MenuItem key={item} value={item}>
+            <ListItemText primary={item} />
+          </MenuItem>
+        ))}
+
+        {hasOthersOption && (
+          <MenuItem value="Other (please specify)">
+            <ListItemText primary="Other (please specify)" />
+          </MenuItem>
+        )}
+      </Select>
+
+      {hasOthersOption && isOtherSelected && (
+        <TextField
+          placeholder="Please specify..."
+          value={value.replace('Other:', '')}
+          onChange={(e) =>
+            onChange({ target: { value: `Other:${e.target.value}` } })
+          }
+          sx={{
+            mt: 1,
+            background: '#000',
+            borderRadius: '5px',
+            input: {
+              color: '#fff',
+            },
+          }}
+          fullWidth
+        />
+      )}
+    </FlexBox>
+  );
 };
 
 export default SymDropdown;

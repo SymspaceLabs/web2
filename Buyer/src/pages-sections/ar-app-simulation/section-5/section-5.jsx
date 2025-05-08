@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 import { keyframes, styled } from "@mui/system";
 import { TESTIMONIALS } from "@/data/testimonial";
 import { H1, Paragraph } from "@/components/Typography";
-import TestimonialCard from "@/components/cards/TestimonialCard";
+import TestimonialCard from "@/components/custom-cards/TestimonialCard";
 
 // ===========================================================
 

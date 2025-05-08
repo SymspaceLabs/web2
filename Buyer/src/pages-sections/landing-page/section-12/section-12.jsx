@@ -98,7 +98,7 @@ export const CustomCard1 = ({ number, description }) => {
           <H1 sx={{  color: '#000', fontSize: {xs:40, sm:100} }}>
             {currentNumber}%
           </H1>
-          <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:24}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
+          <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:20}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
             {description}
           </Paragraph>
           {/* Button with fade-in effect */}
@@ -164,10 +164,10 @@ export const CustomCard2 = () => {
         <Paragraph
           sx={{
             color: '#353535',
-            fontSize: { xs: '14px', sm: '24px' },
+            fontSize: { xs: '14px', sm: '20px' },
             fontWeight: 500,
             textAlign: 'justify',
-            lineHeight: 1.5
+            lineHeight: 1.75
           }}
         >
           We create unique AR experiences for brands helping them bring any idea into reality.

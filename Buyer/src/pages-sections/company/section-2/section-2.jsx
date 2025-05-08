@@ -1,47 +1,97 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react"; // React hooks for managing state and refs
+import { useEffect, useRef, useState } from "react";
+import { Container, Button, Grid, Box } from "@mui/material";
+import { H1, Paragraph } from "@/components/Typography";
+import { ProductCard3 } from "@/components/custom-cards/product-cards";
+import SideNavbar from "@/components/page-sidenav/side-navbar";
+import { layoutConstant } from "utils/constants";
 
-import Section4 from "../section-4"; // Section4 component for rendering products
-import SideNavbar from "../../../components/page-sidenav/side-navbar"; // SideNavbar component for navigation
-import { StyledContainer } from "./styles"; // Styled component for layout styling
+// ============================================================
 
-/**
- * Section2 Component
- *
- * Renders a layout with a side navigation bar and a main content area.
- * The side navigation bar adapts its height dynamically based on the content's height.
- * Includes a list of products displayed via the Section4 component.
- *
- */
-export default function Section2({ products }) {
-  const ref = useRef(); // Ref to track the height of the main content area
-  const [sidebarHeight, setSidebarHeight] = useState(0); // State to store the sidebar height
+export default function Section2({ 
+  products,
+  company
+}) {
+  const ref = useRef();
+  const [sidebarHeight, setSidebarHeight] = useState(0);
 
-  // Dynamically update sidebar height based on the content height
   useEffect(() => {
     if (ref.current) setSidebarHeight(ref.current.offsetHeight);
   }, []);
 
   return (
-    <StyledContainer>
-      {/* Sidebar section */}
-      <div className="sidenav">
-        <SideNavbar
-          lineStyle="dash" // Dashed line style for the navigation
-          navList={categoryNavigation} // Navigation items
-          sidebarStyle="colored" // Colored sidebar styling
-          sidebarHeight={sidebarHeight || "85vh"} // Sidebar height with fallback
-        />
-      </div>
+    <Container sx={{ mt: 4, pb: 4 }}>
+      <Box
+        sx={{
+          gap: "1.75rem",
+          display: "flex",
+        }}
+      >
+        {/* Sidebar */}
+        <Box
+          className="sidenav"
+          sx={{
+            top: 0,
+            bottom: 0,
+            position: "relative",
+            transition: "all 350ms ease-in-out",
+            width: layoutConstant.grocerySidenavWidth,
+            minWidth: layoutConstant.grocerySidenavWidth,
+            "& .MuiPaper-root": {
+              borderRadius: 0,
+              backgroundColor: "transparent",
+            },
+            display: {
+              xs: "none",
+              md: "block",
+            },
+          }}
+        >
+          <SideNavbar
+            lineStyle="dash"
+            navList={categoryNavigation}
+            sidebarStyle="colored"
+            sidebarHeight={sidebarHeight || "85vh"}
+          />
+        </Box>
 
-      {/* Main content section */}
-      <div className="pageContent" ref={ref}>
-        <Section4 products={products} /> {/* Pass the product data to Section4 */}
-      </div>
-    </StyledContainer>
+        {/* Main Content */}
+        <Box
+          className="pageContent"
+          ref={ref}
+          sx={{
+            position: "relative",
+            width: {
+              xs: "100%",
+              md: `calc(100% - ${layoutConstant.grocerySidenavWidth}px)`,
+            },
+          }}
+        >
+          <H1>All Products</H1>
+          <Paragraph color="grey.600" mb={4}>
+            Tall blind but were, been folks not the expand
+          </Paragraph>
+
+          <Grid container spacing={1}>
+            {products?.map((product) => (
+              <Grid key={product.id} item md={4} sm={4} xs={12}>
+                <ProductCard3 product={product} company={company} />
+              </Grid>
+            ))}
+          </Grid>
+
+          <Box mt={6} display="flex" justifyContent="center">
+            <Button color="primary" variant="contained">
+              Load More...
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+    </Container>
   );
 }
+
 
 // Navigation data for the side navigation bar
 const categoryNavigation = [{

@@ -220,10 +220,18 @@ export class ProductsService {
     }
 
     async findAll(): Promise<Product[]> {
-      return await this.productRepository.find({
+      const products = await this.productRepository.find({
         relations: ['company', 'images', 'colors', 'sizes'],
       });
+    
+      // Sort images by sortOrder for each product
+      for (const product of products) {
+        product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+      }
+    
+      return products;
     }
+    
 
     async findBySlug(slug: string): Promise<Product> {
       const product = await this.productRepository.findOne({

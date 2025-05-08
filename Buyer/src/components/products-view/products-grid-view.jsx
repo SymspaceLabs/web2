@@ -1,9 +1,10 @@
-import { Fragment } from "react";
-import { Grid, Pagination } from "@mui/material";
+// ========================================================
 
+import { Fragment } from "react";
 import { Span } from "@/components/Typography";
+import { Grid, Pagination } from "@mui/material";
 import { FlexBetween } from "@/components/flex-box";
-import ProductCard1 from "@/components/product-cards/product-card-1"; // CUSTOM DATA MODEL
+import { ProductCard3 } from "../custom-cards/product-cards";
 
 // ========================================================
 export default function ProductsGridView({
@@ -11,17 +12,12 @@ export default function ProductsGridView({
 }) {
   return (
     <Fragment>
-      <Grid container spacing={3}>
+      <Grid container spacing={1}>
         {products.map(item => (
           <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard1 
-              id={item.id} 
-              slug={item.slug} 
-              name={item.name} 
-              price={item.price} 
-              rating={item.rating} 
-              imgUrl={item.images[0].url} 
-              discount={item.discount}
+            <ProductCard3
+              product={item}
+              company={item.company.entityName}
             />
           </Grid>
         ))}

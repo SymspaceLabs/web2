@@ -1,10 +1,22 @@
+// ==========================================
+// Plan Toggle
+// ==========================================
+
 import { useState } from "react";
 import { styles } from "./styles";
 import { H1 } from "../Typography";
 import { FlexBox } from "../flex-box";
 import { Box, Typography } from "@mui/material";
 
-function PlanToggle({ onChange, value, title, subtitle, theme }) {
+// ==========================================
+
+function PlanToggle({ 
+  onChange,
+  value,
+  title,
+  subtitle,
+  theme
+}) {
   const [selected, setSelected] = useState(value);
 
   const handleToggle = (value) => {
@@ -15,14 +27,18 @@ function PlanToggle({ onChange, value, title, subtitle, theme }) {
   return (
     <FlexBox flexDirection={{xs: "column", sm: "row"}} justifyContent="space-between" alignItems="center" gap={2}>
       {/* LEFT  */}
-      <H1 color='#FFF' fontSize={{xs:12, sm:24}} textAlign={{xs:'center', sm:'left'}}>
+      <H1
+        color='#FFF'
+        fontSize={{ xs:12, sm:18 }}
+        textAlign={{xs:'center', sm:'left'}}
+        wordSpacing='5em'
+      >
         {title}
       </H1>
 
       {/* RIGHT  */}
-      <Box
+      <FlexBox
         sx={{
-          display: "flex",
           flexDirection: { xs: "column-reverse", sm: "row" },
           justifyContent: { xs: "center", sm: "flex-end" },
           alignItems: "center",
@@ -73,7 +89,7 @@ function PlanToggle({ onChange, value, title, subtitle, theme }) {
             Monthly
           </Box>
         </Box>
-      </Box>
+      </FlexBox>
     </FlexBox>
 
   );

@@ -36,7 +36,7 @@ function Loader() {
 export default function SymGLTFViewer({ modelUrl }) {
   return (
     <div style={{ width: '100%', height: '50vh' }}>
-      <Canvas camera={{ position: [0, 0, 100], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 150], fov: 45 }}>
         <ambientLight intensity={0.8} />
         <Suspense fallback={<Loader />}>
           <Stage environment="city" intensity={0.6}>

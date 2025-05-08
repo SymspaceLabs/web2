@@ -66,13 +66,13 @@ export default function Section3() {
         </FlexCol>
 
         <Card sx={styles.cardStyle}>
-          <H1 color="#FFF" fontSize={{xs:20, sm:32}}>
+          <H1 color="#FFF" fontSize={{ xs:20, sm:28 }}>
             {activeBenefit.header}
           </H1>
-          <Paragraph color="#FFF" fontSize={{xs:12, sm:24}}>
+          <Paragraph color="#FFF" fontSize={{ xs:12, sm:18 }}>
             {activeBenefit.content}
           </Paragraph>
-          <Paragraph color="#FFF" fontSize={{xs:12, sm:24}}>
+          <Paragraph color="#FFF" fontSize={{ xs:12, sm:18 }}>
             •&nbsp;&nbsp;{activeBenefit.bullet}
           </Paragraph>
         </Card>

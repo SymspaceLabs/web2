@@ -40,10 +40,9 @@ export class Product {
   @Column()
   slug: string;
 
-  @OneToMany(() => ProductImage, (productImage) => productImage.product, {
-    cascade: true,
-  })
+  @OneToMany(() => ProductImage, (image) => image.product, { cascade: true, eager: true })
   images: ProductImage[];
+  
 
   @Column({ type: 'text', nullable: true })
   description: string;

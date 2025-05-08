@@ -54,7 +54,7 @@ export default function ShopLayout1({children, noFooter=false}) {
   } = useHeader();
 
   const HEADER_SLOT = (
-    <FlexBox width="90%" alignItems="center" justifyContent="space-between">
+    <FlexBox width="90%" alignItems="center" justifyContent="space-between" gap={5}>
       <NavigationList />
       <SearchInput btn={false} mxWidth="350px" />
       <LoginCartButtons

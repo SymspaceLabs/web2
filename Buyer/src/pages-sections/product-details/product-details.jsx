@@ -6,8 +6,8 @@
 // ==============================================================================
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { currency } from "@/lib";
+import { useState, useEffect } from "react";
 import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
@@ -20,7 +20,7 @@ import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 import ProductGallery from "./product-gallery";
 
 // ================================================================
-export default function ProductIntro({ product }) {
+export default function ProductDetails({ product }) {
   const {
     id,
     price,
@@ -135,7 +135,7 @@ export default function ProductIntro({ product }) {
         {/* PRODUCT INFO AREA */}
         <Grid item md={6} xs={12} alignItems="center">
           {/* Card 1 */}
-          <FlexCol gap={1.5} sx={styles.productCard}>
+          <FlexCol gap={{ xs:0, sm:1.5 }} sx={styles.productCard}>
             
             {/* PRODUCT BRAND */}
             <Paragraph sx={{ fontSize: {xs:12, sm:16}, color: '#0366FE', textTransform:'uppercase', '&:hover': {textDecoration:'underline'} }}>
@@ -145,7 +145,7 @@ export default function ProductIntro({ product }) {
             </Paragraph>
             
             {/* PRODUCT TITLE */}
-            <H1 fontSize={{xs:20, sm:40}} color='#000' mb={1}>
+            <H1 fontSize={{xs:18, sm:40}} color='#000' mb={1}>
               {name}
             </H1>
 
@@ -202,58 +202,59 @@ export default function ProductIntro({ product }) {
               </FlexBox>
             </FlexBox>
 
-            {/*Size*/}
-            <FlexCol>
-              <FlexBox gap={1} mb={2} sx={{ alignItems: {xs:'left', sm:'center'} }} flexDirection={{xs:'column', sm:'row'}}>
-                <FormControl sx={{ flexGrow: 1, width: '100%' }} error={sizeError}>
-                  <Select
-                    value={selectedSize}
-                    onChange={(e) => {
-                      setSelectedSize(e.target.value);
-                      setSizeError(false); // Clear error on select
-                    }}
-                    fullWidth
-                    displayEmpty
-                    sx={{
-                      borderRadius: "25px",
-                      width: "100%",
-                      height: '100%',
-                      paddingTop: '0px',
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: sizeError ? "red" : undefined,
-                        borderWidth: "2px",
-                      },
-                    }}
-                  >
-                    <MenuItem value="" disabled>
-                      <em>Select a size</em>
+            {/* Size */}
+            <FlexBox gap={{ xs:2, sm:5 }} py={{ xs:2 }}>
+              <FormControl sx={{ flexGrow: 1, width: '100%' }} error={sizeError}>
+                <Select
+                  value={selectedSize}
+                  onChange={(e) => {
+                    setSelectedSize(e.target.value);
+                    setSizeError(false); // Clear error on select
+                  }}
+                  fullWidth
+                  displayEmpty
+                  sx={{
+                    borderRadius: { xs: "999px", sm: "6px" },
+                    width: "100%",
+                    height: '100%',
+                    "& .MuiSelect-select": {
+                      borderRadius: "999px", // inner element
+                      padding: { xs:'15px 15px', sm:'20px 15px' },
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderRadius: "999px", // outline border
+                      borderColor: sizeError ? "red" : undefined,
+                      borderWidth: "2px",
+                    },
+                  }}
+                >
+                  <MenuItem value="" disabled>
+                    <em>Select a size</em>
+                  </MenuItem>
+                  {sizes.map((size) => (
+                    <MenuItem key={size.id} value={size.id}>
+                      {size.size}
                     </MenuItem>
-                    {sizes.map((size) => (
-                      <MenuItem key={size.id} value={size.id}>
-                        {size.size}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                <Button sx={styles.personalised} onClick={()=>setSidenavOpen(true)}>
-                  Personalized Sizing
-                </Button>
-              </FlexBox>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button sx={styles.personalised} onClick={()=>setSidenavOpen(true)}>
+                Personalized Sizing
+              </Button>
+            </FlexBox>
 
-              {/* SIZE CHART */}
-              <FlexBox justifyContent="flex-end" >
-                <Button sx={styles.sizeChart} onClick={()=>setOpenModal(true)}>
-                  Size chart
-                </Button>
-              </FlexBox>
-            </FlexCol>
+            {/* SIZE CHART */}
+            <FlexBox justifyContent="flex-end" >
+              <Button sx={styles.sizeChart} onClick={()=>setOpenModal(true)}>
+                Size chart
+              </Button>
+            </FlexBox>
             
             {/* ADD TO CART BUTTON */}
-            <FlexBox alignItems="center" gap={5} flexDirection={{xs:'column', sm:'row'}} mb={2} mt={2} >
+            <FlexBox alignItems="center" gap={{ xs:2, sm:5 }} py={1}>
               <Button sx={styles.addToCartButton} onClick={handleCartAmountChange(1)}>
                 Add to Cart
               </Button>
-
               <Button sx={styles.buyNowButton} onClick={handleCartAmountChange(1)}>
                 Buy now
               </Button>
@@ -265,7 +266,6 @@ export default function ProductIntro({ product }) {
             content={description}
           />
           
-
           <SymAccordion
             title="Composition"
             content={composition}

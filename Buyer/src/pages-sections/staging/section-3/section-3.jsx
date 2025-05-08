@@ -1,7 +1,7 @@
 "use client";
 
 // ==================================================
-// Section 3
+// Section 3 | Staging
 // ==================================================
 
 import Link from 'next/link';
@@ -54,16 +54,17 @@ export default function Section3() {
             sx={{
               flexDirection: { xs: "column", sm: "row" },
               alignItems: "center",
+              justifyContent:'center',
               width: "100%",
               gap: 3,
             }}
           >
             {/* Left Side Card */}
             <FlexColCenter sx={styles.glassCard} gap='25px'>
-              <Paragraph sx={{color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+              <Paragraph sx={{color: "#fff", fontSize: { xs: 12, sm: 18 } }}>
                 {activeBenefit.content}
               </Paragraph>
-              <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+              <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 18 } }}>
                 {activeBenefit.bullet}
               </Paragraph>
               <FlexRowCenter>

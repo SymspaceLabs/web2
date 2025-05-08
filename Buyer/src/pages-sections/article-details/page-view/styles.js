@@ -1,11 +1,3 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 export const styles = {
     cardTitle: {
         pb:1,
@@ -16,7 +8,6 @@ export const styles = {
     buttonDark : {
         width: "100%", 
         maxWidth: {xs:'100%', sm:250},
-        ...elementalEndFont,
         borderRadius: 32,
         px: 3,
         background: '#000',
@@ -43,7 +34,6 @@ export const styles = {
         borderRadius: "30px",
     },
     bannerButton : { 
-        ...elementalEndFont,
         background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
         borderRadius: '50px',
         px:5,

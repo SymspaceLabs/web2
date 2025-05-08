@@ -6,6 +6,7 @@
 
 import { Box, Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { styles } from "../page-view/styles";
+import { H1 } from "@/components/Typography";
 
 export default function Section2() {
 
@@ -35,9 +36,9 @@ export default function Section2() {
   return (
     <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:4 }}>
       <Box sx={{ width:'100%' }}>
-        <Typography sx={{ py:5,...styles.elementalEndFont, fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
+        <H1 sx={{ py:5, fontSize: { xs: 25, sm: 40 }, color: '#fff' }}>
           Our Core Values
-        </Typography>
+        </H1>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TableContainer>

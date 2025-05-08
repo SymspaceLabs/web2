@@ -29,9 +29,12 @@ export default function Section4() {
           sx={{
             flexDirection: { xs: "column-reverse", sm: "row" },
             alignItems: "center",
+            justifyContent:'center',
             width: "100%",
             gap: 3,
-            py:{xs:2, sm:5}, px:{xs:2}, gap:4
+            py:{xs:2, sm:5},
+            px:{xs:2},
+            gap:4
           }}
         >
           {/* Left Side Card */}
@@ -47,10 +50,10 @@ export default function Section4() {
 
           {/* Right Side Image */}
           <FlexColCenter sx={styles.glassCard} gap='25px'>
-            <H1 sx={{ color: "#fff", fontSize: { xs: 12, sm: 32 } }}>
+            <H1 sx={{ color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
               Make every Space Your Own with SYMSPACE
             </H1>
-            <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 24 } }}>
+            <Paragraph sx={{ color: "#fff", fontSize: { xs: 12, sm: 18 } }}>
               Customize finishes, layouts, and styles with real-time visualization tools. Adjust style, materials, textures, lighting, and switch between 2D and immersive 3D views to share virtual experiences with others.
             </Paragraph>
             <FlexRowCenter>

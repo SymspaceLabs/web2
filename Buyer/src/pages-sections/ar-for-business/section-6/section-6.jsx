@@ -7,11 +7,12 @@
 import { useState } from "react";
 import { RootStyle } from "./styles";
 import { motion } from "framer-motion";
-import { H1 } from "@/components/Typography";
-import { styles } from "../page-view/styles";
 import { LazyImage } from "@/components/lazy-image";
 import { FlexColCenter } from "@/components/flex-box";
-import { Box, Container, Typography, Button, TextField } from '@mui/material';
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, TextField } from '@mui/material';
+
+// ======================================================
 
 export default function Section6() {
   // Animation variants
@@ -20,10 +21,10 @@ export default function Section6() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
   };
   
-  const [showInput, setShowInput] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [showInput, setShowInput] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleBetaAccessClick = () => {
     setShowInput(true);
@@ -82,16 +83,15 @@ export default function Section6() {
             </H1>
 
             {/* Subheader */}
-            <Typography
-              sx={{
-                fontFamily: 'Helvetica',
-                fontSize: {xs:'14px', sm:'18px'},
+            <Paragraph
+              sx={{ 
+                fontSize: { xs:'14px', sm:'18px' },
                 marginBottom: "1rem",
                 color: '#fff',
               }}
             >
               Customize your customer experience today
-            </Typography>
+            </Paragraph>
 
             {/* Call-to-Action Button */}
             {!showInput && (
@@ -183,7 +183,6 @@ export default function Section6() {
                       borderRadius: "50px",
                       color: isSubmitted ? "#000" : "#fff",
                       padding: "6px 12px",
-                      ...styles.elementalEndFont,
                       "&:hover": {
                         background: isSubmitted
                           ? "#f0f0f0"
@@ -194,11 +193,10 @@ export default function Section6() {
                     {isSubmitted ? "✔️" : "Submit"}
                   </Button>
                 </Box>
-                <Typography sx={{ py:1, px:3, color:'red' }}>
+                <Paragraph sx={{ py:1, px:3, color:'red' }}>
                   {error}
-                </Typography>
+                </Paragraph>
               </>
-              
             )}
           </Box>
         </RootStyle>

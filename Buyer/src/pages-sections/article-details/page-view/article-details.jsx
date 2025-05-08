@@ -2,7 +2,7 @@
 
 import Section1 from "../section-1";
 import Section2 from "../section-2";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BlobBox } from "@/components/BlobBox";
 
@@ -27,7 +27,7 @@ export default function ArticlePageView({ slug }) {
   }, [slug]);
 
   if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
+    return <CircularProgress />; // Loading spinner
   }
 
   return (

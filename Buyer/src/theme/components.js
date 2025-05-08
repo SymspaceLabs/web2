@@ -194,7 +194,7 @@ export const components = {
   },
   MuiContainer: {
     defaultProps: {
-      maxWidth: "xl"
+      maxWidth: 'lg'
     }
   }
 };

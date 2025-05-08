@@ -1,16 +1,21 @@
 "use client";
 
-import { useCallback, useState, useEffect } from "react";
-import { Card, Grid, MenuItem, TextField, Container, IconButton, useMediaQuery, CircularProgress } from "@mui/material";
-import { Apps, ViewList, FilterList } from "@mui/icons-material";
+// ==============================================
+// Product Search Page
+// ==============================================
 
-import ProductFilterCard from "../product-filter-card"; // GLOBAL CUSTOM COMPONENTS
+import { useSearchParams } from "next/navigation";
+import { H5, Paragraph } from "@/components/Typography";
+import { useCallback, useState, useEffect } from "react";
+import { Apps, ViewList, FilterList } from "@mui/icons-material";
+import { Grid, MenuItem, TextField, Container, IconButton, useMediaQuery, CircularProgress, Box } from "@mui/material";
+
 import FlexBox from "@/components/flex-box/flex-box";
 import Sidenav from "@/components/side-nav/side-nav";
-import { H5, Paragraph } from "@/components/Typography";
+import ProductFilterCard from "../product-filter-card"; // GLOBAL CUSTOM COMPONENTS
 import ProductsGridView from "@/components/products-view/products-grid-view";
-import ProductsListView from "@/components/products-view/products-list-view";
-import { useSearchParams } from "next/navigation";
+
+// ==============================================
 
 const SORT_OPTIONS = [
   { label: "Relevance", value: "Relevance" },
@@ -72,24 +77,46 @@ export default function ProductSearchPageView({ slug }) {
   }
 
   return (
-    <Container className="mt-2 mb-3">
-      <Card
-        elevation={1}
-        sx={{
-          mb: "55px",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-between",
-          p: { sm: "1rem 1.25rem", md: "0.5rem 1.25rem", xs: "1.25rem 1.25rem 0.25rem" },
-        }}
-      >
-        <div>
-          <H5>Searching for “{term}”</H5>
-          <Paragraph color="grey.600">{products.length} results found</Paragraph>
-        </div>
+    <Box sx={{ py: 5, background:"#FFF" }} >
+      <Container>
+        
+        {/* Top Sort Card */}
+        {/* <FlexBox
+          mb="10px"
+          py={{ sm: "1rem", md: "0.5rem", xs: "1.25rem 0.25rem" }}
+          flexWrap="wrap"
+          alignItems="center"
+          justifyContent="flex-end"
+          gap={1}
+        >
+          <Paragraph color="grey.600" whiteSpace="pre">
+            Sort by:
+          </Paragraph>
 
-        <FlexBox alignItems="center" columnGap={4} flexWrap="wrap" my="0.5rem">
+          <TextField
+            select
+            fullWidth
+            size="small"
+            variant="outlined"
+            placeholder="Sort by"
+            defaultValue={SORT_OPTIONS[0].value}
+            sx={{ flex: "1 1 0", minWidth: "150px" }}
+          >
+            {SORT_OPTIONS.map((item) => (
+              <MenuItem value={item.value} key={item.value}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </FlexBox> */}
+        {/* <FlexBox
+          mb="10px"
+          py={{ sm: "1rem", md: "0.5rem", xs: "1.25rem 0.25rem" }}
+          flexWrap="wrap"
+          alignItems="center"
+          justifyContent="flex-end"
+          columnGap={4}
+        >
           <FlexBox alignItems="center" gap={1} flex="1 1 0">
             <Paragraph color="grey.600" whiteSpace="pre">
               Sort by:
@@ -111,57 +138,51 @@ export default function ProductSearchPageView({ slug }) {
               ))}
             </TextField>
           </FlexBox>
-
-          <FlexBox alignItems="center" my="0.25rem">
-            <Paragraph color="grey.600" mr={1}>
-              View:
-            </Paragraph>
-
-            <IconButton onClick={toggleView("grid")}>
-              <Apps color={view === "grid" ? "primary" : "inherit"} fontSize="small" />
-            </IconButton>
-
-            <IconButton onClick={toggleView("list")}>
-              <ViewList color={view === "list" ? "primary" : "inherit"} fontSize="small" />
-            </IconButton>
-
-            {downMd && (
-              <Sidenav
-                handler={(close) => (
-                  <IconButton onClick={close}>
-                    <FilterList fontSize="small" />
-                  </IconButton>
-                )}
-              >
-                <ProductFilterCard />
-              </Sidenav>
-            )}
-          </FlexBox>
-        </FlexBox>
-      </Card>
-
-      <Grid container spacing={3}>
-        <Grid
-          item
-          md={3}
-          sx={{
-            display: {
-              md: "block",
-              xs: "none",
-            },
-          }}
+        </FlexBox> */}
+        <FlexBox
+          mb="10px"
+          py={{ sm: "1rem", md: "0.5rem", xs: "1.25rem 0.25rem" }}
+          flexWrap="wrap"
+          alignItems="center"
+          justifyContent="flex-end"
+          gap={1}
         >
-          <ProductFilterCard />
-        </Grid>
+          <Paragraph color="grey.600" whiteSpace="pre">
+            Sort by:
+          </Paragraph>
 
-        <Grid item md={9} xs={12}>
-          {view === "grid" ? (
+          <TextField
+            select
+            size="small"
+            variant="outlined"
+            placeholder="Sort by"
+            defaultValue={SORT_OPTIONS[0].value}
+            sx={{ minWidth: "150px", width: "auto" }}
+          >
+            {SORT_OPTIONS.map((item) => (
+              <MenuItem value={item.value} key={item.value}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </FlexBox>
+
+
+        
+        <Grid container spacing={3}>
+          
+          {/* Left Filter Card */}
+          <Grid item md={3} sx={{ display: { md: "block", xs: "none" } }}>
+            <ProductFilterCard />
+          </Grid>
+
+          {/* Right Product List */}
+          <Grid item md={9} xs={12}>
             <ProductsGridView products={products} />
-          ) : (
-            <ProductsListView products={products} />
-          )}
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Box>
+
   );
 }

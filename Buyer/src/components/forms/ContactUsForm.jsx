@@ -1,6 +1,12 @@
+// =======================================
+// Contadt
+// =======================================
+
 import { useMediaQuery } from '@mui/material';
 import { FlexBox } from '@/components/flex-box';
 import { SymDropdown, SymTextField } from '@/components/custom-inputs';
+
+// =======================================
 
 function ContactUsForm ({
     firstName,
@@ -14,8 +20,8 @@ function ContactUsForm ({
     message,
     setMessage,
 }) {
+
     const isMobile = useMediaQuery('(max-width:600px)');
-    
     const handleFirstNameChange = (event) => setFirstName(event.target.value);
     const handleLastNameChange = (event) => setLastName(event.target.value);
     const handleEmailChange = (event) => setEmail(event.target.value);

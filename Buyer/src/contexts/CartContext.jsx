@@ -3,7 +3,7 @@
 // Cart Context
 // =============================================================
 
-import { createContext, useMemo, useReducer } from "react";
+import { createContext, useMemo, useReducer, useEffect  } from "react";
 
 const INITIAL_CART = [];
 const INITIAL_STATE = { cart: INITIAL_CART };
@@ -52,6 +52,12 @@ const reducer = (state, action) => {
           : [...cartList, { id, qty, selectedColor, selectedSize, ...rest }],
       };
 
+      case "INITIALIZE_CART":
+        return {
+          ...state,
+          cart: action.payload,
+        };
+
     default:
       return state;
   }
@@ -59,6 +65,30 @@ const reducer = (state, action) => {
 
 export default function CartProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+  // Load cart from localStorage on first render
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        try {
+          dispatch({
+            type: "INITIALIZE_CART",
+            payload: JSON.parse(storedCart),
+          });
+        } catch (e) {
+          console.error("Failed to parse cart from localStorage", e);
+        }
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage on every change
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    }
+  }, [state.cart]);
 
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
@@ -29,7 +29,7 @@ export default function CareerDetailsPageView({ jobId }) {
     setDialogOpen((state) => !state)
   };
 
-  if (!job) return <p>Loading...</p>;
+  if (!job) return <CircularProgress />;
 
   return (
     <Box

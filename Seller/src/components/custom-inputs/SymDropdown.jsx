@@ -1,8 +1,14 @@
-import React from 'react';
+// =================================================================
+// Custom Dropdown
+// =================================================================
+
+import { H1 } from '../Typography';
 import { FlexBox } from '../flex-box';
 import { Select, MenuItem, ListItemText, TextField } from '@mui/material';
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { H1 } from '../Typography';
+
+// =================================================================
 
 const SymDropdown = ({
   title,

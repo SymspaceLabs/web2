@@ -1,7 +1,6 @@
-
-import { useState } from 'react';
+import { useState, useRef, useEffect, useMemo  } from 'react';
 import { FlexBox, FlexRowCenter } from '@/components/flex-box';
-import { IconButton, Box } from '@mui/material';
+import { IconButton, Box, useMediaQuery  } from '@mui/material';
 
 import { LazyImage } from '@/components/lazy-image';
 import { useFavorites } from "@/contexts/FavoritesContext";
@@ -12,153 +11,201 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const ProductGallery = ({product}) => {
-
+const ProductGallery = ({ product }) => {
     const {
         id,
         price,
         salePrice,
         colors,
         sizes,
-        name, 
-        images, 
+        name,
+        images,
         slug,
-        model
-      } = product || {};
+        model,
+    } = product || {};
 
+    // State to track currently selected image
     const [selectedImage, setSelectedImage] = useState(0);
-      
 
+    // Access favorite state and dispatcher from context
     const { state: favState, dispatch: favDispatch } = useFavorites();
-    const isFavorited = favState.favorites.some((item) => item.id === product.id);
-    
 
+    // Check if current product is already favorited
+    const isFavorited = favState.favorites.some((item) => item.id === product.id);
+
+    // Toggle product in favorites list
     const toggleFavorite = () => {
         favDispatch({
-          type: "TOGGLE_FAVORITE",
-          payload: {
+            type: "TOGGLE_FAVORITE",
+            payload: {
             price,
             name,
             salePrice,
             imgUrl: images[0].url,
             id,
             slug,
-            sizes: sizes.map(size => ({
-              label: size.size,
-              value: size.id
+            sizes: sizes.map((size) => ({
+                label: size.size,
+                value: size.id,
             })),
-            colors: colors.map(color => ({
-              label: color.name,
-              value: color.code
+            colors: colors.map((color) => ({
+                label: color.name,
+                value: color.code,
             })),
-          },
+            },
         });
-      };      
+    };
+
+    // Determine if the screen size is mobile
+    const isMobileQuery = useMediaQuery('(max-width:600px)');
+
+    // State to determine how many thumbnails to show
+    const [visibleThumbCount, setVisibleThumbCount] = useState(6);
+
+    // Update visible thumbnail count based on screen size
+    useEffect(() => {
+        setVisibleThumbCount(isMobileQuery ? 4 : 6);
+    }, [isMobileQuery]);
+
+    // Total thumbnails includes the 3D model as the first thumbnail
+    const totalThumbnails = images.length + 1; // +1 for 3D model
+    const maxIndex = Math.max(0, totalThumbnails - visibleThumbCount);
+
+    // Index for thumbnail scroll
+    const [thumbIndex, setThumbIndex] = useState(0);
+
+    // Compute which thumbnails are visible in the scroll window
+    const visibleThumbnails = useMemo(() => {
+        const start = thumbIndex;
+        const end = start + visibleThumbCount;
+        return [{ type: "model" }, ...images].slice(start, end);
+    }, [thumbIndex, images, visibleThumbCount]); // Add visibleThumbCount here
+    
+    // Ensure selected image stays within the visible thumbnails
+    useEffect(() => {
+        const totalItems = images.length + 1; // +1 for model
+        const visibleStart = thumbIndex;
+        const visibleEnd = thumbIndex + visibleThumbCount;
+      
+        if (selectedImage < visibleStart) {
+          setThumbIndex(selectedImage);
+        } else if (selectedImage >= visibleEnd) {
+          setThumbIndex(Math.min(selectedImage - visibleThumbCount + 1, totalItems - visibleThumbCount));
+        }
+      }, [selectedImage, thumbIndex, visibleThumbCount, images.length]);
+      
 
     return (
-        <>
-            <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
-                <IconButton
-                    onClick={
-                        () => setSelectedImage((prev) => prev > 0 ? prev - 1 : images?.length)
-                    }
-                    style={{ 
-                        position: "absolute",
-                        left: 0,
-                        zIndex: 1,
-                        background: "white"
+    <>
+        {/* Main image viewer with next/prev and favorite buttons */}
+        <FlexBox justifyContent="center" alignItems="center" position="relative" mb={6}>
+            
+            {/* Previous image button */}
+            <IconButton
+                onClick={() =>
+                    setSelectedImage((prev) => (prev > 0 ? prev - 1 : images?.length))
+                }
+                style={{
+                    position: "absolute",
+                    left: 0,
+                    zIndex: 1,
+                    background: "white",
+                }}
+            >
+                <ArrowBackIosIcon />
+            </IconButton>
+
+            {/* Display main image or 3D model viewer */}
+            <Box
+                width={{ xs: '100%', sm: '500px' }}
+                height={{ xs: '350px', sm: '500px' }}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                overflow="hidden"
+                position="relative"
+                borderRadius="20px"
+            >
+                {selectedImage === 0 && model ? (
+                    <SymGLTFViewer modelUrl={`/models/${model}`} />
+                ) : (
+                <LazyImage
+                    alt={name}
+                    src={product.images[selectedImage - 1]?.url}
+                    width={500}
+                    height={500}
+                    loading="eager"
+                    sx={{
+                        objectFit: "contain",
+                        maxHeight: "100%",
+                        maxWidth: "100%",
                     }}
-                >
-                    <ArrowBackIosIcon />
-                </IconButton>
+                />
+                )}
+            </Box>
 
-                <Box 
-                    maxHeight={{ sm: '500px' }} 
-                    minHeight="450px" 
-                    display="flex" 
-                    alignItems="center" 
-                    justifyContent="center"
-                >
-                    {selectedImage === 0 && model ? (  
-                        <SymGLTFViewer modelUrl={`/models/${model}`} />
-                    ) : (
-                        <LazyImage 
-                        alt={name}
-                        width={500} 
-                        height={500} 
-                        loading="eager" 
-                        src={product.images[selectedImage - 1]?.url}
-                        sx={{ 
-                            objectFit: "contain", 
-                            maxHeight: '100%', 
-                            maxWidth: '100%' 
-                        }}
-                        />
-                    )}
-                    </Box>
+            {/* Next image button */}
+            <IconButton
+                onClick={() =>
+                setSelectedImage((prev) => (prev < images?.length ? prev + 1 : 0))
+                }
+                style={{
+                position: "absolute",
+                right: 0,
+                zIndex: 1,
+                background: "white",
+                }}
+            >
+                <ArrowForwardIosIcon />
+            </IconButton>
 
+            {/* Heart Icon */}
+            <IconButton
+                onClick={toggleFavorite}
+                style={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                zIndex: 2,
+                }}
+            >
+                {isFavorited ? (
+                <FavoriteIcon color="error" />
+                ) : (
+                <FavoriteBorderIcon color="action" />
+                )}
+            </IconButton>
+        </FlexBox>
 
-                <IconButton 
-                    onClick={() => setSelectedImage((prev) => 
-                        prev < images?.length ? prev + 1 : 0 // If last, wrap to 0
-                    )}
-                    style={{
-                        position: "absolute",
-                        right: 0,
-                        zIndex: 1,
-                        background: "white",
-                    }}
-                >
-                    <ArrowForwardIosIcon />
-                </IconButton>
+        {/* Thumbnail selector area */}
+        <FlexBox alignItems="center" mt={2}>
+            
+            {/* Scroll thumbnails left */}
+            <IconButton
+                onClick={() => setThumbIndex((prev) => Math.max(0, prev - 1))}
+                disabled={thumbIndex === 0}
+            >
+                <ArrowBackIosIcon fontSize="small" />
+            </IconButton>
 
-                {/* Heart Icon */}
-                <IconButton 
-                    onClick={toggleFavorite}
-                    style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        zIndex: 2,
-                    }}
-                >
-                    {isFavorited ? (
-                            <FavoriteIcon color="error" />
-                        ) : (
-                            <FavoriteBorderIcon color="action" />
-                        )
-                    }
-                </IconButton>
-            </FlexBox>
-            {/* Thumbnails */}
-            <FlexRowCenter overflow="auto" gap={1}>
-                <>
-                    {/* 3D Model Thumbnail */}
-                    <FlexRowCenter
-                        padding={1}
-                        width={64}
-                        height={64}
-                        minWidth={64}
-                        bgcolor="white"
-                        border="1px solid"
-                        borderRadius="10px"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setSelectedImage(0)} // 0 for 3D model
-                        borderColor={selectedImage === 0 ? "primary.main" : "grey.400"}
-                    >
-                    <LazyImage
-                        alt="3D Model"
-                        width={500}
-                        height={500}
-                        src="/assets/images/products/3d/3d-thumbnail.png"
-                    />
-                    </FlexRowCenter>
+            {/* Visible thumbnails */}
+            <FlexRowCenter
+                sx={{
+                    overflow: 'hidden',
+                    gap: 1,
+                    flexWrap: 'nowrap',
+                    justifyContent: 'center',
+                    width: '100%',
+                }}
+            >
 
-                    {/* Image Thumbnails */}
-                    {images?.length > 0 &&
-                    images.map((image, ind) => (
+                {visibleThumbnails.map((item, index) => {
+                    const isModel = item.type === "model";
+                    const imageIndex = isModel ? 0 : images.indexOf(item) + 1;
+
+                    return (
                         <FlexRowCenter
-                            key={ind}
+                            key={index}
                             width={64}
                             height={64}
                             minWidth={64}
@@ -166,21 +213,31 @@ const ProductGallery = ({product}) => {
                             border="1px solid"
                             borderRadius="10px"
                             style={{ cursor: "pointer" }}
-                            onClick={() => setSelectedImage(ind + 1)}
-                            borderColor={selectedImage === ind + 1 ? "primary.main" : "grey.400"}
+                            onClick={() => setSelectedImage(imageIndex)}
+                            borderColor={selectedImage === imageIndex ? "primary.main" : "grey.400"}
                         >
-                        <LazyImage
-                            alt="product"
-                            width={500}
-                            height={500}
-                            src={image.url}
-                        />
+                            <LazyImage
+                                alt="thumbnail"
+                                width={500}
+                                height={500}
+                                src={isModel ? "/assets/images/products/3d/3d-thumbnail.png" : item.url}
+                            />
                         </FlexRowCenter>
-                    ))}
-                </>
+                    );
+                    })
+                }
             </FlexRowCenter>
-        </>
-    )
-}
 
-export default ProductGallery
+            {/* Scroll thumbnails right */}
+            <IconButton
+                onClick={() => setThumbIndex((prev) => Math.min(maxIndex, prev + 1))}
+                disabled={thumbIndex >= maxIndex}
+            >
+                <ArrowForwardIosIcon fontSize="small" />
+            </IconButton>
+        </FlexBox>
+    </>
+    );
+};
+
+export default ProductGallery;

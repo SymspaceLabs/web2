@@ -1,4 +1,7 @@
 "use client"
+// ========================================
+// Section 2 | Contact Us
+// ========================================
 
 import { motion } from "framer-motion";
 import { EmailBanner } from "@/components/custom-banner";
@@ -16,9 +19,7 @@ export default function Section2() {
         style={{ width: "100%", overflow: "hidden" }}
       >
         <Container sx={{ py: {xs:0, sm:10} }}>
-          <EmailBanner
-            title="join the simulation"
-          />
+          <EmailBanner title="join the simulation" />
         </Container>
       </motion.div>
     </Box>

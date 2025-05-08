@@ -5,18 +5,20 @@
 // ==============================================================
 
 import { useState, useEffect } from 'react';
-import { Box, Container, Grid, Checkbox, ListItemText, InputAdornment, Typography, Divider, TextField, MenuItem, Select, useMediaQuery, FormControl } from '@mui/material';
-import { FlexBox } from '@/components/flex-box';
 import { useRouter } from 'next/navigation';
+import { FlexBox } from '@/components/flex-box';
+import { H1, Paragraph } from '@/components/Typography';
+import { Box, Container, Grid, Checkbox, ListItemText, InputAdornment, Divider, TextField, MenuItem, Select, useMediaQuery, FormControl } from '@mui/material';
+
 import SearchIcon from '@mui/icons-material/Search';
 import FmdGoodIcon from '@mui/icons-material/FmdGood';
 import EastIcon from '@mui/icons-material/East';
 import styled from "@mui/material/styles/styled";
-import { styles } from '../page-view/styles';
+
+// ==============================================================
 
 export default function Section3() {
   const isMobile = useMediaQuery('(max-width:600px)');
-  const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [allLocations, setAllLocations] = useState([]);
@@ -39,7 +41,6 @@ export default function Section3() {
       );
   
       const jobsData = await response.json();
-      setJobs(jobsData);
       setFilteredJobs(jobsData);
     };
   
@@ -62,12 +63,12 @@ export default function Section3() {
   
 
   return (
-    <Box id="open-roles" sx={{ py: { xs: 2, sm: 20 } }}>
+    <Box id="open-roles" sx={{ py: { xs: 2, sm: 10 } }}>
       <Container sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <FlexBox flexDirection={isMobile? 'column': 'row'} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2}>
-          <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
+          <H1 sx={{ fontSize: { xs: 25, sm: 35 }, color: '#fff' }}>
             open roles
-          </Typography>
+          </H1>
           <FlexBox gap={2} flexDirection={isMobile? 'column': 'row'}>
             <TextField
               variant="outlined"
@@ -189,13 +190,13 @@ const JobCard = ({ job }) => {
 
   return (
     <CardWrapper onClick={handleCardClick}> {/* Attach click handler */}
-      <Typography textTransform="uppercase" color="#fff" fontFamily="Helvetica" fontSize={16} sx={{ py: 1 }}>
+      <Paragraph textTransform="uppercase" color="#fff" fontSize={16} sx={{ py: 1 }}>
         {job.location}
-      </Typography>
+      </Paragraph>
       <Divider />
-      <Typography color="#fff" fontSize={18} sx={{ py: 2, ...styles.elementalEndFont }}>
+      <H1 color="#fff" fontSize={18} py={2}>
         {job.title}
-      </Typography>
+      </H1>
       <FlexBox justifyContent="flex-end">
         <EastIcon sx={{ color:'#fff' }} />
       </FlexBox>

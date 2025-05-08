@@ -1,9 +1,9 @@
 "use client";
 // ==============================================================
-// Favourites Context
+// Favorites Context
 // ==============================================================
 
-import { createContext, useContext, useReducer, useMemo } from "react";
+import { createContext, useContext, useReducer, useMemo, useEffect } from "react";
 
 // Initial state
 const INITIAL_STATE = { favorites: [] };
@@ -22,16 +22,22 @@ const reducer = (state, action) => {
           favorites: state.favorites.filter((item) => item.id !== action.payload.id),
         };
       } else {
-        return {
-          ...state,
-          favorites: [...state.favorites, action.payload],
-        };
+          return {
+            ...state,
+            favorites: [...state.favorites, action.payload],
+          };
       }
 
     case "REMOVE_FAVORITE":
       return {
         ...state,
         favorites: state.favorites.filter((item) => item.id !== action.payload),
+      };
+
+    case "INITIALIZE_FAVORITES":
+      return {
+        ...state,
+        favorites: action.payload,
       };
 
     default:
@@ -42,6 +48,32 @@ const reducer = (state, action) => {
 // Provider
 export const FavoritesProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("favorites");
+      if (stored) {
+        try {
+          dispatch({
+            type: "INITIALIZE_FAVORITES",
+            payload: JSON.parse(stored),
+          });
+        } catch (e) {
+          console.error("Failed to parse favorites from localStorage", e);
+        }
+      }
+    }
+  }, []);
+
+    // Save to localStorage on every change
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("favorites", JSON.stringify(state.favorites));
+      }
+    }, [state.favorites]);
+
+
   const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return (

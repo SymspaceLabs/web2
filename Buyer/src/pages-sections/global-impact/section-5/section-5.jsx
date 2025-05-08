@@ -2,20 +2,20 @@
 // Section 5 
 // =======================================================================
 
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import MarqueeeSlider from "./MarqueeeSlider";
-import { styles } from "../page-view/styles";
+import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section5() {
   return (
     <Box sx={{ width: "100%", display:'flex', flexDirection:'column', alignItems:'center', py: 4 }}>
-      <Box sx={{ width: "100%", maxWidth:'1600px', p:2}}>
-        <Typography fontSize="16px" fontFamily="Helvetica" sx={{ color: "#fff" }}>
+      <Box sx={{ width: "100%", maxWidth:'1250px', p:2}}>
+        <Paragraph fontSize="16px" fontFamily="Helvetica" sx={{ color: "#fff" }}>
           What everyone is saying
-        </Typography>
-        <Typography sx={{ pb: "25px", color: "#fff", ...styles.elementalEndFont }} fontSize={{ xs: 28, sm: 40 }} >
+        </Paragraph>
+        <H1 sx={{ pb: "25px", color: "#fff" }} fontSize={{ xs: 28, sm: 40 }} >
           communities and collaborations
-        </Typography>
+        </H1>
       </Box>
       <MarqueeeSlider companies={companies} /> {/* SLIDER */}
     </Box>

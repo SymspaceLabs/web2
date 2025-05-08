@@ -8,7 +8,7 @@ export const styles = {
   },
   subheader: {
     color: '#FFF',
-    fontSize: { xs:12, sm:24 },
+    fontSize: { xs:12, sm:20 },
     textAlign: 'justify',
     maxWidth: 1200,
     lineHeight: { xs:1.5, sm:2 },

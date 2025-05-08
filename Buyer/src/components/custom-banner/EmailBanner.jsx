@@ -76,7 +76,7 @@ export default function EmailBanner({title}) {
         viewport={{ once: true }}
         style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
       >
-        <Container sx={{ py: 10 }}>
+        {/* <Container > */}
           <RootStyle>
             <LazyImage
               src="/assets/images/banners/banner-55.png"
@@ -206,7 +206,7 @@ export default function EmailBanner({title}) {
               )}
             </div>
           </RootStyle>
-        </Container>
+        {/* </Container> */}
       </motion.div>
     </Box>
   );

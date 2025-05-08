@@ -33,10 +33,10 @@ export default function Section8() {
               {/* Card 2 - Website & App Integration */}
               <FlexBox
                 sx={{
-                  width: "100%",
                   gap: 2,
-                  justifyContent: "space-between",
+                  width: "100%",
                   alignItems: "stretch",
+                  justifyContent: "space-between",
                   flexWrap: { xs: "wrap", md: "nowrap" }, // Allow wrapping on small screens
                 }}
               >

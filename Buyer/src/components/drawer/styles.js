@@ -1,5 +1,3 @@
-import { elementalEndFont } from "../styles"
-
 const btn = {
     color: "#FFF",
     borderRadius:'50px',
@@ -7,8 +5,6 @@ const btn = {
     width:'100%',
     border:'2px solid white',
     wordSpacing: '5px',
-    ...elementalEndFont   
-
 }
 
 export const styles = {

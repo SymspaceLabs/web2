@@ -1,5 +1,9 @@
 "use client";
 
+// ===============================================================
+// Section 4 | Careers
+// ===============================================================
+
 import { motion } from "framer-motion";
 import { Box, Container } from "@mui/material";
 import { FlexColCenter } from '@/components/flex-box';
@@ -7,7 +11,7 @@ import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section4() {
   return (
-    <FlexColCenter sx={{ py:10, px:{xs:2, sm:0} }} width="100%">
+    <FlexColCenter sx={{ pb:10, px:{xs:2, sm:0} }} width="100%">
       <Container>
         <motion.div
           component={Box} // Makes motion.div behave like a Box

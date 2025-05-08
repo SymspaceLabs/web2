@@ -89,15 +89,7 @@ const DropZone3D = ({ onModelUpload }) => {
         <Typography color="grey.600">Upload .glb file only</Typography>
 
         {/* 3D Model Viewer */}
-        {/* {selectedModel && (
-          <Canvas style={{ width: "100%", height: "400px" }}>
-            <Suspense fallback={<span>Loading 3D model...</span>}>
-              <OrbitControls />
-              <ambientLight intensity={0.5} />
-              <ModelViewer modelUrl={selectedModel} />
-            </Suspense>
-          </Canvas>
-        )} */}
+
       </FlexBox>
 
       {/* MUI Drawer component - opens from the bottom */}
@@ -123,13 +115,7 @@ const DropZone3D = ({ onModelUpload }) => {
                   onClick={() => handleModelSelect(model.url)} // Select the model
                 >
                   {/* Render the 3D model directly in the drawer */}
-                  {/* <Canvas style={{ width: "100%", height: "100px" }}>
-                    <Suspense fallback={<span>Loading...</span>}>
-                      <OrbitControls enableZoom={false} />
-                      <ambientLight intensity={0.5} />
-                      <ModelViewer modelUrl={model.url} />
-                    </Suspense>
-                  </Canvas> */}
+
                   <Typography variant="body2">{model.name}</Typography>
                 </Box>
               </Grid>

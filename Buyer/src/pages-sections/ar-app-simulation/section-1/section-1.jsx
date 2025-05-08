@@ -1,16 +1,19 @@
 "use client";
 
 // ===================================================================
-// Section 1
+// Section 1 | AR App Simulation
 // ===================================================================
 
-import BlobBox from './blobBox';
 import { useRouter } from 'next/navigation';
 import { styles } from '../page-view/styles';
 import { useState, useRef, useEffect } from 'react';
-import { Box, Typography, Button, TextField } from '@mui/material';
-import AppStore from '@/components/footer/components/app-store';
+import { Box, Button, TextField } from '@mui/material';
 import { H1, Paragraph } from '@/components/Typography';
+
+import BlobBox from './blobBox';
+import AppStore from '@/components/footer/components/app-store';
+
+// ===================================================================
 
 export default function Section1() {
   const router = useRouter();
@@ -176,7 +179,6 @@ export default function Section1() {
                   borderRadius: '50px',
                   color: isSubmitted ? '#000' : '#fff',
                   padding: '6px 12px',
-                  ...styles.elementalEndFont,
                   '&:hover': {
                     background: isSubmitted
                       ? '#f0f0f0'
@@ -187,9 +189,9 @@ export default function Section1() {
                 {isSubmitted ? '✔️' : 'Submit'}
               </Button>
             </Box>
-            <Typography sx={{ py:1, px:1, color:'red' }}>
+            <Paragraph sx={{ py:1, px:1, color:'red' }}>
               {error}
-            </Typography>
+            </Paragraph>
           </>
         )}
       </Box>

@@ -5,8 +5,9 @@
 // =================================================================
 
 import { useState, useRef, useEffect } from 'react';
-import { Box, Typography, Button, useTheme, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
 import { styles } from '../page-view/styles';
+import { H1, Paragraph } from '@/components/Typography';
 
 export default function Section1() {
   const [email, setEmail] = useState('');
@@ -83,14 +84,14 @@ export default function Section1() {
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* Headline */}
-        <Typography sx={{ ...styles.elementalEndFont, color: '#fff', fontSize: { xs: 20, sm: 35, md: 60 } }}>
+        <H1 sx={{ color: '#fff', fontSize: { xs: 20, sm: 35, md: 60 } }}>
           Shaping  the  future  of<br /> accessible  ar  Commerce
-        </Typography>
+        </H1>
 
         {/* Promotional Offer */}
-        <Typography sx={{  marginBottom: '2rem', color: '#fff', fontFamily: 'Helvetica', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px', md: '1500px' } }}>
+        <Paragraph sx={{  marginBottom: '2rem', color: '#fff', fontSize: { xs: 10, sm: 14, md: 16 }, maxWidth:{ xs: '360px', sm: '1000px', md: '1500px' } }}>
           Empowering Inclusion, Sustainability, and Innovation through Augmented Reality + Artificial Intelligence
-        </Typography>
+        </Paragraph>
 
         {/* Button group */}
         {!showEmailInput &&
@@ -158,7 +159,6 @@ export default function Section1() {
                   borderRadius: '50px',
                   color: isSubmitted ? '#000' : '#fff',
                   padding: '6px 12px',
-                  ...styles.elementalEndFont,
                   '&:hover': {
                     background: isSubmitted
                       ? '#f0f0f0'
@@ -169,9 +169,9 @@ export default function Section1() {
                 {isSubmitted ? '✔️' : 'Submit'}
               </Button>
             </Box>
-            <Typography sx={{ py:1, px:1, color:'red' }}>
+            <Paragraph sx={{ py:1, px:1, color:'red' }}>
               {error}
-            </Typography>
+            </Paragraph>
           </>
         )}
       </Box>

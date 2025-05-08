@@ -4,18 +4,21 @@
 // Section 1 | Company Details Page 
 // ====================================================================
 
+import Link from 'next/link';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import PublicIcon from '@mui/icons-material/Public';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import PublicIcon from '@mui/icons-material/Public';
+
 import { LazyImage } from '@/components/lazy-image';
 import { Paragraph } from '@/components/Typography';
-import { FlexBox, FlexCol } from '@/components/flex-box';
+import { FlexBox, FlexCol, FlexRowCenter } from '@/components/flex-box';
 import { Box, IconButton, Stack, Button } from '@mui/material';
-import Link from 'next/link';
+
+// ====================================================================
 
 export default function Section1({ company }) {
 
@@ -30,15 +33,11 @@ export default function Section1({ company }) {
     <Box sx={{ color: '#fff', minHeight: '400px', pb:10 }}>
 
       {/* BANNER BG */}
-      <Box
+      <FlexRowCenter
         sx={{
-          minHeight: '300px',
-          maxHeight: '400px',
+          height: '300px',
           overflow: 'hidden',
           backgroundColor: company.banner ? 'transparent' : '#e0e0e0',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
         }}
       >
         {company.banner ? (
@@ -52,7 +51,7 @@ export default function Section1({ company }) {
         ) : (
           <Paragraph color="#555">No Banner Available</Paragraph>
         )}
-      </Box>
+      </FlexRowCenter>
 
 
       {/* Foreground content */}

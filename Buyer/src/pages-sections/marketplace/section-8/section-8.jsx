@@ -31,12 +31,12 @@ export default function Section8() {
               <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
                 <FlexCol sx={{...styles.bentoBoxCard, maxHeight:{xs:'100%', sm:'290px'}, background:"#353535"}}>
                   {/* Title */}
-                  <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 40 }} color="#FFF">
+                  <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 35 }} color="#FFF">
                     Advanced AR Advertisements
                   </H2>
 
                   {/* Description */}
-                  <Paragraph color="#FFF" fontSize={{ xs: 14, sm: 22 }} mb={1}>
+                  <Paragraph color="#FFF" fontSize={{ xs: 14, sm: 18 }} mb={1}>
                     Equip viewers with immersive AR visuals on top of products or physical posters.
                   </Paragraph>
 
@@ -57,12 +57,12 @@ export default function Section8() {
                 <FlexCol sx={{...styles.bentoBoxCard, maxHeight:{xs:'100%', sm:'290px'}, background:"#BDBDBD"}}>
                   
                   {/* Title */}
-                  <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 40 }} color="#FFF">
+                  <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 35 }} color="#FFF">
                     Application Integration
                   </H2>
                                    
                   {/* Description */}
-                  <Paragraph color="#FFF" fontSize={{ xs: 14, sm: 22 }} mb={1}>
+                  <Paragraph color="#FFF" fontSize={{ xs: 14, sm: 18 }} mb={1}>
                     An immersive way to shop conveniently and confidently with AR functionality enhancing every step of the user experience.
                   </Paragraph>
 
@@ -85,12 +85,12 @@ export default function Section8() {
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
             <FlexCol sx={{...styles.bentoBoxCard, background:"#E0F0FD" }}>
               {/* Title */}
-              <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 40 }} color="#000">
+              <H2 lineHeight={1.2} fontSize={{ xs: 25, sm: 35 }} color="#000">
                 Generate 3D Products through Artificial Intelligence
               </H2>
 
               {/* Description */}
-              <Paragraph color="#909090" fontSize={{ xs: 14, sm: 22 }} mb={1}>
+              <Paragraph color="#909090" fontSize={{ xs: 14, sm: 18 }} mb={1}>
                 Allow consumers to augment 3D products from the comfort of their home to revolutionize the way they engage with products.
               </Paragraph>
 

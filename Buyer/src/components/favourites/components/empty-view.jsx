@@ -5,7 +5,6 @@ import Image from "next/image"; // GLOBAL CUSTOM COMPONENTS
 import { Button } from "@mui/material";
 import { H1 } from "@/components/Typography";
 import { FlexColCenter } from "@/components/flex-box";
-import { styles } from "@/components/styles";
 
 export default function EmptyCartView() {
   return (
@@ -35,8 +34,7 @@ export default function EmptyCartView() {
 }
 
 const btn = {
-    ...styles.elementalEndFont, 
-    color: '#FFF',
+  color: '#FFF',
   fontSize: 12,
   px:3,
   background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',

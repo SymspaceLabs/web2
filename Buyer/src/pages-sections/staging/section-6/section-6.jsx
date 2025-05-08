@@ -31,7 +31,7 @@ export default function Section6() {
             {/* Pricing Table */}
             <PricingTable 
               plans={AR_REAL_ESTATE_PLANS}
-              title="flexible  pricing  for  every  property"
+              title="flexible pricing for every property"
               theme="dark"
             />
 

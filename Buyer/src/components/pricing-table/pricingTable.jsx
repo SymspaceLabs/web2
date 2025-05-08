@@ -4,7 +4,11 @@ import { FlexCol } from "../flex-box";
 import PlanCard from './PlanCard';
 import PlanToggle from './PlanToggle';
 
-const PricingTable = ({plans, title, theme='light'}) => {
+const PricingTable = ({
+    plans,
+    title,
+    theme='light'
+}) => {
     const [billingCycle, setBillingCycle] = useState("monthly");
     const handleBillingCycleChange = (cycle) => {
         setBillingCycle(cycle);
@@ -22,7 +26,7 @@ const PricingTable = ({plans, title, theme='light'}) => {
             />
 
             {/* TABLE */}
-            <Grid container spacing={4} alignItems="stretch">
+            <Grid container spacing={2} alignItems="stretch">
                 {plans(billingCycle).map((plan) => (
                     <Grid item xs={12} sm={6} md={3} key={plan.title} >
                         <PlanCard plan={plan} theme={theme} />

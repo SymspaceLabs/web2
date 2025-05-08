@@ -1,10 +1,16 @@
 "use client"
 
-import { styled } from "@mui/system";
+// ===============================================
+// Testimonial Card
+// ===============================================
+
 import { Box } from "@mui/material";
+import { styled } from "@mui/system";
+import { Paragraph } from "../Typography";
 import { FlexBox } from "@/components/flex-box";
 import { LazyImage } from "@/components/lazy-image";
-import { Paragraph } from "../Typography";
+
+// ===============================================
 
 const TestimonialWrapper = styled(Box)(({ theme }) => ({
     boxSizing: "border-box",

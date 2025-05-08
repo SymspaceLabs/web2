@@ -1,14 +1,19 @@
 "use client";
 
+// ===================================================
+// Section 1 | Staging
+// ===================================================
+
 import { FlexRowCenter } from "@/components/flex-box";
 import { LazyImage } from "@/components/lazy-image";
 import { Box, useMediaQuery} from "@mui/material";
 import { motion } from "framer-motion";
 
+// ===================================================
+
 export default function Section1() {
 
   const isMobile = useMediaQuery('(max-width:1200px)');
-
 
   return (
     <>

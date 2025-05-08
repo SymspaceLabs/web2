@@ -2,7 +2,7 @@
 
 import { Box } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
-import TestimonialCard from "@/components/cards/TestimonialCard";
+import TestimonialCard from "@/components/custom-cards/TestimonialCard";
 
 const marqueeAnimation = keyframes`
   0% { transform: translateX(0); }

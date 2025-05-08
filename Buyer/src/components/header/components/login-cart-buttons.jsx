@@ -63,7 +63,6 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
         </IconButton>
       </Badge>
 
-
       {/* Shopping Cart Icon Button */}
       <Badge badgeContent={cartList.reduce((acc, item) => acc + item.qty, 0)} color="primary">
         <IconButton onClick={toggleCartOpen}>

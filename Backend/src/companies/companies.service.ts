@@ -36,11 +36,19 @@ export class CompaniesService {
       where: { slug },
       relations: ['products', 'products.images'],
     });
+  
     if (!company) {
       throw new NotFoundException(`Company with ID ${slug} not found`);
     }
+  
+    // Sort each product's images by sortOrder
+    for (const product of company.products) {
+      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+    }
+  
     return company;
   }
+  
 
   async update(
     id: string,

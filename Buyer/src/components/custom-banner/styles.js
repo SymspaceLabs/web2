@@ -1,13 +1,4 @@
-import { elementalEnd } from "@/app/layout"; // Calling custom font
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
-
 export const styles = {
-    elementalEndFont,
     banner : {
         background: 'rgba(255, 255, 255, 0.35)',
         boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
@@ -23,7 +14,6 @@ export const styles = {
     buttonDark : {
         width: "100%", 
         maxWidth: {xs:'100%', sm:250},
-        ...elementalEndFont,
         borderRadius: 32,
         px: 3,
         background: '#000',
@@ -38,7 +28,6 @@ export const styles = {
         }
     },
     bannerButton : { 
-        ...elementalEndFont,
         background:'linear-gradient(97.04deg, #666666 0%, #1D1D1D 100%)',
         borderRadius: '50px',
         px:5,

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { styles } from '../page-view/styles';
 import { LazyImage } from '@/components/lazy-image';
-import { Box, Typography, Button } from '@mui/material';
-import { FlexBox, FlexColCenter } from '@/components/flex-box';
+import { Box, Button } from '@mui/material';
+import { FlexBox, FlexCol } from '@/components/flex-box';
 import { H1, Paragraph } from '@/components/Typography';
 
 export const Card1 = () => {
@@ -110,12 +110,11 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
       width: "100%", 
       minHeight: { sm: 250 }, 
       py: { xs: 2, sm: 5.5 }, 
-      px: 2,
+      pr: 3,
       bgcolor: bg,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      gap: 3,
       borderRadius: { xs: '25px', sm: "50px" },
       position: "relative",
       overflow: "hidden",
@@ -153,7 +152,7 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
         />
       </Box>
 
-      <FlexColCenter
+      <FlexCol
         className="headerBox"
         sx={{
           height: { sm: 143 },
@@ -163,33 +162,35 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
           transform: { xs: "none", sm: "translateY(0)" },
         }}
       >
-        <H1
-          sx={{
-            lineHeight: 1.5,
-            minHeight:'26px',
-            alignSelf: 'stretch',
-            color: textColor,
-            fontSize: { xs: 8.5, sm: 20 },
-            wordWrap: 'break-word',
-          }}
-        >
-          {headerText}
-        </H1>
-        <Paragraph
-          sx={{
-            alignSelf: 'stretch',
-            color: '#909090',
-            fontSize: { xs: 12, sm: 16 },
-            fontWeight: 700,
-            lineHeight: { xs: 1, sm: 1.5 },
-            wordWrap: 'break-word',
-            maxWidth: 200,
-            minHeight:'26px',
-          }}
-        >
-          {subHeaderText}
-        </Paragraph>
-      
+        <FlexCol>
+          <H1
+            sx={{
+              lineHeight: 1.5,
+              minHeight:'26px',
+              alignSelf: 'stretch',
+              color: textColor,
+              fontSize: { xs: 8.5, sm: 18 },
+              wordWrap: 'break-word',
+            }}
+          >
+            {headerText}
+          </H1>
+          <Paragraph
+            sx={{
+              alignSelf: 'stretch',
+              color: '#909090',
+              fontSize: { xs: 12, sm: 15 },
+              fontWeight: 700,
+              lineHeight: { xs: 1, sm: 1.5 },
+              wordWrap: 'break-word',
+              maxWidth: 200,
+              minHeight:'26px',
+            }}
+          >
+            {subHeaderText}
+          </Paragraph>
+        </FlexCol>
+        
         <Box sx={{ width: '100%' }}>
           <Link href="/ar-app-simulation" passHref>
             <Button
@@ -201,7 +202,7 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
           </Link>
 
         </Box>
-      </FlexColCenter>
+      </FlexCol>
     </Box>
   )
 }
@@ -210,6 +211,21 @@ export const Card3 = () => {
   return (
     <FlexBox 
       sx={{
+        height: "100%", 
+        pt: { xs: 4, sm: 14 },
+        pb: { xs: 2, sm: 10 },
+        px: { xs: 2, sm: 5 },
+        display: "flex", 
+        flexDirection: "column", 
+        bgcolor: "#D5D5D5", 
+        borderRadius: {xs:'25px', sm:"50px"}, 
+        justifyContent: "center",
+        overflow: 'hidden',
+        position:'relative',
+        // Disable hover effects on mobile
+        '@media (min-width:600px)': {
+          py: 5.5,
+          borderRadius: { sm: '50px' },
           height: "100%", 
           pt: { xs: 4, sm: 14 },
           pb: { xs: 2, sm: 10 },
@@ -221,30 +237,15 @@ export const Card3 = () => {
           justifyContent: "center",
           overflow: 'hidden',
           position:'relative',
-          // Disable hover effects on mobile
-          '@media (min-width:600px)': {
-            py: 5.5,
-            borderRadius: { sm: '50px' },
-            height: "100%", 
-            pt: { xs: 4, sm: 14 },
-            pb: { xs: 2, sm: 10 },
-            px: { xs: 2, sm: 5 },
-            display: "flex", 
-            flexDirection: "column", 
-            bgcolor: "#D5D5D5", 
-            borderRadius: {xs:'25px', sm:"50px"}, 
-            justifyContent: "center",
-            overflow: 'hidden',
-            position:'relative',
-            '&:hover .fadeInBtn': {
-              display: 'flex',
-              opacity: 1,
-              transform: 'translateY(0)',
-            },
-            '&:hover .headerBox': {
-              transform: 'translateY(-10%)',
-            },
+          '&:hover .fadeInBtn': {
+            display: 'flex',
+            opacity: 1,
+            transform: 'translateY(0)',
           },
+          '&:hover .headerBox': {
+            transform: 'translateY(-10%)',
+          },
+        },
       '&:hover .fadeInBtn': {
         display: { xs: "flex", sm: "flex" }, // Always visible on mobile
         opacity: { xs: 1, sm: 1 },
@@ -315,7 +316,7 @@ export const Card3 = () => {
                 fontWeight: 700,
                 lineHeight: { xs: 1, sm: 2 },
                 wordWrap: 'break-word',
-                maxWidth: { md:'400px' },
+                maxWidth: { md:'330px' },
                 textAlign: 'justify',
                 lineHeight: 1.5,
               }}
@@ -333,7 +334,6 @@ export const Card3 = () => {
                 Learn More
               </Button>
             </Link>
-
           </FlexBox>
         </Box>
       </FlexBox>
@@ -346,7 +346,7 @@ export const Card3 = () => {
           height: { xs: 120, sm: 300 },
           display: { xs: "none", lg: "block" },
           position: "absolute", // Position the image absolutely
-          right: "-40px", // Move it partially outside the card
+          right: "-50px", // Move it partially outside the card
           top: "50%",
           transform: "translateY(-50%)", // Center vertically
         }}
@@ -372,7 +372,6 @@ const btnStyle = (color = "#000") => ({
     textAlign: 'center',
     color,
     fontSize: { xs: 10, sm: 16 },
-    ...styles.elementalEndFont,
     fontWeight: 500,
     "&:hover": {
       bgcolor: color,

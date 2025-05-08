@@ -29,15 +29,15 @@ export default function Section1() {
                 viewport={{ once: true }}
                 style={{ height: "100%" }} // Ensures motion.div spans full height
               >
-                <Paragraph sx={{ color: 'rgba(255,255,255,0.7)', fontSize: {xs:18, sm:28}, mb:{xs:-1, sm:-3}, fontWeight: 'bold' }}>
+                <Paragraph sx={{ color: 'rgba(255,255,255,0.7)', fontSize: {xs:18, sm:25}, mb:{xs:-1, sm:-3}, fontWeight: 'bold' }}>
                    AI Powered AR Commerce
                 </Paragraph>
                 
-                <H1 fontSize={{xs:48, sm:60, md:100}} color='#FFF'>
+                <H1 fontSize={{xs:48, sm:60, md:90}} color='#FFF'>
                   SYMSPACE
                 </H1>
                 
-                <Paragraph fontSize={{xs:11, sm:20}} color='#FFF'>
+                <Paragraph fontSize={{ xs:11, sm:18 }} color='#FFF'>
                   Revolutionize your shopping experience through Augmented Reality.
                 </Paragraph>
 
@@ -70,10 +70,12 @@ export default function Section1() {
             {/* Right content: Promotional video */}
             <Grid item xs={12} md={6}
               sx={{
-                justifyContent:'center',
                 zIndex: 2,
+                justifyContent:'flex-end',
+                paddingRight: { sm:'100px' },
                 display: { xs: "none", sm: "none", md: "flex" }
-              }}>
+              }}
+            >
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -83,13 +85,12 @@ export default function Section1() {
               >
                 <Box
                   sx={{
-                    position: 'relative',
-
                     zIndex: 2,
-                    borderRadius: '40px',
-                    overflow: 'hidden',    // important!
                     width: '100%',
-                    maxWidth: '250px',      // optional: controls size
+                    maxWidth: '250px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    borderRadius: '40px',
                   }}
                 >
                   <video

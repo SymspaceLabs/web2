@@ -1,13 +1,15 @@
 "use client"
 
 // ====================================================================
-// Company Details Page Sections
+// Company Details
 // ====================================================================
 
-import Section2 from "../section-2";
 import Section1 from "../section-1";
+import Section2 from "../section-2";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+
+// ====================================================================
 
 export default function CompanyPageView({ slug }) {
 
@@ -62,7 +64,7 @@ export default function CompanyPageView({ slug }) {
   return (
     <div className="bg-white">
       <Section1 company={company} />
-      <Section2 products={company.products} />
+      <Section2 products={company.products} company={company}  />
     </div>
   );
 }

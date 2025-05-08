@@ -6,11 +6,11 @@
 
 // Material-UI components
 import { useEffect, useState } from "react";
-import { Box, Container } from "@mui/material";
+import { Box, CircularProgress, Container } from "@mui/material";
 
 // Local custom components
 import ProductTabs from "../product-tabs";
-import ProductIntro from "../product-intro";
+import ProductDetails from "../product-details";
 import { BlobBox } from "@/components/BlobBox";
 
 export default function ProductDetailsPageView({slug}) {
@@ -39,7 +39,7 @@ export default function ProductDetailsPageView({slug}) {
     fetchProduct();
   }, [slug]);
   
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <CircularProgress />;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -54,7 +54,7 @@ export default function ProductDetailsPageView({slug}) {
       <BlobBox top="60%" left={'-10%'} background="#0366FE" widthHeight='500px' displayNoneMobile={true} /> {/* BLUE */}
 
       <Container className="mt-2 mb-2">
-        <ProductIntro product={product} /> {/* Product introduction */}
+        <ProductDetails product={product} /> {/* Product introduction */}
         <ProductTabs /> {/* Tabs section for detailed product information */}
       </Container>
     </Box>

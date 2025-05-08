@@ -5,7 +5,7 @@
 // =============================================================================
 
 import { useState, useEffect } from "react";
-import { IconButton, Box, Container, Divider, Typography } from "@mui/material";
+import { IconButton, Box, Container, Divider, Typography, CircularProgress } from "@mui/material";
 import { Carousel } from "@/components/carousel"; // Custom carousel component.
 import { useRouter } from 'next/navigation';
 import { FlexBox } from '@/components/flex-box';
@@ -43,7 +43,7 @@ export default function Section6() {
     fetchJobs();
   }, []);
 
-  if (loading) return <Typography color="#fff">Loading...</Typography>;
+  if (loading) return <CircularProgress />
   if (error) return <Typography color="error">{error}</Typography>;
   
   return (

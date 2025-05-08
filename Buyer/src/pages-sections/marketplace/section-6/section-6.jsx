@@ -1,24 +1,15 @@
-/**
- *  Component
- *
- * This component renders a promotional section with a headline, 
- * a description, a call-to-action button for beta access, and an image. 
- * The section uses Material-UI (MUI) for styling and includes styled components.
- *
- */
-
 // ============================================================================
 // Section 6 Banner
 // ============================================================================
 
 import { useState } from "react";
-import { Box, Container, Typography, Button, TextField } from '@mui/material';
-import { LazyImage } from "@/components/lazy-image";
 import { motion } from "framer-motion";
-import { styles } from "../page-view/styles";
-import { H1, Paragraph } from "@/components/Typography";
 import { FlexCol } from "@/components/flex-box";
+import { LazyImage } from "@/components/lazy-image";
+import { H1, Paragraph } from "@/components/Typography";
+import { Box, Container, Button, TextField } from '@mui/material';
 
+// ============================================================================
 
 export default function Section6() {
     const [showInput, setShowInput] = useState(false);
@@ -194,7 +185,6 @@ export default function Section6() {
                         borderRadius: "50px",
                         color: isSubmitted ? "#000" : "#fff",
                         padding: "6px 12px",
-                        ...styles.elementalEndFont,
                         "&:hover": {
                           background: isSubmitted
                             ? "#f0f0f0"

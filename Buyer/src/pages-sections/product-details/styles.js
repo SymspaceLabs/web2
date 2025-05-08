@@ -13,7 +13,7 @@ export const styles = {
     borderRadius: '100px'
   },
   productCard : {
-    p:5,
+    p: { xs:3, sm:5 },
     borderRadius: "30px",
     boxSizing: 'border-box',
     backdropFilter: 'blur(12px)',
@@ -58,16 +58,17 @@ export const styles = {
     }
   },
   personalised: {
-    padding: "16px 9px",
+    padding: { xs:'15px 5px', sm:'16px 9px' },
     border: "2px solid #000000",
     borderRadius: "50px",
-    fontSize: '14px',
+    fontSize: { xs:10, sm:14 },
     color: '#000',
     flexGrow: 1,
     width:'100%'
   },
   sizeChart : {
     ...button,
+    display:{xs:'none'},
     fontSize:8,
     padding: "8px",
     color: '#000',

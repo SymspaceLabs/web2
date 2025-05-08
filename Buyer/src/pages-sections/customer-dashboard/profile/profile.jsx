@@ -9,7 +9,7 @@ import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
 import { ProfileForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { Card, Button, useMediaQuery } from "@mui/material";
+import { Card, Button, useMediaQuery, CircularProgress } from "@mui/material";
 
 import axios from "axios";
 import ProfilePicUpload from "./profile-pic-upload";
@@ -76,7 +76,7 @@ const Profile = ({ isEdit = true }) => {
     fetchUserData();
   }, [user?.id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <CircularProgress />
 
   const handleSaveChanges = async () => {
     const requestBody = {

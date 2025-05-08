@@ -4,32 +4,55 @@
 // Section 7 Product Sections
 // ====================================================================
 
-import Link from "next/link";
 import { motion } from "framer-motion"; // Import Framer Motion
-import { calculateDiscount } from "@/lib";
-import { PRODUCTS } from "@/data/products";
+import { useState, useEffect } from "react";
 import { styles } from "../page-view/styles";
-import { FlexBox, FlexCol } from "@/components/flex-box";
-import { LazyImage } from "@/components/lazy-image";
-import { H1, Paragraph } from "@/components/Typography";
+import { H1 } from "@/components/Typography";
+import { FlexBox } from "@/components/flex-box";
+import { ProductCard2 } from "@/components/custom-cards/product-cards";
 import { Grid, Box, Card, CardContent, Container, Button } from "@mui/material";
+import Link from "next/link";
+
+// ====================================================================
 
 export default function Section7() {
 
   const cardData = [
     {
       btnText:'Shop More',
-      cardHeader:'Selected for you'
+      cardHeader:'Selected for you',
+      slug: 'selected-for-you'
     },
     {
       btnText:'Shop New Arrivals',
-      cardHeader:'New Arrivals'
+      cardHeader:'New Arrivals',
+      slug: 'new-arrivals'
     },
     {
       btnText:'Shop Sale',
-      cardHeader:'Today’s deals'
+      cardHeader:'Today’s deals',
+      slug: 'todays-deals'
     }
   ]
+
+  const [products, setproducts] = useState([]);
+  const [loading, setLoading] = useState(true); 
+
+  useEffect(() => {
+    const fetchproducts = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
+        const data = await response.json();
+        setproducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchproducts();
+  }, []);
 
   return (
     <Box sx={{ py: 5 }}>
@@ -62,47 +85,20 @@ export default function Section7() {
 
                     {/* Products Grid */}
                     <Grid container spacing={{xs:1, sm:2}}>
-                      {PRODUCTS.slice(0, 4).map((product,index) => (
+                      {products.slice(0, 4).map((product,index) => (
                         <Grid item lg={6} md={6} sm={6} xs={6} key={index}>
-                          <ProductCard product={product} />
-                          {/* <Link href={`/products/${product.slug}`} passHref>
-                            <FlexBox
-                              flexDirection="column"
-                              bgcolor="rgba(255, 255, 255, 0.1)"
-                              borderRadius={3}
-                              mb={2}
-                              sx={{ userSelect: "text", textDecoration: "none" }}
-                            >
-                              <Box sx={{ maxHeight: 150, mt: -2, mb: "25px" }}>
-                                <LazyImage
-                                  alt={product.title}
-                                  width={100}
-                                  height={100}
-                                  src={product.thumbnail}
-                                />
-                              </Box>
-                              <Box sx={{ px: 4, pb: 1 }}>
-                                <Paragraph color="#FFF" fontSize="18px">
-                                  {product.title}
-                                </Paragraph>
-                                <Paragraph color="#FFF" fontSize="16px">
-                                  {product.brand}
-                                </Paragraph>
-                                <Paragraph color="#FFF" fontSize="20px" fontWeight={700}>
-                                  {calculateDiscount(product.price, product.discount)}
-                                </Paragraph>
-                              </Box>
-                            </FlexBox>
-                          </Link> */}
+                          <ProductCard2 product={product} />
                         </Grid>
                       ))}
                     </Grid>
 
                     {/* Contact Button */}
-                    <FlexBox justifyContent="center">
-                      <Button sx={styles.buttonLight}>
-                        {data.btnText}
-                      </Button>
+                    <FlexBox justifyContent="center"  py={3}>
+                      <Link href={`/products/search/all?tag=${data.slug}`}>
+                        <Button sx={styles.buttonLight}>
+                          {data.btnText}
+                        </Button>
+                      </Link>
                     </FlexBox>
                   </CardContent>
                 </Card>
@@ -113,42 +109,4 @@ export default function Section7() {
       </Container>
     </Box>
   );
-}
-
-const ProductCard = ({product}) => {
-
-  return (
-    <Link href={`/products/${product.slug}`} passHref>
-      <FlexCol bgcolor="rgba(255, 255, 255, 0.1)"
-        borderRadius={3}
-        mb={2}
-        sx={{
-          userSelect: "text",
-        }}
-      >
-        {/* Product Image */}
-        <Box sx={{ maxHeight: 300, mb: 0 }}>
-          <LazyImage
-            alt={product.title}
-            width={380}
-            height={379}
-            src={product.thumbnail}
-          />
-        </Box>
-
-        {/* Product Details */}
-        <Box sx={{ px: {xs:1.5, sm:4}, pb: 4 }}>
-          <Paragraph color="#FFF" fontSize={{xs:'12px', sm:"18px"}}>
-            {product.title}
-          </Paragraph>
-          <Paragraph color="#FFF" fontSize={{xs:'12px', sm:"16px"}}>
-            {product.brand}
-          </Paragraph>
-          <Paragraph color="#FFF" fontSize={{xs:'12px', sm:"18px"}} fontWeight={700}>
-            {calculateDiscount(product.price, product.discount)}
-          </Paragraph>
-        </Box>
-      </FlexCol>
-    </Link>
-  )
 }

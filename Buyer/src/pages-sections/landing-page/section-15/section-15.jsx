@@ -1,12 +1,13 @@
 "use client";
 
 // =========================================================================
-// Section 13 Component - Displays a testimonial section with a heading, description, 
+// Section 13 Testimonial section
 // ==========================================================================
 
-import { Box } from "@mui/material";
 import { motion } from "framer-motion";
+import { styles } from "../page-view/styles";
 import MarqueeeSlider from "./MarqueeeSlider";
+import { Box, Container } from "@mui/material";
 import { TESTIMONIALS } from "@/data/testimonial";
 import { H1, Paragraph } from "@/components/Typography";
 
@@ -21,14 +22,14 @@ export default function Section13() {
       style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
     >
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", py: 4, background: "#fff" }}>
-        <Box sx={{ width: "100%", maxWidth: "1600px", p: 2 }}>
+        <Container sx={{ width: "100%", p: 2 }}>
           <Paragraph fontSize="16px" sx={{ color: "#434167" }}>
             What everyone is saying
           </Paragraph>
-          <H1 sx={{ fontSize:{xs:20,sm:40}, pb: "25px" }} >
+          <H1 sx={{ ...styles.sectionHeader, fontSize: { xs: 18, sm: 40 }, color:'#2b3445', pb: "25px" }} >
             trusted by users globally
           </H1>
-        </Box>
+        </Container>
         <MarqueeeSlider testimonials={TESTIMONIALS} />
       </Box>
     </motion.div>

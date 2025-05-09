@@ -13,7 +13,7 @@ import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { SymAccordion, SymDialog } from "@/components/custom-components"
-import { Box, Button, Select, MenuItem, FormControl, Tooltip , Drawer, Grid, Rating, CircularProgress } from '@mui/material';
+import { Box, Button, Select, MenuItem, FormControl, Tooltip, Drawer, Grid, Rating, CircularProgress } from '@mui/material';
 
 import styles from "./styles";
 import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
@@ -203,7 +203,7 @@ export default function ProductDetails({ product }) {
             </FlexBox>
 
             {/* Size */}
-            <FlexBox gap={{ xs:2, sm:5 }} py={{ xs:2 }}>
+            <FlexBox gap={{ xs:2, sm:3 }} py={{ xs:2 }}>
               <FormControl sx={{ flexGrow: 1, width: '100%' }} error={sizeError}>
                 <Select
                   value={selectedSize}
@@ -251,11 +251,34 @@ export default function ProductDetails({ product }) {
             </FlexBox>
             
             {/* ADD TO CART BUTTON */}
-            <FlexBox alignItems="center" gap={{ xs:2, sm:5 }} py={1}>
-              <Button sx={styles.addToCartButton} onClick={handleCartAmountChange(1)}>
+            <FlexBox alignItems="center" gap={{ xs:2, sm:3 }} py={1}>
+              <Button
+                sx={{
+                  ...styles.addToCartButton,
+                  ...(availability?.stock === 0 && {
+                    background: 'rgba(128, 128, 128, 0.55)',
+                    color: "#FFF",
+                    cursor: "not-allowed",
+                  }),
+                }}
+                onClick={handleCartAmountChange(1)}
+                disabled={availability?.stock === 0}
+              >
                 Add to Cart
               </Button>
-              <Button sx={styles.buyNowButton} onClick={handleCartAmountChange(1)}>
+
+              <Button
+                sx={{
+                  ...styles.buyNowButton,
+                  ...(availability?.stock === 0 && {
+                    background: 'rgba(128, 128, 128, 0.55)',
+                    color: "#FFF",
+                    cursor: "not-allowed",
+                  }),
+                }}
+                onClick={handleCartAmountChange(1)}
+                disabled={availability?.stock === 0}
+              >
                 Buy now
               </Button>
             </FlexBox>

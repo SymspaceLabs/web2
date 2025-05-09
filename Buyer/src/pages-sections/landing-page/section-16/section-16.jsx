@@ -4,15 +4,15 @@
 // Section 16 | Email Banner | Landing Page
 // ========================================
 
-import { Box } from "@mui/material";
 import { motion } from "framer-motion";
+import { Box, Container } from "@mui/material";
 import { EmailBanner } from "@/components/custom-banner";
 
 // ========================================
 
 export default function Section16() {
   return (
-    <Box sx={{ background:'#FFF' }}>
+    <Box sx={{ background:'#FFF', py:{ xs:5, sm:15 } }}>
       <motion.div
         component={Box}
         initial={{ opacity: 0, y: 30 }}
@@ -21,7 +21,9 @@ export default function Section16() {
         viewport={{ once: true }}
         style={{ width: "100%", overflow: "hidden" }}
       >
-        <EmailBanner title="stay up to date" />
+        <Container>
+          <EmailBanner title="stay up to date" />
+        </Container>
       </motion.div>
     </Box>
   );

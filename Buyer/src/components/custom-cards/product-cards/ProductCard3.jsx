@@ -13,8 +13,9 @@ function ProductCard3(props) {
 
   const  {
     product,
-    company
+    company={}
   } = props;
+  
   return (
     <Link href={`/products/${product.slug}`} passHref>
       <Card

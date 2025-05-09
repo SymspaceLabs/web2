@@ -3,7 +3,7 @@ import { Grid, Pagination } from "@mui/material";
 
 import { Span } from "@/components/Typography";
 import { FlexBetween } from "@/components/flex-box";
-import ProductCard1 from "@/components/product-cards/product-card-1"; // CUSTOM DATA MODEL
+import { ProductCard3 } from "@/components/custom-cards/product-cards";
 
 // ========================================================
 export default function ProductsGridView({
@@ -14,7 +14,10 @@ export default function ProductsGridView({
       <Grid container spacing={3}>
         {products.map(item => (
           <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard1 
+            <ProductCard3
+              products={products}
+            />
+            {/* <ProductCard1 
               id={item.id} 
               slug={item.slug} 
               name={item.name} 
@@ -22,7 +25,7 @@ export default function ProductsGridView({
               rating={item.rating} 
               imgUrl={item.images[0].url} 
               discount={item.discount}
-            />
+            /> */}
           </Grid>
         ))}
       </Grid>

@@ -1,9 +1,11 @@
+// ==============================================================
+//  User Analytics
+// ==============================================================
 
-import { FlexBetween, FlexBox } from "../../../components/flex-box";
-import { H1, H3, H5, Paragraph, Small } from "../../../components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
-
-import { currency } from "../../../lib"; // CUSTOM DATA MODEL
+import { currency } from "@/lib"; // CUSTOM DATA MODEL
+import { FlexBetween, FlexBox } from "@/components/flex-box";
 import { Box, Card, Grid, Avatar, Typography } from "@mui/material";
+import { H1, H3, H5, Paragraph, Small } from "@/components/Typography";
 
 // ==============================================================
 export default function UserAnalytics({

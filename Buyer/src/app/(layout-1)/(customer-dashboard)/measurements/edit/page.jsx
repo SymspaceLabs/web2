@@ -1,4 +1,3 @@
-import MeasurementPageView from "@/pages-sections/customer-dashboard/measurements/page-view/measurements";
 import MeasurementEditPageView from "@/pages-sections/customer-dashboard/measurements/page-view/measurements-edit";
 
 export const metadata = {

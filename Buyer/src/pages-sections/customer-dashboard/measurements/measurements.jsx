@@ -1,20 +1,25 @@
 "use client";
+// ==============================================================
+// 
+// ==============================================================
 
-import { useState, useEffect } from "react";
-import { Card, useMediaQuery } from "@mui/material";
-import { useRouter } from "next/navigation";
-
-import { MeasurementForm } from "@/components/forms";
-import { useAuth } from "@/contexts/AuthContext";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, useMediaQuery } from "@mui/material";
+import { MeasurementForm } from "@/components/forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 
 // ==============================================================
+
 export default function Measurements({ isEdit = true }) {
+  
+  const { showSnackbar } = useSnackbar();
   const { isAuthenticated, user } = useAuth();
+  
   const isMobile = useMediaQuery('(max-width:600px)');
   const router = useRouter(); // Initialize router
-  const { showSnackbar } = useSnackbar();
 
   const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
   const cardStyle = {
@@ -127,26 +132,6 @@ export default function Measurements({ isEdit = true }) {
         isMobile={isMobile}
         isEdit={isEdit}
       />
-      {/* {isEdit && (
-        <FlexBox justifyContent="flex-end" gap={3} sx={{width:'100%'}}>
-          <Button
-              onClick={() => router.push("/measurements")}
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: "20px", p: "10px" }}
-          >
-              Cancel
-          </Button>
-          <Button
-              onClick={handleSaveChanges}
-              variant="contained"
-              color="primary"
-              sx={{ marginTop: "20px", p: "10px" }}
-          >
-              Save changes
-          </Button>
-        </FlexBox>
-      )} */}
     </Card>
   );
 }

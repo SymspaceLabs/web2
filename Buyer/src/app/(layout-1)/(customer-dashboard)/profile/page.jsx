@@ -1,4 +1,4 @@
-import { ProfilePageView } from "../../../../pages-sections/customer-dashboard/profile/page-view";
+import { ProfilePageView } from "@/pages-sections/customer-dashboard/profile/page-view";
 
 export const metadata = {
   title: "Profile",
@@ -11,7 +11,6 @@ export const metadata = {
 };
 
 export default function Profile() {
-
 
   return <ProfilePageView />;
 }

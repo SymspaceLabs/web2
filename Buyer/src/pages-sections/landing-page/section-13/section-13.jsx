@@ -75,8 +75,8 @@ export default function Section12() {
           {/* Product List Container */}
           <Box sx={{ pt: 3, pb: 2 }}>
             <Grid container spacing={3} justifyContent="flex-start" >
-              {products.map((product,index) => (
-                <Grid item xs={6} sm={4} md={3} lg={3} sx={{ display: "flex" }}>
+              {products.map((product, index) => (
+                <Grid key={index} item xs={6} sm={4} md={3} lg={3} sx={{ display: "flex" }}>
                   <ProductCard1 product={product} />
                 </Grid>
               ))}

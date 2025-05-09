@@ -1,7 +1,18 @@
-import { H1 } from "@/components/Typography";
-import { Box, Typography } from "@mui/material"
+// =======================================================
+// Title card
+// - Measurement Form
+// =======================================================
 
-const TitleCard = ({title, subTitle, isMobile}) => {
+import { Box } from "@mui/material"
+import { H1, Paragraph } from "@/components/Typography";
+
+// =======================================================
+
+const TitleCard = ({
+    title,
+    subTitle,
+    isMobile
+}) => {
     return (
         <Box sx={{ py:1 }}>
             <H1 color='#fff' width="100%" fontSize={{xs:'14px', sm:"24px"}}>

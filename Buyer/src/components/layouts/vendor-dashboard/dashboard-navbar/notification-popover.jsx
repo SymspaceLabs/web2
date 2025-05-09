@@ -13,12 +13,12 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Notifications from "@mui/icons-material/Notifications";
 import { formatDistance } from "date-fns"; // CUSTOM ICON COMPONENTS
 
-import CartX from "../../../../icons/CartX";
-import CartCheck from "../../../../icons/CartCheck";
-import TruckFast from "../../../../icons/TruckFast"; // GLOBAL CUSTOM COMPONENTS
+import CartX from "@/icons/CartX";
+import CartCheck from "@/icons/CartCheck";
+import TruckFast from "@/icons/TruckFast"; // GLOBAL CUSTOM COMPONENTS
 
-import { FlexBox } from "../../../../components/flex-box";
-import { H6, Paragraph } from "../../../../components/Typography"; // dummy  data
+import { FlexBox } from "@/components/flex-box";
+import { H6, Paragraph } from "@/components/Typography"; // dummy  data
 
 const orders = [{
   id: "5e8883f1b51cc1956a5a1ec0",

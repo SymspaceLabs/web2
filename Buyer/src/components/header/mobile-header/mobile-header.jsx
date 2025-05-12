@@ -4,13 +4,12 @@
 
 import Icon from "@/icons";
 import Link from "next/link";
-import useHeader from "../hooks/use-header"; // GLOBAL CUSTOM HOOK
+import { useHeader } from "../hooks/use-header";
 import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { Fragment } from "react";
 import { H1 } from "@/components/Typography";
-import { HeaderLogin } from "@/components/header";
 import { Box, IconButton, Card } from "@mui/material";
 import { SearchInput } from "@/components/search-box";
 import { SymDialog, SymDrawer, SymImage } from "@/components/custom-components";

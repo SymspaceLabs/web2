@@ -15,7 +15,7 @@ import { Carousel } from "@/components/carousel";
 import SymImage from "@/components/custom-components/SymImage";
 import { H1, H2, H3, H6, Paragraph } from "@/components/Typography"; // LOCAL CUSTOM HOOKS
 
-import useCart from "@/hooks/useCart"; // CUSTOM UTILS LIBRARY FUNCTION
+import { useCart } from "@/hooks/useCart";
 
 import { currency } from "@/lib"; // =====================================================
 

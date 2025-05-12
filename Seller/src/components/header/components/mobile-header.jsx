@@ -2,29 +2,21 @@
 // Mobile Header
 // ====================================================================
 
-import Link from "next/link";
 import { Fragment } from "react";
-import Box from "@mui/material/Box";
-import Badge from "@mui/material/Badge";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton"; // MUI ICON COMPONENT
-
-import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
-
-import Icon from "@/icons"; // LOCAL CUSTOM COMPONENTS
-
-import DialogDrawer from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
-
-import Image from "@/components/SymImage";
+import { useCart } from "@/hooks/useCart";
+import { H1 } from "@/components/Typography";
 import { SearchInput } from "@/components/search-box";
+import { Box, Drawer, IconButton } from "@mui/material/Box";
 import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { FlexBetween, FlexBox } from "@/components/flex-box"; // GLOBAL CUSTOM HOOK
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-import useCart from "@/hooks/useCart"; // LOCAL CUSTOM HOOK
-
+import Icon from "@/icons";
+import Link from "next/link";
+import Image from "@/components/SymImage";
+import DialogDrawer from "./dialog-drawer"; // GLOBAL CUSTOM COMPONENTS
 import useHeader from "../hooks/use-header";
-import { H1 } from "@/components/Typography";
+import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 // ====================================================================
 

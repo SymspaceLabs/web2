@@ -2,11 +2,11 @@
 // Cart Drawer
 // =========================================================
 
+import { currency } from "@/lib";
+import { useCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
 import { Box, Divider } from "@mui/material";
-import { currency } from "@/lib"; // CUSTOM DATA MODEL
 
-import useCart from "@/hooks/useCart"; // LOCAL CUSTOM COMPONENTS
 import Scrollbar from "@/components/scrollbar"; // CUSTOM UTILS LIBRARY FUNCTION
 import TopHeader from "./components/top-header";
 import MiniCartItem from "./components/cart-item";
@@ -45,7 +45,7 @@ export default function MiniCart({ toggleSidenav }) {
       <Divider />
 
       {/* CART ITEM LIST */}
-      <Box height={`calc(100vh - ${cartList.length ? "207px" : "75px"})`}>
+      <Box height="calc(100vh - 74px)">
         {cartList.length > 0 ? <Scrollbar>
             {cartList.map(item => <MiniCartItem item={item} key={item.id} handleCartAmountChange={handleCartAmountChange} />)}
           </Scrollbar> : <EmptyCartView />}

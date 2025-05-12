@@ -2,7 +2,9 @@
 // Section 1 | Marketplace
 // ======================================================================
 
+import Link from "next/link";
 import Image from "next/image";
+
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { H2, Paragraph } from "@/components/Typography";
@@ -34,7 +36,7 @@ export default function Section1() {
                   <br />
                   Homebound Convenience
                 </H2>
-                <Button sx={styles.buttonDark}>
+                <Button sx={styles.buttonDark} LinkComponent={Link} href="/products/search/all">
                   Shop By Category
                 </Button>
               </Box>
@@ -85,7 +87,7 @@ export default function Section1() {
                   <br />
                   Products
                 </H2>
-                <Button sx={styles.buttonLight}>
+                <Button sx={styles.buttonLight} LinkComponent={Link} href="/ar-app-simulation">
                   Download The App
                 </Button>
               </Box>
@@ -112,7 +114,7 @@ export default function Section1() {
                   Positive Impacts of Mixed
                   <br /> Reality Commerce
                 </H2>
-                <Button sx={styles.buttonDark}>
+                <Button sx={styles.buttonDark} LinkComponent={Link} href="/global-impact">
                   Learn More
                 </Button>
               </Box>

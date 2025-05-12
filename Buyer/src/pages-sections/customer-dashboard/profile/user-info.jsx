@@ -1,7 +1,7 @@
 import Card from "@mui/material/Card";
 import useMediaQuery from "@mui/material/useMediaQuery"; // GLOBAL CUSTOM COMPONENTS
 import { Typography } from "@mui/material";
-import { ProfileForm } from "@/components/forms";
+import { ProfileForm } from "@/components/custom-forms";
 import { H1 } from "@/components/Typography";
 
 // ==============================================================

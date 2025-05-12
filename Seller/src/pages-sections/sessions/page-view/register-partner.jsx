@@ -19,6 +19,8 @@ const RegisterPartnerPageView = () => {
   const { showSnackbar } = useSnackbar();
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); 
@@ -51,6 +53,8 @@ const RegisterPartnerPageView = () => {
     
   // Form submission handler
   const handleSubmit = async () => {
+
+    setLoading(true);
 
     const body = {
       firstName,
@@ -85,6 +89,8 @@ const RegisterPartnerPageView = () => {
       }
     } catch (error) {
       showSnackbar(error, "error");  
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -116,9 +122,10 @@ const RegisterPartnerPageView = () => {
       />
 
       {/* Submit Button */}
-      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+      <SymSubmitButton isValid={isValid} onClick={handleSubmit} loading={loading}>
         Sign Up
       </SymSubmitButton>
+
 
       {/* Checkbox */}
       <Span display={{ color:'#fff', sm: "inline-block" }}>

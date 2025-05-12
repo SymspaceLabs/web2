@@ -132,10 +132,7 @@ const OtpPageView = () => {
           loading={loading}
           sx={{ fontSize:12 }}
         >
-          {loading ? 
-            <CircularProgress size={24} sx={{ color: "#fff" }} />
-            : 
-            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+          {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
         </SymSubmitButton>
       </FlexColCenter>
 

@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { H1, H6, Paragraph } from "../Typography";
 import { useCallback, useState, useEffect } from "react";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { MeasurementForm, PreferenceForm } from "../forms";
+import { MeasurementForm, PreferenceForm } from "../custom-forms";
 import { FlexBox, FlexCol, FlexColCenter } from "../flex-box";
 import { useMediaQuery, Box, Button } from "@mui/material";
 

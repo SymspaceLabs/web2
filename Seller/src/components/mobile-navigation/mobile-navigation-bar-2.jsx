@@ -10,7 +10,7 @@ import User2 from "@/icons/User2";
 import CategoryOutlined from "@/icons/CategoryOutline";
 import ShoppingBagOutlined from "@/icons/ShoppingBagOutlined"; // GLOBAL CUSTOM HOOKS
 
-import useCart from "@/hooks/useCart"; // STYLED COMPONENTS
+import { useCart } from "@/hooks/useCart";
 
 import { iconStyle, StyledBox, StyledDrawer, StyledNavLink, Wrapper } from "./styles";
 /**

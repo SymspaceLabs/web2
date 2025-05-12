@@ -6,7 +6,7 @@
 
 import { Badge, useMediaQuery } from "@mui/material";
 
-import useCart from "@/hooks/useCart"; // STYLED COMPONENTS
+import { useCart } from "@/hooks/useCart";
 import { MOBILE_NAVIGATION } from "@/data/mobileNavigation";
 
 import { iconStyle, StyledNavLink, Wrapper } from "./styles";

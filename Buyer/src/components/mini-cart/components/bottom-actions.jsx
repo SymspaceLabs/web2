@@ -14,13 +14,13 @@ export default function BottomActions({
 }) {
   return (
     <FlexColCenter p={2.5} gap={1}>
-      <Button fullWidth sx={btn} onClick={handleNavigate("/checkout-alternative")}>
+      <Button fullWidth sx={btn} onClick={handleNavigate("/cart")}>
         Checkout Now ({total})
       </Button>
 
-      <Button fullWidth sx={{ ...btn, background:'transparent'}} onClick={handleNavigate("/cart")}>
+      {/* <Button fullWidth sx={{ ...btn, background:'transparent'}} onClick={handleNavigate("/cart")}>
         View Cart
-      </Button>
+      </Button> */}
     </FlexColCenter>
   );
 }

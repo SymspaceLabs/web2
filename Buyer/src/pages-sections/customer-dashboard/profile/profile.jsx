@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
-import { ProfileForm } from "@/components/forms";
+import { ProfileForm } from "@/components/custom-forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { Card, Button, useMediaQuery, CircularProgress } from "@mui/material";
 

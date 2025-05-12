@@ -1,12 +1,13 @@
-import { Box, useMediaQuery} from '@mui/material';
+
+import Link from "next/link";
+import clsx from "clsx";
+import { useMediaQuery} from '@mui/material';
 import { FlexBox } from "../flex-box";
 import { LazyImage } from "../lazy-image";
 import { Fragment } from "react";
-import { HeaderWrapper, StyledContainer } from "./styles"; 
-import Link from "next/link";
-import useTheme from "@mui/material/styles/useTheme";
-import clsx from "clsx";
 import { MobileHeader } from './mobile-header';
+import useTheme from "@mui/material/styles/useTheme";
+import { HeaderWrapper, StyledContainer } from "./styles"; 
 
 // ==============================================================
 export default function Header({

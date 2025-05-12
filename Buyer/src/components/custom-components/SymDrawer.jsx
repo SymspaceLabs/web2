@@ -22,11 +22,14 @@ export default function SymDrawer(props) {
         onClose={toggleOpen}
         PaperProps={{
           sx: {
-            zIndex: 9999,
+            zIndex: 13000,
+            height: '100vh', // Make sure it's full height
+            position: 'fixed',
+            top: 0,
             background: 'rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(50px)',
-          },
-        }}
+          }
+        }}        
       >
         {children}
       </Drawer>

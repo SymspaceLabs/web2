@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FlexCol } from '@/components/flex-box';
-import { ForgotPasswordForm } from '@/components/forms';
+import { ForgotPasswordForm } from '@/components/custom-forms';
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { SymSubmitButton } from '@/components/custom-buttons';
 

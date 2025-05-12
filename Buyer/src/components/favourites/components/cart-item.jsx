@@ -3,15 +3,13 @@
 // ==============================================================
 
 import Link from "next/link";
-import { useState } from "react";
-import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
-import { LazyImage } from "@/components/lazy-image";
-import Remove from "@mui/icons-material/Remove"; // GLOBAL CUSTOM COMPONENTS
-import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 
+import { useState } from "react";
+import { LazyImage } from "@/components/lazy-image";
+import { useCart } from "@/hooks/useCart";
 import { currency } from "@/lib"; // CUSTOM DATA MODEL
-import { H1, Paragraph } from "@/components/Typography";
+import { Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol, FlexColCenter } from "@/components/flex-box";
 import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import { SymColorDropdown, SymRoundedDropdown } from "@/components/custom-inputs";
@@ -24,7 +22,7 @@ export default function MiniCartItem({ item }) {
   const { state, dispatch } = useCart();
   const { dispatch: favoritesDispatch } = useFavorites();
 
-  const [selectedColor, setSelectedColor] = useState(item.colors?.[0]?.value || '');
+  const [selectedColor, setSelectedColor] = useState(item.colors?.[0] || null);
   const [selectedSize, setSelectedSize] = useState(item.sizes?.[0]?.value || '');
 
     const handleAddToCart = () => {
@@ -33,7 +31,7 @@ export default function MiniCartItem({ item }) {
       const existingItem = state.cart.find(
         (item) =>
           item.id === id &&
-          item.selectedColor === selectedColor &&
+          item.selectedColor?.value === selectedColor?.value &&
           item.selectedSize === selectedSize
       );
   
@@ -48,7 +46,10 @@ export default function MiniCartItem({ item }) {
           imgUrl: item.imgUrl,
           id: item.id,
           slug: item.slug,
-          selectedColor,
+          selectedColor: {
+            code: selectedColor.value,
+            label:selectedColor.label
+          },
           selectedSize,
           salePrice: item.salePrice,
           sizes: item.sizes,
@@ -107,11 +108,20 @@ export default function MiniCartItem({ item }) {
         
         {/* 2 Dropdowns side by side */}
         <FlexBox alignItems="center" gap={0.5} pt={1}>
-          <SymColorDropdown
+          {/* <SymColorDropdown
             value={selectedColor}
             onChange={(e) => setSelectedColor(e.target.value)}
             options={item.colors}
+          /> */}
+          <SymColorDropdown
+            value={selectedColor?.value || ''}
+            onChange={(e) => {
+              const selected = item.colors.find(c => c.value === e.target.value);
+              setSelectedColor(selected);
+            }}
+            options={item.colors}
           />
+
 
           <SymRoundedDropdown
             value={selectedSize}

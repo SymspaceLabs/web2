@@ -6,7 +6,7 @@
 
 import React, { useState, useMemo } from "react";
 import { Box, Button } from '@mui/material';
-import JobForm from "@/components/forms/JobForm";
+import JobForm from "@/components/custom-forms/JobForm";
 import { useAuth } from "@/contexts/AuthContext";
 import { styles } from "./styles";
 

@@ -1,16 +1,17 @@
+// ================================================
+// Payment Form
+// ================================================
+
+import { useState } from "react"; // MUI
+import { H1 } from "@/components/Typography";
+import { FlexBox } from "components/flex-box";
+import { Card, Stack, Button, Divider, TextField, Radio, FormControlLabel } from "@mui/material";
+
 import Link from "next/link";
-import { Fragment, useState } from "react"; // MUI
+import { CreditCardForm } from "@/components/custom-forms/checkout";
 
-import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField"; // GLOBAL CUSTOM COMPONENTS
+// ================================================
 
-import FlexBox from "components/flex-box/flex-box"; // Local CUSTOM COMPONENTS
-
-import FormLabel from "./form-label";
-import CreditCardForm from "./credit-card-form";
 export default function PaymentForm() {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
 
@@ -18,60 +19,106 @@ export default function PaymentForm() {
     setPaymentMethod(event.target.name);
   };
 
-  return <Fragment>
-      <Card sx={{
-      padding: {
-        sm: 3,
-        xs: 2
-      },
-      mb: 4
-    }}>
-        {
-        /* CREDIT CARD OPTION */
-      }
-        <FormLabel name="credit-card" title="Pay with credit card" handleChange={handlePaymentMethodChange} checked={paymentMethod === "credit-card"} />
+      // CREDIT CARD
+    const [cardNo, setCardNo] = useState("");
+    const [expiryMonth, setExpiryMonth] = useState("");
+    const [expiryYear, setExpiryYear] = useState("");
+    const [cvv, setCvv] = useState(null);
+    const [cardHolderName, setCardHolderName] = useState("");
 
-        {paymentMethod === "credit-card" && <CreditCardForm />}
 
-        <Divider sx={{
-        my: 3,
-        mx: -4
-      }} />
+  return (
+      <Card sx={styles.wrapper}>
+        
+        {/* CREDIT CARD OPTION */}
+        <FormLabel
+          name="credit-card"
+          title="Pay with credit card"
+          handleChange={handlePaymentMethodChange}
+          checked={paymentMethod === "credit-card"}
+        />
 
-        {
-        /* PAYPAL CARD OPTION */
-      }
+        {paymentMethod === "credit-card" &&
+          <CreditCardForm
+              color="#000"
+              cardNo={cardNo}
+              setCardNo={setCardNo}
+              expiryMonth={expiryMonth}
+              setExpiryMonth={setExpiryMonth}
+              expiryYear={expiryYear}
+              setExpiryYear={setExpiryYear}
+              cvv={cvv}
+              setCvv={setCvv}
+              cardHolderName={cardHolderName}
+              setCardHolderName={setCardHolderName}
+          />
+        
+        }
+
+        <Divider sx={{ my: 3, mx:-4 }} />
+
+        {/* PAYPAL CARD OPTION */}
         <FormLabel name="paypal" title="Pay with Paypal" handleChange={handlePaymentMethodChange} checked={paymentMethod === "paypal"} />
 
-        {paymentMethod === "paypal" && <FlexBox alignItems="flex-end" gap={2} mb={4}>
-            <TextField fullWidth name="email" type="email" label="Paypal Email" />
-            <Button variant="outlined" color="primary" type="button">
-              Submit
-            </Button>
-          </FlexBox>}
+        <Divider sx={{my: 3,mx: -4}} />
 
-        <Divider sx={{
-        my: 3,
-        mx: -4
-      }} />
+        {/* Apple Pay */}
+        <FormLabel name="apple" title="Pay with Apple Pay" handleChange={handlePaymentMethodChange} checked={paymentMethod === "apple"} />
 
-        {
-        /* CASH ON DELIVERY OPTION */
-      }
-        <FormLabel name="cod" title="Cash On Delivery" handleChange={handlePaymentMethodChange} checked={paymentMethod === "cod"} />
+        <Divider sx={{my: 3,mx: -4}} />
+
+        {/* Google Pay */}
+        <FormLabel name="google" title="Pay with Google Pay" handleChange={handlePaymentMethodChange} checked={paymentMethod === "google"} />
+      
+        {/* BUTTONS SECTION */}
+        <Stack direction="row" spacing={3} pt={3}>
+          <Button sx={styles.btn} LinkComponent={Link} href="/checkout" variant="outlined" color="primary" type="button" fullWidth>
+            Back to checkout
+          </Button>
+
+          <Button sx={styles.btn} LinkComponent={Link} variant="contained" color="primary" href="/orders" type="submit" fullWidth>
+            Place Order
+          </Button>
+        </Stack>
       </Card>
+  );
+}
 
-      {
-      /* BUTTONS SECTION */
-    }
-      <Stack direction="row" spacing={3}>
-        <Button LinkComponent={Link} href="/checkout" variant="outlined" color="primary" type="button" fullWidth>
-          Back to checkout
-        </Button>
+const styles = {
+  wrapper : {
+    p:3,
+    borderRadius: "25px",
+    backdropFilter: 'blur(10.0285px)',
+    boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
+    background: 'rgba(255, 255, 255, 0.35)',
+  },
+  btn: {
+    borderRadius: '25px',
+  },
+}
 
-        <Button LinkComponent={Link} variant="contained" color="primary" href="/orders" type="submit" fullWidth>
-          Review
-        </Button>
-      </Stack>
-    </Fragment>;
+function FormLabel({
+  name,
+  checked,
+  title,
+  handleChange
+}) {
+  return(
+    <FormControlLabel
+      name={name}
+      onChange={handleChange}
+      label={
+        <H1>
+          {title}
+        </H1>
+      } 
+      control={
+        <Radio
+          checked={checked}
+          color="primary"
+          size="small"
+        />
+      }
+    />
+  )
 }

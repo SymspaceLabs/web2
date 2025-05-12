@@ -1,25 +1,28 @@
 "use client";
 
 // ==============================================================================
-// Product Intro Component
+// Product Details Component
 // - displays a product's detailed information
 // ==============================================================================
 
 import Link from "next/link";
+import styles from "./styles";
+import ProductGallery from "./product-gallery";
+
 import { currency } from "@/lib";
+import { useCart } from "@/hooks/useCart";
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react";
 import { DrawerRight } from "@/components/drawer";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
+import { useHeader } from "@/components/header/hooks/use-header";
 import { SymAccordion, SymDialog } from "@/components/custom-components"
 import { Box, Button, Select, MenuItem, FormControl, Tooltip, Drawer, Grid, Rating, CircularProgress } from '@mui/material';
 
-import styles from "./styles";
-import useCart from "@/hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-import ProductGallery from "./product-gallery";
-
 // ================================================================
+
 export default function ProductDetails({ product }) {
   const {
     id,
@@ -38,19 +41,23 @@ export default function ProductDetails({ product }) {
   } = product || {};
 
   // State hooks for selected options and toggles
-  const [selectedColor, setSelectedColor] = useState(colors[0].id);
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState("");
   const [sizeError, setSizeError] = useState(false);
+
   const { state, dispatch } = useCart();
+  const { toggleCartOpen } = useHeader();
+
+  const router = useRouter();
 
   // Updates the selected color
-  const handleColorSelect = (colorId) => setSelectedColor(colorId);
+  const handleColorSelect = (color) => setSelectedColor(color);
 
   // Updates the selected size
   const handleSizeSelect = (event) => setSelectedSize(event.target.value);
 
   // Changes the cart amount based on user action
-  const handleCartAmountChange = amount => () => {
+  const handleAddToCart = () => {
     if (!selectedSize) {
       setSizeError(true);
       return;
@@ -62,11 +69,11 @@ export default function ProductDetails({ product }) {
     const existingItem = state.cart.find(
       (item) =>
         item.id === id &&
-        item.selectedColor === selectedColor &&
+        item.selectedColor === selectedColor.id &&
         item.selectedSize === selectedSize
     );
 
-    const newQty = existingItem ? existingItem.qty + amount : amount;
+    const newQty = existingItem ? existingItem.qty + 1 : 1;
 
     dispatch({
       type: "CHANGE_CART_AMOUNT",
@@ -83,10 +90,6 @@ export default function ProductDetails({ product }) {
         sizes: sizes.map(size => ({
           label: size.size,
           value: size.id
-        })),
-        colors: colors.map(color => ({
-          label: color.name,
-          value: color.code
         })),
       },
     });
@@ -106,7 +109,7 @@ export default function ProductDetails({ product }) {
   
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/product-variants/${id}/availability?colorId=${selectedColor}&sizeId=${selectedSize}`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/product-variants/${id}/availability?colorId=${selectedColor.id}&sizeId=${selectedSize}`
         );
         const data = await res.json();
         setAvailability(data);
@@ -184,13 +187,13 @@ export default function ProductDetails({ product }) {
                 {colors.map((color) => (
                   <Tooltip key={color.id} title={color.name || color.code} arrow>
                     <Button
-                      onClick={() => handleColorSelect(color.id)}
+                      onClick={() => handleColorSelect(color)}
                       sx={{
                         width: 40,
                         height: 40,
                         borderRadius: '50%',
                         backgroundColor: color.code,
-                        border: selectedColor === color.id ? '3px solid black' : '1px solid grey',
+                        border: selectedColor.id === color.id ? '3px solid black' : '1px solid grey',
                         margin: '0 5px',
                         '&:hover': {
                           backgroundColor: color.code,
@@ -261,7 +264,14 @@ export default function ProductDetails({ product }) {
                     cursor: "not-allowed",
                   }),
                 }}
-                onClick={handleCartAmountChange(1)}
+                onClick={()=>{
+                  handleAddToCart();
+                  if (!selectedSize) {
+                    setSizeError(true);
+                    return;
+                  }
+                  toggleCartOpen(); // ✅ Open the cart drawer
+                }}
                 disabled={availability?.stock === 0}
               >
                 Add to Cart
@@ -276,11 +286,20 @@ export default function ProductDetails({ product }) {
                     cursor: "not-allowed",
                   }),
                 }}
-                onClick={handleCartAmountChange(1)}
+                onClick={() => {
+                  if (!selectedSize) {
+                    setSizeError(true);
+                    return;
+                  }
+
+                  handleAddToCart(); // This is a curried function, so we call it with ()
+                  router.push('/cart');
+                }}
                 disabled={availability?.stock === 0}
               >
                 Buy now
               </Button>
+
             </FlexBox>
           </FlexCol>
 

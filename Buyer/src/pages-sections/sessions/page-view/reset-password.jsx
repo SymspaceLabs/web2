@@ -17,7 +17,7 @@
 
 import { useState, useEffect } from "react";
 import { FlexColCenter } from '@/components/flex-box';
-import { ResetPasswordForm } from "@/components/forms";
+import { ResetPasswordForm } from "@/components/custom-forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SymSubmitButton } from '@/components/custom-buttons';

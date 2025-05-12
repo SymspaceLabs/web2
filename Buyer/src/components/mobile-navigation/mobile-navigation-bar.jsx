@@ -4,7 +4,7 @@
 // Mobile Navbar
 // ===========================================================
 
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 import { Badge, useMediaQuery } from "@mui/material";
 import { MOBILE_NAVIGATION } from "@/data/mobileNavigation";
 import { iconStyle, StyledNavLink, Wrapper } from "./styles";

@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import PreferenceForm from "@/components/forms/PreferenceForm";
+import PreferenceForm from "@/components/custom-forms/PreferenceForm";
 
 const Preferences = ({
   gender,

@@ -15,9 +15,6 @@ const STEPPER_LIST = [{
 }, {
   title: "Payment",
   disabled: false
-}, {
-  title: "Review",
-  disabled: true
 }];
 
 export default function PageStepper({
@@ -70,7 +67,7 @@ export default function PageStepper({
   }, [pathname]);
 
   return (
-    <Box sx={{ background:'#8C8C8C', width:'100%', py:5 }}>
+    <Box sx={{ background: 'linear-gradient(94.91deg, #838383 0%, #FFFFFF 100%)', width:'100%', py:5 }}>
       <Container>
         <Box mb={3} display={{sm: "block",xs: "none"}}>
           <Stepper
@@ -79,7 +76,6 @@ export default function PageStepper({
             onChange={handleStepChange}
           />
         </Box>
-
         {children}
       </Container>
     </Box>

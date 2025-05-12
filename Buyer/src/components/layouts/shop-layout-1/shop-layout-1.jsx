@@ -20,11 +20,11 @@ import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
 import { MobileNavigationBar } from "@/components/mobile-navigation";
 import { SocialButtons } from "@/components/header/components/SocialButtons";
+import { HeaderProvider, useHeader } from "@/components/header/hooks/use-header";
 
 import Sticky from "@/components/sticky";
 import Header from "@/components/header";
 import LogoWithTitle from "@/components/LogoWithTitle";
-import useHeader from "@/components/header/hooks/use-header";
 import SymDialog from "@/components/custom-components/SymDialog";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
 import OnboardingDialog from "@/components/dialog/OnboardingDialog";
@@ -32,7 +32,15 @@ import LoginCartButtons from "@/components/header/components/login-cart-buttons"
 
 // ==============================================================
 
-export default function ShopLayout1({children, noFooter=false}) {
+export default function ShopLayout1({ children, noFooter = false }) {
+  return (
+    <HeaderProvider>
+      <ShopLayoutContent children={children} noFooter={noFooter} />
+    </HeaderProvider>
+  );
+}
+
+function ShopLayoutContent({children, noFooter}) {
   
   const pathname = usePathname();
 
@@ -89,7 +97,7 @@ export default function ShopLayout1({children, noFooter=false}) {
     <Fragment>
 
       {/* TOP NAVBAR */}
-      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300} sx={{ zIndex: 1100 }}>
         {/* TOP HEADER */}
         <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
 

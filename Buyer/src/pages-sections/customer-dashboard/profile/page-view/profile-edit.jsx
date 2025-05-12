@@ -10,7 +10,7 @@ import { FlexCol } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { Card, Box, CircularProgress, useMediaQuery } from "@mui/material";
-import { ProfileForm, MeasurementForm, PreferenceForm } from "@/components/forms";
+import { ProfileForm, MeasurementForm, PreferenceForm } from "@/components/custom-forms";
 
 import Person from "@mui/icons-material/Person";
 import ProfilePicUpload from "../profile-pic-upload";

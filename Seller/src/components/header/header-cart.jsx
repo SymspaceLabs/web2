@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined";
 
 // GLOBAL CUSTOM HOOK
-import useCart from "hooks/useCart";
+import { useCart } from "hooks/useCart";
 export default function HeaderCart() {
   const {
     state

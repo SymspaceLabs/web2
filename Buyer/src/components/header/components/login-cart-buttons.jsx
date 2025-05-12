@@ -14,7 +14,7 @@ import { useFavorites } from '@/contexts/FavoritesContext';
 import { IconButton, MenuItem, Badge } from "@mui/material";
 import { ChildNavListWrapper } from '@/components/navbar/styles';
 
-import useCart from "@/hooks/useCart";
+import { useCart } from "@/hooks/useCart";
 import SymCard from "@/components/custom-components/SymCard";
 import PersonOutline from "@mui/icons-material/PersonOutline"; 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -66,7 +66,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
       {/* Shopping Cart Icon Button */}
       <Badge badgeContent={cartList.reduce((acc, item) => acc + item.qty, 0)} color="primary">
         <IconButton onClick={toggleCartOpen}>
-          <PiShoppingCartSimpleBold color="#7D879C"  />
+          <PiShoppingCartSimpleBold color="#7D879C" />
         </IconButton>
       </Badge>
 

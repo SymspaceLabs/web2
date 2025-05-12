@@ -9,3 +9,4 @@ export {default as MeasurementForm} from "./MeasurementForm";
 export {default as ResetPasswordForm} from "./ResetPasswordForm";
 export {default as PartnerSignUpForm} from "./PartnerSignUpForm";
 export {default as ForgotPasswordForm} from "./ForgotPasswordForm";
+export {default as AddressForm} from "./AddressForm";

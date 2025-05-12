@@ -1,9 +1,16 @@
 "use client";
 
-import { Grid } from "@mui/material"; // GLOBAL CUSTOM HOOK
-import useCart from "hooks/useCart"; // LOCAL CUSTOM COMPONENTS
+// ======================================================
+// Cart Page Sections
+// ======================================================
+
+import { Grid } from "@mui/material";
+import { useCart } from "hooks/useCart";
+
 import CartItem from "../cart-item";
-import CheckoutForm from "../checkout-form";
+import VoucherForm from "../voucher-form";
+
+// ======================================================
 
 export default function CartPageView() {
   const { state } = useCart();
@@ -12,14 +19,14 @@ export default function CartPageView() {
     <Grid container spacing={3}>
       {/* CART PRODUCT LIST */}
       <Grid item md={8} xs={12}>
-        {state.cart.map((product) => 
-          <CartItem product={product} />
+        {state.cart.map((product, index) => 
+          <CartItem product={product} key={index} />
         )}
       </Grid>
 
-      {/* CHECKOUT FORM */}
+      {/* Voucher FORM */}
       <Grid item md={4} xs={12}>
-        <CheckoutForm />
+        <VoucherForm />
       </Grid>
     </Grid>
   );

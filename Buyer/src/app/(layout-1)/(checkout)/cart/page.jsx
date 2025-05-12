@@ -1,7 +1,11 @@
+// ==========================================================
+// Cart Page
+// ==========================================================
+
 import { CartPageView } from "pages-sections/cart/page-view";
 
 export const metadata = {
-  title: "Cart  E-commerce Template",
+  title: "Cart Page",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

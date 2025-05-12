@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Typography, CircularProgress, Box } from "@mui/material";
 import { FlexBox, FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { OtpForm } from "@/components/forms";
+import { OtpForm } from "@/components/custom-forms";
 import { useAuth } from '@/contexts/AuthContext';
 import { SymSubmitButton } from "@/components/custom-buttons";
 

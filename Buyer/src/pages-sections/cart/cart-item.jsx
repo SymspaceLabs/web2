@@ -4,22 +4,23 @@
 // =========================================================
 
 import Link from "next/link";
-import useCart from "hooks/useCart";
 import Add from "@mui/icons-material/Add";
 import Close from "@mui/icons-material/Close";
 import Remove from "@mui/icons-material/Remove";
-import Image from "@/components/custom-components/SymImage";
 
 import { currency } from "lib";
+import { useCart } from "hooks/useCart";
 import { H1 } from "components/Typography";
 import { FlexBox } from "components/flex-box";
+import { LazyImage } from "@/components/lazy-image";
 import { Button, Box, IconButton } from "@mui/material";
 import { Span, Paragraph } from "components/Typography";
-import { LazyImage } from "@/components/lazy-image";
 
 // =========================================================
 
-export default function CartItem({product}) {
+export default function CartItem({
+  product
+}) {
 
   const { dispatch } = useCart(); // HANDLE CHANGE CART PRODUCT QUANTITY
 
@@ -47,12 +48,11 @@ export default function CartItem({product}) {
       <Box>
         <LazyImage
           alt={name}
-          width={140}
-          height={140}
+          width={100}
+          height={100}
           display="block"
           src={imgUrl || "/assets/images/products/iphone-xi.png"}
         />
-
       </Box>
 
       {/* DELETE BUTTON */}
@@ -68,39 +68,39 @@ export default function CartItem({product}) {
         <Close fontSize="small" />
       </IconButton>
 
-      <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
+      <FlexBox p={2} rowGap={1} width="100%" flexDirection="column">
         <Link href={`/products/${slug}`}>
-          <Span color="#FFF" ellipsis fontWeight="600" fontSize={18}>
+          <H1 color="#000" ellipsis fontSize={18}>
             {name}
-          </Span>
+          </H1>
         </Link>
 
         {/* PRODUCT PRICE SECTION */}
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
-          <Paragraph mt={0.5} color='#5B5B5B' sx={{textDecoration:'line-through'}}>
+          <Paragraph mt={0.5} color='#FFF' sx={{textDecoration:'line-through'}}>
             {currency(salePrice)}
           </Paragraph>
 
-          <Span fontWeight={600} color="#FFF">
-            {currency(price)}
+          <Span fontWeight={600} color="#000">
+            {currency(price)} x {qty}
           </Span>
         </FlexBox>
 
-        <FlexBox alignItems="center" gap={1} pt={1} >
+        <FlexBox alignItems="center" gap={1}>
           <Box 
             sx={{
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: selectedColor
+              background: selectedColor.code
             }}
           />
-          <H1 color="#FFF" mt={0.5}>
+          <H1 color="#000" mt={0.5}>
             {
               sizes?.find(size => size.value === selectedSize)?.label
             }
           </H1>
-          <H1 color="#FFF" mt={0.5}>
+          <H1 color="#000" mt={0.5}>
             QTY : {qty}
           </H1>
         </FlexBox>
@@ -127,13 +127,18 @@ export default function CartItem({product}) {
 
 const styles = {
   wrapper : {
+    pl:4.5,
+    py:1,
     display: "flex",
+    gap:'15px',
     overflow: "hidden",
     alignItems: "center",
     position: "relative",
-    borderRadius: "10px",
+    borderRadius: "25px",
     marginBottom: "1.5rem",
-    background:'rgba(255, 255, 255, 0.1)',
+    backdropFilter: 'blur(10.0285px)',
+    boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
+    background: 'rgba(255, 255, 255, 0.35)',
     "@media only screen and (max-width: 425px)": {
       flexWrap: "wrap",
       img: {

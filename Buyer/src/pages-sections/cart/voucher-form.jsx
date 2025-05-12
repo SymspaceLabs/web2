@@ -1,17 +1,20 @@
+// ================================================
+// Voucher Form
+// ================================================
 
-
-import useCart from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-
-import { Span } from "components/Typography";
-import { FlexBetween, FlexBox, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
+import { useState } from "react";
+import { currency } from "lib";
+import { useCart } from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
+import { Paragraph } from "components/Typography";
+import { Card, Button, Divider } from "@mui/material";
+import { FlexBetween, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
+import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
 
 import countryList from "data/countryList"; // CUSTOM UTILS LIBRARY FUNCTION
-import { Card, Button, Divider } from "@mui/material";
-import { currency } from "lib";
-import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
-import { useState } from "react";
 
-export default function CheckoutForm() {
+// ================================================
+
+export default function VoucherForm() {
   
   const { state: cartState } = useCart();
   const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -23,23 +26,23 @@ export default function CheckoutForm() {
 
   const [promo, setPromo] = useState("");
   const [country, setCountry] = useState(null);
-  const [state, setState] = useState(null);
+  const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState(null);
 
   return (
-    <Card sx={{ background:'rgba(255, 255, 255, 0.1)', p:3 }}>
+    <Card sx={styles.wrapper}>
 
       <FlexCol gap={2} pb={3}>
         <FlexBetween>
-          <Span color="#FFF" fontSize={18} fontWeight={600}>
-            Total
-          </Span>
-          <Span color="#FFF" fontSize={18} fontWeight={600} lineHeight="1">
+          <Paragraph color="#000" fontSize={18}>
+            Subtotal
+          </Paragraph>
+          <Paragraph color="#000" fontSize={18} fontWeight={600} lineHeight="1">
             {currency(getTotalPrice())}
-          </Span>
+          </Paragraph>
         </FlexBetween>
 
-        <Divider />
+        <Divider sx={{ borderColor: '#000' }} />
 
         {/* APPLY VOUCHER TEXT FIELD */}
         <SymTextField
@@ -62,14 +65,14 @@ export default function CheckoutForm() {
         >
           Apply Promo Code
         </Button>
-        <Divider />
+        <Divider sx={{ borderColor: '#000' }} />
 
       </FlexCol>
 
       <FlexCol gap={1}>
-        <Span color="#FFF" fontSize={18} fontWeight={600}>
+        <Paragraph color="#000" fontSize={18}>
           Shipping Estimates
-        </Span>
+        </Paragraph>
         
         {/* COUNTRY TEXT FIELD */}
         <SymAutoComplete
@@ -132,4 +135,14 @@ export default function CheckoutForm() {
 
     </Card>
   );
+}
+
+const styles = {
+  wrapper : {
+    p:3,
+    borderRadius: "25px",
+    backdropFilter: 'blur(10.0285px)',
+    boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
+    background: 'rgba(255, 255, 255, 0.35)',
+  }
 }

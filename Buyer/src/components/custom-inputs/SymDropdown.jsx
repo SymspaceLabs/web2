@@ -17,6 +17,8 @@ const SymDropdown = ({
   options,
   isEdit = true,
   hasOthersOption = false, // default to false
+  placeholder = "Select an option", // Default fallback
+
 }) => {
   const isOtherSelected = value?.startsWith('Other:');
 
@@ -38,8 +40,9 @@ const SymDropdown = ({
         }}
         displayEmpty
         renderValue={(selected) => {
-          if (selected === '') {
-            return <em style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Select an option</em>;
+          if (selected === '' ) {
+            return <em style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{placeholder}</em>;
+
           }
           if (isOtherSelected) {
             return value.replace('Other:', '') || 'Other (please specify)';

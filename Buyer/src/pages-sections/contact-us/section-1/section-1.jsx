@@ -4,7 +4,7 @@
 // Section 1 | Contact Us
 // ===============================================
 
-import { ContactUsForm } from "@/components/forms";
+import { ContactUsForm } from "@/components/custom-forms";
 import { LazyImage } from "@/components/lazy-image";
 import { useState, useEffect, useMemo } from "react";
 import { useSnackbar } from "@/contexts/SnackbarContext";

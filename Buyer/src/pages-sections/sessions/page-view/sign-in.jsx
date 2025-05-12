@@ -6,7 +6,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { LoginForm } from '@/components/forms';
+import { LoginForm } from '@/components/custom-forms';
 import { useAuth } from '@/contexts/AuthContext';
 import { FlexColCenter } from "@/components/flex-box";
 import { useSnackbar } from "@/contexts/SnackbarContext";

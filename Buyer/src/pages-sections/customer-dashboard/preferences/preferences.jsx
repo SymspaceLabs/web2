@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import FlexBox from "../../../components/flex-box/flex-box";
 import { Button, Card, useMediaQuery } from "@mui/material";
-import { PreferenceForm } from "@/components/forms";
+import { PreferenceForm } from "@/components/custom-forms";
 import { useAuth } from "@/contexts/AuthContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";

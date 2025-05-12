@@ -51,7 +51,7 @@ export default function MiniCartItem({
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: item.selectedColor
+              background: item.selectedColor.code
             }}
           />
           <H1 color="#FFF" mt={0.5}>

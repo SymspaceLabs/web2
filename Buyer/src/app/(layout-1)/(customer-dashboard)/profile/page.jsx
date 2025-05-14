@@ -12,5 +12,5 @@ export const metadata = {
 
 export default function Profile() {
 
-  return <ProfilePageView />;
+  return <ProfilePageView isEdit={false} />;
 }

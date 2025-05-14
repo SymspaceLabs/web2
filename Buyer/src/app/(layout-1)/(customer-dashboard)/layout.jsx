@@ -1,4 +1,5 @@
-import { CustomerDashboardLayout } from "../../../components/layouts/customer-dashboard";
+
+import { CustomerDashboardLayout } from "@/components/layouts/customer-dashboard";
 export default function Layout({
   children
 }) {

@@ -1,4 +1,4 @@
-import { PreferencesEditPageView } from "@/pages-sections/customer-dashboard/preferences/page-view"; 
+import { PreferencesPageView } from "@/pages-sections/customer-dashboard/preferences"; // API FUNCTIONS
 
 export const metadata = {
   title: "Preferences",
@@ -10,6 +10,8 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default async function Address() {
-  return <PreferencesEditPageView />
+export default async function Preferences() {
+  return (
+    <PreferencesPageView isEdit={true} />
+  )
 }

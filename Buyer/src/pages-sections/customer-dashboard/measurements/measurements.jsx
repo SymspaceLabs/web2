@@ -26,7 +26,6 @@ export default function Measurements({ isEdit = true }) {
     borderRadius:'15px',
     width:'100%',
     color:'#fff',
-    mt: 3,
     display: "flex",
     flexWrap: "wrap",
     p: "1.5rem",

@@ -6,9 +6,9 @@
 
 import { useState, useEffect } from 'react';
 import { TitleCard } from '../dialog/components';
-import SymMultiSelectDropdown from "@/components/custom-inputs/SymMultiSelectDropdown";
-import cardStyle from "@/pages-sections/customer-dashboard/preferences/styles";
-import { FormControl, RadioGroup, FormControlLabel, Radio, useMediaQuery, Box } from "@mui/material";
+import { SymMultiSelectDropdown } from "@/components/custom-inputs";
+import { FormControl, RadioGroup, FormControlLabel, Radio, Box } from "@mui/material";
+import { FlexBox } from '../flex-box';
 
 // =================================================================================
 
@@ -31,7 +31,7 @@ const PreferenceForm = ({
     setOuterwears,
     accessories,
     setAccessories,
-    isMobile,
+    isMobile=true,
     isEdit,
     sidebar=false,
 }) => {
@@ -44,10 +44,8 @@ const PreferenceForm = ({
       } else {
         setGenderData("male");
       }
-      
     }, [gender]);
 
-    const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
     
     const handleStylesChange = (event) => {
         const { value } = event.target;
@@ -118,24 +116,58 @@ const PreferenceForm = ({
         >
           <FormControlLabel
             value="male"
-            control={<Radio sx={{ color: "#fff" }} />}
+            control={
+              <Radio
+                sx={{
+                  color: "#FFF",
+                  '&.Mui-checked': {
+                    color: "#3084FF",
+                  },
+                  pointerEvents: isEdit ? 'auto' : 'none'
+                }}
+              />
+            }
             label="Male"
+            disabled={!isEdit}
+
           />
           <FormControlLabel
             value="female"
-            control={<Radio sx={{ color: "#fff" }} />}
+            control={
+              <Radio
+                sx={{ 
+                  color: "#FFF",
+                  '&.Mui-checked': {
+                    color: "#3084FF",
+                  },
+                  pointerEvents: isEdit ? 'auto' : 'none'
+                }}
+              />
+            }
             label="Female"
+            disabled={!isEdit}
           />
           <FormControlLabel
             value="both"
-            control={<Radio sx={{ color: "#fff" }} />}
+            control={
+              <Radio
+                sx={{
+                  color: "#FFF",
+                  '&.Mui-checked': {
+                    color: "#3084FF", // Keep the color when checked
+                  },
+                  pointerEvents: isEdit ? 'auto' : 'none'
+                }}
+              />
+            }
             label="Both"
+            disabled={!isEdit}
           />
         </RadioGroup>
       </FormControl>
-        
+
       {/* ROW 1 */}
-      <Box sx={cardStyle(downMd)}>          
+      <FlexBox sx={style.card}>          
         <SymMultiSelectDropdown
           title="Style"
           selectedValue={styles}
@@ -168,46 +200,59 @@ const PreferenceForm = ({
           isEdit={isEdit}
           isColor={true}
         />
-      </Box>
+      </FlexBox>
 
       {/* ROW 2 */}
-      <Box sx={cardStyle(downMd)}>
+      <FlexBox sx={style.card}>
+        <SymMultiSelectDropdown
+          title="Tops"
+          selectedValue={tops}
+          handleChange={handleTopSizeChange}
+          options={["S", "M", "L"]}
+          isEdit={isEdit}
+        />
+        <SymMultiSelectDropdown
+          title="Bottoms"
+          selectedValue={bottoms}
+          handleChange={handleBottomSizeChange}
+          options={["S", "M", "L"]}
+          isEdit={isEdit}
+        />
+        <SymMultiSelectDropdown
+          title="Outerwear"
+          selectedValue={outerwears}
+          handleChange={handleOuterwearSizeChange}
+          options={["S", "M", "L"]}
+          isEdit={isEdit}
+        />
+        {!sidebar &&
           <SymMultiSelectDropdown
-            title="Tops"
-            selectedValue={tops}
-            handleChange={handleTopSizeChange}
+            title="Accessories"
+            selectedValue={accessories}
+            handleChange={handleAccessoriesChange}
             options={["S", "M", "L"]}
             isEdit={isEdit}
           />
-          <SymMultiSelectDropdown
-            title="Bottoms"
-            selectedValue={bottoms}
-            handleChange={handleBottomSizeChange}
-            options={["S", "M", "L"]}
-            isEdit={isEdit}
-          />
-          <SymMultiSelectDropdown
-            title="Outerwear"
-            selectedValue={outerwears}
-            handleChange={handleOuterwearSizeChange}
-            options={["S", "M", "L"]}
-            isEdit={isEdit}
-          />
-          {!sidebar &&
-            <SymMultiSelectDropdown
-              title="Accessories"
-              selectedValue={accessories}
-              handleChange={handleAccessoriesChange}
-              options={["S", "M", "L"]}
-              isEdit={isEdit}
-            />
-          }
-      </Box>
+        }
+      </FlexBox>
     </Box>
   )
 }
 
 export default PreferenceForm
+
+const style = {
+  card: {
+    mt: 2,
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    gap: "16px", // Space between inputs
+    flexDirection: {xs: "column", sm:'row'},
+    alignItems: {xs: "stretch"},
+  }
+}
 
 const brandOptions = [
   {

@@ -1,4 +1,4 @@
-import { PreferencesPageView } from "../../../../pages-sections/customer-dashboard/preferences/page-view"; // API FUNCTIONS
+import { PreferencesPageView } from "@/pages-sections/customer-dashboard/preferences"; // API FUNCTIONS
 
 export const metadata = {
   title: "Preferences",
@@ -12,6 +12,6 @@ export const metadata = {
 
 export default async function Preferences() {
   return (
-    <PreferencesPageView />
+    <PreferencesPageView isEdit={false} />
   )
 }

@@ -1,4 +1,5 @@
-import { ProfileEditPageView } from "../../../../../pages-sections/customer-dashboard/profile/page-view"; // API FUNCTIONS
+import { ProfilePageView } from "@/pages-sections/customer-dashboard/profile/page-view";
+
 export const metadata = {
   title: "Profile  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
@@ -8,7 +9,9 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default async function ProfileEdit() {
 
-  return <ProfileEditPageView />;
+export default async function ProfileEdit() {
+  return (
+    <ProfilePageView isEdit={true} />
+  );
 }

@@ -28,9 +28,9 @@ export default function DashboardHeader({
   const HEADER_LINK = (
     <Button
       sx={styles.btn}
-      href={href}
-      LinkComponent={Link}
-      onClick={handleSave}
+      href={isEdit ? undefined : href}
+      LinkComponent={isEdit ? undefined : Link}
+      onClick={isEdit ? handleSave : undefined}
     >
       {buttonText}
     </Button>

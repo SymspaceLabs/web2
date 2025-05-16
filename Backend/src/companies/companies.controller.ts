@@ -6,10 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
+import { Company } from './entities/company.entity';
 
 @Controller('companies')
 export class CompaniesController {
@@ -20,10 +22,19 @@ export class CompaniesController {
     return this.companiesService.create(createCompanyDto);
   }
 
+  // @Get()
+  // async findAll(@Query('hasProducts') hasProducts?: string): Promise<Company[]> {
+  //   return this.companiesService.findAll(hasProducts === 'true');
+  // }
+
   @Get()
-  findAll() {
-    return this.companiesService.findAll();
+  async findAll(@Query('hasProducts') hasProducts?: string): Promise<Company[]> {
+    // Pass a boolean or undefined to the service
+    const onlyWithProducts = hasProducts === 'true' ? true : undefined;
+    return this.companiesService.findAll(onlyWithProducts);
   }
+
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

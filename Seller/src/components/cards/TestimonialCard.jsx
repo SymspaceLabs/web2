@@ -34,7 +34,7 @@ const TestimonialCard = ({ testimonial }) => {
           </Typography>
           <FlexBox gap={2} alignItems="center">
             <Box sx={imageWrapper}>
-              <LazyImage src={user.avatar} width={50} height={50} alt="User" />
+              <LazyImage src={user?.avatar} width={50} height={50} alt="User" />
             </Box>
             <Typography fontFamily="Helvetica" fontSize={18}>
               {user.name}

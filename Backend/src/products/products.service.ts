@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -8,10 +8,10 @@ import { Company } from 'src/companies/entities/company.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
-// import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
+import { GetProductsFilterDto } from './dto/get-products-filter.dto';
 
 @Injectable()
 export class ProductsService {
@@ -35,6 +35,7 @@ export class ProductsService {
   }
   
 
+    // CREATE & UPDATE PRODUCT
     async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
       const {
         images,
@@ -219,19 +220,52 @@ export class ProductsService {
         return savedProduct;
     }
 
-    async findAll(): Promise<Product[]> {
-      const products = await this.productRepository.find({
-        relations: ['company', 'images', 'colors', 'sizes'],
-      });
-    
-      // Sort images by sortOrder for each product
+
+    // FIND ALL WITH FILTER
+    async findAll(filterDto: GetProductsFilterDto) {
+
+      const { brands } = filterDto;
+
+      const query = this.productRepository.createQueryBuilder('product')
+        .leftJoinAndSelect('product.company', 'company')
+        .leftJoinAndSelect('product.images', 'images')
+        .leftJoinAndSelect('product.colors', 'colors')
+        .leftJoinAndSelect('product.sizes', 'sizes');
+
+      if (brands && Array.isArray(brands) && brands.length > 0) {
+        query.andWhere('product.companyId IN (:...brands)', { brands });
+      }
+
+      const products = await query.getMany();
+
       for (const product of products) {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
-    
-      return products;
-    }
-    
+
+      // Compute price range
+      const prices = products.map(p => p.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+
+      // Get distinct brands that have at least one product
+      const usedBrands = await this.productRepository.createQueryBuilder('product')
+        .leftJoin('product.company', 'company')
+        .select(['company.id AS id', 'company.entityName AS name'])
+        .groupBy('company.id')
+        .addGroupBy('company.entityName')
+        .getRawMany();
+
+      const formattedBrands = usedBrands.map(b => ({
+        id: b.id,
+        entityName: b.name,
+      }));
+
+      return {
+        products,
+        brands: formattedBrands,
+        priceRange: { min: minPrice, max: maxPrice }
+      };    
+  }
 
     async findBySlug(slug: string): Promise<Product> {
       const product = await this.productRepository.findOne({

@@ -11,7 +11,7 @@ import CameraEnhance from "@mui/icons-material/CameraEnhance";
 export default function ProfilePicUpload({user}) {
   return (
     <FlexBox alignItems="flex-end" mb={3}>
-      <Avatar alt="user" src={user.avatar} sx={{ height: 64, width: 64 }} />
+      <Avatar alt="user" src={user?.avatar} sx={{ height: 64, width: 64 }} />
 
       <IconButton size="small" component="label" color="secondary" htmlFor="profile-image" sx={{ bgcolor: "grey.300", ml: -2.5 }} >
         <CameraEnhance fontSize="small" />

@@ -1,6 +1,6 @@
 //measurements.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateMeasurementDto } from './dto/create-measurement.dto';
@@ -85,9 +85,15 @@ export class MeasurementsService {
     }
 
     // Find the measurement associated with the user
-    return await this.measurementRepository.findOne({
+    const measurement = await this.measurementRepository.findOne({
       where: { user: { id: userId } },
     });
+
+    if (!measurement) {
+      throw new NotFoundException('Measurement not found for the user');
+    }
+
+    return measurement;
 
   }
   

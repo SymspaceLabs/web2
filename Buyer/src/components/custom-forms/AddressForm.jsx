@@ -16,18 +16,18 @@ export default function AddressForm({
   return (
     <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
       <SymTextField
-        title="Business Address"
+        title="Address"
         color={color}
         value={data.address1}
-        placeholder="Business Address"
+        placeholder="Address Line 1"
         onChange={(e) => handleChange('address1', e.target.value)}
       />
 
       <SymTextField
-        title="Business Address Line 2 (Optional)"
+        title="Address Line 2 (Optional)"
         color={color}
         value={data.address2}
-        placeholder="Business Address Line 2"
+        placeholder="Address Line 2"
         onChange={(e) => handleChange('address2', e.target.value)}
       />
 

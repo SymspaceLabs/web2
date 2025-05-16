@@ -59,49 +59,49 @@ export default function Section4() {
             </FlexBetween>
 
             {/* Horizontally Scrollable Cards */}
-          <FlexBox
-            sx={{
-              position:'relative' ,
-              display: {xs:'flex', sm:'none'},
-              gap: 2,
-              overflowX: "auto",
-              scrollbarWidth: "none", // Hide scrollbar (Firefox)
-              "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar (Chrome, Safari)
-              scrollSnapType: "x mandatory",
-              paddingBottom: 2, // Ensure spacing for scroll
-            }}
-          >
-            {categories.map((item,index) => (
-              <Link key={index} href={`/products/search/${item.slug}`} passHref sx={{ zIndex:1 }}>
-                {/* Product card */}
-                <FlexColCenter
-                  sx={{
-                    py: {xs:2, sm:5},
-                    bgcolor: "#353535",
-                    borderRadius: '15px',
-                    alignItems: "center",
-                    gap:1,
-                    width: isMobile ? 85 : 160, // Set fixed width for scroll
-                    flexShrink: 0, // Prevents items from shrinking
-                    scrollSnapAlign: "start",
-                  }}
-                >
-                  {/* Product image */}
-                  <LazyImage
-                    alt={item.title}
-                    width={10}
-                    height={10}
-                    sx={{ width: {xs:'30px', sm:"40px"}, height: {xs:'30px', sm:"40px"} }}
-                    src={item.thumbnail}
-                  />
-                  {/* Product title */}
-                  <H1 fontSize={{ xs:8, sm:12 }} color= "#FFF" textAlign="center">
-                    {item.title}
-                  </H1>
-                </FlexColCenter>
-              </Link>
-            ))}
-          </FlexBox>
+            <FlexBox
+              sx={{
+                position:'relative' ,
+                display: {xs:'flex', sm:'none'},
+                gap: 2,
+                overflowX: "auto",
+                scrollbarWidth: "none", // Hide scrollbar (Firefox)
+                "&::-webkit-scrollbar": { display: "none" }, // Hide scrollbar (Chrome, Safari)
+                scrollSnapType: "x mandatory",
+                paddingBottom: 2, // Ensure spacing for scroll
+              }}
+            >
+              {categories.map((item,index) => (
+                <Link key={index} href={`/products/search/${item.slug}`} passHref sx={{ zIndex:1 }}>
+                  {/* Product card */}
+                  <FlexColCenter
+                    sx={{
+                      py: {xs:2, sm:5},
+                      bgcolor: "#353535",
+                      borderRadius: '15px',
+                      alignItems: "center",
+                      gap:1,
+                      width: isMobile ? 85 : 160, // Set fixed width for scroll
+                      flexShrink: 0, // Prevents items from shrinking
+                      scrollSnapAlign: "start",
+                    }}
+                  >
+                    {/* Product image */}
+                    <LazyImage
+                      alt={item.title}
+                      width={10}
+                      height={10}
+                      sx={{ width: {xs:'30px', sm:"40px"}, height: {xs:'30px', sm:"40px"} }}
+                      src={item.thumbnail}
+                    />
+                    {/* Product title */}
+                    <H1 fontSize={{ xs:8, sm:12 }} color= "#FFF" textAlign="center">
+                      {item.title}
+                    </H1>
+                  </FlexColCenter>
+                </Link>
+              ))}
+            </FlexBox>
     
             {/* Carousel displaying products */}
             {!isMobile && (

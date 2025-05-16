@@ -1,5 +1,9 @@
 "use client";
 
+// ===============================================
+// Custome Carousel Component
+// ===============================================
+
 import { forwardRef } from "react";
 import { useTheme } from "@mui/material/styles";
 import SlickCarousel from "react-slick";
@@ -34,12 +38,11 @@ const Carousel = forwardRef((props, ref) => {
     slidesToShow,
     rtl: theme.direction === "rtl",
     ...CarouselArrows(arrowStyles),
-    ...CarouselDots({
-      dotColor,
-      sx: dotStyles
-    }),
-    ...others
+    ...CarouselDots({ dotColor, sx: dotStyles }),
+    ...others // ✅ Make sure others includes `responsive`
   };
+
+
   return <RootStyle space={spaceBetween}>
       <SlickCarousel ref={ref} {...settings}>
         {children}

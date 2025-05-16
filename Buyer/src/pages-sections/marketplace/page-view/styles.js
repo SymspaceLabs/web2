@@ -69,9 +69,9 @@ export const styles = {
 
     },
     blogCard : {
-        borderRadius: {xs:'25px', sm:'80px'},
-        pt: {xs:2, sm:5},
-        px: {xs:1, sm:5},
+        borderRadius: {xs:'25px', sm:'25px', md:'80px'},
+        pt: {xs:2, sm:2, md:5},
+        px: {xs:1, sm:1, md:5},
         background: 'rgba(255, 255, 255, 0.4)',
         boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)',
         backdropFilter: 'blur(10.0285px)',

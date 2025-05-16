@@ -19,7 +19,7 @@ export default function Section4() {
         </H1>
 
         {/* Grid layout for blog cards */}
-        <Grid container spacing={{xs:1, sm:3}}>
+        <Grid container spacing={{xs:1, sm:2, md:3}}>
           {blogs.map((blog,index) => (
             <Grid item lg={4} md={4} xs={4} key={blog.id}>
               {/* Motion wrapper for fade-in animation */}

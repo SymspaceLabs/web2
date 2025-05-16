@@ -104,7 +104,7 @@ export default function Measurements({ isEdit = true }) {
           kg: data.weight,
           lbs: Math.round(data.weight * 2.20462),
         });
-        setIsMetric(data.isMetric);
+        setIsMetric(data?.isMetric);
         setChest(data.chest);
         setWaist(data.waist);
       } catch (error) {

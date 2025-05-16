@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 import { Measurement } from 'src/measurements/entities/measurement.entity';
 import { Preference } from 'src/preferences/entities/preference.entity';
@@ -7,6 +7,7 @@ import { CreditCard } from 'src/credit-cards/entities/credit-card.entity';
 import { BillingAddress } from 'src/billing-addresses/entities/billing-address.entity';
 import { Survey } from 'src/surveys/entities/survey.entity';
 import { File } from 'src/files/entities/file.entity';
+import { Address } from 'src/addresses/entities/address.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -95,6 +96,20 @@ export class User {
 
   @OneToMany(() => File, (file) => file.user)
   files: File[];
+
+  @OneToOne(() => Address, (address) => address.shippingForUser, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn({ name: 'shipping_address_id' })
+  shippingAddress: Address;
+
+  @OneToOne(() => Address, (address) => address.billingForUser, {
+    cascade: true,
+    nullable: true,
+  })
+  @JoinColumn({ name: 'billing_address_id' })
+  billingAddress: Address;
 
 }
 

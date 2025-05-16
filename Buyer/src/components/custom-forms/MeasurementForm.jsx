@@ -68,7 +68,8 @@ function MeasurementForm ({
 
             {/* TOGGLE */}
             <FlexBox justifyContent={isMobile || sidebar ? 'flex-start' : 'flex-end'} alignItems="center" mt={2}>
-                <Box sx={{
+                <Box
+                    sx={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -78,8 +79,11 @@ function MeasurementForm ({
                     height: "35px",
                     border: "1px solid #E4E4E7",
                     position: "relative",
-                }}>
-                    <Box sx={{
+                    opacity: isEdit ? 1 : 0.5,
+                    }}
+                >
+                    <Box
+                    sx={{
                         position: "absolute",
                         top: 0,
                         left: isMetric ? 0 : "50%",
@@ -90,39 +94,47 @@ function MeasurementForm ({
                         borderRadius: "50px",
                         transition: "left 0.3s ease",
                         zIndex: 1,
-                    }} />
-                    <Box sx={{
+                    }}
+                    />
+                    <Box
+                    sx={{
                         fontSize: '12px',
                         zIndex: 2,
                         width: "50%",
                         height: "100%",
                         textAlign: "center",
-                        cursor: "pointer",
+                        cursor: isEdit ? "pointer" : "not-allowed",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
                         color: "#fff",
                         padding: "10px 0"
-                    }} onClick={() => toggleUnit("metric")}>
-                        cm/kg
+                    }}
+                    onClick={isEdit ? () => toggleUnit("metric") : undefined}
+                    >
+                    cm/kg
                     </Box>
-                    <Box sx={{
+                    <Box
+                    sx={{
                         fontSize: '12px',
                         zIndex: 2,
                         width: "50%",
                         height: "100%",
                         textAlign: "center",
-                        cursor: "pointer",
+                        cursor: isEdit ? "pointer" : "not-allowed",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
                         color: "#fff",
                         padding: "10px 0"
-                    }} onClick={() => toggleUnit("imperial")}>
-                        inch/lbs
+                    }}
+                    onClick={isEdit ? () => toggleUnit("imperial") : undefined}
+                    >
+                    inch/lbs
                     </Box>
                 </Box>
-            </FlexBox>
+                </FlexBox>
+
         </FlexBox>
 
         {/* FORM */}

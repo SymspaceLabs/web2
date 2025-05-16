@@ -26,17 +26,21 @@ export default function BillingForm({
 
   return (
     <Box py={3}>
-      <H1 color="#000" mb={2} fontSize={{ xs: 14, sm: 20 }}>
-        Billing Address
-      </H1>
+
 
       {!sameAsShipping && (
-        <AddressForm
-          section="billing"
-          color="#000"
-          data={data}
-          onChange={(field, value) => handleChange(field, value)}
-        />
+        <>
+          <H1 color="#000" mb={2} fontSize={{ xs: 14, sm: 20 }}>
+            Billing Address
+          </H1>
+
+          <AddressForm
+            section="billing"
+            color="#000"
+            data={data}
+            onChange={(field, value) => handleChange(field, value)}
+          />
+        </>
       )}
     </Box>
   );

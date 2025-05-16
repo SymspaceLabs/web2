@@ -31,7 +31,7 @@ export default function Navbar({
           <FlexBox justifyContent="space-between" width="80%">
             {categories.map((item, index)=> (
                 <StyledNavLink 
-                  href={`/products/search/all?category=${item}` }
+                  href={`/products/search/${item.slug}` }
                   key={index} 
                   sx={{ 
                     fontWeight:500,
@@ -41,7 +41,7 @@ export default function Navbar({
                     }
                   }}
                 >
-                  {item}
+                  {item.title}
                 </StyledNavLink>
               ))
             }
@@ -53,5 +53,36 @@ export default function Navbar({
 }
 
 const categories = [
-  "Women", "Men", "Kids", "Maternity", "Elderly", "Assisted Aid", "Home & Furniture", "Sales & Deals"
+  {
+    title:"Women",
+    slug:"women"
+  },
+  {
+    title:"Men",
+    slug:"men"
+  },
+  {
+    title:"Kids",
+    slug:"kids"
+  },
+  {
+    title:"Maternity",
+    slug:"maternity"
+  },
+  {
+    title:"Elderly",
+    slug:"elderly"
+  },
+  {
+    title:"Assisted Aid",
+    slug:"assisted-aid"
+  },
+  {
+    title:"Home & Furniture",
+    slug:"home-furniture"
+  },
+  {
+    title:"Sales & Deals",
+    slug:"sales-deals"
+  }
 ]

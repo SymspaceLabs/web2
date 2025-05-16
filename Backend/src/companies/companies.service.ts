@@ -17,11 +17,18 @@ export class CompaniesService {
     return await this.companiesRepository.save(company);
   }
 
-  async findAll(): Promise<Company[]> {
-    return await this.companiesRepository.find({
-      relations: ['user'],
+  async findAll(hasProductsOnly?: boolean): Promise<Company[]> {
+    const companies = await this.companiesRepository.find({
+      relations: ['user', 'products'],
     });
+
+    if (hasProductsOnly) {
+      return companies.filter(company => company.products && company.products.length > 0);
+    }
+
+    return companies;
   }
+
   
   async findOne(id: string): Promise<Company> {
     const company = await this.companiesRepository.findOne({ where: { id } });

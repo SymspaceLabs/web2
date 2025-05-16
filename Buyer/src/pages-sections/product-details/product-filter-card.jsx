@@ -20,26 +20,21 @@ import {
 import { FlexBetween, FlexBox } from "@/components/flex-box";
 import { H5, H6, Paragraph, Span } from "@/components/Typography";
 import AccordionHeader from "@/components/accordion/accordion-header";
+import CATEGORIES_DATA from "@/data/categories";
 
 // =================================================================
 
-const categoryList = [
-  {
-    title: "Bath Preparations",
-    subCategories: ["Bubble Bath", "Bath Capsules", "Others"]
-  },
-  { title: "Eye Makeup Preparations" },
-  { title: "Fragrance" },
-  { title: "Hair Preparations" }
-];
-
 const otherOptions = ["On Sale", "In Stock", "Featured"];
-const brandList = ["Mac", "Karts", "Baals", "Bukks", "Luasis"];
 const colorList = ["#1C1C1C", "#FF7A7A", "#FFC672", "#84FFB5", "#70F6FF", "#6B7AFF"];
 
-export default function ProductFilterCard() {
-  const [collapsed, setCollapsed] = useState(true);
-  const [priceRange, setPriceRange] = useState([0, 300]);
+export default function ProductFilterCard({
+  allBrands,
+  selectedBrands,
+  setSelectedBrands,
+  priceRange,
+  setPriceRange,
+  priceLimits,
+}) {
 
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
@@ -51,52 +46,11 @@ export default function ProductFilterCard() {
   };
 
   return (
-    <Box>
+    <Box pt={{sm:7}}>
       {/* CATEGORY VARIANT FILTER */}
       <H6 mb={1.25}>Categories</H6>
-      {categoryList.map((item) =>
-        item.subCategories ? (
-          <Fragment key={item.title}>
-            <AccordionHeader
-              open={collapsed}
-              onClick={() => setCollapsed((state) => !state)}
-              sx={{
-                padding: ".5rem 0",
-                cursor: "pointer",
-                color: "grey.600"
-              }}
-            >
-              <Span>{item.title}</Span>
-            </AccordionHeader>
-            <Collapse in={collapsed}>
-              {item.subCategories.map((name) => (
-                <Paragraph
-                  pl="22px"
-                  py={0.75}
-                  key={name}
-                  fontSize="14px"
-                  color="grey.600"
-                  sx={{ cursor: "pointer" }}
-                >
-                  {name}
-                </Paragraph>
-              ))}
-            </Collapse>
-          </Fragment>
-        ) : (
-          <Paragraph
-            key={item.title}
-            sx={{
-              py: 0.75,
-              cursor: "pointer",
-              color: "grey.600",
-              fontSize: 14
-            }}
-          >
-            {item.title}
-          </Paragraph>
-        )
-      )}
+
+      <RecursiveAccordion />
 
       <Box component={Divider} my={3} />
 
@@ -104,8 +58,8 @@ export default function ProductFilterCard() {
       <H6 mb={2}>Price Range</H6>
       <Box px={1}>
         <Slider
-          min={0}
-          max={300}
+          min={priceLimits[0]}
+          max={priceLimits[1]}
           size="small"
           value={priceRange}
           valueLabelDisplay="auto"
@@ -144,14 +98,34 @@ export default function ProductFilterCard() {
 
       {/* BRAND VARIANT FILTER */}
       <H6 mb={2}>Brands</H6>
-      {brandList.map((item) => (
-        <FormControlLabel
-          key={item}
-          sx={{ display: "flex" }}
-          label={<Span color="inherit">{item}</Span>}
-          control={<Checkbox size="small" color="secondary" />}
-        />
-      ))}
+      {allBrands.map((item,index) => {
+        const isChecked = selectedBrands.some(brand => brand.id === item.id);
+
+        const handleBrandChange = () => {
+          if (isChecked) {
+            setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
+          } else {
+            setSelectedBrands([...selectedBrands, item]);
+          }
+        };
+
+        return (
+          <FormControlLabel
+            key={index}
+            sx={{ display: "flex" }}
+            label={<Span color="inherit">{item.entityName}</Span>}
+            control={
+              <Checkbox
+                size="small"
+                color="primary"
+                checked={isChecked}
+                onChange={handleBrandChange}
+              />
+            }
+          />
+        );
+      })}
+
 
       <Box component={Divider} my={3} />
 
@@ -209,3 +183,62 @@ export default function ProductFilterCard() {
     </Box>
   );
 }
+
+
+const RecursiveAccordion = ({ data }) => {
+  const [openMap, setOpenMap] = useState({});
+
+  const toggle = (title) => {
+    setOpenMap((prev) => ({ ...prev, [title]: !prev[title] }));
+  };
+
+  const renderItems = (items, level = 0) => {
+    return items.map((item) => {
+      const hasChildren = item.child && item.child.length > 0;
+      const key = `${item.title}-${level}`;
+
+      return (
+        <Fragment key={key}>
+          {hasChildren ? (
+            <>
+              <AccordionHeader
+                open={!!openMap[key]}
+                onClick={() => toggle(key)}
+                sx={{
+                  padding: ".5rem 0",
+                  cursor: "pointer",
+                  color: "grey.600",
+                  pl: `${level * 12}px`,
+                }}
+              >
+                <Span>{item.title}</Span>
+              </AccordionHeader>
+              <Collapse in={!!openMap[key]}>
+                {renderItems(item.child, level + 1)}
+              </Collapse>
+            </>
+          ) : (
+            <Paragraph
+              sx={{
+                py: 0.75,
+                cursor: "pointer",
+                color: "grey.600",
+                fontSize: 14,
+                pl: `${level * 12}px`,
+              }}
+              onClick={() => {
+                if (item.url) {
+                  window.location.href = item.url;
+                }
+              }}
+            >
+              {item.title}
+            </Paragraph>
+          )}
+        </Fragment>
+      );
+    });
+  };
+
+  return <>{renderItems(CATEGORIES_DATA[0].child)}</>;
+};

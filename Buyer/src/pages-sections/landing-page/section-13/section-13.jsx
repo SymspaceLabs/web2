@@ -27,7 +27,7 @@ export default function Section12() {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
         const data = await response.json();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

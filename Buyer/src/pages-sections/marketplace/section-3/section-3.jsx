@@ -18,7 +18,7 @@ export default function Section3() {
         </H1>
 
         {/* Grid to display product cards */}
-        <Grid container spacing={{xs:1, sm:3}}>
+        <Grid container spacing={{xs:1, sm:2, md:3}}>
           {products.map((item, index) => (
             <Grid item lg={4} md={4} xs={4} key={item.id}>
               {/* Motion wrapper for fade-in animation */}

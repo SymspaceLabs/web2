@@ -68,7 +68,7 @@ export const styles = {
   },
   sizeChart : {
     ...button,
-    display:{xs:'none'},
+    display:{ xs:'none', sm:'block' },
     fontSize:8,
     padding: "8px",
     color: '#000',

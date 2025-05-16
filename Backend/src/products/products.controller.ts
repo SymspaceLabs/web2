@@ -6,10 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  Query
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { GetProductsFilterDto } from './dto/get-products-filter.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -28,9 +30,24 @@ export class ProductsController {
   }  
 
   @Get()
-  async getAllProducts() {
-    return await this.productsService.findAll();
+  async getAllProducts(@Query() filterDto: GetProductsFilterDto) {
+    // Parse brands only if it's a non-empty string
+    if (typeof filterDto.brands === 'string') {
+      const parsedBrands = (filterDto.brands as string)
+        .split(',')
+        .map((brand) => brand.trim())
+        .filter((brand) => brand); // removes empty strings
+
+      filterDto.brands = parsedBrands.length > 0 ? parsedBrands : undefined;
+    }
+
+    return await this.productsService.findAll(filterDto);
   }
+
+
+
+
+
 
   @Get(':slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {
@@ -40,7 +57,7 @@ export class ProductsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const productDetail = await this.productsService.findOne(id);
-    return 
+    return productDetail;
   }
 
   @Delete(':id')
@@ -49,3 +66,4 @@ export class ProductsController {
   }
 
 }
+

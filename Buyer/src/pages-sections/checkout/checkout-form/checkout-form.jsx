@@ -3,19 +3,21 @@
 // ==========================================
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card } from "@mui/material";
 import { FlexBox } from "@/components/flex-box";
+import { useAuth } from '@/contexts/AuthContext';
 import { ShippingForm, BillingForm } from "@/components/custom-forms/checkout";
 
 // ==========================================
 
 export default function CheckoutForm() {
   const router = useRouter();
+  const { user } = useAuth();
 
   const [sameAsShipping, setSameAsShipping] = useState(true);
-
+  const [userData, setUserData] = useState();
   const [shipping, setShipping] = useState({
     firstName: '',
     lastName: '',
@@ -39,6 +41,34 @@ export default function CheckoutForm() {
     country: '',
     zip: ''
   });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`);
+            const data = await response.json();
+            setUserData(data);
+          } catch (error) {
+            console.error("Error fetching blogs:", error);
+          }
+        };
+        fetchUser();
+    }, []);
+
+  useEffect(() => {
+    setShipping({
+      firstName: userData?.firstName || '',
+      lastName: userData?.lastName || '',
+      email: userData?.email || '',
+      address1: userData?.address?.address1 || '',
+      address2: userData?.address?.address2 || '',
+      city: userData?.address?.city || '',
+      state: userData?.address?.state || '',
+      country: userData?.address?.country || 'US',
+      zip: userData?.address?.zip || '',
+    })
+  }, [userData])
+  
 
   const handleFormSubmit = async () => {
     router.push("/payment");

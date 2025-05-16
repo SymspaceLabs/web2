@@ -70,7 +70,7 @@ export default function CartItem({
 
       <FlexBox p={2} rowGap={1} width="100%" flexDirection="column">
         <Link href={`/products/${slug}`}>
-          <H1 color="#000" ellipsis fontSize={18}>
+          <H1 color="#000" fontSize={18}>
             {name}
           </H1>
         </Link>

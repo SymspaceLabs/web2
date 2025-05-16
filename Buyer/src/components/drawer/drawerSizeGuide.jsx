@@ -145,7 +145,7 @@ const DrawerRight = ({ toggleSidenav, headerTitle }) => {
           <Paragraph color="#FFF">
             Welcome back! Explore your personalized features here.
           </Paragraph>
-          <FlexCol flexDirection="column" sx={{ padding: 1, background: 'transparent' }}>
+          <FlexCol flexDirection="column" sx={{ padding: 1, gap: 3, background: 'transparent' }}>
             <MeasurementForm
               setIsMetric={setIsMetric}
               isMetric={isMetric}

@@ -1,7 +1,7 @@
 "use client";
 
 // ===========================================================
-// Dashboard Header
+// Profile Page View
 // ===========================================================
 
 import { useRouter } from "next/navigation";
@@ -37,22 +37,22 @@ export default function ProfilePageView({
   const [dob, setDob] = useState('');
 
 
-    // MEASUREMENTS
-    const [isMetric, setIsMetric] = useState(true);
-    const [height, setHeight] = useState(
-      {
-        feet: 0,
-        inches: 0,
-        cm: 0,
-      }
-    );
-      
-    const [weight, setWeight] = useState(
-      {
-        lbs: 0,
-        kg: Math.round((0) / 2.20462),
-      }
-    );
+  // MEASUREMENTS
+  const [isMetric, setIsMetric] = useState(true);
+  const [height, setHeight] = useState(
+    {
+      feet: 0,
+      inches: 0,
+      cm: 0,
+    }
+  );
+    
+  const [weight, setWeight] = useState(
+    {
+      lbs: 0,
+      kg: Math.round((0) / 2.20462),
+    }
+  );
     
   const [chest, setChest] = useState(0);
   const [waist, setWaist] = useState(0);
@@ -104,11 +104,11 @@ export default function ProfilePageView({
       setFirstName(userData.firstName || '');
       setLastName(userData.lastName || '');
       setDob(userData.dob || '');
-      setIsMetric(userData.measurement.isMetric || '');
-      setHeight(userData.measurement.height || '');
-      setWeight(userData.measurement.weight || '');
-      setChest(userData.measurement.chest || '');
-      setWaist(userData.measurement.waist || '');
+      setIsMetric(userData.measurement?.isMetric || true);
+      setHeight(userData.measurement?.height || '');
+      setWeight(userData.measurement?.weight || '');
+      setChest(userData.measurement?.chest || '');
+      setWaist(userData.measurement?.waist || '');
       setGender(userData.gender || '');
       setTops(userData?.preference?.tops);
       setBottoms(userData?.preference?.bottoms);

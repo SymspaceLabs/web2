@@ -32,7 +32,7 @@ export default function UserAnalytics({
         <Grid container spacing={3} >
           <Grid item md={6} xs={12}>
             <Card sx={{ gap: 2, height: "100%", display: "flex", p: "1rem 1.5rem", alignItems: "center", background:'transparent', color:'#fff', boxShadow:'none' }}>
-              <Avatar alt={user.firstName} src={user.avatar} sx={{ height: 100, width: 100 }} />
+              <Avatar alt={user.firstName} src={user?.avatar} sx={{ height: 100, width: 100 }} />
               <FlexBetween flexWrap="wrap" flex={1}>
                 <div>
                   <H1 fontSize='24px'>

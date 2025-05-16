@@ -259,20 +259,23 @@ export default function ProductDetails({ product }) {
                 sx={{
                   ...styles.addToCartButton,
                   ...(availability?.stock === 0 && {
-                    background: 'rgba(128, 128, 128, 0.55)',
-                    color: "#FFF",
-                    cursor: "not-allowed",
+                      background: 'rgba(128, 128, 128, 0.55)',
+                      color: "#FFF",
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                      border: "2px solid #FFF",
                   }),
                 }}
-                onClick={()=>{
+                onClick={() => {
+                  if (availability?.stock === 0) return;
+
                   handleAddToCart();
                   if (!selectedSize) {
                     setSizeError(true);
                     return;
                   }
-                  toggleCartOpen(); // ✅ Open the cart drawer
+                  toggleCartOpen();
                 }}
-                disabled={availability?.stock === 0}
               >
                 Add to Cart
               </Button>
@@ -281,12 +284,16 @@ export default function ProductDetails({ product }) {
                 sx={{
                   ...styles.buyNowButton,
                   ...(availability?.stock === 0 && {
-                    background: 'rgba(128, 128, 128, 0.55)',
-                    color: "#FFF",
-                    cursor: "not-allowed",
+                      background: 'rgba(128, 128, 128, 0.55)',
+                      color: "#FFF",
+                      cursor: "not-allowed",
+                      pointerEvents: "none",
+                      border: "2px solid #FFF",
                   }),
                 }}
                 onClick={() => {
+                  if (availability?.stock === 0) return;
+
                   if (!selectedSize) {
                     setSizeError(true);
                     return;
@@ -295,7 +302,6 @@ export default function ProductDetails({ product }) {
                   handleAddToCart(); // This is a curried function, so we call it with ()
                   router.push('/cart');
                 }}
-                disabled={availability?.stock === 0}
               >
                 Buy now
               </Button>

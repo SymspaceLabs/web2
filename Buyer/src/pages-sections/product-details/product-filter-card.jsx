@@ -4,7 +4,7 @@
 // Product Filter Card
 // =================================================================
 
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect  } from "react";
 import {
   Box,
   TextField,
@@ -34,6 +34,9 @@ export default function ProductFilterCard({
   priceRange,
   setPriceRange,
   priceLimits,
+  category,
+  checkedCategoryIds,
+  setCheckedCategoryIds
 }) {
 
   const handlePriceChange = (event, newValue) => {
@@ -50,7 +53,10 @@ export default function ProductFilterCard({
       {/* CATEGORY VARIANT FILTER */}
       <H6 mb={1.25}>Categories</H6>
 
-      <RecursiveAccordion />
+      <RecursiveAccordion
+        data={category}
+        setCheckedCategoryIds={setCheckedCategoryIds}
+      />
 
       <Box component={Divider} my={3} />
 
@@ -184,61 +190,132 @@ export default function ProductFilterCard({
   );
 }
 
+const RecursiveAccordion = ({ data, setCheckedCategoryIds }) => {
+  const [checkedMap, setCheckedMap] = useState({});
 
-const RecursiveAccordion = ({ data }) => {
-  const [openMap, setOpenMap] = useState({});
+  useEffect(() => {
+    const selectedIds = Object.entries(checkedMap)
+      .filter(([, checked]) => checked)
+      .map(([id]) => id);
+    setCheckedCategoryIds(selectedIds);
+  }, [checkedMap, setCheckedCategoryIds]);
 
-  const toggle = (title) => {
-    setOpenMap((prev) => ({ ...prev, [title]: !prev[title] }));
+  const onCheck = (itemId) => {
+    setCheckedMap(prev => ({
+      ...prev,
+      [itemId]: !prev[itemId],
+    }));
   };
 
-  const renderItems = (items, level = 0) => {
-    return items.map((item) => {
-      const hasChildren = item.child && item.child.length > 0;
-      const key = `${item.title}-${level}`;
+  const renderCategory = (categories) =>
+    categories.map((cat) => {
+      const catKey = `cat-${cat.id}`;
 
       return (
-        <Fragment key={key}>
-          {hasChildren ? (
-            <>
-              <AccordionHeader
-                open={!!openMap[key]}
-                onClick={() => toggle(key)}
-                sx={{
-                  padding: ".5rem 0",
-                  cursor: "pointer",
-                  color: "grey.600",
-                  pl: `${level * 12}px`,
-                }}
-              >
-                <Span>{item.title}</Span>
-              </AccordionHeader>
-              <Collapse in={!!openMap[key]}>
-                {renderItems(item.child, level + 1)}
-              </Collapse>
-            </>
-          ) : (
-            <Paragraph
-              sx={{
-                py: 0.75,
-                cursor: "pointer",
-                color: "grey.600",
-                fontSize: 14,
-                pl: `${level * 12}px`,
-              }}
-              onClick={() => {
-                if (item.url) {
-                  window.location.href = item.url;
-                }
-              }}
-            >
-              {item.title}
-            </Paragraph>
-          )}
+        <Fragment key={catKey}>
+          {/* Always show category header (optional click handler) */}
+          <AccordionHeader
+            open={true} // always open
+            sx={{ pl: 0 }}
+          >
+            <Span sx={{ fontWeight: 'bold' }}>{cat.title}</Span>
+          </AccordionHeader>
+
+          {/* Always show subcategories */}
+          <Collapse in={true}>
+            {cat.subCategory.map((sub) => {
+              const subKey = `sub-${sub.subcategoryItem.id}`;
+              return (
+                <FormControlLabel
+                  key={subKey}
+                  sx={{ pl: 3 }}
+                  control={
+                    <Checkbox
+                      checked={!!checkedMap[sub.subcategoryItem.id]}
+                      onChange={() => onCheck(sub.subcategoryItem.id)}
+                      size="small"
+                    />
+                  }
+                  label={sub.subcategoryItem.name}
+                />
+              );
+            })}
+          </Collapse>
         </Fragment>
       );
     });
-  };
 
-  return <>{renderItems(CATEGORIES_DATA[0].child)}</>;
+  return <>{renderCategory(data)}</>;
 };
+
+
+
+// const RecursiveAccordion = ({ data, setCheckedCategoryIds }) => {
+//   const [openMap, setOpenMap] = useState({});
+//   const [checkedMap, setCheckedMap] = useState({});
+
+//   // inside RecursiveAccordion, after you declare `checkedMap`:
+//   useEffect(() => {
+//     // collect only the keys (UUID strings) that are truthy in checkedMap
+//     const selectedIds = Object.entries(checkedMap)
+//       .filter(([, checked]) => checked)
+//       .map(([id]) => id);              // ← keep the full string
+//     setCheckedCategoryIds(selectedIds);
+//   }, [checkedMap, setCheckedCategoryIds]);
+
+
+//   const toggle = (key) => {
+//     setOpenMap(prev => ({ ...prev, [key]: !prev[key] }));
+//   };
+
+//   const onCheck = (itemId) => {
+//     setCheckedMap(prev => ({
+//       ...prev,
+//       [itemId]: !prev[itemId],
+//     }));
+//   };
+
+
+//   const renderCategory = (categories) =>
+//     categories.map((cat) => {
+//       const catKey = `cat-${cat.id}`;
+//       const isOpen = !!openMap[catKey];
+
+//       return (
+//         <Fragment key={catKey}>
+//           {/* Category header */}
+//           <AccordionHeader
+//             open={isOpen}
+//             onClick={() => toggle(catKey)}
+//             sx={{ pl: 0, cursor: 'pointer' }}
+//           >
+//             <Span sx={{ fontWeight: 'bold' }}>{cat.title}</Span>
+//           </AccordionHeader>
+
+//           {/* Subcategories */}
+//           <Collapse in={isOpen}>
+//             {cat.subCategory.map((sub) => {
+//               const subKey = `sub-${sub.subcategoryItem.id}`;
+//               return (
+//                 <FormControlLabel
+//                   key={subKey}
+//                   sx={{ pl: 3 }}
+//                   control={
+//                     <Checkbox
+//                       checked={!!checkedMap[sub.subcategoryItem.id]}
+//                       onChange={() => onCheck(sub.subcategoryItem.id)}
+//                       size="small"
+//                     />
+//                   }
+//                   label={sub.subcategoryItem.name}
+//                 />
+//               );
+//             })}
+//           </Collapse>
+//         </Fragment>
+//       );
+//     });
+
+//   return <>{renderCategory(data)}</>;
+  
+// };

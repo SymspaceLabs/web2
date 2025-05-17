@@ -12,6 +12,7 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { GetProductsFilterDto } from './dto/get-products-filter.dto';
+import { parseCommaSeparatedParam } from 'src/utils/query-parser';
 
 @Controller('products')
 export class ProductsController {
@@ -31,18 +32,12 @@ export class ProductsController {
 
   @Get()
   async getAllProducts(@Query() filterDto: GetProductsFilterDto) {
-    // Parse brands only if it's a non-empty string
-    if (typeof filterDto.brands === 'string') {
-      const parsedBrands = (filterDto.brands as string)
-        .split(',')
-        .map((brand) => brand.trim())
-        .filter((brand) => brand); // removes empty strings
-
-      filterDto.brands = parsedBrands.length > 0 ? parsedBrands : undefined;
-    }
+    filterDto.brands = parseCommaSeparatedParam(filterDto.brands);
+    filterDto.subcategoryItemIds = parseCommaSeparatedParam(filterDto.subcategoryItemIds);
 
     return await this.productsService.findAll(filterDto);
   }
+
 
 
 

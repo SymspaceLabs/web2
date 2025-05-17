@@ -4,17 +4,14 @@
 // Product Search Page
 // ==============================================
 
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { H5, Paragraph } from "@/components/Typography";
-import { useCallback, useState, useEffect } from "react";
-import { Apps, ViewList, FilterList } from "@mui/icons-material";
-import { Grid, MenuItem, TextField, Container, IconButton, useMediaQuery, CircularProgress, Box } from "@mui/material";
+import { FlexBetween, FlexBox } from "@/components/flex-box";
+import { Grid, MenuItem, TextField, Container, Box } from "@mui/material";
 
-import FlexBox from "@/components/flex-box/flex-box";
-import Sidenav from "@/components/side-nav/side-nav";
 import ProductFilterCard from "../product-filter-card"; // GLOBAL CUSTOM COMPONENTS
 import ProductsGridView from "@/components/products-view/products-grid-view";
-import { FlexBetween } from "@/components/flex-box";
 
 // ==============================================
 
@@ -26,17 +23,9 @@ const SORT_OPTIONS = [
 ];
 
 export default function ProductSearchPageView({ slug }) {
+
   const searchParams = useSearchParams();
-  // Extract query parameters
-  const subcategoryItem = searchParams.get("subcategoryItem");
-  const term = searchParams.get("term");
 
-  console.log('subcategoryItem', subcategoryItem);
-  console.log('term', term);
-  console.log('slug', slug);
-
-  const [view, setView] = useState("grid");
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -44,29 +33,86 @@ export default function ProductSearchPageView({ slug }) {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 300]); // selected value
   const [priceLimits, setPriceLimits] = useState([0, 300]); // actual allowed min/max
+  const [category, setCategory] = useState([]);
+  const [checkedCategoryIds, setCheckedCategoryIds] = useState([]);
 
+  const [allProducts, setAllProducts] = useState([]);
+  const [displayedProducts, setDisplayedProducts] = useState([]);
 
+   // Fetch once on mount or slug change
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products?brands=${selectedBrands.map(b => b.id).join(",")}&category=${slug}`);
-        if (!response.ok) throw new Error("Failed to fetch products");
-        const data = await response.json();
-        setProducts(data.products);
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`)
+      .then(res => res.json())
+      .then(data => {
+        setAllProducts(data.products);
+        setDisplayedProducts(data.products);
+
+        // also set filters metadata:
         setAllBrands(data.brands);
         setPriceLimits([data.priceRange.min, data.priceRange.max]);
         setPriceRange([data.priceRange.min, data.priceRange.max]);
+        setCategory(data.category);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [slug]);
 
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+    // Recompute displayedProducts whenever any filter changes:
+    useEffect(() => {
+      let list = allProducts;
+
+      if (selectedBrands.length) {
+        const brandIds = new Set(selectedBrands.map(b => b.id));
+        list = list.filter(p => brandIds.has(p.company.id));
       }
-    };
-    fetchProducts();
-  }, [slug, selectedBrands]);
+
+      if (checkedCategoryIds.length) {
+        const subIds = new Set(checkedCategoryIds);
+        list = list.filter(p => subIds.has(p.subcategoryItem.id));
+      }
+
+      // priceRange filter
+      list = list.filter(
+        p => p.price >= priceRange[0] && p.price <= priceRange[1]
+      );
+
+      setDisplayedProducts(list);
+    }, [allProducts, selectedBrands, checkedCategoryIds, priceRange]);
+
+
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     setLoading(true);
+  //     setError(null);
+  //     try {
+  //       const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
+
+  //       // if (selectedBrands.length > 0) {
+  //       //   url += `&brands=${selectedBrands.map(b => b.id).join(",")}`;
+  //       // }
+
+  //       // if (checkedCategoryIds.length > 0) {
+  //       //   url += `&subcategoryItemIds=${checkedCategoryIds.join(",")}`;
+  //       // }
+
+  //       const response = await fetch(url);
+  //       if (!response.ok) throw new Error("Failed to fetch products");
+  //       const data = await response.json();
+  //       setProducts(data.products);
+  //       setAllBrands(data.brands);
+  //       setPriceLimits([data.priceRange.min, data.priceRange.max]);
+  //       setPriceRange([data.priceRange.min, data.priceRange.max]);
+  //       setCategory(data.category);
+  //     } catch (err) {
+  //       setError(err.message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, [slug, selectedBrands, checkedCategoryIds]);
 
 
   if (error) {
@@ -80,8 +126,6 @@ export default function ProductSearchPageView({ slug }) {
   return (
     <Box sx={{ py: 5, background:"#FFF" }} >
       <Container>
-        
-        
         <Grid container spacing={3}>
           
           {/* Left Filter Card */}
@@ -94,6 +138,9 @@ export default function ProductSearchPageView({ slug }) {
               setPriceRange={setPriceRange}
               priceLimits={priceLimits}
               setPriceLimits={setPriceLimits}
+              category={category}
+              checkedCategoryIds={checkedCategoryIds}
+              setCheckedCategoryIds={setCheckedCategoryIds}
             />
           </Grid>
 
@@ -108,7 +155,7 @@ export default function ProductSearchPageView({ slug }) {
               gap={1}
             >
               <Paragraph color="grey.600">
-                Total {products.length} results
+                Total {displayedProducts.length} results
               </Paragraph>
 
               <FlexBox alignItems="center" gap={2}>
@@ -133,7 +180,7 @@ export default function ProductSearchPageView({ slug }) {
               
             </FlexBetween>
             <ProductsGridView
-              products={products}
+              products={displayedProducts}
               loading={loading}
             />
           </Grid>

@@ -221,84 +221,161 @@ export class ProductsService {
     }
 
 
-    // FIND ALL WITH FILTER
-    async findAll(filterDto: GetProductsFilterDto) {
+  // FIND ALL WITH FILTER
+  async findAll(filterDto: GetProductsFilterDto) {
 
-      const { brands } = filterDto;
+    const { brands, subcategoryItemIds } = filterDto;
 
-      const query = this.productRepository.createQueryBuilder('product')
-        .leftJoinAndSelect('product.company', 'company')
-        .leftJoinAndSelect('product.images', 'images')
-        .leftJoinAndSelect('product.colors', 'colors')
-        .leftJoinAndSelect('product.sizes', 'sizes');
+    // 1) Build the query, now selecting subcategoryItem
+    const query = this.productRepository.createQueryBuilder('product')
+      .leftJoinAndSelect('product.company', 'company')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
+      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category'); // ✅ Add this line
 
-      if (brands && Array.isArray(brands) && brands.length > 0) {
-        query.andWhere('product.companyId IN (:...brands)', { brands });
+
+    if (brands && Array.isArray(brands) && brands.length > 0) {
+      query.andWhere('product.companyId IN (:...brands)', { brands });
+    }
+
+    if (subcategoryItemIds && Array.isArray(subcategoryItemIds) && subcategoryItemIds.length > 0) {
+      query.andWhere('subcategoryItem.id IN (:...subcategoryItemIds)', { subcategoryItemIds });
+    }
+
+    // 2) Execute
+    const products = await query.getMany();
+
+    // 3) Sort images
+    for (const product of products) {
+      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+    }
+
+    // 4) Compute price range
+    const prices = products.map(p => p.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+
+    // 5) Get distinct brands that have at least one product
+    const usedBrands = await this.productRepository.createQueryBuilder('product')
+      .leftJoin('product.company', 'company')
+      .select(['company.id AS id', 'company.entityName AS name'])
+      .groupBy('company.id')
+      .addGroupBy('company.entityName')
+      .getRawMany();
+
+    const formattedBrands = usedBrands.map(b => ({
+      id: b.id,
+      entityName: b.name,
+    }));
+
+    // 6) Extract unique subcategory items
+    const subcategoryMap = new Map<string, { id: string; name: string }>();
+    for (const product of products) {
+      const sub = product.subcategoryItem;
+      if (sub && sub.id) {
+        // adjust `sub.name` to whatever field holds the display name in your entity
+        subcategoryMap.set(sub.id, { id: sub.id, name: (sub as any).name });
       }
+    }
+    const subcategories = Array.from(subcategoryMap.values());
 
-      const products = await query.getMany();
+    const categoryMap = new Map<
+  string,
+  {
+    title: string;
+    id: string;
+    subCategory: {
+      title: string;
+      subcategoryItem: {
+        id: string;
+        name: string;
+      };
+    }[];
+  }
+>();
 
-      for (const product of products) {
-        product.images.sort((a, b) => a.sortOrder - b.sortOrder);
-      }
+for (const product of products) {
+  const item = product.subcategoryItem;
+  if (!item || !item.subcategory || !item.subcategory.category) continue;
 
-      // Compute price range
-      const prices = products.map(p => p.price);
-      const minPrice = Math.min(...prices);
-      const maxPrice = Math.max(...prices);
+  const subcategory = item.subcategory;
+  const category = subcategory.category;
 
-      // Get distinct brands that have at least one product
-      const usedBrands = await this.productRepository.createQueryBuilder('product')
-        .leftJoin('product.company', 'company')
-        .select(['company.id AS id', 'company.entityName AS name'])
-        .groupBy('company.id')
-        .addGroupBy('company.entityName')
-        .getRawMany();
-
-      const formattedBrands = usedBrands.map(b => ({
-        id: b.id,
-        entityName: b.name,
-      }));
-
-      return {
-        products,
-        brands: formattedBrands,
-        priceRange: { min: minPrice, max: maxPrice }
-      };    
+  // Initialize main category entry if not already present
+  if (!categoryMap.has(category.id)) {
+    categoryMap.set(category.id, {
+      title: category.name,
+      id: category.id,
+      subCategory: [],
+    });
   }
 
-    async findBySlug(slug: string): Promise<Product> {
-      const product = await this.productRepository.findOne({
-        where: { slug },
-        relations: [
-          'company',
-          'images',
-          'colors',
-          'sizes',
-          'subcategoryItem',
-          'subcategoryItem.subcategory',
-          'subcategoryItem.subcategory.category',
-          'variants'
-        ],
-      });
-    
-      if (!product) {
-        throw new NotFoundException(`Product with slug ${slug} not found`);
-      }
-    
-      // Sort sizes by sortOrder before returning
-      if (product.sizes) {
-        product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
-      }
+  const catEntry = categoryMap.get(category.id)!;
 
-      // Sort sizes by sortOrder before returning
-      if (product.images) {
-        product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+  // Avoid duplicates
+  const exists = catEntry.subCategory.some(
+    (sub) => sub.subcategoryItem.id === item.id
+  );
 
-      }
-    
-      return product;
+  if (!exists) {
+    catEntry.subCategory.push({
+      title: subcategory.name,
+      subcategoryItem: {
+        id: item.id,
+        name: item.name,
+      },
+    });
+  }
+}
+
+const finalOutput = { category: Array.from(categoryMap.values()) };
+
+
+    // 7) Return everything
+    return {
+      products,
+      brands: formattedBrands,
+      subcategories, // return subcategory items
+      priceRange: { min: minPrice, max: maxPrice },
+      category: finalOutput.category // ✅ Fix nesting
+    };    
+  }
+
+  async findBySlug(slug: string): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: { slug },
+      relations: [
+        'company',
+        'images',
+        'colors',
+        'sizes',
+        'subcategoryItem',
+        'subcategoryItem.subcategory',
+        'subcategoryItem.subcategory.category',
+        'variants'
+      ],
+    });
+  
+    if (!product) {
+      throw new NotFoundException(`Product with slug ${slug} not found`);
     }
+  
+    // Sort sizes by sortOrder before returning
+    if (product.sizes) {
+      product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
+    }
+
+    // Sort sizes by sortOrder before returning
+    if (product.images) {
+      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+
+    }
+  
+    return product;
+  }
     
     async findOne(productId: string): Promise<Product> {
       const product = await this.productRepository.findOne({

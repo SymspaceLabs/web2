@@ -6,13 +6,10 @@ import {
   Param,
   Patch,
   Post,
-  Query
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
-import { GetProductsFilterDto } from './dto/get-products-filter.dto';
-import { parseCommaSeparatedParam } from 'src/utils/query-parser';
 
 @Controller('products')
 export class ProductsController {
@@ -31,18 +28,9 @@ export class ProductsController {
   }  
 
   @Get()
-  async getAllProducts(@Query() filterDto: GetProductsFilterDto) {
-    filterDto.brands = parseCommaSeparatedParam(filterDto.brands);
-    filterDto.subcategoryItemIds = parseCommaSeparatedParam(filterDto.subcategoryItemIds);
-
-    return await this.productsService.findAll(filterDto);
+  async getAllProducts() {
+    return await this.productsService.findAll();
   }
-
-
-
-
-
-
 
   @Get(':slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {

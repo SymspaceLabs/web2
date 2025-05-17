@@ -35,8 +35,10 @@ export default function ProductFilterCard({
   setPriceRange,
   priceLimits,
   category,
-  checkedCategoryIds,
-  setCheckedCategoryIds
+  setCheckedCategoryIds,
+  allGenders,
+  selectedGenders,
+  setSelectedGenders,
 }) {
 
   const handlePriceChange = (event, newValue) => {
@@ -44,16 +46,48 @@ export default function ProductFilterCard({
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 250]);
-    // Add any other reset logic here if needed (e.g., checkboxes, colors)
+    setSelectedGenders([]);        // ← clear gender
+    setSelectedBrands([]);
+    setCheckedCategoryIds([]);
+    setPriceRange(priceLimits);
   };
 
   return (
     <Box pt={{sm:7}}>
+
+      {/* GENDER FILTER */}
+      <H6 mb={1.25}>Gender</H6>
+      <Box display="flex" flexDirection="column">
+        {allGenders.map((g) => {
+          const isChecked = selectedGenders.includes(g);
+          return (
+            <FormControlLabel
+              key={g}
+              label={<Span>{g}</Span>}
+              control={
+                <Checkbox
+                  size="small"
+                  checked={isChecked}
+                  onChange={() => {
+                    setSelectedGenders(prev =>
+                      isChecked
+                        ? prev.filter(x => x !== g)
+                        : [...prev, g]
+                    );
+                  }}
+                />
+              }
+            />
+          );
+        })}
+      </Box>
+
+      <Box component={Divider} my={3} />
+
       {/* CATEGORY VARIANT FILTER */}
       <H6 mb={1.25}>Categories</H6>
 
-      <RecursiveAccordion
+      <CategoryAccordion
         data={category}
         setCheckedCategoryIds={setCheckedCategoryIds}
       />
@@ -190,7 +224,7 @@ export default function ProductFilterCard({
   );
 }
 
-const RecursiveAccordion = ({ data, setCheckedCategoryIds }) => {
+const CategoryAccordion = ({ data, setCheckedCategoryIds }) => {
   const [checkedMap, setCheckedMap] = useState({});
 
   useEffect(() => {
@@ -247,75 +281,3 @@ const RecursiveAccordion = ({ data, setCheckedCategoryIds }) => {
 
   return <>{renderCategory(data)}</>;
 };
-
-
-
-// const RecursiveAccordion = ({ data, setCheckedCategoryIds }) => {
-//   const [openMap, setOpenMap] = useState({});
-//   const [checkedMap, setCheckedMap] = useState({});
-
-//   // inside RecursiveAccordion, after you declare `checkedMap`:
-//   useEffect(() => {
-//     // collect only the keys (UUID strings) that are truthy in checkedMap
-//     const selectedIds = Object.entries(checkedMap)
-//       .filter(([, checked]) => checked)
-//       .map(([id]) => id);              // ← keep the full string
-//     setCheckedCategoryIds(selectedIds);
-//   }, [checkedMap, setCheckedCategoryIds]);
-
-
-//   const toggle = (key) => {
-//     setOpenMap(prev => ({ ...prev, [key]: !prev[key] }));
-//   };
-
-//   const onCheck = (itemId) => {
-//     setCheckedMap(prev => ({
-//       ...prev,
-//       [itemId]: !prev[itemId],
-//     }));
-//   };
-
-
-//   const renderCategory = (categories) =>
-//     categories.map((cat) => {
-//       const catKey = `cat-${cat.id}`;
-//       const isOpen = !!openMap[catKey];
-
-//       return (
-//         <Fragment key={catKey}>
-//           {/* Category header */}
-//           <AccordionHeader
-//             open={isOpen}
-//             onClick={() => toggle(catKey)}
-//             sx={{ pl: 0, cursor: 'pointer' }}
-//           >
-//             <Span sx={{ fontWeight: 'bold' }}>{cat.title}</Span>
-//           </AccordionHeader>
-
-//           {/* Subcategories */}
-//           <Collapse in={isOpen}>
-//             {cat.subCategory.map((sub) => {
-//               const subKey = `sub-${sub.subcategoryItem.id}`;
-//               return (
-//                 <FormControlLabel
-//                   key={subKey}
-//                   sx={{ pl: 3 }}
-//                   control={
-//                     <Checkbox
-//                       checked={!!checkedMap[sub.subcategoryItem.id]}
-//                       onChange={() => onCheck(sub.subcategoryItem.id)}
-//                       size="small"
-//                     />
-//                   }
-//                   label={sub.subcategoryItem.name}
-//                 />
-//               );
-//             })}
-//           </Collapse>
-//         </Fragment>
-//       );
-//     });
-
-//   return <>{renderCategory(data)}</>;
-  
-// };

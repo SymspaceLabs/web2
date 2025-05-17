@@ -5,10 +5,12 @@ import {
   IsNotEmpty,
   IsArray,
   ValidateNested,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
+import { ProductGender } from '../entities/product.entity';
 
 class CreateProductVariantPropertyDto {
   @IsString()
@@ -79,6 +81,11 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateProductVariantDto)
   variants: CreateProductVariantDto[];
+
+  @IsOptional()
+  @IsEnum(ProductGender)
+  gender?: ProductGender;
+
 
 
   // @IsString()

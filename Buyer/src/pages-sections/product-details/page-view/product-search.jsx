@@ -28,7 +28,11 @@ export default function ProductSearchPageView({ slug }) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
+  const [allGenders, setAllGenders] = useState([]);
+  const [selectedGenders, setSelectedGenders] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [displayedProducts, setDisplayedProducts] = useState([]);
   const [allBrands, setAllBrands] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 300]); // selected value
@@ -36,10 +40,7 @@ export default function ProductSearchPageView({ slug }) {
   const [category, setCategory] = useState([]);
   const [checkedCategoryIds, setCheckedCategoryIds] = useState([]);
 
-  const [allProducts, setAllProducts] = useState([]);
-  const [displayedProducts, setDisplayedProducts] = useState([]);
-
-   // Fetch once on mount or slug change
+  // Fetch once on mount or slug change
   useEffect(() => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`)
@@ -53,67 +54,49 @@ export default function ProductSearchPageView({ slug }) {
         setPriceLimits([data.priceRange.min, data.priceRange.max]);
         setPriceRange([data.priceRange.min, data.priceRange.max]);
         setCategory(data.category);
+        setAllGenders(data.genders);           // ← seed gender options
+        setSelectedGenders([]);                // ← reset on new fetch
+
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, [slug]);
 
-    // Recompute displayedProducts whenever any filter changes:
-    useEffect(() => {
-      let list = allProducts;
+  // Recompute displayedProducts whenever any filter changes:
+  useEffect(() => {
+    let list = allProducts;
 
-      if (selectedBrands.length) {
-        const brandIds = new Set(selectedBrands.map(b => b.id));
-        list = list.filter(p => brandIds.has(p.company.id));
-      }
+    // Brand filter
+    if (selectedBrands.length) {
+      const brandIds = new Set(selectedBrands.map(b => b.id));
+      list = list.filter(p => brandIds.has(p.company.id));
+    }
 
-      if (checkedCategoryIds.length) {
-        const subIds = new Set(checkedCategoryIds);
-        list = list.filter(p => subIds.has(p.subcategoryItem.id));
-      }
+    // Category filter
+    if (checkedCategoryIds.length) {
+      const subIds = new Set(checkedCategoryIds);
+      list = list.filter(p => subIds.has(p.subcategoryItem.id));
+    }
 
-      // priceRange filter
-      list = list.filter(
-        p => p.price >= priceRange[0] && p.price <= priceRange[1]
-      );
+    // Gender filter ← NEW
+    if (selectedGenders.length) {
+      const genderSet = new Set(selectedGenders);
+      list = list.filter(p => p.gender && genderSet.has(p.gender));
+    }
 
-      setDisplayedProducts(list);
-    }, [allProducts, selectedBrands, checkedCategoryIds, priceRange]);
+    // priceRange filter
+    list = list.filter(
+      p => p.price >= priceRange[0] && p.price <= priceRange[1]
+    );
 
-
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-  //       const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
-
-  //       // if (selectedBrands.length > 0) {
-  //       //   url += `&brands=${selectedBrands.map(b => b.id).join(",")}`;
-  //       // }
-
-  //       // if (checkedCategoryIds.length > 0) {
-  //       //   url += `&subcategoryItemIds=${checkedCategoryIds.join(",")}`;
-  //       // }
-
-  //       const response = await fetch(url);
-  //       if (!response.ok) throw new Error("Failed to fetch products");
-  //       const data = await response.json();
-  //       setProducts(data.products);
-  //       setAllBrands(data.brands);
-  //       setPriceLimits([data.priceRange.min, data.priceRange.max]);
-  //       setPriceRange([data.priceRange.min, data.priceRange.max]);
-  //       setCategory(data.category);
-  //     } catch (err) {
-  //       setError(err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, [slug, selectedBrands, checkedCategoryIds]);
-
+    setDisplayedProducts(list);
+  }, [
+    allProducts,
+    selectedBrands,
+    checkedCategoryIds,
+    selectedGenders,     // ← depend on gender selections
+    priceRange
+  ]);
 
   if (error) {
     return (
@@ -139,8 +122,11 @@ export default function ProductSearchPageView({ slug }) {
               priceLimits={priceLimits}
               setPriceLimits={setPriceLimits}
               category={category}
-              checkedCategoryIds={checkedCategoryIds}
               setCheckedCategoryIds={setCheckedCategoryIds}
+              allGenders={allGenders}
+              selectedGenders={selectedGenders}
+              setSelectedGenders={setSelectedGenders}
+
             />
           </Grid>
 

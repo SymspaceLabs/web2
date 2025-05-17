@@ -18,6 +18,14 @@ export enum ProductType {
   DYNAMIC = 'Dynamic',
 }
 
+export enum ProductGender {
+  MEN = 'men',
+  WOMEN = 'women',
+  BOYS = 'boys',
+  GIRLS = 'girls',
+  UNISEX = 'unisex',
+}
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -82,10 +90,13 @@ export class Product {
   @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
   variants: ProductVariant[];
 
+  @Column({
+    type: 'enum',
+    enum: ProductGender,
+    nullable: true, // ✅ Optional
+  })
+  gender?: ProductGender;
 
-
-  // @Column({ nullable: true })
-  // threeDModel?: string;
 
   // @Column({
   //   type: 'enum',
@@ -99,9 +110,6 @@ export class Product {
 
   // @Column()
   // productFitting: 'True to Size' | 'Runs Small' | 'Runs Big';
-
-  // @Column({ nullable: true })
-  // productSizes: string;
 
   // @Column({ nullable: true })
   // productMaterial: string;
@@ -127,16 +135,7 @@ export class Product {
   // @Column({ type: 'float', default: 0.0 })
   // margin: number;
 
-  // @OneToMany(() => Stock, (stock) => stock.product, {
-  //   cascade: true,
-  // })
-  // stocks: Stock[];
-
   // @Column()
   // createdAt: Date;
 
-  // @OneToMany(() => ProductVariantEntity, (variant) => variant.product, {
-  //   cascade: true,
-  // })
-  // variants: ProductVariantEntity[];
 }

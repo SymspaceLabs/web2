@@ -15,8 +15,6 @@ import TopSortCard from "../top-sort-card";
 
 // ==============================================
 
-
-
 export default function ProductSearchPageView({ slug }) {
 
   const searchParams = useSearchParams();

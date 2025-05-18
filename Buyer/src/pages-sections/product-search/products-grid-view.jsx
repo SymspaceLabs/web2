@@ -1,12 +1,14 @@
 // ========================================================
+// Product Grids View
+// ========================================================
 
 import { Fragment } from "react";
-import { Span } from "@/components/Typography";
+import { FlexRowCenter } from "@/components/flex-box";
 import { Grid, Pagination, CircularProgress } from "@mui/material";
-import { FlexBetween, FlexRowCenter } from "@/components/flex-box";
-import { ProductCard3 } from "../custom-cards/product-cards";
+import { ProductCard3 } from "@/components/custom-cards/product-cards";
 
 // ========================================================
+
 export default function ProductsGridView({
   products,
   loading

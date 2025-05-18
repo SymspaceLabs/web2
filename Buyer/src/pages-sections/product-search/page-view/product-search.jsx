@@ -5,22 +5,17 @@
 // ==============================================
 
 import { useState, useEffect } from "react";
+import { H5 } from "@/components/Typography";
 import { useSearchParams } from "next/navigation";
-import { H5, Paragraph } from "@/components/Typography";
-import { FlexBetween, FlexBox } from "@/components/flex-box";
-import { Grid, MenuItem, TextField, Container, Box } from "@mui/material";
+import { Grid, Container, Box } from "@mui/material";
 
 import ProductFilterCard from "../product-filter-card"; // GLOBAL CUSTOM COMPONENTS
-import ProductsGridView from "@/components/products-view/products-grid-view";
+import ProductsGridView from "../products-grid-view";
+import TopSortCard from "../top-sort-card";
 
 // ==============================================
 
-const SORT_OPTIONS = [
-  { label: "Relevance", value: "Relevance" },
-  { label: "Date", value: "Date" },
-  { label: "Price Low to High", value: "Price Low to High" },
-  { label: "Price High to Low", value: "Price High to Low" },
-];
+
 
 export default function ProductSearchPageView({ slug }) {
 
@@ -39,6 +34,8 @@ export default function ProductSearchPageView({ slug }) {
   const [priceLimits, setPriceLimits] = useState([0, 300]); // actual allowed min/max
   const [category, setCategory] = useState([]);
   const [checkedCategoryIds, setCheckedCategoryIds] = useState([]);
+  const [allAvailabilities, setAllAvailabilities] = useState([]);
+  const [selectedAvailabilities, setSelectedAvailabilities] = useState([]);
 
   // Fetch once on mount or slug change
   useEffect(() => {
@@ -56,6 +53,8 @@ export default function ProductSearchPageView({ slug }) {
         setCategory(data.category);
         setAllGenders(data.genders);           // ← seed gender options
         setSelectedGenders([]);                // ← reset on new fetch
+        setAllAvailabilities(data.availabilities);
+
 
       })
       .catch(err => setError(err.message))
@@ -89,13 +88,19 @@ export default function ProductSearchPageView({ slug }) {
       p => p.price >= priceRange[0] && p.price <= priceRange[1]
     );
 
+    if (selectedAvailabilities.length) {
+      const availSet = new Set(selectedAvailabilities);
+      list = list.filter(p => availSet.has(p.availability));
+    }
+
     setDisplayedProducts(list);
   }, [
     allProducts,
     selectedBrands,
     checkedCategoryIds,
     selectedGenders,     // ← depend on gender selections
-    priceRange
+    priceRange,
+    selectedAvailabilities
   ]);
 
   if (error) {
@@ -126,6 +131,9 @@ export default function ProductSearchPageView({ slug }) {
               allGenders={allGenders}
               selectedGenders={selectedGenders}
               setSelectedGenders={setSelectedGenders}
+              allAvailabilities={allAvailabilities} // NEW
+              selectedAvailabilities={selectedAvailabilities}
+              setSelectedAvailabilities={setSelectedAvailabilities}
 
             />
           </Grid>
@@ -133,38 +141,11 @@ export default function ProductSearchPageView({ slug }) {
           {/* Right Product List */}
           <Grid item md={9.5} xs={12}>
             {/* Top Sort Card */}
-            <FlexBetween
-              mb="10px"
-              py={{ sm: "1rem", md: "0.5rem", xs: "1.25rem 0.25rem" }}
-              flexWrap="wrap"
-              alignItems="center"
-              gap={1}
-            >
-              <Paragraph color="grey.600">
-                Total {displayedProducts.length} results
-              </Paragraph>
-
-              <FlexBox alignItems="center" gap={2}>
-                <Paragraph color="grey.600" whiteSpace="pre">
-                  Sort by:
-                </Paragraph>
-                <TextField
-                  select
-                  size="small"
-                  variant="outlined"
-                  placeholder="Sort by"
-                  defaultValue={SORT_OPTIONS[0].value}
-                  sx={{ minWidth: "150px", width: "auto" }}
-                >
-                  {SORT_OPTIONS.map((item) => (
-                    <MenuItem value={item.value} key={item.value}>
-                      {item.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </FlexBox>
-              
-            </FlexBetween>
+            <TopSortCard
+              products={displayedProducts}
+            />
+            
+            {/* Products Grid View */}
             <ProductsGridView
               products={displayedProducts}
               loading={loading}

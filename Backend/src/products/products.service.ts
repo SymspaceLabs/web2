@@ -228,7 +228,8 @@ export class ProductsService {
       .leftJoinAndSelect('product.sizes', 'sizes')
       .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-      .leftJoinAndSelect('subcategory.category', 'category'); // ✅ Add this line
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('product.variants', 'variants');
 
 
     // 2) Execute
@@ -260,7 +261,7 @@ export class ProductsService {
     // 6) Extract unique subcategory items and format
     const category = nestCategoriesFromProducts(products);
 
-    // ✅ 7) Get distinct genders from products
+    // 7) Get distinct genders from products
     const genderResult = await this.productRepository.createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
       .where('product.gender IS NOT NULL')
@@ -268,13 +269,25 @@ export class ProductsService {
 
     const genders = genderResult.map(g => g.gender); // ['men', 'women', ...]
 
-    // 8) Return everything
+    // 8) Compute availability per product & collect distinct statuses
+    const availabilitySet = new Set<string>();
+    for (const product of products) {
+      const inStock = product.variants.some(v => v.stock > 0);
+      const status = inStock ? 'In stock' : 'Out of stock';
+      // attach to each product for frontend filtering
+      (product as any).availability = status;
+      availabilitySet.add(status);
+    }
+    const availabilities = Array.from(availabilitySet);
+
+    // 9) Return everything
     return {
       products,
       brands: formattedBrands,
       priceRange: { min: minPrice, max: maxPrice },
       category,
-      genders
+      genders,
+      availabilities,
     };    
   }
 

@@ -4,7 +4,6 @@
 // Product Filter Card
 // =================================================================
 
-import { Fragment, useState, useEffect  } from "react";
 import {
   Box,
   TextField,
@@ -12,19 +11,16 @@ import {
   Checkbox,
   Rating,
   Divider,
-  Collapse,
   FormControlLabel,
   Button,
 } from "@mui/material";
 
+import { H5, H6, Span } from "@/components/Typography";
+import { CategoryAccordion } from "./category-accordion";
 import { FlexBetween, FlexBox } from "@/components/flex-box";
-import { H5, H6, Paragraph, Span } from "@/components/Typography";
-import AccordionHeader from "@/components/accordion/accordion-header";
-import CATEGORIES_DATA from "@/data/categories";
 
 // =================================================================
 
-const otherOptions = ["On Sale", "In Stock", "Featured"];
 const colorList = ["#1C1C1C", "#FF7A7A", "#FFC672", "#84FFB5", "#70F6FF", "#6B7AFF"];
 
 export default function ProductFilterCard({
@@ -39,6 +35,9 @@ export default function ProductFilterCard({
   allGenders,
   selectedGenders,
   setSelectedGenders,
+  allAvailabilities,
+  selectedAvailabilities,
+  setSelectedAvailabilities
 }) {
 
   const handlePriceChange = (event, newValue) => {
@@ -169,15 +168,33 @@ export default function ProductFilterCard({
 
       <Box component={Divider} my={3} />
 
-      {/* SALES OPTIONS */}
-      {otherOptions.map((item) => (
-        <FormControlLabel
-          key={item}
-          sx={{ display: "flex" }}
-          label={<Span color="inherit">{item}</Span>}
-          control={<Checkbox size="small" color="secondary" />}
-        />
-      ))}
+      {/* CATEGORY VARIANT FILTER */}
+      <H6 mb={1.25}>Availability</H6>
+      <Box display="flex" flexDirection="column">
+        {allAvailabilities.map((avail) => {
+          const isChecked = selectedAvailabilities.includes(avail)
+          return (
+            <FormControlLabel
+              key={avail}
+              label={<Span color="inherit">{avail}</Span>}
+              control={
+                <Checkbox
+                  size="small"
+                  checked={isChecked}
+                  onChange={() => {
+                    setSelectedAvailabilities(prev =>
+                      isChecked
+                        ? prev.filter(x => x !== avail)
+                        : [...prev, avail]
+                    )
+                  }}
+                />
+              }
+            />
+          )
+        })}
+      </Box>
+
 
       <Box component={Divider} my={3} />
 
@@ -223,61 +240,3 @@ export default function ProductFilterCard({
     </Box>
   );
 }
-
-const CategoryAccordion = ({ data, setCheckedCategoryIds }) => {
-  const [checkedMap, setCheckedMap] = useState({});
-
-  useEffect(() => {
-    const selectedIds = Object.entries(checkedMap)
-      .filter(([, checked]) => checked)
-      .map(([id]) => id);
-    setCheckedCategoryIds(selectedIds);
-  }, [checkedMap, setCheckedCategoryIds]);
-
-  const onCheck = (itemId) => {
-    setCheckedMap(prev => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
-  };
-
-  const renderCategory = (categories) =>
-    categories.map((cat) => {
-      const catKey = `cat-${cat.id}`;
-
-      return (
-        <Fragment key={catKey}>
-          {/* Always show category header (optional click handler) */}
-          <AccordionHeader
-            open={true} // always open
-            sx={{ pl: 0 }}
-          >
-            <Span sx={{ fontWeight: 'bold' }}>{cat.title}</Span>
-          </AccordionHeader>
-
-          {/* Always show subcategories */}
-          <Collapse in={true}>
-            {cat.subCategory.map((sub) => {
-              const subKey = `sub-${sub.subcategoryItem.id}`;
-              return (
-                <FormControlLabel
-                  key={subKey}
-                  sx={{ pl: 3 }}
-                  control={
-                    <Checkbox
-                      checked={!!checkedMap[sub.subcategoryItem.id]}
-                      onChange={() => onCheck(sub.subcategoryItem.id)}
-                      size="small"
-                    />
-                  }
-                  label={sub.subcategoryItem.name}
-                />
-              );
-            })}
-          </Collapse>
-        </Fragment>
-      );
-    });
-
-  return <>{renderCategory(data)}</>;
-};

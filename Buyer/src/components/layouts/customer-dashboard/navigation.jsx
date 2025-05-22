@@ -1,23 +1,28 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+// ====================================================
+// Navigation For Customer Dashboard
+// ====================================================
+
 import { Fragment } from "react"; // MUI ICON COMPONENTS
+import { Divider } from "@mui/material";
+import { H1 } from "@/components/Typography"; // CUSTOM ICON COMPONENT
+import { usePathname } from "next/navigation";
+import { FlexBox } from "@/components/flex-box";
+import { MainContainer, StyledNavLink } from "./styles";
 
 import Place from "@mui/icons-material/Place";
 import Person from "@mui/icons-material/Person";
 import CreditCard from "@mui/icons-material/CreditCard";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import CustomerService from "@/icons/CustomerService"; // STYLED COMPONENTS
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined"; // GLOBAL CUSTOM COMPONENTS
 
-import { FlexBox } from "@/components/flex-box";
-import { H1, Paragraph, Span } from "@/components/Typography"; // CUSTOM ICON COMPONENT
+// ====================================================
 
-import CustomerService from "@/icons/CustomerService"; // STYLED COMPONENTS
-
-import { MainContainer, StyledNavLink } from "./styles";
-import { Divider } from "@mui/material";
 export default function Navigation() {
   const pathname = usePathname();
+  
   return (
     <MainContainer>
       {MENUS.map(item => <Fragment key={item.title}>
@@ -27,7 +32,7 @@ export default function Navigation() {
             </H1>
           }
           <Divider sx={{ marginBottom:'5px' }} />
-          {item.list.map(({ Icon, count, href, title}) => <StyledNavLink href={href} key={title} isCurrentPath={pathname.includes(href)}>
+          {item.list.map(({ Icon, count, href, title}) => <StyledNavLink href={href} key={title} isCurrentPath={isActiveLink(pathname, href)}>
               <FlexBox alignItems="center" gap={1}>
                 <Icon color="inherit" fontSize="small" className="nav-icon" />
                 <H1 fontSize='12px' color='#FFF'>
@@ -42,6 +47,15 @@ export default function Navigation() {
     </MainContainer>
   );
 }
+
+function isActiveLink(pathname, href) {
+  if (href === "/profile") {
+    return pathname === "/profile" || pathname === "/profile/view" || pathname === "/profile/edit";
+  }
+  return pathname === href;
+}
+
+
 const MENUS = [{
   title: "DASHBOARD",
   list: [{
@@ -63,7 +77,7 @@ const MENUS = [{
 }, {
   title: "ACCOUNT",
   list: [{
-    href: "/profile",
+    href: "/profile/view",
     title: "Profile Info",
     Icon: Person,
     count: 3
@@ -78,7 +92,7 @@ const MENUS = [{
     Icon: Person,
     count: 3
   },{
-    href: "/address",
+    href: "/profile/address",
     title: "Addresses",
     Icon: Place,
     count: 16

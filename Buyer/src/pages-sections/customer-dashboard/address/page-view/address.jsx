@@ -1,5 +1,9 @@
 "use client";
 
+// =====================================================
+// Addresses
+// =====================================================
+
 import { useState, Fragment } from "react";
 import Place from "@mui/icons-material/Place"; // Local CUSTOM COMPONENT
 
@@ -20,7 +24,7 @@ export default function AddressPageView({
   return (
     <Fragment>
       {/* TITLE HEADER AREA */}
-      <DashboardHeader Icon={Place} href="/address" title="My Addresses" buttonText="Add New Address" />
+      <DashboardHeader Icon={Place} href="/profile/address" title="My Addresses" buttonText="Add New Address" />
 
       {/* ALL ADDRESS LIST AREA */}
       {allAddress.map(address => <AddressListItem key={address.id} address={address} handleDelete={handleAddressDelete} />)}

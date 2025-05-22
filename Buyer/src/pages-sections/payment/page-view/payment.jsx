@@ -1,7 +1,7 @@
 "use client";
 
 // ======================================================
-// Cart Page Sections
+// Payment Page Sections
 // ======================================================
 
 import { Grid } from "@mui/material";

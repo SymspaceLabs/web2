@@ -11,25 +11,38 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // <-- back icon
 // ==========================================
 
 export default function CheckoutForm({
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  email,
+  setEmail,
   shipping,
   setShipping,
   sameAsShipping,
   setSameAsShipping,
   setBilling,
   billing,
+  handleBack,
 }) {
  
   return (
     <Card sx={styles.wrapper}>
       {/* BACK ICON */}
       <FlexBox justifyContent="flex-start">
-        <IconButton component={Link} href="/cart" color="#FFF">
+        <IconButton onClick={handleBack} color="#FFF">
           <ArrowBackIcon />
         </IconButton>
       </FlexBox>
 
       <FlexCol px={2}>
         <ShippingForm
+          firstName={firstName}
+          setFirstName={setFirstName}
+          lastName={lastName}
+          setLastName={setLastName}
+          email={email}
+          setEmail={setEmail}
           shipping={shipping}
           setShipping={setShipping}
           sameAsShipping={sameAsShipping}

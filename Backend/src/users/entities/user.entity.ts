@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Company } from '../../companies/entities/company.entity';
 import { Measurement } from 'src/measurements/entities/measurement.entity';
 import { Preference } from 'src/preferences/entities/preference.entity';
@@ -8,6 +8,7 @@ import { BillingAddress } from 'src/billing-addresses/entities/billing-address.e
 import { Survey } from 'src/surveys/entities/survey.entity';
 import { File } from 'src/files/entities/file.entity';
 import { Address } from 'src/addresses/entities/address.entity';
+import { Order } from 'src/orders/entities/order.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -97,19 +98,19 @@ export class User {
   @OneToMany(() => File, (file) => file.user)
   files: File[];
 
-  @OneToOne(() => Address, (address) => address.shippingForUser, {
-    cascade: true,
-    nullable: true,
-  })
-  @JoinColumn({ name: 'shipping_address_id' })
-  shippingAddress: Address;
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 
-  @OneToOne(() => Address, (address) => address.billingForUser, {
+  @OneToMany(() => Address, (address) => address.user, {
     cascade: true,
-    nullable: true,
   })
-  @JoinColumn({ name: 'billing_address_id' })
-  billingAddress: Address;
+  addresses: Address[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
 }
 

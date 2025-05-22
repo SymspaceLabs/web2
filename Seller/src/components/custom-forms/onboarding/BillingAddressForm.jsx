@@ -34,7 +34,7 @@ function BillingAddressForm ({
 
             {/* Address Line 2 */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
-                <SymTextField title="Business AddressLine 2 (Optional)" value={address2} placeholder="Business Address Line 2" onChange={(e) => setAddress2(e.target.value)} />
+                <SymTextField title="Business Address Line 2 (Optional)" value={address2} placeholder="Business Address Line 2" onChange={(e) => setAddress2(e.target.value)} />
             </FlexBox>
 
             {/* City || State || Country || ZIP code */}

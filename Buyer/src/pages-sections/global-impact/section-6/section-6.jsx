@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { Box, Container} from "@mui/material";
 import { EmailBanner } from "@/components/custom-banner";
 
+// ==========================================================
+
 export default function Section6() {
   return (
     <Box>
@@ -20,9 +22,7 @@ export default function Section6() {
         style={{ width: "100%", overflow: "hidden" }}
       >
         <Container sx={{ py: 10 }}>
-          <EmailBanner
-            title="stay up to date"
-          />
+          <EmailBanner title="stay up to date"/>
         </Container>
       </motion.div>
     </Box>

@@ -43,7 +43,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
   };
 
   const handleProfile = () => {
-    router.push('/profile');
+    router.push('/profile/view');
   };
 
   const handleDashboard = () => {

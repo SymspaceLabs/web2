@@ -50,8 +50,8 @@ export default function AddressForm({
           title="Country"
           color={color}
           placeholder="Country"
-          value={data.country}
-          onChange={(val) => handleChange('country', val)}
+          value={countryList.find((item) => item.value === data.country)}
+          onChange={(val) => handleChange('country', val?.value ?? "")}
           options={countryList}
         />
         <SymTextField

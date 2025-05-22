@@ -31,7 +31,7 @@ export class UsersService {
       where: {
         id: id,
       },
-      relations: ['measurement', 'preference', 'company', 'banks', 'creditCards', 'billingAddresses', 'survey', 'files'],
+      relations: ['measurement', 'preference', 'company', 'banks', 'creditCards', 'billingAddresses', 'survey', 'files', 'addresses'],
     });
     if (user) {
       return user;
@@ -120,27 +120,33 @@ export class UsersService {
   }
 
   async editUser(userId: string, updates: Partial<User>): Promise<{ user: User; message: string }> {
-    // Find the user by ID
     const user = await this.usersRepository.findOne({
       where: { id: userId },
+      relations: ['addresses'], // ✅ Load addresses
     });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    //CONVERTS TO PROPER DATE
+    // Update user fields
     if (updates.dob) {
       updates.dob = new Date(updates.dob);
     }
-    
 
-    // Apply the updates to the user entity
+    // Apply basic user updates
     Object.assign(user, updates);
 
-    // Validate and save the updated user
+    // ✅ Update the first address if address updates are provided
+    if (updates.addresses && updates.addresses.length > 0 && user.addresses.length > 0) {
+      const updatedAddress = updates.addresses[0];
+      const addressToUpdate = user.addresses[0];
+
+      Object.assign(addressToUpdate, updatedAddress);
+    }
+
     try {
-      const updatedUser = await this.usersRepository.save(user);
+      const updatedUser = await this.usersRepository.save(user); // cascades save to addresses
       return {
         user: updatedUser,
         message: 'User information updated successfully',

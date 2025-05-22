@@ -1,49 +1,38 @@
-// import {
-//   Entity,
-//   PrimaryGeneratedColumn,
-//   Column,
-//   ManyToOne,
-//   CreateDateColumn,
-//   UpdateDateColumn,
-// } from 'typeorm';
-// import { User } from './user.entity'; // Assuming there's a User entity
-// import { Product } from 'src/products/entities/product.entity';
+// src/orders/entities/order.entity.ts
 
-// export enum PaymentStatus {
-//   PENDING = 'Pending',
-//   COMPLETED = 'Completed',
-//   FAILED = 'Failed',
-// }
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, CreateDateColumn } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Address } from 'src/addresses/entities/address.entity';
+import { OrderItem } from './order-item.entity';
 
-// export enum PaymentMethod {
-//   CREDIT_CARD = 'Credit Card',
-//   PAYPAL = 'PayPal',
-//   BANK_TRANSFER = 'Bank Transfer',
-// }
-
-// @Entity()
+@Entity()
 export class Order {
-  // @PrimaryGeneratedColumn('uuid')
-  // id: string;
-  // @Column({ type: 'float' })
-  // totalAmount: number;
-  // @Column({
-  //   type: 'enum',
-  //   enum: PaymentStatus,
-  //   default: PaymentStatus.PENDING,
-  // })
-  // paymentStatus: PaymentStatus;
-  // @Column({
-  //   type: 'enum',
-  //   enum: PaymentMethod,
-  // })
-  // paymentMethod: PaymentMethod;
-  // @ManyToOne(() => User, user => user.orders)
-  // user: User;
-  // @Column({ type: 'string', length: 9 })
-  // productStockId: string;
-  // @CreateDateColumn()
-  // dateCreated: Date;
-  // @UpdateDateColumn()
-  // dateUpdated: Date;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @ManyToOne(() => User, (user) => user.orders)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Address)
+  @JoinColumn({ name: 'shipping_address_id' })
+  shippingAddress: Address;
+
+  @Column()
+  paymentMethod: string;
+
+  @Column({ nullable: true })
+  notes: string;
+
+  @Column({ default: 'pending' })
+  status: string;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  totalAmount: number;
+
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
+  items: OrderItem[];
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }

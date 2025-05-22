@@ -11,10 +11,14 @@ import { Box, Card, Button, Divider } from "@mui/material";
 import Link from "next/link";
 import PaymentItem from "./payment-item"; // GLOBAL CUSTOM COMPONENTS
 import { FlexCol } from "@/components/flex-box";
+import { SymButton } from "@/components/custom-components";
 
 // ================================================
 
-export default function PaymentSummary() {
+export default function PaymentSummary({
+  handleSave,
+  loading
+}) {
   
   const { state: cartState } = useCart();
   const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
@@ -42,11 +46,14 @@ export default function PaymentSummary() {
         </Paragraph>
       </FlexCol>
 
-
       {/* BUTTONS SECTION */}
-      <Button sx={styles.btn} LinkComponent={Link} variant="contained" color="primary" href="/orders" type="submit" fullWidth>
+      <SymButton
+        onClick={handleSave}
+        loading={loading}
+        sx={styles.btn}
+      >
         Place Order
-      </Button>
+      </SymButton>
     </Card>
   );
 }
@@ -59,8 +66,14 @@ const styles = {
     boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
     background: 'rgba(255, 255, 255, 0.35)',
   },
-  btn: {
-    borderRadius: '25px',
-    py:1.5
-  },
+  btn : {
+    py: 1.5,
+    borderRadius:'50px',
+    border:'2px solid #FFF',
+    background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+    color:'#FFF',
+    '&:hover': {
+      background:'transaparent',
+    }
+  }
 }

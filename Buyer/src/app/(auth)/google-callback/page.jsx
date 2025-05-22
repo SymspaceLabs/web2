@@ -1,4 +1,8 @@
-'use client'; // if you're using app/ structure
+'use client';
+
+// =============================================
+//
+// =============================================
 
 import axios from 'axios';
 import { useEffect } from 'react';

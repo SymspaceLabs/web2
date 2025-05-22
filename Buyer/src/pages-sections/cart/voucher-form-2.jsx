@@ -11,11 +11,14 @@ import { FlexBetween, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
 import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
 
 import countryList from "data/countryList"; // CUSTOM UTILS LIBRARY FUNCTION
+import { SymSubmitButton } from "@/components/custom-buttons";
+import { SymButton } from "@/components/custom-components";
 
 // ================================================
 
-export default function VoucherForm({
-  handleSave
+export default function VoucherForm2({
+  handleSave,
+  loading
 }) {
   
   const { state: cartState } = useCart();
@@ -115,22 +118,13 @@ export default function VoucherForm({
           Calculate Shipping
         </Button>
 
-        <Button
-          fullWidth
+        <SymButton
           onClick={handleSave}
-          sx={{
-            py: 1,
-            borderRadius:'50px',
-            border:'2px solid #FFF',
-            background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
-            color:'#FFF',
-            '&:hover': {
-              background:'transaparent',
-            }
-          }}
+          loading={loading}
+          sx={styles.btn}
         >
-          Check Out Now
-        </Button>
+          Proceed to Payment
+        </SymButton>
       </FlexCol>
       
 
@@ -145,5 +139,15 @@ const styles = {
     backdropFilter: 'blur(10.0285px)',
     boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
     background: 'rgba(255, 255, 255, 0.35)',
+  },
+  btn : {
+    py: 1.5,
+    borderRadius:'50px',
+    border:'2px solid #FFF',
+    background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
+    color:'#FFF',
+    '&:hover': {
+      background:'transaparent',
+    }
   }
 }

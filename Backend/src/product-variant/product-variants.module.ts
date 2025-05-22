@@ -11,4 +11,5 @@ import { ProductVariant } from './entities/product-variant.entity';
   providers: [ProductVariantsService],
   exports: [ProductVariantsService], // export if needed in other modules
 })
+
 export class ProductVariantsModule {}

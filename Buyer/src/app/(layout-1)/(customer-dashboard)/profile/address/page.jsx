@@ -1,4 +1,10 @@
-import { AddressPageView } from "../../../../pages-sections/customer-dashboard/address/page-view"; // API FUNCTIONS
+// =================================================
+// Address Page 
+// =================================================
+
+import { AddressPageView } from "@/pages-sections/customer-dashboard/address/page-view";
+
+// =================================================
 
 export const metadata = {
   title: "Address",

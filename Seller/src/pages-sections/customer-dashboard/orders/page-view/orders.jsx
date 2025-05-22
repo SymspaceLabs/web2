@@ -1,5 +1,9 @@
 "use client";
 
+// ====================================================
+// Orders Page View
+// ====================================================
+
 import { Fragment } from "react";
 import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPONENTS
 
@@ -8,23 +12,20 @@ import Pagination from "../../pagination";
 import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
 
 // ====================================================
+
 export default function OrdersPageView({
   orders
 }) {
-  return <Fragment>
-      {
-      /* TITLE HEADER AREA */
-    }
+  return (
+    <Fragment>
+      {/* TITLE HEADER AREA */}
       <DashboardHeader Icon={ShoppingBag} title="My Orders" />
 
-      {
-      /* ORDER LIST AREA */
-    }
+      {/* ORDER LIST AREA */}
       {orders.map(order => <OrderRow order={order} key={order.id} />)}
 
-      {
-      /* ORDERS PAGINATION */
-    }
+      {/* ORDERS PAGINATION */}
       <Pagination count={5} onChange={data => console.log(data)} />
-    </Fragment>;
+    </Fragment>
+  );
 }

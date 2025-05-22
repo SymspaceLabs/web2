@@ -20,7 +20,7 @@ export default function AddressListItem({
     phone,
     id
   } = address || {};
-  return <Link href={`/address/${id}`}>
+  return <Link href={`/profile/address/${id}`}>
       <TableRow>
         <Paragraph ellipsis>{title}</Paragraph>
         <Paragraph ellipsis>{`${street}, ${city}`}</Paragraph>

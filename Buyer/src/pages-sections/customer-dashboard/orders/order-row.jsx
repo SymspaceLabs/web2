@@ -34,38 +34,33 @@ export default function OrderRow({
     }
   };
 
-  return <Link href={`/orders/${order.id}`}>
-      <TableRow sx={{
-      gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr"
-    }}>
+  return (
+    <Link href={`/orders/${order.id}`}>
+      <TableRow sx={{gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr"}}>
         <H5 ellipsis>#{order.id.substring(0, 18)}</H5>
 
         <Box textAlign="center">
           <Chip size="small" label={order.status} color={getColor(order.status)} />
         </Box>
 
-        <Paragraph textAlign={{
-        sm: "center",
-        xs: "left"
-      }}>
+        <Paragraph textAlign={{sm: "center",xs: "left"}}>
           {format(new Date(order.createdAt), "MMM dd, yyyy")}
         </Paragraph>
 
-        <Paragraph textAlign="center">{currency(order.totalPrice)}</Paragraph>
+        <Paragraph textAlign="center">{currency(order.totalAmount)}</Paragraph>
 
-        <Box display={{
-        sm: "inline-flex",
-        xs: "none"
-      }} justifyContent="end">
+        <Box display={{sm: "inline-flex",xs: "none"}} justifyContent="end">
           <IconButton>
-            <East fontSize="small" sx={{
-            color: "grey.500",
-            transform: ({
-              direction
-            }) => `rotate(${direction === "rtl" ? "180deg" : "0deg"})`
+            <East
+              fontSize="small"
+              sx={{
+                color: "grey.500",
+                transform: ({
+                  direction }) => `rotate(${direction === "rtl" ? "180deg" : "0deg"})`
           }} />
           </IconButton>
         </Box>
       </TableRow>
-    </Link>;
+    </Link>
+  );
 }

@@ -51,7 +51,9 @@ export class UsersController {
     return this.userService.changeEmail(userId, changeEmailDto);
   }
 
-  @Post(':id')
+  // ✅ This is the proper PATCH endpoint for updating user data
+  @Patch(':id')
+  // @UseGuards(AuthGuard('jwt'))
   async updateUser(
     @Param('id') id: string,
     @Body() updates: Partial<User>,

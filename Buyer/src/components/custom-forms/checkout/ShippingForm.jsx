@@ -11,6 +11,12 @@ import { FormControlLabel, Checkbox, Box } from "@mui/material";
 // ============================================
 
 export default function ShippingForm({ 
+  firstName,
+  setFirstName,
+  lastName,
+  setLastName,
+  email,
+  setEmail,
   shipping,
   setShipping,
   sameAsShipping,
@@ -38,23 +44,23 @@ export default function ShippingForm({
             title="First Name"
             placeholder="First Name"
             color="#000"
-            value={shipping.firstName}
-            onChange={(e) => handleChange("firstName", e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
           />
           <SymTextField
             title="Last Name"
             placeholder="Last Name"
             color="#000"
-            value={shipping.lastName}
-            onChange={(e) => handleChange("lastName", e.target.value)}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </FlexBox>
         <SymTextField
           title="Email"
           placeholder="Email"
           color="#000"
-          value={shipping.email}
-          onChange={(e) => handleChange("email", e.target.value)}
+          value={email}
+            onChange={(e) => setEmailName(e.target.value)}
         />
         <AddressForm
           section="shipping"

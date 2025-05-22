@@ -35,19 +35,14 @@ export default function OrderRow({
   };
 
   return <Link href={`/orders/${order.id}`}>
-      <TableRow sx={{
-      gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr"
-    }}>
+      <TableRow sx={{gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr"}}>
         <H5 ellipsis>#{order.id.substring(0, 18)}</H5>
 
         <Box textAlign="center">
           <Chip size="small" label={order.status} color={getColor(order.status)} />
         </Box>
 
-        <Paragraph textAlign={{
-        sm: "center",
-        xs: "left"
-      }}>
+        <Paragraph textAlign={{sm: "center",xs: "left"}}>
           {format(new Date(order.createdAt), "MMM dd, yyyy")}
         </Paragraph>
 

@@ -13,7 +13,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // <-- back icon
 
 // ================================================
 
-export default function PaymentForm() {
+export default function PaymentForm({
+  handleBack
+}) {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
 
   const handlePaymentMethodChange = event => {
@@ -33,7 +35,7 @@ export default function PaymentForm() {
       
       {/* BACK ICON */}
       <FlexBox justifyContent="flex-start" mb={1}>
-        <IconButton component={Link} href="/checkout" color="#FFF">
+        <IconButton onClick={handleBack} color="#FFF">
           <ArrowBackIcon />
         </IconButton>
       </FlexBox>

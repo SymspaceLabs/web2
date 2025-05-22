@@ -44,6 +44,9 @@ export default function ProductDetails({ product }) {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState("");
   const [sizeError, setSizeError] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState("");
+
+
 
   const { state, dispatch } = useCart();
   const { toggleCartOpen } = useHeader();
@@ -91,6 +94,7 @@ export default function ProductDetails({ product }) {
           label: size.size,
           value: size.id
         })),
+        variant: selectedVariant
       },
     });
   };
@@ -113,6 +117,7 @@ export default function ProductDetails({ product }) {
         );
         const data = await res.json();
         setAvailability(data);
+        setSelectedVariant(data.variantId);
       } catch (err) {
         console.error("Error fetching availability", err);
         setAvailability(null);

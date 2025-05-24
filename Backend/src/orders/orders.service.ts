@@ -94,7 +94,6 @@ export class OrdersService {
     return this.orderRepo.find({ relations: ['items', 'shippingAddress'] });
   }
 
-  // src/orders/orders.service.ts
   async findByUser(userId: string) {
     return this.orderRepo.find({
       where: { user: { id: userId } },
@@ -103,12 +102,32 @@ export class OrdersService {
     });
   }
 
-  findOne(id: string) {
-    return this.orderRepo.findOne({
+  async findOne(id: string) {
+    const order = await this.orderRepo.findOne({
       where: { id },
-      relations: ['items', 'shippingAddress'],
+      relations: [
+        'items',
+        'items.variant',
+        'items.variant.product',
+        'items.variant.product.images', // include images here
+        'items.variant.color',
+        'items.variant.size',
+        'shippingAddress',
+      ],
     });
+
+    if (!order) return null;
+
+    // Sort images by sortOrder for each product
+    for (const item of order.items) {
+      if (item.variant?.product?.images) {
+        item.variant.product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+      }
+    }
+
+    return order;
   }
+
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepo.findOne({ where: { id } });

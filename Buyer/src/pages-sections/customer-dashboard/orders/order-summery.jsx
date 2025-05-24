@@ -26,15 +26,18 @@ export default function OrderSummery({
       /* SHIPMENT ADDRESS SECTION */
     }
       <Grid item lg={6} md={6} xs={12}>
-        <Card sx={{
-        p: 3
-      }}>
+        <Card sx={{p: 3}}>
           <H5 mt={0} mb={2}>
             Shipping Address
           </H5>
 
           <Paragraph fontSize={14} my={0}>
-            {order.shippingAddress}
+            {order?.shippingAddress?.address1},&nbsp;
+            {order?.shippingAddress?.address2},&nbsp;
+            {order?.shippingAddress?.city},&nbsp;
+            {order?.shippingAddress?.state},&nbsp;
+            {order?.shippingAddress?.zip},&nbsp;
+            {order?.shippingAddress?.country}.
           </Paragraph>
         </Card>
       </Grid>
@@ -43,14 +46,12 @@ export default function OrderSummery({
       /* TOTAL SUMMERY SECTION */
     }
       <Grid item lg={6} md={6} xs={12}>
-        <Card sx={{
-        p: 3
-      }}>
+        <Card sx={{p: 3}}>
           <H5 mt={0} mb={2}>
             Total Summary
           </H5>
 
-          <ListItem title="Subtotal:" value={currency(order.totalPrice)} />
+          <ListItem title="Subtotal:" value={currency(order.totalAmount)} />
           <ListItem title="Shipping fee:" value={currency(0)} />
           <ListItem title="Discount:" value={currency(order.discount)} />
 
@@ -60,7 +61,7 @@ export default function OrderSummery({
 
           <FlexBetween mb={2}>
             <H6>Total</H6>
-            <H6>{currency(order.totalPrice)}</H6>
+            <H6>{currency(order.totalAmount)}</H6>
           </FlexBetween>
 
           <Paragraph>Paid by Credit/Debit Card</Paragraph>

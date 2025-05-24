@@ -1,17 +1,19 @@
+// ================================================
+// Order Progress
+// ================================================
+
 import { Fragment } from "react"; // MUI
+import { Box, Card, Avatar } from "@mui/material";
+import { Paragraph } from "@/components/Typography";
+import { FlexBetween, FlexBox } from "@/components/flex-box"; // STYLED COMPONENTS
 
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Avatar from "@mui/material/Avatar";
-import styled from "@mui/material/styles/styled";
+import Delivery from "@/icons/Delivery";
+import PackageBox from "@/icons/PackageBox";
 import Done from "@mui/icons-material/Done"; // CUSTOM ICON COMPONENTS
+import TruckFilled from "@/icons/TruckFilled"; // GLOBAL CUSTOM COMPONENTS
+import styled from "@mui/material/styles/styled";
 
-import Delivery from "../../../icons/Delivery";
-import PackageBox from "../../../icons/PackageBox";
-import TruckFilled from "../../../icons/TruckFilled"; // GLOBAL CUSTOM COMPONENTS
-
-import { Paragraph } from "../../../components/Typography";
-import { FlexBetween, FlexBox } from "../../../components/flex-box"; // STYLED COMPONENTS
+// ================================================
 
 const StyledFlexbox = styled(FlexBetween)(({
   theme
@@ -76,10 +78,7 @@ export default function OrderProgress() {
           </Fragment>)}
       </StyledFlexbox>
 
-      <FlexBox justifyContent={{
-      xs: "center",
-      sm: "flex-end"
-    }}>
+      <FlexBox justifyContent={{ xs: "center", sm: "flex-end" }}>
         <Paragraph p="0.5rem 1rem" textAlign="center" borderRadius="300px" color="primary.main" bgcolor="primary.light">
           Estimated Delivery Date <b>4th October</b>
         </Paragraph>

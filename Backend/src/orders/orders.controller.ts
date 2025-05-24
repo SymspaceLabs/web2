@@ -17,12 +17,10 @@ export class OrdersController {
     return this.ordersService.findAll();
   }
 
-  // src/orders/orders.controller.ts
   @Get('user/:userId')
   findByUser(@Param('userId') userId: string) {
     return this.ordersService.findByUser(userId);
   }
-
 
   @Get(':id')
   findOne(@Param('id') id: string) {

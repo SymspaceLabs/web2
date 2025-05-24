@@ -1,57 +1,63 @@
-import Card from "@mui/material/Card";
-import Button from "@mui/material/Button";
-import Avatar from "@mui/material/Avatar";
+// ============================================================
+// Ordered Products
+// ============================================================
+
+import { currency } from "@/lib"; // CUSTOM DATA MODEL
 import { format } from "date-fns"; // GLOBAL CUSTOM COMPONENTS
-
-import { H6, Paragraph } from "../../../components/Typography";
-import { FlexBetween, FlexBox } from "../../../components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
-
-import { currency } from "../../../lib"; // CUSTOM DATA MODEL
+import { LazyImage } from "@/components/lazy-image";
+import { H6, Paragraph } from "@/components/Typography";
+import { Card, Button, Avatar, Box } from "@mui/material";
+import { FlexBetween, FlexBox } from "@/components/flex-box"; // CUSTOM UTILS LIBRARY FUNCTION
 
 // ==============================================================
+
 export default function OrderedProducts({
   order
 }) {
-  const {
-    id,
-    createdAt,
-    items,
-    deliveredAt
-  } = order || {};
-  return <Card sx={{
-    p: 0,
-    mb: "30px"
-  }}>
+
+  const { items = [] } = order || {};
+  
+  return (
+    <Card sx={{ p: 0, mb: "30px"}}>
       <FlexBetween px={3} py={2} flexWrap="wrap" bgcolor="grey.200">
-        <Item title="Order ID:" value={id} />
-        <Item title="Placed on:" value={format(new Date(createdAt), "dd MMM, yyyy")} />
-        <Item title="Delivered on:" value={deliveredAt ? format(new Date(deliveredAt), "dd MMM, yyyy") : "None"} />
+        <Item title="Order ID:" value={order?.id} />
+        <Item title="Placed on:" value={order?.createdAt ? format(new Date(order?.createdAt), "dd MMM, yyyy"): "None"} />
+        <Item title="Delivered on:" value={order?.deliveredAt ? format(new Date(order?.deliveredAt), "dd MMM, yyyy") : "None"} />
       </FlexBetween>
 
       {items.map((item, ind) => <FlexBetween px={2} py={1} flexWrap="wrap" key={ind}>
           <FlexBox gap={2.5} alignItems="center">
-            <Avatar alt={item.product_name} src={item.product_img} sx={{
-          height: 64,
-          width: 64
-        }} />
+            <Box>
+              <LazyImage
+                alt={item?.variant?.product?.name}
+                width={50}
+                height={50}
+                display="block"
+                src={item?.variant?.product?.images[0]?.url || ""}
+              />
+            </Box>
 
             <div>
-              <H6>{item.product_name}</H6>
+              <H6>
+                {item?.variant?.product?.name}
+              </H6>
+              
               <Paragraph color="grey.600">
-                {currency(item.product_price)} x {item.product_quantity}
+                {currency(item?.variant?.product?.price)} x {item.quantity}
               </Paragraph>
             </div>
           </FlexBox>
 
           <Paragraph color="grey.600" ellipsis>
-            Product properties: Black, L
+            Product properties: <b>{item?.variant?.color?.name}</b>, <b>{item?.variant?.size?.size}</b>
           </Paragraph>
 
           <Button variant="text" color="primary">
             Write a Review
           </Button>
         </FlexBetween>)}
-    </Card>;
+    </Card>
+  );
 }
 
 function Item({

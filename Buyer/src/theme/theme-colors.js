@@ -17,7 +17,7 @@ export const grey = {
   100: "#F6F9FC"
 };
 export const primary = {
-  100: "#FCE9EC",
+  100: "#E8F1FF",
   200: "#F8C7CF",
   300: "#F07D90",
   400: "#EC6178",

@@ -24,29 +24,24 @@ export default function ShopLayout2({
   let TOP_BAR_CONTENT = null;
 
   let NAV_BAR_CONTENT = null;
-  const SHOW_NAV_BAR = ["/checkout-alternative"];
+  const SHOW_NAV_BAR = [];
   if (SHOW_NAV_BAR.includes(pathname)) NAV_BAR_CONTENT = <Navbar elevation={0} />;
-  return <Fragment>
-      {
-      /* TOP BAR AREA */
-    }
+  
+  return (
+    <Fragment>
+      {/* TOP BAR AREA */}
       {TOP_BAR_CONTENT}
 
-      {
-      /* HEADER */
-    }
+      {/* HEADER */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={70}>
         <Header isFixed={isFixed} midSlot={<SearchInput />} />
       </Sticky>
 
-      {
-      /* NAVIGATION BAR */
-    }
+      {/* NAVIGATION BAR */}
       {NAV_BAR_CONTENT ?? <Divider />}
 
-      {
-      /* BODY CONTENT */
-    }
+      {/* BODY CONTENT */}
       {children}
-    </Fragment>;
+    </Fragment>
+  );
 }

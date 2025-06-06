@@ -31,7 +31,7 @@ export default function Navbar({
           <FlexBox justifyContent="space-between" width="80%">
             {categories.map((item, index)=> (
                 <StyledNavLink 
-                  href={`/products/search/${item.slug}` }
+                  href={`/products/search/all?${item.slug}` }
                   key={index} 
                   sx={{ 
                     fontWeight:500,
@@ -55,15 +55,15 @@ export default function Navbar({
 const categories = [
   {
     title:"Women",
-    slug:"women"
+    slug:"gender=women"
   },
   {
     title:"Men",
-    slug:"men"
+    slug:"gender=men"
   },
   {
     title:"Kids",
-    slug:"kids"
+    slug:"gender=kids"
   },
   {
     title:"Maternity",

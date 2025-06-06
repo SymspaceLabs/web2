@@ -2,7 +2,7 @@
 // Cart Page
 // ==========================================================
 
-import { CartPageView } from "pages-sections/cart/page-view";
+import { CartPageView } from "@/pages-sections/checkout/page-view";
 
 export const metadata = {
   title: "Cart Page",

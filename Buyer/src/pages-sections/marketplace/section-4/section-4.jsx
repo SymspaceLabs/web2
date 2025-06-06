@@ -5,9 +5,9 @@
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
 import { H1 } from "@/components/Typography";
-import BlogCard from "../section-3/blog-card";
 import { FlexBox } from "@/components/flex-box"; // Styled FlexBox component
 import { Box, Container, Button, Grid } from '@mui/material';
+import { ProductCard4 } from "@/components/custom-cards/product-cards";
 
 export default function Section4() {
   return (
@@ -20,8 +20,8 @@ export default function Section4() {
 
         {/* Grid layout for blog cards */}
         <Grid container spacing={{xs:1, sm:2, md:3}}>
-          {blogs.map((blog,index) => (
-            <Grid item lg={4} md={4} xs={4} key={blog.id}>
+          {blogs.map((item,index) => (
+            <Grid item lg={4} md={4} xs={4} key={index}>
               {/* Motion wrapper for fade-in animation */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -29,12 +29,7 @@ export default function Section4() {
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true, amount: 0.2 }}
               >
-                <BlogCard
-                  date={blog.createdAt}
-                  title={blog.title}
-                  image={blog.image}
-                  textColor='#FFF'
-                />
+                <ProductCard4 item={item} textColor='#FFF' />
               </motion.div>
             </Grid>
           ))}
@@ -56,22 +51,19 @@ const blogs = [
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg1",
     title: "Shirts",
-    description: "Detailed description about shirts.",
     image: "/assets/images/products/Men/shirt.png",
-    createdAt: "2022-11-08T07:15:55.897Z",
+    slug:'shirts',
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",
     title: "Bottoms",
-    description: "Detailed description about bottoms.",
     image: "/assets/images/products/Men/pants.png",
-    createdAt: "2022-11-08T07:15:55.897Z",
+    slug:'bottoms',
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Accessories",
-    description: "Detailed description about accessories.",
     image: "/assets/images/products/Men/watch.png",
-    createdAt: "2022-11-08T07:15:55.897Z",
+    slug:'accessories',
   },
 ];

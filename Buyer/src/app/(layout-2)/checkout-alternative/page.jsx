@@ -1,4 +1,4 @@
-import { CheckoutAlternativePageView } from "pages-sections/checkout/page-view";
+import { CheckoutAlternativePageView } from "@/pages-sections/checkout()/page-view";
 export const metadata = {
   title: "Checkout Alternative  E-commerce Template",
   description: `Symspace is an E-commerce website.`,

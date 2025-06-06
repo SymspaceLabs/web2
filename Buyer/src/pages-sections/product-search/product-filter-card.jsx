@@ -13,15 +13,14 @@ import {
   Divider,
   FormControlLabel,
   Button,
+  FormGroup,
+  Typography
 } from "@mui/material";
-
 import { H5, H6, Span } from "@/components/Typography";
 import { CategoryAccordion } from "./category-accordion";
-import { FlexBetween, FlexBox } from "@/components/flex-box";
+import { FlexBetween } from "@/components/flex-box";
 
 // =================================================================
-
-const colorList = ["#1C1C1C", "#FF7A7A", "#FFC672", "#84FFB5", "#70F6FF", "#6B7AFF"];
 
 export default function ProductFilterCard({
   allBrands,
@@ -37,18 +36,49 @@ export default function ProductFilterCard({
   setSelectedGenders,
   allAvailabilities,
   selectedAvailabilities,
-  setSelectedAvailabilities
+  setSelectedAvailabilities,
+  allColors,
+  selectedColors,
+  setSelectedColors,
 }) {
 
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
   };
 
+  // const handleColorClick = (color) => {
+  //   if (selectedColors.includes(color)) {
+  //     setSelectedColors(selectedColors.filter(c => c !== color));
+  //   } else {
+  //     setSelectedColors([...selectedColors, color]);
+  //   }
+  // };
+
+  const handleColorClick = (color) => {
+    const exists = selectedColors.some(c => c.code === color.code);
+    if (exists) {
+      setSelectedColors(selectedColors.filter(c => c.code !== color.code));
+    } else {
+      setSelectedColors([...selectedColors, color]);
+    }
+  };
+
+
   const handleClearFilters = () => {
-    setSelectedGenders([]);        // ← clear gender
+    setSelectedGenders([]);
     setSelectedBrands([]);
     setCheckedCategoryIds([]);
+    setSelectedColors([]);
     setPriceRange(priceLimits);
+  };
+
+  const handleToggle = (color) => {
+    const exists = selectedColors.some((c) => c.code === color.code);
+    if (exists) {
+      setSelectedColors(selectedColors.filter((c) => c.code !== color.code));
+    } else {
+      setSelectedColors([...selectedColors, color]);
+    }
   };
 
   return (
@@ -62,18 +92,26 @@ export default function ProductFilterCard({
           return (
             <FormControlLabel
               key={g}
-              label={<Span>{g}</Span>}
+              label={<Span>{g.charAt(0).toUpperCase() + g.slice(1)}</Span>}
               control={
                 <Checkbox
                   size="small"
-                  checked={isChecked}
+                  checked={selectedGenders.includes(g)}
+                  // checked={isChecked}
                   onChange={() => {
                     setSelectedGenders(prev =>
-                      isChecked
+                      prev.includes(g)
                         ? prev.filter(x => x !== g)
                         : [...prev, g]
                     );
                   }}
+                  // onChange={() => {
+                  //   setSelectedGenders(prev =>
+                  //     isChecked
+                  //       ? prev.filter(x => x !== g)
+                  //       : [...prev, g]
+                  //   );
+                  // }}
                 />
               }
             />
@@ -198,6 +236,40 @@ export default function ProductFilterCard({
 
       <Box component={Divider} my={3} />
 
+      {/* COLORS VARIANT FILTER */}
+      <H6 mb={2}>Colors</H6>
+      <FormGroup>
+        {allColors.map((color) => (
+          <FormControlLabel
+            key={color.code}
+            control={
+              <Checkbox
+                checked={selectedColors.some((c) => c.code === color.code)}
+                onChange={() => handleToggle(color)}
+              />
+            }
+            label={
+              <Box display="flex" alignItems="center">
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    backgroundColor: color.code,
+                    border: "1px solid #ccc",
+                    mr: 1.5,
+                  }}
+                />
+                <Typography variant="body2">{color.name}</Typography>
+              </Box>
+            }
+          />
+        ))}
+      </FormGroup>
+
+      <Box component={Divider} my={3} />
+
+
       {/* RATINGS FILTER */}
       <H6 mb={2}>Ratings</H6>
       {[5, 4, 3, 2, 1].map((item) => (
@@ -210,22 +282,6 @@ export default function ProductFilterCard({
       ))}
 
       <Box component={Divider} my={3} />
-
-      {/* COLORS VARIANT FILTER */}
-      <H6 mb={2}>Colors</H6>
-      <FlexBox mb={2} flexWrap="wrap" gap={1}>
-        {colorList.map((item) => (
-          <Box
-            key={item}
-            width={25}
-            height={25}
-            flexShrink={0}
-            bgcolor={item}
-            borderRadius="50%"
-            sx={{ cursor: "pointer" }}
-          />
-        ))}
-      </FlexBox>
 
       {/* CLEAR FILTERS BUTTON */}
       <Button

@@ -49,9 +49,9 @@ function ShopLayoutContent({children, noFooter}) {
   const [isFixed, setIsFixed] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
-  
  
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
+  
   const {
     dialogOpen,
     toggleDialog,

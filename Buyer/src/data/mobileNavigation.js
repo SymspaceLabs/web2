@@ -18,5 +18,5 @@ export const MOBILE_NAVIGATION = [{
   }, {
     title: "Account",
     Icon: User2,
-    href: "/profile"
+    href: "/profile/view"
   }];

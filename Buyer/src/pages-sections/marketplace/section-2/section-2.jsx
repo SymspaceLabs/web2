@@ -71,6 +71,7 @@ export default function Section2() {
                     flex: "0 0 auto",
                     scrollSnapAlign: "start",
                   }}
+                  key={index}
                 >
                   <Link href={`/press-releases/${item.slug}`}>
                     <StyledGrid

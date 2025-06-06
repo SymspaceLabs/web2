@@ -174,11 +174,11 @@ export const otpEmailTemplate = ( otp: string ) => `
                               color:#ffffff;
                               margin:0 0 12px;"
                         >
-                          <a href="https://festaging-seller.symspacelabs.com/register" style="color:#ffffff; text-decoration:underline;">Seller Signup</a> 
+                          <a href="${process.env.BUYER_URL}/register" style="color:#ffffff; text-decoration:underline;">Seller Signup</a> 
                           |
-                          <a href="https://yourdomain.com/email-preferences" style="color:#ffffff; text-decoration:underline;">Email Preferences</a>
+                          <a href="${process.env.BUYER_URL}/marketplace" style="color:#ffffff; text-decoration:underline;">Shop in AR Marketplace</a>
                           |
-                          <a href="https://festaging.symspacelabs.com/terms-and-conditions#privacy" style="color:#ffffff; text-decoration:underline;">Privacy Policy</a>
+                          <a href="${process.env.BUYER_URL}/terms-and-conditions#privacy" style="color:#ffffff; text-decoration:underline;">Privacy Policy</a>
                         </p>
                         <p style="
                               font-family:ABeeZee,Arial,sans-serif;

@@ -1,6 +1,8 @@
 "use client";
 // =======================================================
 // Product Card 3
+// Used In:
+// - Wish List
 // =======================================================
 
 import { Paragraph, Span } from "components/Typography";

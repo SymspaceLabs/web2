@@ -1,6 +1,11 @@
-import { CheckoutPageView } from "pages-sections/checkout/page-view";
+// ==========================================================
+// Checkout Page
+// ==========================================================
+
+import { CartPageView } from "@/pages-sections/checkout/page-view";
+
 export const metadata = {
-  title: "Checkout  E-commerce Template",
+  title: "Cart Page",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",
@@ -8,6 +13,7 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function Checkout() {
-  return <CheckoutPageView />;
+
+export default function Cart() {
+  return <CartPageView />;
 }

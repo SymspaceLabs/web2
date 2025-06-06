@@ -46,8 +46,6 @@ export default function ProductDetails({ product }) {
   const [sizeError, setSizeError] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState("");
 
-
-
   const { state, dispatch } = useCart();
   const { toggleCartOpen } = useHeader();
 
@@ -304,8 +302,8 @@ export default function ProductDetails({ product }) {
                     return;
                   }
 
-                  handleAddToCart(); // This is a curried function, so we call it with ()
-                  router.push('/cart');
+                  handleAddToCart();
+                  router.push('/checkout');
                 }}
               >
                 Buy now

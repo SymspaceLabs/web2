@@ -6,8 +6,9 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Box, Grid, Container, Tabs, Tab } from "@mui/material";
+import { fetchProducts } from "@/services/productService";
 import { ProductCard1 } from "@/components/custom-cards/product-cards";
+import { Box, Grid, Container, Tabs, Tab, CircularProgress } from "@mui/material";
 
 // =============================================================
 
@@ -19,23 +20,18 @@ export default function Section12() {
   const categories = [
     { id: 1, title: "New Arrivals", slug: "newArrival" },
     { id: 2, title: "Best Seller", slug: "bestSeller" },
-    { id: 3, title: "Featured Products", slug: "featured" },
+    { id: 3, title: "Trending", slug: "trending" },
   ];
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
+    const loadProducts = async () => {
+      const { products, error } = await fetchProducts();
+      if (error) console.error("Error fetching products:", error);
+      setProducts(products);
+      setLoading(false);
     };
 
-    fetchProducts();
+    loadProducts();
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -75,6 +71,9 @@ export default function Section12() {
           {/* Product List Container */}
           <Box sx={{ pt: 3, pb: 2 }}>
             <Grid container spacing={3} justifyContent="flex-start" >
+              {
+                loading && <CircularProgress />
+              }
               {products.map((product, index) => (
                 <Grid key={index} item xs={6} sm={4} md={3} lg={3} sx={{ display: "flex" }}>
                   <ProductCard1 product={product} />

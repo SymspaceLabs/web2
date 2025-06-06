@@ -5,14 +5,15 @@
 // ==============================================
 
 import { Paragraph } from "@/components/Typography";
+import { MenuItem, TextField } from "@mui/material";
 import { FlexBetween, FlexBox } from "@/components/flex-box";
-import { MenuItem, TextField, Container } from "@mui/material";
 
 // ==============================================
 
 
 const TopSortCard = ({
-    products
+    products,
+    slug
 }) => {
   return (
     <FlexBetween
@@ -23,7 +24,7 @@ const TopSortCard = ({
         gap={1}
     >
         <Paragraph color="grey.600">
-            Total {products.length} results
+            Total {products.length}  for {slug}
         </Paragraph>
 
         <FlexBox alignItems="center" gap={2}>

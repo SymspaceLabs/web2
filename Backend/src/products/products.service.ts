@@ -31,6 +31,52 @@ export class ProductsService {
       .replace(/--+/g, '-')            // collapse multiple dashes
       .replace(/^-+|-+$/g, '');        // trim leading/trailing dashes
   }
+
+  // Reusable method to generate and save variants
+  private async generateVariants(product: Product, dto: CreateProductDto): Promise<ProductVariant[]> {
+    const variantsToSave: ProductVariant[] = [];
+
+    // If no dto.variants, generate cartesian product of colors and sizes
+    if (!dto.variants?.length) {
+      for (const color of product.colors) {
+        for (const size of product.sizes) {
+          const variant = new ProductVariant();
+          variant.color = color;
+          variant.size = size;
+          variant.sku = `${product.slug}-${color.code}-${size.size}`;
+          variant.price = product.price || 0;
+          variant.stock = 0;
+          variant.product = product;
+          variantsToSave.push(variant);
+        }
+      }
+    } else {
+      // Use provided variants in DTO
+      for (const v of dto.variants) {
+        const variant = new ProductVariant();
+        variant.stock = v.stock;
+        variant.sku = v.sku;
+        variant.price = v.price;
+        variant.product = product;
+
+        const matchedColor = product.colors.find((c) => c.code === v.colorCode);
+        if (!matchedColor) {
+          throw new BadRequestException(`No matching color for code ${v.colorCode}`);
+        }
+        variant.color = matchedColor;
+
+        const matchedSize = product.sizes.find((s) => s.size === v.size);
+        if (!matchedSize) {
+          throw new BadRequestException(`No matching size for ${v.size}`);
+        }
+        variant.size = matchedSize;
+
+        variantsToSave.push(variant);
+      }
+    }
+
+    return this.productVariantRepository.save(variantsToSave);
+  }
   
   // CREATE & UPDATE PRODUCT
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
@@ -57,12 +103,17 @@ export class ProductsService {
           throw new NotFoundException(`Product with ID ${id} not found`);
         }
 
-        // ✅ Delete all existing product variants
-        if (product.variants?.length) {
+        // ✅  Only delete if user is explicitly changing variants or their dependencies
+        if (
+          ('variants' in dto && dto.variants?.length) ||
+          ('colors' in dto && dto.colors?.length) ||
+          ('sizes' in dto && dto.sizes?.length)
+        ) {
           await this.productVariantRepository.remove(product.variants);
           product.variants = [];
         }
-    
+
+
         if (company) {
           const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
           if (!companyEntity) {
@@ -161,58 +212,75 @@ export class ProductsService {
       const savedProduct = await this.productRepository.save(product);
       
       // === Generate new variants using updated colors and sizes ===
-      if (savedProduct.colors?.length && savedProduct.sizes?.length) {
-        const variantsToSave: ProductVariant[] = [];
-      
-        // If no dto.variants, generate cartesian product
-        if (!dto.variants?.length) {
-          for (const color of savedProduct.colors) {
-            for (const size of savedProduct.sizes) {
-              const variant = new ProductVariant();
-              variant.color = color;
-              variant.size = size;
-              variant.sku = `${savedProduct.slug}-${color.code}-${size.size}`;
-              variant.price = savedProduct.price || 0;
-              variant.stock = 0;
-              variant.product = savedProduct;
-              variantsToSave.push(variant);
-            }
-          }
-        } else {
-          for (const v of dto.variants) {
-            const variant = new ProductVariant();
-            variant.stock = v.stock;
-            variant.sku = v.sku;
-            variant.price = v.price;
-            variant.product = savedProduct;
-      
-            const matchedColor = savedProduct.colors.find((c) => c.code === v.colorCode);
-            if (!matchedColor) {
-              throw new BadRequestException(`No matching color for code ${v.colorCode}`);
-            }
 
-            if (matchedColor) variant.color = matchedColor;
-      
-            const matchedSize = savedProduct.sizes.find((s) => s.size === v.size);
-            if (!matchedSize) {
-              throw new BadRequestException(`No matching size for ${v.size}`);
-            }
-
-            if (matchedSize) variant.size = matchedSize;
-      
-            variantsToSave.push(variant);
-          }
-        }
-      
-        const savedVariants = await this.productVariantRepository.save(variantsToSave);
+      // Generate variants only if CREATE or if dto has colors or sizes
+      if (
+        !id ||
+        ('colors' in dto && dto.colors?.length) ||
+        ('sizes' in dto && dto.sizes?.length)
+      ) {
+        const savedVariants = await this.generateVariants(savedProduct, dto);
         savedProduct.variants = savedVariants;
       }
 
+      // Remove circular reference before returning
       if (savedProduct.variants?.length) {
         savedProduct.variants.forEach((variant) => {
           delete variant.product;
         });
       }
+      
+      // if (savedProduct.colors?.length && savedProduct.sizes?.length) {
+      //   const variantsToSave: ProductVariant[] = [];
+      //   // If no dto.variants, generate cartesian product
+      //   if (!dto.variants?.length) {
+      //     for (const color of savedProduct.colors) {
+      //       for (const size of savedProduct.sizes) {
+      //         const variant = new ProductVariant();
+      //         variant.color = color;
+      //         variant.size = size;
+      //         variant.sku = `${savedProduct.slug}-${color.code}-${size.size}`;
+      //         variant.price = savedProduct.price || 0;
+      //         variant.stock = 0;
+      //         variant.product = savedProduct;
+      //         variantsToSave.push(variant);
+      //       }
+      //     }
+      //   } else {
+      //     for (const v of dto.variants) {
+      //       const variant = new ProductVariant();
+      //       variant.stock = v.stock;
+      //       variant.sku = v.sku;
+      //       variant.price = v.price;
+      //       variant.product = savedProduct;
+      
+      //       const matchedColor = savedProduct.colors.find((c) => c.code === v.colorCode);
+      //       if (!matchedColor) {
+      //         throw new BadRequestException(`No matching color for code ${v.colorCode}`);
+      //       }
+
+      //       if (matchedColor) variant.color = matchedColor;
+      
+      //       const matchedSize = savedProduct.sizes.find((s) => s.size === v.size);
+      //       if (!matchedSize) {
+      //         throw new BadRequestException(`No matching size for ${v.size}`);
+      //       }
+
+      //       if (matchedSize) variant.size = matchedSize;
+      
+      //       variantsToSave.push(variant);
+      //     }
+      //   }
+      
+      //   const savedVariants = await this.productVariantRepository.save(variantsToSave);
+      //   savedProduct.variants = savedVariants;
+      // }
+
+      // if (savedProduct.variants?.length) {
+      //   savedProduct.variants.forEach((variant) => {
+      //     delete variant.product;
+      //   });
+      // }
       
       return savedProduct;
   }
@@ -230,7 +298,6 @@ export class ProductsService {
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
       .leftJoinAndSelect('product.variants', 'variants');
-
 
     // 2) Execute
     const products = await query.getMany();
@@ -280,6 +347,20 @@ export class ProductsService {
     }
     const availabilities = Array.from(availabilitySet);
 
+    // ✅ Extract all distinct colors used
+    const allColorsMap = new Map<string, { name: string; code: string }>();
+    for (const product of products) {
+      for (const color of product.colors) {
+        if (!allColorsMap.has(color.code)) {
+          allColorsMap.set(color.code, {
+            name: color.name,
+            code: color.code,
+          });
+        }
+      }
+    }
+    const colors = Array.from(allColorsMap.values());
+    
     // 9) Return everything
     return {
       products,
@@ -288,6 +369,7 @@ export class ProductsService {
       category,
       genders,
       availabilities,
+      colors
     };    
   }
 

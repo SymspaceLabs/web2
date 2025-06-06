@@ -56,7 +56,6 @@ export default function Section12() {
                 </Grid>
               </Grid>
             </motion.div>
-
           </Grid>
         </motion.div>
       </Container>
@@ -89,45 +88,53 @@ export const CustomCard1 = ({ number, description }) => {
   }, [inView, number]);
 
   return (
-    <Box ref={ref} 
-      sx={{ background:"#FFF", mb: {sm:2}, borderRadius: {xs:'30px', sm:'50px'}, 
-        '&:hover .fadeInBtn': { opacity: 1, transform: 'translateY(0)' }
+    <Box 
+      ref={ref} 
+      sx={{ 
+        background:"#FFF",
+        mb: {sm:2},
+        borderRadius: {xs:'30px', sm:'50px'}, 
+        '&:hover .fadeInBtn': { 
+          opacity: 1,
+          transform: 'translateY(0)'
+        }
       }}
     >
-        <FlexBox sx={{ px: {xs:1, sm:3}, pt: {xs:3, sm:20}, pb: 3, flexDirection: {xs:'row', sm:'column'}, alignItems: 'center', justifyContent: {xs:'space-between', sm:'center'}, height: '100%', gap: {sm:'50px'} }}>
-          <H1 sx={{  color: '#000', fontSize: {xs:40, sm:100} }}>
-            {currentNumber}%
-          </H1>
-          <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:20}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
-            {description}
-          </Paragraph>
-          {/* Button with fade-in effect */}
-          <FlexBox>
-            <Link href="/global-impact" passHref>
-              <Button
-                className="fadeInBtn"
-                sx={{
-                  opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
-                  transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
-                  transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
-                  py: { sm:2 },
-                  px: { sm:3 },
-                  borderRadius: 50,
-                  border: '2px solid black',
-                  color: 'black',
-                  fontSize: {xs:8, sm:12},
-                  ':hover': {
-                    background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
-                    color: '#FFF',
-                    border: '2px solid white',
-                  },
-                }}
-              >
-                Learn More
-              </Button>
-            </Link>
-          </FlexBox>
+      <FlexBox sx={{ px: {xs:1, sm:3}, pt: {xs:3, sm:20}, pb: 3, flexDirection: {xs:'row', sm:'column'}, alignItems: 'center', justifyContent: {xs:'space-between', sm:'center'}, height: '100%', gap: {sm:'50px'} }}>
+        <H1 sx={{  color: '#000', fontSize: {xs:40, sm:100} }}>
+          {currentNumber}%
+        </H1>
+        <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:20}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
+          {description}
+        </Paragraph>
+        {/* Button with fade-in effect */}
+        <FlexBox>
+          <Link href="/global-impact" passHref>
+            <Button
+              className="fadeInBtn"
+              sx={{
+                opacity: { xs: 1, sm: 0 }, // Keep button always visible on mobile
+                transform: { xs: 'none', sm: 'translateY(20px)' }, // Remove fade-in effect on mobile
+                transition: { xs: 'none', sm: 'all 0.3s ease' }, // Remove animation on mobile
+                py: { sm:2 },
+                px: { sm:3 },
+                borderRadius: 50,
+                border: '2px solid black',
+                color: 'black',
+                fontSize: {xs:8, sm:12},
+                mb: 5,
+                ':hover': {
+                  background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
+                  color: '#FFF',
+                  border: '2px solid white',
+                },
+              }}
+            >
+              Learn More
+            </Button>
+          </Link>
         </FlexBox>
+      </FlexBox>
     </Box>
   );
 };
@@ -175,7 +182,7 @@ export const CustomCard2 = () => {
           Conversion rates for AR advertising have been reported to be as high as 25%, which is more than 10 times higher than traditional ads.
         </Paragraph>
         <FlexBox>
-          <Link  href="/sell-on-symspace#benefits" passHref>
+          <Link  href="/contact-us" passHref>
             <Button
               className="fadeInBtn"
               sx={{

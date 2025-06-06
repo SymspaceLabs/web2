@@ -21,17 +21,8 @@ const navbarNavigation = [
     megaMenuWithSub: false,
     child: [
       {
-        title: "AR App Simulation",
-        child: [{
-          title: "Application",
-          url: "/ar-app-simulation"
-        },{
-          title: "Features",
-          url: "/ar-app-simulation#features"
-        }, {
-          title: "User Testimonials",
-          url: "/ar-app-simulation#user_testimonials"
-        }]
+        title: "AR Application",
+        url: "/ar-app-simulation"
       }, {
         title: "AR Real Estate",
         url: "/ar-real-estate"

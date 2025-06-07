@@ -1,34 +1,40 @@
 "use client";
 
-// ==============================================
+// ======================================================
 // Product Search Page
-// ==============================================
+// ======================================================
 
 import { H5 } from "@/components/Typography";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Grid, Container, Box } from "@mui/material";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 import ProductFilterCard from "../product-filter-card"; // GLOBAL CUSTOM COMPONENTS
 import ProductsGridView from "../products-grid-view";
 import TopSortCard from "../top-sort-card";
 
-// ==============================================
+// ======================================================
 
 export default function ProductSearchPageView({ slug }) {
 
-  const searchParams = useSearchParams();
-  const rawSearchParams = useSearchParams();
+  const searchParams  = useSearchParams();
+  const router = useRouter(); // Initialize useRouter
 
-  const genderQueryValues = useMemo(() => {
-    return rawSearchParams.getAll("gender").map(g => g.toLowerCase());
-  }, [rawSearchParams]);
 
+  // Extract gender and category query values from the URL
+  const genderQuery = useMemo(
+    () => searchParams.getAll("gender").map(g => g.toLowerCase()),
+    [searchParams]
+  );
+  const categoryQuery = useMemo(
+    () => searchParams.getAll("category").map(c => c.toLowerCase()),
+    [searchParams]
+  );
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [allGenders, setAllGenders] = useState([]);
+  // selectedGenders will be initialized based on URL in the useEffect
   const [selectedGenders, setSelectedGenders] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState([]);
@@ -42,6 +48,7 @@ export default function ProductSearchPageView({ slug }) {
   const [selectedAvailabilities, setSelectedAvailabilities] = useState([]);
   const [allColors, setAllColors] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -49,8 +56,9 @@ export default function ProductSearchPageView({ slug }) {
       .then(res => res.json())
       .then(data => {
         const validGenders = data.genders.map(g => g.toLowerCase());
-        const queryGenders = genderQueryValues;
+        const queryGenders = genderQuery;
         const filteredQueryGenders = queryGenders.filter(g => validGenders.includes(g));
+        const queryCategories = categoryQuery;
 
         setAllProducts(data.products);
         setDisplayedProducts(data.products);
@@ -59,30 +67,53 @@ export default function ProductSearchPageView({ slug }) {
         setPriceRange([data.priceRange.min, data.priceRange.max]);
         setCategory(data.category);
         setAllGenders(data.genders.map(g => g.toLowerCase()));
+        // CRITICAL: Set selectedGenders here based on the URL on initial load
         setSelectedGenders(filteredQueryGenders);
         setAllAvailabilities(data.availabilities);
         setAllColors(data.colors);
-
-        // 🔄 Remove invalid gender from URL
-        if (queryGenders.length !== filteredQueryGenders.length) {
-          const params = new URLSearchParams(window.location.search);
-          queryGenders.forEach(g => {
-            if (!validGenders.includes(g)) {
-              params.delete("gender", g); // removes specific gender values
-            }
-          });
-
-          const newUrl = `${window.location.pathname}?${params.toString()}`;
-          window.history.replaceState({}, "", newUrl); // replaces URL without reloading
-        }
+        setSelectedCategories(queryCategories);
       })
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [slug, genderQueryValues]);
+  }, [slug, genderQuery, categoryQuery]);
+
+  // Callback function to handle gender filter changes and update the URL
+  const handleGenderFilterChange = useCallback((genderValue, isChecked) => {
+    const currentParams = new URLSearchParams(searchParams.toString());
+    let newSelectedGenders = [...selectedGenders];
+
+    if (isChecked) {
+      // Add gender if not already present
+      if (!newSelectedGenders.includes(genderValue)) {
+        newSelectedGenders.push(genderValue);
+      }
+    } else {
+      // Remove gender
+      newSelectedGenders = newSelectedGenders.filter(g => g !== genderValue);
+    }
+
+    // Update the local state FIRST to ensure filters apply immediately
+    setSelectedGenders(newSelectedGenders);
+
+    // Update URL parameters
+    currentParams.delete("gender"); // Remove all existing gender params
+    newSelectedGenders.forEach(g => currentParams.append("gender", g)); // Add updated ones
+
+    // Update the URL using Next.js router.replace for a non-history-stack-adding navigation
+    router.replace(`${window.location.pathname}?${currentParams.toString()}`);
+  }, [selectedGenders, searchParams, router]); // Dependencies for useCallback
 
   // Recompute displayedProducts whenever any filter changes:
   useEffect(() => {
     let list = allProducts;
+
+    // ✅ Category filter (match against category name or slug, depending on your data shape)
+    if (categoryQuery.length > 0) {
+      list = list.filter(p => {
+        const subcategoryName = p.subcategoryItem?.subcategory?.name?.toLowerCase();
+        return categoryQuery.includes(subcategoryName);
+      });
+    }
 
     // Brand filter
     if (selectedBrands.length) {
@@ -129,22 +160,25 @@ export default function ProductSearchPageView({ slug }) {
     selectedGenders,
     priceRange,
     selectedAvailabilities,
-    selectedColors
+    selectedColors,
+    categoryQuery
   ]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+  // useEffect(() => {
+  //   const currentParams = new URLSearchParams(window.location.search);
+  //   const currentGenders = currentParams.getAll("gender").map(g => g.toLowerCase());
 
-    // Remove all existing gender params
-    params.delete("gender");
+  //   const areEqual =
+  //     currentGenders.length === selectedGenders.length &&
+  //     selectedGenders.every(g => currentGenders.includes(g));
 
-    // Add only currently selected genders to the URL
-    selectedGenders.forEach(g => params.append("gender", g));
-
-    // Update the URL without reloading the page
-    const newUrl = `${window.location.pathname}?${params.toString()}`;
-    window.history.replaceState({}, "", newUrl);
-  }, [selectedGenders]);
+  //   if (!areEqual) {
+  //     currentParams.delete("gender");
+  //     selectedGenders.forEach(g => currentParams.append("gender", g));
+  //     const newUrl = `${window.location.pathname}?${currentParams.toString()}`;
+  //     window.history.replaceState({}, "", newUrl);
+  //   }
+  // }, [selectedGenders]);
 
 
   if (error) {
@@ -175,6 +209,7 @@ export default function ProductSearchPageView({ slug }) {
               allGenders={allGenders}
               selectedGenders={selectedGenders}
               setSelectedGenders={setSelectedGenders}
+              onGenderFilterChange={handleGenderFilterChange} // Pass the new handler
               allAvailabilities={allAvailabilities}
               selectedAvailabilities={selectedAvailabilities}
               setSelectedAvailabilities={setSelectedAvailabilities}
@@ -189,7 +224,7 @@ export default function ProductSearchPageView({ slug }) {
             {/* Top Sort Card */}
             <TopSortCard
               products={displayedProducts}
-              slug={slug}
+              slug={genderQuery[0]}
             />
             
             {/* Products Grid View */}

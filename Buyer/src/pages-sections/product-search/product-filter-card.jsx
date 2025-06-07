@@ -16,9 +16,9 @@ import {
   FormGroup,
   Typography
 } from "@mui/material";
+import { FlexBetween } from "@/components/flex-box";
 import { H5, H6, Span } from "@/components/Typography";
 import { CategoryAccordion } from "./category-accordion";
-import { FlexBetween } from "@/components/flex-box";
 
 // =================================================================
 
@@ -33,7 +33,7 @@ export default function ProductFilterCard({
   setCheckedCategoryIds,
   allGenders,
   selectedGenders,
-  setSelectedGenders,
+  onGenderFilterChange,
   allAvailabilities,
   selectedAvailabilities,
   setSelectedAvailabilities,
@@ -46,26 +46,12 @@ export default function ProductFilterCard({
     setPriceRange(newValue);
   };
 
-  // const handleColorClick = (color) => {
-  //   if (selectedColors.includes(color)) {
-  //     setSelectedColors(selectedColors.filter(c => c !== color));
-  //   } else {
-  //     setSelectedColors([...selectedColors, color]);
-  //   }
-  // };
-
-  const handleColorClick = (color) => {
-    const exists = selectedColors.some(c => c.code === color.code);
-    if (exists) {
-      setSelectedColors(selectedColors.filter(c => c.code !== color.code));
-    } else {
-      setSelectedColors([...selectedColors, color]);
-    }
-  };
-
-
   const handleClearFilters = () => {
-    setSelectedGenders([]);
+    // Call the onGenderFilterChange to clear gender filters via the parent
+    if (onGenderFilterChange) {
+      onGenderFilterChange('', false); // Pass empty string or appropriate value to signify clearing all genders
+    }
+    // setSelectedGenders([]);
     setSelectedBrands([]);
     setCheckedCategoryIds([]);
     setSelectedColors([]);
@@ -96,6 +82,30 @@ export default function ProductFilterCard({
               control={
                 <Checkbox
                   size="small"
+                  checked={isChecked} // Checked state comes directly from selectedGenders prop
+                  onChange={() => {
+                    // <--- IMPLEMENTATION POINT: Call the new prop here
+                    if (onGenderFilterChange) {
+                      // Pass the current gender value (g) and the new checked state (!isChecked)
+                      onGenderFilterChange(g, !isChecked);
+                    }
+                  }}
+                />
+              }
+            />
+          );
+        })}
+      </Box>
+      {/* <Box display="flex" flexDirection="column">
+        {allGenders.map((g) => {
+          const isChecked = selectedGenders.includes(g);
+          return (
+            <FormControlLabel
+              key={g}
+              label={<Span>{g.charAt(0).toUpperCase() + g.slice(1)}</Span>}
+              control={
+                <Checkbox
+                  size="small"
                   checked={selectedGenders.includes(g)}
                   // checked={isChecked}
                   onChange={() => {
@@ -105,19 +115,12 @@ export default function ProductFilterCard({
                         : [...prev, g]
                     );
                   }}
-                  // onChange={() => {
-                  //   setSelectedGenders(prev =>
-                  //     isChecked
-                  //       ? prev.filter(x => x !== g)
-                  //       : [...prev, g]
-                  //   );
-                  // }}
                 />
               }
             />
           );
         })}
-      </Box>
+      </Box> */}
 
       <Box component={Divider} my={3} />
 

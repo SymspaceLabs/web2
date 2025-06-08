@@ -10,76 +10,76 @@ import { H1, Small } from "@/components/Typography";
 // ============================================================
 
 const SymTextField = ({
-    title,
-    toolTipText,
-    value,
-    onChange,
-    multiline = false,
-    rows = 4,  // Default number of rows
-    isEdit = true,
-    placeholder="",
-    charLimit= false,
-    showCharlimit = false,
-    type = 'text',
-    color="white"
+  title,
+  toolTipText,
+  value,
+  onChange,
+  multiline = false,
+  rows = 4,
+  isEdit = true,
+  placeholder = "",
+  charLimit = false,
+  showCharlimit = false,
+  type = "text",
+  color = "white",
+  theme = "dark" // New prop with default value
 }) => {
-
   const currentLength = value?.length || 0;
+  const isLight = theme === "light";
 
   return (
     <FlexBox flexDirection="column" flex={1}>
-        <FlexBox gap={1}>
-            <H1 color={color} mb={0.5} >
-                {title}
-            </H1>
-            {toolTipText && (
-                <Tooltip title={toolTipText} arrow>
-                    <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
-                </Tooltip>
-            )}
-        </FlexBox>
-
-        <TextField
-            value={value}
-            onChange={onChange}
-            disabled={!isEdit}
-            multiline={multiline}
-            placeholder={placeholder}
-            rows={multiline ? rows : 1}
-            InputProps={{
-                style: { color: '#fff' },
-            }}
-            inputProps={{
-                maxLength: charLimit ? charLimit : undefined,
-                style: { color: "#fff" },
-            }}
-            type={type}
-            sx={{
-                background: "#000",
-                borderRadius: "5px",
-                color: "#fff",
-                "& input::placeholder": {
-                  color: "#aaa", // or any contrasting color like "#ccc" or "#fff"
-                  opacity: 1,
-                },
-                // Hides the increment/decrement buttons in all browsers
-                "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
-                  {
-                    WebkitAppearance: "none",
-                    margin: 0,
-                  },
-                "& input[type=number]": {
-                  MozAppearance: "textfield", // Firefox
-                },
-            }}
-        />
-        {charLimit && showCharlimit &&  (
-          <Small color="white" mt={0.5} textAlign="right">
-            {currentLength}/{charLimit}
-          </Small>
+      <FlexBox gap={1}>
+        <H1 color={isLight ? "" : color} mb={0.5}>
+          {title}
+        </H1>
+        {toolTipText && (
+          <Tooltip title={toolTipText} arrow>
+            <InfoOutlined sx={{ color: isLight ? "#000" : "#fff", fontSize: 16 }} />
+          </Tooltip>
         )}
+      </FlexBox>
+
+      <TextField
+        value={value}
+        onChange={onChange}
+        disabled={!isEdit}
+        multiline={multiline}
+        placeholder={placeholder}
+        rows={multiline ? rows : 1}
+        InputProps={{
+          style: { color: isLight ? "#000" : "#fff" }
+        }}
+        inputProps={{
+          maxLength: charLimit ? charLimit : undefined,
+          style: { color: isLight ? "#000" : "#fff" }
+        }}
+        type={type}
+        sx={{
+          background: isLight ? "transparent" : "#000",
+          borderRadius: "5px",
+          color: isLight ? "#000" : "#fff",
+          "& input::placeholder": {
+            color: isLight ? "#666" : "#aaa",
+            opacity: 1
+          },
+          "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button": {
+            WebkitAppearance: "none",
+            margin: 0
+          },
+          "& input[type=number]": {
+            MozAppearance: "textfield"
+          }
+        }}
+      />
+
+      {charLimit && showCharlimit && (
+        <Small color={isLight ? "black" : "white"} mt={0.5} textAlign="right">
+          {currentLength}/{charLimit}
+        </Small>
+      )}
     </FlexBox>
-  )
-}
+  );
+};
 
 export default SymTextField;

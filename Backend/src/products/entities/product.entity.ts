@@ -5,7 +5,7 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
-
+import { Review } from 'src/reviews/entities/review.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
@@ -97,45 +97,7 @@ export class Product {
   })
   gender?: ProductGender;
 
-
-  // @Column({
-  //   type: 'enum',
-  //   enum: ProductType,
-  //   default: ProductType.STATIC,
-  // })
-  // productType: ProductType;
-
-  // @Column({ type: 'boolean', default: false })
-  // modelSize: boolean;
-
-  // @Column()
-  // productFitting: 'True to Size' | 'Runs Small' | 'Runs Big';
-
-  // @Column({ nullable: true })
-  // productMaterial: string;
-
-  // @Column({ type: 'boolean', default: false, nullable: true })
-  // productDimensions: boolean;
-
-  // @Column({ type: 'boolean', default: false, nullable: true })
-  // productSizechart: boolean;
-
-  // @Column({ nullable: true })
-  // productInsurance?: string;
-
-  // @Column({ type: 'boolean', default: false })
-  // chargeTax: boolean;
-
-  // @Column({ type: 'float', default: 0.0 })
-  // costPerProduct: number;
-
-  // @Column({ type: 'float', default: 0.0 })
-  // profit: number;
-
-  // @Column({ type: 'float', default: 0.0 })
-  // margin: number;
-
-  // @Column()
-  // createdAt: Date;
+  @OneToMany(() => Review, (review) => review.product)
+  reviews: Review[];
 
 }

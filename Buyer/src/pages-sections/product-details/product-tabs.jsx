@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from "react";
-import {Box, Tab, Tabs} from "@mui/material";
-import styled from "@mui/material/styles/styled";
+// =================================================
+// Product Review
+// =================================================
 
-import ProductReview from "./product-review";
-import ProductDescription from "./product-description";
 import styles from "./styles";
+import ProductReview from "./product-review";
+import styled from "@mui/material/styles/styled";
+import ProductDescription from "./product-description";
+
+import { useState, useEffect } from "react";
+import { Box, Tab, Tabs } from "@mui/material";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+
+// =================================================
 
 // STYLED COMPONENT
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -21,8 +29,76 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   }
 }));
 
-export default function ProductTabs() {
+export default function ProductTabs({
+  productId
+}) {
+
+  const { user } = useAuth();
+  const { showSnackbar } = useSnackbar();
+  
   const [selectedOption, setSelectedOption] = useState(0);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // prevent default form behavior if it's a form submission
+
+    setLoading(true);
+
+    const body = {
+      productId,
+      userId: user.id,
+      rating,
+      content,
+    };
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // ✅ Clear inputs
+        setRating(0);
+        setContent("");
+        // ✅ Refetch reviews
+        await fetchReviews();
+        showSnackbar("Review submitted successfully!", "success");
+      } else {
+        showSnackbar("Failed to submit review:", "error");
+      }
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/reviews/product/${productId}`);
+      const data = await res.json();
+      setReviews(data);
+    } catch (err) {
+      console.error("Failed to fetch reviews:", err);
+    }
+  };
+  
+  useEffect(() => {
+    if (productId) {
+      fetchReviews()
+    };
+  }, [productId]);
 
   const handleOptionClick = (_, value) => setSelectedOption(value);
 
@@ -51,7 +127,7 @@ export default function ProductTabs() {
         />
         <Tab
           className="inner-tab"
-          label="Review (3)"
+          label={`Review (${reviews.length})`}
           sx={{
             color: selectedOption === 1 ? '#353535' : 'grey'
           }}
@@ -60,7 +136,18 @@ export default function ProductTabs() {
 
       <Box mb={6}>
         {selectedOption === 0 && <ProductDescription />}
-        {selectedOption === 1 && <ProductReview />}
+        
+        {selectedOption === 1 && (
+          <ProductReview
+            reviews={reviews}
+            rating={rating}
+            setRating={setRating}
+            content={content}
+            setContent={setContent}
+            handleSubmit={handleSubmit}
+            loading={loading}
+          />
+        )}
       </Box>
     </Box>
   );

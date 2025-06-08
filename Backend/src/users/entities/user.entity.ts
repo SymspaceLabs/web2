@@ -9,6 +9,7 @@ import { Survey } from 'src/surveys/entities/survey.entity';
 import { File } from 'src/files/entities/file.entity';
 import { Address } from 'src/addresses/entities/address.entity';
 import { Order } from 'src/orders/entities/order.entity';
+import { Review } from 'src/reviews/entities/review.entity';
 
 export enum AuthMethod {
   EMAIL = 'email',
@@ -105,6 +106,9 @@ export class User {
     cascade: true,
   })
   addresses: Address[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 
   @CreateDateColumn()
   createdAt: Date;

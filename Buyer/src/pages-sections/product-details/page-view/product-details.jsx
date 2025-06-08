@@ -55,7 +55,7 @@ export default function ProductDetailsPageView({slug}) {
 
       <Container className="mt-2 mb-2">
         <ProductDetails product={product} /> {/* Product introduction */}
-        <ProductTabs /> {/* Tabs section for detailed product information */}
+        <ProductTabs productId={product.id} /> {/* Tabs section for detailed product information */}
       </Container>
     </Box>
   );

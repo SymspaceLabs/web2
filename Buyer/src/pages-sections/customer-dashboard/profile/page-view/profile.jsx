@@ -107,8 +107,8 @@ export default function ProfilePageView({
       setIsMetric(userData.measurement?.isMetric || true);
       setHeight(userData.measurement?.height || '');
       setWeight(userData.measurement?.weight || '');
-      setChest(userData.measurement?.chest || '');
-      setWaist(userData.measurement?.waist || '');
+      setChest(userData.measurement?.chest || 0);
+      setWaist(userData.measurement?.waist || 0);
       setGender(userData.gender || '');
       setTops(userData?.preference?.tops);
       setBottoms(userData?.preference?.bottoms);
@@ -223,7 +223,7 @@ export default function ProfilePageView({
 
         if (res.status === 201) {
           showSnackbar("Changes saved!", "success");
-          router.push("/profile");
+          router.push("/profile/view");
 
         } else {
           // You can optionally handle other status codes here

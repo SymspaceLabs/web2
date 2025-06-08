@@ -83,34 +83,34 @@ function MeasurementForm ({
                     }}
                 >
                     <Box
-                    sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: isMetric ? 0 : "50%",
-                        width: "50%",
-                        height: "100%",
-                        backgroundColor: "#1A1A1A",
-                        border: "1px solid white",
-                        borderRadius: "50px",
-                        transition: "left 0.3s ease",
-                        zIndex: 1,
-                    }}
+                        sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: isMetric ? 0 : "50%",
+                            width: "50%",
+                            height: "100%",
+                            backgroundColor: "#1A1A1A",
+                            border: "1px solid white",
+                            borderRadius: "50px",
+                            transition: "left 0.3s ease",
+                            zIndex: 1,
+                        }}
                     />
                     <Box
-                    sx={{
-                        fontSize: '12px',
-                        zIndex: 2,
-                        width: "50%",
-                        height: "100%",
-                        textAlign: "center",
-                        cursor: isEdit ? "pointer" : "not-allowed",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        color: "#fff",
-                        padding: "10px 0"
-                    }}
-                    onClick={isEdit ? () => toggleUnit("metric") : undefined}
+                        sx={{
+                            fontSize: '12px',
+                            zIndex: 2,
+                            width: "50%",
+                            height: "100%",
+                            textAlign: "center",
+                            cursor: isEdit ? "pointer" : "not-allowed",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            color: "#fff",
+                            padding: "10px 0"
+                        }}
+                        onClick={isEdit ? () => toggleUnit("metric") : undefined}
                     >
                     cm/kg
                     </Box>

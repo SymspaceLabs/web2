@@ -40,6 +40,7 @@ import { SurveysModule } from './surveys/surveys.module';
 import { FilesModule } from './files/files.module';
 import { ProductVariantsModule } from './product-variant/product-variants.module';
 import { AddressesModule } from './addresses/addresses.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -95,7 +96,8 @@ import { AddressesModule } from './addresses/addresses.module';
     SurveysModule,
     FilesModule,
     ProductVariantsModule,
-    AddressesModule
+    AddressesModule,
+    ReviewsModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

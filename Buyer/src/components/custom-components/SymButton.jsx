@@ -9,14 +9,17 @@ import { Button, CircularProgress } from "@mui/material";
 const SymButton = ({
   onClick,
   loading = false,
+  fullWidth = true, // ✅ Default to full width unless overridden
   sx = {},
   children,
-  ...rest // to allow other props like 'type', 'variant', etc.
+  ...rest
 }) => {
   return (
     <Button
-      fullWidth
       onClick={onClick}
+      fullWidth={fullWidth} // ✅ Use passed prop
+      variant="contained"
+      color="primary"
       sx={sx}
       disabled={loading}
       {...rest}

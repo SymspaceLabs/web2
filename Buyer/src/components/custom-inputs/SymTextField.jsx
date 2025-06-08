@@ -5,7 +5,7 @@
 import { FlexBox } from "../flex-box";
 import { InfoOutlined } from "@mui/icons-material";
 import { TextField, Tooltip } from "@mui/material";
-import { H1, Small } from "@/components/Typography";
+import { H1, Small, H5 } from "@/components/Typography";
 
 // ============================================================
 
@@ -22,7 +22,8 @@ const SymTextField = ({
   showCharlimit = false,
   type = "text",
   color = "white",
-  theme = "dark" // New prop with default value
+  theme = "dark", // New prop with default value
+  mandatory= false
 }) => {
   const currentLength = value?.length || 0;
   const isLight = theme === "light";
@@ -33,6 +34,7 @@ const SymTextField = ({
         <H1 color={isLight ? "" : color} mb={0.5}>
           {title}
         </H1>
+        {mandatory && <H5 color="error.main">*</H5>}
         {toolTipText && (
           <Tooltip title={toolTipText} arrow>
             <InfoOutlined sx={{ color: isLight ? "#000" : "#fff", fontSize: 16 }} />

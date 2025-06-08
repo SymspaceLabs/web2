@@ -41,9 +41,25 @@ export default function ProductTabs({
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // prevent default form behavior if it's a form submission
+    e.preventDefault();
+    
+    let formErrors = {};
+
+    if (!rating) {
+      formErrors.rating = "Rating is required";
+    }
+
+    if (!content.trim()) {
+      formErrors.content = "Review needs to be filled";
+    }
+
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length > 0) return;
 
     setLoading(true);
 
@@ -62,8 +78,6 @@ export default function ProductTabs({
         },
         body: JSON.stringify(body),
       });
-
-      const result = await response.json();
 
       if (response.ok) {
         // ✅ Clear inputs
@@ -146,6 +160,7 @@ export default function ProductTabs({
             setContent={setContent}
             handleSubmit={handleSubmit}
             loading={loading}
+            errors={errors}
           />
         )}
       </Box>

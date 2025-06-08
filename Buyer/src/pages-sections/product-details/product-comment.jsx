@@ -23,7 +23,7 @@ export default function ProductComment({
   } = item || {};
 
   return (
-    <Box mb={4} sx={{background:'#fff', p:3, borderRadius:3 }}>
+    <Box sx={{background:'#fff', p:3, borderRadius:3 }}>
       <FlexBox alignItems="center" mb={2} gap={2}>
         <Avatar
           alt={`${user?.firstName}`}

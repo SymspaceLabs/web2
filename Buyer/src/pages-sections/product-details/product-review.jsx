@@ -11,6 +11,8 @@ import { H1, H5, H2 } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { SymTextField } from "@/components/custom-inputs";
 import { SymButton } from "@/components/custom-components";
+import { FormHelperText } from "@mui/material"; // Add this at the top
+
 
 // =================================================
 
@@ -21,16 +23,13 @@ export default function ProductReview({
   content,
   setContent,
   handleSubmit,
-  loading
+  loading,
+  errors
 }) {
 
   return (
-    <FlexCol gap={2}> 
-      <H2 fontWeight="600" mt={7} mb={2.5}>
-        Write a Review for this product
-      </H2>
-
-      <Box mb={2.5}>
+    <FlexCol gap={3}> 
+      <Box mt={2}>
         <FlexBox mb={1.5} gap={0.5}>
           <H1>Your Rating</H1>
           <H5 color="error.main">*</H5>
@@ -41,17 +40,28 @@ export default function ProductReview({
           value={rating}
           onChange={(e) => setRating(e.target.value)}
         />
+        {errors?.rating && (
+          <FormHelperText error>{errors.rating}</FormHelperText>
+        )}
       </Box>
 
-      <SymTextField
-        title='Your Review'
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        multiline={true}
-        placeholder="Write a review here"
-        theme="light"
-        mandatory={true}
-      />
+      <FlexCol>
+        <SymTextField
+          title='Your Review'
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          multiline={true}
+          placeholder="Write a review here"
+          theme="light"
+          mandatory={true}
+        />
+        {errors?.content && (
+          <FormHelperText error>
+            {errors.content}
+          </FormHelperText>
+        )}
+      </FlexCol>
+
 
       <FlexBox>
         <SymButton
@@ -67,12 +77,15 @@ export default function ProductReview({
         </SymButton>
       </FlexBox>
 
-      {reviews.length>0 && reviews?.map((item, index) => (
-        <ProductComment 
-          key={index}
-          item={item}
-        />
-      ))}      
+      <FlexCol gap={1}>
+        {reviews.length>0 && reviews?.map((item, index) => (
+          <ProductComment 
+            key={index}
+            item={item}
+          />
+        ))}  
+      </FlexCol>
+    
     </FlexCol>
   );
 }

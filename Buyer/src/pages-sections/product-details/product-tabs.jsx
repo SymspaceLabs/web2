@@ -33,7 +33,7 @@ export default function ProductTabs({
   productId
 }) {
 
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const { showSnackbar } = useSnackbar();
   
   const [selectedOption, setSelectedOption] = useState(0);
@@ -161,6 +161,7 @@ export default function ProductTabs({
             handleSubmit={handleSubmit}
             loading={loading}
             errors={errors}
+            isAuthenticated={isAuthenticated}
           />
         )}
       </Box>

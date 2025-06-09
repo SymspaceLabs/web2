@@ -1,10 +1,31 @@
-import { Button } from "@mui/material";
-import { btnStyle } from "./styles";
+// =============================================
+// Custom Submit Button
+// =============================================
 
-const SymSubmitButton = ({ isValid, onClick, children }) => {
+import { btnStyle } from "./styles";
+import { Button, CircularProgress } from "@mui/material";
+
+// =============================================
+
+const SymSubmitButton = ({
+  isValid,
+  onClick,
+  children,
+  loading
+}) => {
   return (
-    <Button sx={btnStyle({ isValid })} onClick={onClick}>
-      {children}
+    <Button
+      sx={btnStyle({ isValid })}
+      onClick={onClick}
+    >
+      {loading ? 
+        <CircularProgress
+          size={20}
+          sx={{ color: "#fff" }}
+        /> 
+        :
+        children
+      }
     </Button>
   );
 };

@@ -4,7 +4,7 @@
 
 import { FlexBox } from "../flex-box";
 import { InfoOutlined } from "@mui/icons-material";
-import { TextField, Tooltip } from "@mui/material";
+import { TextField, Tooltip, FormHelperText } from "@mui/material";
 import { H1, Small, H5 } from "@/components/Typography";
 
 // ============================================================
@@ -23,7 +23,9 @@ const SymTextField = ({
   type = "text",
   color = "white",
   theme = "dark", // New prop with default value
-  mandatory= false
+  mandatory = false,
+  error = false,
+  helperText = ""
 }) => {
   const currentLength = value?.length || 0;
   const isLight = theme === "light";
@@ -74,6 +76,12 @@ const SymTextField = ({
           }
         }}
       />
+
+      {error && (
+        <FormHelperText error>
+          {helperText}
+        </FormHelperText>
+      )}
 
       {charLimit && showCharlimit && (
         <Small color={isLight ? "black" : "white"} mt={0.5} textAlign="right">

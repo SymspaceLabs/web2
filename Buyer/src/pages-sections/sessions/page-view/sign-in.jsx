@@ -24,6 +24,8 @@ const LoginPageView = ({ closeDialog }) => {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
   const [isValid, setIsValid] = useState(true);
+  const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     setIsValid(email && password);
@@ -31,6 +33,8 @@ const LoginPageView = ({ closeDialog }) => {
 
   // Form submission handler
   const handleSubmit = async () => {
+    setLoading(true);
+
     const body = { 
       email,
       password
@@ -69,6 +73,8 @@ const LoginPageView = ({ closeDialog }) => {
       }
     } catch (error) {
       console.error('Error during login:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,7 +90,11 @@ const LoginPageView = ({ closeDialog }) => {
       /> 
 
       {/* Submit Button */}
-      <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
+      <SymSubmitButton
+        isValid={isValid}
+        onClick={handleSubmit}
+        loading={loading}
+      >
         Sign In
       </SymSubmitButton>
 

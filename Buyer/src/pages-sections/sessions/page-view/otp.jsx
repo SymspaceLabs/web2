@@ -72,8 +72,6 @@ const OtpPageView = () => {
       }
     } catch (error) {
       showSnackbar(error.message, "error");
-    } finally {
-      setLoading(false);
     }
   };
 

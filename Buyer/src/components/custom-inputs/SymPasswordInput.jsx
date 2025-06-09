@@ -1,7 +1,14 @@
+// =========================================
+// Custom Password Input
+// =========================================
+
 import { useState } from "react";
-import { TextField, InputAdornment, IconButton, FormHelperText, Typography } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { H1 } from "../Typography";
 import { FlexBox } from "../flex-box";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { TextField, InputAdornment, IconButton, FormHelperText } from "@mui/material";
+
+// =========================================
 
 const SymPasswordInput = ({
     title,
@@ -10,8 +17,10 @@ const SymPasswordInput = ({
     isEdit = true,
     placeholder = "",
     error,
-    showError=true
+    showError = true,
+    forceValidate = false // New prop: set to true to force validation display
 }) => {
+    
     const [showPassword, setShowPassword] = useState(false);
     const [touched, setTouched] = useState(false);
 
@@ -30,7 +39,9 @@ const SymPasswordInput = ({
         return "";
     };
 
-    const errorMessage = showError && touched ? validatePassword(value) || error : "";
+    // Modified errorMessage logic to include forceValidate:
+    // The error message will show if showError is true AND (the input has been touched OR forceValidate is true)
+    const errorMessage = showError && (touched || forceValidate) ? validatePassword(value) || error : "";
 
     // Handle password change
     const handlePasswordChange = (e) => {
@@ -39,9 +50,9 @@ const SymPasswordInput = ({
 
     return (
         <FlexBox flexDirection="column" flex={1}>
-            <Typography color="white" mb={0.5}  textAlign="left">
+            <H1 color="white" mb={0.5} textAlign="left">
                 {title}
-            </Typography>
+            </H1>
             <TextField
                 type={showPassword ? "text" : "password"}
                 value={value}
@@ -49,7 +60,8 @@ const SymPasswordInput = ({
                 onBlur={() => setTouched(true)} // Mark as touched when the user leaves the input
                 disabled={!isEdit}
                 placeholder={placeholder}
-                error={Boolean(errorMessage)}
+                // error prop is true if there's an errorMessage
+                error={Boolean(errorMessage)} 
                 InputProps={{
                     style: { color: "#fff" },
                     endAdornment: (
@@ -66,9 +78,11 @@ const SymPasswordInput = ({
                     color: "#fff",
                 }}
             />
+            {/* Display helper text only if errorMessage exists */}
             {errorMessage && <FormHelperText sx={{ color: "red", mt: 0.5 }}>{errorMessage}</FormHelperText>}
         </FlexBox>
     );
 };
 
 export default SymPasswordInput;
+

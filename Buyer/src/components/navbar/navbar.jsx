@@ -24,7 +24,7 @@ export default function Navbar({
         </InnerContainer>
         : 
         <InnerContainer>
-          {/* CATEGORY DROPDOWN */}
+          {/* CATEGORY DROPDOWN || CATEGORIES DROPDOWN  */}
           <Categories />
 
           {/* CATEGORY LIST */}

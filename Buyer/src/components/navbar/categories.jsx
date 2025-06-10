@@ -23,8 +23,14 @@ function NavigationList() {
     return list.map(nav => {
       if (isRoot) {
         if (nav.child) {
-          return <FlexBox sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } }}} key={nav.title} alignItems="center" position="relative" flexDirection="column" >
-
+          return (
+            <FlexBox
+              sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } }}}
+              key={nav.title}
+              alignItems="center"
+              position="relative"
+              flexDirection="column"
+            >
               <CategoryMenuButton onClick={e => handler(e)}>
                 <IoGrid size="1.3em" color="#FFF" />
                 <H1 color="#FFF">
@@ -37,12 +43,13 @@ function NavigationList() {
                   {renderNestedNav(nav.child)}
                 </SymCard>
               </ChildNavListWrapper>
-            </FlexBox>;
+            </FlexBox>
+          );
         }
       } else {
-        if (nav.url) {
+        if (nav.slug) {
           return (
-            <NavLink href={nav.url} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
+            <NavLink href={`/products/search/all?category=${nav.slug}`} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
               <MenuItem sx={elementalEndFont}>
                 {nav.title}
               </MenuItem>
@@ -51,9 +58,11 @@ function NavigationList() {
         }
 
         if (nav.child) {
-          return <NavItemChild nav={nav} key={nav.title}>
+          return (
+            <NavItemChild nav={nav} key={nav.title}>
               {renderNestedNav(nav.child)}
-            </NavItemChild>;
+            </NavItemChild>
+          );
         }
       }
     });
@@ -66,17 +75,11 @@ function NavigationList() {
 
 const Wrapper = styled("div", {
   shouldForwardProp: prop => prop !== "open"
-})(({
-  // open,
-  theme: {
-    direction
-  }
-}) => ({
+})(() => ({
   cursor: "pointer",
   position: "relative",
   "& .dropdown-icon": {
     transition: "all 250ms ease-in-out",
-    // transform: `rotate(${open ? direction === "rtl" ? "-90deg" : "90deg" : "0deg"})`
   }
 }));
 

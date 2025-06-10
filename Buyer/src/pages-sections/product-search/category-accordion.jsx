@@ -1,53 +1,62 @@
-
+"use client";
 
 import { Span } from "@/components/Typography";
-import { Fragment, useState, useEffect  } from "react";
-import { Checkbox, Collapse,FormControlLabel } from "@mui/material";
+import { Fragment, useCallback } from "react"; // Removed useState, useEffect, useRef
+import { Checkbox, Collapse, FormControlLabel } from "@mui/material";
 import AccordionHeader from "@/components/accordion/accordion-header";
 
-export const CategoryAccordion = ({ data, setCheckedCategoryIds }) => {
-  const [checkedMap, setCheckedMap] = useState({});
+// Removed arraysEqual helper as it's no longer needed with this controlled approach.
 
-  useEffect(() => {
-    const selectedIds = Object.entries(checkedMap)
-      .filter(([, checked]) => checked)
-      .map(([id]) => id);
-    setCheckedCategoryIds(selectedIds);
-  }, [checkedMap, setCheckedCategoryIds]);
+export const CategoryAccordion = ({ data, checkedCategoryIds, onCategoryToggle }) => { // onCategoryToggle is the new prop for handling changes
+  // No internal checkedMap state anymore.
+  // The 'checked' status is now directly controlled by 'checkedCategoryIds' prop.
 
-  const onCheck = (itemId) => {
-    setCheckedMap(prev => ({
-      ...prev,
-      [itemId]: !prev[itemId],
-    }));
-  };
+  // Callback function to handle a checkbox toggle.
+  // This function now directly calls the 'onCategoryToggle' prop passed from the parent.
+  const handleCheckboxChange = useCallback((itemId, isChecked) => {
+    // We pass the itemId and its new checked state directly to the parent handler.
+    if (onCategoryToggle) {
+      onCategoryToggle(itemId, isChecked);
+    }
+  }, [onCategoryToggle]); // Dependency array includes onCategoryToggle to ensure it's up-to-date.
 
+  // Helper function to render the categories and their subcategories
   const renderCategory = (categories) =>
     categories.map((cat) => {
       const catKey = `cat-${cat.id}`;
 
       return (
         <Fragment key={catKey}>
-          {/* Always show category header (optional click handler) */}
+          {/* Main category header, always open */}
           <AccordionHeader
-            open={true} // always open
+            open={true}
             sx={{ pl: 0 }}
           >
             <Span sx={{ fontWeight: 'bold' }}>{cat.title}</Span>
           </AccordionHeader>
 
-          {/* Always show subcategories */}
+          {/* Collapse component to always show subcategories */}
           <Collapse in={true}>
             {cat.subCategory.map((sub) => {
+              // Basic validation to ensure subcategoryItem exists before accessing its properties
+              if (!sub || !sub.subcategoryItem || !sub.subcategoryItem.id) {
+                console.warn("Invalid subcategory item found:", sub);
+                return null; // Skip rendering an invalid item
+              }
               const subKey = `sub-${sub.subcategoryItem.id}`;
+              const isChecked = checkedCategoryIds.includes(sub.subcategoryItem.id); // Direct check against the prop
+
               return (
                 <FormControlLabel
                   key={subKey}
                   sx={{ pl: 3 }}
                   control={
                     <Checkbox
-                      checked={!!checkedMap[sub.subcategoryItem.id]}
-                      onChange={() => onCheck(sub.subcategoryItem.id)}
+                      // The 'checked' state is now directly derived from the 'checkedCategoryIds' prop
+                      checked={isChecked}
+                      // When the checkbox is changed, call the new 'handleCheckboxChange'
+                      // which in turn calls the 'onCategoryToggle' prop.
+                      onChange={() => handleCheckboxChange(sub.subcategoryItem.id, !isChecked)}
                       size="small"
                     />
                   }

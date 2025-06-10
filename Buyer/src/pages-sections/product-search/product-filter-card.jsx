@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { FlexBetween } from "@/components/flex-box";
 import { H5, H6, Span } from "@/components/Typography";
-import { CategoryAccordion } from "./category-accordion";
+import { CategoryAccordion } from "./category-accordion"; // LOCAL COMPONENT
 
 // =================================================================
 
@@ -30,7 +30,8 @@ export default function ProductFilterCard({
   setPriceRange,
   priceLimits,
   category,
-  setCheckedCategoryIds,
+  checkedCategoryIds, // Prop from ProductSearchPageView
+  onCategoryFilterChange, // Prop from ProductSearchPageView to handle category toggles
   allGenders,
   selectedGenders,
   onGenderFilterChange,
@@ -39,7 +40,7 @@ export default function ProductFilterCard({
   setSelectedAvailabilities,
   allColors,
   selectedColors,
-  setSelectedColors,
+  setSelectedColors, // The problematic prop
 }) {
 
   const handlePriceChange = (event, newValue) => {
@@ -51,19 +52,36 @@ export default function ProductFilterCard({
     if (onGenderFilterChange) {
       onGenderFilterChange('', false); // Pass empty string or appropriate value to signify clearing all genders
     }
-    // setSelectedGenders([]);
-    setSelectedBrands([]);
-    setCheckedCategoryIds([]);
-    setSelectedColors([]);
+    // FIX: Add defensive check before calling setSelectedBrands
+    if (typeof setSelectedBrands === 'function') {
+      setSelectedBrands([]);
+    }
+    // FIX: Add defensive check before calling setSelectedColors
+    if (typeof setSelectedColors === 'function') {
+      setSelectedColors([]);
+    }
     setPriceRange(priceLimits);
+    // FIX: Add defensive check before calling setSelectedAvailabilities
+    if (typeof setSelectedAvailabilities === 'function') {
+      setSelectedAvailabilities([]); // Clear availability filter
+    }
   };
 
   const handleToggle = (color) => {
-    const exists = selectedColors.some((c) => c.code === color.code);
-    if (exists) {
-      setSelectedColors(selectedColors.filter((c) => c.code !== color.code));
+    // Ensure selectedColors is an array before using it or spreading it
+    const currentSelectedColors = Array.isArray(selectedColors) ? selectedColors : [];
+    const exists = currentSelectedColors.some((c) => c.code === color.code);
+
+    // FIX: More robust defensive check for setSelectedColors
+    if (typeof setSelectedColors === 'function') {
+      if (exists) {
+        setSelectedColors(currentSelectedColors.filter((c) => c.code !== color.code));
+      } else {
+        setSelectedColors([...currentSelectedColors, color]);
+      }
     } else {
-      setSelectedColors([...selectedColors, color]);
+      // Log an error if setSelectedColors is not a function to help diagnose
+      console.error("Error: setSelectedColors is not a function.", setSelectedColors);
     }
   };
 
@@ -74,7 +92,7 @@ export default function ProductFilterCard({
       <H6 mb={1.25}>Gender</H6>
       <Box display="flex" flexDirection="column">
         {allGenders.map((g) => {
-          const isChecked = selectedGenders.includes(g);
+          const isChecked = Array.isArray(selectedGenders) && selectedGenders.includes(g);
           return (
             <FormControlLabel
               key={g}
@@ -82,11 +100,9 @@ export default function ProductFilterCard({
               control={
                 <Checkbox
                   size="small"
-                  checked={isChecked} // Checked state comes directly from selectedGenders prop
+                  checked={isChecked}
                   onChange={() => {
-                    // <--- IMPLEMENTATION POINT: Call the new prop here
                     if (onGenderFilterChange) {
-                      // Pass the current gender value (g) and the new checked state (!isChecked)
                       onGenderFilterChange(g, !isChecked);
                     }
                   }}
@@ -96,31 +112,6 @@ export default function ProductFilterCard({
           );
         })}
       </Box>
-      {/* <Box display="flex" flexDirection="column">
-        {allGenders.map((g) => {
-          const isChecked = selectedGenders.includes(g);
-          return (
-            <FormControlLabel
-              key={g}
-              label={<Span>{g.charAt(0).toUpperCase() + g.slice(1)}</Span>}
-              control={
-                <Checkbox
-                  size="small"
-                  checked={selectedGenders.includes(g)}
-                  // checked={isChecked}
-                  onChange={() => {
-                    setSelectedGenders(prev =>
-                      prev.includes(g)
-                        ? prev.filter(x => x !== g)
-                        : [...prev, g]
-                    );
-                  }}
-                />
-              }
-            />
-          );
-        })}
-      </Box> */}
 
       <Box component={Divider} my={3} />
 
@@ -129,7 +120,8 @@ export default function ProductFilterCard({
 
       <CategoryAccordion
         data={category}
-        setCheckedCategoryIds={setCheckedCategoryIds}
+        checkedCategoryIds={checkedCategoryIds}
+        onCategoryToggle={onCategoryFilterChange}
       />
 
       <Box component={Divider} my={3} />
@@ -179,13 +171,15 @@ export default function ProductFilterCard({
       {/* BRAND VARIANT FILTER */}
       <H6 mb={2}>Brands</H6>
       {allBrands.map((item,index) => {
-        const isChecked = selectedBrands.some(brand => brand.id === item.id);
-
+        const isChecked = Array.isArray(selectedBrands) && selectedBrands.some(brand => brand.id === item.id);
         const handleBrandChange = () => {
-          if (isChecked) {
-            setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
-          } else {
-            setSelectedBrands([...selectedBrands, item]);
+          // FIX: Add defensive check before calling setSelectedBrands
+          if (typeof setSelectedBrands === 'function') {
+            if (isChecked) {
+              setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
+            } else {
+              setSelectedBrands([...selectedBrands, item]);
+            }
           }
         };
 
@@ -209,11 +203,11 @@ export default function ProductFilterCard({
 
       <Box component={Divider} my={3} />
 
-      {/* CATEGORY VARIANT FILTER */}
+      {/* AVAILABILITY FILTER */}
       <H6 mb={1.25}>Availability</H6>
       <Box display="flex" flexDirection="column">
         {allAvailabilities.map((avail) => {
-          const isChecked = selectedAvailabilities.includes(avail)
+          const isChecked = Array.isArray(selectedAvailabilities) && selectedAvailabilities.includes(avail);
           return (
             <FormControlLabel
               key={avail}
@@ -223,11 +217,14 @@ export default function ProductFilterCard({
                   size="small"
                   checked={isChecked}
                   onChange={() => {
-                    setSelectedAvailabilities(prev =>
-                      isChecked
-                        ? prev.filter(x => x !== avail)
-                        : [...prev, avail]
-                    )
+                    // FIX: Add defensive check before calling setSelectedAvailabilities
+                    if (typeof setSelectedAvailabilities === 'function') {
+                      setSelectedAvailabilities(prev =>
+                        isChecked
+                          ? prev.filter(x => x !== avail)
+                          : [...prev, avail]
+                      )
+                    }
                   }}
                 />
               }
@@ -247,7 +244,8 @@ export default function ProductFilterCard({
             key={color.code}
             control={
               <Checkbox
-                checked={selectedColors.some((c) => c.code === color.code)}
+                // Ensure selectedColors is an array before using .some()
+                checked={Array.isArray(selectedColors) && selectedColors.some((c) => c.code === color.code)}
                 onChange={() => handleToggle(color)}
               />
             }

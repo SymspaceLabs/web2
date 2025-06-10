@@ -19,8 +19,6 @@ const SORT_OPTIONS = [
 ];
 
 const TopSortCard = ({
-  products, // This prop is likely unused for the count now as totalProducts is passed
-  slug,     // This prop is likely unused for the display name now as genderDisplayName is passed
   totalProducts,      // NEW: Prop for total count from ProductSearchPageView
   categoryDisplayName, // NEW: Prop for formatted category name from ProductSearchPageView
   genderDisplayName   // NEW: Prop for formatted gender name from ProductSearchPageView

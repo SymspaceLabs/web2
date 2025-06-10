@@ -37,51 +37,27 @@ export default function ProductFilterCard({
   onGenderFilterChange,
   allAvailabilities,
   selectedAvailabilities,
-  setSelectedAvailabilities,
+  onAvailabilityFilterChange, // Changed from setSelectedAvailabilities
   allColors,
   selectedColors,
-  setSelectedColors, // The problematic prop
+  onColorFilterChange, // Changed from setSelectedColors
+  onClearAllFilters, // NEW PROP: Function from parent to clear all filters
 }) {
 
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
   };
 
+  /**
+   * Handles the click event for the "Clear Filters" button.
+   * This now delegates the full filter reset logic to the parent component
+   * via the `onClearAllFilters` prop.
+   */
   const handleClearFilters = () => {
-    // Call the onGenderFilterChange to clear gender filters via the parent
-    if (onGenderFilterChange) {
-      onGenderFilterChange('', false); // Pass empty string or appropriate value to signify clearing all genders
-    }
-    // FIX: Add defensive check before calling setSelectedBrands
-    if (typeof setSelectedBrands === 'function') {
-      setSelectedBrands([]);
-    }
-    // FIX: Add defensive check before calling setSelectedColors
-    if (typeof setSelectedColors === 'function') {
-      setSelectedColors([]);
-    }
-    setPriceRange(priceLimits);
-    // FIX: Add defensive check before calling setSelectedAvailabilities
-    if (typeof setSelectedAvailabilities === 'function') {
-      setSelectedAvailabilities([]); // Clear availability filter
-    }
-  };
-
-  const handleToggle = (color) => {
-    // Ensure selectedColors is an array before using it or spreading it
-    const currentSelectedColors = Array.isArray(selectedColors) ? selectedColors : [];
-    const exists = currentSelectedColors.some((c) => c.code === color.code);
-
-    // FIX: More robust defensive check for setSelectedColors
-    if (typeof setSelectedColors === 'function') {
-      if (exists) {
-        setSelectedColors(currentSelectedColors.filter((c) => c.code !== color.code));
-      } else {
-        setSelectedColors([...currentSelectedColors, color]);
-      }
+    if (typeof onClearAllFilters === 'function') {
+      onClearAllFilters();
     } else {
-      // Log an error if setSelectedColors is not a function to help diagnose
-      console.error("Error: setSelectedColors is not a function.", setSelectedColors);
+      console.error("Error: onClearAllFilters is not a function in ProductFilterCard.");
     }
   };
 
@@ -102,6 +78,7 @@ export default function ProductFilterCard({
                   size="small"
                   checked={isChecked}
                   onChange={() => {
+                    // This calls the generic handleFilterChange in the parent
                     if (onGenderFilterChange) {
                       onGenderFilterChange(g, !isChecked);
                     }
@@ -173,7 +150,7 @@ export default function ProductFilterCard({
       {allBrands.map((item,index) => {
         const isChecked = Array.isArray(selectedBrands) && selectedBrands.some(brand => brand.id === item.id);
         const handleBrandChange = () => {
-          // FIX: Add defensive check before calling setSelectedBrands
+          // This calls the specific setSelectedBrands prop from the parent
           if (typeof setSelectedBrands === 'function') {
             if (isChecked) {
               setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
@@ -217,13 +194,9 @@ export default function ProductFilterCard({
                   size="small"
                   checked={isChecked}
                   onChange={() => {
-                    // FIX: Add defensive check before calling setSelectedAvailabilities
-                    if (typeof setSelectedAvailabilities === 'function') {
-                      setSelectedAvailabilities(prev =>
-                        isChecked
-                          ? prev.filter(x => x !== avail)
-                          : [...prev, avail]
-                      )
+                    // Use the new onAvailabilityFilterChange prop from parent
+                    if (onAvailabilityFilterChange) {
+                      onAvailabilityFilterChange(avail, !isChecked);
                     }
                   }}
                 />
@@ -244,9 +217,13 @@ export default function ProductFilterCard({
             key={color.code}
             control={
               <Checkbox
-                // Ensure selectedColors is an array before using .some()
                 checked={Array.isArray(selectedColors) && selectedColors.some((c) => c.code === color.code)}
-                onChange={() => handleToggle(color)}
+                onChange={() => {
+                  // Use the new onColorFilterChange prop from parent
+                  if (onColorFilterChange) {
+                    onColorFilterChange(color, !selectedColors.some((c) => c.code === color.code));
+                  }
+                }}
               />
             }
             label={

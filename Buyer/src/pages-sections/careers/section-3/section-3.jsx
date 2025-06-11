@@ -128,12 +128,14 @@ export default function Section3() {
               >
                 <MenuItem value="All Locations">
                   <Checkbox checked={selectedLocation.length === 0} />
-                  <ListItemText primary="All Locations" />
+                  <H1  sx={{ textTransform:'lowercase' }}>
+                    All Locations
+                  </H1>
                 </MenuItem>
                 {allLocations.map((location, index) => (
                   <MenuItem key={index} value={location}>
                     <Checkbox checked={selectedLocation.includes(location)} />
-                    <ListItemText primary={location} />
+                    {location}
                   </MenuItem>
                 ))}
               </Select>

@@ -50,7 +50,7 @@ function NavigationList() {
         if (nav.slug) {
           return (
             <NavLink href={`/products/search/all?category=${nav.slug}`} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
-              <MenuItem sx={elementalEndFont}>
+              <MenuItem>
                 {nav.title}
               </MenuItem>
             </NavLink>

@@ -5,12 +5,14 @@
 // =================================================
 
 import ProductComment from "./product-comment";
+import Link from 'next/link'; // Import the Link component
 
 import { Box, Rating, FormHelperText } from "@mui/material";
-import { H1, H5, H2 } from "@/components/Typography";
+import { H1, H5, H2, Paragraph, Span } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { SymTextField } from "@/components/custom-inputs";
 import { SymButton } from "@/components/custom-components";
+import { BoxLink } from "../sessions/components";
 
 
 // =================================================
@@ -28,19 +30,21 @@ export default function ProductReview({
 }) {
 
   return (
-    <FlexCol gap={3}> 
+    <FlexCol gap={3}>
       {!isAuthenticated ? (
-        <H5 color="error.main" my={3}>
-          Sign in to add a review.
-        </H5>
+        // Display message for unauthenticated users
+        <Span display={{ color:'#000', sm: "inline-block", fontSize: 18 }}>
+          <BoxLink textColor="#000" title="Sign in" href="/sign-in" /> &nbsp;to add a review.
+        </Span>
       ) : (
+        // Display review form for authenticated users
         <>
           <Box mt={2}>
             <FlexBox mb={1.5} gap={0.5}>
               <H1>Your Rating</H1>
               <H5 color="error.main">*</H5>
             </FlexBox>
-            <Rating 
+            <Rating
               color="warn"
               size="medium"
               value={rating}
@@ -83,14 +87,15 @@ export default function ProductReview({
       )}
 
       <FlexCol gap={1}>
-        {reviews.length>0 && reviews?.map((item, index) => (
-          <ProductComment 
+        {/* Render existing product comments */}
+        {reviews.length > 0 && reviews?.map((item, index) => (
+          <ProductComment
             key={index}
             item={item}
           />
-        ))}  
+        ))}
       </FlexCol>
-    
+
     </FlexCol>
   );
 }

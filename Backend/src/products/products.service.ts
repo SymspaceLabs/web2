@@ -286,7 +286,7 @@ export class ProductsService {
   }
 
   // FIND ALL WITH FILTER
-  async findAll() {
+  async findAll(searchTerm?: string) {
 
     // 1) Build the query, now selecting subcategoryItem
     const query = this.productRepository.createQueryBuilder('product')
@@ -298,6 +298,14 @@ export class ProductsService {
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
       .leftJoinAndSelect('product.variants', 'variants');
+
+    // Add search condition if searchTerm is provided
+    if (searchTerm) {
+      query.andWhere(
+        '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
+        { searchTerm: `%${searchTerm}%` }
+      );
+    }
 
     // 2) Execute
     const products = await query.getMany();
@@ -316,6 +324,10 @@ export class ProductsService {
     const usedBrands = await this.productRepository.createQueryBuilder('product')
       .leftJoin('product.company', 'company')
       .select(['company.id AS id', 'company.entityName AS name'])
+      .where(
+        searchTerm ? '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))' : '1=1',
+        { searchTerm: `%${searchTerm}%` }
+      ) // Apply search term to brands as well
       .groupBy('company.id')
       .addGroupBy('company.entityName')
       .getRawMany();
@@ -332,6 +344,10 @@ export class ProductsService {
     const genderResult = await this.productRepository.createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
       .where('product.gender IS NOT NULL')
+      .andWhere(
+        searchTerm ? '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))' : '1=1',
+        { searchTerm: `%${searchTerm}%` }
+      ) // Apply search term to genders as well
       .getRawMany();
 
     const genders = genderResult.map(g => g.gender); // ['men', 'women', ...]

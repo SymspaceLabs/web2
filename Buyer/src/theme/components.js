@@ -86,6 +86,16 @@ export const components = {
       }
     }
   },
+  MuiListItemText: {
+    styleOverrides: {
+      root: {
+        paddingTop: 8,
+        paddingBottom: 8,
+        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+        textTransform: 'lowercase'
+      }
+    }
+  },
   MuiTab: {
     styleOverrides: {
       root: {

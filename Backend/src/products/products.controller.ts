@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -28,8 +29,8 @@ export class ProductsController {
   }  
 
   @Get()
-  async getAllProducts() {
-    return await this.productsService.findAll();
+  async getAllProducts(@Query('search') search?: string) {
+    return await this.productsService.findAll(search);
   }
 
   @Get(':slug')

@@ -34,10 +34,6 @@ export default function ShippingForm({
 
   return (
     <Box py={3}>
-      <H1 color="#000" mb={2} fontSize={{ xs: 14, sm: 20 }}>
-        Shipping Address
-      </H1>
-
       <FlexBox flexDirection="column" gap={3}>
         <FlexBox flexDirection={{ xs: "column", sm: "row" }} gap={3}>
           <SymTextField

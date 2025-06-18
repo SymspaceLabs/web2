@@ -11,11 +11,12 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default async function Address({
-  params
-}) {
+export default async function Address({ params }) {
+  
+  const { id } = await params;
+
   try {
-    return <AddressDetailsPageView address={address} />;
+    return <AddressDetailsPageView addressId={id} />;
   } catch (error) {
     notFound();
   }

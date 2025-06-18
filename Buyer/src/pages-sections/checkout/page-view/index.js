@@ -1,1 +1,1 @@
-export { default as CartPageView } from "./cart";
+export { default as CartPageView } from "./checkout";

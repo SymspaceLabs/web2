@@ -25,13 +25,14 @@ const SymTextField = ({
   theme = "dark", // New prop with default value
   mandatory = false,
   error = false,
-  helperText = ""
+  helperText = "",
+  sx
 }) => {
   const currentLength = value?.length || 0;
   const isLight = theme === "light";
 
   return (
-    <FlexBox flexDirection="column" flex={1}>
+    <FlexBox flexDirection="column" flex={1} sx={{...sx}}>
       <FlexBox gap={1}>
         <H1 color={isLight ? "" : color} mb={0.5}>
           {title}

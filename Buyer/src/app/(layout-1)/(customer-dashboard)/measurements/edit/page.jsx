@@ -12,5 +12,5 @@ export const metadata = {
 
 export default async function Measurement() {
 
-  return <MeasurementEditPageView />
+  return <MeasurementEditPageView isEdit={true} />
 }

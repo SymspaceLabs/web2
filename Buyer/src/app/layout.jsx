@@ -24,7 +24,6 @@ import SettingsProvider from "@/contexts/SettingContext";
 import ProgressBar from "@/components/progress";
 import SnackbarProvider from "@/contexts/SnackbarContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-// import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function RootLayout({ children }) {
   return (

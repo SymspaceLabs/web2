@@ -2,6 +2,9 @@ import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateAddressDto {
   @IsString()
+  name: string;
+
+  @IsString()
   address1: string;
 
   @IsOptional()

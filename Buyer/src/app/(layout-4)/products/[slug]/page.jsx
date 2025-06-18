@@ -15,7 +15,7 @@ export const metadata = {
 };
 
 export default async function ProductDetails({params}) {
-  const {slug} = await params;
+  const { slug } = await params;
   return (
     <ProductDetailsPageView slug={slug} />
   )

@@ -13,7 +13,6 @@ function CreditCardForm ({
     cardHolderName,
     setCardHolderName,
     color="#FFF"
-
 }) {
        
     const handleCardNoChange = (event) => setCardNo(event.target.value);

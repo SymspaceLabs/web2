@@ -92,7 +92,7 @@ const MENUS = [{
     Icon: Person,
     count: 3
   },{
-    href: "/profile/address",
+    href: "/address",
     title: "Addresses",
     Icon: Place,
     count: 16

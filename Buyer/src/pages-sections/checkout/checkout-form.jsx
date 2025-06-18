@@ -7,6 +7,7 @@ import { Card, IconButton } from "@mui/material";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { ShippingForm, BillingForm } from "@/components/custom-forms/checkout";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // <-- back icon
+import { H1 } from "@/components/Typography";
 
 // ==========================================
 
@@ -29,10 +30,13 @@ export default function CheckoutForm({
   return (
     <Card sx={styles.wrapper}>
       {/* BACK ICON */}
-      <FlexBox justifyContent="flex-start">
+      <FlexBox justifyContent="flex-start" alignItems="center"  mb={2} >
         <IconButton onClick={handleBack} color="#FFF">
           <ArrowBackIcon />
         </IconButton>
+        <H1 color="#000" fontSize={{ xs: 14, sm: 20 }}>
+          Shipping Address
+        </H1>
       </FlexBox>
 
       <FlexCol px={2}>

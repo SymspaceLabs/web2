@@ -115,20 +115,20 @@ function MeasurementForm ({
                     cm/kg
                     </Box>
                     <Box
-                    sx={{
-                        fontSize: '12px',
-                        zIndex: 2,
-                        width: "50%",
-                        height: "100%",
-                        textAlign: "center",
-                        cursor: isEdit ? "pointer" : "not-allowed",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        color: "#fff",
-                        padding: "10px 0"
-                    }}
-                    onClick={isEdit ? () => toggleUnit("imperial") : undefined}
+                        sx={{
+                            fontSize: '12px',
+                            zIndex: 2,
+                            width: "50%",
+                            height: "100%",
+                            textAlign: "center",
+                            cursor: isEdit ? "pointer" : "not-allowed",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            color: "#fff",
+                            padding: "10px 0"
+                        }}
+                        onClick={isEdit ? () => toggleUnit("imperial") : undefined}
                     >
                     inch/lbs
                     </Box>

@@ -7,13 +7,14 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderItem } from './entities/order-item.entity';
 import { Address } from 'src/addresses/entities/address.entity';
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common'; // Import Logger for better debugging
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 
 @Injectable()
 export class OrdersService {
-  constructor(
+  private readonly logger = new Logger(OrdersService.name); // Initialize Logger
 
+  constructor(
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
 
@@ -28,17 +29,38 @@ export class OrdersService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    const { userId, items, shippingAddressId, paymentMethod } = createOrderDto;
+    this.logger.log(`Attempting to create order for userId: ${createOrderDto.userId}`);
+    this.logger.debug(`Received createOrderDto: ${JSON.stringify(createOrderDto)}`);
+
+    const { userId, items, shippingAddressId, paymentMethod, paypalOrderId } = createOrderDto;
 
     // shippingAddressId is now a string
     const address = await this.addressRepo.findOne({
       where: { id: shippingAddressId },
-      relations: ['user'],
+      relations: ['user'], // Ensure the 'user' relation is loaded
     });
 
-    if (!address || address.user.id !== userId) {
+    if (!address) {
+      this.logger.error(`Shipping address with ID ${shippingAddressId} not found.`);
+      throw new NotFoundException('Shipping address not found.');
+    }
+
+    // --- Added for more detailed debugging ---
+    this.logger.debug(`Address found: ID=${address.id}`);
+    if (address.user) {
+        this.logger.debug(`Full Address User Object: ${JSON.stringify(address.user)}`);
+    } else {
+        this.logger.debug(`Address User Object: NULL (relationship not loaded or not set)`);
+    }
+    // --- End of added debugging ---
+
+    // Explicitly check if address.user exists before accessing its properties
+    if (!address.user || address.user.id !== userId) {
+      this.logger.error(`Shipping address ${shippingAddressId} found, but it's not associated with user ${userId}. ` +
+                       `Address user ID: ${address.user ? address.user.id : 'NULL'}`);
       throw new NotFoundException('Shipping address not found or not associated with user');
     }
+    this.logger.log(`Shipping address ${shippingAddressId} verified for user ${userId}.`);
 
     const orderItems: OrderItem[] = [];
     let totalAmount = 0;
@@ -50,10 +72,12 @@ export class OrdersService {
       });
 
       if (!variant) {
+        this.logger.error(`Product variant ${item.variantId} not found for order creation.`);
         throw new NotFoundException(`Variant ${item.variantId} not found`);
       }
 
       if (variant.stock < item.quantity) {
+        this.logger.error(`Insufficient stock for variant ${item.variantId}. Requested: ${item.quantity}, Available: ${variant.stock}.`);
         throw new BadRequestException('Insufficient stock');
       }
 
@@ -70,18 +94,21 @@ export class OrdersService {
       // Update stock
       variant.stock -= item.quantity;
       await this.variantRepo.save(variant);
+      this.logger.debug(`Updated stock for variant ${variant.id}. New stock: ${variant.stock}.`);
     }
 
     const order = this.orderRepo.create({
-      user: { id: userId },
-      shippingAddress: address,
+      user: { id: userId }, // Assign user by ID
+      shippingAddress: address, // Assign full address object
       paymentMethod,
-      status: 'pending',
+      status: 'pending', // Initial status, can be updated to 'completed' later
       totalAmount,
       items: orderItems,
+      paypalOrderId: paypalOrderId, // Store PayPal Order ID if provided
     });
 
     await this.orderRepo.save(order); // ✅ This is enough
+    this.logger.log(`Order ${order.id} created successfully for user ${userId}.`);
 
     return {
       status: 'success',
@@ -128,11 +155,16 @@ export class OrdersService {
     return order;
   }
 
-
   async update(id: string, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepo.findOne({ where: { id } });
     if (!order) {
       throw new NotFoundException('Order not found');
+    }
+
+    // Explicitly handle status updates for captured PayPal payments
+    if (order.paymentMethod === 'paypal' && updateOrderDto.status === 'completed') { // Use order.paymentMethod
+        order.status = 'completed'; // Set status to completed
+        order.paypalOrderId = updateOrderDto.paypalOrderId || order.paypalOrderId; // Update or confirm PayPal Order ID
     }
 
     Object.assign(order, updateOrderDto);

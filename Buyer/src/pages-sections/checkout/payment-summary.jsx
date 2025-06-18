@@ -5,19 +5,22 @@
 
 import { currency } from "lib";
 import { useCart } from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-import { Paragraph } from "components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
-import { Box, Card, Button, Divider } from "@mui/material";
-
-import Link from "next/link";
-import PaymentItem from "./payment-item"; // GLOBAL CUSTOM COMPONENTS
-import { FlexCol } from "@/components/flex-box";
+import { H1, Paragraph } from "components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
+import { Box, Card, Divider } from "@mui/material";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 import { SymButton } from "@/components/custom-components";
+
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import PaymentItem from "./payment-item"; // GLOBAL CUSTOM COMPONENTS
+import VoucherForm from "./voucher-form";
 
 // ================================================
 
 export default function PaymentSummary({
+  btnText="Place Order",
   handleSave,
-  loading
+  loading,
+  step
 }) {
   
   const { state: cartState } = useCart();
@@ -30,31 +33,58 @@ export default function PaymentSummary({
   const grandTotal = subtotal + tax - discount;
   
   return (
-    <Card sx={styles.wrapper}>
-      <FlexCol pb={4}>
-        <PaymentItem title="Subtotal:" amount={getTotalPrice()}/>
-        <PaymentItem title="Shipping:" amount={shipping} />
-        <PaymentItem title="Tax:" amount={tax} />
-        <PaymentItem title="Discount:" amount={discount} />
-
-        <Box py={2}>
+    <FlexCol gap={2}>
+      <Card sx={styles.wrapper}>
+        <H1 pb={3}>
+            Payment Summary
+        </H1>
+        {/* <Box pb={2}>
+          
           <Divider sx={{ borderColor: '#000'}} />
-        </Box>
+        </Box> */}
+        <FlexCol pb={4}>
+          <PaymentItem title="Subtotal" amount={getTotalPrice()}/>
+          <PaymentItem title="Shipping" amount={shipping} />
+          <PaymentItem title="Tax" amount={tax} />
+          <PaymentItem title="Discount" amount={discount} />
 
-        <Paragraph fontSize={25} fontWeight={600} lineHeight={1} textAlign="right">
-          {currency(grandTotal)}
-        </Paragraph>
-      </FlexCol>
+          <Box py={2}>
+            <Divider sx={{ borderColor: 'rgba(0,0,0,0.2)'}} />
+          </Box>
 
-      {/* BUTTONS SECTION */}
-      <SymButton
-        onClick={handleSave}
-        loading={loading}
-        sx={styles.btn}
-      >
-        Place Order
-      </SymButton>
-    </Card>
+          <FlexBox justifyContent="space-between" alignItems="center">
+            <Paragraph>
+              Order total
+            </Paragraph>
+            <Paragraph fontSize={25} fontWeight={600} lineHeight={1} textAlign="right">
+              {currency(grandTotal)}
+            </Paragraph>
+          </FlexBox>
+
+
+        </FlexCol>
+
+        {/* BUTTONS SECTION */}
+        <SymButton
+          onClick={handleSave}
+          loading={loading}
+          sx={styles.btn}
+        >
+          {
+            step < 2 ?
+              <FlexBox width="100%" justifyContent="space-between">
+                <Box minWidth="25px" />
+                {btnText}
+                <ArrowForwardIcon color="#FFF" />
+              </FlexBox>
+            :
+              btnText
+          }
+        </SymButton>
+      </Card>
+      <VoucherForm />
+    </FlexCol>
+
   );
 }
 

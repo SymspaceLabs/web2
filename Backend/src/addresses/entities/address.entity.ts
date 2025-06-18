@@ -8,6 +8,9 @@ export class Address {
   id: string;
 
   @Column()
+  name: string;
+
+  @Column()
   address1: string;
 
   @Column({ nullable: true })

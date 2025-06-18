@@ -41,6 +41,7 @@ import { FilesModule } from './files/files.module';
 import { ProductVariantsModule } from './product-variant/product-variants.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { PaypalModule } from './paypal/paypal.module';
 
 @Module({
   imports: [
@@ -97,7 +98,8 @@ import { ReviewsModule } from './reviews/reviews.module';
     FilesModule,
     ProductVariantsModule,
     AddressesModule,
-    ReviewsModule
+    ReviewsModule,
+    PaypalModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

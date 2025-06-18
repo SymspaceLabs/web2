@@ -69,6 +69,8 @@ export default function MultiStepCheckout() {
     const [paypalProcessed, setPaypalProcessed] = useState(false); // Flag to prevent multiple PayPal processing
     // New state to hold PayPal return parameters, persisting across renders
     const [paypalReturnInfo, setPaypalReturnInfo] = useState({ status: null, orderId: null });
+    // New state to control error visibility in shipping form
+    const [showShippingFormErrors, setShowShippingFormErrors] = useState(false);
 
 
     // --- Subsection 3.3: Mock Financial Constants ---
@@ -148,7 +150,7 @@ export default function MultiStepCheckout() {
             // Displays success message, clears cart, and redirects to the order detail page.
             showSnackbar(`PayPal order successfully placed and recorded!`, "success");
             dispatch({ type: "CLEAR_CART" });
-            router.push(`/orders/${responseBody.data.id}`);
+            router.push(`/order/${responseBody.data.id}`);
 
         } catch (error) {
             // Logs and displays an error message if recording the order fails.
@@ -222,6 +224,8 @@ export default function MultiStepCheckout() {
         // Only allows going back if not on the first step.
         if (selectedStep > 0) {
             setSelectedStep(prev => prev - 1);
+            // When going back, hide any previously forced errors
+            setShowShippingFormErrors(false);
         }
     };
 
@@ -349,19 +353,19 @@ export default function MultiStepCheckout() {
         // Proceed only if payment status is success, order ID is present, and user data with addresses is loaded.
         if (paymentStatus === 'success' && paypalOrderId && userData?.addresses?.[0]?.id) {
             setLoading(false); // Reset loading to allow subsequent action
-            console.log("Returned from PayPal: Payment successful. PayPal Order ID:", paypalOrderId);
+            // console.log("Returned from PayPal: Payment successful. PayPal Order ID:", paypalOrderId); // Removed
             handlePayPalPaymentSuccessInternal({ paypalOrderId }); // Calls success handler.
             // Clear paypalReturnInfo to prevent re-processing on subsequent userData updates
             setPaypalReturnInfo({ status: null, orderId: null });
         } else if (paymentStatus === 'cancelled' && paypalOrderId) {
             setLoading(false);
-            console.log("Returned from PayPal: Payment cancelled.");
+            // console.log("Returned from PayPal: Payment cancelled."); // Removed
             showSnackbar("PayPal payment cancelled by user.", "warning");
             handlePayPalPaymentError("User cancelled payment.");
             setPaypalReturnInfo({ status: null, orderId: null });
         } else if ((paymentStatus === 'failed' || paymentStatus === 'error') && paypalOrderId) {
             setLoading(false);
-            console.error("Returned from PayPal: Payment failed or error occurred. PayPal Order ID:", paypalOrderId);
+            // console.error("Returned from PayPal: Payment failed or error occurred. PayPal Order ID:", paypalOrderId); // Removed
             showSnackbar("PayPal payment failed or encountered an error.", "error");
             handlePayPalPaymentError("Payment failed or error occurred.");
             setPaypalReturnInfo({ status: null, orderId: null });
@@ -375,6 +379,17 @@ export default function MultiStepCheckout() {
 
 
     /**
+     * Handles the change of the checkout step.
+     * @param {number} step - The index of the step to navigate to (0, 1, or 2).
+     */
+    const handleStepChange = (step) => {
+        // Ensures the step index is within valid bounds.
+        if (step >= 0 && step < 3) {
+            setSelectedStep(step);
+        }
+    };
+
+    /**
      * Handles advancing to the next step in the checkout process.
      * For PayPal, it initiates the REST API flow by creating a PayPal order on the backend.
      * For other methods, it proceeds directly to order creation.
@@ -384,6 +399,23 @@ export default function MultiStepCheckout() {
 
         if (selectedStep < 2) { // If not on the final (Payment) step (i.e., on Cart or Details step)
             if (selectedStep === 1) {
+                // Validate personal details
+                const isPersonalDetailsComplete = firstName.trim() !== '' && lastName.trim() !== '' && email.trim() !== '';
+
+                // Validate shipping address
+                const requiredShippingFields = ['address1', 'city', 'state', 'zip', 'country'];
+                const isShippingComplete = requiredShippingFields.every(field => {
+                    const value = shipping[field];
+                    return typeof value === 'string' ? value.trim() !== '' : (value && typeof value.value === 'string' && value.value.trim() !== '');
+                });
+
+                if (!isPersonalDetailsComplete || !isShippingComplete) {
+                    showSnackbar("Please fill in all required personal details and shipping address fields.", "error");
+                    setShowShippingFormErrors(true); // Force show errors in ShippingForm
+                    setLoading(false);
+                    return; // Stop progression
+                }
+                setShowShippingFormErrors(false); // Reset if validation passes
                 await handleSaveChanges(); // Saves user details when moving from 'Details' to 'Payment'.
             }
             setSelectedStep(prev => prev + 1); // Moves to the next step.
@@ -462,8 +494,6 @@ export default function MultiStepCheckout() {
                 }
             };
 
-            console.log("Frontend: Calling backend to create PayPal order with payload:", orderDataForPayPal);
-
             // API call to your backend to create a PayPal order.
             const createOrderResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/create-order`, {
                 method: 'POST',
@@ -481,7 +511,6 @@ export default function MultiStepCheckout() {
             }
 
             const paypalOrder = await createOrderResponse.json();
-            console.log("Frontend: Received PayPal Order Response from backend:", paypalOrder);
 
             // Redirects the user to PayPal's approval URL.
             if (paypalOrder.approvalUrl) {
@@ -506,8 +535,6 @@ export default function MultiStepCheckout() {
      */
     const handleCreateOrderInternal = async () => {
         setLoading(true); // Activates loading state.
-
-        console.log(userData)
 
         try {
             // Ensures user is authenticated before creating an order.
@@ -626,6 +653,7 @@ export default function MultiStepCheckout() {
                         billing={billing}
                         handleBack={handleBack}
                         loading={loading}
+                        forceShowErrors={showShippingFormErrors} // Pass the new prop
                     />
                 );
             case 2: // Payment Step

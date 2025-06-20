@@ -42,6 +42,8 @@ import { ProductVariantsModule } from './product-variant/product-variants.module
 import { AddressesModule } from './addresses/addresses.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { PaypalModule } from './paypal/paypal.module';
+import { PaymentModule } from './payment/payment.module';
+import { ProductModelsModule } from './product-models/product-models.module';
 
 @Module({
   imports: [
@@ -99,7 +101,9 @@ import { PaypalModule } from './paypal/paypal.module';
     ProductVariantsModule,
     AddressesModule,
     ReviewsModule,
-    PaypalModule
+    PaypalModule,
+    PaymentModule,
+    ProductModelsModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

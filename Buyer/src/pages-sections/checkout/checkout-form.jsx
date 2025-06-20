@@ -31,10 +31,7 @@ export default function CheckoutForm({
     return (
         <Card sx={styles.wrapper}>
             {/* BACK ICON */}
-            <FlexBox justifyContent="flex-start" alignItems="center" mb={2} >
-                <IconButton onClick={handleBack} color="inherit">
-                    <ArrowBackIcon />
-                </IconButton>
+            <FlexBox justifyContent="flex-start" alignItems="center" mb={2} px={2} pt={2}>
                 <H1 color="#000" fontSize={{ xs: 14, sm: 20 }}>
                     Shipping Address
                 </H1>

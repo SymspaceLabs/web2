@@ -21,6 +21,8 @@ import Button from '@mui/material/Button'; // Import Button for dialog actions
 import Pagination from "../../pagination";
 import Place from "@mui/icons-material/Place";
 import AddressListItem from "../address-item";
+import { FlexCol } from "@/components/flex-box";
+import { Box, Card } from "@mui/material";
 
 // =======================================================
 export default function AddressPageView() {
@@ -128,38 +130,53 @@ export default function AddressPageView() {
   }
 
   return (
-    <Fragment>
-      {/* TITLE HEADER AREA */}
-      <SymDashboardHeader
-        title={"My Addresses"}
-        Icon={Place}
-        buttonText={"Add New Address"}
-        onClick={() => router.push('/address/new')}
-        loading={loading}
-      />
+    <FlexCol sx={style.box}>
 
-      {/* ALL ADDRESS LIST AREA */}
-      {allAddress.length === 0 && !loading && (
-        <p style={{ textAlign: 'center', marginTop: '20px' }}>No addresses found. Click "Add New Address" to add one.</p>
-      )}
 
-      {allAddress.map(address => (
-        <AddressListItem
-          key={address.id}
-          address={address}
-          // Pass the handler to open the confirmation dialog
-          handleDelete={() => handleOpenConfirmation(address)} // Pass the entire address object
-          handleEdit={handleEdit}
+      <Box>
+        {/* TITLE HEADER AREA */}
+        <SymDashboardHeader
+          title="My Addresses"
+          Icon={Place}
+          buttonText={"Add New Address"}
+          onClick={() => router.push('/address/new')}
+          loading={loading}
         />
-      ))}
+        <Card
+          sx={{
+            background:'#FFF',
+            borderRadius: "0px 0px 15px 15px",
+            minHeight: '25vh'
+          }}
+        >
 
-      {/* PAGINATION AREA */}
-      {allAddress.length > 10 &&
-        <Pagination
-          count={5}
-          onChange={data => console.log(data)}
-        />
-      }
+        
+        {/* ALL ADDRESS LIST AREA */}
+        {allAddress.length === 0 && !loading && (
+          <p style={{ textAlign: 'center', marginTop: '20px' }}>No addresses found. Click "Add New Address" to add one.</p>
+        )}
+
+        {allAddress.map(address => (
+          <AddressListItem
+            key={address.id}
+            address={address}
+            // Pass the handler to open the confirmation dialog
+            handleDelete={() => handleOpenConfirmation(address)} // Pass the entire address object
+            handleEdit={handleEdit}
+          />
+        ))}
+
+        {/* PAGINATION AREA */}
+        {allAddress.length > 10 &&
+          <Pagination
+            count={5}
+            onChange={data => console.log(data)}
+          />
+        }
+
+      </Card>
+      </Box>
+
 
       {/* Confirmation Dialog */}
       <Dialog
@@ -183,6 +200,17 @@ export default function AddressPageView() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Fragment>
+    </FlexCol>
   );
+}
+
+const style = {
+  box : { 
+    padding:'15px',
+    borderRadius:'15px',
+    background: 'linear-gradient(176.84deg, #B7B7B9 -3.62%, #777777 109.48%)',
+    boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
+    backdropFilter: 'blur(12px)',
+    gap:'25px'
+  }
 }

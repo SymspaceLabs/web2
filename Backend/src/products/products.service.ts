@@ -10,6 +10,7 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
+import { ProductModel } from 'src/product-models/entities/product-model.entity';
 
 @Injectable()
 export class ProductsService {
@@ -19,6 +20,8 @@ export class ProductsService {
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(ProductVariant) private productVariantRepository: Repository<ProductVariant>,
+    @InjectRepository(ProductModel) private productModelRepository: Repository<ProductModel>, // NEW: Inject ProductModel Repository
+
   ) {}
 
   // Convert text to slug
@@ -82,6 +85,7 @@ export class ProductsService {
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
     const {
       images,
+      models, // Destructure models from DTO
       company,
       name,
       colors,
@@ -89,200 +93,221 @@ export class ProductsService {
       subcategoryItem: subcategoryItemId,
       ...productData
     } = dto;
-    
-      let product: Product;
-    
-      // === UPDATE MODE ===
-      if (id) {
-        product = await this.productRepository.findOne({
-          where: { id },
-          relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants'],
-        });
-    
-        if (!product) {
-          throw new NotFoundException(`Product with ID ${id} not found`);
-        }
 
-        // ✅  Only delete if user is explicitly changing variants or their dependencies
-        if (
-          ('variants' in dto && dto.variants?.length) ||
-          ('colors' in dto && dto.colors?.length) ||
-          ('sizes' in dto && dto.sizes?.length)
-        ) {
-          await this.productVariantRepository.remove(product.variants);
-          product.variants = [];
-        }
+    let product: Product;
 
+    // === UPDATE MODE ===
+    if (id) {
+      product = await this.productRepository.findOne({
+        where: { id },
+        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants', 'models'], // IMPORTANT: Load models relation here
+      });
 
-        if (company) {
-          const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
-          if (!companyEntity) {
-            throw new NotFoundException(`Company with ID ${company} not found`);
-          }
-          product.company = companyEntity;
-        }
-    
-        if (subcategoryItemId) {
-          const subcategoryItem = await this.subcategoryItemRepository.findOne({
-            where: { id: subcategoryItemId },
-            relations: ['subcategory', 'subcategory.category'],
-          });
-    
-          if (!subcategoryItem) {
-            throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
-          }
-          product.subcategoryItem = subcategoryItem;
-        }
-    
-        if (name || company) {
-          const updatedCompany = product.company || (await this.companiesRepository.findOne({ where: { id: company } }));
-          product.slug = `${this.slugify(updatedCompany.entityName)}-${this.slugify(name || product.name)}`;
-        }
-    
-        if (name) product.name = name;
-        Object.assign(product, productData);
+      if (!product) {
+        throw new NotFoundException(`Product with ID ${id} not found`);
       }
-    
-      // === CREATE MODE ===
-      else {
-        if (!company) {
-          throw new NotFoundException('Company not provided');
+
+      // ✅ Only delete variants if user is explicitly changing variants or their dependencies (colors/sizes)
+      if (
+        ('variants' in dto && dto.variants !== undefined) || // Check if variants key is present in DTO
+        ('colors' in dto && dto.colors !== undefined) ||     // Check if colors key is present in DTO
+        ('sizes' in dto && dto.sizes !== undefined)          // Check if sizes key is present in DTO
+      ) {
+        if (product.variants && product.variants.length > 0) {
+            await this.productVariantRepository.remove(product.variants); // Clear old variants
         }
-    
+        product.variants = []; // Reset the array on the entity
+      }
+
+      // --- NEW: MODEL UPDATE LOGIC ---
+      // If the 'models' key is present in the DTO, it means we should update them.
+      // This allows sending an empty 'models' array to clear existing models.
+      if (models !== undefined) {
+        // If there are existing models, remove them first
+        if (product.models && product.models.length > 0) {
+          await this.productModelRepository.remove(product.models);
+        }
+        // Map the new models from DTO to ProductModel entities
+        product.models = models.map((modelDto) => {
+          const newModel = new ProductModel();
+          newModel.url = modelDto.url;
+          newModel.colorCode = modelDto.colorCode || null; // Ensure colorCode is passed or set to null
+          newModel.product = product; // Link to the current product entity
+          return newModel;
+        });
+      }
+
+
+      if (company) {
         const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
         if (!companyEntity) {
           throw new NotFoundException(`Company with ID ${company} not found`);
         }
-    
+        product.company = companyEntity;
+      }
+
+      if (subcategoryItemId) {
         const subcategoryItem = await this.subcategoryItemRepository.findOne({
           where: { id: subcategoryItemId },
           relations: ['subcategory', 'subcategory.category'],
         });
-    
+
         if (!subcategoryItem) {
           throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
         }
-    
-        const slug = `${this.slugify(companyEntity.entityName)}-${this.slugify(name)}`;
+        product.subcategoryItem = subcategoryItem;
+      }
 
-              
-        product = this.productRepository.create({
-          ...productData,
-          name,
-          company: companyEntity,
-          slug,
-          subcategoryItem,
-          variants: [], // ✅ assign actual entity instances
+      // Re-generate slug if name or company changes
+      if (name !== undefined || company !== undefined) { // Check if name or company are explicitly provided in DTO
+        const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
+        const updatedProductName = name !== undefined ? name : product.name;
+        
+        if (updatedCompanyName && updatedProductName) {
+          product.slug = `${this.slugify(updatedCompanyName)}-${this.slugify(updatedProductName)}`;
+        }
+      }
+      
+      // Assign other product data
+      Object.assign(product, productData);
+      // If name is explicitly provided, update it
+      if (name !== undefined) product.name = name;
+
+    }
+
+    // === CREATE MODE ===
+    else {
+      if (!company) {
+        throw new NotFoundException('Company not provided');
+      }
+
+      const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+      if (!companyEntity) {
+        throw new NotFoundException(`Company with ID ${company} not found`);
+      }
+
+      const subcategoryItem = await this.subcategoryItemRepository.findOne({
+        where: { id: subcategoryItemId },
+        relations: ['subcategory', 'subcategory.category'],
+      });
+
+      if (!subcategoryItem) {
+        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
+      }
+
+      const slug = `${this.slugify(companyEntity.entityName)}-${this.slugify(name)}`;
+
+      product = this.productRepository.create({
+        ...productData,
+        name,
+        company: companyEntity,
+        slug,
+        subcategoryItem,
+        variants: [], // Initialize variants as empty
+        images: [],  // Initialize images as empty
+        colors: [],  // Initialize colors as empty
+        sizes: [],   // Initialize sizes as empty
+        models: [],  // Initialize models as empty for creation
+      });
+
+      // --- NEW: MODEL CREATION LOGIC ---
+      if (models?.length) { // If models are provided during creation
+        product.models = models.map((modelDto) => {
+          const newModel = new ProductModel();
+          newModel.url = modelDto.url;
+          newModel.colorCode = modelDto.colorCode || null;
+          newModel.product = product; // Link to the product
+          return newModel;
         });
       }
-    
-      // === Shared logic for both Create & Update ===
-    
-      // Images
-      if (images?.length) {
+    }
+
+    // === Shared logic for both Create & Update ===
+
+    // Images: Replace images if provided in DTO
+    if (images !== undefined) { // Check if 'images' key is present
+        // If Product.images relationship uses cascade:true, simply assigning a new array will handle removal/addition
         product.images = images.map((url, i) => {
-          const img = new ProductImage();
-          img.url = url;
-          img.sortOrder = i;
-          return img;
+            const img = new ProductImage();
+            img.url = url;
+            img.sortOrder = i;
+            img.product = product; // Link to the product
+            return img;
         });
-      }
-    
-      // Colors
-      if (colors) {
+    }
+
+    // Colors: Replace colors if provided in DTO
+    if (colors !== undefined) { // Check if 'colors' key is present
         product.colors = colors.map((color) => {
-          const c = new ProductColor();
-          c.name = color.name;
-          c.code = color.code;
-          return c;
+            const c = new ProductColor();
+            c.name = color.name;
+            c.code = color.code;
+            c.product = product; // Link to the product
+            return c;
         });
-      }
-    
-      // Sizes
-      if (sizes?.length) {
+    }
+
+    // Sizes: Replace sizes if provided in DTO
+    if (sizes !== undefined) { // Check if 'sizes' key is present
         product.sizes = sizes.map((size, i) => {
-          const s = new ProductSize();
-          s.size = size;
-          s.sortOrder = i;
-          return s;
+            const s = new ProductSize();
+            s.size = size;
+            s.sortOrder = i;
+            s.product = product; // Link to the product
+            return s;
         });
-      }
+    }
 
-      // Step 1: Save product first to ensure colors/sizes are persisted
-      const savedProduct = await this.productRepository.save(product);
-      
-      // === Generate new variants using updated colors and sizes ===
+    // Step 1: Save product (this will cascade save/update models, images, colors, sizes)
+    const savedProduct = await this.productRepository.save(product);
 
-      // Generate variants only if CREATE or if dto has colors or sizes
-      if (
-        !id ||
-        ('colors' in dto && dto.colors?.length) ||
-        ('sizes' in dto && dto.sizes?.length)
-      ) {
-        const savedVariants = await this.generateVariants(savedProduct, dto);
-        savedProduct.variants = savedVariants;
-      }
-
-      // Remove circular reference before returning
-      if (savedProduct.variants?.length) {
-        savedProduct.variants.forEach((variant) => {
-          delete variant.product;
+    // === Generate new variants using updated colors and sizes ===
+    // This part should run after main product and its related entities (colors, sizes) are saved.
+    // Ensure that savedProduct has the latest colors and sizes for variant generation.
+    // Reload savedProduct with relations to ensure fresh data if needed, or pass the `product` object directly
+    // which should now have its `colors` and `sizes` relations updated by the previous save.
+    if (
+      !id || // Always generate variants for new products
+      (colors !== undefined && colors.length > 0) || // If colors were explicitly provided/updated
+      (sizes !== undefined && sizes.length > 0)      // If sizes were explicitly provided/updated
+    ) {
+        // Fetch product again with updated colors and sizes to ensure accurate variant generation
+        const productWithFreshRelations = await this.productRepository.findOne({
+            where: { id: savedProduct.id },
+            relations: ['colors', 'sizes'], // Only load relations needed for generateVariants
         });
-      }
-      
-      // if (savedProduct.colors?.length && savedProduct.sizes?.length) {
-      //   const variantsToSave: ProductVariant[] = [];
-      //   // If no dto.variants, generate cartesian product
-      //   if (!dto.variants?.length) {
-      //     for (const color of savedProduct.colors) {
-      //       for (const size of savedProduct.sizes) {
-      //         const variant = new ProductVariant();
-      //         variant.color = color;
-      //         variant.size = size;
-      //         variant.sku = `${savedProduct.slug}-${color.code}-${size.size}`;
-      //         variant.price = savedProduct.price || 0;
-      //         variant.stock = 0;
-      //         variant.product = savedProduct;
-      //         variantsToSave.push(variant);
-      //       }
-      //     }
-      //   } else {
-      //     for (const v of dto.variants) {
-      //       const variant = new ProductVariant();
-      //       variant.stock = v.stock;
-      //       variant.sku = v.sku;
-      //       variant.price = v.price;
-      //       variant.product = savedProduct;
-      
-      //       const matchedColor = savedProduct.colors.find((c) => c.code === v.colorCode);
-      //       if (!matchedColor) {
-      //         throw new BadRequestException(`No matching color for code ${v.colorCode}`);
-      //       }
 
-      //       if (matchedColor) variant.color = matchedColor;
-      
-      //       const matchedSize = savedProduct.sizes.find((s) => s.size === v.size);
-      //       if (!matchedSize) {
-      //         throw new BadRequestException(`No matching size for ${v.size}`);
-      //       }
+        if (productWithFreshRelations) {
+            const savedVariants = await this.generateVariants(productWithFreshRelations, dto);
+            savedProduct.variants = savedVariants;
+        }
+    }
 
-      //       if (matchedSize) variant.size = matchedSize;
-      
-      //       variantsToSave.push(variant);
-      //     }
-      //   }
-      
-      //   const savedVariants = await this.productVariantRepository.save(variantsToSave);
-      //   savedProduct.variants = savedVariants;
-      // }
+    // Remove circular references before returning to prevent JSON serialization issues
+    if (savedProduct.variants?.length) {
+      savedProduct.variants.forEach((variant) => {
+        delete variant.product;
+      });
+    }
+    
+    if (savedProduct.models?.length) { 
+      savedProduct.models.forEach((model) => {
+        delete model.product;
+      });
+    }
 
-      // if (savedProduct.variants?.length) {
-      //   savedProduct.variants.forEach((variant) => {
-      //     delete variant.product;
-      //   });
-      // }
-      
-      return savedProduct;
+    // You might also need to clear circular references for colors, sizes, images if they have 'product' properties
+    if (savedProduct.colors?.length) {
+      savedProduct.colors.forEach(color => delete color.product);
+    }
+    if (savedProduct.sizes?.length) {
+      savedProduct.sizes.forEach(size => delete size.product);
+    }
+    if (savedProduct.images?.length) {
+      savedProduct.images.forEach(image => delete image.product);
+    }
+
+    return savedProduct;
   }
 
   // FIND ALL WITH FILTER

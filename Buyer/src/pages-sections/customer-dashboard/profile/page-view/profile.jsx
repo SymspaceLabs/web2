@@ -250,7 +250,6 @@ export default function ProfilePageView({
         />
         <UserAnalytics user={userData} />
       </Box>
-
       <Card sx={[style.card, {flexDirection:'column', }]}>
         
         <ProfilePicUpload user={user} />

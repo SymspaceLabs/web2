@@ -11,7 +11,11 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-const ProductGallery = ({ product }) => {
+const ProductGallery = ({ 
+    product,
+    selectedColor
+}) => {
+
     const {
         id,
         price,
@@ -22,6 +26,7 @@ const ProductGallery = ({ product }) => {
         images,
         slug,
         model,
+        models
     } = product || {};
 
     // State to track currently selected image
@@ -62,6 +67,13 @@ const ProductGallery = ({ product }) => {
     // State to determine how many thumbnails to show
     const [visibleThumbCount, setVisibleThumbCount] = useState(6);
 
+    // Filter models based on selectedColor
+    const filteredModels = useMemo(() => {
+        return models.filter((m) => m.colorCode === selectedColor);
+    }, [models, selectedColor]);
+
+
+
     // Update visible thumbnail count based on screen size
     useEffect(() => {
         setVisibleThumbCount(isMobileQuery ? 4 : 6);
@@ -81,6 +93,12 @@ const ProductGallery = ({ product }) => {
         return [{ type: "model" }, ...images].slice(start, end);
     }, [thumbIndex, images, visibleThumbCount]); // Add visibleThumbCount here
     
+    // Reset selected image when color changes
+    useEffect(() => {
+        setSelectedImage(0);
+        setThumbIndex(0);
+    }, [selectedColor]);
+
     // Ensure selected image stays within the visible thumbnails
     useEffect(() => {
         const totalItems = images.length + 1; // +1 for model
@@ -126,34 +144,39 @@ const ProductGallery = ({ product }) => {
                 position="relative"
                 borderRadius="20px"
             >
-                {selectedImage === 0 && model ? (
-                    <SymGLTFViewer modelUrl={`/models/${model}`} />
-                ) : (
-                <LazyImage
-                    alt={name}
-                    src={product.images[selectedImage - 1]?.url}
-                    width={500}
-                    height={500}
-                    loading="eager"
-                    sx={{
+                {selectedImage === 0 ? (
+                    filteredModels.length > 0 ? (
+                        <SymGLTFViewer modelUrl={`/models/${filteredModels[0].url}`} />
+                    ) : (
+                        <Box>No 3D model for this color</Box>
+                    )
+                    ) : (
+                    <LazyImage
+                        alt={name}
+                        src={product.images[selectedImage - 1]?.url}
+                        width={500}
+                        height={500}
+                        loading="eager"
+                        sx={{
                         objectFit: "contain",
                         maxHeight: "100%",
                         maxWidth: "100%",
-                    }}
-                />
+                        }}
+                    />
                 )}
+
             </Box>
 
             {/* Next image button */}
             <IconButton
                 onClick={() =>
-                setSelectedImage((prev) => (prev < images?.length ? prev + 1 : 0))
+                    setSelectedImage((prev) => (prev < images?.length ? prev + 1 : 0))
                 }
                 style={{
-                position: "absolute",
-                right: 0,
-                zIndex: 1,
-                background: "white",
+                    position: "absolute",
+                    right: 0,
+                    zIndex: 1,
+                    background: "white",
                 }}
             >
                 <ArrowForwardIosIcon />

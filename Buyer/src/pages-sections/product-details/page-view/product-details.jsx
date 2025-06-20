@@ -13,6 +13,11 @@ import ProductTabs from "../product-tabs";
 import ProductDetails from "../product-details";
 import { BlobBox } from "@/components/BlobBox";
 
+// Services
+import { fetchProductBySlug } from "@/services/productService"; // Adjust the path if needed
+
+// ==========================================================
+
 export default function ProductDetailsPageView({slug}) {
 
   const [product, setProduct] = useState(null);
@@ -20,14 +25,10 @@ export default function ProductDetailsPageView({slug}) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const getProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch product data");
-        }
-        const data = await response.json();
+        const data = await fetchProductBySlug(slug);
         setProduct(data);
       } catch (err) {
         setError(err.message);
@@ -36,11 +37,33 @@ export default function ProductDetailsPageView({slug}) {
       }
     };
   
-    fetchProduct();
+    getProduct();
   }, [slug]);
   
-  if (loading) return <CircularProgress />;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'error.main' }}>
+        <div>Error: {error}</div>
+      </Box>
+    );
+  }
+
+  // Ensure product exists before rendering its properties
+  if (!product) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div>Product not found.</div>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ position: 'relative', overflow: 'hidden', background: '#FFF', display: 'flex', justifyContent: 'center' }}>

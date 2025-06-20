@@ -11,6 +11,7 @@ import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
 import { ProductGender } from '../entities/product.entity';
+import { CreateProductModelDto } from 'src/product-models/dto/create-product-model.dto';
 
 class CreateProductVariantPropertyDto {
   @IsString()
@@ -86,7 +87,11 @@ export class CreateProductDto {
   @IsEnum(ProductGender)
   gender?: ProductGender;
 
-
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductModelDto) // Add CreateProductModelDto to the DTO
+  models?: CreateProductModelDto[];
 
   // @IsString()
   // @IsOptional()

@@ -7,9 +7,8 @@ import { styled } from '@mui/system';
 import { H1 } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { CreditCardForm } from "@/components/custom-forms/checkout"; // Removed as PayPalCheckout handles this now
-import { Card, IconButton, Button, Box, Typography } from '@mui/material';
+import { Card, Button, Box, Typography } from '@mui/material';
 
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"; // <-- back icon
 // import PayPalCheckout from "@/components/PayPalCheckout"; // Removed as it's now rendered in MultiStepCheckout
 
 // ================================================
@@ -60,16 +59,9 @@ export default function PaymentForm({
     return (
         <Card sx={styles.wrapper}>
 
-            {/* BACK ICON and "Payment details" Header */}
-            <FlexBox justifyContent="flex-start" alignItems="center" mb={1}>
-                <IconButton onClick={handleBack} color="inherit">
-                    <ArrowBackIcon />
-                </IconButton>
-
-                <H1 fontSize={20}>
-                    Payment details
-                </H1>
-            </FlexBox>
+            <H1 fontSize={20}>
+                Payment details
+            </H1>
 
             {/* Transaction Protection Message */}
             <Box mb={3}>
@@ -109,8 +101,8 @@ export default function PaymentForm({
 
                 {/* Google Pay Button */}
                 <PaymentMethodButton
-                    onClick={() => setPaymentMethod("google-pay")}
-                    isSelected={paymentMethod === "google-pay"}
+                    onClick={() => setPaymentMethod("google")}
+                    isSelected={paymentMethod === "google"}
                 >
                     <Box component="img" src="assets//images/payment-methods/GooglePay.svg" alt="Google Pay" sx={{ height: 24, mb: 0.5 }} />
                     <Typography fontSize={12} fontWeight={500} textAlign="center">Google Pay</Typography>

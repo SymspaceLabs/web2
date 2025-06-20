@@ -8,6 +8,7 @@ import { ProductImage } from '../product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
+import { ProductModel } from 'src/product-models/entities/product-model.entity';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { ProductVariant } from 'src/product-variant/entities/product-variant.ent
       Company,
       ProductImage,
       SubcategoryItem,
-      ProductVariant
+      ProductVariant,
+      ProductModel
       // ProductVariantPropertyEntity,
       // PriceEntity,
     ]),

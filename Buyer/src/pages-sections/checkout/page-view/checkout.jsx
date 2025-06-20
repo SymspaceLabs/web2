@@ -7,15 +7,25 @@
 import { useCart } from "hooks/useCart";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Button } from "@mui/material";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { useRouter, useSearchParams } from 'next/navigation';
+import { 
+    handlePayPalPaymentSuccessInternal,
+    initiatePayPalRestApiPayment,
+    handleCreateOrderInternal
+} from "@/services/paymentService";
 
 import Stepper from "../stepper";
 import CartItem from "../cart-item";
 import PaymentForm from "../payment-form";
 import CheckoutForm from "../checkout-form";
 import PaymentSummary from "../payment-summary";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { H1 } from "@/components/Typography";
+
+
 
 // ======================================================
 // Section 2: Component Constants
@@ -52,7 +62,7 @@ export default function MultiStepCheckout() {
         address2: "",
         city: "",
         state: "",
-        country: "",
+        country: "", // Will store the country value (e.g., "US")
         zip: ""
     });
     // Stores the billing address details.
@@ -61,9 +71,10 @@ export default function MultiStepCheckout() {
         address2: "",
         city: "",
         state: "",
-        country: "",
+        country: "", // Will store the country value (e.g., "US")
         zip: ""
     });
+
     const [loading, setLoading] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
     const [paypalProcessed, setPaypalProcessed] = useState(false); // Flag to prevent multiple PayPal processing
@@ -71,7 +82,6 @@ export default function MultiStepCheckout() {
     const [paypalReturnInfo, setPaypalReturnInfo] = useState({ status: null, orderId: null });
     // New state to control error visibility in shipping form
     const [showShippingFormErrors, setShowShippingFormErrors] = useState(false);
-
 
     // --- Subsection 3.3: Mock Financial Constants ---
     const MOCK_SHIPPING_COST = 4.99;
@@ -88,78 +98,6 @@ export default function MultiStepCheckout() {
     const checkoutAmount = calculateTotalAmount();
 
     // --- Subsection 3.5: Event Handlers and Core Logic Functions (Moved Up) ---
-
-    /**
-     * Callback function for when a PayPal payment is successfully completed (captured).
-     * This is triggered after the user returns from PayPal and the capture API call succeeds (backend handled).
-     * @param {object} details - Contains `paypalOrderId` from URL query parameters.
-     */
-    const handlePayPalPaymentSuccessInternal = async ({ paypalOrderId }) => { // Renamed from handlePayPalPaymentSuccess
-        setLoading(true); // Activates loading for internal order creation.
-
-        try {
-            // Ensures user is authenticated.
-            if (!isAuthenticated || !user?.id) {
-                showSnackbar("User not authenticated. Please sign in.", "error");
-                setLoading(false);
-                return;
-            }
-
-            // Retrieves shipping address ID. `userData` should now be populated by the `useEffect`'s wait.
-            const shippingAddressId = userData?.addresses?.[0]?.id;
-            if (!shippingAddressId) {
-                // This scenario should be rare now with the `useEffect` wait.
-                showSnackbar("No shipping address found for this user. Please add one.", "error");
-                setLoading(false);
-                return;
-            }
-
-            // Maps cart items to backend format.
-            const items = cartState.cart.map(item => ({
-                variantId: item.variant,
-                quantity: item.qty,
-            }));
-
-            // Constructs the payload for your backend's order creation API.
-            const payload = {
-                userId: user.id,
-                items,
-                shippingAddressId,
-                paymentMethod: "paypal", // Explicitly sets payment method to "paypal".
-                totalAmount: parseFloat(checkoutAmount),
-                paypalOrderId: paypalOrderId // Stores PayPal's order ID for reference.
-            };
-
-            // API call to your backend's `/orders` endpoint to record the PayPal order.
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${user.token}` // Include auth token if needed.
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const responseBody = await res.json();
-
-            // Checks if the API response was successful.
-            if (!res.ok) {
-                throw new Error(responseBody.message || `Failed to create internal order after PayPal success.`);
-            }
-
-            // Displays success message, clears cart, and redirects to the order detail page.
-            showSnackbar(`PayPal order successfully placed and recorded!`, "success");
-            dispatch({ type: "CLEAR_CART" });
-            router.push(`/order/${responseBody.data.id}`);
-
-        } catch (error) {
-            // Logs and displays an error message if recording the order fails.
-            console.error("Error creating internal order after PayPal success:", error);
-            showSnackbar(`Failed to record order after PayPal payment: ${error.message}`, "error");
-        } finally {
-            setLoading(false); // Ensures loading is off.
-        }
-    };
 
     /**
      * Callback function for when a PayPal payment encounters an error or is cancelled.
@@ -187,7 +125,10 @@ export default function MultiStepCheckout() {
                 city: shipping.city,
                 state: shipping.state,
                 zip: shipping.zip,
-                country: shipping.country.value || 'US', // Extracts the country value correctly.
+                // Ensure country value is always a string. If your country selector returns an object
+                // like { label: 'United States', value: 'US' }, then shipping.country should already
+                // be updated to just 'US' by the setShipping in CheckoutForm.
+                country: shipping.country || 'US', 
             }]
         };
 
@@ -292,41 +233,61 @@ export default function MultiStepCheckout() {
     }, [isAuthenticated, user?.id, process.env.NEXT_PUBLIC_BACKEND_URL, showSnackbar, userData]);
 
     // Effect 2: Populates shipping and billing addresses from fetched `userData`.
-    // Runs when `userData` or `sameAsShipping` changes.
+    // This effect now conditionally updates to prevent overwriting user input.
     useEffect(() => {
-        // Checks if user data and addresses are available.
         if (userData && userData.addresses && userData.addresses.length > 0) {
-            const defaultAddress = userData.addresses[0]; // Uses the first address as default.
+            const defaultAddress = userData.addresses[0];
 
-            // Creates a new shipping address object.
-            const newShipping = {
+            // Normalize fetched country to a string if it's an object with a 'value' property
+            const fetchedCountry = defaultAddress.country && typeof defaultAddress.country === 'object' 
+                                 ? defaultAddress.country.value 
+                                 : defaultAddress.country;
+
+            const fetchedShippingData = {
                 address1: defaultAddress.address1 || "",
                 address2: defaultAddress.address2 || "",
                 city: defaultAddress.city || "",
                 state: defaultAddress.state || "",
-                country: defaultAddress.country || "US",
+                country: fetchedCountry || "US",
                 zip: defaultAddress.zip || "",
             };
-            setShipping(newShipping); // Sets the shipping address.
+
+            // Check if current shipping state is "empty" (initial state)
+            // or if the fetched data is genuinely different from the current state.
+            const isShippingCurrentlyEmpty = Object.values(shipping).every(val => val === "");
+
+            if (isShippingCurrentlyEmpty || JSON.stringify(shipping) !== JSON.stringify(fetchedShippingData)) {
+                setShipping(fetchedShippingData);
+            }
 
             // If `sameAsShipping` is true, updates the billing address to match shipping.
             // Includes a check to prevent infinite loops if values are already identical.
             if (sameAsShipping) {
-                if (JSON.stringify(billing) !== JSON.stringify(newShipping)) {
-                    setBilling(newShipping);
+                if (JSON.stringify(billing) !== JSON.stringify(fetchedShippingData)) {
+                    setBilling(fetchedShippingData);
                 }
             }
         } else if (userData && userData.addresses && userData.addresses.length === 0) {
             // If user data loaded but no addresses exist, clears shipping and billing.
-            setShipping({
-                address1: "", address2: "", city: "", state: "", country: "", zip: ""
-            });
-            setBilling({
-                address1: "", address2: "", city: "", state: "", country: "", zip: ""
-            });
+            // Only clear if they are not already empty, to avoid unnecessary state updates.
+            const isShippingCurrentlyEmpty = Object.values(shipping).every(val => val === "");
+            const isBillingCurrentlyEmpty = Object.values(billing).every(val => val === "");
+
+            if (!isShippingCurrentlyEmpty) {
+                setShipping({
+                    address1: "", address2: "", city: "", state: "", country: "", zip: ""
+                });
+            }
+            if (!isBillingCurrentlyEmpty) {
+                setBilling({
+                    address1: "", address2: "", city: "", state: "", country: "", zip: ""
+                });
+            }
         }
-        // Dependencies array: effect re-runs if any of these values change.
-    }, [userData, sameAsShipping, billing]);
+        // Dependencies array: effect re-runs if `userData` or `sameAsShipping` changes.
+        // `shipping` and `billing` are not direct dependencies to avoid infinite loops,
+        // but their *current values* are checked inside the effect.
+    }, [userData, sameAsShipping]); // Removed `billing` from dependencies here.
 
     // Effect 3a: Captures PayPal return query parameters and stores them in state.
     // This effect runs on component mount and whenever searchParams change.
@@ -353,19 +314,26 @@ export default function MultiStepCheckout() {
         // Proceed only if payment status is success, order ID is present, and user data with addresses is loaded.
         if (paymentStatus === 'success' && paypalOrderId && userData?.addresses?.[0]?.id) {
             setLoading(false); // Reset loading to allow subsequent action
-            // console.log("Returned from PayPal: Payment successful. PayPal Order ID:", paypalOrderId); // Removed
-            handlePayPalPaymentSuccessInternal({ paypalOrderId }); // Calls success handler.
+            handlePayPalPaymentSuccessInternal({
+                paypalOrderId,
+                cartState,
+                dispatch,
+                user,
+                showSnackbar,
+                router,
+                checkoutAmount,
+                userData,
+                setLoading,
+            });  // Calls success handler.
             // Clear paypalReturnInfo to prevent re-processing on subsequent userData updates
             setPaypalReturnInfo({ status: null, orderId: null });
         } else if (paymentStatus === 'cancelled' && paypalOrderId) {
             setLoading(false);
-            // console.log("Returned from PayPal: Payment cancelled."); // Removed
             showSnackbar("PayPal payment cancelled by user.", "warning");
             handlePayPalPaymentError("User cancelled payment.");
             setPaypalReturnInfo({ status: null, orderId: null });
         } else if ((paymentStatus === 'failed' || paymentStatus === 'error') && paypalOrderId) {
             setLoading(false);
-            // console.error("Returned from PayPal: Payment failed or error occurred. PayPal Order ID:", paypalOrderId); // Removed
             showSnackbar("PayPal payment failed or encountered an error.", "error");
             handlePayPalPaymentError("Payment failed or error occurred.");
             setPaypalReturnInfo({ status: null, orderId: null });
@@ -374,8 +342,7 @@ export default function MultiStepCheckout() {
         // - `paypalReturnInfo`: Triggers when PayPal return params are initially set.
         // - `userData`: Crucially, this ensures the effect re-evaluates when userData is fetched (after reload).
         // - `showSnackbar`: For displaying messages.
-        // - `handlePayPalPaymentSuccessInternal`, `handlePayPalPaymentError`: Stable function references.
-    }, [paypalReturnInfo, userData, showSnackbar, handlePayPalPaymentSuccessInternal, handlePayPalPaymentError]);
+    }, [paypalReturnInfo, userData, showSnackbar, handlePayPalPaymentError, cartState, dispatch, user, router, checkoutAmount, setLoading]);
 
 
     /**
@@ -406,7 +373,11 @@ export default function MultiStepCheckout() {
                 const requiredShippingFields = ['address1', 'city', 'state', 'zip', 'country'];
                 const isShippingComplete = requiredShippingFields.every(field => {
                     const value = shipping[field];
-                    return typeof value === 'string' ? value.trim() !== '' : (value && typeof value.value === 'string' && value.value.trim() !== '');
+                    // Handle both string and potentially object.value for country field
+                    if (field === 'country') {
+                        return typeof value === 'string' ? value.trim() !== '' : (value && typeof value.value === 'string' && value.value.trim() !== '');
+                    }
+                    return typeof value === 'string' ? value.trim() !== '' : Boolean(value); // For other fields, just check for truthiness if not string
                 });
 
                 if (!isPersonalDetailsComplete || !isShippingComplete) {
@@ -422,192 +393,56 @@ export default function MultiStepCheckout() {
             setLoading(false); // Deactivates loading after successful step transition.
         } else if (selectedStep === 2) { // If on the final 'Payment' step
             if (selectedPaymentMethod === "paypal") {
-                await initiatePayPalRestApiPayment(); // Initiates PayPal REST API flow.
+                await initiatePayPalRestApiPayment({
+                    cartState,
+                    user,
+                    showSnackbar,
+                    router,
+                    checkoutAmount,
+                    setLoading,
+                    MOCK_SHIPPING_COST,
+                    MOCK_TAX_TOTAL,
+                }); // Initiates PayPal REST API flow.
+            } else if (selectedPaymentMethod === "google") {
+                showSnackbar("Google Pay selected!", "info");
+                setLoading(false); // Deactivate loading if button is not clicked.
             } else if (selectedPaymentMethod === "card") {
                 // For 'card' payment, this is a placeholder. In a real app, this would involve
                 // integrating with a payment gateway (e.g., Stripe, another PayPal API for direct card processing).
                 showSnackbar("Card payment (direct) not fully implemented in this example. Simulating direct order.", "info");
-                await handleCreateOrderInternal(); // Simulates direct order creation.
-                setLoading(false);
+                await handleCreateOrderInternal({
+                    cartState,
+                    dispatch,
+                    user,
+                    showSnackbar,
+                    router,
+                    checkoutAmount,
+                    userData,
+                    setLoading,
+                    selectedPaymentMethod,
+                    isAuthenticated,
+                }); // Simulates direct order creation.
             } else {
                 // For other payment methods (e.g., "cash on delivery"), proceeds to create the order directly.
-                if (isAuthenticated) {
-                    await handleCreateOrderInternal();
-                } else {
-                    showSnackbar("Sign In to make payment", "error"); // Prompts user to sign in if not authenticated.
-                }
-                setLoading(false); // Deactivates loading for non-PayPal methods.
+                await handleCreateOrderInternal({
+                    cartState,
+                    dispatch,
+                    user,
+                    showSnackbar,
+                    router,
+                    checkoutAmount,
+                    userData,
+                    setLoading,
+                    selectedPaymentMethod,
+                    isAuthenticated,
+                });
             }
         } else {
             setLoading(false); // Deactivates loading if no action is taken.
         }
     };
 
-    /**
-     * Initiates the PayPal payment flow using the REST API.
-     * This involves creating an order on your backend (which then calls PayPal's API)
-     * and redirecting the user to PayPal for approval.
-     */
-    const initiatePayPalRestApiPayment = async () => {
-        setLoading(true); // Activates loading state.
-        try {
-            // Ensures user is authenticated before proceeding with PayPal.
-            if (!isAuthenticated || !user?.id) {
-                showSnackbar("User not authenticated. Please sign in.", "error");
-                setLoading(false);
-                return;
-            }
-
-            // Maps cart items to PayPal's required item format.
-            const items = cartState.cart.map(item => ({
-                name: item.name,
-                unit_amount: {
-                    currency_code: "USD",
-                    value: item.price.toFixed(2),
-                },
-                quantity: item.qty,
-            }));
-
-            // Constructs the order payload for PayPal, including breakdown of amount.
-            const orderDataForPayPal = {
-                intent: "CAPTURE", // Indicates that this order will be captured (funds transferred) later.
-                purchase_units: [{
-                    amount: {
-                        currency_code: "USD",
-                        value: checkoutAmount, // Total amount for the order.
-                        breakdown: { // Detailed breakdown of the total amount.
-                            item_total: { currency_code: "USD", value: items.reduce((sum, i) => sum + (parseFloat(i.unit_amount.value) * i.quantity), 0).toFixed(2) },
-                            shipping: { currency_code: "USD", value: MOCK_SHIPPING_COST.toFixed(2) },
-                            tax_total: { currency_code: "USD", value: MOCK_TAX_TOTAL.toFixed(2) },
-                        }
-                    },
-                    items: items, // List of items in the order.
-                    payee: {
-                        email_address: "sb-merchant@example.com" // Sandbox merchant email. In production, this is usually configured on the backend.
-                    }
-                }],
-                application_context: {
-                    // URLs where PayPal redirects the user after approval or cancellation.
-                    return_url: `${window.location.origin}/checkout?paymentStatus=success`,
-                    cancel_url: `${window.location.origin}/checkout?paymentStatus=cancelled`,
-                    shipping_preference: "NO_SHIPPING" // Controls how shipping address is handled by PayPal.
-                }
-            };
-
-            // API call to your backend to create a PayPal order.
-            const createOrderResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/paypal/create-order`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires auth.
-                },
-                body: JSON.stringify(orderDataForPayPal),
-            });
-
-            // Checks if the backend API call was successful.
-            if (!createOrderResponse.ok) {
-                const errorData = await createOrderResponse.json();
-                throw new Error(errorData.message || 'Failed to create PayPal order on backend.');
-            }
-
-            const paypalOrder = await createOrderResponse.json();
-
-            // Redirects the user to PayPal's approval URL.
-            if (paypalOrder.approvalUrl) {
-                window.location.href = paypalOrder.approvalUrl;
-                // Loading state will naturally end as the user leaves the application.
-            } else {
-                throw new Error("No approval URL found from backend for PayPal order. Check backend response structure.");
-            }
-
-        } catch (error) {
-            // Logs and displays an error message if PayPal initiation fails.
-            console.error("Error initiating PayPal REST API payment:", error);
-            showSnackbar(`Failed to start PayPal payment: ${error.message}`, "error");
-            setLoading(false); // Deactivates loading if an error occurs before redirection.
-        }
-    };
-
-    /**
-     * This function handles order creation for payment methods that are NOT PayPal (REST API) or Card.
-     * Examples: "Cash on Delivery", other direct integrations.
-     * It makes an API call to your backend's `/orders` endpoint.
-     */
-    const handleCreateOrderInternal = async () => {
-        setLoading(true); // Activates loading state.
-
-        try {
-            // Ensures user is authenticated before creating an order.
-            // if (!isAuthenticated || !user?.id) {
-            //   showSnackbar("User not authenticated. Please sign in.", "error");
-            //   setLoading(false);
-            //   return;
-            // }
-
-            // Retrieves the shipping address ID from `userData`.
-            const shippingAddressId = userData?.addresses?.[0]?.id;
-            if (!shippingAddressId) {
-                showSnackbar("No shipping address found for this user. Please add one.", "error");
-                setLoading(false);
-                return;
-            }
-
-            // Maps cart items to the format required by your backend's order creation API.
-            const items = cartState.cart.map(item => ({
-                variantId: item.variant,
-                quantity: item.qty,
-            }));
-
-            // Checks if the cart is empty.
-            if (items.length === 0) {
-                showSnackbar("Your cart is empty. Please add items to proceed.", "error");
-                setLoading(false);
-                return;
-            }
-
-            // Constructs the payload for your backend's order creation API.
-            const payload = {
-                userId: user.id,
-                items,
-                shippingAddressId,
-                paymentMethod: selectedPaymentMethod, // Uses the currently selected payment method.
-                totalAmount: parseFloat(checkoutAmount), // Ensures totalAmount is a number.
-            };
-
-            // API call to your backend's `/orders` endpoint to create the order.
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${user.token}` // Include auth token if needed.
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const responseBody = await res.json();
-
-            // Checks if the API response was successful.
-            if (!res.ok) {
-                throw new Error(responseBody.message || `Failed to create order via ${selectedPaymentMethod}`);
-            }
-
-            // Displays success message, clears cart, and redirects to the order detail page.
-            showSnackbar(`${selectedPaymentMethod} order successfully placed!`, "success");
-            dispatch({ type: "CLEAR_CART" });
-            router.push(`/orders/${responseBody.data.id}`);
-
-        } catch (error) {
-            // Logs and displays an error message if order creation fails.
-            console.error("Error creating order (non-PayPal):", error);
-            showSnackbar(`Failed to place order: ${error.message}`, "error");
-        } finally {
-            setLoading(false); // Always deactivates loading, regardless of success or failure.
-        }
-    };
-
-
     // --- Subsection 3.7: Helper Functions for UI Rendering ---
-
     // Dynamically determines the text for the action button in the PaymentSummary component.
     const getPaymentSummaryButtonText = () => {
         if (selectedStep === 0) {
@@ -658,19 +493,26 @@ export default function MultiStepCheckout() {
                 );
             case 2: // Payment Step
                 return (
-                    <>
+                    <>                      
                         {/* Renders the PaymentForm component, passing payment method state and handler. */}
                         <PaymentForm
                             handleBack={handleBack}
                             paymentMethod={selectedPaymentMethod}
                             setPaymentMethod={setSelectedPaymentMethod}
                         />
-
                         {/* Displays a loading message specifically for PayPal redirection. */}
                         {selectedPaymentMethod === "paypal" && loading && (
                             <Box mt={3}>
                                 <Typography variant="body2" color="text.secondary" mt={2}>
                                     Redirecting to PayPal for secure payment...
+                                </Typography>
+                            </Box>
+                        )}
+                        {/* Conditionally render Google Pay button */}
+                        {selectedPaymentMethod === "google"  && loading &&  (
+                            <Box mt={3}>
+                                <Typography variant="body2" color="text.secondary" mt={2}>
+                                    Processing Google Pay payment...
                                 </Typography>
                             </Box>
                         )}
@@ -682,7 +524,6 @@ export default function MultiStepCheckout() {
     };
 
     // --- Subsection 3.8: Component JSX Structure ---
-
     return (
         <>
             {/* Stepper component: Displays the checkout progress steps.
@@ -698,9 +539,19 @@ export default function MultiStepCheckout() {
             {/* Main layout using Material-UI Grid.
                 `flexWrap="wrap-reverse"` ensures the summary (right column) appears above main content
                 on smaller screens, which is a common pattern for checkout. */}
+            {selectedStep > 0 && 
+                <Button onClick={handleBack} sx={{ mb: 2 }} >
+                    <ChevronLeftIcon />
+                    <H1>Back</H1>
+                </Button>
+            }
+            
+
             <Grid container flexWrap="wrap-reverse" spacing={3}>
                 {/* Left column: Main content area for Cart, Details, or Payment forms. */}
+
                 <Grid item md={8} xs={12}>
+                    
                     {renderMainContent()} {/* Renders the dynamic content based on the current step. */}
                 </Grid>
 

@@ -21,6 +21,9 @@ import { useHeader } from "@/components/header/hooks/use-header";
 import { SymAccordion, SymDialog } from "@/components/custom-components"
 import { Box, Button, Select, MenuItem, FormControl, Tooltip, Drawer, Grid, Rating, CircularProgress } from '@mui/material';
 
+// Services
+import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
+
 // ================================================================
 
 export default function ProductDetails({ product }) {
@@ -105,27 +108,28 @@ export default function ProductDetails({ product }) {
 
   // THIS FUNCTION FETCHES AVAILABILILTY OF A PRODUCT INSTANTLY
   useEffect(() => {
-    const fetchAvailability = async () => {
-      if (!selectedSize || !selectedColor) return;
+    const checkAvailability = async () => {
+      // Ensure product.id, selectedColor, and selectedSize are available
+      if (!id || !selectedColor || !selectedSize) {
+        setAvailability(null); // Reset availability if not all options are selected
+        return;
+      }
       setLoadingAvailability(true);
-  
+
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/product-variants/${id}/availability?colorId=${selectedColor.id}&sizeId=${selectedSize}`
-        );
-        const data = await res.json();
+        const data = await fetchProductAvailability(id, selectedColor.id, selectedSize);
         setAvailability(data);
         setSelectedVariant(data.variantId);
       } catch (err) {
         console.error("Error fetching availability", err);
-        setAvailability(null);
+        setAvailability({ stock: 0, status: "Error", statusColor: "error.main" }); // Set a default error state
       } finally {
         setLoadingAvailability(false);
       }
     };
-  
-    fetchAvailability();
-  }, [selectedColor, selectedSize]);
+
+    checkAvailability();
+  }, [id, selectedColor, selectedSize]);
   
 
   return (
@@ -135,7 +139,10 @@ export default function ProductDetails({ product }) {
         { /* IMAGE GALLERY AREA */}
         <Grid item md={6} xs={12} alignItems="center">
           {/* Image Gallery */}
-          <ProductGallery product={product} />
+          <ProductGallery
+            product={product}
+            selectedColor={selectedColor.code}
+          />
         </Grid>
 
         {/* PRODUCT INFO AREA */}

@@ -134,47 +134,25 @@ export default function MultiStepCheckout() {
                 firstName,
                 lastName,
                 email,
-                addresses: { // Assumes the first address in the array is either new or an update.
+                shippingAddress: { // Assumes the first address in the array is either new or an update.
                     address1: shipping.address1,
                     address2: shipping.address2,
                     city: shipping.city,
                     state: shipping.state,
                     zip: shipping.zip,
                     country: shipping.country || 'US', 
+                },
+                billingAddress: { // Assumes the first address in the array is either new or an update.
+                    address1: billing.address1,
+                    address2: billing.address2,
+                    city: billing.city,
+                    state: billing.state,
+                    zip: billing.zip,
+                    country: billing.country || 'US', 
                 }
             };
         }
-
         setLoading(false); 
-        
-        
-        // Constructs the payload for updating user details and addresses.
-        
-
-        // try {
-        //     // API call to your backend to update user details and addresses.
-        //     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`, {
-        //         method: 'PATCH', // Using PATCH for partial updates.
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires auth.
-        //         },
-        //         body: JSON.stringify(payload)
-        //     });
-
-        //     // Checks if the API response was successful.
-        //     if (!res.ok) {
-        //         const errorData = await res.json();
-        //         throw new Error(errorData.message || "Failed to save shipping details on backend.");
-        //     }
-
-        //     showSnackbar("Shipping details saved successfully.", "success"); // Displays success message.
-        // } catch (error) {
-        //     // Logs and displays an error message if saving fails.
-        //     showSnackbar(`Failed to save shipping details: ${error.message}`, "error");
-        // } finally {
-        //     // Always deactivates loading.
-        // }
     };
 
     /**
@@ -204,7 +182,7 @@ export default function MultiStepCheckout() {
             // and keep the URL clean. `shallow: true` prevents a full page reload.
             router.replace(window.location.pathname, undefined, { shallow: true });
         }
-    }, [searchParams, router, paypalProcessed]); // Dependencies: only re-run if searchParams or paypalProcessed changes
+    }, [searchParams, router, paypalProcessed]);
 
     // Effect 3b: Processes PayPal return *after* userData is confirmed to be available.
     // This effect runs when `paypalReturnInfo` or `userData` changes.
@@ -224,7 +202,8 @@ export default function MultiStepCheckout() {
                 router,
                 checkoutAmount,
                 setLoading,
-                shippingAddressId: selectedAddressId
+                shippingAddressId: selectedAddressId,
+                isAuthenticated
             });  // Calls success handler.
             // Clear paypalReturnInfo ONLY AFTER successful processing
             setPaypalReturnInfo({ status: null, orderId: null });
@@ -243,7 +222,7 @@ export default function MultiStepCheckout() {
         // - `paypalReturnInfo`: Triggers when PayPal return params are initially set.
         // - `userData`: Crucially, this ensures the effect re-evaluates when userData is fetched (after reload).
         // - `showSnackbar`: For displaying messages.
-    }, [paypalReturnInfo, userData, showSnackbar, handlePayPalPaymentError, cartState, dispatch, user, router, checkoutAmount, setLoading]);
+    }, [paypalReturnInfo, userData, showSnackbar, handlePayPalPaymentError, cartState, dispatch, user, router, checkoutAmount, setLoading, isAuthenticated]);
 
     /**
      * Handles the change of the checkout step.
@@ -379,7 +358,6 @@ export default function MultiStepCheckout() {
             } else if (selectedPaymentMethod === "card") {
                 // For 'card' payment, this is a placeholder. In a real app, this would involve
                 // integrating with a payment gateway (e.g., Stripe, another PayPal API for direct card processing).
-                showSnackbar("Card payment (direct) not fully implemented in this example. Simulating direct order.", "info");
                 if (isAuthenticated) {
                     await handleCreateOrderInternal({
                         cartState,
@@ -391,7 +369,7 @@ export default function MultiStepCheckout() {
                         userData,
                         setLoading,
                         selectedPaymentMethod,
-                        isAuthenticated,
+                        isAuthenticated
                     });
                 } else {
                     await handleGuestCheckout();

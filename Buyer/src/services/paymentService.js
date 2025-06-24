@@ -1,30 +1,30 @@
+"use client"; 
+
 /**
  * Handles the internal processing after a successful PayPal payment.
- * This includes recording the order in your backend, clearing the cart,
- * and redirecting the user to the order details page.
  *
  * @param {object} params - The parameters for the function.
  * @param {string} params.paypalOrderId - The order ID returned by PayPal.
  * @param {object} params.cartState - The current state of the cart from useCart hook.
  * @param {function} params.dispatch - The dispatch function from useCart hook.
- * @param {object} params.user - The authenticated user object.
+ * @param {object} params.user - The authenticated user object (PASSED FROM COMPONENT).
  * @param {function} params.showSnackbar - Function to display snackbar messages.
  * @param {object} params.router - The Next.js router object.
  * @param {string} params.checkoutAmount - The total amount of the checkout.
- * @param {object} params.userData - The fetched user profile and addresses.
- * @param {function} params.setLoading - Function to set the loading state.
+ * @param {string} params.shippingAddressId - The ID of the selected shipping address for authenticated users.
+ * @param {boolean} params.isAuthenticated - Flag indicating if the user is authenticated (PASSED FROM COMPONENT).
  */
 export const handlePayPalPaymentSuccessInternal = async ({
   paypalOrderId,
   cartState,
   dispatch,
-  user,
+  user, // User is received as a parameter
   showSnackbar,
   router,
   checkoutAmount,
   setLoading,
   shippingAddressId,
-  isAuthenticated,
+  isAuthenticated, // isAuthenticated is received as a parameter
 }) => {
   setLoading(true);
 
@@ -36,6 +36,7 @@ export const handlePayPalPaymentSuccessInternal = async ({
       quantity: item.qty,
     }));
 
+    // This logic relies on the isAuthenticated value passed from the component
     const endpoint = isAuthenticated ? "/orders" : "/orders/guest-checkout";
 
     if (!isAuthenticated) {
@@ -55,7 +56,7 @@ export const handlePayPalPaymentSuccessInternal = async ({
 
     const payload = isAuthenticated
       ? {
-          userId: user.id,
+          userId: user.id, // user from parameter
           items,
           shippingAddressId,
           paymentMethod: "paypal",
@@ -98,7 +99,7 @@ export const handlePayPalPaymentSuccessInternal = async ({
     router.push(
       isAuthenticated
         ? `/orders/${responseBody.data.id}`
-        : `/orders/order-confirmation/${responseBody.data.id}`
+        : `/order-confirmation/${responseBody.data.id}`
     );
   } catch (error) {
     console.error("PayPal order creation failed:", error);
@@ -107,10 +108,6 @@ export const handlePayPalPaymentSuccessInternal = async ({
     setLoading(false);
   }
 };
-
-
-
-
 /**
  * Initiates the PayPal payment flow using the REST API.
  * This involves creating an order on your backend (which then calls PayPal's API)

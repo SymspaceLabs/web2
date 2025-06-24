@@ -5,7 +5,7 @@ import { Box, CircularProgress } from "@mui/material";
 import Section1 from "../section-1";
 import Section2 from "../section-2";
 import Section3 from "../section-3";
-import JobApplicationDialog from "@/components/dialog/JobApplicationDialog";
+import JobApplicationDialog from "@/components/custom-dialog/JobApplicationDialog";
 
 export default function CareerDetailsPageView({ jobId }) {
   const [job, setJob] = useState(null);

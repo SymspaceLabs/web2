@@ -24,7 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ShippingForm, BillingForm } from "@/components/custom-forms/checkout";
 import { useSnackbar } from '@/contexts/SnackbarContext'; // Assuming you have this context
 import { fetchAddressesByUserId, fetchAddressById, deleteAddressById } from "@/services/addressService"; // Import deleteAddressById
-import { AddressDialog } from "@/components/dialog";
+import { AddressDialog } from "@/components/custom-dialog";
 
 // =================================================================
 

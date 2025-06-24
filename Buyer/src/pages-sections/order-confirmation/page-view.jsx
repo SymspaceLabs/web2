@@ -1,39 +1,84 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import styled from "@mui/material/styles/styled"; // GLOBAL CUSTOM COMPONENTS
+// =============================================================
+// Order Details Page View
+// =============================================================
 
-import SymCard from "@/components/custom-components/SymCard";
-import { H1, Paragraph } from "components/Typography"; // STYLED COMPONENT
 
-const Wrapper = styled(SymCard)({
-  margin: "auto",
-  padding: "3rem",
-  maxWidth: "630px",
-  textAlign: "center"
-});
-const StyledButton = styled(Button)({
-  marginTop: "2rem",
-  padding: "11px 24px"
-});
-export default function OrderConfirmationPageView() {
-  return <Container className="mt-2 mb-10">
-      <Wrapper>
-        <Image width={116} height={116} alt="complete" src="/assets/images/illustrations/party-popper.svg" />
-        <H1 lineHeight={1.1} mt="1.5rem">
-          Your order is completed!
-        </H1>
+import { Container } from "@mui/material";
+import { useState, useEffect } from "react";
+import { fetchOrderById } from "@/services/orderService";
+import { SymDashboardHeader } from "@/components/custom-components";
 
-        <Paragraph color="grey.800" mt="0.3rem">
-          You will be receiving confirmation email with order details.
-        </Paragraph>
+import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPONENTS
+import OrderSummary from "../customer-dashboard/orders/order-summary";
+import OrderProgress from "../customer-dashboard/orders/order-progress";
+import OrderedProducts from "../customer-dashboard/orders/ordered-products";
 
-        <StyledButton color="primary" disableElevation variant="contained" className="button-link" LinkComponent={Link} href="/market-1">
-          Browse products
-        </StyledButton>
-      </Wrapper>
-    </Container>;
+// =============================================================
+export default function OrderConfirmationPageView({
+  orderId
+}) {
+
+  const [order, setOrder] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  console.log(orderId)
+
+  useEffect(() => {
+    const fetchOrder = async () => {
+      if (!orderId) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const orderData = await fetchOrderById(orderId)
+        setOrder(orderData);
+      } catch (err) {
+        console.error("Failed to load order:", err);
+        setError("Unable to load order details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrder();
+  }, [orderId]);
+
+
+  if (loading) {
+    return <p>Loading order details…</p>;
+  }
+
+  if (error) {
+    return <p style={{ color: "red" }}>{error}</p>;
+  }
+
+  if (!order) {
+    return <p>No order found.</p>;
+  }
+
+  return (
+    <Container sx={{ py:{xs:5, sm:10} }}>
+      
+      {/* TITLE HEADER AREA */}
+      <SymDashboardHeader
+        href="/orders"
+        Icon={ShoppingBag}
+        title="Order Details"
+        buttonText="Order Again"
+      />
+
+      {/* ORDER PROGRESS AREA */}
+      <OrderProgress />
+
+      {/* ORDERED PRODUCT LIST */}
+      <OrderedProducts order={order} />
+
+      {/* SHIPPING AND ORDER SUMMERY */}
+      <OrderSummary order={order} />
+    </Container>
+  );
 }

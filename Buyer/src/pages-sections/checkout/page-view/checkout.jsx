@@ -6,6 +6,7 @@
 
 import { useCart } from "hooks/useCart";
 import { useState, useEffect } from "react";
+import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
 import { Grid, Box, Button } from "@mui/material";
 import { useSnackbar } from "@/contexts/SnackbarContext";
@@ -21,11 +22,8 @@ import CartItem from "../cart-item";
 import PaymentForm from "../payment-form";
 import CheckoutForm from "../checkout-form";
 import PaymentSummary from "../payment-summary";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { H1 } from "@/components/Typography";
-
-
+import { fetchUserById } from "@/services/userService";
 
 // ======================================================
 // Section 2: Component Constants
@@ -44,11 +42,12 @@ const STEPPER_LIST = [
 export default function MultiStepCheckout() {
 
     // --- Subsection 3.1: Hook Initialization ---
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const { state: cartState, dispatch } = useCart();
     const { user, isAuthenticated } = useAuth();
     const { showSnackbar } = useSnackbar();
-    const router = useRouter();
-    const searchParams = useSearchParams();
 
     // --- Subsection 3.2: State Management ---
     const [selectedStep, setSelectedStep] = useState(0);
@@ -62,7 +61,7 @@ export default function MultiStepCheckout() {
         address2: "",
         city: "",
         state: "",
-        country: "", // Will store the country value (e.g., "US")
+        country: "",
         zip: ""
     });
     // Stores the billing address details.
@@ -75,19 +74,20 @@ export default function MultiStepCheckout() {
         zip: ""
     });
 
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
-    const [paypalProcessed, setPaypalProcessed] = useState(false); // Flag to prevent multiple PayPal processing
-    // New state to hold PayPal return parameters, persisting across renders
-    const [paypalReturnInfo, setPaypalReturnInfo] = useState({ status: null, orderId: null });
-    // New state to control error visibility in shipping form
     const [showShippingFormErrors, setShowShippingFormErrors] = useState(false);
 
-    // --- Subsection 3.3: Mock Financial Constants ---
+    // New state to hold PayPal return parameters, persisting across renders
+    const [paypalProcessed, setPaypalProcessed] = useState(false); // Flag to prevent multiple PayPal processing
+    const [paypalReturnInfo, setPaypalReturnInfo] = useState({ status: null, orderId: null });
+
+    // Mock Financial Constants ---
     const MOCK_SHIPPING_COST = 4.99;
     const MOCK_TAX_TOTAL = 0.00;
 
-    // --- Subsection 3.4: Derived Values ---
+    // Derived Values ---
     const calculateTotalAmount = () => {
         const itemsTotal = cartState.cart.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 0), 0);
         const totalWithShippingAndTax = itemsTotal + MOCK_SHIPPING_COST + MOCK_TAX_TOTAL;
@@ -97,7 +97,21 @@ export default function MultiStepCheckout() {
     // Stores the calculated total checkout amount. This will be used in API calls.
     const checkoutAmount = calculateTotalAmount();
 
-    // --- Subsection 3.5: Event Handlers and Core Logic Functions (Moved Up) ---
+    // Fetch User
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const data = await fetchUserById(user.id);
+                setUserData(data);
+            } catch (err) {
+                console.error("Failed to fetch user data:", err);
+            }
+        };
+        if(isAuthenticated) {
+            fetchUserData(); 
+        }
+        
+    }, [user, isAuthenticated]);
 
     /**
      * Callback function for when a PayPal payment encounters an error or is cancelled.
@@ -108,54 +122,59 @@ export default function MultiStepCheckout() {
         setLoading(false); // Ensures loading is off.
     };
 
-    /**
-     * Handles saving user's checkout details (first name, last name, email, addresses).
-     * This is typically called when moving from the 'Details' step.
-     */
     const handleSaveChanges = async () => {
-        setLoading(true); // Activates loading state.
-        // Constructs the payload for updating user details and addresses.
-        const payload = {
-            firstName,
-            lastName,
-            email,
-            addresses: [{ // Assumes the first address in the array is either new or an update.
-                address1: shipping.address1,
-                address2: shipping.address2,
-                city: shipping.city,
-                state: shipping.state,
-                zip: shipping.zip,
-                // Ensure country value is always a string. If your country selector returns an object
-                // like { label: 'United States', value: 'US' }, then shipping.country should already
-                // be updated to just 'US' by the setShipping in CheckoutForm.
-                country: shipping.country || 'US', 
-            }]
-        };
+        
+        // Activates loading state.
+        setLoading(true);
 
-        try {
-            // API call to your backend to update user details and addresses.
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`, {
-                method: 'PATCH', // Using PATCH for partial updates.
-                headers: {
-                    'Content-Type': 'application/json',
-                    // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires auth.
-                },
-                body: JSON.stringify(payload)
-            });
+        if(isAuthenticated){
 
-            // Checks if the API response was successful.
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message || "Failed to save shipping details on backend.");
-            }
-
-            showSnackbar("Shipping details saved successfully.", "success"); // Displays success message.
-        } catch (error) {
-            // Logs and displays an error message if saving fails.
-            showSnackbar(`Failed to save shipping details: ${error.message}`, "error");
-        } finally {
-            setLoading(false); // Always deactivates loading.
+        } else {
+            const payload = {
+                firstName,
+                lastName,
+                email,
+                addresses: { // Assumes the first address in the array is either new or an update.
+                    address1: shipping.address1,
+                    address2: shipping.address2,
+                    city: shipping.city,
+                    state: shipping.state,
+                    zip: shipping.zip,
+                    country: shipping.country || 'US', 
+                }
+            };
         }
+
+        setLoading(false); 
+        
+        
+        // Constructs the payload for updating user details and addresses.
+        
+
+        // try {
+        //     // API call to your backend to update user details and addresses.
+        //     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`, {
+        //         method: 'PATCH', // Using PATCH for partial updates.
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires auth.
+        //         },
+        //         body: JSON.stringify(payload)
+        //     });
+
+        //     // Checks if the API response was successful.
+        //     if (!res.ok) {
+        //         const errorData = await res.json();
+        //         throw new Error(errorData.message || "Failed to save shipping details on backend.");
+        //     }
+
+        //     showSnackbar("Shipping details saved successfully.", "success"); // Displays success message.
+        // } catch (error) {
+        //     // Logs and displays an error message if saving fails.
+        //     showSnackbar(`Failed to save shipping details: ${error.message}`, "error");
+        // } finally {
+        //     // Always deactivates loading.
+        // }
     };
 
     /**
@@ -169,125 +188,6 @@ export default function MultiStepCheckout() {
             setShowShippingFormErrors(false);
         }
     };
-
-    // --- Subsection 3.6: useEffect Hooks for Data Fetching and Side Effects (Revised Order) ---
-
-    // Effect 1: Fetches user data (profile and addresses) from the backend.
-    useEffect(() => {
-        const fetchUserData = async () => {
-            // Prevents fetching if the user is not authenticated or user ID is missing.
-            if (!isAuthenticated || !user?.id) {
-                setUserData(null); // Clears user data if not authenticated.
-                return;
-            }
-
-            setLoading(true); // Activates loading state.
-            try {
-                // API call to fetch user profile data, including addresses.
-                const userProfileResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires authentication token.
-                    },
-                });
-
-                // Checks if the API response was successful.
-                if (!userProfileResponse.ok) {
-                    const errorData = await userProfileResponse.json();
-                    throw new Error(errorData.message || 'Failed to fetch user profile.');
-                }
-                // Parses the JSON response.
-                const userProfile = await userProfileResponse.json();
-
-                // Updates the `userData` state with the fetched profile and addresses.
-                setUserData({
-                    id: userProfile.id,
-                    firstName: userProfile.firstName,
-                    lastName: userProfile.lastName,
-                    email: userProfile.email,
-                    addresses: userProfile.addresses, // Addresses are now part of the user profile.
-                });
-
-                // Initializes form state variables with fetched user data.
-                setFirstName(userProfile.firstName || "");
-                setLastName(userProfile.lastName || "");
-                setEmail(userProfile.email || "");
-
-            } catch (error) {
-                // Logs and displays an error message if fetching fails.
-                console.error("Error fetching user data:", error);
-                showSnackbar(`Failed to load user information: ${error.message}`, "error");
-                setUserData(null); // Clears data on error to prevent inconsistent state.
-            } finally {
-                setLoading(false); // Deactivates loading state.
-            }
-        };
-
-        // Conditional call: only fetch if authenticated, user ID exists, and `userData` hasn't been loaded.
-        // Also ensure not to refetch unnecessarily if userData is already available.
-        if (isAuthenticated && user?.id && !userData) {
-            fetchUserData();
-        }
-        // Dependencies array: effect re-runs if any of these values change.
-    }, [isAuthenticated, user?.id, process.env.NEXT_PUBLIC_BACKEND_URL, showSnackbar, userData]);
-
-    // Effect 2: Populates shipping and billing addresses from fetched `userData`.
-    // This effect now conditionally updates to prevent overwriting user input.
-    useEffect(() => {
-        if (userData && userData.addresses && userData.addresses.length > 0) {
-            const defaultAddress = userData.addresses[0];
-
-            // Normalize fetched country to a string if it's an object with a 'value' property
-            const fetchedCountry = defaultAddress.country && typeof defaultAddress.country === 'object' 
-                                 ? defaultAddress.country.value 
-                                 : defaultAddress.country;
-
-            const fetchedShippingData = {
-                address1: defaultAddress.address1 || "",
-                address2: defaultAddress.address2 || "",
-                city: defaultAddress.city || "",
-                state: defaultAddress.state || "",
-                country: fetchedCountry || "US",
-                zip: defaultAddress.zip || "",
-            };
-
-            // Check if current shipping state is "empty" (initial state)
-            // or if the fetched data is genuinely different from the current state.
-            const isShippingCurrentlyEmpty = Object.values(shipping).every(val => val === "");
-
-            if (isShippingCurrentlyEmpty || JSON.stringify(shipping) !== JSON.stringify(fetchedShippingData)) {
-                setShipping(fetchedShippingData);
-            }
-
-            // If `sameAsShipping` is true, updates the billing address to match shipping.
-            // Includes a check to prevent infinite loops if values are already identical.
-            if (sameAsShipping) {
-                if (JSON.stringify(billing) !== JSON.stringify(fetchedShippingData)) {
-                    setBilling(fetchedShippingData);
-                }
-            }
-        } else if (userData && userData.addresses && userData.addresses.length === 0) {
-            // If user data loaded but no addresses exist, clears shipping and billing.
-            // Only clear if they are not already empty, to avoid unnecessary state updates.
-            const isShippingCurrentlyEmpty = Object.values(shipping).every(val => val === "");
-            const isBillingCurrentlyEmpty = Object.values(billing).every(val => val === "");
-
-            if (!isShippingCurrentlyEmpty) {
-                setShipping({
-                    address1: "", address2: "", city: "", state: "", country: "", zip: ""
-                });
-            }
-            if (!isBillingCurrentlyEmpty) {
-                setBilling({
-                    address1: "", address2: "", city: "", state: "", country: "", zip: ""
-                });
-            }
-        }
-        // Dependencies array: effect re-runs if `userData` or `sameAsShipping` changes.
-        // `shipping` and `billing` are not direct dependencies to avoid infinite loops,
-        // but their *current values* are checked inside the effect.
-    }, [userData, sameAsShipping]); // Removed `billing` from dependencies here.
 
     // Effect 3a: Captures PayPal return query parameters and stores them in state.
     // This effect runs on component mount and whenever searchParams change.
@@ -312,7 +212,8 @@ export default function MultiStepCheckout() {
         const { status: paymentStatus, orderId: paypalOrderId } = paypalReturnInfo;
 
         // Proceed only if payment status is success, order ID is present, and user data with addresses is loaded.
-        if (paymentStatus === 'success' && paypalOrderId && userData?.addresses?.[0]?.id) {
+        // IMPORTANT: Only clear paypalReturnInfo IF we actually process it successfully.
+        if (paymentStatus === 'success' && paypalOrderId) {
             setLoading(false); // Reset loading to allow subsequent action
             handlePayPalPaymentSuccessInternal({
                 paypalOrderId,
@@ -322,28 +223,27 @@ export default function MultiStepCheckout() {
                 showSnackbar,
                 router,
                 checkoutAmount,
-                userData,
                 setLoading,
+                shippingAddressId: selectedAddressId
             });  // Calls success handler.
-            // Clear paypalReturnInfo to prevent re-processing on subsequent userData updates
+            // Clear paypalReturnInfo ONLY AFTER successful processing
             setPaypalReturnInfo({ status: null, orderId: null });
         } else if (paymentStatus === 'cancelled' && paypalOrderId) {
             setLoading(false);
             showSnackbar("PayPal payment cancelled by user.", "warning");
             handlePayPalPaymentError("User cancelled payment.");
-            setPaypalReturnInfo({ status: null, orderId: null });
+            setPaypalReturnInfo({ status: null, orderId: null }); // Clear if cancelled
         } else if ((paymentStatus === 'failed' || paymentStatus === 'error') && paypalOrderId) {
             setLoading(false);
             showSnackbar("PayPal payment failed or encountered an error.", "error");
             handlePayPalPaymentError("Payment failed or error occurred.");
-            setPaypalReturnInfo({ status: null, orderId: null });
+            setPaypalReturnInfo({ status: null, orderId: null }); // Clear if failed/error
         }
         // Dependencies:
         // - `paypalReturnInfo`: Triggers when PayPal return params are initially set.
         // - `userData`: Crucially, this ensures the effect re-evaluates when userData is fetched (after reload).
         // - `showSnackbar`: For displaying messages.
     }, [paypalReturnInfo, userData, showSnackbar, handlePayPalPaymentError, cartState, dispatch, user, router, checkoutAmount, setLoading]);
-
 
     /**
      * Handles the change of the checkout step.
@@ -356,6 +256,50 @@ export default function MultiStepCheckout() {
         }
     };
 
+    const handleGuestCheckout = async () => {
+    const guestPayload = {
+        firstName,
+        lastName,
+        email,
+        shippingAddress: shipping,
+        billingAddress: sameAsShipping ? shipping : billing,
+        items: cartState.cart.map(item => ({
+            variantId: item.variant,
+            quantity: item.qty,
+        })),
+        paymentMethod: selectedPaymentMethod,
+        totalAmount: parseFloat(checkoutAmount),
+    };
+
+    if (selectedPaymentMethod === "paypal") {
+        guestPayload.paypalOrderId = paypalReturnInfo.orderId;
+    }
+
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/guest-checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(guestPayload),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "Guest checkout failed");
+
+        showSnackbar("Order placed successfully!", "success");
+        dispatch({ type: "CLEAR_CART" });
+        router.push(`/order-confirmation/${data.data.id}`);
+    } catch (error) {
+        console.error("Guest checkout error:", error);
+        showSnackbar(`Failed to place order: ${error.message}`, "error");
+    } finally {
+        setLoading(false);
+    }
+};
+
+
     /**
      * Handles advancing to the next step in the checkout process.
      * For PayPal, it initiates the REST API flow by creating a PayPal order on the backend.
@@ -366,32 +310,58 @@ export default function MultiStepCheckout() {
 
         if (selectedStep < 2) { // If not on the final (Payment) step (i.e., on Cart or Details step)
             if (selectedStep === 1) {
-                // Validate personal details
-                const isPersonalDetailsComplete = firstName.trim() !== '' && lastName.trim() !== '' && email.trim() !== '';
+                
+                // Conditional validation based on authentication status
+                if (isAuthenticated) {
+                    // If authenticated, skip client-side validation for personal and shipping details
+                    // Assuming data is managed via saved addresses/profile
+                    await handleSaveChanges(); // Directly attempt to save (update) user details
+                } else {
+                // Personal details validation: Now includes email regex check
+                const isPersonalDetailsComplete = firstName.trim() !== '' && lastName.trim() !== '' && email.trim() !== '' && /\S+@\S+\.\S+/.test(email);
 
-                // Validate shipping address
+                // Shipping address validation
                 const requiredShippingFields = ['address1', 'city', 'state', 'zip', 'country'];
                 const isShippingComplete = requiredShippingFields.every(field => {
                     const value = shipping[field];
-                    // Handle both string and potentially object.value for country field
-                    if (field === 'country') {
-                        return typeof value === 'string' ? value.trim() !== '' : (value && typeof value.value === 'string' && value.value.trim() !== '');
-                    }
-                    return typeof value === 'string' ? value.trim() !== '' : Boolean(value); // For other fields, just check for truthiness if not string
+                    return typeof value === 'string' ? value.trim() !== '' : Boolean(value);
                 });
 
-                if (!isPersonalDetailsComplete || !isShippingComplete) {
-                    showSnackbar("Please fill in all required personal details and shipping address fields.", "error");
-                    setShowShippingFormErrors(true); // Force show errors in ShippingForm
-                    setLoading(false);
-                    return; // Stop progression
+                // Billing address validation (only if not same as shipping)
+                let isBillingComplete = true;
+                if (!sameAsShipping) {
+                    const requiredBillingFields = ['address1', 'city', 'state', 'zip', 'country'];
+                    isBillingComplete = requiredBillingFields.every(field => {
+                        const value = billing[field];
+                        return typeof value === 'string' ? value.trim() !== '' : Boolean(value);
+                    });
                 }
-                setShowShippingFormErrors(false); // Reset if validation passes
-                await handleSaveChanges(); // Saves user details when moving from 'Details' to 'Payment'.
+
+                if (!isPersonalDetailsComplete || !isShippingComplete || (!sameAsShipping && !isBillingComplete)) {
+                    showSnackbar("Please fill in all required personal details, shipping address, and billing address fields.", "error");
+                    setShowShippingFormErrors(true);
+                    setLoading(false);
+                    return;
+                }
+                setShowShippingFormErrors(false);
+                await handleSaveChanges();
+            }
+                
             }
             setSelectedStep(prev => prev + 1); // Moves to the next step.
             setLoading(false); // Deactivates loading after successful step transition.
         } else if (selectedStep === 2) { // If on the final 'Payment' step
+            const guestCheckoutData = {
+                firstName,
+                lastName,
+                email,
+                shipping,
+                billing: sameAsShipping ? shipping : billing,
+                cartItems: cartState.cart,
+                totalAmount: checkoutAmount,
+            };
+            localStorage.setItem("guestCheckoutData", JSON.stringify(guestCheckoutData));
+            
             if (selectedPaymentMethod === "paypal") {
                 await initiatePayPalRestApiPayment({
                     cartState,
@@ -410,32 +380,41 @@ export default function MultiStepCheckout() {
                 // For 'card' payment, this is a placeholder. In a real app, this would involve
                 // integrating with a payment gateway (e.g., Stripe, another PayPal API for direct card processing).
                 showSnackbar("Card payment (direct) not fully implemented in this example. Simulating direct order.", "info");
-                await handleCreateOrderInternal({
-                    cartState,
-                    dispatch,
-                    user,
-                    showSnackbar,
-                    router,
-                    checkoutAmount,
-                    userData,
-                    setLoading,
-                    selectedPaymentMethod,
-                    isAuthenticated,
-                }); // Simulates direct order creation.
+                if (isAuthenticated) {
+                    await handleCreateOrderInternal({
+                        cartState,
+                        dispatch,
+                        user,
+                        showSnackbar,
+                        router,
+                        checkoutAmount,
+                        userData,
+                        setLoading,
+                        selectedPaymentMethod,
+                        isAuthenticated,
+                    });
+                } else {
+                    await handleGuestCheckout();
+                }
+
             } else {
                 // For other payment methods (e.g., "cash on delivery"), proceeds to create the order directly.
-                await handleCreateOrderInternal({
-                    cartState,
-                    dispatch,
-                    user,
-                    showSnackbar,
-                    router,
-                    checkoutAmount,
-                    userData,
-                    setLoading,
-                    selectedPaymentMethod,
-                    isAuthenticated,
-                });
+                if (isAuthenticated) {
+                    await handleCreateOrderInternal({
+                        cartState,
+                        dispatch,
+                        user,
+                        showSnackbar,
+                        router,
+                        checkoutAmount,
+                        userData,
+                        setLoading,
+                        selectedPaymentMethod,
+                        isAuthenticated,
+                    });
+                } else {
+                    await handleGuestCheckout();
+                }
             }
         } else {
             setLoading(false); // Deactivates loading if no action is taken.
@@ -450,10 +429,18 @@ export default function MultiStepCheckout() {
         } else if (selectedStep === 1) {
             return "Proceed to Payment"; // Text for the 'Details' step.
         } else if (selectedStep === 2) {
-            // Text for the 'Payment' step, varies based on selected payment method.
-            return selectedPaymentMethod === "paypal" || selectedPaymentMethod === "card"
-                ? "Confirm Order"
-                : "Place Order";
+            switch (selectedPaymentMethod) {
+                case "paypal":
+                    return "Pay with PayPal";
+                case "card":
+                    return "Pay with Card"; // Or "Pay with Credit/Debit Card"
+                case "apple-pay":
+                    return "Pay with Apple Pay";
+                case "google":
+                    return "Pay with Google Pay";
+                default:
+                    return "Continue to Order"; // Default text if no method is selected or recognized
+            }
         }
         return ""; // Default empty string if no step matches.
     };
@@ -480,6 +467,8 @@ export default function MultiStepCheckout() {
                         setLastName={setLastName}
                         email={email}
                         setEmail={setEmail}
+                        selectedAddressId={selectedAddressId}
+                        setSelectedAddressId={setSelectedAddressId}
                         shipping={shipping}
                         setShipping={setShipping}
                         sameAsShipping={sameAsShipping}
@@ -493,30 +482,12 @@ export default function MultiStepCheckout() {
                 );
             case 2: // Payment Step
                 return (
-                    <>                      
-                        {/* Renders the PaymentForm component, passing payment method state and handler. */}
-                        <PaymentForm
-                            handleBack={handleBack}
-                            paymentMethod={selectedPaymentMethod}
-                            setPaymentMethod={setSelectedPaymentMethod}
-                        />
-                        {/* Displays a loading message specifically for PayPal redirection. */}
-                        {selectedPaymentMethod === "paypal" && loading && (
-                            <Box mt={3}>
-                                <Typography variant="body2" color="text.secondary" mt={2}>
-                                    Redirecting to PayPal for secure payment...
-                                </Typography>
-                            </Box>
-                        )}
-                        {/* Conditionally render Google Pay button */}
-                        {selectedPaymentMethod === "google"  && loading &&  (
-                            <Box mt={3}>
-                                <Typography variant="body2" color="text.secondary" mt={2}>
-                                    Processing Google Pay payment...
-                                </Typography>
-                            </Box>
-                        )}
-                    </>
+                    // Renders the PaymentForm component, passing payment method state and handler.
+                    <PaymentForm
+                        handleBack={handleBack}
+                        paymentMethod={selectedPaymentMethod}
+                        setPaymentMethod={setSelectedPaymentMethod}
+                    />
                 );
             default:
                 return null; // Returns null for any unhandled step.
@@ -545,16 +516,18 @@ export default function MultiStepCheckout() {
                     <H1>Back</H1>
                 </Button>
             }
+            {selectedStep == 0 && 
+                <Button onClick={()=>router.push('/products/all')} sx={{ mb: 2 }} >
+                    <ChevronLeftIcon />
+                    <H1>Continue Shopping</H1>
+                </Button>
+            }
             
-
             <Grid container flexWrap="wrap-reverse" spacing={3}>
                 {/* Left column: Main content area for Cart, Details, or Payment forms. */}
-
                 <Grid item md={8} xs={12}>
-                    
-                    {renderMainContent()} {/* Renders the dynamic content based on the current step. */}
+                    {renderMainContent()}
                 </Grid>
-
                 {/* Right column: Payment Summary. This component is always visible. */}
                 <Grid item md={4} xs={12}>
                     <PaymentSummary

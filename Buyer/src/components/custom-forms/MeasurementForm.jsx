@@ -4,7 +4,7 @@
 
 import { FlexBox } from '../flex-box';
 import { Small } from '../Typography';
-import { TitleCard } from '../dialog/components';
+import { TitleCard } from '../custom-dialog/components';
 import { Box, TextField, InputAdornment } from "@mui/material";
 
 // =============================================

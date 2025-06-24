@@ -1,4 +1,9 @@
+// ===================================================
+// Order Confirmation
+// ===================================================
+
 import { OrderConfirmationPageView } from "pages-sections/order-confirmation";
+
 export const metadata = {
   title: "Order Confirmation  E-commerce Template",
   description: `Symspace is an E-commerce website.`,
@@ -8,6 +13,11 @@ export const metadata = {
   }],
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
-export default function OrderConfirmation() {
-  return <OrderConfirmationPageView />;
+
+export default async function OrderConfirmation({params}) {
+  const { id } = await params;
+
+  return (
+    <OrderConfirmationPageView orderId={id} />
+  );
 }

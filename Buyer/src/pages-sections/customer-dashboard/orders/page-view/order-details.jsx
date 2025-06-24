@@ -3,7 +3,7 @@
 import { Fragment, useState, useEffect } from "react";
 import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPONENTS
 
-import OrderSummery from "../order-summery";
+import OrderSummary from "../order-summary";
 import OrderProgress from "../order-progress";
 import OrderedProducts from "../ordered-products";
 import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
@@ -73,7 +73,7 @@ export default function OrderDetailsPageView({
       <OrderedProducts order={order} />
 
       {/* SHIPPING AND ORDER SUMMERY */}
-      <OrderSummery order={order} />
+      <OrderSummary order={order} />
     </Fragment>
   );
 }

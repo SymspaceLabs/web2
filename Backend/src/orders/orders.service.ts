@@ -9,6 +9,7 @@ import { OrderItem } from './entities/order-item.entity';
 import { Address } from 'src/addresses/entities/address.entity';
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common'; // Import Logger for better debugging
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
+import { CreateGuestOrderDto } from './dto/create-guest-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -181,5 +182,102 @@ export class OrdersService {
 
     await this.orderRepo.remove(order);
     return { status: 'success', message: 'Order deleted', data: order };
+  }
+
+    /**
+   * Creates an order for a guest user.
+   * Uses raw customer and address data directly in the order entity.
+   * @param createGuestOrderDto Data for creating the guest order.
+   * @returns Order creation result.
+   */
+  async createGuestOrder(createGuestOrderDto: CreateGuestOrderDto) {
+    const {
+      firstName, lastName, email,
+      shippingAddress, billingAddress, // These are now raw address objects
+      items, paymentMethod, totalAmount, paypalOrderId
+    } = createGuestOrderDto;
+
+    const orderItems: OrderItem[] = [];
+    let calculatedTotalAmount = 0; // Use a new variable for safety
+
+    // Process each item in the order
+    for (const item of items) {
+      const variant = await this.variantRepo.findOne({
+        where: { id: item.variantId },
+        relations: ['product', 'color', 'size'],
+      });
+
+      if (!variant) {
+        throw new NotFoundException(`Variant ${item.variantId} not found`);
+      }
+
+      if (variant.stock < item.quantity) {
+        throw new BadRequestException('Insufficient stock');
+      }
+
+      const orderItem = this.orderItemRepo.create({
+        variant,
+        quantity: item.quantity,
+        price: variant.price,
+        subtotal: variant.price * item.quantity,
+      });
+
+      calculatedTotalAmount += orderItem.subtotal;
+      orderItems.push(orderItem);
+
+      // Update stock
+      variant.stock -= item.quantity;
+      await this.variantRepo.save(variant);
+    }
+
+    // Basic validation for totalAmount consistency
+    // In a real application, you should re-calculate total amount on the backend
+    // and compare it with the provided totalAmount for security.
+    if (parseFloat(totalAmount.toFixed(2)) !== parseFloat(calculatedTotalAmount.toFixed(2))) {
+        this.logger.warn(`Provided totalAmount ${totalAmount} does not match calculated totalAmount ${calculatedTotalAmount} for guest order. Using calculated value.`);
+        // Or throw new BadRequestException('Total amount mismatch.');
+    }
+
+
+    // Create the order entity for a guest user
+    const order = this.orderRepo.create({
+      // Set user and address relations to null for guest orders
+      user: null,
+      shippingAddress: null,
+      billingAddress: null, // Assuming billing address can also be directly stored
+
+      // Populate guest-specific fields
+      isGuestOrder: true,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      shippingAddress1: shippingAddress.address1,
+      shippingAddress2: shippingAddress.address2 || null, // Ensure nullable fields are handled
+      shippingCity: shippingAddress.city,
+      shippingState: shippingAddress.state,
+      shippingCountry: shippingAddress.country,
+      shippingZip: shippingAddress.zip,
+      billingAddress1: billingAddress.address1,
+      billingAddress2: billingAddress.address2 || null,
+      billingCity: billingAddress.city,
+      billingState: billingAddress.state,
+      billingCountry: billingAddress.country,
+      billingZip: billingAddress.zip,
+
+      paymentMethod,
+      status: 'pending', // Initial status
+      totalAmount: calculatedTotalAmount, // Use calculated total for consistency
+      items: orderItems,
+      paypalOrderId: paypalOrderId, // Store PayPal Order ID if provided
+    });
+
+    await this.orderRepo.save(order);
+    this.logger.log(`Guest order ${order.id} created successfully for email ${email}.`);
+
+    return {
+      status: 'success',
+      message: 'Guest order placed successfully',
+      data: order,
+    };
   }
 }

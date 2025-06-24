@@ -2,16 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { CreateGuestOrderDto } from './dto/create-guest-order.dto';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
+  /**
+   * Endpoint for creating an order for an authenticated user.
+   * Expects userId and shippingAddressId to link to existing entities.
+   * @param createOrderDto Data for creating the order.
+   * @returns Order creation result.
+   */
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     return this.ordersService.create(createOrderDto);
   }
 
+  /**
+   * Endpoint for creating an order for a guest user.
+   * Expects raw customer and address data directly.
+   * @param createGuestOrderDto Data for creating the guest order.
+   * @returns Guest order creation result.
+   */
+  @Post('guest-checkout') // New endpoint for guest checkouts
+  createGuestOrder(@Body() createGuestOrderDto: CreateGuestOrderDto) {
+    return this.ordersService.createGuestOrder(createGuestOrderDto);
+  }
+  
   @Get()
   findAll() {
     return this.ordersService.findAll();
@@ -36,4 +54,6 @@ export class OrdersController {
   remove(@Param('id') id: string) {
     return this.ordersService.remove(id);
   }
+
+
 }

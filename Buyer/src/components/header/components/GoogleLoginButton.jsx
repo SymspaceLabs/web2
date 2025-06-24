@@ -26,7 +26,6 @@ const GoogleLoginButton = ({ handleAuthResponse }) => {
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
     const redirectUri = window.location.origin + '/google-callback'; // Frontend page to handle tokens
-  
     const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20email%20profile&prompt=select_account&nonce=random_nonce`;
   
     window.location.href = googleOAuthUrl;

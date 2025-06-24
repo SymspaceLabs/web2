@@ -41,7 +41,7 @@ export default function Section4() {
             btnUrl="/"
             invert={false}
           >
-            <SymGLTFViewer modelUrl="/models/handBag/scene.gltf" />
+            <SymGLTFViewer modelUrl="/models/xander-vera-cherub-blue-angel-mini-bag/scene.gltf" />
           </SymSection>
         </motion.div>
 

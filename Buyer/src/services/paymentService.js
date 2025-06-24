@@ -15,81 +15,101 @@
  * @param {function} params.setLoading - Function to set the loading state.
  */
 export const handlePayPalPaymentSuccessInternal = async ({
-    paypalOrderId,
-    cartState,
-    dispatch,
-    user,
-    showSnackbar,
-    router,
-    checkoutAmount,
-    userData,
-    setLoading,
+  paypalOrderId,
+  cartState,
+  dispatch,
+  user,
+  showSnackbar,
+  router,
+  checkoutAmount,
+  setLoading,
+  shippingAddressId,
+  isAuthenticated,
 }) => {
-    setLoading(true); // Activates loading for internal order creation.
+  setLoading(true);
 
-    try {
-        // Ensures user is authenticated.
-        if (!user?.id) { // isAuthenticated check should ideally happen before calling this function or be passed here too if needed
-            showSnackbar("User not authenticated. Please sign in.", "error");
-            setLoading(false);
-            return;
+  let guestData = {};
+
+  try {
+    const items = cartState.cart.map(item => ({
+      variantId: item.variant,
+      quantity: item.qty,
+    }));
+
+    const endpoint = isAuthenticated ? "/orders" : "/orders/guest-checkout";
+
+    if (!isAuthenticated) {
+      const getGuestCheckoutData = () => {
+        if (typeof window !== "undefined") {
+          const data = localStorage.getItem("guestCheckoutData");
+          return data ? JSON.parse(data) : null;
         }
+        return null;
+      };
+      guestData = getGuestCheckoutData();
 
-        // Retrieves shipping address ID. `userData` should now be populated by the `useEffect`'s wait.
-        const shippingAddressId = userData?.addresses?.[0]?.id;
-        if (!shippingAddressId) {
-            // This scenario should be rare now with the `useEffect` wait.
-            showSnackbar("No shipping address found for this user. Please add one.", "error");
-            setLoading(false);
-            return;
+      if (!guestData) {
+        throw new Error("Guest data is missing from localStorage.");
+      }
+    }
+
+    const payload = isAuthenticated
+      ? {
+          userId: user.id,
+          items,
+          shippingAddressId,
+          paymentMethod: "paypal",
+          totalAmount: parseFloat(checkoutAmount),
+          paypalOrderId,
         }
-
-        // Maps cart items to backend format.
-        const items = cartState.cart.map(item => ({
+      : {
+          firstName: guestData.firstName,
+          lastName: guestData.lastName,
+          email: guestData.email,
+          shippingAddress: guestData.shipping,
+          billingAddress: guestData.billing,
+          items: guestData.cartItems.map(item => ({
             variantId: item.variant,
             quantity: item.qty,
-        }));
-
-        // Constructs the payload for your backend's order creation API.
-        const payload = {
-            userId: user.id,
-            items,
-            shippingAddressId,
-            paymentMethod: "paypal", // Explicitly sets payment method to "paypal".
-            totalAmount: parseFloat(checkoutAmount),
-            paypalOrderId: paypalOrderId // Stores PayPal's order ID for reference.
+          })),
+          paymentMethod: "paypal",
+          totalAmount: parseFloat(guestData.totalAmount),
+          paypalOrderId,
         };
 
-        // API call to your backend's `/orders` endpoint to record the PayPal order.
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${user.token}` // Include auth token if needed.
-            },
-            body: JSON.stringify(payload),
-        });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-        const responseBody = await res.json();
+    const responseBody = await res.json();
 
-        // Checks if the API response was successful.
-        if (!res.ok) {
-            throw new Error(responseBody.message || `Failed to create internal order after PayPal success.`);
-        }
-
-        // Displays success message, clears cart, and redirects to the order detail page.
-        showSnackbar(`PayPal order successfully placed and recorded!`, "success");
-        dispatch({ type: "CLEAR_CART" });
-        router.push(`/orders/${responseBody.data.id}`); // Changed to /orders for consistency
-
-    } catch (error) {
-        // Logs and displays an error message if recording the order fails.
-        console.error("Error creating internal order after PayPal success:", error);
-        showSnackbar(`Failed to record order after PayPal payment: ${error.message}`, "error");
-    } finally {
-        setLoading(false); // Ensures loading is off.
+    if (!res.ok) {
+      throw new Error(responseBody.message || "Failed to create order.");
     }
+
+    showSnackbar("PayPal order placed successfully!", "success");
+    dispatch({ type: "CLEAR_CART" });
+    localStorage.removeItem("guestCheckoutData");
+
+    router.push(
+      isAuthenticated
+        ? `/orders/${responseBody.data.id}`
+        : `/orders/order-confirmation/${responseBody.data.id}`
+    );
+  } catch (error) {
+    console.error("PayPal order creation failed:", error);
+    showSnackbar(`Error: ${error.message}`, "error");
+  } finally {
+    setLoading(false);
+  }
 };
+
+
+
 
 /**
  * Initiates the PayPal payment flow using the REST API.
@@ -118,12 +138,6 @@ export const initiatePayPalRestApiPayment = async ({
 }) => {
     setLoading(true); // Activates loading state.
     try {
-        // Ensures user is authenticated before proceeding with PayPal.
-        if (!user?.id) {
-            showSnackbar("User not authenticated. Please sign in.", "error");
-            setLoading(false);
-            return;
-        }
 
         // Maps cart items to PayPal's required item format.
         const items = cartState.cart.map(item => ({
@@ -227,12 +241,6 @@ export const handleCreateOrderInternal = async ({
     setLoading(true); // Activates loading state.
 
     try {
-        // Ensures user is authenticated before creating an order.
-        if (!isAuthenticated || !user?.id) { // This check is now externalized and passed in
-          showSnackbar("User not authenticated. Please sign in.", "error");
-          setLoading(false);
-          return;
-        }
 
         // Retrieves the shipping address ID from `userData`.
         const shippingAddressId = userData?.addresses?.[0]?.id;
@@ -284,7 +292,13 @@ export const handleCreateOrderInternal = async ({
         // Displays success message, clears cart, and redirects to the order detail page.
         showSnackbar(`${selectedPaymentMethod} order successfully placed!`, "success");
         dispatch({ type: "CLEAR_CART" });
-        router.push(`/orders/${responseBody.data.id}`);
+
+        if(isAuthenticated){
+            router.push(`/orders/${responseBody.data.id}`);
+        } else {
+            router.push(`/order-confirmation/${responseBody.data.id}`);
+        }
+        
 
     } catch (error) {
         // Logs and displays an error message if order creation fails.

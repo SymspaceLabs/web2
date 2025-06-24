@@ -27,7 +27,7 @@ import Header from "@/components/header";
 import LogoWithTitle from "@/components/LogoWithTitle";
 import SymDialog from "@/components/custom-components/SymDialog";
 import NavigationList from "@/components/navbar/nav-list/nav-list";
-import OnboardingDialog from "@/components/dialog/OnboardingDialog";
+import OnboardingDialog from "@/components/custom-dialog/OnboardingDialog";
 import LoginCartButtons from "@/components/header/components/login-cart-buttons";
 
 // ==============================================================

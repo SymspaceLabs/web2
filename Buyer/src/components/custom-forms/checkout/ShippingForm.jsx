@@ -22,7 +22,8 @@ export default function ShippingForm({
     sameAsShipping,
     setSameAsShipping,
     setBilling,
-    forceShowErrors = false // Prop to force error display from parent
+    forceShowErrors = false, // Prop to force error display from parent
+    ref
 }) {
     // Local state for personal details touch status
     const [firstNameTouched, setFirstNameTouched] = useState(false);
@@ -108,7 +109,6 @@ export default function ShippingForm({
         setEmailTouched(true);
     };
 
-
     return (
         <Box py={3}>
             <FlexBox flexDirection="column" gap={3}>
@@ -150,6 +150,7 @@ export default function ShippingForm({
                     data={shipping}
                     onChange={handleAddressChange} // Use the new handler
                     errors={shippingAddressErrors} // Pass the errors object
+                    dialogContentRef={ref} 
                 />
                 <FormControlLabel
                     control={

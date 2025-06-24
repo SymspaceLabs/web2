@@ -8,7 +8,7 @@ import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import CanvasLoader from "./Loader";
 
 const Model = ({ isMobile }) => {
-  const { scene } = useGLTF("/models/handBag/scene.gltf");
+  const { scene } = useGLTF("/models/xander-vera-cherub-blue-angel-mini-bag/scene.gltf");
 
   return (
     <mesh>
@@ -90,7 +90,7 @@ export default HandBagCanvas;
 // import CanvasLoader from "./Loader";
 
 // const Model = ({ isMobile, setCameraSettings }) => {
-//   const { scene } = useGLTF("/models/handBag/scene.gltf");
+//   const { scene } = useGLTF("/models/xander-vera-cherub-blue-angel-mini-bag/scene.gltf");
 //   const modelRef = useRef();
 
 //   useEffect(() => {

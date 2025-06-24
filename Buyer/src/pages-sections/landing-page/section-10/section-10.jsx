@@ -99,7 +99,7 @@ export default function Section9() {
                 variants={rightComponentVariants}
               >
                   <SymGLTFViewer
-                    modelUrl="/models/handBag/scene.gltf"
+                    modelUrl="/models/xander-vera-cherub-blue-angel-mini-bag/scene.gltf"
                   />
               </motion.div>
             </Grid>

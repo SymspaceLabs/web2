@@ -4,11 +4,11 @@
 // Preference Form Used in Profile
 // =================================================================================
 
+import { FlexBox } from '../flex-box';
 import { useState, useEffect } from 'react';
-import { TitleCard } from '../dialog/components';
+import { TitleCard } from '../custom-dialog/components';
 import { SymMultiSelectDropdown } from "@/components/custom-inputs";
 import { FormControl, RadioGroup, FormControlLabel, Radio, Box } from "@mui/material";
-import { FlexBox } from '../flex-box';
 
 // =================================================================================
 

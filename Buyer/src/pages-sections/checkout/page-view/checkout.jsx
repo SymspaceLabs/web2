@@ -61,7 +61,7 @@ export default function MultiStepCheckout() {
         address2: "",
         city: "",
         state: "",
-        country: "",
+        country: "" || 'US',
         zip: ""
     });
     // Stores the billing address details.
@@ -70,13 +70,13 @@ export default function MultiStepCheckout() {
         address2: "",
         city: "",
         state: "",
-        country: "", // Will store the country value (e.g., "US")
+        country: "" || 'US', // Will store the country value (e.g., "US")
         zip: ""
     });
 
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
     const [showShippingFormErrors, setShowShippingFormErrors] = useState(false);
 
     // New state to hold PayPal return parameters, persisting across renders
@@ -236,47 +236,47 @@ export default function MultiStepCheckout() {
     };
 
     const handleGuestCheckout = async () => {
-    const guestPayload = {
-        firstName,
-        lastName,
-        email,
-        shippingAddress: shipping,
-        billingAddress: sameAsShipping ? shipping : billing,
-        items: cartState.cart.map(item => ({
-            variantId: item.variant,
-            quantity: item.qty,
-        })),
-        paymentMethod: selectedPaymentMethod,
-        totalAmount: parseFloat(checkoutAmount),
+        const guestPayload = {
+            firstName,
+            lastName,
+            email,
+            shippingAddress: shipping,
+            billingAddress: sameAsShipping ? shipping : billing,
+            items: cartState.cart.map(item => ({
+                variantId: item.variant,
+                quantity: item.qty,
+            })),
+            paymentMethod: selectedPaymentMethod,
+            totalAmount: parseFloat(checkoutAmount),
+        };
+
+        if (selectedPaymentMethod === "paypal") {
+            guestPayload.paypalOrderId = paypalReturnInfo.orderId;
+        }
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/guest-checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(guestPayload),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) throw new Error(data.message || "Guest checkout failed");
+
+            showSnackbar("Order placed successfully!", "success");
+            dispatch({ type: "CLEAR_CART" });
+            router.push(`/order-confirmation/${data.data.id}`);
+        } catch (error) {
+            console.error("Guest checkout error:", error);
+            showSnackbar(`Failed to place order: ${error.message}`, "error");
+        } finally {
+            setLoading(false);
+        }
     };
-
-    if (selectedPaymentMethod === "paypal") {
-        guestPayload.paypalOrderId = paypalReturnInfo.orderId;
-    }
-
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/guest-checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(guestPayload),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) throw new Error(data.message || "Guest checkout failed");
-
-        showSnackbar("Order placed successfully!", "success");
-        dispatch({ type: "CLEAR_CART" });
-        router.push(`/order-confirmation/${data.data.id}`);
-    } catch (error) {
-        console.error("Guest checkout error:", error);
-        showSnackbar(`Failed to place order: ${error.message}`, "error");
-    } finally {
-        setLoading(false);
-    }
-};
 
 
     /**

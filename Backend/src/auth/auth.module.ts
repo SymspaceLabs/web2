@@ -12,7 +12,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { JwtGuard } from './jwt-auth.guard';
 import { MailchimpModule } from '../mailchimp/mailchimp.module';
 import { UsersModule } from '../users/users.module';
-import { HttpModule, HttpService } from '@nestjs/axios'; // Import the UsersModule
+import { HttpModule } from '@nestjs/axios'; // Import the UsersModule
 import { RedisModule } from '../redis/redis.module';
 
 @Module({

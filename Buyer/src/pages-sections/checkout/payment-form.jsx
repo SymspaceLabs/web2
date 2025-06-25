@@ -38,13 +38,13 @@ export default function PaymentForm({
             {/* PAYMENT METHOD BUTTONS */}
             <FlexBox gap={2} mb={3} justifyContent="space-between" flexWrap="wrap"> {/* Added flexWrap for responsiveness */}
                 {/* Card Button (now handled by PayPal Advanced Checkout) */}
-                <Button
+                {/* <Button
                     onClick={() => setPaymentMethod("card")}
                     sx={styles.paymentMethodButton(paymentMethod === "card")} // Apply styles from the styles object
                 >
                     <Box component="img" src="assets/images/payment-methods/Card.svg" alt="Card Icon" sx={{ height: 24, mb: 0.5 }} />
                     <Typography fontSize={12} fontWeight={500} textAlign="center">Credit/Debit Card<br/>(PayPal Advanced)</Typography>
-                </Button>
+                </Button> */}
 
                 {/* PayPal Button */}
                 <Button
@@ -56,22 +56,22 @@ export default function PaymentForm({
                 </Button>
 
                 {/* Apple Pay Button */}
-                <Button
+                {/* <Button
                     onClick={() => setPaymentMethod("apple-pay")}
                     sx={styles.paymentMethodButton(paymentMethod === "apple-pay")} // Apply styles from the styles object
                 >
                     <Box component="img" src="assets/images/payment-methods/ApplePay.svg" alt="Apple Pay" sx={{ height: 24, mb: 0.5 }} />
                     <Typography fontSize={12} fontWeight={500} textAlign="center">Apple Pay</Typography>
-                </Button>
+                </Button> */}
 
                 {/* Google Pay Button */}
-                <Button
+                {/* <Button
                     onClick={() => setPaymentMethod("google")}
                     sx={styles.paymentMethodButton(paymentMethod === "google")} // Apply styles from the styles object
                 >
                     <Box component="img" src="assets//images/payment-methods/GooglePay.svg" alt="Google Pay" sx={{ height: 24, mb: 0.5 }} />
                     <Typography fontSize={12} fontWeight={500} textAlign="center">Google Pay</Typography>
-                </Button>
+                </Button> */}
 
             </FlexBox>
 

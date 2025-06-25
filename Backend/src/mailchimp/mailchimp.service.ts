@@ -364,7 +364,7 @@ CONFIRM
   }
 
   async sendPasswordResetEmail(email: string, token: string): Promise<void> {
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    const resetUrl = `${process.env.BUYER_URL}/reset-password?token=${token}`;
 
     try {
       const response = await this.mailchimpClient.messages.send({

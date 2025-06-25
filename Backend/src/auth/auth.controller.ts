@@ -77,14 +77,14 @@ export class AuthController {
       await this.authService.verifyEmail(token);
       let redirectUrl;
       if (role === 'seller') {
-        redirectUrl = `${process.env.FRONTEND_URL}/vendor/dashboard`;
+        redirectUrl = `${process.env.BUYER_URL}/vendor/dashboard`;
       } else {
-        redirectUrl = `${process.env.FRONTEND_URL}/sign-in`;
+        redirectUrl = `${process.env.BUYER_URL}/sign-in`;
       }
       return res.redirect(redirectUrl);
     } catch (error) {
       return res.redirect(
-        `${process.env.FRONTEND_URL}/email-verification-failed`,
+        `${process.env.BUYER_URL}/email-verification-failed`,
       );
     }
   }

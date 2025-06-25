@@ -178,7 +178,7 @@ var MailchimpService = function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            resetUrl = "".concat(process.env.FRONTEND_URL, "/reset-password?token=").concat(token);
+                            resetUrl = "".concat(process.env.BUYER_URL, "/reset-password?token=").concat(token);
                             console.log(resetUrl);
                             message = {
                                 from_email: 'your-email@example.com',

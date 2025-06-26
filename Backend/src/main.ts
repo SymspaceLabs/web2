@@ -12,7 +12,7 @@ async function bootstrap() {
   await seeder.seed();
 
   app.enableCors({
-    origin: [process.env.BUYER_URL, process.env.SELLER_URL],
+    origin: [process.env.BUYER_URL, process.env.SELLER_URL, "https://symspacelabs.com"],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],

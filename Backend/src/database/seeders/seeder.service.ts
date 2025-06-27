@@ -30,9 +30,10 @@ export class SeederService {
       const subcategoryItemRepository = manager.getRepository(SubcategoryItem);
       
       // ✅ Clear existing records first (in child-to-parent order)
-      await subcategoryItemRepository.clear();
-      await subcategoryRepository.clear();
-      await categoryRepository.clear();
+      await subcategoryItemRepository.delete({});
+      await subcategoryRepository.delete({});
+      await categoryRepository.delete({});
+
 
 
       // 🔁 Now proceed with seeding

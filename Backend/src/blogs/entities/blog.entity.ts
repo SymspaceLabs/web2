@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { IsNotEmpty, IsString, IsNumber, IsUrl, Length, IsOptional } from 'class-validator';
 
-@Entity()
+@Entity('blogs')
 @Unique(['slug'])
 export class Blog {
   @PrimaryGeneratedColumn('uuid')

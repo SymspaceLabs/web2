@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { categoriesSeedData } from './category/data';
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { categoriesSeedData } from './category/data';
-import { blogSeedData } from './blog/data';
-import { Blog } from 'src/blogs/entities/blog.entity';
+// import { blogSeedData } from './blog/data';
+// import { Blog } from 'src/blogs/entities/blog.entity';
 
 @Injectable()
 export class SeederService {
@@ -18,8 +18,8 @@ export class SeederService {
     private readonly subcategoryRepository: Repository<Subcategory>,
     @InjectRepository(SubcategoryItem)
     private readonly subcategoryItemRepository: Repository<SubcategoryItem>,
-    @InjectRepository(Blog)
-    private readonly blogRepository: Repository<Blog>,
+    // @InjectRepository(Blog)
+    // private readonly blogRepository: Repository<Blog>,
   ) {}
 
   async seed() {
@@ -71,22 +71,6 @@ export class SeederService {
             }
             await subcategoryItemRepository.save(subcategoryItem);
           }
-        }
-      }
-  
-      // SEED BLOGS
-      const blogRepository = manager.getRepository(Blog);
-      for (const blog of blogSeedData) {
-        let existingBlog = await blogRepository.findOne({
-          where: { slug: blog.slug },
-        });
-        if (!existingBlog) {
-          const newBlog = blogRepository.create(blog);
-          await blogRepository.save(newBlog);
-        } else {
-          existingBlog.title = blog.title; // Update fields as necessary
-          existingBlog.content = blog.content;
-          await blogRepository.save(existingBlog);
         }
       }
     });

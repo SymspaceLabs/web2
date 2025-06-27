@@ -9,7 +9,7 @@ import {
 import { IsNotEmpty, IsString, IsNumber, IsUrl, Length, IsOptional } from 'class-validator';
 
 @Entity('blogs')
-@Unique(['slug'])
+// @Unique(['slug'])
 export class Blog {
   @PrimaryGeneratedColumn('uuid')
   id: string;

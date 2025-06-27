@@ -17,7 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "types": ["node", "express", "multer", "jest"]
+    "types": ["node", "express", "multer", "jest"],
+    "moduleResolution": "node",
+
   },
   "include": ["src/**/*"]
 }

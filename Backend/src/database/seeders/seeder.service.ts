@@ -28,7 +28,13 @@ export class SeederService {
       const categoryRepository = manager.getRepository(Category);
       const subcategoryRepository = manager.getRepository(Subcategory);
       const subcategoryItemRepository = manager.getRepository(SubcategoryItem);
-  
+      
+      // ✅ Clear existing records first (in child-to-parent order)
+      await subcategoryItemRepository.delete({});
+      await subcategoryRepository.delete({});
+      await categoryRepository.delete({});
+
+      // 🔁 Now proceed with seeding
       for (const categoryData of categoriesSeedData) {
         let category = await categoryRepository.findOne({ where: { id: categoryData.id } });
         if (!category) {

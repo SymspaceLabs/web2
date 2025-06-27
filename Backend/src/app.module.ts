@@ -108,4 +108,16 @@ import { ProductModelsModule } from './product-models/product-models.module';
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    // --- TEMPORARY DEBUG LOGS ---
+    console.log('--- TypeORM Config Check ---');
+    console.log('DB_HOST:', process.env.DB_HOST);
+    console.log('DB_PORT:', process.env.DB_PORT);
+    console.log('DB_USERNAME:', process.env.DB_USERNAME);
+    console.log('DB_DATABASE:', process.env.DB_DATABASE);
+    console.log('DB_SYNCHRONIZE:', process.env.NODE_ENV === 'development' ? true : false); // Example for conditional synchronize
+    console.log('--- End TypeORM Config Check ---');
+    // --- END TEMPORARY DEBUG LOGS ---
+  }
+}

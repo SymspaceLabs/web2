@@ -25,60 +25,60 @@ export class SeederService {
   async seed() {
     await this.dataSource.transaction(async (manager) => {
       // SEED CATEGORIES
-      const categoryRepository = manager.getRepository(Category);
-      const subcategoryRepository = manager.getRepository(Subcategory);
-      const subcategoryItemRepository = manager.getRepository(SubcategoryItem);
+      // const categoryRepository = manager.getRepository(Category);
+      // const subcategoryRepository = manager.getRepository(Subcategory);
+      // const subcategoryItemRepository = manager.getRepository(SubcategoryItem);
       
       // ✅ Clear existing records first (in child-to-parent order)
-      await subcategoryItemRepository.delete({});
-      await subcategoryRepository.delete({});
-      await categoryRepository.delete({});
+      // await subcategoryItemRepository.delete({});
+      // await subcategoryRepository.delete({});
+      // await categoryRepository.delete({});
 
       // 🔁 Now proceed with seeding
-      for (const categoryData of categoriesSeedData) {
-        let category = await categoryRepository.findOne({ where: { id: categoryData.id } });
-        if (!category) {
-          category = categoryRepository.create({
-            id: categoryData.id,
-            name: categoryData.name,
-          });
-          await categoryRepository.save(category);
-        } else {
-          category.name = categoryData.name; // Update if necessary
-          await categoryRepository.save(category);
-        }
+      // for (const categoryData of categoriesSeedData) {
+      //   let category = await categoryRepository.findOne({ where: { id: categoryData.id } });
+      //   if (!category) {
+      //     category = categoryRepository.create({
+      //       id: categoryData.id,
+      //       name: categoryData.name,
+      //     });
+      //     await categoryRepository.save(category);
+      //   } else {
+      //     category.name = categoryData.name; // Update if necessary
+      //     await categoryRepository.save(category);
+      //   }
   
-        for (const subcategoryData of categoryData.subcategories) {
-          let subcategory = await subcategoryRepository.findOne({ where: { id: subcategoryData.id } });
-          if (!subcategory) {
-            subcategory = subcategoryRepository.create({
-              id: subcategoryData.id,
-              name: subcategoryData.name,
-              category,
-            });
-            await subcategoryRepository.save(subcategory);
-          } else {
-            subcategory.name = subcategoryData.name; // Update if necessary
-            subcategory.category = category;
-            await subcategoryRepository.save(subcategory);
-          }
+      //   for (const subcategoryData of categoryData.subcategories) {
+      //     let subcategory = await subcategoryRepository.findOne({ where: { id: subcategoryData.id } });
+      //     if (!subcategory) {
+      //       subcategory = subcategoryRepository.create({
+      //         id: subcategoryData.id,
+      //         name: subcategoryData.name,
+      //         category,
+      //       });
+      //       await subcategoryRepository.save(subcategory);
+      //     } else {
+      //       subcategory.name = subcategoryData.name; // Update if necessary
+      //       subcategory.category = category;
+      //       await subcategoryRepository.save(subcategory);
+      //     }
   
-          for (const subcategoryItemData of subcategoryData.subcategoryItems) {
-            let subcategoryItem = await subcategoryItemRepository.findOne({ where: { id: subcategoryItemData.id } });
-            if (!subcategoryItem) {
-              subcategoryItem = subcategoryItemRepository.create({
-                id: subcategoryItemData.id,
-                name: subcategoryItemData.name,
-                subcategory,
-              });
-            } else {
-              subcategoryItem.name = subcategoryItemData.name; // Update if necessary
-              subcategoryItem.subcategory = subcategory;
-            }
-            await subcategoryItemRepository.save(subcategoryItem);
-          }
-        }
-      }
+      //     for (const subcategoryItemData of subcategoryData.subcategoryItems) {
+      //       let subcategoryItem = await subcategoryItemRepository.findOne({ where: { id: subcategoryItemData.id } });
+      //       if (!subcategoryItem) {
+      //         subcategoryItem = subcategoryItemRepository.create({
+      //           id: subcategoryItemData.id,
+      //           name: subcategoryItemData.name,
+      //           subcategory,
+      //         });
+      //       } else {
+      //         subcategoryItem.name = subcategoryItemData.name; // Update if necessary
+      //         subcategoryItem.subcategory = subcategory;
+      //       }
+      //       await subcategoryItemRepository.save(subcategoryItem);
+      //     }
+      //   }
+      // }
     });
   }
 }

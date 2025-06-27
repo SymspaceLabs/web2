@@ -58,7 +58,7 @@ import { ProductModelsModule } from './product-models/product-models.module';
         password: configService.get<string>('DB_UPASS') || '1234',
         database: configService.get<string>('DB_NAME')  || 'sympspace', 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
+        synchronize: true,
         options: {
           encrypt: true,
           trustServerCertificate: true,

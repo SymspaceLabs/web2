@@ -3,7 +3,7 @@ import {
   Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn,
 } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
-import { User } from 'src/users/entities/user.entity'; // Assuming you have a User entity
+import { User } from '../../src/users/entities/user.entity'; // Assuming you have a User entity
 
 @Entity()
 export class Review {

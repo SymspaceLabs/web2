@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import User from 'src/users/entities/user.entity';
+import User from '../../src/users/entities/user.entity';
 
 @Entity('credit_cards')
 export class CreditCard {

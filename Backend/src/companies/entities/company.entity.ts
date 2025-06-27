@@ -8,7 +8,7 @@ import {
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../src/users/entities/user.entity';
 import { Product } from 'src/products/entities/product.entity';
 import { IsString } from 'class-validator';
 

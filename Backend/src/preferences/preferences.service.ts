@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreatePreferencesDto } from './dto/create-preference.dto';
 import { UpdatePreferencesDto } from './dto/update-preference.dto';
 import { Preference } from './entities/preference.entity';
-import User from 'src/users/entities/user.entity';
+import User from '../../src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 

@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateMeasurementDto } from './dto/create-measurement.dto';
 import { UpdateMeasurementDto } from './dto/update-measurement.dto';
 import { Measurement } from './entities/measurement.entity';
-import User from 'src/users/entities/user.entity';
+import User from '../../src/users/entities/user.entity';
 
 @Injectable()
 export class MeasurementsService {

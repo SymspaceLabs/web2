@@ -1,7 +1,7 @@
 // src/orders/entities/order.entity.ts
 
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { User } from '../../src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Address } from 'src/addresses/entities/address.entity';
 import { OrderItem } from './order-item.entity';
 

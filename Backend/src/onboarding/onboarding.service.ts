@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateOnboardingDto } from './dto/create-onboarding.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Measurement } from 'src/measurements/entities/measurement.entity';
-import User from '../../src/users/entities/user.entity';
+import User from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Preference } from 'src/preferences/entities/preference.entity';
 

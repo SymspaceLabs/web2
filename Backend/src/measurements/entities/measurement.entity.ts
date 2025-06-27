@@ -1,5 +1,5 @@
 import { IsBoolean, IsEnum } from 'class-validator';
-import User from '../../src/users/entities/user.entity';
+import User from '../../users/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()

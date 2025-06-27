@@ -5,7 +5,7 @@ import { ReviewsService } from './reviews.service';
 import { ReviewsController } from './reviews.controller';
 import { Review } from './entities/review.entity';
 import { Product } from 'src/products/entities/product.entity';
-import { User } from '../../src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Review, Product, User])],

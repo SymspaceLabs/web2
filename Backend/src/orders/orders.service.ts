@@ -11,7 +11,7 @@ import { CreateGuestOrderDto } from './dto/create-guest-order.dto';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common'; // Import Logger for better debugging
 import { MailchimpService } from 'src/mailchimp/mailchimp.service';
-import User from '../../src/users/entities/user.entity';
+import User from '../users/entities/user.entity';
 @Injectable()
 export class OrdersService {
   private readonly logger = new Logger(OrdersService.name); // Initialize Logger

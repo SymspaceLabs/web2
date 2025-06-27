@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSellerOnboardingDto } from './dto/create-seller-onboarding.dto';
 import { UpdateSellerOnboardingDto } from './dto/update-seller-onboarding.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import User from '../../src/users/entities/user.entity';
+import User from '../users/entities/user.entity';
 import { DataSource, Not, Repository } from 'typeorm';
 import { Company } from 'src/companies/entities/company.entity';
 import { Bank } from 'src/banks/entities/bank.entity';

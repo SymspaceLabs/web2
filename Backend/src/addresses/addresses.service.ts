@@ -1,10 +1,10 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from './entities/address.entity';
-import { User } from '../../src/users/entities/user.entity';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import User from '../users/entities/user.entity';
 
 @Injectable()
 export class AddressesService {

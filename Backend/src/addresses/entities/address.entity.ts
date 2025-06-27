@@ -1,6 +1,6 @@
 // src/addresses/entities/address.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
-import { User } from '../../src/users/entities/user.entity';
+import User from '../../users/entities/user.entity';
 
 @Entity()
 export class Address {

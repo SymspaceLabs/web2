@@ -111,6 +111,7 @@ export const Card2 = ({ imageUrl, headerText, subHeaderText, bg, textColor="#000
       minHeight: { sm: 250 }, 
       py: { xs: 2, sm: 5.5 }, 
       pr: 3,
+      pl: { xs: 2 },
       bgcolor: bg,
       display: "flex",
       justifyContent: "center",

@@ -92,7 +92,8 @@ export const CustomCard1 = ({ number, description }) => {
       ref={ref} 
       sx={{ 
         background:"#FFF",
-        mb: {sm:2},
+        mb: { sm: 2 },
+        px: { xs: 1 },
         borderRadius: {xs:'30px', sm:'50px'}, 
         '&:hover .fadeInBtn': { 
           opacity: 1,
@@ -104,7 +105,7 @@ export const CustomCard1 = ({ number, description }) => {
         <H1 sx={{  color: '#000', fontSize: {xs:40, sm:100} }}>
           {currentNumber}%
         </H1>
-        <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:20}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'} }}>
+        <Paragraph sx={{ color: '#353535', fontSize: {xs:10, sm:20}, textAlign: {xs:'left', sm:'center'}, maxWidth:{xs:'120px', sm:'100%'}, px: {xs:1} }}>
           {description}
         </Paragraph>
         {/* Button with fade-in effect */}
@@ -122,7 +123,7 @@ export const CustomCard1 = ({ number, description }) => {
                 border: '2px solid black',
                 color: 'black',
                 fontSize: {xs:8, sm:12},
-                mb: 5,
+                mb: { xs:0, sm:5 },
                 ':hover': {
                   background: 'linear-gradient(94.44deg, #666666 29%, #000000 100%)',
                   color: '#FFF',

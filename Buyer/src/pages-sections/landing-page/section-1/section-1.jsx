@@ -97,6 +97,7 @@ export default function Section1() {
                     autoPlay
                     loop
                     muted
+                    playsInline
                     src='/assets/videos/landing-page/hero.mp4'
                     poster='/assets/videos/landing-page/hero.mp4'
                     style={{

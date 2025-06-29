@@ -495,7 +495,7 @@ export default function MultiStepCheckout() {
                 </Button>
             }
             {selectedStep == 0 && 
-                <Button onClick={()=>router.push('/products/all')} sx={{ mb: 2 }} >
+                <Button onClick={()=>router.push('/products/search/all')} sx={{ mb: 2 }} >
                     <ChevronLeftIcon />
                     <H1>Continue Shopping</H1>
                 </Button>

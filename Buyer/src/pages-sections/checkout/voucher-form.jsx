@@ -1,3 +1,4 @@
+// src/components/voucher-form.js
 // ================================================
 // Voucher Form
 // ================================================
@@ -5,53 +6,111 @@
 import { useState } from "react";
 import { Box, Card, Button, TextField, InputAdornment, CircularProgress } from "@mui/material";
 
-// import { currency } from "lib";
-// import { useCart } from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
-// import { Paragraph } from "components/Typography";
-// import { FlexBetween, FlexCol } from "components/flex-box"; // DUMMY CUSTOM DATA
-// import { SymAutoComplete, SymDropdown, SymTextField } from "@/components/custom-inputs";
-
-// import countryList from "data/countryList"; // CUSTOM UTILS LIBRARY FUNCTION
-// import { SymButton } from "@/components/custom-components";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 // ================================================
 
 export default function VoucherForm({
-  // btnText="Check Out Now",
-  // handleSave,
-  // loading=false
+  cartTotal = 0,
+  onDiscountApplied,
 }) {
-  
-  // const { state: cartState } = useCart();
-  // const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-
-  // const STATE_LIST = [
-  //   "New York", 
-  //   "Chicago"
-  // ];
+  const { user, token } = useAuth();
+  const { showSnackbar } = useSnackbar();
 
   const [promo, setPromo] = useState("");
   const [loading, setLoading] = useState(false);
   const [promoValid, setPromoValid] = useState(false);
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
-  // const [country, setCountry] = useState(null);
-  // const [state, setState] = useState("");
-  // const [zipCode, setZipCode] = useState(null);
+  const getAuthToken = () => {
+    return token;
+  };
 
-  // Function to handle promo code application logic.
-  // Now includes logic to show and hide the loading spinner, and then show the checkmark.
-  const handleApplyPromo = () => {
-    setLoading(true); // Set loading to true when button is clicked
-    setPromoValid(false); // Reset valid state when a new attempt is made
+  const handleApplyPromo = async () => {
+    setLoading(true);
+    setPromoValid(false);
 
-    console.log("Applying promo code:", promo);
-    // Simulate an asynchronous operation (e.g., an API call)
-    setTimeout(() => {
-      setLoading(false); // After a delay, reset loading to false
-      setPromoValid(true); // Assuming valid for demonstration, set to true
-      // In a real application, you would check the API response for validity
-      // and set setPromoValid(true) or setPromoValid(false) accordingly.
-    }, 1500); // Simulate a 1.5-second loading time
+    const currentToken = getAuthToken();
+    if (!currentToken) {
+      showSnackbar("Please log in to apply a promo code. Token is missing.", "error");
+      setLoading(false);
+      return;
+    }
+
+    if (!promo.trim()) {
+      showSnackbar("Please enter a promo code.", "error");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        'http://localhost:3000/promo-codes/apply',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentToken}`,
+          },
+          body: JSON.stringify({ code: promo.trim() }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to apply promo code.');
+      }
+
+      const data = await response.json();
+      const { discountPercentage: receivedDiscount } = data;
+
+      const rawDiscountAmount = cartTotal * receivedDiscount;
+      const calculatedDiscountAmount = Math.floor(rawDiscountAmount * 100) / 100;
+
+      setDiscountPercentage(receivedDiscount);
+      setPromoValid(true);
+      setAppliedPromo(promo.trim());
+      
+      showSnackbar(
+        `Promo code "${promo.trim()}" applied! You get a ${(receivedDiscount * 100).toFixed(0)}% discount.`,
+        "success"
+      );
+      
+      if (onDiscountApplied) {
+        onDiscountApplied(calculatedDiscountAmount);
+      }
+
+    } catch (error) {
+      console.error('Error applying promo code:', error.message);
+      setDiscountPercentage(0);
+      setPromoValid(false);
+      setAppliedPromo(null);
+      
+      showSnackbar(error.message || 'Failed to apply promo code. Please try again.', "error");
+      
+      if (onDiscountApplied) {
+        onDiscountApplied(0);
+      }
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setPromo("");
+    setLoading(false);
+    setPromoValid(false);
+    setAppliedPromo(null);
+    setDiscountPercentage(0);
+    
+    showSnackbar("Promo code removed.", "info");
+
+    if (onDiscountApplied) {
+      onDiscountApplied(0);
+    }
   };
 
   return (
@@ -59,137 +118,78 @@ export default function VoucherForm({
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, py: 1 }}>
         <TextField
           placeholder="Promo Code"
-          value={promo}
+          value={promoValid ? appliedPromo : promo}
           onChange={(e) => {
-            setPromo(e.target.value);
-            setPromoValid(false); // Reset valid state when input changes
-
+            setPromo(e.target.value.toUpperCase()); 
+            if (promoValid) {
+              handleRemovePromo();
+            }
           }}
-          // endAdornment places the element at the trailing end of the input field.
+          disabled={promoValid && !loading} 
+          // --- UPDATED STYLING FOR VISIBILITY USING SX PROP ---
+          sx={{
+            // Target the actual input element when it's disabled (which it is when promoValid is true)
+            '& .MuiInputBase-input.Mui-disabled': {
+              WebkitTextFillColor: 'black !important', // For Webkit browsers (Chrome, Safari)
+              color: 'black !important',             // For other browsers
+              opacity: '1 !important',                // Ensure full opacity
+              fontWeight: 'bold',                     // Make it bold for emphasis
+            },
+            // Fallback/general style for the input if not disabled (e.g., when user is typing)
+            '& .MuiInputBase-input': {
+                textTransform: 'uppercase', // Ensure text input is visually uppercase
+            }
+          }}
           InputProps={{
+            // The `style` prop here is less specific than `sx` on the TextField component itself for disabled states.
+            // Keeping it for clarity, but the `sx` on TextField is more likely to fix the disabled transparency.
+            style: promoValid ? { color: 'black', opacity: 1, fontWeight: 'bold' } : {},
             endAdornment: (
               <InputAdornment position="end">
-                {/* The 'Apply' button is placed within the InputAdornment. */}
-                <Button
-                  onClick={handleApplyPromo}
-                  disabled={loading || promoValid} 
-                  sx={{
-                    // Styling for the 'Apply' button to make it compact and fit within the input.
-                    minWidth: 'auto', 
-                    padding: '6px 12px', 
-                    borderRadius: '15px', 
-                    // border: '1px solid #0366FE',
-                    color: '#0366FE',
-                    // '&:hover': {
-                    //   background: '#0366FE',
-                    //   color: '#FFF'
-                    // }
-                  }}
-                >
-                  {loading ? (
-                    // Show spinner when loading
-                    <CircularProgress 
-                      size={20} 
-                      color="primary" // Inherits color from parent Button's color prop
-                    /> 
-                  ) : promoValid ? (
-                    // Show green checkmark when promo is valid
-                    <svg 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      viewBox="0 0 24 24" 
-                      fill="green" 
-                      width="20px" 
-                      height="20px"
-                    >
-                      <path d="M0 0h24v24H0z" fill="none"/>
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                  ) : (
-                    // Show "Apply" text otherwise
-                    "Apply"
-                  )}
-                </Button>
+                {promoValid && !loading ? (
+                  <Button
+                    onClick={handleRemovePromo}
+                    sx={{
+                      minWidth: 'auto', 
+                      padding: '6px 12px', 
+                      borderRadius: '15px', 
+                      color: 'red',
+                      '&:hover': {
+                         backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                      }
+                    }}
+                  >
+                    REMOVE
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleApplyPromo}
+                    disabled={loading || !promo.trim()} 
+                    sx={{
+                      minWidth: 'auto', 
+                      padding: '6px 12px', 
+                      borderRadius: '15px', 
+                      color: '#0366FE', 
+                      '&:hover': {
+                         backgroundColor: 'rgba(3, 102, 254, 0.1)',
+                      }
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress 
+                        size={20} 
+                        color="primary" 
+                      /> 
+                    ) : (
+                      "APPLY"
+                    )}
+                  </Button>
+                )}
               </InputAdornment>
             ),
           }}
         />
       </Box>
-
-      {/* <FlexCol gap={2} py={1}>
-        <SymTextField
-          placeholder="Promo Code"
-          value={promo}
-          onChange={(e) => setPromo(e.target.value)}
-        />
-        <Button
-          fullWidth
-          sx={{
-            py: 1,
-            borderRadius:'50px',
-            border:'2px solid #0366FE',
-            color:'#0366FE',
-            '&:hover': {
-              background:'#0366FE',
-              color:'#FFF'
-            }
-          }}
-        >
-          Apply Promo Code
-        </Button>
-      </FlexCol> */}
-
-      {/* <SymButton
-          onClick={handleSave}
-          loading={loading}
-          sx={styles.btn}
-        >
-        {btnText}
-      </SymButton> */}
-
-      {/* <FlexCol gap={1}>
-        <Paragraph color="#000" fontSize={18}>
-          Shipping Estimates
-        </Paragraph>
-        
-        <SymAutoComplete
-          placeholder="Country"
-          value={country}
-          onChange={(val) => setCountry(val)}
-          options={countryList}
-        />
-
-        <SymDropdown
-          placeholder="State"
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-          options={STATE_LIST}
-        />
-
-        <SymTextField
-          placeholder="Zip code"
-          value={zipCode}
-          onChange={(e)=>setZipCode(e.target.value)}
-        />
-
-        <Button
-          fullWidth
-          sx={{
-            py: 1,
-            borderRadius:'50px',
-            border:'2px solid #0366FE',
-            color:'#0366FE',
-            '&:hover': {
-              background:'#0366FE',
-              color:'#FFF'
-            }
-          }}
-        >
-          Calculate Shipping
-        </Button>
-
-         
-      </FlexCol> */}
-
     </Card>
   );
 }
@@ -209,7 +209,7 @@ const styles = {
     background:'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
     color:'#FFF',
     '&:hover': {
-      background:'transaparent',
+      background:'transparent',
     }
   }
 }

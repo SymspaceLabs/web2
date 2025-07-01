@@ -99,11 +99,11 @@ export default function Section1() {
                     muted
                     playsInline
                     src='/assets/videos/landing-page/hero.mp4'
-                    poster='/assets/videos/landing-page/hero.mp4'
+                    poster='/assets/videos/landing-page/hero-poster.png'
                     style={{
                       width: '100%',
                       height: 'auto',
-                      display: 'block',     // removes inline spacing issues
+                      display: 'block'
                     }}
                   />
                 </Box>

@@ -4,6 +4,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { User } from '../../users/entities/user.entity';
 import { Address } from 'src/addresses/entities/address.entity';
 import { OrderItem } from './order-item.entity';
+import { PromoCode } from 'src/promo-codes/entities/promo-code.entity';
 
 @Entity()
 export class Order {
@@ -98,6 +99,14 @@ export class Order {
 
   @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
   items: OrderItem[];
+
+  // --- NEW FIELDS FOR PROMO CODE ---
+  @ManyToOne(() => PromoCode, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'promoCodeId' })
+  promoCode: PromoCode;
+
+  @Column({ type: 'uuid', nullable: true })
+  promoCodeId: string; // Foreign key for PromoCode
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

@@ -113,6 +113,17 @@ export default function MultiStepCheckout() {
         
     }, [user, isAuthenticated]);
 
+
+    // --- Fetch Address After Routing From Paypal
+    useEffect(() => {
+    const storedAddressId = localStorage.getItem("selectedAddressId");
+    if (storedAddressId) {
+        setSelectedAddressId(storedAddressId);
+        localStorage.removeItem("selectedAddressId"); // Clean up
+    }
+    }, []);
+
+
     /**
      * Callback function for when a PayPal payment encounters an error or is cancelled.
      * @param {object | string} error - The error object or string message.
@@ -128,6 +139,9 @@ export default function MultiStepCheckout() {
         setLoading(true);
 
         if(isAuthenticated){
+
+            localStorage.setItem("selectedAddressId", selectedAddressId);
+
 
         } else {
             const payload = {

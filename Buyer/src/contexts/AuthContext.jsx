@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const handleAuthResponse = (userData, userToken) => {
+    console.log(userToken);
     setUser(userData);
     setToken(userToken);
     setIsAuthenticated(true);

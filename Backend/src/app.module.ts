@@ -43,6 +43,8 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { PaypalModule } from './paypal/paypal.module';
 import { PaymentModule } from './payment/payment.module';
 import { ProductModelsModule } from './product-models/product-models.module';
+import { PromoCodesModule } from './promo-codes/promo-codes.module';
+import { UserPromoCodesModule } from './user-promo-codes/user-promo-codes.module';
 
 @Module({
   imports: [
@@ -57,7 +59,7 @@ import { ProductModelsModule } from './product-models/product-models.module';
         password: configService.get<string>('DB_UPASS') || '1234',
         database: configService.get<string>('DB_NAME')  || 'sympspace', 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
+        synchronize: true,
         options: {
           encrypt: true,
           trustServerCertificate: true,
@@ -101,7 +103,9 @@ import { ProductModelsModule } from './product-models/product-models.module';
     ReviewsModule,
     PaypalModule,
     PaymentModule,
-    ProductModelsModule
+    ProductModelsModule,
+    PromoCodesModule,
+    UserPromoCodesModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

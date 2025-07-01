@@ -45,6 +45,7 @@ export class AuthService {
     private jwtService: JwtService,
     private redisService: RedisService,
     private readonly mailchimpService: MailchimpService,
+
   ) {}
 
   private appleClient = jwksClient({
@@ -474,11 +475,78 @@ export class AuthService {
     };
   }
 
-  async loginWithGoogle(idToken: string) {
+  // async loginWithGoogle(idToken: string) {
 
-    const googleUser = await this.parseJWT(idToken);
+  //   const googleUser = await this.parseJWT(idToken);
+
+  //   const { email } = googleUser;
+
+  //   let user = await this.usersRepository.findOne({
+  //     where: { email },
+  //   });
+
+  //   try {
+  //     if (!user) {
+  //       user = this.usersRepository.create({
+  //           email: googleUser.email,
+  //           firstName: googleUser.firstName || '',
+  //           lastName: googleUser.lastName || '',
+  //           avatar: googleUser.picture || '',
+  //           isVerified: true,
+  //           role: 'buyer',
+  //           password: '',
+  //           authMethod: AuthMethod.GOOGLE,
+  //       });
+  //       await this.usersRepository.save(user);  
+  //     }
+  //   } catch (error) {
+  //     console.error('Error saving user:', error.message);
+  //     throw new Error('Failed to create user. Please check your data and try again.');
+  //   }
+
+  //   const accessToken = this.jwtService.sign(
+  //     { userId: user.id, email: user.email },
+  //     { secret: process.env.JWT_SECRET, expiresIn: '1h' },
+  //   );
+
+  //   // Store the token in Redis
+  //   await this.redisService
+  //     .getClient()
+  //     .set(`auth:${user.id}`, accessToken, 'EX', 3600);
+
+  //   await this.authRepository.update(user.id, { refreshToken: accessToken });
+
+  //   return {
+  //     accessToken,
+  //     user: {
+  //       id: user.id,
+  //       email: user.email,
+  //       firstName: user.firstName,
+  //       lastName: user.lastName,
+  //       role: user.role,
+  //       avatar: user.avatar,
+  //       isOnboardingFormFilled: user.isOnboardingFormFilled,
+  //     },
+  //   };
+  // }
+
+  async loginWithGoogle(idToken: string) {
+    this.logger.log('loginWithGoogle: Starting authentication process.');
+    this.logger.debug(`loginWithGoogle: Received idToken (first 20 chars): ${idToken ? idToken.substring(0, 20) : 'null'}`);
+
+
+    let googleUser;
+    try {
+        googleUser = await this.parseJWT(idToken);
+        this.logger.log(`loginWithGoogle: Parsed Google User email: ${googleUser.email}`);
+    } catch (error) {
+        this.logger.error(`loginWithGoogle: Error parsing JWT: ${error.message}`, error.stack);
+        throw new UnauthorizedException('Invalid Google ID token.');
+    }
+    
 
     const { email } = googleUser;
+    this.logger.log(`loginWithGoogle: Looking for user with email: ${email}`);
 
     let user = await this.usersRepository.findOne({
       where: { email },
@@ -486,6 +554,7 @@ export class AuthService {
 
     try {
       if (!user) {
+        this.logger.log(`loginWithGoogle: User not found, creating new user for email: ${email}`);
         user = this.usersRepository.create({
             email: googleUser.email,
             firstName: googleUser.firstName || '',
@@ -493,14 +562,24 @@ export class AuthService {
             avatar: googleUser.picture || '',
             isVerified: true,
             role: 'buyer',
-            password: '',
+            password: '', // Password is not used for social logins
             authMethod: AuthMethod.GOOGLE,
         });
-        await this.usersRepository.save(user);  
+        await this.usersRepository.save(user); 
+        this.logger.log(`loginWithGoogle: New user created with ID: ${user.id}`);
+      } else {
+        this.logger.log(`loginWithGoogle: Existing user found with ID: ${user.id}`);
+        // Consider updating user details here if needed, but for now, just log.
       }
     } catch (error) {
-      console.error('Error saving user:', error.message);
-      throw new Error('Failed to create user. Please check your data and try again.');
+      this.logger.error(`loginWithGoogle: Error creating/saving user: ${error.message}`, error.stack);
+      throw new InternalServerErrorException('Failed to process user. Please try again.');
+    }
+
+    // Ensure user object is valid before proceeding
+    if (!user || !user.id || !user.email) {
+        this.logger.error('loginWithGoogle: User object is invalid after creation/retrieval.');
+        throw new InternalServerErrorException('User data not available for token generation.');
     }
 
     const accessToken = this.jwtService.sign(
@@ -508,13 +587,32 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
 
+    // --- IMPORTANT LOGGING HERE ---
+    this.logger.log(`loginWithGoogle: Generated accessToken (first 20 chars): ${accessToken.substring(0, 20)}...`);
+    this.logger.debug(`loginWithGoogle: Full generated accessToken: ${accessToken}`);
+
+
     // Store the token in Redis
-    await this.redisService
-      .getClient()
-      .set(`auth:${user.id}`, accessToken, 'EX', 3600);
+    try {
+        await this.redisService
+          .getClient()
+          .set(`auth:${user.id}`, accessToken, 'EX', 3600);
+        this.logger.log(`loginWithGoogle: Token stored in Redis for user ID: ${user.id}`);
+    } catch (redisError) {
+        this.logger.error(`loginWithGoogle: Failed to store token in Redis for user ID ${user.id}: ${redisError.message}`, redisError.stack);
+        // Decide how critical this is. You might still return the token if Redis is just a cache.
+    }
 
-    await this.authRepository.update(user.id, { refreshToken: accessToken });
 
+    try {
+        await this.authRepository.update(user.id, { refreshToken: accessToken });
+        this.logger.log(`loginWithGoogle: Auth repository updated with refreshToken for user ID: ${user.id}`);
+    } catch (authRepoError) {
+        this.logger.error(`loginWithGoogle: Failed to update auth repository for user ID ${user.id}: ${authRepoError.message}`, authRepoError.stack);
+    }
+
+
+    this.logger.log('loginWithGoogle: Returning success response.');
     return {
       accessToken,
       user: {
@@ -578,18 +676,21 @@ export class AuthService {
 
       await this.authRepository.update(user.id, { refreshToken: accessToken });
 
-        return {
-          accessToken,
-          user: {
-            id: user.id,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            role: user.role,
-            avatar: user.avatar,
-            isOnboardingFormFilled: user.isOnboardingFormFilled,
-          },
-        };
+      console.log(accessToken);
+
+      return {
+        accessToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          role: user.role,
+          avatar: user.avatar,
+          isOnboardingFormFilled: user.isOnboardingFormFilled,
+          token: accessToken
+        },
+      };
 
 
       } catch (err) {

@@ -12,7 +12,7 @@ import { Fragment } from "react";
 import { H1 } from "@/components/Typography";
 import { Box, IconButton, Card } from "@mui/material";
 import { SearchInput } from "@/components/search-box";
-import { SymDialog, SymDrawer, SymImage } from "@/components/custom-components";
+import { SymDialog, SymDrawer } from "@/components/custom-components";
 import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { styled } from '@mui/material/styles';
 
@@ -31,9 +31,8 @@ import Scrollbar from "@/components/scrollbar"; // CUSTOM UTILS LIBRARY FUNCTION
 
 export default function MobileHeader() {
 
-    const { state: favState } = useFavorites();
+  const { state: favState } = useFavorites();
   
-
   const {
     searchBarOpen,
     toggleSearchBar,
@@ -58,7 +57,11 @@ export default function MobileHeader() {
 
         {/* MIDDLE CONTENT - LOGO */}
         <Link href="/">
-          <SymImage height={35} src="/assets/images/logo_without_text.svg" alt="logo" />
+          <img 
+            src="/assets/images/logo_without_text.svg" 
+            alt="logo" 
+            style={{ width: "100%", width: 35, height: "auto" }}
+          />
         </Link>
 
         {/* RIGHT CONTENT - LOGIN, CART, SEARCH BUTTON */}

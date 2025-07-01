@@ -1,12 +1,8 @@
 "use client";
 
-/**
- * Authentication Layout Component
- *
- * This component dynamically renders different authentication pages based on the current route.
- * It customizes the UI for login, registration, password recovery, and email verification.
- *
- */
+// ==============================================
+// Authentication Layout Component
+// ==============================================
 
 import Image from "next/image";
 import Link from "next/link";
@@ -257,14 +253,12 @@ export default function AuthLayout({ children }) {
   return (
     <FlexBox sx={styles.mainContainer}>
       {/* LOGO */}
-      <FlexBox sx={{ zIndex: 2, py:3 }}>
+      <FlexBox sx={{ zIndex: 2, py:3, minHeight : 50 }}>
         <Link href="/">
-          <Image 
-            width={250} 
-            height={250} 
+          <img 
             src="/assets/images/logos/Logo.svg" 
-            alt="logo"
-            style={{ maxWidth: '100%', height: 'auto' }}
+            alt="logo" 
+            style={{ width: "100%", width: 250, height: "auto" }}
           />
         </Link>
       </FlexBox>

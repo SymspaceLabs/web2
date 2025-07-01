@@ -1,51 +1,26 @@
+// src/components/GoogleLoginButton.js (or wherever your component is located)
 'use client';
 
- // =======================================
-
-import axios from 'axios';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
-import googleLogo from "../../../../public/assets/images/icons/google-1.svg";
-import Image from "next/image"; // MUI
+import Image from "next/image"; // Assuming you have Next.js Image component
+import googleLogo from "../../../../public/assets/images/icons/google-1.svg"; // Adjust path as necessary
 
+const GoogleLoginButton = () => {
 
-const GoogleLoginButton = ({ handleAuthResponse }) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.google) {
-      google.accounts.id.initialize({
-        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        callback: handleGoogleLoginSuccess,
-      });
-    }
-  }, []);
-
-
+  // The redirect URI where Google will send the user back after authentication.
+  // This MUST match an Authorized redirect URI in your Google Cloud Console.
+  // Construct the Google OAuth URL for the implicit flow (response_type=id_token)
+  // Redirect the user's browser to Google's authentication page
   const handleGoogleLogin = () => {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    const redirectUri = window.location.origin + '/google-callback'; // Frontend page to handle tokens
-    const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20email%20profile&prompt=select_account&nonce=random_nonce`;
-  
+    const redirectUri = window.location.origin + '/google-callback'; 
+    const googleOAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=id_token&scope=openid%20email%20profile&prompt=select_account&nonce=${Math.random().toString(36).substring(2)}`;
     window.location.href = googleOAuthUrl;
-  };
-  
-
-  const handleGoogleLoginSuccess = async (response) => {
-    try {
-      const idToken = response.credential;
-      const result = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/google`, { idToken });
-      handleAuthResponse(result.data.user, result.data.token);
-      router.push('/marketplace');
-    } catch (error) {
-      console.error("Google login failed:", error);
-    }
   };
 
   return (
     <Button
-      onClick={handleGoogleLogin}
+      onClick={handleGoogleLogin} // This button's click event triggers the redirect
       fullWidth 
       size="large" 
       sx={{
@@ -55,12 +30,12 @@ const GoogleLoginButton = ({ handleAuthResponse }) => {
         '&:hover': { 
           background: 'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)' 
         }
-      }}  
+      }}  
     >
       <Image
         alt="google"
         src={googleLogo}
-        style={{ height: "25px" }}
+        style={{ height: "25px" }} // Adjust image styling as needed
       />
     </Button>
   );

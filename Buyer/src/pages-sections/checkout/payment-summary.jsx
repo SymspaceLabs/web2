@@ -2,7 +2,7 @@
 // Payment Summary
 // ================================================
 
-
+import { useState } from "react"; // <-- Import useState
 import { currency } from "lib";
 import { useCart } from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 import { H1, Paragraph } from "components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
@@ -27,10 +27,19 @@ export default function PaymentSummary({
   const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const subtotal = getTotalPrice();
-  const shipping = 4.99
-  const tax = 40; // or 0.1 * subtotal
-  const discount = 0; // optionally calculate from vouchers
-  const grandTotal = subtotal + tax - discount;
+  const shipping = 4.99; // Assuming fixed shipping
+  const tax = 40; // Assuming fixed tax (or you can calculate: 0.1 * subtotal)
+
+  // Use state for discount to make it reactive
+  const [discountAmount, setDiscountAmount] = useState(0);
+
+  // Callback function to receive the discount from VoucherForm
+  const handleDiscountApplied = (amount) => {
+    setDiscountAmount(amount);
+  };
+
+  // Calculate grandTotal using the state-managed discountAmount
+  const grandTotal = subtotal + tax - discountAmount;
   
   return (
     <FlexCol gap={2}>
@@ -38,15 +47,11 @@ export default function PaymentSummary({
         <H1 pb={3}>
             Payment Summary
         </H1>
-        {/* <Box pb={2}>
-          
-          <Divider sx={{ borderColor: '#000'}} />
-        </Box> */}
         <FlexCol pb={4}>
-          <PaymentItem title="Subtotal" amount={getTotalPrice()}/>
+          <PaymentItem title="Subtotal" amount={subtotal}/> {/* Use calculated subtotal */}
           <PaymentItem title="Shipping" amount={shipping} />
           <PaymentItem title="Tax" amount={tax} />
-          <PaymentItem title="Discount" amount={discount} />
+          <PaymentItem title="Discount" amount={discountAmount} /> {/* Use state-managed discount */}
 
           <Box py={2}>
             <Divider sx={{ borderColor: 'rgba(0,0,0,0.2)'}} />
@@ -60,7 +65,6 @@ export default function PaymentSummary({
               {currency(grandTotal)}
             </Paragraph>
           </FlexBox>
-
 
         </FlexCol>
 
@@ -82,9 +86,13 @@ export default function PaymentSummary({
           }
         </SymButton>
       </Card>
-      <VoucherForm />
+      
+      {/* Pass cartTotal and the callback function to VoucherForm */}
+      <VoucherForm
+        cartTotal={subtotal} // Pass the current subtotal
+        onDiscountApplied={handleDiscountApplied} // Pass the callback
+      />
     </FlexCol>
-
   );
 }
 
@@ -93,7 +101,7 @@ const styles = {
     p:3,
     borderRadius: "25px",
     backdropFilter: 'blur(10.0285px)',
-    boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)', 
+    boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)',
     background: 'rgba(255, 255, 255, 0.35)',
   },
   btn : {

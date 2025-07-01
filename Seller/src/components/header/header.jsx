@@ -1,4 +1,4 @@
-import { Box, useMediaQuery} from '@mui/material';
+import { useMediaQuery} from '@mui/material';
 import { FlexBox } from "../flex-box";
 import { LazyImage } from "../lazy-image";
 import { Fragment } from "react";

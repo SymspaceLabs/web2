@@ -109,8 +109,7 @@ function ShopLayoutContent({children, noFooter}) {
       {/* BODY CONTENT */}
       {children}
 
-      {/* SMALL DEVICE BOTTOM NAVIGATION */}
-      {/* BOTTOM NAVBAR */}
+      {/* BOTTOM NAVBAR - MOBILE */}
       <MobileNavigationBar />
 
       {/* LOGIN DIALOG */}

@@ -222,12 +222,10 @@ export default function AuthLayout({ children }) {
       {/* LOGO */}
       <FlexBox sx={{ zIndex: 2, py:3 }}>
         <Link href={process.env.NEXT_PUBLIC_BUYER_URL}>
-          <Image
-            width={250} 
-            height={250} 
+          <img 
             src="/assets/images/logos/Logo.svg" 
-            alt="logo"
-            style={{ maxWidth: '100%', height: 'auto' }}
+            alt="logo" 
+            style={{ width: "100%", width: 250, height: "auto" }}
           />
         </Link>
       </FlexBox>

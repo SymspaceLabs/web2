@@ -36,6 +36,10 @@ export class CreateOrderDto {
     @IsOptional() // Added 'status' property to handle order status updates
     @IsString()
     status?: string;
+
+    @IsOptional()
+    @IsString()
+    promoCode?: string;
 }
 
 export class OrderItemDto {

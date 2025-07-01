@@ -24,7 +24,7 @@ export default function GoogleCallback() {
       // Send idToken to your backend
       axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/google`, { idToken })
         .then((response) => {
-          handleAuthResponse(response.data.user, response.data.token);
+          handleAuthResponse(response.data.user, response.data.accessToken);
           router.push('/marketplace'); // After successful login
         })
         .catch((error) => {

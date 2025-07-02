@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 /**
  * Handles the internal processing after a successful PayPal payment.
@@ -13,6 +13,9 @@
  * @param {string} params.checkoutAmount - The total amount of the checkout.
  * @param {string} params.shippingAddressId - The ID of the selected shipping address for authenticated users.
  * @param {boolean} params.isAuthenticated - Flag indicating if the user is authenticated (PASSED FROM COMPONENT).
+ * @param {number} params.shippingCost - The shipping cost for the order.
+ * @param {string} [params.promoCodeId] - The ID of the applied promo code (optional).
+ * @param {number} [params.discountAmount] - The discount amount applied to the order (optional).
  */
 export const handlePayPalPaymentSuccessInternal = async ({
   paypalOrderId,
@@ -24,7 +27,11 @@ export const handlePayPalPaymentSuccessInternal = async ({
   checkoutAmount,
   setLoading,
   shippingAddressId,
-  isAuthenticated, // isAuthenticated is received as a parameter
+  isAuthenticated,
+  shippingCost,
+  promoCodeId, // Added promoCodeId
+  discountAmount, // Added discountAmount
+  subtotal
 }) => {
   setLoading(true);
 
@@ -62,6 +69,10 @@ export const handlePayPalPaymentSuccessInternal = async ({
           paymentMethod: "paypal",
           totalAmount: parseFloat(checkoutAmount),
           paypalOrderId,
+          shippingCost: shippingCost,
+          promoCodeId: promoCodeId, // Included promoCodeId in payload
+          discountAmount: discountAmount, // Included discountAmount in payload
+          subtotal
         }
       : {
           firstName: guestData.firstName,
@@ -76,7 +87,13 @@ export const handlePayPalPaymentSuccessInternal = async ({
           paymentMethod: "paypal",
           totalAmount: parseFloat(guestData.totalAmount),
           paypalOrderId,
+          shippingCost: guestData.shippingCost,
+          promoCodeId: guestData.promoCodeId, // Included promoCodeId from guest data
+          discountAmount: guestData.discountAmount, // Included discountAmount from guest data
+          subtotal
         };
+    console.log(payload);
+
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}`, {
       method: "POST",
@@ -122,21 +139,24 @@ export const handlePayPalPaymentSuccessInternal = async ({
  * @param {function} params.setLoading - Function to set the loading state.
  * @param {number} params.MOCK_SHIPPING_COST - The mock shipping cost.
  * @param {number} params.MOCK_TAX_TOTAL - The mock tax total.
+ * @param {number} params.discountAmount - The discount amount applied to the order.
  */
 export const initiatePayPalRestApiPayment = async ({
     cartState,
-    user,
     showSnackbar,
-    router,
     checkoutAmount,
     setLoading,
     MOCK_SHIPPING_COST,
     MOCK_TAX_TOTAL,
+    discountAmount, // New parameter for discount amount
 }) => {
     setLoading(true); // Activates loading state.
     try {
+        // Ensure checkoutAmount is a positive number
+        const finalCheckoutAmount = Math.max(0, parseFloat(checkoutAmount));
 
         // Maps cart items to PayPal's required item format.
+        // The prices here are the original, undiscounted prices.
         const items = cartState.cart.map(item => ({
             name: item.name,
             unit_amount: {
@@ -146,20 +166,25 @@ export const initiatePayPalRestApiPayment = async ({
             quantity: item.qty,
         }));
 
+        // Calculate the item total based on original (undiscounted) prices
+        const originalItemTotal = items.reduce((sum, i) => sum + (parseFloat(i.unit_amount.value) * i.quantity), 0);
+
         // Constructs the order payload for PayPal, including breakdown of amount.
         const orderDataForPayPal = {
             intent: "CAPTURE", // Indicates that this order will be captured (funds transferred) later.
             purchase_units: [{
                 amount: {
                     currency_code: "USD",
-                    value: checkoutAmount, // Total amount for the order.
+                    value: finalCheckoutAmount.toFixed(2), // Use the final calculated checkout amount
                     breakdown: { // Detailed breakdown of the total amount.
-                        item_total: { currency_code: "USD", value: items.reduce((sum, i) => sum + (parseFloat(i.unit_amount.value) * i.quantity), 0).toFixed(2) },
+                        // item_total should be the original item total (undiscounted)
+                        item_total: { currency_code: "USD", value: originalItemTotal.toFixed(2) },
                         shipping: { currency_code: "USD", value: MOCK_SHIPPING_COST.toFixed(2) },
                         tax_total: { currency_code: "USD", value: MOCK_TAX_TOTAL.toFixed(2) },
+                        discount: { currency_code: "USD", value: discountAmount.toFixed(2) }, // Explicitly show discount
                     }
                 },
-                items: items, // List of items in the order.
+                items: items, // List of items in the order with their original prices.
                 payee: {
                     email_address: "sb-merchant@example.com" // Sandbox merchant email. In production, this is usually configured on the backend.
                 }
@@ -185,6 +210,7 @@ export const initiatePayPalRestApiPayment = async ({
         // Checks if the backend API call was successful.
         if (!createOrderResponse.ok) {
             const errorData = await createOrderResponse.json();
+            console.error("Backend error creating PayPal order:", errorData); // Log the full error data
             throw new Error(errorData.message || 'Failed to create PayPal order on backend.');
         }
 
@@ -222,6 +248,9 @@ export const initiatePayPalRestApiPayment = async ({
  * @param {function} params.setLoading - Function to set the loading state.
  * @param {string} params.selectedPaymentMethod - The currently selected payment method.
  * @param {boolean} params.isAuthenticated - Flag indicating if the user is authenticated.
+ * @param {number} params.shippingCost - The shipping cost for the order.
+ * @param {string} [params.promoCodeId] - The ID of the applied promo code (optional).
+ * @param {number} [params.discountAmount] - The discount amount applied to the order (optional).
  */
 export const handleCreateOrderInternal = async ({
     cartState,
@@ -233,75 +262,93 @@ export const handleCreateOrderInternal = async ({
     userData,
     setLoading,
     selectedPaymentMethod,
-    isAuthenticated, // Added isAuthenticated as a parameter
+    isAuthenticated,
+    shippingCost,
+    promoCodeId, // Added promoCodeId
+    discountAmount, // Added discountAmount
 }) => {
     setLoading(true); // Activates loading state.
 
+    let guestData = {};
+
     try {
-
-        // Retrieves the shipping address ID from `userData`.
-        const shippingAddressId = userData?.addresses?.[0]?.id;
-        if (!shippingAddressId) {
-            showSnackbar("No shipping address found for this user. Please add one.", "error");
-            setLoading(false);
-            return;
-        }
-
-        // Maps cart items to the format required by your backend's order creation API.
         const items = cartState.cart.map(item => ({
             variantId: item.variant,
             quantity: item.qty,
         }));
 
-        // Checks if the cart is empty.
-        if (items.length === 0) {
-            showSnackbar("Your cart is empty. Please add items to proceed.", "error");
-            setLoading(false);
-            return;
+        const endpoint = isAuthenticated ? "/orders" : "/orders/guest-checkout";
+
+        if (!isAuthenticated) {
+            const getGuestCheckoutData = () => {
+                if (typeof window !== "undefined") {
+                    const data = localStorage.getItem("guestCheckoutData");
+                    return data ? JSON.parse(data) : null;
+                }
+                return null;
+            };
+            guestData = getGuestCheckoutData();
+
+            if (!guestData) {
+                throw new Error("Guest data is missing from localStorage.");
+            }
         }
 
-        // Constructs the payload for your backend's order creation API.
-        const payload = {
-            userId: user.id,
-            items,
-            shippingAddressId,
-            paymentMethod: selectedPaymentMethod, // Uses the currently selected payment method.
-            totalAmount: parseFloat(checkoutAmount), // Ensures totalAmount is a number.
-        };
+        const payload = isAuthenticated
+            ? {
+                userId: user.id,
+                items,
+                shippingAddressId: userData?.addresses?.find(addr => addr.isDefault)?.id || userData?.addresses?.[0]?.id,
+                paymentMethod: selectedPaymentMethod,
+                totalAmount: parseFloat(checkoutAmount),
+                shippingCost: shippingCost,
+                promoCodeId: promoCodeId, // Included promoCodeId in payload
+                discountAmount: discountAmount, // Included discountAmount in payload
+            }
+            : {
+                firstName: guestData.firstName,
+                lastName: guestData.lastName,
+                email: guestData.email,
+                shippingAddress: guestData.shipping,
+                billingAddress: guestData.billing,
+                items: guestData.cartItems.map(item => ({
+                    variantId: item.variant,
+                    quantity: item.qty,
+                })),
+                paymentMethod: selectedPaymentMethod,
+                totalAmount: parseFloat(guestData.totalAmount),
+                shippingCost: guestData.shippingCost,
+                promoCodeId: guestData.promoCodeId, // Included promoCodeId from guest data
+                discountAmount: guestData.discountAmount, // Included discountAmount from guest data
+            };
 
-        // API call to your backend's `/orders` endpoint to create the order.
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders`, {
-            method: 'POST',
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}`, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${user.token}` // Include auth token if needed.
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(payload),
         });
 
         const responseBody = await res.json();
 
-        // Checks if the API response was successful.
         if (!res.ok) {
-            throw new Error(responseBody.message || `Failed to create order via ${selectedPaymentMethod}`);
+            throw new Error(responseBody.message || "Failed to create order.");
         }
 
-        // Displays success message, clears cart, and redirects to the order detail page.
-        showSnackbar(`${selectedPaymentMethod} order successfully placed!`, "success");
+        showSnackbar("Order placed successfully!", "success");
         dispatch({ type: "CLEAR_CART" });
+        localStorage.removeItem("guestCheckoutData"); // Clear guest data after successful order
 
-        if(isAuthenticated){
-            router.push(`/orders/${responseBody.data.id}`);
-        } else {
-            router.push(`/order-confirmation/${responseBody.data.id}`);
-        }
-        
-
+        router.push(
+            isAuthenticated
+                ? `/orders/${responseBody.data.id}`
+                : `/order-confirmation/${responseBody.data.id}`
+        );
     } catch (error) {
-        // Logs and displays an error message if order creation fails.
-        console.error("Error creating order (non-PayPal):", error);
-        showSnackbar(`Failed to place order: ${error.message}`, "error");
+        console.error("Order creation failed:", error);
+        showSnackbar(`Error: ${error.message}`, "error");
     } finally {
-        setLoading(false); // Always deactivates loading, regardless of success or failure.
+        setLoading(false);
     }
 };

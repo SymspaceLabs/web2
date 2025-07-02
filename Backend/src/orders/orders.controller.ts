@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -34,10 +34,16 @@ export class OrdersController {
   findAll() {
     return this.ordersService.findAll();
   }
-
   @Get('user/:userId')
-  findByUser(@Param('userId') userId: string) {
-    return this.ordersService.findByUser(userId);
+  async findUserOrders(
+    @Param('userId') userId: string,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '10',
+  ) {
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+
+    return this.ordersService.findByUser(userId, pageNum, limitNum);
   }
 
   @Get(':id')

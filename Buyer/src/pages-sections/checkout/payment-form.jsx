@@ -51,8 +51,22 @@ export default function PaymentForm({
                     onClick={() => setPaymentMethod("paypal")}
                     sx={styles.paymentMethodButton(paymentMethod === "paypal")} // Apply styles from the styles object
                 >
-                    <Box component="img" src="assets/images/paypal.svg" alt="PayPal" sx={{ height: 24, mb: 0.5 }} />
-                    <Typography fontSize={12} fontWeight={500} textAlign="center">PayPal</Typography>
+                    <img
+                        src="assets/images/paypal.svg"
+                        style={{ 
+                            width: "100%",
+                            width: 25,
+                            height: "auto"
+                        }}
+                        alt="PayPal"
+                    />
+                    <H1 
+                        fontSize={12} 
+                        fontWeight={500} 
+                        textAlign="center"
+                    >
+                        PayPal
+                    </H1>
                 </Button>
 
                 {/* Apple Pay Button */}

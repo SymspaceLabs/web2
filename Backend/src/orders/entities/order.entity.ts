@@ -83,13 +83,16 @@ export class Order {
 
 
   @Column({ name: 'payment_method' })
-  paymentMethod: string;
+  paymentMethod: string; // Consider using the PaymentMethod enum here if applicable
 
   @Column({ nullable: true })
   notes: string;
 
   @Column({ default: 'pending' })
   status: string;
+
+  @Column('decimal', { precision: 10, scale: 2, name: 'subtotal', default: 0.00 })
+  subtotal: number;
 
   @Column('decimal', { precision: 10, scale: 2, name: 'total_amount' })
   totalAmount: number;
@@ -100,13 +103,19 @@ export class Order {
   @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
   items: OrderItem[];
 
-  // --- NEW FIELDS FOR PROMO CODE ---
+  // --- NEW FIELDS FOR PROMO CODE AND DISCOUNT ---
   @ManyToOne(() => PromoCode, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'promoCodeId' })
+  @JoinColumn({ name: 'promo_code_id' }) // Changed to snake_case for consistency
   promoCode: PromoCode;
 
-  @Column({ type: 'uuid', nullable: true })
-  promoCodeId: string; // Foreign key for PromoCode
+  @Column({ type: 'uuid', nullable: true, name: 'promo_code_id' }) // Foreign key for PromoCode
+  promoCodeId: string;
+
+  @Column('decimal', { precision: 10, scale: 2, name: 'shipping_cost', default: 0.00 })
+  shippingCost: number;
+
+  @Column('decimal', { precision: 10, scale: 2, name: 'discount_amount', default: 0.00 }) // ADDED THIS COLUMN
+  discountAmount: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

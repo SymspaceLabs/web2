@@ -1,9 +1,12 @@
-// src/components/GoogleLoginButton.js (or wherever your component is located)
+// ============================================
+// Google Login Button
+// ============================================
 'use client';
 
 import { Button } from '@mui/material';
-import Image from "next/image"; // Assuming you have Next.js Image component
-import googleLogo from "../../../../public/assets/images/icons/google-1.svg"; // Adjust path as necessary
+
+// ============================================
+
 
 const GoogleLoginButton = () => {
 
@@ -32,10 +35,14 @@ const GoogleLoginButton = () => {
         }
       }}  
     >
-      <Image
+      <img
+        src="/assets/images/icons/google-1.svg"
+        style={{ 
+          width: "100%",
+          width: 25,
+          height: "auto"
+        }}
         alt="google"
-        src={googleLogo}
-        style={{ height: "25px" }} // Adjust image styling as needed
       />
     </Button>
   );

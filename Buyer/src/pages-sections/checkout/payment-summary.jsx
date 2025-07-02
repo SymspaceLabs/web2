@@ -2,7 +2,7 @@
 // Payment Summary
 // ================================================
 
-import { useState } from "react"; // <-- Import useState
+import { useState, useEffect } from "react"; // Added useEffect
 import { currency } from "lib";
 import { useCart } from "hooks/useCart"; // GLOBAL CUSTOM COMPONENTS
 import { H1, Paragraph } from "components/Typography"; // CUSTOM UTILS LIBRARY FUNCTION
@@ -20,27 +20,43 @@ export default function PaymentSummary({
   btnText="Place Order",
   handleSave,
   loading,
-  step
+  step,
+  // New props to receive callbacks from parent
+  onDiscountChange, // Callback to update discountAmount in parent
+  onPromoCodeApplied, // Callback to update promoCodeId in parent
 }) {
-  
+
   const { state: cartState } = useCart();
   const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
 
   const subtotal = getTotalPrice();
   const shipping = 4.99; // Assuming fixed shipping
-  const tax = 40; // Assuming fixed tax (or you can calculate: 0.1 * subtotal)
+  const tax = 0; // Assuming fixed tax (or you can calculate: 0.1 * subtotal)
 
-  // Use state for discount to make it reactive
-  const [discountAmount, setDiscountAmount] = useState(0);
+  // Internal state for discount and applied promo code (received from VoucherForm)
+  const [internalDiscountAmount, setInternalDiscountAmount] = useState(0);
+  const [internalAppliedPromoCode, setInternalAppliedPromoCode] = useState(null);
 
   // Callback function to receive the discount from VoucherForm
-  const handleDiscountApplied = (amount) => {
-    setDiscountAmount(amount);
+  const handleDiscountApplied = (amount, promoCode) => {
+    // Ensure amount is a valid number, defaulting to 0 if not
+    const safeAmount = Number(amount) || 0;
+    setInternalDiscountAmount(safeAmount);
+    setInternalAppliedPromoCode(promoCode);
+
+    // Propagate changes up to the parent component
+    if (onDiscountChange) {
+      onDiscountChange(safeAmount); // Pass safeAmount to parent
+    }
+    if (onPromoCodeApplied) {
+      onPromoCodeApplied(promoCode?.id); // Pass only the ID to the parent
+    }
   };
 
-  // Calculate grandTotal using the state-managed discountAmount
-  const grandTotal = subtotal + tax - discountAmount;
-  
+  // Calculate grandTotal using the internal discountAmount
+  let grandTotal = subtotal + shipping + tax - internalDiscountAmount;
+  if (grandTotal < 0) grandTotal = 0; // Ensure total doesn't go negative
+
   return (
     <FlexCol gap={2}>
       <Card sx={styles.wrapper}>
@@ -51,7 +67,7 @@ export default function PaymentSummary({
           <PaymentItem title="Subtotal" amount={subtotal}/> {/* Use calculated subtotal */}
           <PaymentItem title="Shipping" amount={shipping} />
           <PaymentItem title="Tax" amount={tax} />
-          <PaymentItem title="Discount" amount={discountAmount} /> {/* Use state-managed discount */}
+          <PaymentItem title="Discount" amount={internalDiscountAmount} /> {/* Use internal state for display */}
 
           <Box py={2}>
             <Divider sx={{ borderColor: 'rgba(0,0,0,0.2)'}} />
@@ -86,11 +102,11 @@ export default function PaymentSummary({
           }
         </SymButton>
       </Card>
-      
+
       {/* Pass cartTotal and the callback function to VoucherForm */}
       <VoucherForm
         cartTotal={subtotal} // Pass the current subtotal
-        onDiscountApplied={handleDiscountApplied} // Pass the callback
+        onDiscountApplied={handleDiscountApplied} // Pass the callback to receive discount and promo code
       />
     </FlexCol>
   );

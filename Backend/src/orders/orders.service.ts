@@ -37,22 +37,31 @@ export class OrdersService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    this.logger.log(`Attempting to create order for userId: ${createOrderDto.userId}`);
-    this.logger.debug(`Received createOrderDto: ${JSON.stringify(createOrderDto)}`);
 
-    const { userId, items, shippingAddressId, paymentMethod, paypalOrderId } = createOrderDto;
+    // 1. Destructure all relevant fields from the DTO, including new ones
+    const {
+      userId,
+      items,
+      shippingAddressId,
+      paymentMethod,
+      paypalOrderId,
+      shippingCost,
+      promoCodeId,
+      discountAmount,
+      subtotal
+    } = createOrderDto;
 
-    // 1. Fetch user by ID
+    // 2. Fetch user by ID
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) {
       this.logger.error(`User with ID ${userId} not found.`);
       throw new NotFoundException('User not found');
     }
 
-    // 2. Fetch address and verify ownership
+    // 3. Fetch address and verify ownership
     const address = await this.addressRepo.findOne({
       where: { id: shippingAddressId },
-      relations: ['user'], // Ensure the 'user' relation is loaded
+      relations: ['user'],
     });
 
     if (!address || address.user?.id !== userId) {
@@ -60,9 +69,9 @@ export class OrdersService {
       throw new NotFoundException('Shipping address not found.');
     }
 
-    // 3. Prepare order items
+    // 4. Prepare order items and calculate item subtotal
     const orderItems: OrderItem[] = [];
-    let totalAmount = 0;
+    let itemsSubtotal = 0; // Renamed for clarity
 
     for (const item of items) {
       const variant = await this.variantRepo.findOne({
@@ -87,7 +96,7 @@ export class OrdersService {
         subtotal: variant.price * item.quantity,
       });
 
-      totalAmount += orderItem.subtotal;
+      itemsSubtotal += orderItem.subtotal;
       orderItems.push(orderItem);
 
       // Update stock
@@ -96,29 +105,46 @@ export class OrdersService {
       this.logger.debug(`Updated stock for variant ${variant.id}. New stock: ${variant.stock}.`);
     }
 
-    // 4. Create and save the order
+    // 5. Calculate final total amount (item subtotal + shipping - discount)
+    // Use optional chaining and default to 0 if shippingCost/discountAmount are undefined
+    const finalShippingCost = shippingCost || 0; // Ensure it's a number, default to 0
+    const finalDiscountAmount = discountAmount || 0; // Ensure it's a number, default to 0
+
+    // Important: Re-calculate totalAmount on the backend for security and accuracy
+    const calculatedTotalAmount = itemsSubtotal + finalShippingCost - finalDiscountAmount;
+
+    // Optional: Compare with frontend totalAmount for consistency check (though backend calculated is authoritative)
+    if (Math.abs(calculatedTotalAmount - createOrderDto.totalAmount) > 0.01) { // Allow for float precision
+      this.logger.warn(`Frontend totalAmount (${createOrderDto.totalAmount}) differs from backend calculated totalAmount (${calculatedTotalAmount}) for order for user ${userId}. Using backend calculated value.`);
+      // You could throw an error here if strict mismatch is unacceptable
+    }
+
+    // 6. Create and save the order, assigning all fields
     const order = this.orderRepo.create({
-      user: { id: userId }, // Assign user by ID
-      shippingAddress: address, // Assign full address object
+      user: { id: userId },
+      shippingAddress: address,
       paymentMethod,
-      status: 'pending', // Initial status, can be updated to 'completed' later
-      totalAmount,
+      status: 'pending',
+      totalAmount: calculatedTotalAmount, // <-- Use the backend calculated total
       items: orderItems,
-      paypalOrderId: paypalOrderId, // Store PayPal Order ID if provided
+      paypalOrderId: paypalOrderId,
+      shippingCost: finalShippingCost,
+      promoCodeId: promoCodeId,
+      discountAmount: finalDiscountAmount,
+      subtotal
     });
 
-    await this.orderRepo.save(order); // ✅ This is enough
+    await this.orderRepo.save(order);
 
-    // 5. Send confirmation email to user
+    // 7. Send confirmation email to user
     try {
-      const userEmail = user.email; // Or from userRepo if not available here
-      const emailHtml = `
-        <h3>Thank you for your order!</h3>
-        <p>Your order ID: <strong>${order.id}</strong></p>
-        <p>Total Amount: <strong>$${order.totalAmount.toFixed(2)}</strong></p>
-        <p>We are processing your order and will notify you once it's shipped.</p>
-      `;
-      await this.mailChimpService.sendEmail(userEmail, emailHtml);
+      const userEmail = user.email;
+      const customerName = `${user.firstName} ${user.lastName}`;
+      const orderNumber = order.id;
+      const orderTrackingUrl = `${process.env.BUYER_URL}/order-confirmation/${order.id}`;
+
+      await this.mailChimpService.sendOrderConfirmationEmail(userEmail, customerName, orderNumber, orderTrackingUrl);
+
       this.logger.log(`Order confirmation email sent to ${userEmail}`);
     } catch (emailErr) {
       this.logger.error(`Failed to send order confirmation email: ${emailErr.message}`);
@@ -164,12 +190,14 @@ export class OrdersService {
         status: order.status,
         totalAmount: order.totalAmount,
         paypalOrderId: order.paypalOrderId,
-        createdAt: order.createdAt,
-        updatedAt: order.updatedAt,
+        discountAmount : order.discountAmount,
+        subtotal: order.subtotal,
         items: order.items,
         user: null,
         shippingAddress: null,
         billingAddress: null,
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
       };
 
       if (order.isGuestOrder) {
@@ -208,12 +236,92 @@ export class OrdersService {
     return normalizedOrders;
   }
 
-  async findByUser(userId: string) {
-    return this.orderRepo.find({
+  /**
+   * Fetches orders for a specific user with pagination.
+   * @param userId The ID of the user.
+   * @param page The page number to retrieve (defaults to 1).
+   * @param limit The number of orders per page (defaults to 10).
+   * @returns An object containing the orders for the requested page, total orders, and total pages.
+   */
+  async findByUser(userId: string, page: number = 1, limit: number = 10) {
+    const [orders, total] = await this.orderRepo.findAndCount({
       where: { user: { id: userId } },
       relations: ['items', 'shippingAddress'],
-      order: { id: 'DESC' }, // optional: sort by latest order
+      order: { createdAt: 'DESC' }, // Sort by latest order
+      take: limit, // Number of items to take
+      skip: (page - 1) * limit, // Number of items to skip
     });
+
+    const totalPages = Math.ceil(total / limit);
+
+    // Normalize the orders for the current page
+    const normalizedOrders = orders.map(order => {
+      // Apply any normalization logic if required for the returned orders
+      // For instance, if you need to sort product images within order items:
+      for (const item of order.items) {
+        if (item.variant?.product?.images) {
+          item.variant.product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+        }
+      }
+
+      // If you need to include guest order specific fields, etc., normalize here
+      // For example, if you want a consistent user object structure
+      const normalizedOrder: any = {
+        id: order.id,
+        isGuestOrder: order.isGuestOrder,
+        paymentMethod: order.paymentMethod,
+        notes: order.notes,
+        status: order.status,
+        totalAmount: order.totalAmount,
+        paypalOrderId: order.paypalOrderId,
+        shippingCost: order.shippingCost,
+        items: order.items,
+        user: order.user, // User relation is already loaded
+        shippingAddress: order.shippingAddress, // Shipping address is already loaded
+        billingAddress: order.billingAddress, // If you load billingAddress, include it
+        createdAt: order.createdAt,
+        updatedAt: order.updatedAt,
+      };
+
+      // Since these are user orders, `isGuestOrder` should typically be false,
+      // and `user`, `shippingAddress`, `billingAddress` would be relations.
+      // However, if there's a chance of guest order data somehow being mixed
+      // or if your entity design requires it, you can keep the conditional logic.
+      if (order.isGuestOrder) {
+        normalizedOrder.user = {
+          firstName: order.firstName,
+          lastName: order.lastName,
+          email: order.email,
+        };
+        // Also normalize guest address fields if they are directly on the order entity
+        normalizedOrder.shippingAddress = {
+          address1: order.shippingAddress1,
+          address2: order.shippingAddress2,
+          city: order.shippingCity,
+          state: order.shippingState,
+          zip: order.shippingZip,
+          country: order.shippingCountry, // Assuming country is part of shippingAddress
+        };
+        // Add billing address normalization if applicable
+        normalizedOrder.billingAddress = {
+          address1: order.billingAddress1,
+          address2: order.billingAddress2,
+          city: order.billingCity,
+          state: order.billingState,
+          zip: order.billingZip,
+          country: order.billingCountry, // Assuming country is part of billingAddress
+        };
+      }
+      return normalizedOrder;
+    });
+
+    return {
+      data: normalizedOrders,
+      total,
+      currentPage: page,
+      perPage: limit,
+      totalPages,
+    };
   }
 
   async findOne(id: string) {
@@ -249,12 +357,15 @@ export class OrdersService {
       status: order.status,
       totalAmount: order.totalAmount,
       paypalOrderId: order.paypalOrderId,
-      createdAt: order.createdAt,
-      updatedAt: order.updatedAt,
+      shippingCost: order.shippingCost,
+      discountAmount : order.discountAmount,
+      subtotal: order.subtotal,
       items: order.items,
       user: null,
       shippingAddress: null,
       billingAddress: null,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
     };
 
     if (order.isGuestOrder) {
@@ -426,5 +537,4 @@ export class OrdersService {
       data: order,
     };
   }
-
 }

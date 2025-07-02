@@ -15,46 +15,75 @@ import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPO
 
 // ====================================================
 export default function OrdersPageView() {
-
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // New state for current page
+  const [totalPages, setTotalPages] = useState(1);   // New state for total pages
+  const ordersPerPage = 10; // Consistent with backend limit
 
-    useEffect(() => {
-      const fetchOrders = async () => {
-        try {
-          const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/user/${user.id}`, {
-            headers: {
-              "Content-Type": "application/json",
-              // "Authorization": `Bearer ${token}`, // Uncomment if needed
-            },
-          });
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
 
-          const data = await res.json();
-          setOrders(data || []);
-        } catch (error) {
-          console.error("Failed to fetch orders:", error);
-        } finally {
-          setLoading(false);
+      try {
+        setLoading(true); // Set loading to true before fetching
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/user/${user.id}?page=${currentPage}&limit=${ordersPerPage}`, {
+          headers: {
+            "Content-Type": "application/json",
+            // "Authorization": `Bearer ${token}`, // Uncomment if needed
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
         }
-      };
+
+        const responseData = await res.json();
+        setOrders(responseData.data || []); // Update orders with the 'data' array
+        setTotalPages(responseData.totalPages || 1); // Update total pages
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+        setOrders([]); // Clear orders on error
+        setTotalPages(1); // Reset total pages on error
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchOrders();
-  }, []);
+  }, [user, currentPage]); // Re-fetch when user or currentPage changes
 
-  return <Fragment>
+  // Handler for pagination change
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+    // Scroll to the top of the page when pagination number is clicked
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <Fragment>
       {/* TITLE HEADER AREA */}
       <DashboardHeader Icon={ShoppingBag} title="My Orders" />
 
       {/* ORDER LIST AREA */}
       {loading ? (
-        <CircularProgress/>
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+          <CircularProgress/>
+        </div>
       ) : orders.length === 0 ? (
-        <p>No orders found.</p>
+        <p style={{ textAlign: 'center', padding: '20px' }}>No orders found.</p>
       ) : (
         orders.map(order => <OrderRow order={order} key={order.id} />)
       )}
+
       {/* ORDERS PAGINATION */}
-      <Pagination count={5} onChange={data => console.log(data)} />
-    </Fragment>;
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
+        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
+      </div>
+    </Fragment>
+  );
 }

@@ -66,10 +66,14 @@ const AppleSigninButton = () => {
         }
       }}  
     startIcon={
-      <Image 
-        alt="apple" 
-        src={appleLogo} 
-        style={{ height: '25px' }} 
+      <img
+        src="/assets/images/icons/apple-white.svg"
+        style={{
+          width: "100%",
+          width: 25,
+          height: "auto"
+        }}
+        alt="apple"
       />
     }
   />

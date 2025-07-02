@@ -22,6 +22,10 @@ export class CreateOrderDto {
     paymentMethod: string;
 
     @IsNumber()
+    @IsNotEmpty()
+    subtotal: number;
+
+    @IsNumber()
     @IsNotEmpty() // Re-added IsNotEmpty for totalAmount
     totalAmount: number; // Re-added totalAmount
 
@@ -40,6 +44,18 @@ export class CreateOrderDto {
     @IsOptional()
     @IsString()
     promoCode?: string;
+
+    @IsOptional()
+    @IsString()
+    promoCodeId?: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    shippingCost: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    discountAmount: number;
 }
 
 export class OrderItemDto {

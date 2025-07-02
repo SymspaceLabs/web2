@@ -2,6 +2,7 @@
 import { Controller, Post, Body, Get, Param, UseGuards, Req, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PromoCodeService } from './promo-codes.service';
+import { ApplyPromoCodeDto } from './dto/apply-promo-code.dto';
 
 @Controller('promo-codes')
 export class PromoCodeController {
@@ -23,9 +24,10 @@ export class PromoCodeController {
   }
 
   @Post('apply')
-  @UseGuards(AuthGuard('jwt'))
-  async applyPromoCode(@Req() req: any, @Body('code') code: string) {
-    const userId = req.user.id;
+  // @UseGuards(AuthGuard('jwt'))
+  async applyPromoCode(@Body() applyPromoCodeDto: ApplyPromoCodeDto) {
+    // Destructure code and userId directly from the DTO
+    const { code, userId } = applyPromoCodeDto;
 
     // Call the new validation-only method
     const { discountPercentage, promoCodeId } = await this.promoCodeService.validatePromoCode(userId, code);

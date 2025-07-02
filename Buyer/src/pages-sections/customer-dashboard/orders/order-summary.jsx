@@ -47,20 +47,25 @@ export default function OrderSummary({
             Total Summary
           </H5>
 
-          <ListItem title="Subtotal:" value={currency(order.totalAmount)} />
-          <ListItem title="Shipping fee:" value={currency(0)} />
-          <ListItem title="Discount:" value={currency(order.discount)} />
-
-          <Divider sx={{
-          mb: 1
-        }} />
+          <ListItem title="Subtotal:" value={currency(order.subtotal)} />
+          <ListItem title="Shipping fee:" value={currency(order.shippingCost)} />
+          {/* Added a space after the negative sign for discount amount */}
+          <ListItem
+            title="Discount:"
+            value={
+              order.discountAmount > 0
+                ? `- ${currency(order.discountAmount)}`
+                : currency(0)
+            }
+          />
+          <Divider sx={{mb: 1}} />
 
           <FlexBetween mb={2}>
             <H6>Total</H6>
             <H6>{currency(order.totalAmount)}</H6>
           </FlexBetween>
 
-          <Paragraph>Paid by Credit/Debit Card</Paragraph>
+          <Paragraph>Paid by <span style={{textTransform:'capitalize'}}>{order.paymentMethod}</span></Paragraph>
         </Card>
       </Grid>
     </Grid>

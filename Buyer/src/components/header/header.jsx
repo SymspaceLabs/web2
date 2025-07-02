@@ -23,7 +23,15 @@ export default function Header({
     <Fragment>
       <FlexBox minWidth={100} alignItems="center">
         <Link href="/">
-          <LazyImage src={require("../../../public/assets/images/logos/Logo.svg")} alt="logo" />
+          <img 
+            src="/assets/images/logos/Logo.svg" 
+            alt="logo" 
+            style={{ 
+              width: "100%",
+              width: 175,
+              height: "auto"
+            }}
+          />
         </Link>
       </FlexBox>
       <FlexBox justifyContent="flex-end" alignItems="center" width="90%">

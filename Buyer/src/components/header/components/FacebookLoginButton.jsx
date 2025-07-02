@@ -1,10 +1,13 @@
+// =========================================================
+// Facebook Login Button
+// =========================================================
+
 import { useEffect } from "react";
-import { useAuth } from '../../../contexts/AuthContext';
-import Image from "next/image"; // MUI
-import Button from "@mui/material/Button";
-import facebookLogo from "../../../../public/assets/images/icons/facebook-1.svg"; // =======================================
-import axios from 'axios';
+import { Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+
+// =========================================================
 
 const FacebookSigninButton = () => {
   const { handleAuthResponse } = useAuth();
@@ -36,33 +39,45 @@ const FacebookSigninButton = () => {
   const handleFacebookResponse = async (response) => {
     try {
       console.log("Facebook Signin Response:", response);
-  
+
       // Extract `accessToken` from the response
       const { accessToken } = response.authResponse;
-  
+
       if (!accessToken) {
         throw new Error("Access token not found in the response");
       }
-  
-      // Send the `accessToken` to the backend
-      const result = await axios.post(
+
+      // Send the `accessToken` to the backend using fetch
+      const result = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/facebook`,
-        { accessToken }
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ accessToken }),
+        }
       );
-  
-      console.log("Backend Response:", result.data);
-  
+
+      if (!result.ok) {
+        const errorData = await result.json();
+        throw new Error(errorData.message || 'Failed to login with Facebook on backend.');
+      }
+
+      const data = await result.json();
+
+      console.log("Backend Response:", data);
+
       // Handle the response: save user info and app's access token
-      handleAuthResponse(result.data.user, result.data.accessToken);
-  
+      handleAuthResponse(data.user, data.accessToken);
+
       // Redirect to the marketplace
       router.push('/marketplace');
     } catch (error) {
-      console.error("Facebook login failed:", error.response?.data || error.message);
+      console.error("Facebook login failed:", error.message);
+      // You might want to display a user-friendly error message here
     }
   };
-  
-  
 
   return (
     <Button
@@ -75,21 +90,25 @@ const FacebookSigninButton = () => {
           }
         }, { scope: "email,public_profile" });
       }}
-      fullWidth 
-      size="large" 
+      fullWidth
+      size="large"
       sx={{
-        background: '#1A1D21', 
-        color: '#fff', 
-        my: 1, 
-        '&:hover': { 
-          background: 'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)' 
+        background: '#1A1D21',
+        color: '#fff',
+        my: 1,
+        '&:hover': {
+          background: 'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)'
         }
-      }}  
+      }}
       startIcon={
-        <Image
+        <img
+          src="/assets/images/icons/facebook-1.svg"
+          style={{
+            width: "100%",
+            width: 25,
+            height: "auto"
+          }}
           alt="facebook"
-          src={facebookLogo}
-          style={{ height: "25px" }}
         />
       }
     />

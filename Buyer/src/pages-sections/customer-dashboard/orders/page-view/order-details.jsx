@@ -2,6 +2,10 @@
 
 import { Fragment, useState, useEffect } from "react";
 import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPONENTS
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { H1 } from "@/components/Typography";
+import { Button } from "@mui/material";
+import { useRouter } from 'next/navigation';
 
 import OrderSummary from "../order-summary";
 import OrderProgress from "../order-progress";
@@ -12,6 +16,8 @@ import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
 export default function OrderDetailsPageView({
   orderId
 }) {
+
+  const router = useRouter();
 
   const [order, setOrder] = useState({});
   const [loading, setLoading] = useState(false);
@@ -57,6 +63,11 @@ export default function OrderDetailsPageView({
 
   return (
     <Fragment>
+
+      <Button onClick={()=>router.push('/orders')} sx={{ mb: 2 }} >
+          <ChevronLeftIcon />
+          <H1>Back</H1>
+      </Button>
       
       {/* TITLE HEADER AREA */}
       <DashboardHeader

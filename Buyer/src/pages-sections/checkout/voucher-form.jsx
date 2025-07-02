@@ -47,7 +47,7 @@ export default function VoucherForm({
 
     try {
       const response = await fetch(
-        'http://localhost:3000/promo-codes/apply',
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/promo-codes/apply`,
         {
           method: 'POST',
           headers: {

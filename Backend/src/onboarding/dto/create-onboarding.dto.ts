@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { CreatePreferencesDto } from 'src/preferences/dto/create-preference.dto';
 import { CreateMeasurementDto } from 'src/measurements/dto/create-measurement.dto';
-import { IsNumber, IsOptional, IsString, IsDate, ValidateNested } from 'class-validator';
+import { IsNumber, IsString, ValidateNested } from 'class-validator';
 
 export class CreateOnboardingDto {
   @IsString()

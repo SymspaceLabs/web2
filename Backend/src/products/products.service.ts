@@ -11,6 +11,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductModel } from 'src/product-models/entities/product-model.entity';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class ProductsService {
@@ -21,6 +22,7 @@ export class ProductsService {
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(ProductVariant) private productVariantRepository: Repository<ProductVariant>,
     @InjectRepository(ProductModel) private productModelRepository: Repository<ProductModel>, // NEW: Inject ProductModel Repository
+    // @InjectRepository(Category) private readonly categoryRepository: Repository<Product>,
 
   ) {}
 
@@ -362,11 +364,43 @@ export class ProductsService {
       entityName: b.name,
     }));
 
-    // 6) Extract unique subcategory items and format
-    const category = nestCategoriesFromProducts(products);
+    // 6) Extract unique subcategory items and format (nested structure)
+  const nestedCategories = nestCategoriesFromProducts(products);
+
+  // 6a) Get all categories (flat structure)
+  const allCategoriesResult = await this.productRepository.manager
+    .createQueryBuilder(Category, 'category')
+    .select(['category.id', 'category.name'])
+    .distinct(true)
+    .getRawMany();
+
+  // Create a Map for quick lookup of nested categories by ID
+  const combinedCategoriesMap = new Map();
+
+  // Add nested categories first
+  nestedCategories.forEach(cat => {
+    combinedCategoriesMap.set(cat.id, {
+      id: cat.id,
+      name: cat.title, // Assuming 'title' in nestedCategories maps to 'name'
+      subCategory: cat.subCategory // Keep the nested subCategory structure
+    });
+  });
+
+  // Add all categories, only if not already present from nestedCategories
+  allCategoriesResult.forEach(cat => {
+    if (!combinedCategoriesMap.has(cat.category_id)) {
+      combinedCategoriesMap.set(cat.category_id, {
+        id: cat.category_id,
+        name: cat.category_name,
+      });
+    }
+  });
+
+  // Convert the map values back to an array
+  const category = Array.from(combinedCategoriesMap.values());
 
     // 7) Get distinct genders from products
-    const genderResult = await this.productRepository.createQueryBuilder('product')
+    const productGendersResult = await this.productRepository.createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
       .where('product.gender IS NOT NULL')
       .andWhere(
@@ -375,7 +409,13 @@ export class ProductsService {
       ) // Apply search term to genders as well
       .getRawMany();
 
-    const genders = genderResult.map(g => g.gender); // ['men', 'women', ...]
+    const distinctProductGenders = productGendersResult.map(g => g.gender);
+
+    // Define all possible genders
+    const allPossibleGenders = ['women', 'men', 'unisex'];
+
+    // Combine and ensure uniqueness, prioritizing predefined order
+    const genders = Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
 
     // 8) Compute availability per product & collect distinct statuses
     const availabilitySet = new Set<string>();

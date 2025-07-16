@@ -17,15 +17,38 @@ export class AddressesService {
   ) {}
 
   async create(createAddressDto: CreateAddressDto): Promise<Address> {
-    const { userId, ...addressData } = createAddressDto;
+    const { userId, isDefault, ...addressData } = createAddressDto;
 
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
+    const existingAddressesCount = await this.addressRepo.count({
+      where: { user: { id: userId } },
+    });
+
+    let newAddressIsDefault = isDefault;
+
+    // If this is the first address for the user, make it default regardless of input
+    if (existingAddressesCount === 0) {
+      newAddressIsDefault = true;
+    } else if (newAddressIsDefault) {
+      // If user explicitly wants this new address to be default,
+      // find and deactivate the current default address for this user.
+      const currentDefaultAddress = await this.addressRepo.findOne({
+        where: { user: { id: userId }, isDefault: true },
+      });
+
+      if (currentDefaultAddress) {
+        currentDefaultAddress.isDefault = false;
+        await this.addressRepo.save(currentDefaultAddress);
+      }
+    }
+
     const address = this.addressRepo.create({
       ...addressData,
+      isDefault: newAddressIsDefault,
       user,
     });
 
@@ -37,6 +60,8 @@ export class AddressesService {
   }
 
   async findOne(id: string): Promise<Address> {
+    // This query should automatically include the 'isDefault' column
+    // once your database schema is updated to include it.
     const address = await this.addressRepo.findOne({
       where: { id },
       relations: ['user'],
@@ -59,7 +84,7 @@ export class AddressesService {
    * @returns A promise that resolves to an array of Address entities.
    * @throws NotFoundException if the user with the given ID is not found.
    */
-  async findByUserId(userId: string): Promise<Address[]> {
+  async findAddressesByUserId(userId: string): Promise<Address[]> {
     // Check if the user exists to provide a more specific error if needed
     const userExists = await this.userRepo.exists({ where: { id: userId } });
     if (!userExists) {
@@ -86,13 +111,32 @@ export class AddressesService {
    * @throws NotFoundException if the address with the given ID is not found.
    */
   async update(id: string, updateDto: UpdateAddressDto): Promise<Address> {
-    const address = await this.findOne(id); // Find the existing address
+    const addressToUpdate = await this.findOne(id); // Find the existing address
+
+    // If the updateDto explicitly sets isDefault to true
+    if (updateDto.isDefault === true) {
+      // Find the current default address for this user (excluding the one being updated)
+      const currentDefaultAddress = await this.addressRepo.findOne({
+        where: { user: { id: addressToUpdate.user.id }, isDefault: true },
+      });
+
+      // If a current default exists and it's not the address we are updating,
+      // set its isDefault to false.
+      if (currentDefaultAddress && currentDefaultAddress.id !== addressToUpdate.id) {
+        currentDefaultAddress.isDefault = false;
+        await this.addressRepo.save(currentDefaultAddress);
+      }
+    } else if (updateDto.isDefault === false) {
+      // If the address being updated is currently the default, and we are setting it to false,
+      // ensure there's still a default address for the user (optional, but good practice).
+      // For simplicity, we'll just update this one to false.
+      // More complex logic might involve selecting a new default if this was the only one.
+    }
 
     // Apply partial updates from the DTO to the found address entity
-    // Object.assign is useful for merging properties from updateDto into address
-    Object.assign(address, updateDto);
+    Object.assign(addressToUpdate, updateDto);
     
-    return this.addressRepo.save(address); // Save the updated address
+    return this.addressRepo.save(addressToUpdate); // Save the updated address
   }
 
   async remove(id: string): Promise<{ message: string }> {

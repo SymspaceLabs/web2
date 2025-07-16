@@ -36,6 +36,7 @@
     "@types/passport-facebook": "^3.0.3",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "braintree": "^3.32.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",

@@ -45,6 +45,8 @@ import { PaymentModule } from './payment/payment.module';
 import { ProductModelsModule } from './product-models/product-models.module';
 import { PromoCodesModule } from './promo-codes/promo-codes.module';
 import { UserPromoCodesModule } from './user-promo-codes/user-promo-codes.module';
+import { BraintreeModule } from './braintree/braintree.module';
+import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
 
 @Module({
   imports: [
@@ -59,7 +61,7 @@ import { UserPromoCodesModule } from './user-promo-codes/user-promo-codes.module
         password: configService.get<string>('DB_UPASS') || '1234',
         database: configService.get<string>('DB_NAME')  || 'sympspace', 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
         options: {
           encrypt: true,
           trustServerCertificate: true,
@@ -105,7 +107,9 @@ import { UserPromoCodesModule } from './user-promo-codes/user-promo-codes.module
     PaymentModule,
     ProductModelsModule,
     PromoCodesModule,
-    UserPromoCodesModule
+    UserPromoCodesModule,
+    BraintreeModule,
+    PaymentMethodsModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

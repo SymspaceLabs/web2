@@ -28,6 +28,9 @@ export class Address {
   @Column()
   country: string;
 
+  @Column({ default: false }) // Added the isDefault column with a default value of false
+  isDefault: boolean;
+
   @ManyToOne(() => User, (user) => user.addresses, { onDelete: 'CASCADE' })
   user: User;
 

@@ -101,7 +101,7 @@ export class OnboardingService {
   
     // Step 4: Return Response
     return {
-      message: 'Onboarding completed successfully',
+      message: 'Successfully Saved Personalized Sizing & Preferences',
       user: {
         id: user.id,
         dob: user.dob,

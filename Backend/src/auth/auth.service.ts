@@ -475,78 +475,18 @@ export class AuthService {
     };
   }
 
-  // async loginWithGoogle(idToken: string) {
-
-  //   const googleUser = await this.parseJWT(idToken);
-
-  //   const { email } = googleUser;
-
-  //   let user = await this.usersRepository.findOne({
-  //     where: { email },
-  //   });
-
-  //   try {
-  //     if (!user) {
-  //       user = this.usersRepository.create({
-  //           email: googleUser.email,
-  //           firstName: googleUser.firstName || '',
-  //           lastName: googleUser.lastName || '',
-  //           avatar: googleUser.picture || '',
-  //           isVerified: true,
-  //           role: 'buyer',
-  //           password: '',
-  //           authMethod: AuthMethod.GOOGLE,
-  //       });
-  //       await this.usersRepository.save(user);  
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving user:', error.message);
-  //     throw new Error('Failed to create user. Please check your data and try again.');
-  //   }
-
-  //   const accessToken = this.jwtService.sign(
-  //     { userId: user.id, email: user.email },
-  //     { secret: process.env.JWT_SECRET, expiresIn: '1h' },
-  //   );
-
-  //   // Store the token in Redis
-  //   await this.redisService
-  //     .getClient()
-  //     .set(`auth:${user.id}`, accessToken, 'EX', 3600);
-
-  //   await this.authRepository.update(user.id, { refreshToken: accessToken });
-
-  //   return {
-  //     accessToken,
-  //     user: {
-  //       id: user.id,
-  //       email: user.email,
-  //       firstName: user.firstName,
-  //       lastName: user.lastName,
-  //       role: user.role,
-  //       avatar: user.avatar,
-  //       isOnboardingFormFilled: user.isOnboardingFormFilled,
-  //     },
-  //   };
-  // }
-
   async loginWithGoogle(idToken: string) {
-    this.logger.log('loginWithGoogle: Starting authentication process.');
-    this.logger.debug(`loginWithGoogle: Received idToken (first 20 chars): ${idToken ? idToken.substring(0, 20) : 'null'}`);
-
-
+    
     let googleUser;
+
     try {
         googleUser = await this.parseJWT(idToken);
-        this.logger.log(`loginWithGoogle: Parsed Google User email: ${googleUser.email}`);
     } catch (error) {
-        this.logger.error(`loginWithGoogle: Error parsing JWT: ${error.message}`, error.stack);
         throw new UnauthorizedException('Invalid Google ID token.');
     }
     
 
     const { email } = googleUser;
-    this.logger.log(`loginWithGoogle: Looking for user with email: ${email}`);
 
     let user = await this.usersRepository.findOne({
       where: { email },
@@ -554,7 +494,6 @@ export class AuthService {
 
     try {
       if (!user) {
-        this.logger.log(`loginWithGoogle: User not found, creating new user for email: ${email}`);
         user = this.usersRepository.create({
             email: googleUser.email,
             firstName: googleUser.firstName || '',
@@ -566,19 +505,13 @@ export class AuthService {
             authMethod: AuthMethod.GOOGLE,
         });
         await this.usersRepository.save(user); 
-        this.logger.log(`loginWithGoogle: New user created with ID: ${user.id}`);
-      } else {
-        this.logger.log(`loginWithGoogle: Existing user found with ID: ${user.id}`);
-        // Consider updating user details here if needed, but for now, just log.
       }
     } catch (error) {
-      this.logger.error(`loginWithGoogle: Error creating/saving user: ${error.message}`, error.stack);
       throw new InternalServerErrorException('Failed to process user. Please try again.');
     }
 
     // Ensure user object is valid before proceeding
     if (!user || !user.id || !user.email) {
-        this.logger.error('loginWithGoogle: User object is invalid after creation/retrieval.');
         throw new InternalServerErrorException('User data not available for token generation.');
     }
 
@@ -587,32 +520,23 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
 
-    // --- IMPORTANT LOGGING HERE ---
-    this.logger.log(`loginWithGoogle: Generated accessToken (first 20 chars): ${accessToken.substring(0, 20)}...`);
-    this.logger.debug(`loginWithGoogle: Full generated accessToken: ${accessToken}`);
-
-
     // Store the token in Redis
     try {
-        await this.redisService
-          .getClient()
-          .set(`auth:${user.id}`, accessToken, 'EX', 3600);
-        this.logger.log(`loginWithGoogle: Token stored in Redis for user ID: ${user.id}`);
-    } catch (redisError) {
+      await this.redisService
+        .getClient()
+        .set(`auth:${user.id}`, accessToken, 'EX', 3600);
+
+      } catch (redisError) {
         this.logger.error(`loginWithGoogle: Failed to store token in Redis for user ID ${user.id}: ${redisError.message}`, redisError.stack);
-        // Decide how critical this is. You might still return the token if Redis is just a cache.
     }
 
 
     try {
         await this.authRepository.update(user.id, { refreshToken: accessToken });
-        this.logger.log(`loginWithGoogle: Auth repository updated with refreshToken for user ID: ${user.id}`);
     } catch (authRepoError) {
         this.logger.error(`loginWithGoogle: Failed to update auth repository for user ID ${user.id}: ${authRepoError.message}`, authRepoError.stack);
     }
 
-
-    this.logger.log('loginWithGoogle: Returning success response.');
     return {
       accessToken,
       user: {
@@ -761,29 +685,29 @@ export class AuthService {
     }
   }
   
-  async verifyEmail(token: string): Promise<boolean> {
-    try {
-      const { email } = this.jwtService.verify(token);
-      const user = await this.usersRepository.findOne({ where: { email } });
-      if (!user) throw new HttpException('User not found', 404);
-      user.isVerified = true;
-      await this.usersRepository.save(user);
-      return true;
-    } catch (error) {
-      this.logger.error(`Email verification failed: ${error.message}`);
-      if (error.name === 'TokenExpiredError') {
-        throw new HttpException(
-          'Email verification token has expired. Please request a new verification link.',
-          441,
-        );
-      } else {
-        throw new HttpException(
-          'Invalid verification token.',
-          400,
-        );
-      }
-    }
-  }
+  // async verifyEmail(token: string): Promise<boolean> {
+  //   try {
+  //     const { email } = this.jwtService.verify(token);
+  //     const user = await this.usersRepository.findOne({ where: { email } });
+  //     if (!user) throw new HttpException('User not found', 404);
+  //     user.isVerified = true;
+  //     await this.usersRepository.save(user);
+  //     return true;
+  //   } catch (error) {
+  //     this.logger.error(`Email verification failed: ${error.message}`);
+  //     if (error.name === 'TokenExpiredError') {
+  //       throw new HttpException(
+  //         'Email verification token has expired. Please request a new verification link.',
+  //         441,
+  //       );
+  //     } else {
+  //       throw new HttpException(
+  //         'Invalid verification token.',
+  //         400,
+  //       );
+  //     }
+  //   }
+  // }
 
   async generateResetPasswordOtp(email: string): Promise<void> {
     const user = await this.usersRepository.findOne({ where: { email } });
@@ -854,7 +778,50 @@ export class AuthService {
     await this.usersRepository.save(user);
 
     return { message: 'Password has been reset successfully. You can now log in with your new password.' };
+  }  
+  
+  /**
+   * Resends an OTP for password reset requests.
+   * Includes a rate limit to prevent abuse.
+   * @param email The email address of the user requesting OTP resend.
+   * @returns A message indicating the success of the OTP resend.
+   * @throws NotFoundException if the user is not found.
+   * @throws BadRequestException if too many OTP requests have been made.
+   */
+  async resendResetPasswordOtp(email: string): Promise<{ message: string }> {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    // Rate limit for password reset OTP requests
+    const redisKey = `password-reset-otp-resend:${email}`;
+    const requestCount = await this.redisService.getClient().get(redisKey);
+
+    if (requestCount && parseInt(requestCount) >= 3) {
+      throw new BadRequestException('Too many password reset OTP requests. Please try again later.');
+    }
+
+    // Generate a new OTP
+    const { otp, otpExpiresAt } = await this.generateOtp();
+
+    // Update user with new OTP
+    user.otp = otp;
+    user.otpExpiresAt = otpExpiresAt;
+    await this.usersRepository.save(user);
+
+    // Increase request count in Redis (expires in 5 minutes)
+    await this.redisService.getClient().incr(redisKey);
+    await this.redisService.getClient().expire(redisKey, 300); // 5-minute expiry
+
+    // Send OTP email
+    await this.mailchimpService.sendOtpEmail(email, 'Your New OTP for Password Reset', otp);
+
+    return { message: 'A new password reset OTP has been sent to your email.' };
   }
+
+
 
   async validateGoogleUser(googleUser: any): Promise<any> {
     let user = await this.authRepository.findOne({

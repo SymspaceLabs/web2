@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { AddressesService } from './addresses.service';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 
 @Controller('addresses')
 export class AddressesController {
@@ -35,8 +35,8 @@ export class AddressesController {
    * @returns A promise that resolves to an array of Address entities.
   **/
   @Get('user/:userId') // New endpoint to retrieve addresses by user ID
-  findByUserId(@Param('userId') userId: string) {
-    return this.addressesService.findByUserId(userId);
+  findAddressesByUserId(@Param('userId') userId: string) {
+    return this.addressesService.findAddressesByUserId(userId);
   }
 
   /**

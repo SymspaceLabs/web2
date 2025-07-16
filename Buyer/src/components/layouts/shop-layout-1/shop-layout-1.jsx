@@ -4,7 +4,7 @@
 // Shop Layout 1
 // ==============================================================
 
-import { Box, Card } from "@mui/material";
+import { Box, Card, useMediaQuery, useTheme } from "@mui/material"; // Import useMediaQuery and useTheme
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { usePathname } from 'next/navigation';
@@ -41,17 +41,20 @@ export default function ShopLayout1({ children, noFooter = false }) {
 }
 
 function ShopLayoutContent({children, noFooter}) {
-  
+
   const pathname = usePathname();
+  const theme = useTheme(); // Get the theme object
+  // Check if the screen size is greater than or equal to 'md' (desktop view)
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const { isAuthenticated, user } = useAuth();
 
   const [isFixed, setIsFixed] = useState(false);
 
   const [showPopup, setShowPopup] = useState(false);
- 
+
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
-  
+
   const {
     dialogOpen,
     toggleDialog,
@@ -77,7 +80,7 @@ function ShopLayoutContent({children, noFooter}) {
   // and when they're in /Marketplace
     useEffect(() => {
       const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
-  
+
       if (
         pathname === "/marketplace" &&
         isAuthenticated &&
@@ -86,7 +89,7 @@ function ShopLayoutContent({children, noFooter}) {
       ) {
         setShowPopup(true);
       }
-    }, [user?.isOnboardingFormFilled]);
+    }, [user?.isOnboardingFormFilled, isAuthenticated, pathname]); // Added isAuthenticated and pathname to dependency array
 
     const handleClose = () => {
       setShowPopup(false);
@@ -112,21 +115,23 @@ function ShopLayoutContent({children, noFooter}) {
       {/* BOTTOM NAVBAR - MOBILE */}
       <MobileNavigationBar />
 
-      {/* LOGIN DIALOG */}
-      <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
-        <Box sx={{ width: '100%', maxWidth: 580, height: {xs:650, sm:800}, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
-          <Box sx={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
-              <Wrapper>
-                <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
-                <LoginPageView closeDialog={toggleDialog} />
-                <SocialButtons />
-                <LoginBottom />
-              </Wrapper>
+      {/* LOGIN DIALOG - Only show when user is NOT authenticated */}
+      {!isAuthenticated && (
+        <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
+          <Box sx={{ width: '100%', maxWidth: 580, height: {xs:650, sm:800}, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+            <Box sx={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
+              <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
+                <Wrapper>
+                  <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
+                  <LoginPageView closeDialog={toggleDialog} />
+                  <SocialButtons />
+                  <LoginBottom />
+                </Wrapper>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </SymDialog>
+        </SymDialog>
+      )}
 
       {/* BUYER ONBOARDING DIALOG */}
       {showPopup && (
@@ -144,16 +149,18 @@ function ShopLayoutContent({children, noFooter}) {
         />
       </SymDrawer>
 
-      {/* FAVOURITES SIDE DRAWER */}
-      <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>
-        <MiniFavorite
-          toggleSidenav={toggleFavouriteOpen}
-        />
-      </SymDrawer>
+      {/* FAVOURITES SIDE DRAWER - ONLY RENDER ON DESKTOP */}
+      {isDesktop && ( // Conditionally render based on isDesktop
+        <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>
+          <MiniFavorite
+            toggleSidenav={toggleFavouriteOpen}
+          />
+        </SymDrawer>
+      )}
 
       {/* Footer Component */}
       { !noFooter && <Footer /> }
-      
+
     </Fragment>
   );
 }

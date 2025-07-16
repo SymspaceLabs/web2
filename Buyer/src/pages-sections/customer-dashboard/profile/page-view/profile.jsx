@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { Card, Box, CircularProgress, useMediaQuery } from "@mui/material";
 import { ProfileForm, MeasurementForm, PreferenceForm } from "@/components/custom-forms";
+import { fetchUserById } from "@/services/userService";
 
 import Person from "@mui/icons-material/Person";
 import ProfilePicUpload from "../profile-pic-upload";
@@ -50,7 +51,7 @@ export default function ProfilePageView({
   const [weight, setWeight] = useState(
     {
       lbs: 0,
-      kg: Math.round((0) / 2.20462),
+      kg: 0, // Initialize kg to 0
     }
   );
     
@@ -59,65 +60,85 @@ export default function ProfilePageView({
 
   // Preferences
   const [gender, setGender] = useState('');
-  const [tops, setTops] = useState();
-  const [bottoms, setBottoms] = useState();
-  const [outerwears, setOuterwears] = useState();
-  const [accessories, setAccessories] = useState();
-  const [styles, setStyles] = useState();
-  const [fits, setFits] = useState();
-  const [brands, setBrands] = useState();
-  const [colors, setColors] = useState();
+  const [tops, setTops] = useState([]); // Initialize as empty array
+  const [bottoms, setBottoms] = useState([]); // Initialize as empty array
+  const [outerwears, setOuterwears] = useState([]); // Initialize as empty array
+  const [accessories, setAccessories] = useState([]); // Initialize as empty array
+  const [styles, setStyles] = useState([]); // Initialize as empty array
+  const [fits, setFits] = useState([]); // Initialize as empty array
+  const [brands, setBrands] = useState([]); // Initialize as empty array
+  const [colors, setColors] = useState([]); // Initialize as empty array
   
   useEffect(() => {
-    const fetchUserData = async () => {
+    // Use the new service function to fetch user data
+    const getUserData = async () => {
       if (user?.id) {
         try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            setUserData(data)
-          } else {
-            console.error("Failed to fetch user data:", response.statusText);
-          }
+          const data = await fetchUserById(user.id);
+          setUserData(data);
         } catch (error) {
-          console.error("Error fetching user data:", error);
+          console.error("Error fetching user data in component:", error);
+          // Handle error, e.g., show a snackbar
+          showSnackbar("Failed to load user data.", "error");
         }
       }
     };
- 
+  
     if (user?.id) {
-      fetchUserData();
+      getUserData();
     }
-  }, [user?.id]);
+  }, [user?.id, showSnackbar]); // Added showSnackbar to dependency array
 
   useEffect(() => {
     if (userData) {
       setFirstName(userData.firstName || '');
       setLastName(userData.lastName || '');
-      setDob(userData.dob || '');
-      setIsMetric(userData.measurement?.isMetric || true);
-      setHeight(userData.measurement?.height || '');
-      setWeight(userData.measurement?.weight || '');
-      setChest(userData.measurement?.chest || 0);
-      setWaist(userData.measurement?.waist || 0);
-      setGender(userData.gender || '');
-      setTops(userData?.preference?.tops);
-      setBottoms(userData?.preference?.bottoms);
-      setOuterwears(userData?.preference?.outerWears);
-      setAccessories(userData?.preference?.accessories);
-      setStyles(userData?.preference?.styles);
-      setFits(userData?.preference?.fits);
-      setBrands(userData?.preference?.brands);
-      setColors(userData?.preference?.colors);
+      setDob(userData.dob || ''); // dob is a string like "YYYY-MM-DD"
+
+      const fetchedIsMetric = userData.measurement?.isMetric ?? true; // Default to true if undefined
+      const fetchedHeightCm = userData.measurement?.height || 0;
+      const fetchedWeightKg = userData.measurement?.weight || 0;
+      const fetchedChest = userData.measurement?.chest || 0;
+      const fetchedWaist = userData.measurement?.waist || 0;
+
+      setIsMetric(fetchedIsMetric);
+
+      // Calculate height in feet/inches if not metric, otherwise use cm directly
+      if (!fetchedIsMetric) {
+        const totalInches = fetchedHeightCm / 2.54;
+        const feet = Math.floor(totalInches / 12);
+        const inches = Math.round(totalInches % 12);
+        setHeight({
+          feet: feet,
+          inches: inches,
+          cm: fetchedHeightCm, // Still store cm for consistency
+        });
+      } else {
+        setHeight({
+          feet: Math.floor(fetchedHeightCm / 30.48), // Calculate feet from cm
+          inches: Math.round((fetchedHeightCm / 2.54) % 12), // Calculate inches from cm
+          cm: fetchedHeightCm,
+        });
+      }
+
+      // Calculate weight in lbs if not metric, otherwise use kg directly
+      setWeight({
+        kg: fetchedWeightKg,
+        lbs: Math.round(fetchedWeightKg * 2.20462),
+      });
+
+      setChest(fetchedChest);
+      setWaist(fetchedWaist);
+
+      setGender(userData.preference?.gender || '');
+      setTops(userData.preference?.tops || []);
+      setBottoms(userData.preference?.bottoms || []);
+      setOuterwears(userData.preference?.outerwears || []); // Corrected property name
+      setAccessories(userData.preference?.accessories || []);
+      setStyles(userData.preference?.styles || []);
+      setFits(userData.preference?.fits || []);
+      setBrands(userData.preference?.brands || []);
+      setColors(userData.preference?.colors || []);
     }
   }, [userData]);
   
@@ -127,44 +148,10 @@ export default function ProfilePageView({
     }
   }, [isAuthenticated, router]);
 
-  useEffect(() => {
-    const fetchMeasurements = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/measurements/user/${user.id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            // Include authorization if needed:
-            // 'Authorization': `Bearer ${yourToken}`,
-          },
-        });
-  
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-  
-        const data = await res.json();
-  
-        setHeight({
-          cm: data.height,
-          feet: Math.floor(data.height / 30.48),
-          inches: Math.round((data.height % 30.48) / 2.54),
-        });
-        setWeight({
-          kg: data.weight,
-          lbs: Math.round(data.weight * 2.20462),
-        });
-        setIsMetric(data.isMetric);
-        setChest(data.chest);
-        setWaist(data.waist);
-      } catch (error) {
-        console.error("Error fetching measurements:", error);
-      }
-    };
-  
-    if (isAuthenticated) fetchMeasurements();
-  }, [isAuthenticated]);
-  
+  // Removed the duplicate fetchMeasurements useEffect
+  // The initial fetch in the first useEffect and subsequent userData processing
+  // in the second useEffect should handle all data loading.
+  // If you need to refetch measurements specifically, ensure it's not redundant.
 
   if (isAuthenticated === undefined || user === undefined) {
     return (
@@ -184,8 +171,8 @@ export default function ProfilePageView({
     
     const requestBody = {
       "measurement" : {
-          "weight": weight.kg,
-          "height": height.cm,
+          "weight": weight.kg, // Ensure this is kg for the payload
+          "height": height.cm, // Ensure this is cm for the payload
           "isMetric": isMetric,
           "chest": chest,
           "waist": waist
@@ -230,7 +217,7 @@ export default function ProfilePageView({
           // alert("Failed to create onboarding. Please try again.");
         }
         
-    }  catch (error) {
+    }   catch (error) {
         console.error("Error creating onboarding:", error);
         // alert("An error occurred while creating onboarding.");
     } finally {

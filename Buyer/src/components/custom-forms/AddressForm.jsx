@@ -4,7 +4,7 @@
 
 import { FlexBox } from '@/components/flex-box';
 import { SymTextField, SymAutoComplete } from '@/components/custom-inputs'; // Assuming SymAutoComplete is correctly imported
-import { FormHelperText } from '@mui/material'; // Import FormHelperText for displaying errors
+import { FormHelperText, FormControlLabel, Checkbox } from '@mui/material'; // Import FormControlLabel and Checkbox
 
 import countryList from 'data/countryList'; // Ensure this path is correct
 
@@ -115,6 +115,21 @@ export default function AddressForm({
                     helperText={errors.zip} // Passes error message for zip
                     sx={{ flex: 1 }} // Added flex: 1 to make it take equal width
                     mandatory={true}
+                />
+            </FlexBox>
+
+            {/* Make as default checkbox */}
+            <FlexBox justifyContent="flex-start" mt={2}>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={data.isDefault || false} // Control the checked state
+                            onChange={(e) => handleChange('isDefault', e.target.checked)} // Update isDefault on change
+                            sx={{ color: color }} // Apply color to the checkbox
+                        />
+                    }
+                    label="Save as Default Addres"
+                    sx={{ color: color }} // Apply color to the label
                 />
             </FlexBox>
         </FlexBox>

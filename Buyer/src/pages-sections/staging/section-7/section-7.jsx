@@ -1,11 +1,18 @@
 "use client";
 
+// ===============================================================
+// Section 7 | Article Details Page
+// ===============================================================
+
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
 import { Box, Container } from "@mui/material";
 import { FlexColCenter } from '@/components/flex-box';
 import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section7() {
+  const router = useRouter();
+  
   return (
     <FlexColCenter sx={{ py:10, px:{xs:2, sm:0}, width:"100%", maxWidth:"1600px" }}>
       <Container width="100%">
@@ -21,7 +28,7 @@ export default function Section7() {
             title="get in touch"
             subtitle="Learn more about our vision to help those who need it most."
             btnText="contact us"
-            btnUrl="/contact-us"
+            onClick={()=> router.push('/contact-us')}
           />
         </motion.div>
       </Container>

@@ -4,34 +4,41 @@
 
 import Icon from "@/icons";
 import Link from "next/link";
-import { useHeader } from "../hooks/use-header";
 import Clear from "@mui/icons-material/Clear"; // CUSTOM ICON COMPONENTS
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { Fragment } from "react";
+import { useRouter } from 'next/navigation';
 import { H1 } from "@/components/Typography";
-import { Box, IconButton, Card } from "@mui/material";
-import { SearchInput } from "@/components/search-box";
-import { SymDialog, SymDrawer } from "@/components/custom-components";
-import { MobileMenu } from "@/components/navbar/mobile-menu";
 import { styled } from '@mui/material/styles';
+import { useHeader } from "../hooks/use-header";
+import { useAuth } from "@/contexts/AuthContext";
+import { Box, IconButton, Card, MenuItem } from "@mui/material";
+import { SearchInput } from "@/components/search-box";
+import { MobileMenu } from "@/components/navbar/mobile-menu";
+import { SymDialog, SymDrawer } from "@/components/custom-components";
 
 // LOCAL CUSTOM COMPONENTS
 import { FlexBetween, FlexBox } from "@/components/flex-box"; 
-
 import { LogoWithTitle } from "@/components";
 import { SocialButtons } from "../components/SocialButtons";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { LoginBottom } from "@/pages-sections/sessions/components";
 import { LoginPageView } from "@/pages-sections/sessions/page-view";
-import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
-import { useFavorites } from "@/contexts/FavoritesContext";
+
 import MiniCartItem from "@/components/favourites/components/cart-item";
 import EmptyCartView from "@/components/favourites/components/empty-view";
 import Scrollbar from "@/components/scrollbar"; // CUSTOM UTILS LIBRARY FUNCTION
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
+
+// =================================================================
 
 export default function MobileHeader() {
 
+  const { isAuthenticated, user, logout } = useAuth();
   const { state: favState } = useFavorites();
+  const router = useRouter();
+  
   
   const {
     searchBarOpen,
@@ -45,6 +52,18 @@ export default function MobileHeader() {
   const ICON_STYLE = {
     color: "grey.600",
     fontSize: 20
+  };
+
+  const handleProfile = () => {
+    router.push('/profile/view');
+  };
+
+  const handleDashboard = () => {
+    router.push(`${process.env.NEXT_PUBLIC_SELLER_URL}`);
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   return (
@@ -125,34 +144,62 @@ export default function MobileHeader() {
         </Box>
       </SymDrawer>
 
-      {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-      <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
-        <Box sx={{ width: '100%', maxWidth: 580, height: {xs:650, sm:800}, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
-          <Box sx={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
-              <Wrapper>
-                <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
-                <LoginPageView closeDialog={toggleDialog} />
-                <SocialButtons />
-                <LoginBottom />
-              </Wrapper>
+      {/* LOGIN DIALOG - Only show when user is NOT authenticated */}
+      {!isAuthenticated && (
+        <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
+          <Box sx={{ width: '100%', maxWidth: 580, height: {xs:650, sm:800}, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+            <Box sx={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
+              <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
+                <Wrapper>
+                  <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
+                  <LoginPageView closeDialog={toggleDialog} />
+                  <SocialButtons />
+                  <LoginBottom />
+                </Wrapper>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </SymDialog>
+        </SymDialog>
+      )}
+
+
+      {/* LOGIN DRAWER - Only show when user is authenticated */}
+      {isAuthenticated && (
+        <SymDrawer open={dialogOpen} toggleOpen={toggleDialog} anchor="top">
+          <Box width="auto" padding={2} height="100vh">
+            <FlexBetween mb={1}>
+              <H1 color="#FFF" fontSize={15}>
+                User
+              </H1>
+              <IconButton onClick={toggleDialog}>
+                <Clear sx={{color: "#FFF"}}/>
+              </IconButton>
+            </FlexBetween>
+            <>
+              <MenuItem sx={{ ...styles.text, color: "#fff" }}>
+                {user?.email || "User"}
+              </MenuItem>
+          
+              {user?.role === "buyer" ? (
+                <MenuItem onClick={handleProfile} sx={{ ...styles.text, color: "#fff" }}>
+                  Profile
+                </MenuItem>
+              ) : user?.role === "seller" ? (
+                <MenuItem onClick={handleDashboard} sx={{ ...styles.text, color: "#fff" }}>
+                  Dashboard
+                </MenuItem>
+              ) : null}
+          
+              <MenuItem onClick={handleLogout} sx={{ ...styles.text, color: "#fff" }}>
+                Logout
+              </MenuItem>
+            </>
+          </Box>
+        </SymDrawer>
+      )}
     </Fragment>
   );
 }
-
-
-const fbStyle = {
-  background: "#3B5998",
-  color: "white"
-};
-const googleStyle = {
-  background: "#4285F4",
-  color: "white"
-};
 
 const Wrapper = styled(Card)(({ theme }) => ({
   padding: "2rem 3rem",
@@ -164,15 +211,35 @@ const Wrapper = styled(Card)(({ theme }) => ({
   },
   ".facebookButton": {
     marginBottom: 10,
-    ...fbStyle,
-    "&:hover": fbStyle,
+    ...styles.fb,
+    "&:hover": styles.fb,
   },
   ".googleButton": {
-    ...googleStyle,
-    "&:hover": googleStyle,
+    ...styles.google,
+    "&:hover": styles.google,
   },
   ".agreement": {
     marginTop: 12,
     marginBottom: 24,
   },
 }));
+
+export const styles = {
+  text: {
+    color: "#fff",
+    "& .MuiMenuItem-root:hover": {
+      color: "#fff",
+    },
+    ":hover": {
+      color: "#fff",
+    }
+  },
+  fb: {
+    background: "#3B5998",
+    color: "white"
+  },
+  google: {
+    background: "#4285F4",
+    color: "white"
+  }
+}

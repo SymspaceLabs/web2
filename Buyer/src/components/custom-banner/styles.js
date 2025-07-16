@@ -7,7 +7,7 @@ export const styles = {
                     inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
                     inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
         backdropFilter: 'blur(10.0285px)',
-        borderRadius:'40px',
+        borderRadius:'30px',
         py:{ xs:3, sm:8 },
         px:{ xs:3, sm:8 },
     },

@@ -14,7 +14,7 @@ export const MOBILE_NAVIGATION = [{
   }, {
     title: "Cart",
     Icon: ShoppingBagOutlined,
-    href: "/cart"
+    href: "/mobile-cart"
   }, {
     title: "Account",
     Icon: User2,

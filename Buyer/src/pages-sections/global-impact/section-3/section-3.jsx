@@ -55,8 +55,8 @@ export default function Section3() {
               pt: { xs:3 }
             }}
           >
-            {benefits.slice(3, 6).map((benefit) => (
-              <Box sx={styles.textBubble} onMouseEnter={() => handleBenefitChange(benefit)}>
+            {benefits.slice(3, 6).map((benefit, index) => (
+              <Box key={index} sx={styles.textBubble} onMouseEnter={() => handleBenefitChange(benefit)}>
                 <H1 color="#FFF" fontSize={12}>
                   {benefit.title}
                 </H1>

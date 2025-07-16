@@ -60,6 +60,7 @@ export default function Section4() {
               autoPlay
               loop
               muted
+              playsInline
               src="/assets/videos/ar-for-business/black-t-shirt.mp4"
               poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
@@ -82,6 +83,7 @@ export default function Section4() {
               autoPlay
               loop
               muted
+              playsInline
               src="/assets/videos/ar-for-business/model.mp4"
               poster="/assets/videos/ar-for-business/model.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}
@@ -104,6 +106,7 @@ export default function Section4() {
               autoPlay
               loop
               muted
+              playsInline
               src="/assets/videos/ar-for-business/black-t-shirt.mp4"
               poster="/assets/videos/ar-for-business/black-t-shirt.mp4"
               style={{ position: "relative", zIndex: 2, borderRadius: "50px" }}

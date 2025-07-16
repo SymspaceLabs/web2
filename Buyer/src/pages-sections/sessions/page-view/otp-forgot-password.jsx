@@ -75,7 +75,7 @@ const OtpForgotPasswordPageView = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/resend-otp`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/resend-forgot-password-otp`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -92,7 +92,8 @@ const OtpForgotPasswordPageView = () => {
         setCooldown(60); // Start cooldown (60 seconds)
       }
     } catch (error) {
-      console.error("Error during forgot password request:", error);
+      console.error("Error during forgot password resend OTP request:", error);
+      showSnackbar("Failed to resend OTP. Please try again.", "error"); // Added a generic error message for network/unexpected issues
     } finally {
       setLoading(false);
     }
@@ -105,6 +106,21 @@ const OtpForgotPasswordPageView = () => {
       </Typography>
 
       <OtpForm onVerifyOtp={setOtp} />
+
+      <FlexColCenter paddingTop={2} gap={2}>
+        <Typography color="#FFF">
+          Didn’t receive the Code?
+        </Typography>
+        <SymSubmitButton
+          isValid={!(cooldown > 0) && !loading}
+          disabled={cooldown > 0 || loading}
+          onClick={handleResendCode}
+          loading={loading}
+        >
+          {loading ? <CircularProgress size={24} sx={{ color: "#fff" }} /> : 
+            cooldown > 0 ? `Resend in ${cooldown}s` : "Resend Code"}
+        </SymSubmitButton>
+      </FlexColCenter>
 
     </FlexBox>
   );

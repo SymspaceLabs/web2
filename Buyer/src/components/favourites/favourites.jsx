@@ -1,5 +1,5 @@
 // =========================================================
-// Favorites Sidebar
+// Favorites Sidebar | Favorites Drawer
 // =========================================================
 
 import { Box, Divider } from "@mui/material";

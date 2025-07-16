@@ -1,7 +1,7 @@
 import { ProfilePageView } from "@/pages-sections/customer-dashboard/profile/page-view";
 
 export const metadata = {
-  title: "Profile  E-commerce Template",
+  title: "Profile ",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

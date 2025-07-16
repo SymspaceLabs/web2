@@ -2,17 +2,16 @@
 // Glassmorphic Banner
 // ===================================================================
 
-import Link from 'next/link';
 import { styles } from './styles';
-import { H1, Paragraph } from '../Typography';
 import { Box, Button } from '@mui/material';
+import { H1, Paragraph } from '../Typography';
 import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
 
 export default function GlassBanner({
     title,
     subtitle,
     btnText,
-    btnUrl,
+    onClick,
     sx
 }) {
   return (
@@ -28,11 +27,9 @@ export default function GlassBanner({
                     </Paragraph>
                 </FlexCol>
                 <FlexColCenter sx={{ maxWidth:{xs:'100%', sm:'350px'} }}>
-                    <Link href={btnUrl} passHref>
-                        <Button sx={styles.bannerButton}>
-                            {btnText}
-                        </Button>
-                    </Link>
+                    <Button sx={styles.bannerButton} onClick={onClick}>
+                        {btnText}
+                    </Button>
                 </FlexColCenter>
             </FlexBox>
         </Box>

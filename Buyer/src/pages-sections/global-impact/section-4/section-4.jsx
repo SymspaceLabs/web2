@@ -71,6 +71,7 @@ export default function Section4() {
                   autoPlay
                   loop
                   muted
+                  playsInline
                   src={activeBenefit.video}
                   style={{
                     position: 'relative',

@@ -7,7 +7,7 @@ import { ProductSearchPageView } from "@/pages-sections/product-details/page-vie
 // ==================================================================
 
 export const metadata = {
-  title: "Product Search - Symspace E-commerce",
+  title: "Product Search",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

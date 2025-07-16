@@ -5,7 +5,7 @@
 import { Card } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import { useAuth } from "@/contexts/AuthContext";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, useRef } from "react"; // Import useRef
 import { AddressForm } from "@/components/custom-forms";
 import { useSnackbar } from '@/contexts/SnackbarContext';
 import { SymTextField } from "@/components/custom-inputs"; // Make sure SymTextField is imported
@@ -32,10 +32,13 @@ export default function AddressDetailsPageView({
     state: "",
     country: "",
     zip: "",
+    isDefault: false, // Initialize isDefault here
   });
   const [loading, setLoading] = useState(false); // State for loading indicator during fetch and save
   const [error, setError] = useState(null); // State for general error handling (e.g., API fetch errors)
   const [fieldErrors, setFieldErrors] = useState({}); // State for field-specific validation errors
+
+  const dialogContentRef = useRef(null); // Create a ref for the dialog content
 
   // useEffect to fetch address details when in edit mode (addressId is provided)
   useEffect(() => {
@@ -144,6 +147,7 @@ export default function AddressDetailsPageView({
       state: address.state,
       zip: address.zip,
       country: address.country,
+      isDefault: address.isDefault, // Include isDefault in the request body
     };
 
     try {
@@ -234,6 +238,7 @@ export default function AddressDetailsPageView({
           data={address}
           onChange={(field, value) => handleChange(field, value)}
           errors={fieldErrors} // Pass field-specific errors to the form
+          dialogContentRef={dialogContentRef} // Pass the ref to the AddressForm
         />
       </Card>
     </Fragment>

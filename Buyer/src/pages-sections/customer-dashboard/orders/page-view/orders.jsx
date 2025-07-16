@@ -12,6 +12,7 @@ import OrderRow from "../order-row";
 import Pagination from "../../pagination";
 import DashboardHeader from "../../dashboard-header"; // CUSTOM DATA MODEL
 import ShoppingBag from "@mui/icons-material/ShoppingBag"; // Local CUSTOM COMPONENTS
+import { fetchUserOrders } from '@/services/orderService';
 
 // ====================================================
 export default function OrdersPageView() {
@@ -23,30 +24,15 @@ export default function OrdersPageView() {
   const ordersPerPage = 10; // Consistent with backend limit
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (!user?.id) {
-        setLoading(false);
-        return;
-      }
-
+    const loadOrders = async () => {
+      setLoading(true); // Set loading to true before fetching
       try {
-        setLoading(true); // Set loading to true before fetching
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/user/${user.id}?page=${currentPage}&limit=${ordersPerPage}`, {
-          headers: {
-            "Content-Type": "application/json",
-            // "Authorization": `Bearer ${token}`, // Uncomment if needed
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const responseData = await res.json();
-        setOrders(responseData.data || []); // Update orders with the 'data' array
-        setTotalPages(responseData.totalPages || 1); // Update total pages
+        // Call the isolated API function
+        const { data, totalPages } = await fetchUserOrders(user?.id, currentPage, ordersPerPage);
+        setOrders(data);
+        setTotalPages(totalPages);
       } catch (error) {
-        console.error("Failed to fetch orders:", error);
+        console.error("Error loading orders in component:", error);
         setOrders([]); // Clear orders on error
         setTotalPages(1); // Reset total pages on error
       } finally {
@@ -54,8 +40,15 @@ export default function OrdersPageView() {
       }
     };
 
-    fetchOrders();
-  }, [user, currentPage]); // Re-fetch when user or currentPage changes
+    // Only load orders if user is available
+    if (user?.id) {
+      loadOrders();
+    } else {
+      setLoading(false); // If no user, stop loading and show no orders
+      setOrders([]);
+      setTotalPages(1);
+    }
+  }, [user?.id, currentPage]); // Re-fetch when user.id or currentPage changes
 
   // Handler for pagination change
   const handlePageChange = (event, page) => {

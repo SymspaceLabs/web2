@@ -38,8 +38,9 @@ const reducer = (state, action) => {
           ),
         };
       }
-
+      console.log(action.payload)
       return {
+        
         ...state,
         cart: exist
           ? cartList.map(item =>
@@ -64,7 +65,7 @@ const reducer = (state, action) => {
           cart: [],
         };
 
-
+        
     default:
       return state;
   }

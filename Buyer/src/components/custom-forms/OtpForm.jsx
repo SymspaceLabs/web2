@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { TextField, Box } from "@mui/material";
+import { TextField, Box, useMediaQuery, useTheme } from "@mui/material"; // Import useMediaQuery and useTheme
 
 const OtpForm = ({ onVerifyOtp }) => {
   const [otp, setOtp] = useState(Array(6).fill(""));
   const inputRefs = useRef([]);
+  const theme = useTheme(); // Get the theme object
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check if it's a mobile screen
 
   useEffect(() => {
     inputRefs.current[0]?.focus(); // Auto-focus the first input box on mount
@@ -44,8 +46,15 @@ const OtpForm = ({ onVerifyOtp }) => {
     inputRefs.current[5]?.focus();
   };
 
+  // Determine input box width and gap based on screen size
+  // On desktop (isMobile is false), inputWidth and inputHeight will be 40.
+  // On mobile (isMobile is true), inputWidth and inputHeight will be 35.
+  const inputWidth = isMobile ? 37 : 50;
+  const inputHeight = isMobile ? 37 : 50;
+  const gap = isMobile ? 0.5 : 1; // Smaller gap for mobile
+
   return (
-    <Box sx={{ display: "flex", gap: 1 }}>
+    <Box sx={{ display: "flex", gap: gap, justifyContent: "center" }}>
       {otp.map((digit, index) => (
         <TextField
           key={index}
@@ -57,7 +66,12 @@ const OtpForm = ({ onVerifyOtp }) => {
           variant="outlined"
           inputProps={{
             maxLength: 1,
-            style: { textAlign: "center", fontSize: 18, width: 40, height: 40 },
+            style: {
+              textAlign: "center",
+              fontSize: isMobile ? 16 : 18, // Font size is 18 on desktop, 16 on mobile
+              width: inputWidth, // Width is 40 on desktop, 35 on mobile
+              height: inputHeight // Height is 40 on desktop, 35 on mobile
+            },
           }}
           InputProps={{
             style: { color: "#fff" },
@@ -66,6 +80,11 @@ const OtpForm = ({ onVerifyOtp }) => {
             background: "#000",
             borderRadius: "5px",
             color: "#fff",
+            // Ensure the TextField itself doesn't have a fixed width that overrides inputProps
+            '& .MuiOutlinedInput-root': {
+              width: inputWidth,
+              height: inputHeight,
+            }
           }}
         />
       ))}

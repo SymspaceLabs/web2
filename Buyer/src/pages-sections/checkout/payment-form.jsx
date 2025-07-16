@@ -1,28 +1,276 @@
 // ================================================
-// Payment Form
+// Payment Form (Updated for Braintree & Google Pay)
 // ================================================
 
-import { useState } from "react";
-// Removed 'styled' as it's no longer needed for PaymentMethodButton
+import { useState, useEffect, useRef } from "react";
+import Script from 'next/script';
 import { H1 } from "@/components/Typography";
-import { FlexBox } from "@/components/flex-box"; // Assuming FlexBox is still used
-import { CreditCardForm } from "@/components/custom-forms/checkout";
-import { Card, Button, Box, Typography } from '@mui/material';
+import { FlexBox } from "@/components/flex-box";
+// Removed CreditCardForm as Braintree Drop-in will handle it
+import { Card, Button, Box, Typography, CircularProgress } from '@mui/material'; // Import CircularProgress for loading
+import { useSnackbar } from "@/contexts/SnackbarContext";
+
+// Braintree Drop-in imports
+import DropIn from 'braintree-web-drop-in-react';
 
 // ================================================
 
 export default function PaymentForm({
     paymentMethod,
     setPaymentMethod,
+    orderTotal = 100.00, // Ensure this prop is being passed from parent
+    orderCurrency = "USD", // Ensure this prop is being passed from parent
+    onPaymentSuccess, // New prop to handle successful payments
+    onPaymentError // New prop to handle payment errors
 }) {
-    const [cardNo, setCardNo] = useState("");
-    const [expiryMonth, setExpiryMonth] = useState("");
-    const [expiryYear, setExpiryYear] = useState("");
-    const [cvv, setCvv] = useState(null);
-    const [cardHolderName, setCardHolderName] = useState("");
+    // --- Existing states for other payment methods (if still needed, though Braintree Drop-in might supersede) ---
+    // const [cardNo, setCardNo] = useState("");
+    // const [expiryMonth, setExpiryMonth] = useState("");
+    // const [expiryYear, setExpiryYear] = useState("");
+    // const [cvv, setCvv] = useState(null);
+    // const [cardHolderName, setCardHolderName] = useState("");
+
+    // --- Google Pay states ---
+    const [googlePayClient, setGooglePayClient] = useState(null);
+    const [isGooglePayReady, setIsGooglePayReady] = useState(false);
+
+    // --- Braintree states ---
+    const [braintreeClientToken, setBraintreeClientToken] = useState(null);
+    const [braintreeInstance, setBraintreeInstance] = useState(null); // To store the Braintree Drop-in instance
+    const [braintreeLoading, setBraintreeLoading] = useState(false); // Loading state for Braintree Drop-in
+    const braintreeDropInRef = useRef(null); // Ref to access the DropIn instance if needed later
+
+    const { showSnackbar } = useSnackbar();
+
+    // --- Effect to fetch Braintree Client Token ---
+    // This runs when the component mounts or when paymentMethod changes to 'card'
+    useEffect(() => {
+        if (paymentMethod === "card" && !braintreeClientToken && !braintreeLoading) {
+            setBraintreeLoading(true);
+            const fetchClientToken = async () => {
+                try {
+                    const response = await fetch('/api/braintree/client-token'); // Your NestJS endpoint
+                    const data = await response.json();
+                    if (response.ok) {
+                        setBraintreeClientToken(data.clientToken);
+                    } else {
+                        throw new Error(data.message || "Failed to fetch Braintree client token.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching Braintree client token:", error);
+                    showSnackbar("Failed to initialize card payment. Please try again.", "error");
+                } finally {
+                    setBraintreeLoading(false);
+                }
+            };
+            fetchClientToken();
+        }
+    }, [paymentMethod, braintreeClientToken, braintreeLoading, showSnackbar]);
+
+
+    // --- Google Pay Script Loading & Initialization ---
+    const loadGooglePayScript = () => {
+        console.log("Google Pay script loaded. Attempting to initialize client...");
+        if (window.google && window.google.payments && window.google.payments.api) {
+            const paymentsClient = new window.google.payments.api.PaymentsClient({
+                environment: 'TEST', // IMPORTANT: Use 'PRODUCTION' for live environment
+            });
+            setGooglePayClient(paymentsClient);
+
+            paymentsClient.isReadyToPay({
+                apiVersion: 2,
+                apiVersionMinor: 0,
+                allowedPaymentMethods: [
+                    {
+                        type: 'CARD',
+                        parameters: {
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['AMEX', 'DISCOVER', 'MASTERCARD', 'VISA'],
+                        },
+                        tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                                // IMPORTANT: Replace 'example' with your actual payment gateway (e.g., 'braintree', 'stripe', 'adyen')
+                                // If using Braintree with Google Pay, this would be 'braintree'
+                                gateway: 'braintree',
+                                // IMPORTANT: This is the Braintree Merchant ID for the *Google Pay* integration in Braintree.
+                                // It might be your primary merchant ID or a specific one for Google Pay.
+                                gatewayMerchantId: 'YOUR_BRAINTREE_GATEWAY_MERCHANT_ID', // Replace with your Braintree's Google Pay merchant ID
+                            },
+                        },
+                    },
+                ],
+            })
+                .then(function (response) {
+                    if (response.result) {
+                        setIsGooglePayReady(true);
+                        console.log("Google Pay is ready to pay!");
+                        // showSnackbar("Google Pay is available!", "success"); // Removed to avoid too many snackbars on load
+                    } else {
+                        setIsGooglePayReady(false);
+                        console.log("Google Pay is NOT ready to pay. Reason:", response);
+                        // showSnackbar("Google Pay is not available on this device/browser.", "warning"); // Removed
+                    }
+                })
+                .catch(function (err) {
+                    setIsGooglePayReady(false);
+                    console.error("Error checking Google Pay readiness:", err);
+                    // showSnackbar("Error initializing Google Pay. Please try again later.", "error"); // Removed
+                });
+        } else {
+            console.warn("Google Pay API not found on window.google.payments.api. Script might not have loaded or is blocked.");
+        }
+    };
+
+    // --- Google Pay Button Click Handler ---
+    const onGooglePayButtonClicked = () => {
+        console.log("Google Pay button clicked. Attempting to load payment data...");
+        if (!googlePayClient) {
+            console.error("Google Pay client not initialized. Cannot proceed with payment.");
+            showSnackbar("Google Pay is not ready. Please refresh the page.", "error");
+            return;
+        }
+
+        const paymentDataRequest = {
+            apiVersion: 2,
+            apiVersionMinor: 0,
+            allowedPaymentMethods: [
+                {
+                    type: 'CARD',
+                    parameters: {
+                        allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                        allowedCardNetworks: ['AMEX', 'DISCOVER', 'MASTERCARD', 'VISA'],
+                    },
+                    tokenizationSpecification: {
+                        type: 'PAYMENT_GATEWAY',
+                        parameters: {
+                            gateway: 'braintree', // IMPORTANT: Match the gateway you configured in Braintree
+                            gatewayMerchantId: 'YOUR_BRAINTREE_GATEWAY_MERCHANT_ID',
+                        },
+                    },
+                },
+            ],
+            transactionInfo: {
+                totalPriceStatus: 'FINAL',
+                totalPrice: orderTotal.toFixed(2),
+                currencyCode: orderCurrency,
+                countryCode: 'US', // IMPORTANT: Replace with your actual country code (e.g., 'MY' for Malaysia)
+            },
+            merchantInfo: {
+                merchantId: 'YOUR_GOOGLE_PAY_MERCHANT_ID', // Your Google Pay Merchant ID from Google Pay & Wallet Console
+                merchantName: 'Your E-commerce Store',
+            },
+            callbackIntents: ['PAYMENT_AUTHORIZATION'],
+        };
+
+        googlePayClient.loadPaymentData(paymentDataRequest)
+            .then(function (paymentData) {
+                console.log("Payment Data received:", paymentData);
+                // Send paymentData.paymentMethodData.token to your backend for processing
+                processGooglePayPayment(paymentData);
+            })
+            .catch(function (err) {
+                console.error("Error loading payment data (user might have cancelled):", err);
+                if (err.statusCode === 'CANCELED') {
+                    showSnackbar("Google Pay payment cancelled.", "info");
+                } else {
+                    showSnackbar("Google Pay payment failed. Please try again.", "error");
+                }
+            });
+    };
+
+    // --- Simulate sending Google Pay data to backend ---
+    const processGooglePayPayment = async (paymentData) => {
+        console.log("Sending Google Pay payment data to backend...");
+        try {
+            // This is a placeholder. You would make an actual API call to your NestJS backend.
+            // Example endpoint: /api/braintree/process-google-pay (if you set up a specific endpoint for it)
+            const response = await fetch('/api/braintree/checkout', { // Re-using Braintree checkout endpoint
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    paymentMethodNonce: paymentData.paymentMethodData.tokenizationData.token, // Google Pay token as Braintree nonce
+                    amount: orderTotal,
+                    currency: orderCurrency,
+                    deviceData: paymentData.paymentMethodData.tokenizationData.androidPayCards.deviceData, // If needed for fraud
+                    // You might need to add specific fields for Google Pay processing on your Braintree backend
+                }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                console.log("Payment processed successfully by backend:", result);
+                showSnackbar("Google Pay payment successful!", "success");
+                if (onPaymentSuccess) onPaymentSuccess(result); // Call parent handler
+            } else {
+                console.error("Payment processing failed on backend:", result);
+                showSnackbar(`Google Pay payment failed: ${result.message || 'Unknown error'}`, "error");
+                if (onPaymentError) onPaymentError(result.message || 'Unknown error'); // Call parent handler
+            }
+        } catch (error) {
+            console.error("Error sending payment to backend:", error);
+            showSnackbar("An error occurred while processing your payment.", "error");
+            if (onPaymentError) onPaymentError(error.message); // Call parent handler
+        }
+    };
+
+
+    // --- Braintree Payment Processing ---
+    const handleBraintreePayment = async () => {
+        if (!braintreeInstance) {
+            showSnackbar("Payment method not initialized. Please try again.", "error");
+            return;
+        }
+
+        setBraintreeLoading(true); // Start loading animation on the button
+        try {
+            // Request payment method from the Drop-in UI
+            const { nonce } = await braintreeInstance.requestPaymentMethod();
+            console.log("Braintree nonce received:", nonce);
+
+            // Send nonce to your NestJS backend for server-side transaction
+            const response = await fetch('/api/braintree/checkout', { // Your NestJS endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    paymentMethodNonce: nonce,
+                    amount: orderTotal, // Send as number, NestJS backend will format to fixed(2)
+                    currency: orderCurrency,
+                    // Add any other relevant order details for your backend (e.g., customerId, orderId)
+                }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                console.log("Braintree transaction successful:", result.transaction);
+                showSnackbar("Payment successful!", "success");
+                if (onPaymentSuccess) onPaymentSuccess(result.transaction); // Call parent handler
+            } else {
+                console.error("Braintree transaction failed:", result.message || result.errors);
+                showSnackbar(`Payment failed: ${result.message || 'Unknown error'}`, "error");
+                if (onPaymentError) onPaymentError(result.message || 'Unknown error'); // Call parent handler
+            }
+        } catch (error) {
+            console.error("Error processing Braintree payment:", error);
+            showSnackbar(`Payment error: ${error.message}`, "error");
+            if (onPaymentError) onPaymentError(error.message);
+        } finally {
+            setBraintreeLoading(false); // Stop loading animation
+        }
+    };
 
     return (
         <Card sx={styles.wrapper}>
+            {/* Load Google Pay script */}
+            <Script
+                src="https://pay.google.com/gp/p/js/pay.js"
+                onLoad={loadGooglePayScript} // Call our loader function when script loads
+                strategy="lazyOnload" // Load script after page hydration
+            />
 
             <H1 fontSize={20}>
                 Payment details
@@ -36,59 +284,145 @@ export default function PaymentForm({
             </Box>
 
             {/* PAYMENT METHOD BUTTONS */}
-            <FlexBox gap={2} mb={3} justifyContent="space-between" flexWrap="wrap"> {/* Added flexWrap for responsiveness */}
-                {/* Card Button (now handled by PayPal Advanced Checkout) */}
-                {/* <Button
-                    onClick={() => setPaymentMethod("card")}
-                    sx={styles.paymentMethodButton(paymentMethod === "card")} // Apply styles from the styles object
-                >
-                    <Box component="img" src="assets/images/payment-methods/Card.svg" alt="Card Icon" sx={{ height: 24, mb: 0.5 }} />
-                    <Typography fontSize={12} fontWeight={500} textAlign="center">Credit/Debit Card<br/>(PayPal Advanced)</Typography>
-                </Button> */}
-
-                {/* PayPal Button */}
+            <FlexBox gap={2} mb={3} justifyContent="space-between" flexWrap="wrap">
+                {/* PayPal Button (existing) */}
                 <Button
                     onClick={() => setPaymentMethod("paypal")}
-                    sx={styles.paymentMethodButton(paymentMethod === "paypal")} // Apply styles from the styles object
+                    sx={styles.paymentMethodButton(paymentMethod === "paypal")}
                 >
                     <img
                         src="assets/images/paypal.svg"
-                        style={{ 
-                            width: "100%",
+                        style={{
                             width: 25,
                             height: "auto"
                         }}
                         alt="PayPal"
                     />
-                    <H1 
-                        fontSize={12} 
-                        fontWeight={500} 
+                    <H1
+                        fontSize={12}
+                        fontWeight={500}
                         textAlign="center"
                     >
                         PayPal
                     </H1>
                 </Button>
 
-                {/* Apple Pay Button */}
-                {/* <Button
-                    onClick={() => setPaymentMethod("apple-pay")}
-                    sx={styles.paymentMethodButton(paymentMethod === "apple-pay")} // Apply styles from the styles object
-                >
-                    <Box component="img" src="assets/images/payment-methods/ApplePay.svg" alt="Apple Pay" sx={{ height: 24, mb: 0.5 }} />
-                    <Typography fontSize={12} fontWeight={500} textAlign="center">Apple Pay</Typography>
-                </Button> */}
-
                 {/* Google Pay Button */}
-                {/* <Button
-                    onClick={() => setPaymentMethod("google")}
-                    sx={styles.paymentMethodButton(paymentMethod === "google")} // Apply styles from the styles object
-                >
-                    <Box component="img" src="assets//images/payment-methods/GooglePay.svg" alt="Google Pay" sx={{ height: 24, mb: 0.5 }} />
-                    <Typography fontSize={12} fontWeight={500} textAlign="center">Google Pay</Typography>
-                </Button> */}
+                {isGooglePayReady && ( // Only show button if Google Pay is ready
+                    <Button
+                        onClick={() => {
+                            setPaymentMethod("google"); // Set the payment method state
+                            onGooglePayButtonClicked(); // Trigger Google Pay flow
+                        }}
+                        sx={styles.paymentMethodButton(paymentMethod === "google")}
+                    >
+                        <img
+                            src="assets/images/payment-methods/GooglePay.svg"
+                            style={{
+                                width: 70,
+                                height: "auto"
+                            }}
+                            alt="Google Pay"
+                        />
+                        <H1
+                            fontSize={12}
+                            fontWeight={500}
+                            textAlign="center"
+                        >
+                            Google Pay
+                        </H1>
+                    </Button>
+                )}
 
+                {/* Credit Card Button (now powered by Braintree Drop-in) */}
+                <Button
+                    onClick={() => setPaymentMethod("card")}
+                    sx={styles.paymentMethodButton(paymentMethod === "card")}
+                >
+                    <img
+                        src="assets/images/payment-methods/Card.svg"
+                        style={{
+                            width: 40,
+                            height: "auto"
+                        }}
+                        alt="Credit Card"
+                    />
+                    <H1
+                        fontSize={12}
+                        fontWeight={500}
+                        textAlign="center"
+                    >
+                        Credit Card
+                    </H1>
+                </Button>
             </FlexBox>
 
+            {/* Braintree Drop-in UI for Credit Card */}
+            {paymentMethod === "card" && (
+                <Box mt={3}>
+                    {braintreeLoading ? (
+                        <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+                            <CircularProgress />
+                            <Typography sx={{ ml: 2 }}>Loading payment form...</Typography>
+                        </Box>
+                    ) : braintreeClientToken ? (
+                        <>
+                            <DropIn
+                                options={{
+                                    authorization: braintreeClientToken,
+                                    // Braintree automatically includes card payments when client token is generated
+                                    // You can explicitly configure other payment options here if you want them within the Drop-in
+                                    // Example for PayPal within Drop-in (requires specific PayPal configuration in Braintree Control Panel):
+                                    // paypal: {
+                                    //     flow: 'vault', // 'checkout' or 'vault'
+                                    //     amount: orderTotal.toFixed(2),
+                                    //     currency: orderCurrency,
+                                    //     billingAgreementDescription: 'Your product description',
+                                    // },
+                                    // Example for Google Pay within Braintree Drop-in (alternative to direct Google Pay integration above):
+                                    // googlePay: {
+                                    //     googlePayVersion: 2,
+                                    //     merchantId: 'YOUR_GOOGLE_PAY_MERCHANT_ID', // Your Google Pay Merchant ID
+                                    //     countryCode: 'US',
+                                    //     currencyCode: orderCurrency,
+                                    //     // This tokenizationSpecification must be correctly configured in Braintree's control panel
+                                    //     // and match what Braintree expects for Google Pay.
+                                    //     tokenizationSpecification: {
+                                    //         type: 'PAYMENT_GATEWAY',
+                                    //         parameters: {
+                                    //             gateway: 'braintree',
+                                    //             gatewayMerchantId: 'YOUR_BRAINTREE_GATEWAY_MERCHANT_ID',
+                                    //         },
+                                    //     },
+                                    // },
+                                }}
+                                onInstance={(instance) => setBraintreeInstance(instance)}
+                                ref={braintreeDropInRef}
+                            />
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                onClick={handleBraintreePayment}
+                                disabled={!braintreeInstance || braintreeLoading}
+                                sx={{ mt: 2, borderRadius: '25px' }}
+                            >
+                                {braintreeLoading ? <CircularProgress size={24} color="inherit" /> : `Pay ${orderTotal.toFixed(2)} ${orderCurrency}`}
+                            </Button>
+                        </>
+                    ) : (
+                        // Show error if client token couldn't be fetched
+                        <Typography color="error">Error loading payment form. Please try again.</Typography>
+                    )}
+                </Box>
+            )}
+
+            {/*
+                The `CreditCardForm` component is no longer needed here as Braintree's Drop-in
+                provides its own secure UI for collecting card details.
+                You can remove or comment out this block:
+            */}
+            {/*
             {
                 paymentMethod === "card" &&
                 <CreditCardForm
@@ -104,15 +438,16 @@ export default function PaymentForm({
                     setCardHolderName={setCardHolderName}
                 />
             }
+            */}
 
         </Card>
     );
 }
 
 const styles = {
-    wrapper : {
-        p:3,
-        pb:5,
+    wrapper: {
+        p: 3,
+        pb: 5,
         borderRadius: "25px",
         backdropFilter: 'blur(10.0285px)',
         boxShadow: 'inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4), inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5), inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24), inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)',
@@ -121,29 +456,27 @@ const styles = {
     btn: {
         borderRadius: '25px',
     },
-    // Styles for PaymentMethodButton, now a function that returns the style object
-    paymentMethodButton: (isSelected) => ({ // Accepts isSelected as an argument
+    paymentMethodButton: (isSelected) => ({
         border: isSelected ? '2px solid #007bff' : '2px solid transparent',
         borderRadius: '16px',
         padding: '18px',
         display: 'flex',
-        flexDirection: 'column', // Arrange content vertically
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        flexGrow: 1, // Allows buttons to grow and fill space
-        // Explicitly set width to ensure equal distribution for 4 items with a 16px gap
-        width: 'calc(25% - 12px)', // For 4 items and gap={2} (16px), 3 gaps = 48px total gap. (100% - 48px) / 4 = 25% - 12px
-        boxSizing: 'border-box', // Include padding and border in the width calculation
-        minWidth: '90px', // Adjusted minimum width to allow shrinking on very small screens, while maintaining proportion
-        backgroundColor: 'white', // Set background to white for all payment methods
-        textTransform:'none',
+        flexGrow: 1,
+        gap:1.5,
+        width: 'calc(25% - 12px)',
+        boxSizing: 'border-box',
+        minWidth: '90px',
+        backgroundColor: 'white',
+        textTransform: 'none',
         '&:hover': {
             border: '2px solid #007bff',
         },
-        // Responsive adjustments for smaller screens
         '@media (max-width:600px)': {
-            width: 'calc(50% - 8px)', // 2 items per row on small screens (e.g., mobile)
-            marginBottom: '16px', // Add some vertical spacing
+            width: 'calc(50% - 8px)',
+            marginBottom: '16px',
         },
     }),
 };

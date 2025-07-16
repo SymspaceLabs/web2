@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import { AddressDetailsPageView } from "pages-sections/customer-dashboard/address/page-view"; // API FUNCTIONS
 
 export const metadata = {
-  title: "Address  E-commerce Template",
+  title: "Edit Address",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",
     url: "https://symspacelabs.com"
   }],
-  keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
+  keywords: ["e-commerce"]
 };
 
 export default async function Address({ params }) {

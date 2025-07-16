@@ -1,7 +1,7 @@
 "use client"
 
 // =========================================================
-// Job Application Form 
+// Address Dialog Form
 // =========================================================
 
 import { Fragment } from "react";
@@ -38,7 +38,7 @@ const AddressDialog = ({
                 style: {
                     maxWidth: "650px", // Set custom max width here
                     width: "100%", // Ensure responsiveness
-                    backgroundColor: "rgba(63, 103, 166, 0.8)",
+                    backgroundColor: "rgba(128, 128, 128, 0.4)", // Changed to grey with transparency
                     backdropFilter: 'blur(10px)',
                     borderRadius: '40px',
                     boxShadow:
@@ -95,7 +95,7 @@ const AddressDialog = ({
             <DialogActions sx={{ display: "flex", justifyContent: "space-between", padding: {xs:2, sm:"35px"} }}>
                 <Box sx={{width:'100%', p:'10px' }}>
                     <SymButton
-                        sx={styles.saveBtn} 
+                        sx={styles.saveBtn}
                         loading={loading}
                         onClick={handleSave}
                     >
@@ -106,7 +106,7 @@ const AddressDialog = ({
         </Dialog>
     );
 };
-    
+
 
 export default AddressDialog
 
@@ -134,5 +134,3 @@ const styles = {
         },
     }
 }
-
-

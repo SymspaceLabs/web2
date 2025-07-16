@@ -68,7 +68,10 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                 "brands": brands,
                 "colors": colors
             },
-            "dob": dob
+            "user" : {
+                "dob": dob
+            }
+            
         };
         
         try {
@@ -93,7 +96,6 @@ const OnboardingDialog = ({ open, onClose, user }) => {
 
     // Media query to detect mobile screens
     const isMobile = useMediaQuery('(max-width:600px)');
-    
       
     return (
         <Dialog
@@ -175,6 +177,7 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                     />
                 </Box>
             </DialogContent>
+
             <DialogActions sx={{ display: "flex", justifyContent: "space-between", padding: isMobile? 2 : "35px" }}>
                 <Button
                     variant="outlined"

@@ -6,23 +6,27 @@
 
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, Fragment, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { SymDashboardHeader } from "@/components/custom-components";
 import { useSnackbar } from '@/contexts/SnackbarContext'; // Import useSnackbar
 
+
 // MUI Dialog Components
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button'; // Import Button for dialog actions
+import { 
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Box,
+  Card
+} from '@mui/material';
 
 import Pagination from "../../pagination";
 import Place from "@mui/icons-material/Place";
 import AddressListItem from "../address-item";
 import { FlexCol } from "@/components/flex-box";
-import { Box, Card } from "@mui/material";
 
 // =======================================================
 export default function AddressPageView() {
@@ -57,7 +61,15 @@ export default function AddressPageView() {
         throw new Error(errorData.message || `Failed to fetch addresses: ${response.statusText}`);
       }
 
-      const data = await response.json();
+      let data = await response.json();
+
+      // Sort addresses: default address first, then by ID or any other consistent order
+      data.sort((a, b) => {
+        if (a.isDefault && !b.isDefault) return -1; // a comes before b if a is default and b is not
+        if (!a.isDefault && b.isDefault) return 1;  // b comes before a if b is default and a is not
+        return 0; // Maintain original order for non-default addresses, or sort by another criterion if needed
+      });
+
       setAllAddress(data);
     } catch (err) {
       console.error("Error fetching addresses:", err);

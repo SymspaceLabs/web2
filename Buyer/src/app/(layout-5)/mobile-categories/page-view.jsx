@@ -7,7 +7,7 @@
 import { useState } from "react";
 import renderChild from "./render-child";
 import { useRouter } from "next/navigation";
-import { categoryMenus } from "@/data/navigations";
+import { categoryMenus } from "@/data/mobileCategoryMenus";
 import { CategoryListItem, StyledRoot } from "./styles";
 import OverlayScrollbar from "@/components/overlay-scrollbar";
 import IconComponent from "@/components/service-cards/icon-component";
@@ -32,7 +32,8 @@ export default function MobileCategoriesPageView() {
               isActive={selected.title === item.title}
               onClick={() => { 
                 if (item.children) setSelected(item);
-                else router.push(item.href);
+                else router.push(`/products/search/all?category=${item.slug}`);
+
               }}
             >
               {/* <IconComponent icon={item.icon} className="icon" /> */}

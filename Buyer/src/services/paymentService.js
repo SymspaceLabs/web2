@@ -2,7 +2,6 @@
 
 /**
  * Handles the internal processing after a successful PayPal payment.
- *
  * @param {object} params - The parameters for the function.
  * @param {string} params.paypalOrderId - The order ID returned by PayPal.
  * @param {object} params.cartState - The current state of the cart from useCart hook.
@@ -125,6 +124,7 @@ export const handlePayPalPaymentSuccessInternal = async ({
     setLoading(false);
   }
 };
+
 /**
  * Initiates the PayPal payment flow using the REST API.
  * This involves creating an order on your backend (which then calls PayPal's API)
@@ -202,7 +202,6 @@ export const initiatePayPalRestApiPayment = async ({
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': `Bearer ${user.token}` // Uncomment if backend requires auth.
             },
             body: JSON.stringify(orderDataForPayPal),
         });
@@ -229,6 +228,8 @@ export const initiatePayPalRestApiPayment = async ({
         console.error("Error initiating PayPal REST API payment:", error);
         showSnackbar(`Failed to start PayPal payment: ${error.message}`, "error");
         setLoading(false); // Deactivates loading if an error occurs before redirection.
+    } finally {
+        setLoading(false);
     }
 };
 
@@ -348,6 +349,77 @@ export const handleCreateOrderInternal = async ({
     } catch (error) {
         console.error("Order creation failed:", error);
         showSnackbar(`Error: ${error.message}`, "error");
+    } finally {
+        setLoading(false);
+    }
+};
+
+/**
+ * Handles the creation of an order for a guest user.
+ * @param {object} payload - The guest checkout payload.
+ * @param {function} showSnackbar - Function to display snackbar messages.
+ * @param {function} dispatch - Cart dispatch function.
+ * @param {object} router - Next.js router object.
+ * @param {function} setLoading - Function to set loading state.
+ */
+export const handleGuestCheckout = async ({
+    firstName,
+    lastName,
+    email,
+    shipping,
+    billing,
+    sameAsShipping,
+    cartItems,
+    totalAmount,
+    shippingCost,
+    promoCodeId,
+    discountAmount,
+    subtotal,
+    selectedPaymentMethod, // Pass this to determine if paypalOrderId is needed
+    paypalOrderId, // Pass if it's a PayPal guest checkout
+    showSnackbar,
+    dispatch,
+    router,
+    setLoading
+}) => {
+    const guestPayload = {
+        firstName,
+        lastName,
+        email,
+        shipping,
+        billing: sameAsShipping ? shipping : billing,
+        cartItems: cartItems,
+        totalAmount: parseFloat(totalAmount),
+        shippingCost: shippingCost,
+        promoCodeId: promoCodeId,
+        discountAmount: discountAmount,
+        subtotal: subtotal,
+    };
+
+    if (selectedPaymentMethod === "paypal") {
+        guestPayload.paypalOrderId = paypalOrderId;
+    }
+
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/guest-checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(guestPayload),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.message || "Guest checkout failed");
+
+        showSnackbar("Order placed successfully!", "success");
+        dispatch({ type: "CLEAR_CART" });
+        localStorage.removeItem("guestCheckoutData"); // Clear guest data after successful order
+        router.push(`/order-confirmation/${data.data.id}`);
+    } catch (error) {
+        console.error("Guest checkout error:", error);
+        showSnackbar(`Failed to place order: ${error.message}`, "error");
     } finally {
         setLoading(false);
     }

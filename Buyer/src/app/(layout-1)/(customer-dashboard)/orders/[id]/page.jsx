@@ -1,5 +1,5 @@
 // =================================================
-// Order Details Page 
+// Order Details Page
 // =================================================
 
 import { OrderDetailsPageView } from "@/pages-sections/customer-dashboard/orders/page-view"; // API FUNCTIONS
@@ -7,7 +7,7 @@ import { OrderDetailsPageView } from "@/pages-sections/customer-dashboard/orders
 // =================================================
 
 export const metadata = {
-  title: "Order Details  E-commerce Template",
+  title: "Order Details E-commerce Template",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",
@@ -16,8 +16,11 @@ export const metadata = {
   keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
 };
 
-export default async function OrderDetails({params}) {
+export default async function OrderDetails({ params }) {
+  // Explicitly extract the 'id' from params
+  const { id } = params;
+
   return (
-    <OrderDetailsPageView orderId={params.id} />
+    <OrderDetailsPageView orderId={id} /> // Use the extracted 'id'
   );
 }

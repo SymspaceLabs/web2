@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 import { FAQS } from "@/data/faqs";
 import { motion } from "framer-motion";
 import { styles } from "../page-view/styles";
@@ -12,6 +12,11 @@ import { H1, Paragraph } from "@/components/Typography";
 
 export default function Section15() {
   const [expanded, setExpanded] = useState(false);
+  const [isClient, setIsClient] = useState(false); // State to track if component is mounted on client
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once the component mounts on the client
+  }, []);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -26,23 +31,75 @@ export default function Section15() {
     marginBottom: "15px",
     padding: {xs:"5px", sm:"10px"},
     position: "relative",
-    border: "2px solid linear-gradient(94.91deg, #FFFFFF 0%, #AEAEAE 100%)", // Base transparent border
+    // FIX: Changed invalid border gradient to a solid white border.
+    // If a gradient border is truly desired, it requires a different CSS technique
+    border: "2px solid #FFF",
     borderRadius: "15px",
-    backgroundClip: "padding-box", // Ensures inner content is not affected
+    backgroundClip: "padding-box",
     "&:first-of-type": { borderRadius: "15px !important" },
     "&:last-of-type": { borderRadius: "15px !important" }
   };
 
   return (
     <Box sx={{ width: "100%", py: { xs:2, sm:10 }, background: "#1F1F1F" }}>
-      <motion.div
-        component={Box} // Makes motion.div behave like a Box
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
-        style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
-      >
+      {/* Conditionally render motion.div only on the client to prevent hydration errors */}
+      {isClient ? (
+        <motion.div
+          component={Box} // Makes motion.div behave like a Box
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
+        >
+          <Container>
+            <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
+              <H1 sx={styles.sectionHeader}>
+                FAQs
+              </H1>
+              <Link href="/faq" target="blank" >
+                <H1
+                  sx={{
+                    color: 'rgba(255,255,255,0.5)',
+                    textDecoration: 'none',
+                    fontSize:{xs:10},
+                    '&:hover': {
+                      color: '#FFF',
+                      textDecoration: 'underline',
+                    }
+                  }}
+                >
+                  More FAQS
+                </H1>
+              </Link>
+            </FlexBox>
+
+            {FAQS.slice(0,3).map((faq, index) => (
+              <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
+                <Box sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}>
+                  <Accordion
+                    expanded={expanded === index}
+                    onChange={handleChange(index)}
+                    sx={accordionStyles}
+                  >
+                    <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
+                      <H1 sx={{ fontSize:{xs:10, sm:18}, color: "#FFF" }} >
+                        {faq.question}
+                      </H1>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <Paragraph sx={{ color: "#fff" }}>
+                        {faq.answer}
+                      </Paragraph>
+                    </AccordionDetails>
+                  </Accordion>
+                </Box>
+              </motion.div>
+            ))}
+          </Container>
+        </motion.div>
+      ) : (
+        // Render a static version of the content on the server
         <Container>
           <FlexBox justifyContent="space-between" alignItems="center" sx={{py:{xs:1, sm:4}}}>
             <H1 sx={styles.sectionHeader}>
@@ -50,14 +107,14 @@ export default function Section15() {
             </H1>
             <Link href="/faq" target="blank" >
               <H1
-                sx={{ 
-                  color: 'rgba(255,255,255,0.5)',  
-                  textDecoration: 'none', 
+                sx={{
+                  color: 'rgba(255,255,255,0.5)',
+                  textDecoration: 'none',
                   fontSize:{xs:10},
-                  '&:hover': { 
+                  '&:hover': {
                     color: '#FFF',
                     textDecoration: 'underline',
-                  } 
+                  }
                 }}
               >
                 More FAQS
@@ -65,31 +122,29 @@ export default function Section15() {
             </Link>
           </FlexBox>
 
-
           {FAQS.slice(0,3).map((faq, index) => (
-            <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }}>
-              <Box sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}> {/* Ensures spacing remains consistent */}
-                <Accordion
-                  expanded={expanded === index}
-                  onChange={handleChange(index)}
-                  sx={accordionStyles}
-                >
-                  <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
-                    <H1 sx={{ fontSize:{xs:10, sm:18}, color: "#FFF" }} >
-                      {faq.question}
-                    </H1>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Paragraph sx={{ color: "#fff" }}>
-                      {faq.answer}
-                    </Paragraph>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-            </motion.div>
+            // Render Accordions without motion.div wrapper for SSR
+            <Box key={index} sx={{ marginBottom: expanded === index ? "15px" : "0px",  overflow: "hidden" }}>
+              <Accordion
+                expanded={expanded === index}
+                onChange={handleChange(index)}
+                sx={accordionStyles}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />} sx={{ borderBottom: "none" }}>
+                  <H1 sx={{ fontSize:{xs:10, sm:18}, color: "#FFF" }} >
+                    {faq.question}
+                  </H1>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Paragraph sx={{ color: "#fff" }}>
+                    {faq.answer}
+                  </Paragraph>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           ))}
         </Container>
-      </motion.div>
+      )}
     </Box>
   );
 }

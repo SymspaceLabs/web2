@@ -1,41 +1,51 @@
 "use client";
 
+// ==================================================================
+// Wish List | Favourites Page
+// ==================================================================
+
 import { Fragment } from "react";
-import Grid from "@mui/material/Grid";
-import Favorite from "@mui/icons-material/Favorite"; // LOCAL CUSTOM HOOK
+import { Grid, Box } from "@mui/material";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
-import useWishList from "./use-wish-list"; // GLOBAL CUSTOM COMPONENT
-
-// Local CUSTOM COMPONENT
 import Pagination from "../pagination";
-import DashboardHeader from "../dashboard-header"; // ==================================================================
-import { ProductCard3 } from "@/components/custom-cards/product-cards";
+import DashboardHeader from "../dashboard-header"; 
+import Favorite from "@mui/icons-material/Favorite"; // LOCAL CUSTOM HOOK
+import MiniCartItem from "@/components/favourites/components/cart-item";
+import { FlexCol } from "@/components/flex-box";
 
 // ==================================================================
+
 export default function WishListPageView(props) {
-  const {
-    totalProducts,
-    products
-  } = props;
-  const {
-    currentPage,
-    handleChangePage
-  } = useWishList();
-  return <Fragment>
+  const { state: favState } = useFavorites();
+  
+  return (
+    <Fragment>
       {/* TOP HEADER AREA */}
-      <DashboardHeader title="My Wish List" Icon={Favorite} />
+      <DashboardHeader title="My Favourites" Icon={Favorite} />
 
       {/* PRODUCT LIST AREA */}
-      <Grid container spacing={3}>
-        {products.map(item => <Grid item lg={4} sm={6} xs={12} key={item.id}>
-            <ProductCard3
-              company={{}}
-              product={item}
+      <FlexCol>
+        {favState.favorites.map(item => (
+          <Box sx={styles.card}>
+            <MiniCartItem
+              item={item}
+              key={item.id}
+              mode='dark'
             />
-          </Grid>)}
-      </Grid>
+          </Box>
+
+        ))}
+      </FlexCol>
 
       {/* PAGINATION AREA */}
-      <Pagination page={currentPage} count={Math.ceil(totalProducts / 6)} onChange={(_, page) => handleChangePage(page)} />
-    </Fragment>;
+      {/* <Pagination page={currentPage} count={Math.ceil(totalProducts / 6)} onChange={(_, page) => handleChangePage(page)} /> */}
+    </Fragment>
+  );
+}
+
+const styles = {
+  card: {
+    background: '#FFF'
+  }
 }

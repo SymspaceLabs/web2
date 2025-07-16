@@ -34,7 +34,7 @@ export default function VoucherForm({
 
     const currentToken = getAuthToken();
     if (!currentToken) {
-      showSnackbar("Please log in to apply a promo code. Token is missing.", "error");
+      showSnackbar("Please log in to apply a promo code", "error");
       setLoading(false);
       return;
     }

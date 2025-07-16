@@ -1,6 +1,6 @@
 import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
-import { CategoryMenuButton, elementalEndFont } from "./styles";
+import { CategoryMenuButton } from "./styles";
 import { ChildNavListWrapper } from "./styles";
 import { NavLink } from "../nav-link";
 import { MenuItem } from "@mui/material";

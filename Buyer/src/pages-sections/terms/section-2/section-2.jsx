@@ -1,11 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useRouter } from 'next/navigation';
 import { Box, Container } from "@mui/material";
 import { FlexColCenter } from '@/components/flex-box';
 import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section2() {
+  const router = useRouter();
+  
   return (
     <FlexColCenter sx={{ py:{ xs:5, sm:10 }, px:{xs:2, sm:0} }}>
       <Container>
@@ -21,7 +24,7 @@ export default function Section2() {
             title="get in touch"
             subtitle="Learn more about our vision to help those who need it most."
             btnText="contact us"
-            btnUrl="/contact-us"
+            onClick={()=> router.push('/contact-us')}
           />
         </motion.div>
       </Container>

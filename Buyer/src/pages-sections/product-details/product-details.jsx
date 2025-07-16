@@ -73,7 +73,7 @@ export default function ProductDetails({ product }) {
     const existingItem = state.cart.find(
       (item) =>
         item.id === id &&
-        item.selectedColor === selectedColor.id &&
+        item.selectedColor.id === selectedColor.id &&
         item.selectedSize === selectedSize
     );
 
@@ -103,7 +103,7 @@ export default function ProductDetails({ product }) {
   const toggleSidenav = () => setSidenavOpen(state => !state);
   const [sidenavOpen, setSidenavOpen] = useState();
   const [openModal, setOpenModal] = useState(false);
-  const [availability, setAvailability] = useState(null); // null | true | false
+  const [availability, setAvailability] = useState(null);
   const [loadingAvailability, setLoadingAvailability] = useState(false);
 
   // THIS FUNCTION FETCHES AVAILABILILTY OF A PRODUCT INSTANTLY

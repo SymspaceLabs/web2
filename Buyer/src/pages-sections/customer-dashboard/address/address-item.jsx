@@ -12,12 +12,12 @@ import TableRow from "../table-row"; // CUSTOM DATA MODEL
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
 import { Paragraph } from "@/components/Typography"; // LOCAL CUSTOM COMPONENT
+import { Box, Chip } from "@mui/material"; // Import Box and Chip for styling
 
 // ==============================================================
 export default function AddressListItem({
-  address, // The full address object (contains id, name, address1, etc.)
-  handleDelete, // This prop is now expected to be the handleOpenConfirmation function from parent
-  handleEdit // This prop is for navigating to the edit page
+  address, // The full address object (contains id, name, address1, etc., including isDefault)
+  handleDelete // This prop is now expected to be the handleOpenConfirmation function from parent
 }) {
   const router = useRouter(); // Initialize useRouter for navigation
 
@@ -29,7 +29,8 @@ export default function AddressListItem({
     city,
     state,
     zip,
-    country
+    country,
+    isDefault // Destructure isDefault from the address object
   } = address || {};
 
   const address2Text = address2 ? `${address2},` : '';
@@ -48,10 +49,29 @@ export default function AddressListItem({
   };
 
   return (
-    <TableRow>
+    <TableRow
+      sx={{
+        border: isDefault ? '2px solid #007bff' : 'none', // Apply blue border if isDefault is true
+        mb: 2, // Add some margin-bottom for separation if needed
+      }}
+    >
       {/* Display Address Name */}
       {/* Fallback to 'Unnamed Address' if 'name' is empty or null */}
-      <Paragraph ellipsis>{name || 'Unnamed Address'}</Paragraph>
+      <Box display="flex" alignItems="center" gap={1}> {/* Use Box for flex container */}
+        <Paragraph ellipsis>{name || 'Unnamed Address'}</Paragraph>
+        {isDefault && ( // Conditionally render the Chip if isDefault is true
+          <Chip
+            label="Default"
+            size="small"
+            sx={{
+              backgroundColor: '#c1d4f7', // Blue background for the chip
+              color: '#0004ff', // White text color
+              fontWeight: 'bold',
+              height: '20px', // Adjust height as needed
+            }}
+          />
+        )}
+      </Box>
 
       {/* Display Full Address Details */}
       <Paragraph ellipsis>{`${address1}, ${address2Text} ${city}, ${state}, ${zip}, ${country}`}</Paragraph>

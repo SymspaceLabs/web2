@@ -221,8 +221,15 @@ export const CustomCard3 = () => {
         <video
           width={292}
           height={195}
-          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-          autoPlay loop muted
+          style={{ 
+            objectFit: 'cover',
+            width: '100%',
+            height: '100%'
+          }}
+          autoPlay
+          loop
+          muted
+          playsInline
         >
           <source src="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/646e4fcefb0291863787d1a7_AR_Visuals_Spaceman-transcode.webm" type="video/mp4" />
           Your browser does not support the video tag.

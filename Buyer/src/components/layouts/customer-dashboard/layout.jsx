@@ -14,7 +14,7 @@
 
 import { Grid, Container } from "@mui/material";
 import Navigation from "./navigation";
-
+import { MainContainer } from "./styles";
 // ============================================
 
 export default function CustomerDashboardLayout({
@@ -24,7 +24,9 @@ export default function CustomerDashboardLayout({
     <Container className="mt-2 mb-2">
       <Grid container spacing={3}>
         <Grid item md={3} xs={12} sx={{ display: {xs: "none", sm: "none", md: "block"} }}>
-          <Navigation />
+          <MainContainer>
+            <Navigation />
+          </MainContainer>
         </Grid>
 
         <Grid item md={9} xs={12}>

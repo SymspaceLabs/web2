@@ -50,10 +50,12 @@ const ProductGallery = ({
             id,
             slug,
             sizes: sizes.map((size) => ({
+                id: size.id,
                 label: size.size,
                 value: size.id,
             })),
             colors: colors.map((color) => ({
+                id: color.id,
                 label: color.name,
                 value: color.code,
             })),

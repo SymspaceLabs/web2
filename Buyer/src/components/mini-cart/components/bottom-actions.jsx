@@ -2,7 +2,7 @@
 // Bottom Actions
 // ==============================================================
 
-import { Box, Button } from "@mui/material"; 
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material"; // Import useMediaQuery and useTheme
 import { styles } from "@/components/styles";
 import { FlexColCenter } from "@/components/flex-box";
 
@@ -13,7 +13,13 @@ export default function BottomActions({
   handleNavigate
 }) {
   return (
-    <FlexColCenter p={2.5} gap={1}>
+    <FlexColCenter
+      p={2.5}
+      gap={1}
+      sx={{
+        pb: { xs:'100px', sm:'100px', md: 2.5 } // Apply 100px padding only on mobile
+      }}
+    >
       <Button fullWidth sx={btn} onClick={handleNavigate("/checkout")}>
         Checkout Now ({total})
       </Button>
@@ -21,7 +27,7 @@ export default function BottomActions({
   );
 }
 
-const btn = { 
+const btn = {
   height: "50px",
   color:'#FFF',
   background:'linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)',

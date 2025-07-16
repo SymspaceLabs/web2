@@ -29,6 +29,8 @@
     "apple-auth": "^1.0.9",
     "axios": "^1.6.7",
     "axios-mock-adapter": "^1.22.0",
+    "braintree-web": "^3.123.2",
+    "braintree-web-drop-in-react": "^1.2.1",
     "clsx": "^2.1.0",
     "cross-env": "^7.0.3",
     "currency.js": "^2.0.4",

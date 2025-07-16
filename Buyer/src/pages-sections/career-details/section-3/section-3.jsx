@@ -1,41 +1,32 @@
-import { Box, Container, Button, Typography } from '@mui/material';
-import { FlexBox, FlexCol, FlexColCenter } from '@/components/flex-box';
-import { H1 } from '@/components/Typography';
-import { styles } from '../page-view/styles';
+// ===============================================================
+// Section 3 | Career Details
+// ===============================================================
+
+import { motion } from "framer-motion";
+import { Box, Container } from "@mui/material";
+import { FlexColCenter } from '@/components/flex-box';
+import { GlassBanner } from "@/components/custom-banner";
 
 export default function Section3({toggleDialog}) {
   return (
-    <Container sx={{ py:5 }}>
-      <Box sx={cardStyle}>
-        <FlexBox sx={{ flexDirection:{xs:'column', sm:'row'}, justifyContent:'space-between', gap:2 }}>
-          <FlexCol gap={2}>
-            <H1 fontSize={{xs:30, sm:40}} color="#FFF">
-              how to apply
-            </H1>
-            <Typography fontFamily='Helvetica' sx={{ fontSize: {xs:18,sm:24}, maxWidth:'850px' }} color="#fff" >
-              Attach your resume and cover letter detailing your relevant experience and why you are interested in joining SYMSPACE
-            </Typography>
-          </FlexCol>
-          <FlexColCenter>
-              <Button sx={styles.btn2} onClick={toggleDialog}>
-                Apply
-              </Button>
-          </FlexColCenter>
-        </FlexBox>
-      </Box>
-    </Container>
+    <FlexColCenter sx={{ pb:10, px:{xs:0, sm:0} }} width="100%">
+      <Container>
+        <motion.div
+          component={Box} // Makes motion.div behave like a Box
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          viewport={{ once: true }}
+          style={{ width: "100%", overflow: "hidden" }} // Ensures content stays within bounds
+        >
+          <GlassBanner
+            title="how to apply"
+            subtitle="Attach your resume and cover letter detailing your relevant experience and why you are interested in joining SYMSPACE"
+            btnText="Apply"
+            onClick={toggleDialog}
+          />
+        </motion.div>
+      </Container>
+    </FlexColCenter>
   );
 }
-
-const cardStyle = {
-  py:{xs:2, sm:5},
-  px:{xs:3, sm:8},
-  background: 'rgba(255, 255, 255, 0.35)',
-  boxShadow: `inset 0px 3.00856px 6.01712px rgba(255, 255, 255, 0.4),
-              inset 0px -3.00856px 9.02569px rgba(255, 255, 255, 0.5),
-              inset 0px -1.50428px 20.0571px rgba(255, 255, 255, 0.24),
-              inset 0px 20.0571px 20.0571px rgba(255, 255, 255, 0.24),
-              inset 0px 1.00285px 20.5585px rgba(255, 255, 255, 0.8)`,
-  backdropFilter: 'blur(10.0285px)',
-  borderRadius: "40px",
-};

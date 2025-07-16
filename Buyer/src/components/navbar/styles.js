@@ -1,16 +1,9 @@
 
-import styled from "@mui/material/styles/styled";
+import { styled } from "@mui/material/styles";
 import SymCard from "@/components/custom-components/SymCard"; // COMMON STYLED OBJECT
 
-import { elementalEnd } from "@/app/layout"; // Calling custom font
 import { NavLink } from "@/components/nav-link";
 import { Box, Button, Container } from "@mui/material";
-
-export const elementalEndFont = {
-    fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-    textTransform:'lowercase',
-    fontWeight: 500
-}
 
 export const NAV_LINK_STYLES = {
   color:'#6A6B6B',

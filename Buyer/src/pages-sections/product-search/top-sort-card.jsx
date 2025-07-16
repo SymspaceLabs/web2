@@ -19,9 +19,9 @@ const SORT_OPTIONS = [
 ];
 
 const TopSortCard = ({
-  totalProducts,      // NEW: Prop for total count from ProductSearchPageView
-  categoryDisplayName, // NEW: Prop for formatted category name from ProductSearchPageView
-  genderDisplayName   // NEW: Prop for formatted gender name from ProductSearchPageView
+  totalProducts,       // Prop for total count from ProductSearchPageView
+  categoryDisplayName, // Prop for formatted category name from ProductSearchPageView
+  genderDisplayName    // Prop for formatted gender name from ProductSearchPageView
 }) => {
   const [selectedOption, setSelectedOption] = useState(SORT_OPTIONS[0].value);
 
@@ -36,6 +36,8 @@ const TopSortCard = ({
     if (genderDisplayName) {
       parts.push(genderDisplayName);
     }
+    // This part now directly uses the categoryDisplayName passed from the parent,
+    // which is already designed to reflect the URL category.
     if (categoryDisplayName) {
       parts.push(categoryDisplayName);
     }

@@ -66,6 +66,7 @@ export default function SymDashboardHeader({
           }}
         >
           <SideNav
+            mode="dark"
             position="left"
             handler={(close) => (
               <IconButton onClick={close}>
@@ -77,10 +78,14 @@ export default function SymDashboardHeader({
           </SideNav>
         </Box>
 
-        {!isTablet ? HEADER_LINK : null}
+        {/* This button will be hidden on mobile (xs and sm) and shown on md and up */}
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+          {HEADER_LINK}
+        </Box>
       </Box>
 
-      {isTablet && buttonText ? <Box mt={2}>{HEADER_LINK}</Box> : null}
+      {/* Removed the button that was previously shown on tablet/mobile */}
+      {/* {isTablet && buttonText ? <Box mt={2}>{HEADER_LINK}</Box> : null} */}
     </Box>
   );
 }

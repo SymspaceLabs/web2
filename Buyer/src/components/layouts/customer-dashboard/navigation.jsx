@@ -20,39 +20,57 @@ import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined"; // GL
 
 // ====================================================
 
-export default function Navigation() {
+// Add 'mode' as an optional prop with a default value of 'light'
+export default function Navigation({ mode = 'light' }) {
   const pathname = usePathname();
-  
+
+  // Determine text color based on the 'mode' prop
+  const textColor = mode === 'dark' ? '#000' : '#FFF';
+
   return (
-    <MainContainer>
+    <>
       {MENUS.map(item => <Fragment key={item.title}>
-          {item.title && 
-            <H1 p="26px 26px 0px 0px" color="white" fontSize={16} >
+          {item.title &&
+            <H1 p="26px 26px 0px 0px" color={textColor} fontSize={16} > {/* Apply dynamic text color */}
               {item.title}
             </H1>
           }
           <Divider sx={{ marginBottom:'5px' }} />
-          {item.list.map(({ Icon, count, href, title}) => <StyledNavLink href={href} key={title} isCurrentPath={isActiveLink(pathname, href)}>
+          {item.list.map(({ Icon, count, href, title}) => (
+            <StyledNavLink
+              href={href}
+              key={title}
+              isCurrentPath={isActiveLink(pathname, href)}
+              // Conditionally add target="_blank" and rel="noopener noreferrer" for Business Portal
+              {...(title === "Business Portal" && {
+                target: "_blank",
+                rel: "noopener noreferrer",
+              })}
+            >
               <FlexBox alignItems="center" gap={1}>
                 <Icon color="inherit" fontSize="small" className="nav-icon" />
-                <H1 fontSize='12px' color='#FFF'>
+                <H1 fontSize='12px' color={textColor}> {/* Apply dynamic text color */}
                   {title}
                 </H1>
               </FlexBox>
 
               {/* <Span>{count}</Span> */}
-            </StyledNavLink>)
-          }
+            </StyledNavLink>
+          ))}
         </Fragment>)}
-    </MainContainer>
+    </>
   );
 }
 
 function isActiveLink(pathname, href) {
-  if (href === "/profile") {
-    return pathname === "/profile" || pathname === "/profile/view" || pathname === "/profile/edit";
+  // Special handling for the profile paths to highlight the parent '/profile' link
+  // This ensures that '/profile/view' and '/profile/edit' both highlight 'Profile Info'
+  if (href === "/profile/view") {
+    return pathname === "/profile/view" || pathname === "/profile/edit";
   }
-  return pathname === href;
+  // For all other links, the link is active if the pathname starts with the href.
+  // This makes it generic for /orders, /measurements, /preferences, etc., and their sub-paths.
+  return pathname.startsWith(href);
 }
 
 
@@ -65,7 +83,7 @@ const MENUS = [{
     count: 5
   }, {
     href: "/wish-list",
-    title: "Wishlist",
+    title: "Favorites",
     Icon: FavoriteBorder,
     count: 19
   }, {
@@ -110,7 +128,7 @@ const MENUS = [{
     Icon: Person,
     count: 3
   }, {
-    href: "/business-portal",
+    href: `${process.env.NEXT_PUBLIC_SELLER_URL}`,
     title: "Business Portal",
     Icon: Person,
     count: 3

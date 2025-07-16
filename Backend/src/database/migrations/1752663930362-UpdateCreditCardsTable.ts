@@ -78,6 +78,38 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
             console.log('Unique index for paymentGatewayToken already exists, skipping add.');
         }
 
+        // --- Handle 'last4' column and its index ---
+        const hasLast4Column = await queryRunner.hasColumn('credit_cards', 'last4');
+        if (!hasLast4Column) {
+            await queryRunner.addColumn('credit_cards', new TableColumn({
+                name: 'last4',
+                type: 'varchar',
+                length: '4',
+                isNullable: true, // Add as nullable first
+            }));
+            console.log('Added last4 column to credit_cards.');
+        } else {
+            console.log('last4 column already exists in credit_cards, skipping add.');
+        }
+        // Update existing NULL values to a default (e.g., '0000')
+        await queryRunner.query(`UPDATE \`credit_cards\` SET \`last4\` = '0000' WHERE \`last4\` IS NULL`);
+        // Then alter the column to be NOT NULL
+        await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`last4\` \`last4\` varchar(4) NOT NULL`);
+        console.log('Ensured last4 is NOT NULL and updated NULLs.');
+
+        // Add index for last4 if it doesn't exist
+        const hasLast4Index = await this.hasIndex(queryRunner, 'credit_cards', 'IDX_8c08402a67a5099917aa3e3fbf'); // Use the index name from your generated query
+        if (!hasLast4Index) {
+            await queryRunner.createIndex('credit_cards', new TableIndex({
+                name: 'IDX_8c08402a67a5099917aa3e3fbf', // Use the exact index name
+                columnNames: ['last4'],
+                isUnique: false, // This index is not unique based on your entity
+            }));
+            console.log('Added index for last4.');
+        } else {
+            console.log('Index for last4 already exists, skipping add.');
+        }
+
 
         // --- Handle 'expiryMonth' column ---
         await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryMonth\` = 1 WHERE \`expiryMonth\` IS NULL`);
@@ -91,7 +123,6 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         
         // --- Remaining generated queries ---
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`userId\` \`userId\` varchar(36) NOT NULL`);
-        await queryRunner.query(`CREATE INDEX \`IDX_8c08402a67a5099917aa3e3fbf\` ON \`credit_cards\` (\`last4\`)`);
         
         // Re-add the foreign key with ON DELETE CASCADE
         await queryRunner.query(`ALTER TABLE \`credit_cards\` ADD CONSTRAINT \`FK_316ec479135fbc369ccf229dd0f\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
@@ -121,7 +152,7 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         }
 
         // Revert paymentGatewayToken column and index changes
-        const hasPaymentGatewayTokenIndex = await this.hasIndex(queryRunner, 'credit_cards', 'IDX_a358a26def849b562cd49465fd'); // Use helper
+        const hasPaymentGatewayTokenIndex = await this.hasIndex(queryRunner, 'credit_cards', 'IDX_a358a26def849b562cd49465fd');
         if (hasPaymentGatewayTokenIndex) {
             await queryRunner.dropIndex('credit_cards', 'IDX_a358a26def849b562cd49465fd');
             console.log('Dropped unique index for paymentGatewayToken during down migration.');
@@ -137,9 +168,25 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
             console.log('paymentGatewayToken column does not exist, skipping drop during down migration.');
         }
 
+        // Revert last4 column and index changes
+        const hasLast4Index = await this.hasIndex(queryRunner, 'credit_cards', 'IDX_8c08402a67a5099917aa3e3fbf');
+        if (hasLast4Index) {
+            await queryRunner.dropIndex('credit_cards', 'IDX_8c08402a67a5099917aa3e3fbf');
+            console.log('Dropped index for last4 during down migration.');
+        } else {
+            console.log('Index for last4 does not exist, skipping drop during down migration.');
+        }
+        const hasLast4Column = await queryRunner.hasColumn('credit_cards', 'last4');
+        if (hasLast4Column) {
+            await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`last4\` \`last4\` varchar(4) NULL`); // Make it nullable again
+            await queryRunner.dropColumn('credit_cards', 'last4'); // Then drop it
+            console.log('Dropped last4 column from credit_cards during down migration.');
+        } else {
+            console.log('last4 column does not exist, skipping drop during down migration.');
+        }
+
 
         // Existing generated queries (in reverse order of up)
-        await queryRunner.query(`DROP INDEX \`IDX_8c08402a67a5099917aa3e3fbf\` ON \`credit_cards\``);
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`userId\` \`userId\` varchar(36) NULL`); // Assuming it was nullable before
         await queryRunner.query(`ALTER TABLE \`credit_cards\` DROP INDEX \`IDX_a358a26def849b562cd49465fd\``); // This index might have been dropped already or not exist
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryYear\` \`expiryYear\` int NULL`);

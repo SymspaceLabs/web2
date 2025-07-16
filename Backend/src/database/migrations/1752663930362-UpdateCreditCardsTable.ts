@@ -110,6 +110,25 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
             console.log('Index for last4 already exists, skipping add.');
         }
 
+        // --- Handle 'isDefault' column ---
+        const hasIsDefaultColumn = await queryRunner.hasColumn('credit_cards', 'isDefault');
+        if (!hasIsDefaultColumn) {
+            await queryRunner.addColumn('credit_cards', new TableColumn({
+                name: 'isDefault',
+                type: 'boolean', // Or 'tinyint' for MySQL
+                isNullable: true, // Add as nullable first
+                default: false // Set a default value for new columns
+            }));
+            console.log('Added isDefault column to credit_cards.');
+        } else {
+            console.log('isDefault column already exists in credit_cards, skipping add.');
+        }
+        // Update existing NULL values to false (matching entity default)
+        await queryRunner.query(`UPDATE \`credit_cards\` SET \`isDefault\` = FALSE WHERE \`isDefault\` IS NULL`);
+        // Then alter the column to be NOT NULL
+        await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`isDefault\` \`isDefault\` tinyint(1) NOT NULL`); // Use tinyint(1) for boolean in MySQL
+        console.log('Ensured isDefault is NOT NULL and updated NULLs.');
+
 
         // --- Handle 'expiryMonth' column ---
         await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryMonth\` = 1 WHERE \`expiryMonth\` IS NULL`);
@@ -183,6 +202,16 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
             console.log('Dropped last4 column from credit_cards during down migration.');
         } else {
             console.log('last4 column does not exist, skipping drop during down migration.');
+        }
+
+        // Revert isDefault column changes
+        const hasIsDefaultColumn = await queryRunner.hasColumn('credit_cards', 'isDefault');
+        if (hasIsDefaultColumn) {
+            await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`isDefault\` \`isDefault\` tinyint(1) NULL`); // Make it nullable again
+            await queryRunner.dropColumn('credit_cards', 'isDefault'); // Then drop it
+            console.log('Dropped isDefault column from credit_cards during down migration.');
+        } else {
+            console.log('isDefault column does not exist, skipping drop during down migration.');
         }
 
 

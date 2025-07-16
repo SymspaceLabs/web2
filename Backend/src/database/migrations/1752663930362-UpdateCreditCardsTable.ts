@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, TableColumn } from "typeorm"; // Import TableColumn if not already there
+import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 
 export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
     name = 'UpdateCreditCardsTable1752663930362'
@@ -8,19 +8,30 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`credit_cards\` DROP FOREIGN KEY \`FK_316ec479135fbc369ccf229dd0f\``);
 
         // Add the missing cardBrand column
-        // Ensure the type and length match your CreditCard entity's @Column definition
+        // If there are existing rows, set a default value for 'cardBrand' before making it NOT NULL
         await queryRunner.addColumn('credit_cards', new TableColumn({
             name: 'cardBrand',
             type: 'varchar',
-            length: '50', // Match the length from your entity
-            isNullable: false, // Or true, depending on your entity's @Column config
-            // If you have existing rows, you might need a default value here:
-            // default: "'unknown'",
+            length: '50',
+            isNullable: true, // Make it temporarily nullable to add
         }));
+        // Update existing NULL values to a default (e.g., 'unknown')
+        await queryRunner.query(`UPDATE \`credit_cards\` SET \`cardBrand\` = 'unknown' WHERE \`cardBrand\` IS NULL`);
+        // Then alter the column to be NOT NULL
+        await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`cardBrand\` \`cardBrand\` varchar(50) NOT NULL`);
 
-        // Existing generated queries
+
+        // Update existing NULL values for expiryMonth to a default (e.g., 1)
+        await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryMonth\` = 1 WHERE \`expiryMonth\` IS NULL`);
+        // Then alter the column to be NOT NULL
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryMonth\` \`expiryMonth\` int NOT NULL`);
+
+        // Update existing NULL values for expiryYear to a default (e.g., 20)
+        await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryYear\` = 20 WHERE \`expiryYear\` IS NULL`);
+        // Then alter the column to be NOT NULL
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryYear\` \`expiryYear\` int NOT NULL`);
+        
+        // Existing generated queries
         await queryRunner.query(`ALTER TABLE \`credit_cards\` ADD UNIQUE INDEX \`IDX_a358a26def849b562cd49465fd\` (\`paymentGatewayToken\`)`);
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`userId\` \`userId\` varchar(36) NOT NULL`);
         await queryRunner.query(`CREATE INDEX \`IDX_8c08402a67a5099917aa3e3fbf\` ON \`credit_cards\` (\`last4\`)`);
@@ -33,8 +44,9 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         // Drop the foreign key (if it was added in up)
         await queryRunner.query(`ALTER TABLE \`credit_cards\` DROP FOREIGN KEY \`FK_316ec479135fbc369ccf229dd0f\``);
         
-        // Drop the cardBrand column (to revert the up change)
-        await queryRunner.dropColumn('credit_cards', 'cardBrand');
+        // Revert cardBrand column changes
+        await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`cardBrand\` \`cardBrand\` varchar(50) NULL`); // Make it nullable again
+        await queryRunner.dropColumn('credit_cards', 'cardBrand'); // Then drop it
 
         // Existing generated queries (in reverse order of up)
         await queryRunner.query(`DROP INDEX \`IDX_8c08402a67a5099917aa3e3fbf\` ON \`credit_cards\``);
@@ -44,9 +56,6 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryMonth\` \`expiryMonth\` int NULL`);
         
         // Re-add the foreign key as it was before (if needed, or simply omit if dropping table)
-        // Note: The original down method re-added the FK without ON DELETE CASCADE, which might be incorrect for a full revert.
-        // If your original schema didn't have ON DELETE CASCADE, this line is fine.
         await queryRunner.query(`ALTER TABLE \`credit_cards\` ADD CONSTRAINT \`FK_316ec479135fbc369ccf229dd0f\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`);
     }
-
 }

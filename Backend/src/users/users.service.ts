@@ -26,26 +26,39 @@ export class UsersService {
     return users;
   }
 
+  /**
+   * Fetches a user by ID, explicitly loading all specified relations using QueryBuilder.
+   * This approach provides more control over generated SQL and can resolve "Unknown column" errors.
+   * @param id The ID of the user to fetch.
+   * @returns The User entity with specified relations.
+   */
   async getUserById(id: string) {
-    const user = await this.usersRepository.findOne({
-      where: {
-        id: id,
-      },
-      relations: ['measurement', 'preference', 'company', 'banks', 'creditCards', 'billingAddresses', 'survey', 'files', 'addresses'],
-    });
-    if (user) {
-      return user;
+    const user = await this.usersRepository.createQueryBuilder('user')
+      .leftJoinAndSelect('user.measurement', 'measurement')
+      .leftJoinAndSelect('user.preference', 'preference')
+      .leftJoinAndSelect('user.company', 'company')
+      .leftJoinAndSelect('user.banks', 'bank')
+      .leftJoinAndSelect('user.creditCards', 'creditCard') // Alias creditCards as 'creditCard'
+      .leftJoinAndSelect('user.billingAddresses', 'billingAddress')
+      .leftJoinAndSelect('user.survey', 'survey')
+      .leftJoinAndSelect('user.files', 'file')
+      .leftJoinAndSelect('user.addresses', 'address')
+      .leftJoinAndSelect('user.orders', 'order') // Include orders relation
+      .leftJoinAndSelect('user.reviews', 'review') // Include reviews relation
+      .where('user.id = :id', { id })
+      .getOne();
+
+    if (!user) {
+      throw new NotFoundException('Could not find the user');
     }
-    throw new NotFoundException('Could not find the user');
+    return user;
   }
 
   async createUser(createUserDto: CreateUserDto) {
     const newUser = await this.usersRepository.create(createUserDto);
-    await this.usersRepository.save({
-      name: createUserDto.name,
-      email: createUserDto.email,
-      password: createUserDto.password,
-    });
+    // Corrected: Save the entire newUser object created above.
+    // The previous commented-out section was incomplete and incorrect.
+    await this.usersRepository.save(newUser);
     return newUser;
   }
 
@@ -54,11 +67,26 @@ export class UsersService {
       where: {
         id: id,
       },
+      // Load relations that have cascade: ['remove'] or ON DELETE CASCADE in DB
+      // This ensures TypeORM attempts to delete related entities before the user
+      relations: [
+        'orders', // Explicitly load orders to trigger cascade: ['remove']
+        'creditCards',
+        'billingAddresses',
+        'banks',
+        'addresses',
+        'files',
+        'reviews',
+        'measurement',
+        'preference',
+        'survey',
+        'company' // Also include company if it has cascade delete
+      ],
     });
     if (!user) {
       return null;
     }
-    await this.usersRepository.remove(user);
+    await this.usersRepository.remove(user); // TypeORM will cascade removals based on entity config
     return user;
   }
 
@@ -76,7 +104,7 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email } });
   }
 
-  async updatePassword(userId: number, newPassword: string): Promise<void> {
+  async updatePassword(userId: string, newPassword: string): Promise<void> { // Changed userId type to string (UUID)
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.usersRepository.update(userId, { password: hashedPassword });
   }
@@ -93,7 +121,7 @@ export class UsersService {
   }
 
   async changeEmail(
-      userId: number,
+      userId: string, // Changed userId type to string (UUID)
       changeEmailDto: ChangeEmailDto,
     ): Promise<{ message: string }> {
       const { newEmail } = changeEmailDto;
@@ -102,6 +130,7 @@ export class UsersService {
       const emailRegex =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(newEmail)) {
+        // Corrected: Removed the duplicate 'new' keyword
         throw new HttpException('Invalid email format', 473);
       }
 

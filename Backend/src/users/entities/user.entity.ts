@@ -99,7 +99,7 @@ export class User {
   @OneToMany(() => File, (file) => file.user)
   files: File[];
 
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user, { cascade: ['remove'] })
   orders: Order[];
 
   @OneToMany(() => Address, (address) => address.user, {

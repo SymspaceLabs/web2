@@ -17,29 +17,39 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
             }
         }
 
-        // Add the missing cardBrand column
-        // If there are existing rows, set a default value for 'cardBrand' before making it NOT NULL
-        await queryRunner.addColumn('credit_cards', new TableColumn({
-            name: 'cardBrand',
-            type: 'varchar',
-            length: '50',
-            isNullable: true, // Make it temporarily nullable to add
-        }));
-        // Update existing NULL values to a default (e.g., 'unknown')
+        // Check if 'cardBrand' column exists before adding it
+        const hasCardBrandColumn = await queryRunner.hasColumn('credit_cards', 'cardBrand');
+        if (!hasCardBrandColumn) {
+            // Add the missing cardBrand column
+            await queryRunner.addColumn('credit_cards', new TableColumn({
+                name: 'cardBrand',
+                type: 'varchar',
+                length: '50',
+                isNullable: true, // Add as nullable first to avoid issues with existing rows
+            }));
+            console.log('Added cardBrand column to credit_cards.');
+        } else {
+            console.log('cardBrand column already exists in credit_cards, skipping add.');
+        }
+
+        // Ensure 'cardBrand' has no NULL values and is NOT NULL
+        // This is run whether the column was just added or already existed.
         await queryRunner.query(`UPDATE \`credit_cards\` SET \`cardBrand\` = 'unknown' WHERE \`cardBrand\` IS NULL`);
-        // Then alter the column to be NOT NULL
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`cardBrand\` \`cardBrand\` varchar(50) NOT NULL`);
+        console.log('Ensured cardBrand is NOT NULL and updated NULLs.');
 
 
         // Update existing NULL values for expiryMonth to a default (e.g., 1)
         await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryMonth\` = 1 WHERE \`expiryMonth\` IS NULL`);
         // Then alter the column to be NOT NULL
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryMonth\` \`expiryMonth\` int NOT NULL`);
+        console.log('Ensured expiryMonth is NOT NULL and updated NULLs.');
 
         // Update existing NULL values for expiryYear to a default (e.g., 20)
         await queryRunner.query(`UPDATE \`credit_cards\` SET \`expiryYear\` = 20 WHERE \`expiryYear\` IS NULL`);
         // Then alter the column to be NOT NULL
         await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`expiryYear\` \`expiryYear\` int NOT NULL`);
+        console.log('Ensured expiryYear is NOT NULL and updated NULLs.');
         
         // Existing generated queries
         await queryRunner.query(`ALTER TABLE \`credit_cards\` ADD UNIQUE INDEX \`IDX_a358a26def849b562cd49465fd\` (\`paymentGatewayToken\`)`);
@@ -64,8 +74,15 @@ export class UpdateCreditCardsTable1752663930362 implements MigrationInterface {
         }
         
         // Revert cardBrand column changes
-        await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`cardBrand\` \`cardBrand\` varchar(50) NULL`); // Make it nullable again
-        await queryRunner.dropColumn('credit_cards', 'cardBrand'); // Then drop it
+        const hasCardBrandColumn = await queryRunner.hasColumn('credit_cards', 'cardBrand');
+        if (hasCardBrandColumn) {
+            await queryRunner.query(`ALTER TABLE \`credit_cards\` CHANGE \`cardBrand\` \`cardBrand\` varchar(50) NULL`); // Make it nullable again
+            await queryRunner.dropColumn('credit_cards', 'cardBrand'); // Then drop it
+            console.log('Dropped cardBrand column from credit_cards during down migration.');
+        } else {
+            console.log('cardBrand column does not exist, skipping drop during down migration.');
+        }
+
 
         // Existing generated queries (in reverse order of up)
         await queryRunner.query(`DROP INDEX \`IDX_8c08402a67a5099917aa3e3fbf\` ON \`credit_cards\``);

@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ReplaceCreditCardTable1710xxxxxx implements MigrationInterface {
+export class ReplaceCreditCardTable1710923456789 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE IF EXISTS credit_cards`);
 

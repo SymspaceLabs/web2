@@ -9,8 +9,8 @@ import {
   BeforeUpdate
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Product } from 'src/products/entities/product.entity';
 import { IsString } from 'class-validator';
+import { Product } from '../../products/entities/product.entity';
 
 @Entity('companies')
 export class Company {

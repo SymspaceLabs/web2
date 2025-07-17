@@ -1,6 +1,12 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+  TableIndex,
+} from 'typeorm';
 
-export class AddCreditCardTable1752732460721 implements MigrationInterface {
+export class AddCreditCardsTable1752732460721 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Create credit_cards table
     await queryRunner.createTable(
@@ -12,29 +18,24 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
             type: 'varchar',
             length: '36',
             isPrimary: true,
-            isGenerated: false,
           },
           {
             name: 'cardBrand',
             type: 'varchar',
             length: '50',
-            isNullable: false,
           },
           {
             name: 'last4',
             type: 'varchar',
             length: '4',
-            isNullable: false,
           },
           {
             name: 'expiryMonth',
             type: 'int',
-            isNullable: false,
           },
           {
             name: 'expiryYear',
             type: 'int',
-            isNullable: false,
           },
           {
             name: 'isDefault',
@@ -57,7 +58,6 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
             name: 'userId',
             type: 'varchar',
             length: '36',
-            isNullable: false,
           },
           {
             name: 'createdAt',
@@ -75,7 +75,7 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
       true,
     );
 
-    // Add indexes
+    // Add index on last4
     await queryRunner.createIndex(
       'credit_cards',
       new TableIndex({
@@ -84,6 +84,7 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
       }),
     );
 
+    // Add index on paymentGatewayToken (redundant since isUnique, but explicit)
     await queryRunner.createIndex(
       'credit_cards',
       new TableIndex({
@@ -93,12 +94,12 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
       }),
     );
 
-    // Add foreign key
+    // Add foreign key to user table
     await queryRunner.createForeignKey(
       'credit_cards',
       new TableForeignKey({
         columnNames: ['userId'],
-        referencedTableName: 'users',
+        referencedTableName: 'user',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
       }),
@@ -107,9 +108,13 @@ export class AddCreditCardTable1752732460721 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     const table = await queryRunner.getTable('credit_cards');
-    const foreignKey = table.foreignKeys.find(fk => fk.columnNames.indexOf('userId') !== -1);
-    if (foreignKey) {
-      await queryRunner.dropForeignKey('credit_cards', foreignKey);
+    if (table) {
+      const foreignKey = table.foreignKeys.find(
+        (fk) => fk.columnNames.indexOf('userId') !== -1,
+      );
+      if (foreignKey) {
+        await queryRunner.dropForeignKey('credit_cards', foreignKey);
+      }
     }
 
     await queryRunner.dropIndex('credit_cards', 'IDX_CREDIT_CARD_LAST4');

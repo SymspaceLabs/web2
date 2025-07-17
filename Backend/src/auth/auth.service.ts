@@ -97,9 +97,24 @@ export class AuthService {
 
   private async parseJWT(idToken: string): Promise<any> {
     try {
-      const decodedHeader: any = jwt.decode(idToken, { complete: true });
-      const payload = decodedHeader.payload;
-      const { sub, email, email_verified, name, picture, given_name, family_name } = payload;
+      const decoded: any = jwt.decode(idToken, { complete: true });
+
+      if (!decoded || !decoded.payload) {
+        console.error('[parseJWT] Token decode failed. Token may be malformed:', idToken);
+        throw new Error('Invalid ID token structure');
+      }
+
+      const payload = decoded.payload;
+
+      const {
+        sub,
+        email,
+        email_verified,
+        name,
+        picture,
+        given_name,
+        family_name,
+      } = payload;
 
       return {
         userId: sub,
@@ -109,8 +124,9 @@ export class AuthService {
         firstName: given_name,
         lastName: family_name,
         picture,
-      }
+      };
     } catch (error) {
+      console.error('[parseJWT] Error occurred:', error);
       throw new Error('Invalid ID token');
     }
   }
@@ -476,43 +492,41 @@ export class AuthService {
   }
 
   async loginWithGoogle(idToken: string) {
-    
     let googleUser;
 
     try {
-        googleUser = await this.parseJWT(idToken);
+      googleUser = await this.parseJWT(idToken);
     } catch (error) {
-        throw new UnauthorizedException('Invalid Google ID token.');
+      console.error('[ERROR] JWT Parsing Failed:', error);
+      throw new UnauthorizedException('Invalid Google ID token.');
     }
-    
 
     const { email } = googleUser;
 
-    let user = await this.usersRepository.findOne({
-      where: { email },
-    });
+    let user = await this.usersRepository.findOne({ where: { email } });
 
     try {
       if (!user) {
         user = this.usersRepository.create({
-            email: googleUser.email,
-            firstName: googleUser.firstName || '',
-            lastName: googleUser.lastName || '',
-            avatar: googleUser.picture || '',
-            isVerified: true,
-            role: 'buyer',
-            password: '', // Password is not used for social logins
-            authMethod: AuthMethod.GOOGLE,
+          email: googleUser.email,
+          firstName: googleUser.firstName || '',
+          lastName: googleUser.lastName || '',
+          avatar: googleUser.picture || '',
+          isVerified: true,
+          role: 'buyer',
+          password: '',
+          authMethod: AuthMethod.GOOGLE,
         });
-        await this.usersRepository.save(user); 
+        await this.usersRepository.save(user);
       }
     } catch (error) {
+      console.error('[ERROR] Failed to create/save user:', error);
       throw new InternalServerErrorException('Failed to process user. Please try again.');
     }
 
-    // Ensure user object is valid before proceeding
     if (!user || !user.id || !user.email) {
-        throw new InternalServerErrorException('User data not available for token generation.');
+      console.error('[ERROR] Incomplete user data for JWT creation:', user);
+      throw new InternalServerErrorException('User data not available for token generation.');
     }
 
     const accessToken = this.jwtService.sign(
@@ -520,21 +534,19 @@ export class AuthService {
       { secret: process.env.JWT_SECRET, expiresIn: '1h' },
     );
 
-    // Store the token in Redis
     try {
       await this.redisService
         .getClient()
         .set(`auth:${user.id}`, accessToken, 'EX', 3600);
-
-      } catch (redisError) {
-        this.logger.error(`loginWithGoogle: Failed to store token in Redis for user ID ${user.id}: ${redisError.message}`, redisError.stack);
+    } catch (redisError) {
+      console.error('[ERROR] Redis set failed:', redisError);
     }
 
-
     try {
-        await this.authRepository.update(user.id, { refreshToken: accessToken });
+      await this.authRepository.update(user.id, { refreshToken: accessToken });
+      console.log('[DEBUG] Auth repo updated with token.');
     } catch (authRepoError) {
-        this.logger.error(`loginWithGoogle: Failed to update auth repository for user ID ${user.id}: ${authRepoError.message}`, authRepoError.stack);
+      console.error('[ERROR] Auth repository update failed:', authRepoError);
     }
 
     return {
@@ -550,6 +562,7 @@ export class AuthService {
       },
     };
   }
+
 
   async loginWithApple(idToken: string) {
     const decodedHeader: any = jwt.decode(idToken, { complete: true });
@@ -599,8 +612,6 @@ export class AuthService {
       .set(`auth:${user.id}`, accessToken, 'EX', 3600);
 
       await this.authRepository.update(user.id, { refreshToken: accessToken });
-
-      console.log(accessToken);
 
       return {
         accessToken,

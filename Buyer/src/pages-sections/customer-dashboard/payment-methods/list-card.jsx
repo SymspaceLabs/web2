@@ -130,10 +130,6 @@ export default function ListCard({
 
       {/* Action Buttons (Edit and Delete) */}
       <Paragraph textAlign="center" color="grey.600">
-        <IconButton LinkComponent={Link} href={`/payment-methods/${id}`}>
-          <Edit fontSize="small" color="inherit" />
-        </IconButton>
-
         {/* Attach onDelete handler to the Delete button */}
         <IconButton onClick={handleOpenConfirmDialog}> {/* Call the new handler */}
           <Delete fontSize="small" color="inherit" />

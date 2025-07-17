@@ -1,14 +1,17 @@
 "use client";
 
 import { Fragment, useState, useEffect, useCallback } from "react";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { useAuth } from "@/contexts/AuthContext"; // Assuming this is the correct import path for your authContext
+
 import ListCard from "../list-card";
 import Pagination from "../../pagination"; // Assuming this is your Material-UI Pagination component
 import DashboardHeader from "../../dashboard-header";
 import CreditCard from "@mui/icons-material/CreditCard";
-import { useSnackbar } from "@/contexts/SnackbarContext";
 
 export default function PaymentMethodsPageView() {
   const { showSnackbar } = useSnackbar();
+  const { user, token } = useAuth(); // Get user from authContext
 
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,23 +20,29 @@ export default function PaymentMethodsPageView() {
   const [totalPages, setTotalPages] = useState(1); // State for total pages
   const itemsPerPage = 5; // Define items per page, match backend default or make configurable
 
-  // IMPORTANT: In a real application, this userId would come from an authentication context
-  // (e.g., from a logged-in user's session, a JWT token, etc.), not hardcoded.
-  // Using this hardcoded value to match your backend's test userId.
-  const currentUserId = 'cc674c38-3785-405a-b6c0-97f6a6d462e5';
+  // The userId will now come from the authenticated user context
+  // No longer hardcoded: const currentUserId = 'cc674c38-3785-405a-b6c0-97f6a6d462e5';
 
   const fetchCreditCards = useCallback(async () => {
+    // Only attempt to fetch if user.id is available
+    if (!user || !user.id) {
+      setLoading(false);
+      setError("User not authenticated or user ID not available.");
+      showSnackbar("User not authenticated. Please log in.", 'error');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
       // Call the new endpoint to fetch cards by userId
-      const response = await fetch(`${backendUrl}/credit-cards/user/${currentUserId}?page=${currentPage}&limit=${itemsPerPage}`, {
+      const response = await fetch(`${backendUrl}/credit-cards/user/${user.id}?page=${currentPage}&limit=${itemsPerPage}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${yourAuthToken}`, // Add authorization if needed
+          'Authorization': `Bearer ${token}`, // Add authorization if needed
         },
       });
 
@@ -67,14 +76,26 @@ export default function PaymentMethodsPageView() {
     } finally {
       setLoading(false);
     }
-  }, [currentPage, itemsPerPage, showSnackbar, currentUserId]); // Added currentUserId to dependencies
+  }, [currentPage, itemsPerPage, showSnackbar, user]); // Added user to dependencies
 
   useEffect(() => {
-    // Trigger fetch when component mounts or currentPage/itemsPerPage changes
-    fetchCreditCards();
-  }, [fetchCreditCards]); // Dependency on the memoized fetchCreditCards
+    // Trigger fetch when component mounts or currentPage/itemsPerPage changes, AND user is available
+    if (user && user.id) {
+      fetchCreditCards();
+    } else {
+      // If user is not available on mount, set loading to false and error
+      setLoading(false);
+      setError("User not authenticated or user ID not available.");
+    }
+  }, [fetchCreditCards, user]); // Dependency on the memoized fetchCreditCards and user
 
   const handleSetDefault = useCallback(async (cardId) => {
+    // Only proceed if user.id is available
+    if (!user || !user.id) {
+      showSnackbar("User not authenticated. Cannot set default card.", 'error');
+      return;
+    }
+
     setLoading(true);
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
@@ -83,7 +104,7 @@ export default function PaymentMethodsPageView() {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${yourAuthToken}`,
+          'Authorization': `Bearer ${token}`, // Add authorization if needed
         },
       });
 
@@ -103,18 +124,25 @@ export default function PaymentMethodsPageView() {
     } finally {
       setLoading(false);
     }
-  }, [fetchCreditCards, showSnackbar]); // Dependencies for useCallback
+  }, [fetchCreditCards, showSnackbar, user]); // Dependencies for useCallback
 
-  // NEW: Handler for deleting a credit card
+  // Handler for deleting a credit card
   const handleDeleteCard = useCallback(async (cardId) => {
+    // Only proceed if user.id is available
+    if (!user || !user.id) {
+      showSnackbar("User not authenticated. Cannot delete card.", 'error');
+      return;
+    }
+
     setLoading(true);
+
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
       const response = await fetch(`${backendUrl}/credit-cards/${cardId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${yourAuthToken}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 
@@ -123,8 +151,6 @@ export default function PaymentMethodsPageView() {
         throw new Error(errorData.message || "Failed to delete card.");
       }
 
-      // No content expected for 204, but check if any message is returned
-      // const result = await response.json(); // May not be needed for 204 No Content
       console.log(`Card with ID ${cardId} deleted successfully.`);
 
       // Re-fetch the list to update the UI
@@ -137,7 +163,7 @@ export default function PaymentMethodsPageView() {
     } finally {
       setLoading(false);
     }
-  }, [fetchCreditCards, showSnackbar]); // Dependencies for useCallback
+  }, [fetchCreditCards, showSnackbar, user]); // Dependencies for useCallback
 
   // Handler for pagination change
   const handlePageChange = (event, page) => {

@@ -21,11 +21,8 @@ export class CreditCardsService {
     private creditCardRepository: Repository<CreditCard>,
   ) {}
 
-  // The userId will typically come from authentication context in a real app.
-  // For this example, it remains a placeholder.
-  // IMPORTANT: This 'test-user-id' must match an actual user ID in your database.
-  // Based on your latest log, the ID is 'cc674c38-3785-405a-b6c0-97f6a6d462e5'.
-  private readonly userId = 'cc674c38-3785-405a-b6c0-97f6a6d462e5'; // Updated to match your provided user ID
+  // Removed the hardcoded 'private readonly userId' field.
+  // All methods requiring a userId will now accept it as a parameter.
 
   private getCardBrandFromNumber(cardNumber: string): string {
     const cleanNum = cardNumber.replace(/\D/g, '');
@@ -40,32 +37,31 @@ export class CreditCardsService {
   }
 
   /**
-   * Creates a new credit card record in the database.
+   * Creates a new credit card record in the database for a specific user.
    * @param createCreditCardDto Data for the new credit card.
+   * @param userId The ID of the user creating the credit card (should come from authentication context).
    * @returns The created CreditCard.
    */
-  async create(createCreditCardDto: CreateCreditCardDto): Promise<CreditCard> {
-    console.log('Attempting to create credit card with DTO:', createCreditCardDto);
+  async create(createCreditCardDto: CreateCreditCardDto, userId: string): Promise<CreditCard> {
 
     const paymentGatewayToken = `tok_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 
     const last4 = createCreditCardDto.cardNumber.slice(-4);
     const cardBrand = this.getCardBrandFromNumber(createCreditCardDto.cardNumber);
 
-    // Determine if this card should be default
-    // Now directly use the userId column for counting
-    const existingCardsCount = await this.creditCardRepository.count({ where: { userId: this.userId } });
+    // Determine if this card should be default for the given userId
+    const existingCardsCount = await this.creditCardRepository.count({ where: { userId: userId } });
     let isDefault = false;
     if (existingCardsCount === 0) {
       isDefault = true;
     } else if (createCreditCardDto.isDefault === true) {
-      await this.unsetAllDefaultCards(this.userId);
+      await this.unsetAllDefaultCards(userId); // Pass userId to helper
       isDefault = true;
     }
 
     // Create a new entity instance, assigning the explicit userId column
     const newCreditCard = this.creditCardRepository.create({
-      userId: this.userId, // Directly assign to the userId column
+      userId: userId, // Use the userId passed as a parameter
       last4: last4,
       cardBrand: cardBrand,
       expiryMonth: parseInt(createCreditCardDto.expirationMonth, 10), // Convert to number
@@ -86,15 +82,15 @@ export class CreditCardsService {
   }
 
   /**
-   * Retrieves all credit card records for the current user with pagination.
-   * This method now uses TypeORM's findAndCount method.
+   * Retrieves all credit card records for a specific user with pagination.
+   * @param userId The ID of the user whose cards to fetch.
    * @param page The current page number (1-indexed).
    * @param limit The number of items per page.
    * @returns A paginated response containing credit card data and metadata.
    */
-  async findAll(page: number = 1, limit: number = 10): Promise<PaginatedCreditCardsResponse> {
+  async findAll(userId: string, page: number = 1, limit: number = 10): Promise<PaginatedCreditCardsResponse> {
     const [userCards, totalItems] = await this.creditCardRepository.findAndCount({
-      where: { userId: this.userId }, // Filter by userId column
+      where: { userId: userId }, // Filter by userId parameter
       skip: (page - 1) * limit,
       take: limit,
       order: { isDefault: 'DESC', createdAt: 'ASC' },
@@ -113,40 +109,27 @@ export class CreditCardsService {
   }
 
   /**
-   * NEW: Retrieves credit card records for a specific user ID with pagination.
+   * Retrieves credit card records for a specific user ID with pagination.
+   * This method is essentially a duplicate of findAll now, but kept for clarity if different logic were needed.
    * @param targetUserId The ID of the user whose cards to fetch.
    * @param page The current page number (1-indexed).
    * @param limit The number of items per page.
    * @returns A paginated response containing credit card data and metadata.
    */
   async findByUserId(targetUserId: string, page: number = 1, limit: number = 10): Promise<PaginatedCreditCardsResponse> {
-    const [userCards, totalItems] = await this.creditCardRepository.findAndCount({
-      where: { userId: targetUserId }, // Filter by the provided targetUserId
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { isDefault: 'DESC', createdAt: 'ASC' },
-    });
-
-    const totalPages = Math.ceil(totalItems / limit);
-    const currentPage = Math.max(1, Math.min(page, totalPages || 1));
-
-    return {
-      data: userCards,
-      totalItems: totalItems,
-      currentPage: currentPage,
-      totalPages: totalPages,
-      itemsPerPage: limit,
-    };
+    // This method now calls findAll internally, as their logic is identical after refactoring
+    return this.findAll(targetUserId, page, limit);
   }
 
   /**
-   * Retrieves a single credit card record by its ID for the current user.
+   * Retrieves a single credit card record by its ID for a specific user.
    * @param id The ID of the credit card.
+   * @param userId The ID of the user who owns the credit card.
    * @returns The CreditCard found.
    */
-  async findOne(id: number): Promise<CreditCard> {
+  async findOne(id: string, userId: string): Promise<CreditCard> {
     const card = await this.creditCardRepository.findOne({
-      where: { id: id, userId: this.userId }, // Filter by userId column
+      where: { id: id, userId: userId }, // Filter by userId parameter
     });
     if (!card) {
       throw new NotFoundException(`Credit card with ID "${id}" not found for this user.`);
@@ -155,14 +138,15 @@ export class CreditCardsService {
   }
 
   /**
-   * Updates an existing credit card record.
+   * Updates an existing credit card record for a specific user.
    * @param id The ID of the credit card to update.
    * @param updateCreditCardDto Data to update the credit card.
+   * @param userId The ID of the user who owns the credit card.
    * @returns The updated CreditCard.
    */
-  async update(id: number, updateCreditCardDto: UpdateCreditCardDto): Promise<CreditCard> {
+  async update(id: string, updateCreditCardDto: UpdateCreditCardDto, userId: string): Promise<CreditCard> {
     const existingCard = await this.creditCardRepository.findOne({
-      where: { id: id, userId: this.userId }, // Filter by userId column
+      where: { id: id, userId: userId }, // Filter by userId parameter
     });
 
     if (!existingCard) {
@@ -171,7 +155,7 @@ export class CreditCardsService {
 
     if (updateCreditCardDto.isDefault !== undefined) {
       if (updateCreditCardDto.isDefault === true) {
-        await this.unsetAllDefaultCards(this.userId);
+        await this.unsetAllDefaultCards(userId); // Pass userId to helper
       }
     }
 
@@ -197,30 +181,60 @@ export class CreditCardsService {
   }
 
   /**
-   * Removes a credit card record.
+   * Removes a credit card record for a specific user.
    * @param id The ID of the credit card to remove.
+   * @param userId The ID of the user who owns the credit card.
    * @returns A message indicating success.
    */
-  async remove(id: number): Promise<{ message: string }> {
-    const result = await this.creditCardRepository.delete({ id: id, userId: this.userId }); // Filter by userId column
+  async remove(id: string, userId: string): Promise<{ message: string }> {
+    // Find the card to be removed
+    const cardToRemove = await this.creditCardRepository.findOne({
+      where: { id: id }, // Filter by userId parameter
+    });
 
-    if (result.affected === 0) {
+    if (!cardToRemove) {
       throw new NotFoundException(`Credit card with ID "${id}" not found for this user.`);
     }
+
+    // Perform the deletion
+    const result = await this.creditCardRepository.delete({ id: id, userId: userId }); // Filter by userId parameter
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Credit card with ID "${id}" could not be deleted.`);
+    }
+
     console.log(`Credit card with ID "${id}" removed.`);
+
+    // After deletion, check if the removed card was the default and if there are other cards
+    if (cardToRemove.isDefault) {
+      const remainingCards = await this.creditCardRepository.find({
+        where: { userId: userId }, // Filter by userId parameter
+        order: { createdAt: 'ASC' }, // Order by creation date to pick the oldest as new default
+      });
+
+      if (remainingCards.length > 0) {
+        // If there's at least one card left, set the first one as default
+        const newDefaultCard = remainingCards[0];
+        newDefaultCard.isDefault = true;
+        newDefaultCard.updatedAt = new Date();
+        await this.creditCardRepository.save(newDefaultCard);
+        console.log(`New default card set: ${newDefaultCard.id}`);
+      }
+    }
+
     return { message: `Credit card with ID "${id}" removed successfully.` };
   }
 
   /**
-   * Sets a specific card as default and unsets all other cards for the user.
+   * Sets a specific card as default and unsets all other cards for a specific user.
    * @param cardId The ID of the credit card to set as default.
+   * @param userId The ID of the user who owns the credit card.
    * @returns The updated list of credit cards for the user.
    */
-  async setDefaultCard(cardId: number): Promise<CreditCard[]> {
-    console.log(`Attempting to set card ${cardId} as default for user ${this.userId}`);
+  async setDefaultCard(cardId: string, userId: string): Promise<CreditCard[]> {
 
     const targetCard = await this.creditCardRepository.findOne({
-      where: { id: cardId, userId: this.userId }, // Filter by userId column
+      where: { id: cardId, userId: userId }, // Filter by userId parameter
     });
 
     if (!targetCard) {
@@ -229,7 +243,7 @@ export class CreditCardsService {
 
     // Unset all other default cards for this user
     await this.creditCardRepository.update(
-      { userId: this.userId, isDefault: true, id: Not(cardId) }, // Filter by userId column and Not(cardId)
+      { userId: userId, isDefault: true, id: Not(cardId) }, // Filter by userId parameter and Not(cardId)
       { isDefault: false, updatedAt: new Date() }
     );
 
@@ -239,7 +253,7 @@ export class CreditCardsService {
     await this.creditCardRepository.save(targetCard);
 
     // Return all cards for the user, with the new default status
-    return this.creditCardRepository.find({ where: { userId: this.userId }, order: { isDefault: 'DESC', createdAt: 'ASC' } }); // Filter by userId column
+    return this.creditCardRepository.find({ where: { userId: userId }, order: { isDefault: 'DESC', createdAt: 'ASC' } }); // Filter by userId parameter
   }
 
   /**
@@ -249,7 +263,7 @@ export class CreditCardsService {
   private async unsetAllDefaultCards(userId: string): Promise<void> {
     console.log(`Unsetting all default cards for user ${userId}`);
     await this.creditCardRepository.update(
-      { userId: userId, isDefault: true }, // Filter by userId column
+      { userId: userId, isDefault: true }, // Filter by userId parameter
       { isDefault: false, updatedAt: new Date() }
     );
   }

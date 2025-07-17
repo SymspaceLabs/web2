@@ -3,8 +3,8 @@ import User from '../../users/entities/user.entity'; // Assuming User entity pat
 
 @Entity('credit_cards') // Defines the table name in your MySQL database
 export class CreditCard {
-  @PrimaryGeneratedColumn() // Generates a numeric primary key (e.g., 1, 2, 3...)
-  id: number;
+  @PrimaryGeneratedColumn('uuid') // Generates a numeric primary key (e.g., 1, 2, 3...)
+  id: string;
 
   // These fields store non-sensitive display information, provided by the payment gateway
   @Column({ type: 'varchar', length: 50 })

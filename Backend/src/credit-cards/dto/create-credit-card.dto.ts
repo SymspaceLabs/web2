@@ -40,7 +40,7 @@ export class CreateCreditCardDto {
   @IsBoolean()
   isDefault?: boolean;
 
-  @IsOptional() // userId will typically be derived from authentication context, not sent by frontend
+  @IsNotEmpty() // userId is now mandatory
   @IsString()
-  userId?: string; // NEW: Added userId to DTO
+  userId: string; // Removed '?' to make it mandatory
 }

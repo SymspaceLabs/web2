@@ -6,7 +6,6 @@ import {
   TableIndex,
 } from 'typeorm';
 
-
 export class AddCreditCardsTable1752732460721 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Create credit_cards table

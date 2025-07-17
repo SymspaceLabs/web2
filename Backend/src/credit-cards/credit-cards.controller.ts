@@ -89,16 +89,23 @@ export class CreditCardsController {
    * @param id The ID of the credit card to set as default.
    * @returns The updated list of credit cards for the user, with the new default status.
    */
+   // In your CreditCardsController
     @UseGuards(AuthGuard('jwt'))
     @Patch(':id/set-default')
     async setDefault(
         @Req() req: Request,
         @Param('id') id: string
     ): Promise<CreditCard[]> {
-        const userId = (req.user as any)?.id;
+        const userId = (req.user as any)?.id; // This is the userId that gets passed to the service
+        console.log('--- setDefault Request Debug ---');
+        console.log('Card ID from Param:', id);
+        console.log('User ID from JWT (req.user):', userId); // <<< THIS IS THE VALUE YOU NEED TO CHECK
+        console.log('--------------------------------');
+
         if (!userId) {
             throw new UnauthorizedException('User ID not found in request. This route requires authentication.');
         }
+        // The userId passed here must match the card's actual userId in the DB.
         return this.creditCardsService.setDefaultCard(id, userId);
     }
 

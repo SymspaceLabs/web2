@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailchimpModule } from '../mailchimp/mailchimp.module';
 import { Company } from 'src/companies/entities/company.entity';
 import { JwtStrategy } from './jwt.strategy'; // Import your JwtStrategy
+import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { JwtStrategy } from './jwt.strategy'; // Import your JwtStrategy
   controllers: [AuthController],
   providers: [
     AuthService,
-    JwtStrategy
+    JwtStrategy,
+    UsersService
   ],
   exports: [AuthService, PassportModule, RedisModule],
 })

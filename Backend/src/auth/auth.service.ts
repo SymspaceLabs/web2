@@ -549,6 +549,11 @@ export class AuthService {
       console.error('[ERROR] Auth repository update failed:', authRepoError);
     }
 
+    const payload = { email: user.email, id: user.id }; // <<< ENSURE 'id' HERE IS THE CORRECT USER ID
+    console.log('--- JWT Generation Debug ---');
+    console.log('Payload for JWT:', payload); // Verify the ID being put into the token
+    console.log('----------------------------');
+
     return {
       accessToken,
       user: {

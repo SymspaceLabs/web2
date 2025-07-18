@@ -82,7 +82,7 @@ export const components = {
         paddingTop: 8,
         paddingBottom: 8,
         fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-        textTransform: 'lowercase'
+        // textTransform: 'lowercase'
       }
     }
   },
@@ -91,8 +91,8 @@ export const components = {
       root: {
         paddingTop: 8,
         paddingBottom: 8,
-        fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
-        textTransform: 'lowercase'
+        // fontFamily: `${elementalEnd.style.fontFamily}, sans-serif`,
+        // textTransform: 'lowercase'
       }
     }
   },

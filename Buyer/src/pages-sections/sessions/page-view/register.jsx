@@ -16,7 +16,6 @@ import { Span } from '@/components/Typography';
 import { FlexBox } from "@/components/flex-box";
 import { SignUpForm } from "@/components/custom-forms";
 import { useSnackbar } from "@/contexts/SnackbarContext";
-import { SymSubmitButton } from "@/components/custom-buttons";
 import { BoxLink } from '@/pages-sections/sessions/components';
 import { SymButton } from "@/components/custom-components";
 
@@ -55,76 +54,6 @@ const RegisterPageView = () => {
         !retypeError // Ensure retype password doesn't have an error
       );
     }, [firstName, lastName, email, password, retypePassword, retypeError]);
-
-
-  
-  // useEffect(() => {
-  //   const passwordIsValid = password.length >= 8 && /[!@#$%^&*(),.?":{}|<>]/.test(password);
-  //   const passwordMatch = retypePassword === password;
-  //   setIsValid(
-  //     firstName &&
-  //     lastName &&
-  //     email &&
-  //     passwordIsValid &&
-  //     passwordMatch
-  //   );
-  // }, [firstName, lastName, email, password, retypePassword]);
-  
-  // Form submission handler
-  // const handleSubmit = async () => {
-  //   setIsFormSubmitted(true); // Set this to true when the button is clicked
-  //   let formIsValid = true;
-
-
-
-
-  //   const newErrors = {};
-  //   if (!firstName) newErrors.firstName = "First name is required";
-  //   if (!lastName) newErrors.lastName = "Last name is required";
-  //   if (!email) newErrors.email = "Email is required";
-  //   if (!password) newErrors.password = "Password is required";
-  //   else if (password.length < 8 || !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-  //     newErrors.password = "Password must be at least 8 characters and include a special character";
-  //   }
-  //   if (!retypePassword) newErrors.retypePassword = "Please retype your password";
-  //   else if (password !== retypePassword) newErrors.retypePassword = "Passwords do not match";
-
-  //   setErrors(newErrors);
-
-  //   if (Object.keys(newErrors).length > 0) return; // Don't proceed if there are errors
-  //   setLoading(true);
-
-  //   const body = {
-  //     firstName,
-  //     lastName,
-  //     email,
-  //     password,
-  //     role: "buyer"
-  //   };
-
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`,
-  //       {
-  //         method: 'POST',
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(body),
-  //       }
-  //     );
-
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       showSnackbar(data.message, "success");
-  //       router.push(`/otp?email=${email}`)
-  //     } else {
-  //       showSnackbar(data.message, "error");
-  //     }
-  //   } catch (error) {
-  //     showSnackbar(error, "error")
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   // Form submission handler
   const handleSubmit = async () => {
@@ -237,9 +166,6 @@ const RegisterPageView = () => {
       />
 
       {/* Submit Button */}
-      {/* <SymSubmitButton isValid={isValid} onClick={handleSubmit}>
-        Sign Up
-      </SymSubmitButton> */}
       <SymButton
         sx={styles.btn}
         onClick={handleSubmit}

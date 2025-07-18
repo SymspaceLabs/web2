@@ -5,11 +5,8 @@ export class ContactUs {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 100 })
-  firstName: string;
-
-  @Column({ length: 100 })
-  lastName: string;
+  @Column({ length: 200 }) // Adjusted length to accommodate a full name
+  fullName: string; // Renamed from firstName and lastName
 
   @Column({ length: 200 })
   email: string;

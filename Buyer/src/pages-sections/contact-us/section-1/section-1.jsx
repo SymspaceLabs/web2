@@ -4,12 +4,13 @@
 // Section 1 | Contact Us
 // ===============================================
 
-import { ContactUsForm } from "@/components/custom-forms";
+import { useState } from "react";
 import { LazyImage } from "@/components/lazy-image";
-import { useState, useEffect, useMemo } from "react";
 import { useSnackbar } from "@/contexts/SnackbarContext";
+import { ContactUsForm } from "@/components/custom-forms";
+import { SymButton } from "@/components/custom-components"; // Make sure SymButton exists and accepts 'loading' prop
 import { SocialLinks } from "@/components/footer/components";
-import { Box, Grid, Button, Container } from "@mui/material";
+import { Box, Grid, Button, Container } from "@mui/material"; // Keep Button if needed elsewhere or remove if not.
 import { H1, Paragraph, Span } from '@/components/Typography';
 
 import BoxLink from '@/pages-sections/sessions/components/box-link';
@@ -21,51 +22,33 @@ export default function Section1({
   setIsSubmitted
 }) {
   const { showSnackbar } = useSnackbar();
-  
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [topic, setTopic] = useState('');
   const [message, setMessage] = useState('');
-  const [isValid, setIsValid] = useState(true);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setIsValid(
-        firstName && 
-        lastName && 
-        email && 
-        topic && 
-        message
-    );
-  }, [firstName, lastName, email, topic, message]);
-
-  const buttonStyles = useMemo(() => ({
-    background: isValid
-        ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
-        : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
-      boxShadow: "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
-      backdropFilter: "blur(50px)",
-      borderRadius: "12px",
-      color: '#fff',
-      cursor: isValid ? 'pointer' : 'not-allowed',
-      pointerEvents: isValid ? 'auto' : 'none',
-      '&:hover': {
-          background: isValid
-              ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
-              : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
-      },
-  }), [isValid]);
+  const [formSubmitted, setFormSubmitted] = useState(false); // NEW: State to track submission attempt
 
   const clearForm = () => {
-    setFirstName('');
-    setLastName('');
+    setFullName('');
     setEmail('');
     setTopic('');
     setMessage('');
+    setFormSubmitted(false); // NEW: Reset formSubmitted state when clearing the form
   }
 
   const handleSubmit = async () => {
+    setFormSubmitted(true); // NEW: Indicate that a submission attempt has occurred
+
+    // NEW: Perform immediate validation check
+    const allFieldsFilled = fullName && email && topic && message;
+
+    if (!allFieldsFilled) {
+        showSnackbar("Please fill in all required fields.", "error");
+        return; // Prevent API call if form is not valid
+    }
+
     setLoading(true);
 
     try {
@@ -74,8 +57,7 @@ export default function Section1({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName,
-          lastName,
+          fullName,
           email,
           topic,
           message
@@ -85,9 +67,13 @@ export default function Section1({
       const data = await response.json();
       if (response.ok) {
         setIsSubmitted(true);
+        clearForm();
+        showSnackbar("We've received your message!", "success");
       } else {
         showSnackbar(data.message, "error");
       }
+
+      
     } catch (error) {
       showSnackbar('Network error. Please try again.', "error");
     }
@@ -98,9 +84,9 @@ export default function Section1({
   return (
     <Container sx={{ py: 10 }}>
       {
-        !isSubmitted? 
-        <Box sx={cardStyle}>
-          
+        !isSubmitted?
+        <Box sx={styles.card}>
+
           {/* Grid Layout */}
           <Grid container p={5} alignItems="center">
             {/* Left Content */}
@@ -118,38 +104,33 @@ export default function Section1({
             {/* Right Content */}
             <Grid item xs={12} md={6} sx={{display:'flex', flexDirection:'column', gap:3 }}>
               <ContactUsForm
-                firstName={firstName}
-                setFirstName={setFirstName}
-                lastName={lastName}
-                setLastName={setLastName}
+                fullName={fullName}
+                setFullName={setFullName}
                 email={email}
                 setEmail={setEmail}
                 topic={topic}
                 setTopic={setTopic}
                 message={message}
                 setMessage={setMessage}
+                formSubmitted={formSubmitted} // NEW: Pass the formSubmitted state
               />
-              <Button 
-                sx={buttonStyles} 
-                fullWidth 
-                type="submit" 
-                color="primary" 
-                variant="contained" 
-                size="large"
+              {/* Submit Button */}
+              <SymButton
+                sx={styles.btn}
                 onClick={handleSubmit}
-                disabled={loading}
+                loading={loading}
               >
-                {loading ? 'Submitting...' : 'Submit'}
-              </Button>
+                Submit
+              </SymButton>
 
               <Span display={{ color:'#fff', sm: "inline-block" }}>
                   By clicking Submit, you agree to our <BoxLink title="Terms" href="/terms-and-conditions#terms" />, <BoxLink title="Privacy Policy" href="/terms-and-conditions#privacy" /> and <BoxLink title="Cookies" href="/terms-and-conditions#cookies" />. You may receive SMS Notifications from us and can opt out any time.
-              </Span> 
+              </Span>
             </Grid>
           </Grid>
-        </Box>  
+        </Box>
         :
-        <Box sx={[cardStyle, {width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{xs:5, sm:25}, px:3, gap:2 }]}>
+        <Box sx={[styles.card, {width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{xs:5, sm:25}, px:3, gap:2 }]}>
           <Box>
             <LazyImage
               src='/assets/images/contact-us/check-mark.png'
@@ -180,8 +161,24 @@ export default function Section1({
   );
 }
 
-const cardStyle = {
-  background: 'linear-gradient(0deg, rgba(140, 140, 140, 0.3), rgba(140, 140, 140, 0.3)), rgba(255, 255, 255, 0.1)',
-  borderRadius: '50px',
-  width:'100%'
-};
+const styles = {
+  card : {
+    background: 'linear-gradient(0deg, rgba(140, 140, 140, 0.3), rgba(140, 140, 140, 0.3)), rgba(255, 255, 255, 0.1)',
+    borderRadius: '50px',
+    width:'100%'
+  },
+  btn : {
+    width:'100%',
+    py:1.5,
+    fontWeight: 500,
+    fontSize: {xs:14, sm:18},
+    background: "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
+    boxShadow: "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
+    backdropFilter: "blur(50px)",
+    borderRadius: "12px",
+    color: "#fff",
+    "&:hover": {
+      background: "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
+    },
+  }
+}

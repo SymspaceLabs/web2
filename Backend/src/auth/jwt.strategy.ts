@@ -1,4 +1,4 @@
-// src/auth/jwt.strategy.ts (or wherever your JwtStrategy is located)
+// src/auth/jwt.strategy.ts
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
@@ -15,15 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('--- JWTStrategy Validate Debug ---');
-    console.log('Received JWT Payload:', payload); // See the raw payload
-    
-    // --- FIX IS HERE ---
-    // The user ID is in payload.userId, not payload.id or payload.sub
     const userIdFromPayload = payload.userId; // Correctly access the 'userId' property
-    // --- END FIX ---
-
-    console.log('Extracted userId from JWT Payload:', userIdFromPayload);
 
     if (!userIdFromPayload) {
       console.error('JWT Payload missing user ID field.');
@@ -37,11 +29,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       console.error(`User with ID ${userIdFromPayload} not found in DB.`);
       throw new UnauthorizedException('User associated with token not found.');
     }
-
-    // This is what gets assigned to req.user in your controllers
-    // Ensure you are returning an object with an 'id' property that holds the correct user ID
-    console.log('User object returned to req.user:', { id: user.id, email: user.email /* add other relevant user info */ });
-    console.log('--------------------------------');
     return { id: user.id, email: user.email }; // Return the actual user ID as 'id' for req.user.id
   }
 }

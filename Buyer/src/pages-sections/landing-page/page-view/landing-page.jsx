@@ -61,7 +61,7 @@ export default function LandingPageView() {
 
       {/* Future of Retail Section */}
       <BlobBox top="17%" right="10%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="15%" right="5%" />{/* BLUE */}
+      <BlobBox top="15%" right="5%" displayNoneMobile={true}  /> {/* BLUE */}
 
       {/* Convenient & Comfortable */}
       <BlobBox top="23%" right="0%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}

@@ -47,6 +47,11 @@ export default function ProductSearchPageView({ slug }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [sortOption, setSortOption] = useState("latest"); // Default sort option
 
+  // Define the handleSortChange function
+  const handleSortChange = useCallback((event) => {
+    setSortOption(event.target.value);
+  }, []);
+
   // Custom hook to handle data fetching
   const {
     allProducts,

@@ -29,8 +29,16 @@ export function useFilteredAndSortedProducts(filterState, sortOption, categoryQu
 
     // Apply gender filter
     if (filterState.selectedGenders.length) {
-      const genderSet = new Set(filterState.selectedGenders);
-      list = list.filter(p => p.gender && genderSet.has(p.gender));
+      const selectedGendersLower = new Set(filterState.selectedGenders.map(g => g.toLowerCase()));
+      list = list.filter(p => {
+        const productGenderLower = p.gender ? p.gender.toLowerCase() : '';
+
+        // If the product's gender is directly selected
+        // OR if the product is 'unisex' and 'men' or 'women' is among the selected genders
+        return selectedGendersLower.has(productGenderLower) ||
+               (productGenderLower === 'unisex' && 
+                (selectedGendersLower.has('men') || selectedGendersLower.has('women')));
+      });
     }
 
     // Apply price range filter
@@ -64,6 +72,8 @@ export function useFilteredAndSortedProducts(filterState, sortOption, categoryQu
 
     // Apply sorting
     if (sortOption === "latest") {
+      // Assuming 'postedDate' exists on your product objects for sorting by latest.
+      // If not, you might need to use 'createdAt' or another suitable timestamp.
       list.sort((a, b) => new Date(b.postedDate) - new Date(a.postedDate));
     } else if (sortOption === "price-asc") {
       list.sort((a, b) => a.price - b.price);

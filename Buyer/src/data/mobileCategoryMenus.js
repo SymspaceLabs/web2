@@ -129,330 +129,330 @@ export const categoryMenus = [
 
     //Electronics
     {
-      icon: 'Laptop',
-      slug: "/fashion",
-      title: "Electronics",
-    
-      children: [
-        {
-            title: "Mobile Phones & Accessories",
-            href: "#",
-            children: [
-                { title: "Smartphones", slug: "smartphones" },
-                { title: "Cases & Covers", slug: "cases-and-covers" },
-                { title: "Screen Protectors", slug: "screen-protectors" },
-                { title: "Chargers & Cables", slug: "chargers-and-cables" },
-                { title: "Power Banks", slug: "power-banks" }
+        icon: 'Laptop',
+        slug: "/fashion",
+        title: "Electronics",
+        children: [
+            {
+                title: "Mobile Phones & Accessories",
+                href: "#",
+                children: [
+                    { title: "Smartphones", slug: "smartphones" },
+                    { title: "Cases & Covers", slug: "cases-and-covers" },
+                    { title: "Screen Protectors", slug: "screen-protectors" },
+                    { title: "Chargers & Cables", slug: "chargers-and-cables" },
+                    { title: "Power Banks", slug: "power-banks" }
+                ]
+            },
+            {
+                title: "Computers & Accessories",
+                href: "#",
+                children: [
+                    { title: "Laptops", slug: "laptops"},
+                    { title: "Desktops", slug: "desktops"},
+                    { title: "Monitors", slug: "monitors"},
+                    { title: "Keyboards & Mice", slug: "keyboards-and-mice"},
+                    { title: "Printers & Scanners", slug: "printers-and-scanners"}
             ]
-        },
-        {
-            title: "Computers & Accessories",
-            href: "#",
-            children: [
-                { title: "Laptops", slug: "laptops"},
-                { title: "Desktops", slug: "desktops"},
-                { title: "Monitors", slug: "monitors"},
-                { title: "Keyboards & Mice", slug: "keyboards-and-mice"},
-                { title: "Printers & Scanners", slug: "printers-and-scanners"}
-          ]
-        }, 
-        {
-            title: "Home Entertainment",
-            href: "#",
-            children: [
-                { title: "Televisions", slug: "televisions" },
-                { title: "Sound Systems", slug: "sound-systems" },
-                { title: "Streaming Devices", slug: "streaming-devices" },
-                { title: "Blu-ray & DVD Players", slug: "blu-ray-and-dvd-players" }
-            ]
-            
-        }, 
-        {
-            title: "Cameras & Photography",
-            href: "#",
-            children: [
-                { title: "Digital Cameras", slug: "digital-cameras"},
-                { title: "Lenses", slug: "lenses"},
-                { title: "Tripods", slug: "tripods"},
-                { title: "Camera Accessories", slug: "camera-accessories"}
-            ]
-        }
-    ]
+            }, 
+            {
+                title: "Home Entertainment",
+                href: "#",
+                children: [
+                    { title: "Televisions", slug: "televisions" },
+                    { title: "Sound Systems", slug: "sound-systems" },
+                    { title: "Streaming Devices", slug: "streaming-devices" },
+                    { title: "Blu-ray & DVD Players", slug: "blu-ray-and-dvd-players" }
+                ]
+                
+            }, 
+            {
+                title: "Cameras & Photography",
+                href: "#",
+                children: [
+                    { title: "Digital Cameras", slug: "digital-cameras"},
+                    { title: "Lenses", slug: "lenses"},
+                    { title: "Tripods", slug: "tripods"},
+                    { title: "Camera Accessories", slug: "camera-accessories"}
+                ]
+            }
+        ]
     },
 
     //Home, Furniture & Appliances
     {
         icon: 'Sofa',
-        slug: "/fashion",
         title: "Home, Furniture & Appliances",
         children: [
-        {
-            title: "Furniture",
-            href: "#",
-            children: [
-                { title: "Living Room", slug: "living-room" },
-                { title: "Sofas", slug: "sofas" },
-                { title: "Coffee Tables", slug: "coffee-tables" },
-                { title: "TV Stands", slug: "tv-stands" },
-                { title: "Recliners", slug: "recliners" },
-                { title: "Bedroom", slug: "bedroom" },
-                { title: "Beds", slug: "beds" },
-                { title: "Dressers", slug: "dressers" },
-                { title: "Nightstands", slug: "nightstands" },
-                { title: "Wardrobes", slug: "wardrobes" },
-                { title: "Office", slug: "office" },
-                { title: "Desks", slug: "desks" },
-                { title: "Office Chairs", slug: "office-chairs" },
-                { title: "Bookcases", slug: "bookcases" },
-                { title: "Outdoor", slug: "outdoor" },
-                { title: "Patio Sets", slug: "patio-sets" },
-                { title: "Outdoor Chairs", slug: "outdoor-chairs" },
-                { title: "Garden Storage", slug: "garden-storage" }
+            {
+                title: "Furniture",
+                href: "#",
+                children: [
+                    { title: "Living Room", slug: "living-room" },
+                    { title: "Sofas", slug: "sofas" },
+                    { title: "Coffee Tables", slug: "coffee-tables" },
+                    { title: "TV Stands", slug: "tv-stands" },
+                    { title: "Recliners", slug: "recliners" },
+                    { title: "Bedroom", slug: "bedroom" },
+                    { title: "Beds", slug: "beds" },
+                    { title: "Dressers", slug: "dressers" },
+                    { title: "Nightstands", slug: "nightstands" },
+                    { title: "Wardrobes", slug: "wardrobes" },
+                    { title: "Office", slug: "office" },
+                    { title: "Desks", slug: "desks" },
+                    { title: "Office Chairs", slug: "office-chairs" },
+                    { title: "Bookcases", slug: "bookcases" },
+                    { title: "Outdoor", slug: "outdoor" },
+                    { title: "Patio Sets", slug: "patio-sets" },
+                    { title: "Outdoor Chairs", slug: "outdoor-chairs" },
+                    { title: "Garden Storage", slug: "garden-storage" }
+                ]
+            }, {
+                title: "Home Decor",
+                href: "#",
+                children: [
+                    { title: "Lighting", slug: "lighting" },
+                    { title: "Lamps", slug: "lamps" },
+                    { title: "Ceiling Lights", slug: "ceiling-lights" },
+                    { title: "Wall Lights", slug: "wall-lights" },
+                    { title: "Rugs", slug: "rugs" },
+                    { title: "Wall Art", slug: "wall-art" },
+                    { title: "Clocks", slug: "clocks" },
+                    { title: "Mirrors", slug: "mirrors" },
+                ]
+            }, {
+                title: "Kitchen & Dining",
+                href: "#",
+                children: [
+                    { title: "Cookware", slug: "cookware" },
+                    { title: "Pots & Pans", slug: "pots-pans" },
+                    { title: "Bakeware", slug: "bakeware" },
+                    { title: "Tableware", slug: "tableware" },
+                    { title: "Dinner Sets", slug: "dinner-sets" },
+                    { title: "Glassware", slug: "glassware" },
+                    { title: "Cutlery", slug: "cutlery" },
+                    { title: "Kitchen Storage", slug: "kitchen-storage" },
+                    { title: "Containers", slug: "containers" },
+                    { title: "Racks & Holders", slug: "racks-holders" },
+                { title: "Small Appliances", slug: "small-appliances" },
+                { title: "Toasters", slug: "toasters" },
+                { title: "Blenders", slug: "blenders" },
+                { title: "Coffee Makers", slug: "coffee-makers" },
             ]
-        }, {
-            title: "Home Decor",
-            href: "#",
-            children: [
-                { title: "Lighting", slug: "t-shirt" },
-                { title: "Lamps", slug: "t-shirt" },
-                { title: "Ceiling Lights", slug: "t-shirt" },
-                { title: "Wall Lights", slug: "t-shirt" },
-                { title: "Rugs", slug: "t-shirt" },
-                { title: "Wall Art", slug: "t-shirt" },
-                { title: "Clocks", slug: "t-shirt" },
-                { title: "Mirrors", slug: "t-shirt" },
-            ]
-        }, {
-            title: "Kitchen & Dining",
-            href: "#",
-            children: [
-                { title: "Cookware", slug: "t-shirt" },
-                { title: "Pots & Pans", slug: "t-shirt" },
-                { title: "Bakeware", slug: "t-shirt" },
-                { title: "Tableware", slug: "t-shirt" },
-                { title: "Dinner Sets", slug: "t-shirt" },
-                { title: "Glassware", slug: "t-shirt" },
-                { title: "Cutlery", slug: "t-shirt" },
-                { title: "Kitchen Storage", slug: "t-shirt" },
-                { title: "Containers", slug: "t-shirt" },
-                { title: "Racks & Holders", slug: "t-shirt" },
-                { title: "Small Appliances", slug: "t-shirt" },
-                { title: "Toasters", slug: "t-shirt" },
-                { title: "Blenders", slug: "t-shirt" },
-                { title: "Coffee Makers", slug: "t-shirt" },
-            ]
-        }, {
-            title: "Large Appliances",
-            href: "#",
-            children: [
-                { title: "Refrigerators", slug: "t-shirt" },
-                { title: "Washing Machines", slug: "t-shirt" },
-                { title: "Ovens", slug: "t-shirt" },
-                { title: "Dishwashers", slug: "t-shirt" },
-            ]
-        },]
+            }, {
+                title: "Large Appliances",
+                href: "#",
+                children: [
+                    { title: "Refrigerators", slug: "refrigerators" },
+                    { title: "Washing Machines", slug: "washing-machines" },
+                    { title: "Ovens", slug: "ovens" },
+                    { title: "Dishwashers", slug: "dishwashers" },
+                ]
+            },
+        ]
     },
 
     //Health
     {
         icon: 'MakeUp',
-        slug: "/fashion",
+        slug: "beauty-health-pets", // Updated slug based on "Beauty, Health & Pets"
         title: "Beauty, Health & Pets",
-    
         children: [
-        {
-            title: "Beauty",
-            href: "#",
-            children: [
-                { title: "Skincare", slug: "t-shirt" },
-                { title: "Moisturizers", slug: "t-shirt" },
-                { title: "Cleansers", slug: "t-shirt" },
-                { title: "Serums", slug: "t-shirt" },
-                { title: "Masks", slug: "t-shirt" },
-                { title: "Haircare", slug: "t-shirt" },
-                { title: "Shampoos", slug: "t-shirt" },
-                { title: "Conditioners", slug: "t-shirt" },
-                { title: "Hair Treatments", slug: "t-shirt" },
-                { title: "Styling Tools", slug: "t-shirt" },
-                { title: "Makeup", slug: "t-shirt" },
-                { title: "Foundations", slug: "t-shirt" },
-                { title: "Lipsticks", slug: "t-shirt" },
-                { title: "Eyeshadows", slug: "t-shirt" },
-                { title: "Mascaras", slug: "t-shirt" },
-                { title: "Blushes", slug: "t-shirt" },
-                { title: "Makeup Tools", slug: "t-shirt" },
-                { title: "Concealers", slug: "t-shirt" },
-                { title: "Powders", slug: "t-shirt" },
-                { title: "Eyeliners", slug: "t-shirt" },
-                { title: "Brow Products", slug: "t-shirt" },
-                { title: "Fragrances", slug: "t-shirt" },
-                { title: "Perfumes", slug: "t-shirt" },
-                { title: "Body Sprays", slug: "t-shirt" },
-            ]
-        }, {
-            title: "Health & Wellness",
-            href: "#",
-            children: [
-                { title: "Vitamins & Supplements", slug: "t-shirt" },
-                { title: "Medical Equipment", slug: "t-shirt" },
-                { title: "Fitness Equipment", slug: "t-shirt" },
-                { title: "Health Monitors", slug: "t-shirt" },
-            ]
-        },
-        {
-            title: "Personal Care",
-            href: "#",
-            children: [
-                { title: "Oral Care", slug: "t-shirt" },
-                { title: "Toothbrushes", slug: "t-shirt" },
-                { title: "Toothpaste", slug: "t-shirt" },
-                { title: "Bath & Body", slug: "t-shirt" },
-                { title: "Body Wash", slug: "t-shirt" },
-                { title: "Lotions", slug: "t-shirt" },
-                { title: "Hand Sanitizers", slug: "t-shirt" },
-                { title: "Shaving & Hair Removal", slug: "t-shirt" },
-                { title: "Razors", slug: "t-shirt" },
-                { title: "Shaving Cream", slug: "t-shirt" },
-                { title: "Hair Removal Devices", slug: "t-shirt" },
-            ]
-        },
-        {
-            title: "Pet Supplies",
-            href: "#",
-            child: [
-                { title: "Dog Supplies", slug: "t-shirt" },
-                { title: "Dog Food", slug: "t-shirt" },
-                { title: "Cat Supplies", slug: "t-shirt" },
-                { title: "Cat Food", slug: "t-shirt" },
-                { title: "Fish & Aquatic Pets", slug: "t-shirt" },
-                { title: "Small Animals", slug: "t-shirt" },
-                { title: "Birds", slug: "t-shirt" },
-            ],
-        },
-    ]
+            {
+                title: "Beauty",
+                href: "#",
+                children: [
+                    { title: "Skincare", slug: "skincare" },
+                    { title: "Moisturizers", slug: "moisturizers" },
+                    { title: "Cleansers", slug: "cleansers" },
+                    { title: "Serums", slug: "serums" },
+                    { title: "Masks", slug: "masks" },
+                    { title: "Haircare", slug: "haircare" },
+                    { title: "Shampoos", slug: "shampoos" },
+                    { title: "Conditioners", slug: "conditioners" },
+                    { title: "Hair Treatments", slug: "hair-treatments" },
+                    { title: "Styling Tools", slug: "styling-tools" },
+                    { title: "Makeup", slug: "makeup" },
+                    { title: "Foundations", slug: "foundations" },
+                    { title: "Lipsticks", slug: "lipsticks" },
+                    { title: "Eyeshadows", slug: "eyeshadows" },
+                    { title: "Mascaras", slug: "mascaras" },
+                    { title: "Blushes", slug: "blushes" },
+                    { title: "Makeup Tools", slug: "makeup-tools" },
+                    { title: "Concealers", slug: "concealers" },
+                    { title: "Powders", slug: "powders" },
+                    { title: "Eyeliners", slug: "eyeliners" },
+                    { title: "Brow Products", slug: "brow-products" },
+                    { title: "Fragrances", slug: "fragrances" },
+                    { title: "Perfumes", slug: "perfumes" },
+                    { title: "Body Sprays", slug: "body-sprays" },
+                ]
+            },
+            {
+                title: "Health & Wellness",
+                href: "#",
+                children: [
+                    { title: "Vitamins & Supplements", slug: "vitamins-supplements" },
+                    { title: "Medical Equipment", slug: "medical-equipment" },
+                    { title: "Fitness Equipment", slug: "fitness-equipment" },
+                    { title: "Health Monitors", slug: "health-monitors" },
+                ]
+            },
+            {
+                title: "Personal Care",
+                href: "#",
+                children: [
+                    { title: "Oral Care", slug: "oral-care" },
+                    { title: "Toothbrushes", slug: "toothbrushes" },
+                    { title: "Toothpaste", slug: "toothpaste" },
+                    { title: "Bath & Body", slug: "bath-body" },
+                    { title: "Body Wash", slug: "body-wash" },
+                    { title: "Lotions", slug: "lotions" },
+                    { title: "Hand Sanitizers", slug: "hand-sanitizers" },
+                    { title: "Shaving & Hair Removal", slug: "shaving-hair-removal" },
+                    { title: "Razors", slug: "razors" },
+                    { title: "Shaving Cream", slug: "shaving-cream" },
+                    { title: "Hair Removal Devices", slug: "hair-removal-devices" },
+                ]
+            },
+            {
+                title: "Pet Supplies",
+                href: "#",
+                children: [
+                    { title: "Dog Supplies", slug: "dog-supplies" },
+                    { title: "Dog Food", slug: "dog-food" },
+                    { title: "Cat Supplies", slug: "cat-supplies" },
+                    { title: "Cat Food", slug: "cat-food" },
+                    { title: "Fish & Aquatic Pets", slug: "fish-aquatic-pets" },
+                    { title: "Small Animals", slug: "small-animals" },
+                    { title: "Birds", slug: "birds" },
+                ],
+            },
+        ]
     },
 
     // Baby, Kids & Toys
     {
         icon: 'TeddyBear',
-        slug: "/fashion",
+        slug: "baby-kids-toys", // Updated slug based on "Baby, Kids & Toys"
         title: "Baby, Kids & Toys",
         children: [
-        {
-            title: "Baby",
-            href: "#",
-            children: [
-                { title: "Diapers", slug: "t-shirt" },
-                { title: "Disposable Diapers", slug: "t-shirt" },
-                { title: "Cloth Diapers", slug: "t-shirt" },
-                { title: "Feeding", slug: "t-shirt" },
-                { title: "Bottles", slug: "t-shirt" },
-                { title: "Breastfeeding Accessories", slug: "t-shirt" },
-                { title: "Baby Gear", slug: "t-shirt" },
-                { title: "Strollers", slug: "t-shirt" },
-                { title: "Car Seats", slug: "t-shirt" },
-                { title: "Carriers", slug: "t-shirt" },
-                { title: "Nursery", slug: "t-shirt" },
-                { title: "Cribs", slug: "t-shirt" },
-                { title: "Changing Tables", slug: "t-shirt" },
-                { title: "Baby Monitors", slug: "t-shirt" },
-            ]
-        }, {
-            title: "Toys",
-            href: "#",
-            children: [
-                { title: "Educational", slug: "t-shirt" },
-                { title: "Learning Toys", slug: "t-shirt" },
-                { title: "STEM Toys", slug: "t-shirt" },
-                { title: "Action Figures", slug: "t-shirt" },
-                { title: "Dolls & Accessories", slug: "t-shirt" },
-                { title: "Outdoor Play", slug: "t-shirt" },
-                { title: "Playhouses", slug: "t-shirt" },
-                { title: "Slides", slug: "t-shirt" },
-                { title: "Swings", slug: "t-shirt" },
-            ]
-        }, {
-            title: "Kids Clothing",
-            href: "#",
-            children: [
-                { title: "Girls", slug: "t-shirt" },
-                { title: "Boys", slug: "t-shirt" },
-            ]
-        }]
+            {
+                title: "Baby",
+                href: "#",
+                children: [
+                    { title: "Diapers", slug: "diapers" },
+                    { title: "Disposable Diapers", slug: "disposable-diapers" },
+                    { title: "Cloth Diapers", slug: "cloth-diapers" },
+                    { title: "Feeding", slug: "feeding" },
+                    { title: "Bottles", slug: "bottles" },
+                    { title: "Breastfeeding Accessories", slug: "breastfeeding-accessories" },
+                    { title: "Baby Gear", slug: "baby-gear" },
+                    { title: "Strollers", slug: "strollers" },
+                    { title: "Car Seats", slug: "car-seats" },
+                    { title: "Carriers", slug: "carriers" },
+                    { title: "Nursery", slug: "nursery" },
+                    { title: "Cribs", slug: "cribs" },
+                    { title: "Changing Tables", slug: "changing-tables" },
+                    { title: "Baby Monitors", slug: "baby-monitors" },
+                ]
+            }, {
+                title: "Toys",
+                href: "#",
+                children: [
+                    { title: "Educational", slug: "educational" },
+                    { title: "Learning Toys", slug: "learning-toys" },
+                    { title: "STEM Toys", slug: "stem-toys" },
+                    { title: "Action Figures", slug: "action-figures" },
+                    { title: "Dolls & Accessories", slug: "dolls-accessories" },
+                    { title: "Outdoor Play", slug: "outdoor-play" },
+                    { title: "Playhouses", slug: "playhouses" },
+                    { title: "Slides", slug: "slides" },
+                    { title: "Swings", slug: "swings" },
+                ]
+            }, {
+                title: "Kids Clothing",
+                href: "#",
+                children: [
+                    { title: "Girls", slug: "girls" },
+                    { title: "Boys", slug: "boys" },
+                ]
+            }
+        ]
     },
 
     // Recipes
     {
         icon: 'Food',
-        slug: "/fashion",
+        slug: "recipes", // Updated slug based on "Recipes"
         title: "Recipes",
         children: [
         {
             title: "Fresh Produce",
             href: "#",
             children: [
-                { title: "Fruits", slug: "t-shirt" },
-                { title: "Vegetables", slug: "t-shirt" },
+                { title: "Fruits", slug: "fruits" },
+                { title: "Vegetables", slug: "vegetables" },
             ]
         }, {
             title: "Pantry Staples",
             href: "#",
             children: [
-                { title: "Snacks", slug: "t-shirt" },
-                { title: "Beverages", slug: "t-shirt" },
-                { title: "Tea", slug: "t-shirt" },
-                { title: "Coffee", slug: "t-shirt" },
-                { title: "Soft Drinks", slug: "t-shirt" },
-                { title: "Baking", slug: "t-shirt" },
-                { title: "Flour", slug: "t-shirt" },
-                { title: "Sugar", slug: "t-shirt" },
-                { title: "Baking Mixes", slug: "t-shirt" },
+                { title: "Snacks", slug: "snacks" },
+                { title: "Beverages", slug: "beverages" },
+                { title: "Tea", slug: "tea" },
+                { title: "Coffee", slug: "coffee" },
+                { title: "Soft Drinks", slug: "soft-drinks" },
+                { title: "Baking", slug: "baking" },
+                { title: "Flour", slug: "flour" },
+                { title: "Sugar", slug: "sugar" },
+                { title: "Baking Mixes", slug: "baking-mixes" },
             ]
         }, {
             title: "Meat & Seafood",
             href: "#",
             children: [
-                { 
+                {
                     title: 'Fresh Meat',
-                    slug: "/products/search/Casual"
+                    slug: "fresh-meat" // Updated slug
                 },
-                { 
+                {
                     title: 'Seafood',
-                    slug: "/products/search/Casual"
+                    slug: "seafood" // Updated slug
                 },
             ]
         }, {
             title: "Dairy",
             href: "#",
             children: [
-                { 
+                {
                     title: 'Milk',
-                    slug: "/products/search/Casual"
+                    slug: "milk" // Updated slug
                 },
-                { 
+                {
                     title: 'Cheese',
-                    slug: "/products/search/Casual"
+                    slug: "cheese" // Updated slug
                 },
-                { 
+                {
                     title: 'Eggs',
-                    slug: "/products/search/Casual"
+                    slug: "eggs" // Updated slug
                 },
             ]
         }, {
             title: "Frozen Foods",
             href: "#",
             children: [
-                { 
+                {
                     title: 'Vegetables',
-                    slug: "/products/search/Casual"
+                    slug: "vegetables" // Updated slug
                 },
-                { 
+                {
                     title: 'Meats',
-                    slug: "/products/search/Casual"
+                    slug: "meats" // Updated slug
                 },
-                { 
+                {
                     title: 'Desserts',
-                    slug: "/products/search/Casual"
+                    slug: "desserts" // Updated slug
                 },
             ]
         }]
@@ -461,98 +461,98 @@ export const categoryMenus = [
     //Sports
     {
         icon: 'Football',
-        slug: "/fashion",
+        slug: "sports-fitness-outdoors", // Updated slug based on "Sports, Fitness & Outdoors"
         title: "Sports, Fitness & Outdoors",
-    
+
         children: [
         {
             title: "Fitness Equipment",
             href: "#",
             children: [
-                { 
+                {
                     title: 'Cardio Machines',
-                    slug: "/products/search/Casual"
+                    slug: "cardio-machines"
                 },
-                { 
+                {
                     title: 'Treadmills',
-                    slug: "/products/search/Casual"
+                    slug: "treadmills"
                 },
-                { 
+                {
                     title: 'Exercise Bikes',
-                    slug: "/products/search/Casual"
+                    slug: "exercise-bikes"
                 },
-                { 
+                {
                     title: 'Strength Training',
-                    slug: "/products/search/Casual"
+                    slug: "strength-training"
                 },
-                { 
+                {
                     title: 'Dumbbells',
-                    slug: "/products/search/Casual"
+                    slug: "dumbbells"
                 },
-                { 
+                {
                     title: 'Weight Benches',
-                    slug: "/products/search/Casual"
+                    slug: "weight-benches"
                 },
-                { 
+                {
                     title: 'Fitness Accessories',
-                    slug: "/products/search/Casual"
+                    slug: "fitness-accessories"
                 },
-                { 
+                {
                     title: 'Yoga Mats',
-                    slug: "/products/search/Casual"
+                    slug: "yoga-mats"
                 },
-                { 
+                {
                     title: 'Resistance Bands',
-                    slug: "/products/search/Casual"
+                    slug: "resistance-bands"
                 }
             ]
         }, {
             title: "Outdoor Recreation",
             href: "#",
             children: [
-                { 
+                {
                     title: 'Camping' ,
-                    slug: "/products/search/Casual"
+                    slug: "camping"
                 },
-                { 
+                {
                     title: 'Tents' ,
-                    slug: "/products/search/Casual"
+                    slug: "tents"
                 },
-                { 
+                {
                     title: 'Sleeping Bags' ,
-                    slug: "/products/search/Casual"
+                    slug: "sleeping-bags"
                 },
-                { 
+                {
                     title: 'Backpacks' ,
-                    slug: "/products/search/Casual"
+                    slug: "backpacks"
                 },
-                { 
+                {
                     title: 'Hiking' ,
-                    slug: "/products/search/Casual"
+                    slug: "hiking"
                 },
-                { 
+                {
                     title: 'Boots' ,
-                    slug: "/products/search/Casual"
+                    slug: "boots"
                 },
-                { 
+                {
                     title: 'Poles' ,
-                    slug: "/products/search/Casual"
+                    slug: "poles"
                 },
-                { 
+                {
                     title: 'Gear' ,
-                    slug: "/products/search/Casual"
+                    slug: "gear"
                 },
-                { 
+                {
                     title: 'Water Sports' ,
-                    slug: "/products/search/Casual"
+                    slug: "water-sports"
                 },
-                { 
+                {
                     title: 'Kayaks' ,
-                    slug: "/products/search/Casual"
+                    slug: "kayaks"
                 },
-                { 
+                {
                     title: 'Life Jackets' ,
-                    slug: "/products/search/Casual"
+                    slug: "life-jackets"
                 },
             ]
         }, {
@@ -560,25 +560,25 @@ export const categoryMenus = [
             href: "#",
             children: [
                 { title: 'Soccer' ,
-                slug: "/products/search/Casual"
+                slug: "soccer"
                 },
                 { title: 'Balls' ,
-                slug: "/products/search/Casual"
+                slug: "balls"
                 },
                 { title: 'Apparel' ,
-                slug: "/products/search/Casual"
+                slug: "apparel"
                 },
                 { title: 'Basketball' ,
-                slug: "/products/search/Casual"
+                slug: "basketball"
                 },
                 { title: 'Shoes' ,
-                slug: "/products/search/Casual"
+                slug: "shoes"
                 },
                 { title: 'Tennis' ,
-                slug: "/products/search/Casual"
+                slug: "tennis"
                 },
                 { title: 'Rackets' ,
-                slug: "/products/search/Casual"
+                slug: "rackets"
                 },
             ]
         }]
@@ -587,244 +587,233 @@ export const categoryMenus = [
     //Automotive
     {
         icon: 'Car',
-        slug: "/fashion",
+        slug: "automotive", // Updated slug based on "Automotive"
         title: "Automotive",
-    
+
         children: [
-        {
-            title: "Vehicle Parts & Accessories",
-            href: "#",
-            children: [
-                { title: 'Car Electronics' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'GPS' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Stereos' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Tools & Equipment' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Wrenches' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Jacks' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Replacement Parts' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Brakes' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Batteries' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Interior Accessories' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Seat Covers' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Floor Mats' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Exterior Accessories' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Car Covers' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Bike Racks' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        }]
+            {
+                title: "Vehicle Parts & Accessories",
+                href: "#",
+                children: [
+                    { title: 'Car Electronics' ,
+                        slug: "car-electronics"
+                    },
+                    { title: 'GPS' ,
+                        slug: "gps"
+                    },
+                    { title: 'Stereos' ,
+                        slug: "stereos"
+                    },
+                    { title: 'Tools & Equipment' ,
+                        slug: "tools-equipment"
+                    },
+                    { title: 'Wrenches' ,
+                        slug: "wrenches"
+                    },
+                    { title: 'Jacks' ,
+                        slug: "jacks"
+                    },
+                    { title: 'Replacement Parts' ,
+                        slug: "replacement-parts"
+                    },
+                    { title: 'Brakes' ,
+                        slug: "brakes"
+                    },
+                    { title: 'Batteries' ,
+                        slug: "batteries"
+                    },
+                    { title: 'Interior Accessories' ,
+                        slug: "interior-accessories"
+                    },
+                    { title: 'Seat Covers' ,
+                        slug: "seat-covers"
+                    },
+                    { title: 'Floor Mats' ,
+                        slug: "floor-mats"
+                    },
+                    { title: 'Exterior Accessories' ,
+                        slug: "exterior-accessories"
+                    },
+                    { title: 'Car Covers' ,
+                        slug: "car-covers"
+                    },
+                    { title: 'Bike Racks' ,
+                        slug: "bike-racks"
+                    },
+                ]
+            }
+        ]
     },
 
     //Special Needs
     {
         icon: 'Food',
-        slug: "/fashion",
+        slug: "special-needs-accessibility", // Updated slug based on "Special Needs & Accessibility"
         title: "Special Needs & Accessibility",
-    
         children: [
-        {
-            title: "Mobility Aids",
-            href: "#",
-            children: [
-                { title: 'Wheelchairs' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Walkers' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Canes' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Mobility Scooters' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        },{
-            title: "Daily Living Aids",
-            href: "#",
-            children: [
-                { title: 'Dressing Aids' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Eating Aids' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Bathing Aids' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Communication Aids' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        },{
-            title: "Accessibility Equipment",
-            href: "#",
-            children: [
-                { title: 'Ramps' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Lifts' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Accessible Furniture' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        }]
+            {
+                title: "Mobility Aids",
+                href: "#",
+                children: [
+                    { title: 'Wheelchairs' ,
+                        slug: "wheelchairs"
+                    },
+                    { title: 'Walkers' ,
+                        slug: "walkers"
+                    },
+                    { title: 'Canes' ,
+                        slug: "canes"
+                    },
+                    { title: 'Mobility Scooters' ,
+                        slug: "mobility-scooters"
+                    },
+                ]
+            },{
+                title: "Daily Living Aids",
+                href: "#",
+                children: [
+                    { title: 'Dressing Aids' ,
+                        slug: "dressing-aids"
+                    },
+                    { title: 'Eating Aids' ,
+                        slug: "eating-aids"
+                    },
+                    { title: 'Bathing Aids' ,
+                        slug: "bathing-aids"
+                    },
+                    { title: 'Communication Aids' ,
+                        slug: "communication-aids"
+                    },
+                ]
+            },{
+                title: "Accessibility Equipment",
+                href: "#",
+                children: [
+                    { title: 'Ramps' ,
+                        slug: "ramps"
+                    },
+                    { title: 'Lifts' ,
+                        slug: "lifts"
+                    },
+                    { title: 'Accessible Furniture' ,
+                        slug: "accessible-furniture"
+                    },
+                ]
+            }
+        ]
     },
 
     //Maternity & Prenatal Care
     {
         icon: 'Food',
-        slug: "/fashion",
+        slug: "maternity-prenatal-care", // Updated slug based on "Maternity & Prenatal Care"
         title: "Maternity & Prenatal Care",
-    
+
         children: [
         {
             title: "Maternity Clothing",
             href: "#",
             children: [
                 { title: 'Dresses' ,
-                    slug: "/products/search/Casual"
+                    slug: "dresses"
                 },
                 { title: 'Tops' ,
-                    slug: "/products/search/Casual"
+                    slug: "tops"
                 },
                 { title: 'Bottoms' ,
-                    slug: "/products/search/Casual"
+                    slug: "bottoms"
                 },
             ]
-    },{
-        title: "Prenatal Care",
-        href: "#",
-                children: [
-            {
-                title: "Prenatal Care",
-                href: "#",
-                children: [
-                    { title: 'Vitamins' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Support Bands' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Pregnancy Pillows' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Skincare' ,
-                        slug: "/products/search/Casual"
-                    },
-                ]
-            }
-        ]
-    },{
-        title: "Baby Essentials",
-        href: "#",
-                children: [
-            {
-                title: "Baby Essentials",
-                href: "#",
-                children: [
-                    { title: 'Clothing' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Diapers' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Feeding' ,
-                        slug: "/products/search/Casual"
-                    },
-                    { title: 'Nursery' ,
-                        slug: "/products/search/Casual"
-                    },
-                ]
-            },
-        ]
-    }]
+        },{
+            title: "Prenatal Care",
+            href: "#",
+            children: [
+                { title: 'Vitamins' ,
+                    slug: "vitamins"
+                },
+                { title: 'Support Bands' ,
+                    slug: "support-bands"
+                },
+                { title: 'Pregnancy Pillows' ,
+                    slug: "pregnancy-pillows"
+                },
+                { title: 'Skincare' ,
+                    slug: "skincare"
+                },
+            ]
+        },{
+            title: "Baby Essentials",
+            href: "#",
+            children: [
+                { title: 'Clothing' ,
+                    slug: "clothing"
+                },
+                { title: 'Diapers' ,
+                    slug: "diapers"
+                },
+                { title: 'Feeding' ,
+                    slug: "feeding"
+                },
+                { title: 'Nursery' ,
+                    slug: "nursery"
+                },
+            ]
+        }]
     },
 
     // Senior Care
     {
         icon: 'Food',
-        slug: "/fashion",
+        slug: "senior-care", // Updated slug based on "Senior Care"
         title: "Senior Care",
-    
         children: [
-        {
-            title: "Health & Wellness",
-            href: "#",
-            children: [
-                { title: 'Supplements' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Monitors' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Mobility Aids' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Vision & Hearing Aids' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        },{
-            title: "Comfort & Care",
-            href: "#",
-            children: [
-                { title: 'Recliners' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Cushions' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Adjustable Beds' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Daily Living Aids' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        },{
-            title: "Recreation & Leisure",
-            href: "#",
-            children: [
-                { title: 'Puzzles' ,
-                    slug: "/products/search/Casual"
-                },
-                { title: 'Books' ,
-                    slug: "/products/search/Casual"
-                },
-            ]
-        }]
+            {
+                title: "Health & Wellness",
+                href: "#",
+                children: [
+                    { title: 'Supplements' ,
+                        slug: "supplements"
+                    },
+                    { title: 'Monitors' ,
+                        slug: "monitors"
+                    },
+                    { title: 'Mobility Aids' ,
+                        slug: "mobility-aids"
+                    },
+                    { title: 'Vision & Hearing Aids' ,
+                        slug: "vision-hearing-aids"
+                    },
+                ]
+            },{
+                title: "Comfort & Care",
+                href: "#",
+                children: [
+                    { title: 'Recliners' ,
+                        slug: "recliners"
+                    },
+                    { title: 'Cushions' ,
+                        slug: "cushions"
+                    },
+                    { title: 'Adjustable Beds' ,
+                        slug: "adjustable-beds"
+                    },
+                    { title: 'Daily Living Aids' ,
+                        slug: "daily-living-aids"
+                    },
+                ]
+            },{
+                title: "Recreation & Leisure",
+                href: "#",
+                children: [
+                    { title: 'Puzzles' ,
+                        slug: "puzzles"
+                    },
+                    { title: 'Books' ,
+                        slug: "books"
+                    },
+                ]
+            }
+        ]
     },
 
 ];  

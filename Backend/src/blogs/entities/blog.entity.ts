@@ -9,7 +9,6 @@ import {
 import { IsNotEmpty, IsString, IsNumber, IsUrl, Length, IsOptional } from 'class-validator';
 
 @Entity('blogs')
-// @Unique(['slug'])
 export class Blog {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -18,6 +17,11 @@ export class Blog {
   @IsNotEmpty()
   @IsString()
   title: string;
+
+  @Column({ nullable: true, length: 1000 })
+  @IsOptional()
+  @IsString()
+  nickname?: string;  
 
   @Column('text')
   @IsNotEmpty()

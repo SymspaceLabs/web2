@@ -122,7 +122,7 @@ export default function LandingPageView() {
           <Section13 /> 
           <Section14 /> 
           <Section15 /> 
-          <Section16 /> 
+          <Section16 />
         </Suspense>
       </Box>
     </Box>

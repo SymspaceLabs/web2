@@ -49,10 +49,13 @@ export default function Sticky({
     // Pass the zIndex prop to StyledBox. StyledBox should consume it for styling
     // and not pass it down to the underlying DOM element.
     <StyledBox fixedOn={fixedOn} componentHeight={height} fixed={fixed} zIndex={zIndex}>
-      <div className={clsx({
-        hold: !fixed,
-        fixed: fixed 
-      })} ref={elementRef}>
+      <div 
+        className={clsx({
+          hold: !fixed,
+          fixed: fixed 
+        })} 
+        ref={elementRef}
+      >
         {children}
       </div>
     </StyledBox>

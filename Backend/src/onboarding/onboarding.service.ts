@@ -149,6 +149,9 @@ export class OnboardingService {
         ? {
             height: measurement.height,
             weight: measurement.weight,
+            shoulders: measurement.shoulders,
+            armLength: measurement.armLength,
+            shoeSize: measurement.shoeSize,
             isMetric: measurement.isMetric
           }
         : null, // Return null if no measurement is found

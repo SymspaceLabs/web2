@@ -1,7 +1,7 @@
 import { keyframes, styled } from "@mui/material/styles";
 
 // ==============================================================
-// StyledBox - Adjusted for Z-Index Prop Consumption
+// StyledBox - Adjusted for Z-Index Prop Consumption and Conditional Responsive Padding
 // ==============================================================
 const slideDown = keyframes`
     from {transform: translateY(-200%)}
@@ -17,7 +17,14 @@ export const StyledBox = styled("div", {
   fixed,
   zIndex // Destructure zIndex prop here
 }) => ({
-  paddingTop: fixed ? componentHeight : 0,
+  // Default paddingTop for all screen sizes.
+  // If 'fixed' is true, paddingTop is 'componentHeight'.
+  // If 'fixed' is false, paddingTop is 0.
+  paddingTop: componentHeight,
+  [theme.breakpoints.down('sm')]: {
+    paddingTop: '64px', // When not fixed, ensure paddingTop is 0 on mobile
+  },
+
   "& .hold": {
     zIndex: 5,
     boxShadow: "none",

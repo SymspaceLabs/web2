@@ -7,7 +7,7 @@ export const metadata = {
     name: "SYMSPACE LABS",
     url: "https://symspacelabs.com"
   }],
-  keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
+  keywords: ["e-commerce"]
 };
 
 export default function ArAppSimulation() {

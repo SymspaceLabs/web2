@@ -8,7 +8,7 @@ export const metadata = {
   title: "Orders Page",
   description: `Symspace is an E-commerce website.`,
   authors: [{ name: "SYMSPACE LABS", url: "https://symspacelabs.com" }],
-  keywords: ["e-commerce", "e-commerce", "next.js", "react"],
+  keywords: ["e-commerce", "e-commerce"],
 };
 
 export default function Orders() {

@@ -3,7 +3,11 @@ import { Card, TextField } from "@mui/material";
 import TitleCard from "./TitleCard";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-const DOB = ({ dob, setDob, isMobile }) => {
+const DOB = ({ 
+  dob,
+  setDob,
+  isMobile
+}) => {
   const [open, setOpen] = useState(false);
 
   return (

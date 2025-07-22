@@ -3,11 +3,11 @@
 // ==========================================================
 
 import { Fragment } from "react";
-import { Span } from "../../../components/Typography"; // IMPORT IMAGES
+import { Span } from "@/components/Typography"; // IMPORT IMAGES
 import AppleSigninButton from "./AppleLoginButton";
 import FacebookLoginButton from "./FacebookLoginButton";
 import GoogleLoginButton from './GoogleLoginButton';
-import { Divider, Box, Grid, } from '@mui/material';
+import { Divider, Box, Grid } from '@mui/material';
 
 // ==========================================================
 

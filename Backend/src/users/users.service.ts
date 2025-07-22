@@ -1,6 +1,5 @@
 import {
   NotFoundException,
-  UnauthorizedException,
   BadRequestException,
   HttpException,
 } from '@nestjs/common';
@@ -9,8 +8,6 @@ import { Repository } from 'typeorm';
 import User from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
-import { RequestChangeEmailDto } from './dto/request-change-email.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { MailchimpService } from 'src/mailchimp/mailchimp.service';
 import { ChangeEmailDto } from './dto/change-email.dto';
 
@@ -51,7 +48,20 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Could not find the user');
     }
-    return user;
+
+    // Calculate total number of orders and wishlists
+    // Ensure 'orders' and 'wishlists' properties exist and are arrays before accessing length.
+    // They will be loaded as arrays if the relations are correctly defined and joined.
+    const totalOrders = user.orders ? user.orders.length : 0;
+
+    // Return a new object that includes all user properties and the new counts.
+    // This creates a plain JavaScript object, preventing issues if the frontend
+    // expects a simpler data structure or if you want to avoid modifying the
+    // TypeORM entity instance directly with non-schema properties.
+    return {
+      ...user, // Spread all existing user properties
+      totalOrders
+    };
   }
 
   async createUser(createUserDto: CreateUserDto) {

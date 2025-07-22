@@ -8,7 +8,7 @@ export const metadata = {
     name: "SYMSPACE LABS",
     url: "https://symspacelabs.com"
   }],
-  keywords: ["e-commerce", "next.js", "react"]
+  keywords: ["e-commerce"]
 };
 
 export default async function Address() {

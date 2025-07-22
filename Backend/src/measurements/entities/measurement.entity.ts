@@ -19,6 +19,15 @@ export class Measurement {
   @Column({ type: 'float', nullable: true })
   waist?: number;
 
+  @Column({ type: 'float', nullable: true })
+  shoulders?: number;
+
+  @Column({ type: 'float', nullable: true })
+  armLength?: number;
+
+  @Column({ type: 'float', nullable: true })
+  shoeSize?: number;
+
   @Column({ type: 'boolean', nullable: false, default: true })
   @IsBoolean({ message: 'isMetric must be a boolean value (true or false)' })
   isMetric: boolean;

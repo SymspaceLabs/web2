@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+
+import { useMediaQuery } from "@mui/material";
+import { FlexBox } from "@/components/flex-box";
 import { SymDatePicker, SymTextField } from "@/components/custom-inputs";
-import FlexBox from "@/components/flex-box/flex-box";
-import useMediaQuery from "@mui/material/useMediaQuery"; // GLOBAL CUSTOM COMPONENTS
 
 const ProfileForm = ({ 
   firstName,
@@ -13,6 +13,7 @@ const ProfileForm = ({
   setDob,
   isEdit = true
 }) => {
+
   const isMobile = useMediaQuery('(max-width:600px)');
 
   const handleFirstNameChange = (event) => {

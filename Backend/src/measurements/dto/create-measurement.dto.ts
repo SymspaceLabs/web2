@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsEnum, IsNotEmpty, Min, IsBoolean } from 'class-validator';
+import { IsInt, IsOptional, IsNotEmpty, Min, IsBoolean } from 'class-validator';
 
 export class CreateMeasurementDto {
   @IsNotEmpty()
@@ -18,6 +18,18 @@ export class CreateMeasurementDto {
   @IsOptional()
   @IsInt()
   waist?: number; // Waist measurement (optional)
+
+  @IsOptional()
+  @IsInt()
+  shoulders?: number; // optional
+
+  @IsOptional()
+  @IsInt()
+  armLength?: number; // optional
+
+  @IsOptional()
+  @IsInt()
+  shoeSize?: number; // optional
 
   @IsNotEmpty()
   @IsBoolean()

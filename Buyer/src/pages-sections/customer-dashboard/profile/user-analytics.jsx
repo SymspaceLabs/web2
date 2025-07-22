@@ -5,20 +5,24 @@
 import { currency } from "@/lib"; // CUSTOM DATA MODEL
 import { FlexBetween, FlexBox, FlexCol } from "@/components/flex-box";
 import { Box, Card, Avatar, Typography, Button } from "@mui/material";
-import { H1, H3, H5, Paragraph, Small } from "@/components/Typography";
+import { H1, H3, Paragraph, Small } from "@/components/Typography";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 // ==============================================================
 export default function UserAnalytics({
   user
 }) {
+
+  const { state: favState } = useFavorites();
+  
   const INFO_LIST = [{
-    title: "16",
+    title: user?.totalOrders !== undefined ? user.totalOrders.toString() : "0", // Use dynamic totalOrders
     subtitle: "All Orders"
   }, {
-    title: "16",
-    subtitle: "Wishlist"
+    title: favState.favorites.length.toString() ,
+    subtitle: "Favorites"
   }, {
-    title: "1",
+    title: "0",
     subtitle: "Referrals"
   }
   ];
@@ -55,7 +59,7 @@ export default function UserAnalytics({
 
                   <FlexBox alignItems="center" gap={1}>
                     <Paragraph color="#fff" fontSize={{ xs: '10px', sm: 'inherit' }}> {/* Smaller on mobile */}
-                      SYMPS
+                      SYMS
                     </Paragraph>
                     <Paragraph color="primary.main" fontSize={{ xs: '10px', sm: 'inherit' }}> {/* Smaller on mobile */}
                       {currency(500)}

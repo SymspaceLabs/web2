@@ -1,34 +1,37 @@
 "use client";
 
 // ==============================================================
-// Shop Layout 1
+// Shop Layout 1 - Optimized for Faster Loading
 // ==============================================================
 
-import { Box, Card, useMediaQuery, useTheme } from "@mui/material"; // Import useMediaQuery and useTheme
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { Box, Card, useMediaQuery, useTheme } from "@mui/material";
+import { Navbar } from "@/components/navbar"; // Navbar is likely always visible, so direct import is fine
+import { Footer } from "@/components/footer"; // Footer can be dynamically imported if often not displayed or very heavy
 import { usePathname } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
-import { MiniCart } from "@/components/mini-cart";
-import { SearchInput } from "@/components/search-box";
-import { MiniFavorite } from "@/components/favourites";
-import { SymDrawer } from "@/components/custom-components";
-import { Fragment, useCallback, useState, useEffect } from "react";
-import { LoginBottom } from "@/pages-sections/sessions/components";
-import { LoginPageView } from "@/pages-sections/sessions/page-view";
-import { MobileNavigationBar } from "@/components/mobile-navigation";
-import { SocialButtons } from "@/components/header/components/SocialButtons";
+import { SearchInput } from "@/components/search-box"; // SearchInput likely always visible
+import { Fragment, useCallback, useState, useEffect, Suspense, lazy } from "react"; // Added Suspense, lazy
 import { HeaderProvider, useHeader } from "@/components/header/hooks/use-header";
 
 import Sticky from "@/components/sticky";
-import Header from "@/components/header";
-import LogoWithTitle from "@/components/LogoWithTitle";
-import SymDialog from "@/components/custom-components/SymDialog";
-import NavigationList from "@/components/navbar/nav-list/nav-list";
-import OnboardingDialog from "@/components/custom-dialog/OnboardingDialog";
-import LoginCartButtons from "@/components/header/components/login-cart-buttons";
+import Header from "@/components/header"; // Header is likely always visible
+import LogoWithTitle from "@/components/LogoWithTitle"; // Used in login dialog, can be lazy loaded
+import NavigationList from "@/components/navbar/nav-list/nav-list"; // NavigationList likely always visible
+import LoginCartButtons from "@/components/header/components/login-cart-buttons"; // LoginCartButtons likely always visible
+
+// Dynamically import components that are not always immediately visible
+const MiniCart = lazy(() => import("@/components/mini-cart").then(mod => ({ default: mod.MiniCart })));
+const MiniFavorite = lazy(() => import("@/components/favourites").then(mod => ({ default: mod.MiniFavorite })));
+const SymDrawer = lazy(() => import("@/components/custom-components/SymDrawer").then(mod => ({ default: mod.default }))); // Used by MiniCart and MiniFavorite
+const LoginBottom = lazy(() => import("@/pages-sections/sessions/components").then(mod => ({ default: mod.LoginBottom })));
+const LoginPageView = lazy(() => import("@/pages-sections/sessions/page-view").then(mod => ({ default: mod.LoginPageView })));
+const MobileNavigationBar = lazy(() => import("@/components/mobile-navigation").then(mod => ({ default: mod.MobileNavigationBar }))); // Only on mobile
+const SocialButtons = lazy(() => import("@/components/header/components/SocialButtons").then(mod => ({ default: mod.SocialButtons }))); // Part of login dialog
+const SymDialog = lazy(() => import("@/components/custom-components/SymDialog").then(mod => ({ default: mod.default }))); // Used for login and onboarding
+const OnboardingDialog = lazy(() => import("@/components/custom-dialog/OnboardingDialog").then(mod => ({ default: mod.default })));
+
 
 // ==============================================================
 
@@ -40,17 +43,14 @@ export default function ShopLayout1({ children, noFooter = false }) {
   );
 }
 
-function ShopLayoutContent({children, noFooter}) {
-
+function ShopLayoutContent({ children, noFooter }) {
   const pathname = usePathname();
-  const theme = useTheme(); // Get the theme object
-  // Check if the screen size is greater than or equal to 'md' (desktop view)
+  const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const { isAuthenticated, user } = useAuth();
 
   const [isFixed, setIsFixed] = useState(false);
-
   const [showPopup, setShowPopup] = useState(false);
 
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
@@ -78,29 +78,29 @@ function ShopLayoutContent({children, noFooter}) {
 
   // Open Onboarding Form Only When User Hasn't Filled the Onboarding Form
   // and when they're in /Marketplace
-    useEffect(() => {
-      const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
+  useEffect(() => {
+    const isDialogClosed = localStorage.getItem("onboardingDialogClosed");
 
-      if (
-        pathname === "/marketplace" &&
-        isAuthenticated &&
-        !user?.isOnboardingFormFilled &&
-        isDialogClosed !== "true"
-      ) {
-        setShowPopup(true);
-      }
-    }, [user?.isOnboardingFormFilled, isAuthenticated, pathname]); // Added isAuthenticated and pathname to dependency array
+    if (
+      pathname === "/marketplace" &&
+      isAuthenticated &&
+      !user?.isOnboardingFormFilled &&
+      isDialogClosed !== "true"
+    ) {
+      setShowPopup(true);
+    }
+  }, [user?.isOnboardingFormFilled, isAuthenticated, pathname]);
 
-    const handleClose = () => {
-      setShowPopup(false);
-      localStorage.setItem("onboardingDialogClosed", "true");
-    };
+  const handleClose = () => {
+    setShowPopup(false);
+    localStorage.setItem("onboardingDialogClosed", "true");
+  };
 
   return (
     <Fragment>
-
       {/* TOP NAVBAR */}
-      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300} sx={{ zIndex: 1100 }}>
+      {/* Set Sticky's zIndex to a low value to ensure dialog is always on top */}
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} sx={{ zIndex: 100 }}> 
         {/* TOP HEADER */}
         <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
 
@@ -108,58 +108,80 @@ function ShopLayoutContent({children, noFooter}) {
         <Navbar />
       </Sticky>
 
-
       {/* BODY CONTENT */}
       {children}
 
       {/* BOTTOM NAVBAR - MOBILE */}
-      <MobileNavigationBar />
+      {/* Use Suspense for MobileNavigationBar as it's conditionally displayed by CSS on larger screens */}
+      <Suspense fallback={null}> {/* Fallback can be null or a small placeholder */}
+        <MobileNavigationBar />
+      </Suspense>
 
-      {/* LOGIN DIALOG - Only show when user is NOT authenticated */}
-      {!isAuthenticated && (
-        <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
-          <Box sx={{ width: '100%', maxWidth: 580, height: {xs:650, sm:800}, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
-            <Box sx={{ width: '100%', alignSelf: 'stretch',  flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
-              <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center'}}>
-                <Wrapper>
-                  <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
-                  <LoginPageView closeDialog={toggleDialog} />
-                  <SocialButtons />
-                  <LoginBottom />
-                </Wrapper>
+
+      {/* LOGIN DIALOG - Only show when user is NOT authenticated and dialog is open */}
+      {/* Wrap with Suspense to lazy load SymDialog and its contents */}
+      {!isAuthenticated && dialogOpen && ( // Only render if dialogOpen is true to lazy load
+        <Suspense fallback={null}> {/* Or a simple loading spinner */}
+          <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
+            <Box sx={{ width: '100%', maxWidth: 580, height: { xs: 650, sm: 800 }, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
+              <Box sx={{ width: '100%', alignSelf: 'stretch', flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
+                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center' }}>
+                  <Wrapper>
+                    {/* LogoWithTitle, LoginPageView, SocialButtons, LoginBottom are now lazy loaded */}
+                    <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
+                    <LoginPageView closeDialog={toggleDialog} />
+                    <SocialButtons />
+                    <LoginBottom />
+                  </Wrapper>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </SymDialog>
+          </SymDialog>
+        </Suspense>
       )}
 
       {/* BUYER ONBOARDING DIALOG */}
+      {/* Wrap with Suspense to lazy load OnboardingDialog */}
       {showPopup && (
-        <OnboardingDialog
-          open={showPopup}
-          onClose={handleClose}
-          user={user}
-        />
+        <Suspense fallback={null}>
+          <OnboardingDialog
+            open={showPopup}
+            onClose={handleClose}
+            user={user}
+          />
+        </Suspense>
       )}
 
       {/* SHOPPING CART SIDE DRAWER */}
-      <SymDrawer open={cartOpen} toggleOpen={toggleCartOpen}>
-        <MiniCart
-          toggleSidenav={toggleCartOpen}
-        />
-      </SymDrawer>
-
-      {/* FAVOURITES SIDE DRAWER - ONLY RENDER ON DESKTOP */}
-      {isDesktop && ( // Conditionally render based on isDesktop
-        <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>
-          <MiniFavorite
-            toggleSidenav={toggleFavouriteOpen}
-          />
-        </SymDrawer>
+      {/* Wrap with Suspense to lazy load SymDrawer and MiniCart */}
+      {cartOpen && ( // Only render if cartOpen is true to lazy load
+        <Suspense fallback={null}>
+          <SymDrawer open={cartOpen} toggleOpen={toggleCartOpen}>
+            <MiniCart
+              toggleSidenav={toggleCartOpen}
+            />
+          </SymDrawer>
+        </Suspense>
       )}
 
-      {/* Footer Component */}
-      { !noFooter && <Footer /> }
+      {/* FAVOURITES SIDE DRAWER - ONLY RENDER ON DESKTOP */}
+      {/* Conditionally render based on isDesktop AND wrap with Suspense */}
+      {isDesktop && favouriteOpen && ( // Only render if favouriteOpen is true to lazy load
+        <Suspense fallback={null}>
+          <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>
+            <MiniFavorite
+              toggleSidenav={toggleFavouriteOpen}
+            />
+          </SymDrawer>
+        </Suspense>
+      )}
+
+      {/* Footer Component - Can be lazy loaded if not always needed */}
+      {!noFooter && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
 
     </Fragment>
   );
@@ -180,7 +202,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
 
   [theme.breakpoints.down("sm")]: {
     width: "100%",
-    padding: "2rem 2rem", // Mobile-specific padding
+    padding: "2rem 2rem",
   },
   ".facebookButton": {
     marginBottom: 10,

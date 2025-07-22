@@ -21,7 +21,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState(user?.firstName);
   const [lastName, setLastName] = useState(user?.lastName);
-  const [dob, setDob] = useState();
+  const [dob, setDob] = useState(null);
 
   const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
   const cardStyle = {

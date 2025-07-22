@@ -35,8 +35,11 @@ export class OnboardingService {
       existingMeasurement.weight = measurement?.weight ?? existingMeasurement.weight;
       existingMeasurement.chest = measurement?.chest ?? existingMeasurement.chest;
       existingMeasurement.waist = measurement?.waist ?? existingMeasurement.waist;
-      
-      
+      existingMeasurement.shoulders = measurement?.shoulders ?? existingMeasurement.shoulders;
+      existingMeasurement.armLength = measurement?.armLength ?? existingMeasurement.armLength;
+      existingMeasurement.shoeSize = measurement?.shoeSize ?? existingMeasurement.shoeSize;
+
+
       // Explicitly handle the boolean case for isMetric
       if (measurement?.isMetric !== undefined) {
         existingMeasurement.isMetric = measurement.isMetric;
@@ -51,6 +54,9 @@ export class OnboardingService {
         weight: measurement?.weight || 0,
         chest: measurement?.chest || 0,
         waist: measurement?.waist || 0,
+        shoulders: measurement?.shoulders || 0,
+        armLength: measurement?.armLength || 0,
+        shoeSize: measurement?.shoeSize || 0,
         isMetric: measurement?.isMetric !== undefined ? measurement.isMetric : true,
         user,
       });

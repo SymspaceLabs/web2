@@ -22,7 +22,7 @@ export default function WishListPageView(props) {
   return (
     <Fragment>
       {/* TOP HEADER AREA */}
-      <DashboardHeader title="My Favourites" Icon={Favorite} />
+      <DashboardHeader title="My Favorites" Icon={Favorite} />
 
       {/* PRODUCT LIST AREA */}
       <FlexCol>

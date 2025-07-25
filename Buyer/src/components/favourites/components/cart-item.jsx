@@ -71,7 +71,6 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       } catch (err) {
         console.error("Error fetching availability for mini cart item:", err);
         setCurrentVariantStock(0); // Set stock to 0 on error
-        setStockWarningMessage("Failed to check stock. Please try again.");
       } finally {
         setLoadingAvailability(false); // Set loading to false after fetch completes
       }

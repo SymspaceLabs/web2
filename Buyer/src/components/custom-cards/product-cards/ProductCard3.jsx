@@ -17,7 +17,7 @@ function ProductCard3(props) {
     product,
     company={}
   } = props;
-  
+
   return (
     <Link href={`/products/${product.slug}`} passHref>
       <Card

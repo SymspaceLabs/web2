@@ -8,16 +8,16 @@ export class ProductModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  url: string; // The URL for the 3D model or image
+  // @Column()
+  // url: string; // The URL for the 3D model or image
 
-  @Column({ nullable: true }) // Optional column for storing color code directly if needed
-  colorCode: string;
+  // @Column({ nullable: true }) // Optional column for storing color code directly if needed
+  // colorCode: string;
 
-  // ManyToOne relationship with Product, as one product can have many models
-  @ManyToOne(() => Product, (product) => product.threeDModels, {
-    onDelete: 'CASCADE', // If product is deleted, delete its models
-  })
-  product: Product;
+  // // ManyToOne relationship with Product, as one product can have many models
+  // @ManyToOne(() => Product, (product) => product.threeDModels, {
+  //   onDelete: 'CASCADE', // If product is deleted, delete its models
+  // })
+  // product: Product;
 
 }

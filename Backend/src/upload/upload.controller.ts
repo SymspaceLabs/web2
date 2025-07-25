@@ -10,7 +10,7 @@ export class UploadController {
     private readonly uploadService: UploadService,
   ) {}
 
-  @Post('image')
+  @Post('file')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: any) {
     try {

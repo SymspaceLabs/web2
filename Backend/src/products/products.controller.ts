@@ -29,9 +29,15 @@ export class ProductsController {
   }  
 
   @Get()
-  async getAllProducts(@Query('search') search?: string) {
-    return await this.productsService.findAll(search);
+  async getAllProducts(
+    @Query('search') search?: string,
+    @Query('category') categorySlug?: string,
+    @Query('subcategory') subcategorySlug?: string
+
+  ) {
+    return await this.productsService.findAll(search, categorySlug, subcategorySlug);
   }
+
 
   @Get(':slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {

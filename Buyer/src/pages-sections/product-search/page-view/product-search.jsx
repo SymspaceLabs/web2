@@ -4,7 +4,6 @@
 // Product Search Page
 // ======================================================
 
-import { H5 } from "@/components/Typography"; // Paragraph is now used only in MobileProductHeader
 import { useSearchParams } from "next/navigation";
 import {
   Grid,
@@ -82,7 +81,7 @@ export default function ProductSearchPageView({ slug }) {
     [searchParams]
   );
   const categoryQuery = useMemo(
-    () => searchParams.getAll("category").map(c => c.toLowerCase()),
+    () => searchParams.getAll("subcategory").map(c => c.toLowerCase()),
     [searchParams]
   );
 

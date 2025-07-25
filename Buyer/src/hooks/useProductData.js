@@ -1,19 +1,9 @@
 // src/hooks/useProductData.js
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Custom hook to fetch product data and initialize filter options.
- * @returns {{
- * allProducts: Array<object>,
- * allBrands: Array<object>,
- * priceLimits: [number, number],
- * category: Array<object>,
- * allGenders: Array<string>,
- * allAvailabilities: Array<string>,
- * allColors: Array<object>,
- * loading: boolean,
- * error: string | null,
- * }} Fetched data and loading/error states.
  */
 export function useProductData() {
   const [data, setData] = useState({
@@ -25,12 +15,22 @@ export function useProductData() {
     allAvailabilities: [],
     allColors: [],
   });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const subcategoryParam = searchParams.get("subcategory");
+
+
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`)
+
+    // Construct query string only if category is present
+    const queryString = subcategoryParam ? `?subcategory=${encodeURIComponent(subcategoryParam)}` : "";  
+
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`)
       .then(res => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
@@ -51,7 +51,7 @@ export function useProductData() {
         setError(err.message);
       })
       .finally(() => setLoading(false));
-  }, []); // Empty dependency array means this runs once on mount
+  }, [categoryParam]); // Refetch if category changes
 
   return { ...data, loading, error };
 }

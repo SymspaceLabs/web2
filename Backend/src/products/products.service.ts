@@ -13,6 +13,7 @@ import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item
 import { ProductModel } from 'src/product-models/entities/product-model.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
+import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 
 @Injectable()
 export class ProductsService {
@@ -22,7 +23,9 @@ export class ProductsService {
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(ProductVariant) private productVariantRepository: Repository<ProductVariant>,
-    @InjectRepository(ProductModel) private productModelRepository: Repository<ProductModel>, // NEW: Inject ProductModel Repository
+    // @InjectRepository(ProductModel) private product3DModelRepository: Repository<ProductModel>, // NEW: Inject ProductModel Repository
+    @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>, // NEW: Inject ProductModel Repository
+
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>, // Injected
 
@@ -89,7 +92,7 @@ export class ProductsService {
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
     const {
       images,
-      models, // Destructure models from DTO
+      threeDModels, // Destructure threeDModels from DTO
       company,
       name,
       colors,
@@ -104,7 +107,7 @@ export class ProductsService {
     if (id) {
       product = await this.productRepository.findOne({
         where: { id },
-        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants', 'models'], // IMPORTANT: Load models relation here
+        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants', 'threeDModels'], // IMPORTANT: Load threeDModels relation here
       });
 
       if (!product) {
@@ -124,15 +127,15 @@ export class ProductsService {
       }
 
       // --- NEW: MODEL UPDATE LOGIC ---
-      // If the 'models' key is present in the DTO, it means we should update them.
-      // This allows sending an empty 'models' array to clear existing models.
-      if (models !== undefined) {
-        // If there are existing models, remove them first
-        if (product.models && product.models.length > 0) {
-          await this.productModelRepository.remove(product.models);
+      // If the 'threeDModels' key is present in the DTO, it means we should update them.
+      // This allows sending an empty 'threeDModels' array to clear existing threeDModels.
+      if (threeDModels !== undefined) {
+        // If there are existing threeDModels, remove them first
+        if (product.threeDModels && product.threeDModels.length > 0) {
+          await this.product3DModelRepository.remove(product.threeDModels);
         }
-        // Map the new models from DTO to ProductModel entities
-        product.models = models.map((modelDto) => {
+        // Map the new threeDModels from DTO to ProductModel entities
+        product.threeDModels = threeDModels.map((modelDto) => {
           const newModel = new ProductModel();
           newModel.url = modelDto.url;
           newModel.colorCode = modelDto.colorCode || null; // Ensure colorCode is passed or set to null
@@ -211,12 +214,12 @@ export class ProductsService {
         images: [],  // Initialize images as empty
         colors: [],  // Initialize colors as empty
         sizes: [],   // Initialize sizes as empty
-        models: [],  // Initialize models as empty for creation
+        threeDModels: [],  // Initialize threeDModels as empty for creation
       });
 
       // --- NEW: MODEL CREATION LOGIC ---
-      if (models?.length) { // If models are provided during creation
-        product.models = models.map((modelDto) => {
+      if (threeDModels?.length) { // If threeDModels are provided during creation
+        product.threeDModels = threeDModels.map((modelDto) => {
           const newModel = new ProductModel();
           newModel.url = modelDto.url;
           newModel.colorCode = modelDto.colorCode || null;
@@ -262,7 +265,7 @@ export class ProductsService {
         });
     }
 
-    // Step 1: Save product (this will cascade save/update models, images, colors, sizes)
+    // Step 1: Save product (this will cascade save/update threeDModels, images, colors, sizes)
     const savedProduct = await this.productRepository.save(product);
 
     // === Generate new variants using updated colors and sizes ===
@@ -294,8 +297,8 @@ export class ProductsService {
       });
     }
     
-    if (savedProduct.models?.length) { 
-      savedProduct.models.forEach((model) => {
+    if (savedProduct.threeDModels?.length) { 
+      savedProduct.threeDModels.forEach((model) => {
         delete model.product;
       });
     }

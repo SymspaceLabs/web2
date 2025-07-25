@@ -15,7 +15,7 @@ export class ProductModel {
   colorCode: string;
 
   // ManyToOne relationship with Product, as one product can have many models
-  @ManyToOne(() => Product, (product) => product.models, {
+  @ManyToOne(() => Product, (product) => product.threeDModels, {
     onDelete: 'CASCADE', // If product is deleted, delete its models
   })
   product: Product;

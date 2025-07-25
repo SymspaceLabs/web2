@@ -6,7 +6,7 @@ import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Review } from 'src/reviews/entities/review.entity';
-import { ProductModel } from 'src/product-models/entities/product-model.entity';
+import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
@@ -71,12 +71,16 @@ export class Product {
   })
   colors: ProductColor[];
 
-  @Column({ type: 'text', nullable: true })
-  model: string;
+  // @Column({ type: 'text', nullable: true })
+  // model: string;
 
   // Add the new OneToMany relationship to ProductModel
-  @OneToMany(() => ProductModel, (model) => model.product, { cascade: true, eager: true }) // eager: true to load models automatically
-  models: ProductModel[]; // Changed 'model' to 'models' (plural) as it's an array
+  // @OneToMany(() => ProductModel, (model) => model.product, { cascade: true, eager: true }) // eager: true to load models automatically
+  // models: ProductModel[]; // Changed 'model' to 'models' (plural) as it's an array
+
+  // Add the new OneToMany relationship to ProductModel
+  @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true }) // eager: true to load models automatically
+  threeDModels: Product3DModel[]; // Changed 'model' to 'models' (plural) as it's an array
 
   @Column()
   composition: string;

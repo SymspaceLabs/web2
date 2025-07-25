@@ -91,7 +91,7 @@ export class CreateProductDto {
   @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreateProductModelDto) // Add CreateProductModelDto to the DTO
-  models?: CreateProductModelDto[];
+  threeDModels?: CreateProductModelDto[];
 
   // @IsString()
   // @IsOptional()

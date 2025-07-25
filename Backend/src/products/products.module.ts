@@ -8,9 +8,9 @@ import { ProductImage } from '../product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
-import { ProductModel } from 'src/product-models/entities/product-model.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
+import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
       ProductImage,
       SubcategoryItem,
       ProductVariant,
-      ProductModel,
+      Product3DModel,
       Category,
       Subcategory
       // ProductVariantPropertyEntity,

@@ -58,7 +58,7 @@ export default function ProductDetails({ product }) {
   const handleColorSelect = (color) => setSelectedColor(color);
 
   // Updates the selected size
-  const handleSizeSelect = (event) => setSelectedSize(event.target.value);
+  // const handleSizeSelect = (event) => setSelectedSize(event.target.value);
 
   // Changes the cart amount based on user action
   const handleAddToCart = () => {

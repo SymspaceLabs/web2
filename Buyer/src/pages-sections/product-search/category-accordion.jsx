@@ -1,12 +1,12 @@
 "use client";
 
 import { Span } from "@/components/Typography";
-import { Fragment, useCallback } from "react";
+import { Fragment, useCallback, useMemo } from "react"; // Import useMemo
 import {
   Checkbox,
   Collapse,
   FormControlLabel,
-  FormGroup // Import FormGroup here
+  FormGroup
 } from "@mui/material";
 import AccordionHeader from "@/components/accordion/accordion-header";
 
@@ -17,67 +17,106 @@ export const CategoryAccordion = ({ data, checkedCategoryIds, onCategoryToggle }
     }
   }, [onCategoryToggle]);
 
-  // Helper function to render the categories and their subcategories
-  const renderCategory = (categories) => {
-    // Add a check to ensure categories is an array before mapping
-    if (!categories || !Array.isArray(categories)) {
-      console.warn("Category data is not an array:", categories);
-      return null; // Or return an empty array/message
+  // Use useMemo to sort the categories
+  const sortedCategories = useMemo(() => {
+    if (!data || !Array.isArray(data)) {
+      return [];
     }
 
-    return categories.map((cat) => {
+    // Create a copy to avoid mutating the original prop array
+    const categoriesCopy = [...data];
+
+    // Sort criteria: Categories with subcategoryItems first
+    // A category has subcategoryItems if any of its subCategory objects
+    // have a non-empty subcategoryItems array.
+    return categoriesCopy.sort((a, b) => {
+      const aHasSubcategoryItems = a.subCategory && Array.isArray(a.subCategory) &&
+                                   a.subCategory.some(sub => sub.subcategoryItems && Array.isArray(sub.subcategoryItems) && sub.subcategoryItems.length > 0);
+
+      const bHasSubcategoryItems = b.subCategory && Array.isArray(b.subCategory) &&
+                                   b.subCategory.some(sub => sub.subcategoryItems && Array.isArray(sub.subcategoryItems) && sub.subcategoryItems.length > 0);
+
+      if (aHasSubcategoryItems && !bHasSubcategoryItems) {
+        return -1; // 'a' comes before 'b'
+      }
+      if (!aHasSubcategoryItems && bHasSubcategoryItems) {
+        return 1;  // 'b' comes before 'a'
+      }
+      return 0; // Maintain original order if both have or both don't have subcategoryItems
+    });
+  }, [data]); // Recalculate only when 'data' prop changes
+
+  // Helper function to render the categories and their subcategories
+  const renderCategory = (categoriesToRender) => {
+    if (!categoriesToRender || !Array.isArray(categoriesToRender)) {
+      return null;
+    }
+
+    return categoriesToRender.map((cat) => {
       const catKey = `cat-${cat.id}`;
 
-      // Check if the category has subCategory and if it's an array with items
       const hasSubcategories = cat.subCategory && Array.isArray(cat.subCategory) && cat.subCategory.length > 0;
 
       return (
         <Fragment key={catKey}>
-          {/* Main category header, always open */}
+          {/* Main category header */}
           <AccordionHeader
-            open={true} // Always open as per your original logic
+            open={true}
             sx={{ pl: 0 }}
           >
-            {/* Use cat.name for the title as per the combined backend structure */}
             <Span sx={{ fontWeight: 'bold' }}>{cat.name}</Span>
           </AccordionHeader>
 
-          {/* Only render subcategories and their checkboxes if they exist */}
+          {/* Render subcategories if they exist */}
           {hasSubcategories && (
             <Collapse in={true}>
-              <FormGroup>
-                {cat.subCategory.map((sub) => {
-                  if (!sub || !sub.subcategoryItem || !sub.subcategoryItem.id) {
-                    console.warn("Invalid subcategory item found:", sub);
-                    return null;
-                  }
-                  const subKey = `sub-${sub.subcategoryItem.id}`;
-                  const isChecked = checkedCategoryIds.includes(sub.subcategoryItem.id);
+              {cat.subCategory.map((sub) => {
+                const subKey = `sub-${sub.id}`;
 
-                  return (
-                    <FormControlLabel
-                      key={subKey}
-                      sx={{ pl: 3 }}
-                      control={
-                        <Checkbox
-                          checked={isChecked}
-                          onChange={() => handleCheckboxChange(sub.subcategoryItem.id, !isChecked)}
-                          size="small"
-                        />
-                      }
-                      label={sub.subcategoryItem.name}
-                    />
-                  );
-                })}
-              </FormGroup>
+                const hasSubcategoryItems = sub.subcategoryItems && Array.isArray(sub.subcategoryItems) && sub.subcategoryItems.length > 0;
+
+                return (
+                  <Fragment key={subKey}>
+
+                    {/* Render subcategory items if they exist under the subcategory */}
+                    {hasSubcategoryItems && (
+                      <Collapse in={true}>
+                        <FormGroup>
+                          {sub.subcategoryItems.map((item) => {
+                            if (!item || !item.id) {
+                              console.warn("Invalid subcategory item found:", item);
+                              return null;
+                            }
+                            const itemKey = `item-${item.id}`;
+                            const isChecked = checkedCategoryIds.includes(item.id);
+
+                            return (
+                              <FormControlLabel
+                                key={itemKey}
+                                sx={{ pl: 4 }} // Further indent for subcategory items
+                                control={
+                                  <Checkbox
+                                    checked={isChecked}
+                                    onChange={() => handleCheckboxChange(item.id, !isChecked)}
+                                    size="small"
+                                  />
+                                }
+                                label={item.name}
+                              />
+                            );
+                          })}
+                        </FormGroup>
+                      </Collapse>
+                    )}
+                  </Fragment>
+                );
+              })}
             </Collapse>
           )}
-          {/* If there are no subcategories, nothing else is rendered for this category here,
-              just its AccordionHeader (title) will be visible. */}
         </Fragment>
       );
     });
   };
 
-  return <>{renderCategory(data)}</>;
+  return <>{renderCategory(sortedCategories)}</>; // Pass the sorted categories to render
 };

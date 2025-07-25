@@ -3,7 +3,7 @@ import { ProductsService } from './products.service';
 import { ProductsController } from './products.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { MinioService } from '../MinioModule/minio.service';
+import { MinioService } from 'src/minio/minio.service';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';

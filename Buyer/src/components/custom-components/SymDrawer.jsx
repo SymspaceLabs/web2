@@ -21,7 +21,7 @@ export default function SymDrawer(props) {
         anchor={anchor}
         onClose={toggleOpen}
         ModalProps={{
-          sx: { zIndex: 13000 }
+          sx: { zIndex: 1000 }
         }}
         PaperProps={{
           sx: {

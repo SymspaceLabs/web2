@@ -15,7 +15,7 @@ export default function MiniFavorite({ toggleSidenav }) {
   const { state: favState } = useFavorites();
 
   return (
-    <Box width="100%" minWidth={380} sx={glassBg}>
+    <Box width="100%" minWidth={380} sx={styles.glassBg}>
       {/* HEADING SECTION */}
       <TopHeader toggle={toggleSidenav} total={favState.favorites.length} />
 
@@ -37,7 +37,9 @@ export default function MiniFavorite({ toggleSidenav }) {
   );
 }
 
-const glassBg = {
-  background: 'rgba(255, 255, 255, 0.4)',
-  backdropFilter: 'blur(10.0285px)',
+const styles = {
+  glassBg : {
+    background: 'rgba(255, 255, 255, 0.4)',
+    backdropFilter: 'blur(10.0285px)',
+  }
 }

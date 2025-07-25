@@ -16,13 +16,16 @@ export default function ColorDropdown({ value, onChange, options }) {
         </Box>
       )}
       MenuProps={{
+        disablePortal: false, // ✅ this forces the dropdown list to render outside the DOM hierarchy
         PaperProps: {
           sx: {
-            p: 0,           // Remove all padding inside dropdown
-            m: 0,           // Optional: Remove margin if needed
+            p: 0,
+            m: 0,
+            zIndex: 2000, // ✅ ensures it appears above the drawer
           },
         },
       }}
+
       sx={{
         borderRadius: '999px',
         backgroundColor: '#fff',

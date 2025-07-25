@@ -11,9 +11,10 @@ import { useCart } from "@/hooks/useCart";
 import { currency } from "@/lib"; // CUSTOM DATA MODEL
 import { Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol, FlexColCenter } from "@/components/flex-box";
-import { Box, Button, MenuItem, Select, Typography, CircularProgress } from "@mui/material"; // Import CircularProgress
+import { Box, Button, CircularProgress } from "@mui/material"; // Import CircularProgress
 import { SymColorDropdown, SymRoundedDropdown } from "@/components/custom-inputs";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { H1 } from "@/components/Typography";
 
 // Services
 import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
@@ -230,13 +231,19 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           <CircularProgress size={20} sx={{ mt: 0.5 }} />
         ) : (
           stockWarningMessage && (
-            <Typography variant="caption" color="error" sx={{ whiteSpace: 'nowrap', mb: 0.5 }}> {/* Added margin-bottom */}
-              {stockWarningMessage}
-            </Typography>
+            <Box sx={styles.statusPill}>
+              <H1 fontSize="8px" color="#000">
+                {loadingAvailability ? <CircularProgress size={8} /> : stockWarningMessage}
+              </H1>
+            </Box>
           )
         )}
         <FlexBox alignItems="center" gap={1}> {/* FlexBox to align button and stock message */}
-          <Button sx={styles.btn} onClick={handleAddToCart} disabled={isAddToCartDisabled}>
+          <Button
+            sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
+            onClick={handleAddToCart}
+            // disabled={isAddToCartDisabled}
+          >
             Add to cart
           </Button>
         </FlexBox>
@@ -256,5 +263,19 @@ const styles = {
     py: 1,
     px: 1.5,
     minWidth: '115px'
+  },
+  statusPill: {
+    py: '5px',
+    px: '10px',
+    background: 'linear-gradient(94.91deg, #858585 0%, #FFFFFF 100%)',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+    borderRadius: '100px'
+  },
+  disabledBtn : {
+    background: 'rgba(128, 128, 128, 0.55)',
+    color: "#FFF",
+    cursor: "not-allowed",
+    pointerEvents: "none",
+    border: "2px solid #FFF",
   }
 }

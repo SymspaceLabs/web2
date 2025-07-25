@@ -4,14 +4,16 @@
 // Product Details Page
 // ==========================================================
 
-// Material-UI components
+// React Hooks
 import { useEffect, useState } from "react";
+
+// Material-UI components
 import { Box, CircularProgress, Container } from "@mui/material";
 
 // Local custom components
 import ProductTabs from "../product-tabs";
-import ProductDetails from "../product-details";
 import { BlobBox } from "@/components/BlobBox";
+import ProductDetails from "../product-details";
 
 // Services
 import { fetchProductBySlug } from "@/services/productService"; // Adjust the path if needed

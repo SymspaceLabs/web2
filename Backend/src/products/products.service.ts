@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
-import { nestCategoriesFromProducts } from 'src/utils/nest-categories';
+// import { nestCategoriesFromProducts } from 'src/utils/nest-categories';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { ProductModel } from 'src/product-models/entities/product-model.entity';
+// import { ProductModel } from 'src/product-models/entities/product-model.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
@@ -136,7 +136,7 @@ export class ProductsService {
         }
         // Map the new threeDModels from DTO to ProductModel entities
         product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new ProductModel();
+          const newModel = new Product3DModel();
           newModel.url = modelDto.url;
           newModel.colorCode = modelDto.colorCode || null; // Ensure colorCode is passed or set to null
           newModel.product = product; // Link to the current product entity
@@ -220,7 +220,7 @@ export class ProductsService {
       // --- NEW: MODEL CREATION LOGIC ---
       if (threeDModels?.length) { // If threeDModels are provided during creation
         product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new ProductModel();
+          const newModel = new Product3DModel();
           newModel.url = modelDto.url;
           newModel.colorCode = modelDto.colorCode || null;
           newModel.product = product; // Link to the product

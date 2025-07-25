@@ -25,7 +25,7 @@ const ProductGallery = ({
         name,
         images,
         slug,
-        threeDmodels = []
+        threeDModels = []
     } = product || {};
 
     // State to track currently selected image
@@ -68,10 +68,10 @@ const ProductGallery = ({
     // State to determine how many thumbnails to show
     const [visibleThumbCount, setVisibleThumbCount] = useState(6);
 
-    // Filter threeDmodels based on selectedColor
+    // Filter threeDModels based on selectedColor
     const filteredThreeDModels = useMemo(() => {
-        return threeDmodels.filter((m) => m.colorCode === selectedColor);
-    }, [threeDmodels, selectedColor]);
+        return threeDModels.filter((m) => m.colorCode === selectedColor);
+    }, [threeDModels, selectedColor]);
 
 
 
@@ -147,7 +147,7 @@ const ProductGallery = ({
             >
                 {selectedImage === 0 ? (
                     filteredThreeDModels.length > 0 ? (
-                        <SymGLTFViewer modelUrl={`/threeDmodels/${filteredThreeDModels[0].url}`} />
+                        <SymGLTFViewer modelUrl={`/threeDModels/${filteredThreeDModels[0].url}`} />
                     ) : (
                         <Box>No 3D model for this color</Box>
                     )

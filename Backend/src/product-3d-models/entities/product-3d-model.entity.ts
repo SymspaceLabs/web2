@@ -3,7 +3,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
 
-@Entity()
+@Entity('product_3d_model')
 export class Product3DModel {
   @PrimaryGeneratedColumn('uuid')
   id: string;

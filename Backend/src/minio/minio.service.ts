@@ -7,7 +7,7 @@ import { Readable } from 'stream';
 @Injectable()
 export class MinioService {
   private readonly minioClient: Client;
-  private readonly bucketName = 'images';
+  private readonly bucketName = 'file';
 
   constructor(private readonly configService: ConfigService) {
     // Configure MinIO client to connect to the internal endpoint (where MinIO server listens)
@@ -44,6 +44,8 @@ export class MinioService {
 
   async uploadFile(filename: string, file: any): Promise<string> {
     const fileStream = Readable.from(file.buffer);
+    const cleanedFilename = filename.trim().replace(/\s+/g, '-');
+
 
     // Ensure the bucket exists
     const bucketExists = await this.minioClient.bucketExists(this.bucketName);
@@ -58,14 +60,14 @@ export class MinioService {
     };
 
     // Upload the file with metadata
-    await this.minioClient.putObject(this.bucketName, filename, fileStream, file.size, metaData);
+    await this.minioClient.putObject(this.bucketName, cleanedFilename, fileStream, file.size, metaData);
 
     // Construct the public URL using the public endpoint and SSL setting
     const protocol = this.configService.get<boolean>('MINIO_USE_SSL') ? 'https' : 'http';
     const publicEndpoint = this.configService.get<string>('MINIO_PUBLIC_ENDPOINT');
     
     // The public URL should NOT include the port (Nginx handles that)
-    const fileUrl = `${protocol}://${publicEndpoint}/${this.bucketName}/${filename}`;
+    const fileUrl = `${protocol}://${publicEndpoint}/${this.bucketName}/${cleanedFilename}`;
 
     return fileUrl;
   }

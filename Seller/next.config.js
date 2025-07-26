@@ -6,6 +6,7 @@ const nextConfig = {
     remotePatterns: [{ protocol: "https", hostname: "ui-lib.com" }],
     domains: [
       '154.53.63.170',
+      'media.symspacelabs.com'
     ],
   },
 };

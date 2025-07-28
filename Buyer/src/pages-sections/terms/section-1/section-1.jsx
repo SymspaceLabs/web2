@@ -35,7 +35,7 @@ export default function Section1() {
   };
 
   return (
-    <Box sx={{ width: "100%", py: { xs:2, sm:10 }, zIndex:2 }}>
+    <Box sx={{ width: "100%", py: { xs:2, sm:10 }, zIndex:2, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <motion.div
         component={Box} // Makes motion.div behave like a Box
         initial={{ opacity: 0, y: 30 }}

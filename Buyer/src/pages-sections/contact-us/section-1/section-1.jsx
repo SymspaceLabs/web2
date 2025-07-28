@@ -82,7 +82,7 @@ export default function Section1({
   };
 
   return (
-    <Container sx={{ py: 10 }}>
+    <Container sx={{ py: 10, pt: {xs:'100px', sm:'100px', md:'175px'} }}>
       {
         !isSubmitted?
         <Box sx={styles.card}>

@@ -79,7 +79,7 @@ export default function Section1() {
 
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', py:{ xs:10, sm:25 } }}>
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', py:{ xs:10, sm:25 }, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       {/* Content Section */}
       <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         

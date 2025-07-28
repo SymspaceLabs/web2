@@ -9,7 +9,7 @@ import { styles } from '../page-view/styles';
 export default function Section1() {
 
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1000px' }}>
           <Typography sx={{ ...styles.elementalEndFont, fontSize: { xs: 25, sm: 45 }, color: '#fff' }}>
             Let’s build the future together

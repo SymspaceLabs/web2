@@ -69,7 +69,7 @@ export default function Section1() {
   };
 
   return (
-    <FlexColCenter sx={{ py: { xs: 2, sm: 5 } }}>
+    <FlexColCenter sx={{ py: { xs: 2, sm: 5 }, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <FlexCol sx={{ alignItems: "center", maxWidth:'1400px', width:'100%', px:{xs:2, sm:0} }}>
         <FlexBox flexDirection={isMobile ? "column" : "row"} justifyContent="space-between" width="100%" sx={{ py: 5 }} gap={2} alignItems="center">
           <H1 fontSize={{xs:25, sm:50}} color="#FFF">

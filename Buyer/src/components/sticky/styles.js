@@ -20,10 +20,10 @@ export const StyledBox = styled("div", {
   // Default paddingTop for all screen sizes.
   // If 'fixed' is true, paddingTop is 'componentHeight'.
   // If 'fixed' is false, paddingTop is 0.
-  paddingTop: componentHeight,
-  [theme.breakpoints.down('md')]: {
-    paddingTop: '64px', // When not fixed, ensure paddingTop is 0 on mobile
-  },
+  // paddingTop: componentHeight,
+  // [theme.breakpoints.down('md')]: {
+  //   paddingTop: '64px', // When not fixed, ensure paddingTop is 0 on mobile
+  // },
 
   "& .hold": {
     zIndex: 5,

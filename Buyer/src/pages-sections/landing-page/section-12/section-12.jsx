@@ -230,8 +230,10 @@ export const CustomCard3 = () => {
           loop
           muted
           playsInline
+          preload="metadata"
+          poster='https://placehold.co/1280x720/cccccc/333333'
         >
-          <source src="https://uploads-ssl.webflow.com/64694132a19474ee2218a9e6/646e4fcefb0291863787d1a7_AR_Visuals_Spaceman-transcode.webm" type="video/mp4" />
+          <source src='/assets/videos/landing-page/ar-visuals.webm' type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </Box>

@@ -19,7 +19,7 @@ export default function Section1() {
     <>
       {
         isMobile ? 
-        <Box p={2} zIndex={1}>
+        <Box p={2} zIndex={1} sx={{pt: {xs:'100px', sm:'100px', md:'175px'} }}>
           <motion.div
             initial={{ opacity: 0, y: 50 }} // Start from below with opacity 0
             animate={{ opacity: 1, y: 0 }} // Fade in while moving up
@@ -34,7 +34,7 @@ export default function Section1() {
           </motion.div>
         </Box>
         :      
-        <FlexRowCenter sx={{ width:'100%', position: "relative", minHeight: "80vh", maxWidth:'1200px', py:10, px:10 }}>
+        <FlexRowCenter sx={{ width:'100%', position: "relative", minHeight: "80vh", maxWidth:'1200px', py:10, px:10, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
           <Box sx={{ position: "relative", height: { xs: 350, sm: 500, md: 800 }, width:'100%' }}>
             {/* Background (Static) Image */}
             <LazyImage

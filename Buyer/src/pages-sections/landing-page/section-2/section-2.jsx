@@ -105,9 +105,7 @@ export default function Section2() {
                 autoPlay
                 loop
                 muted
-                // IMPORTANT: Use an actual optimized image for the poster.
-                // Example: poster='/assets/videos/landing-page/reimagining-shopping-poster.webp'
-                poster='https://placehold.co/1280x720/cccccc/333333?text=Video+Loading+Poster'
+                poster='https://placehold.co/1280x720/cccccc/333333'
               >
                 {/* Provide multiple sources for broader browser compatibility and potential size benefits */}
                 <source src='/assets/videos/landing-page/reimagining-shopping.webm' type="video/webm" />

@@ -25,7 +25,7 @@ export default function Section1() {
           transition={{ duration: 0.8, ease: "easeOut" }} // Smooth transition
         >
           {/* Content box containing text and buttons */}
-          <Box sx={{ flexGrow: 1, py: 8, zIndex: 2 }}>
+          <Box sx={{ flexGrow: 1, py: 8, zIndex: 2, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
             <Grid container spacing={4} alignItems="center">
               {/* Left column: Text content */}
               <Grid item xs={12} md={6} sx={{ display: 'flex', flexDirection: 'column' }}>

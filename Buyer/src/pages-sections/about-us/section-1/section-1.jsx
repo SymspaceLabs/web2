@@ -29,7 +29,7 @@ export default function Section1() {
   ]
 
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <Box sx={{ display:'flex', flexDirection:'column', width:'100%', maxWidth:'1400px' }}>
         <H1 fontSize={{xs:25,sm:45}} color='#FFF' wordSpacing="10px" pb={3}>
           simulating reality with technology that brings spaces to life

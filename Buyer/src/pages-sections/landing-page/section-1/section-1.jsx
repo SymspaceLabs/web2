@@ -18,7 +18,7 @@ export default function Section1() {
   return (
     <Grid sx={{ background: 'transparent' }}>
       <Container>
-        <Box sx={{ flexGrow: 1, py: 8 }}>
+        <Box sx={{ flexGrow: 1, py: 8, pt: {xs:'100px', sm:'100px', md:'200px'} }}>
           <Grid container spacing={3} alignItems="center">
             {/* Left content */}
             <Grid item xs={12} md={6} sx={{ display: "flex", flexDirection: "column", zIndex: 2 }}>

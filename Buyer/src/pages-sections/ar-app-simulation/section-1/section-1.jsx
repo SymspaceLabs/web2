@@ -90,7 +90,7 @@ export default function Section1() {
   }, []);
 
   return (
-    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', minHeight: '80vh' }}>
+    <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center', minHeight: '80vh', pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       {/* Decorative Blob centered as background */}
       <BlobBox />
 

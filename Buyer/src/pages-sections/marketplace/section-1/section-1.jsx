@@ -14,7 +14,7 @@ import { Box, Grid, Container, Button } from "@mui/material";
 
 export default function Section1() {
   return (
-    <Container sx={{ py:{xs:5, sm:10} }}>
+    <Container sx={{ py:{xs:5, sm:10}, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <Grid container spacing={3}>
         
         {/* Card 1 */}

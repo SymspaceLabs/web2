@@ -79,7 +79,12 @@ export default function MobileHeader() {
           <img 
             src="/assets/images/logo_without_text.svg" 
             alt="logo" 
-            style={{ width: "100%", width: 35, height: "auto" }}
+            style={{ 
+              width: "100%", 
+              width: 35, 
+              height: "auto",
+              display: "block"
+          }}
           />
         </Link>
 

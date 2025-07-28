@@ -4,9 +4,9 @@
 // Landing Page Pages Section
 // =======================================================
 
-import { useEffect, Suspense, lazy } from "react"; // Import lazy and Suspense
-import { Box, CircularProgress } from "@mui/material"; // Added CircularProgress for a loading fallback
 import { BlobBox } from "@/components/BlobBox";
+import { useEffect, Suspense, lazy } from "react";
+import { Box, CircularProgress } from "@mui/material";
 
 // Lazy load all your sections
 // This tells React to only load these components when they are first rendered.
@@ -122,7 +122,7 @@ export default function LandingPageView() {
           <Section13 /> 
           <Section14 /> 
           <Section15 /> 
-          <Section16 />
+          <Section16 /> {/* */}
         </Suspense>
       </Box>
     </Box>

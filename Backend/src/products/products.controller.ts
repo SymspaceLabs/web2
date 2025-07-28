@@ -38,6 +38,19 @@ export class ProductsController {
     return await this.productsService.findAll(search, categorySlug, subcategorySlug);
   }
 
+  @Get('search') // This will be your dedicated search endpoint: /products/search
+  async search(
+    @Query('q') query?: string, // The free-form search term
+    // You might still keep these for more refined filtering,
+    // but the main 'q' parameter will drive the free-form search.
+    @Query('categorySlug') categorySlug?: string,
+    @Query('subcategorySlug') subcategorySlug?: string,
+  ) {
+    // Delegate the search logic to the service
+    const results = await this.productsService.performFreeFormSearch(query, categorySlug, subcategorySlug);
+    return results;
+  }
+
 
   @Get(':slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {
@@ -54,6 +67,8 @@ export class ProductsController {
   async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
+
+
 
 }
 

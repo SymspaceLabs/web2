@@ -98,8 +98,8 @@ function ShopLayoutContent({ children, noFooter }) {
 
   return (
     <Fragment>
+
       {/* TOP NAVBAR */}
-      {/* Set Sticky's zIndex to a low value to ensure dialog is always on top */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} sx={{ zIndex: 100 }}> 
         {/* TOP HEADER */}
         <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
@@ -112,14 +112,12 @@ function ShopLayoutContent({ children, noFooter }) {
       {children}
 
       {/* BOTTOM NAVBAR - MOBILE */}
-      {/* Use Suspense for MobileNavigationBar as it's conditionally displayed by CSS on larger screens */}
-      <Suspense fallback={null}> {/* Fallback can be null or a small placeholder */}
+      <Suspense fallback={null}>
         <MobileNavigationBar />
       </Suspense>
 
 
       {/* LOGIN DIALOG - Only show when user is NOT authenticated and dialog is open */}
-      {/* Wrap with Suspense to lazy load SymDialog and its contents */}
       {!isAuthenticated && dialogOpen && ( // Only render if dialogOpen is true to lazy load
         <Suspense fallback={null}> {/* Or a simple loading spinner */}
           <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>

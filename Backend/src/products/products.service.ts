@@ -1,16 +1,14 @@
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
-// import { nestCategoriesFromProducts } from 'src/utils/nest-categories';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-// import { ProductModel } from 'src/product-models/entities/product-model.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
@@ -23,11 +21,9 @@ export class ProductsService {
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(ProductVariant) private productVariantRepository: Repository<ProductVariant>,
-    // @InjectRepository(ProductModel) private product3DModelRepository: Repository<ProductModel>, // NEW: Inject ProductModel Repository
-    @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>, // NEW: Inject ProductModel Repository
-
+    @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
-    @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>, // Injected
+    @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>,
 
   ) {}
 
@@ -40,6 +36,15 @@ export class ProductsService {
       .replace(/[^a-z0-9-]/g, '')      // remove anything not alphanumeric or dash
       .replace(/--+/g, '-')            // collapse multiple dashes
       .replace(/^-+|-+$/g, '');        // trim leading/trailing dashes
+  }
+
+  /**
+   * Helper function to normalize text for search: lowercase and remove hyphens.
+   * @param text The input string.
+   * @returns The normalized string.
+   */
+  private normalizeSearchText(text: string): string {
+    return text.toLowerCase().replace(/-/g, '');
   }
 
   // Reusable method to generate and save variants
@@ -317,7 +322,7 @@ export class ProductsService {
     return savedProduct;
   }
 
-/**
+  /**
    * Finds all products based on a search term and/or category/subcategory slugs.
    * Filters products belonging to the specified category, subcategory, or subcategory item,
    * including their direct and indirect descendants.
@@ -742,4 +747,86 @@ export class ProductsService {
       product,
     };
   }
+
+ /**
+   * Performs a free-form search across product names, descriptions, company names,
+   * category names, and subcategory names. It supports optional filtering by category
+   * and subcategory slugs. All text-based searches are case-insensitive and hyphen-insensitive.
+   *
+   * @param searchTerm An optional general search query string.
+   * @param categorySlug An optional slug to filter by category.
+   * @param subcategorySlug An optional slug to filter by subcategory or subcategory item.
+   * @returns A promise that resolves to an array of products matching the criteria.
+   */
+   async performFreeFormSearch(
+    searchTerm?: string,
+    categorySlug?: string,
+    subcategorySlug?: string,
+  ) {
+    const normalizedSearchTermForComparison = searchTerm
+      ? `%${this.normalizeSearchText(searchTerm)}%`
+      : null;
+
+    const productsQuery = this.productRepository.createQueryBuilder('product')
+      .select([
+        'product.id',
+        'product.name',
+        'product.price',
+        'product.slug',
+        'product.description',
+      ])
+      .leftJoinAndSelect('product.company', 'company')
+      .addSelect([
+        'company.id',
+        'company.entityName',
+      ])
+      .leftJoin('product.images', 'images')
+      .leftJoin('product.subcategoryItem', 'subcategoryItem')
+      .leftJoin('subcategoryItem.subcategory', 'subcategory')
+      .leftJoin('subcategory.category', 'category')
+      .orderBy('images.sortOrder', 'ASC');
+
+    if (normalizedSearchTermForComparison) {
+      productsQuery.andWhere(new Brackets(qb => {
+        // Apply normalization (lowercase, remove hyphens, remove spaces) to database column values
+        // Note: You still need REPLACE in SQL for hyphens if your DB *could* store values with them
+        // and you're normalizing them away only on the search side.
+        // However, if normalizeSearchText removes spaces, the SQL REPLACE should also remove spaces.
+        // Let's adjust the SQL REPLACE as well for consistency.
+        qb.where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+          .orWhere('LOWER(REPLACE(REPLACE(product.description, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+          // Apply to company.entityName
+          .orWhere('LOWER(REPLACE(REPLACE(company.entityName, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+          // Apply to category.name
+          .orWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+          // Apply to subcategory.name
+          .orWhere('LOWER(REPLACE(REPLACE(subcategory.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+          // Apply to subcategoryItem.name
+          .orWhere('LOWER(REPLACE(REPLACE(subcategoryItem.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison });
+      }));
+    }
+
+    // Category and subcategory slugs are typically exact matches, so 'REPLACE' might not be needed
+    // unless you store slugs with hyphens but expect searches without them.
+    // For now, assuming slugs are always consistently formatted.
+    if (categorySlug) {
+      // If category slugs also might have spaces/hyphens that need ignoring during direct matching,
+      // you would also apply normalization here:
+      // productsQuery.andWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) = :categorySlugNormalized', { categorySlugNormalized: this.normalizeSearchText(categorySlug) });
+      // Otherwise, keep as is for exact slug matching:
+      productsQuery.andWhere('LOWER(category.name) = LOWER(:categorySlug)', { categorySlug });
+    }
+    if (subcategorySlug) {
+      // Same consideration as for categorySlug
+      productsQuery.andWhere(new Brackets(qb => {
+        qb.where('LOWER(subcategory.name) = LOWER(:subcategorySlug)', { subcategorySlug })
+          .orWhere('LOWER(subcategoryItem.name) = LOWER(:subcategorySlug)', { subcategorySlug });
+      }));
+    }
+
+    const products = await productsQuery.getMany();
+
+    return products;
+  }
+  
 }

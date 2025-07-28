@@ -5,19 +5,19 @@
 import useSearch from "./hooks/use-search"; // LOCAL CUSTOM COMPONENT
 import SearchResult from "./components/search-result"; // STYLED COMPONENT
 
-import { SearchOutlinedIcon } from "./styles";
-import { Box, Button, TextField, InputAdornment, CircularProgress, Typography, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
+import { SearchOutlinedIcon } from "./styles"; // Assuming this is correct
+import { Box, Button, TextField, InputAdornment, CircularProgress, Typography } from "@mui/material";
 
 // ============================================
 
-export default function SearchInput({ btn=true, mxWidth="670px" }) {
+export default function SearchInput({ btn = true, mxWidth = "670px" }) {
   const {
     handleSearch,
     parentRef,
     resultList,
     loading,
     error
-  } = useSearch(); // Call the hook here
+  } = useSearch();
 
   const getInputProps = (isButtonPresent) => ({
     sx: {
@@ -29,13 +29,7 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
       backgroundColor: "grey.200",
       "& .MuiOutlinedInput-notchedOutline": {
         border: 0,
-      },
-      // "& input::placeholder": {
-      //   textAlign: "center",
-      // },
-      // "& input": {
-      //   textAlign: "center",
-      // }
+      }
     },
     endAdornment: isButtonPresent ? (
       <InputAdornment
@@ -95,71 +89,18 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
       <TextField
         fullWidth
         variant="outlined"
-        placeholder="Search categories..."
+        placeholder="Search Symspace"
         onChange={handleSearch}
         InputProps={getInputProps(btn)}
       />
 
-      {/* {(loading || error || (resultList.length > 0 && !loading && !error)) && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            backgroundColor: 'background.paper',
-            boxShadow: 3,
-            borderRadius: '8px',
-            mt: 2,
-            zIndex: 10,
-            maxHeight: '320px',
-            overflowY: 'auto',
-          }}
-        >
-          {loading && (
-            <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'left' }}>
-              Loading suggestions...
-            </Typography>
-          )}
-
-          {error && (
-            <Typography
-              variant="body2"
-              color="error.dark"
-              sx={{
-                p: 2,
-                textAlign: 'center',
-                backgroundColor: 'error.light',
-                border: '1px solid',
-                borderColor: 'error.main',
-                borderRadius: '8px',
-                m: 1,
-              }}
-            >
-              {error}
-            </Typography>
-          )}
-
-          {!loading && !error && resultList.length > 0 && (
-            <SearchResult results={resultList} />
-          )}
-
-          {!loading && !error && resultList.length === 0 && (
-            <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'left' }}>
-              No matching categories found.
-            </Typography>
-          )}
-        </Box>
-      )} */}
       {(loading || error || (resultList.length > 0 && !loading && !error)) && (
         <Box
           sx={{
             position: 'absolute',
             top: '100%',
             left: 0,
-            // Ensured the dropdown box takes the full width of its parent TextField container
             width: '100%',
-            // Added a minWidth to ensure visibility even if the parent is very narrow
             minWidth: '250px',
             backgroundColor: 'background.paper',
             boxShadow: 3,
@@ -200,7 +141,7 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
 
           {!loading && !error && resultList.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'left' }}>
-              No matching categories found.
+              No results found. {/* Changed from "No matching categories found." */}
             </Typography>
           )}
         </Box>
@@ -208,4 +149,3 @@ export default function SearchInput({ btn=true, mxWidth="670px" }) {
     </Box>
   );
 }
-

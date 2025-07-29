@@ -67,22 +67,22 @@ const categories = [
   },
   {
     title:"Maternity",
-    slug:"maternity"
+    slug:"category=maternity-&-prenatal-care"
   },
   {
     title:"Elderly",
-    slug:"elderly"
+    slug:"ageGroup=elderly"
   },
   {
     title:"Assisted Aid",
-    slug:"assisted-aid"
+    slug:"category=special-needs-&-accessibility"
   },
   {
     title:"Home & Furniture",
-    slug:"home-furniture"
+    slug:"category=home-furniture-&-appliances"
   },
   {
     title:"Sales & Deals",
-    slug:"sales-deals"
+    slug:"tag=sales-&-deals"
   }
 ]

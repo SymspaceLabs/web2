@@ -48,65 +48,51 @@ export default function LandingPageView() {
 
       {/* BlobBox elements are likely small and don't need lazy loading */}
       {/* Hero Section Left */}
-      <BlobBox top={-30} left="15%" background="#FFF" displayNoneMobile={true} /> {/*  WHITE */}
-      <BlobBox top={-30} left={0} /> {/* BLUE */}
+      <BlobBox top={-30} left="15%" background="#FFF" displayNoneMobile={true} />  {/* WHITE */}
+      <BlobBox top={-30} left={0} /> {/*  BLUE */}
 
       {/* Hero Section Right */}
       <BlobBox top={150} right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top={0} right={0} /> {/* BLUE */}
+      <BlobBox top={0} right={0} /> {/*  BLUE */}
 
       {/* Video Section 1 */}
       <BlobBox top="10%" left="15%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="10%" left="10%" /> {/* BLUE */}
+      <BlobBox top="10%" left="10%" /> {/*  BLUE */}
 
       {/* Video Section 2 */}
       <BlobBox top="10%" right="15%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="10%" right="10%" />{/* BLUE */}
+      <BlobBox top="10%" right="10%" /> {/* BLUE */}
 
       {/* Future of Retail Section */}
       <BlobBox top="17%" right="10%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="15%" right="5%" displayNoneMobile={true} /> {/* BLUE */}
+      <BlobBox top="15%" right="5%" displayNoneMobile={true} />{/*  BLUE */}
 
       {/* Convenient & Comfortable */}
       <BlobBox top="23%" right="0%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="25%" right="5%" />{/* BLUE */}
+      <BlobBox top="25%" right="5%" /> {/*BLUE */}
 
       {/* 3D Repository  */}
       <BlobBox top="36%" left="-12%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="38%" left="-12%" />{/* BLUE */}
+      <BlobBox top="38%" left="-12%" /> {/*BLUE */}
 
       {/* BENTO BOX */}
       <BlobBox top="43%" right="-10%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="45%" right={0} />{/* BLUE */}
+      <BlobBox top="45%" right={0} /> {/*BLUE */}
 
       {/* 3D Model */}
       <BlobBox top="55%" left="-10%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="55%" left={0} />{/* BLUE */}
+      <BlobBox top="55%" left={0} /> {/*BLUE */}
 
       {/* OUR FOCUS */}
       <BlobBox top="63%" right={0} background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="65%" right={0} />{/* BLUE */}
+      <BlobBox top="65%" right={0} /> {/*BLUE */}
 
       {/* GRADIENT CIRCLES 9 */}
       <BlobBox top="80%" left="-10%" background="#FFF" displayNoneMobile={true} /> {/* WHITE */}
-      <BlobBox top="80%" left={0} />{/* BLUE */}
+      <BlobBox top="80%" left={0} /> {/*BLUE */}
 
       <Box sx={{ background: '#1F1F1F', zIndex: 2 }}>
-        {/* Wrap all lazily loaded components with Suspense.
-            The fallback will show while the component's code is being loaded.
-            You might want a more sophisticated loader or skeleton for a better UX.
-        */}
-        <Suspense fallback={
-          <Box sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '200px', // Give it some height so it's not collapsed
-            color: 'white' // Ensure the spinner is visible on your dark background
-          }}>
-            <CircularProgress color="inherit" />
-          </Box>
-        }>
+        {/* <Suspense fallback={null}> */}
           <Section1 /> 
           <Section2 /> 
           <Section3 /> 
@@ -122,8 +108,8 @@ export default function LandingPageView() {
           <Section13 /> 
           <Section14 /> 
           <Section15 /> 
-          <Section16 /> {/* */}
-        </Suspense>
+          <Section16 />
+        {/* </Suspense> */}
       </Box>
     </Box>
   )

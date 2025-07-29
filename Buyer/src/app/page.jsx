@@ -7,10 +7,10 @@ import LandingPageView from "@/pages-sections/landing-page/page-view";
 
 export const metadata = {
   title: "SYMSPACE",
-  description: `Symspacelabs is an E-commerce website. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  description: `Symspacelabs is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",
-    url: "https://symspacelabs.com"
+    url: "https://www.symspacelabs.com"
   }],
   keywords: ["e-commerce"]
 };

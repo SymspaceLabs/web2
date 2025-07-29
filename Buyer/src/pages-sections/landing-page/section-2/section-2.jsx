@@ -7,10 +7,6 @@ import { Container, Box, Card } from '@mui/material';
 import { FlexBox, FlexColCenter } from '@/components/flex-box'; // Re-enabled original imports
 import { useState, useEffect, useRef, forwardRef } from 'react'; // Added React hooks for lazy loading
 
-// Removed mock styles and components, assuming original imports are correct.
-// If 'styles', 'H1', 'FlexBox', 'FlexColCenter' are not correctly imported,
-// you might need to re-add their mock definitions or ensure their paths are valid.
-
 // GraphicsCard component, now forwarding the ref
 const GraphicsCard = forwardRef(({ sx, children, overLay = false, bgImage, ...rest }, ref) => {
   return (
@@ -24,8 +20,6 @@ const GraphicsCard = forwardRef(({ sx, children, overLay = false, bgImage, ...re
         bgcolor: 'grey.100',
         borderRadius: { xs: 6, sm: 8, md: 10 },
         ...(bgImage && {
-          // Assuming GetImagePath is defined elsewhere or you'll handle image paths directly
-          // backgroundImage: `url(${GetImagePath(bgImage)})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }),
@@ -105,7 +99,7 @@ export default function Section2() {
                 autoPlay
                 loop
                 muted
-                poster='https://placehold.co/1280x720/cccccc/333333'
+                poster='https://placehold.co/1280x720/cccccc/cccccc'
               >
                 {/* Provide multiple sources for broader browser compatibility and potential size benefits */}
                 <source src='/assets/videos/landing-page/reimagining-shopping.webm' type="video/webm" />
@@ -115,7 +109,7 @@ export default function Section2() {
             ) : (
               // Display an optimized image placeholder while the video is not loaded
               <img
-                src='https://placehold.co/1280x720/cccccc/333333?text=Video+Placeholder' // Use your actual optimized poster image here
+                src='https://placehold.co/1280x720/cccccc/cccccc' // Use your actual optimized poster image here
                 alt="Reimagining Shopping Preview"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'flex' }}
               />

@@ -231,7 +231,7 @@ export const CustomCard3 = () => {
           muted
           playsInline
           preload="metadata"
-          poster='https://placehold.co/1280x720/cccccc/333333'
+          poster='https://placehold.co/1280x720/cccccc/cccccc'
         >
           <source src='/assets/videos/landing-page/ar-visuals.webm' type="video/mp4" />
           Your browser does not support the video tag.

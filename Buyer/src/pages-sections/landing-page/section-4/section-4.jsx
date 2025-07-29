@@ -108,7 +108,7 @@ export default function Section4() {
               <Carousel ref={carouselRef} slidesToShow={isMobile? 3:6} responsive={responsive} arrows={false}>
                 {categories.map((item) => (
                   <motion.div key={item.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                    <Link href={`/products/search/all?category=${item.slug}`}>
+                    <Link href={`/products/search/all?subcategory=${item.slug}`}>
                       <FlexBox
                         sx={{
                           py: 5,
@@ -159,7 +159,7 @@ const categories = [
   { id: 5, title: "Shoes", thumbnail: "/assets/images/icons/shoe.svg", slug: "shoe" },
   { id: 6, title: "Dresses", thumbnail: "/assets/images/icons/dress-2.svg", slug: "dress" },
   { id: 7, title: "Earrings", thumbnail: "/assets/images/icons/earring.svg", slug: "earring" },
-  { id: 8, title: "Accessories", thumbnail: "/assets/images/icons/accessory.svg", slug: "accessory" },
+  { id: 8, title: "Accessories", thumbnail: "/assets/images/icons/accessory.svg", slug: "accessories" },
   { id: 9, title: "Bags", thumbnail: "/assets/images/icons/bag-2.svg", slug: "bag" },
   { id: 10, title: "Hats", thumbnail: "/assets/images/icons/hat.svg", slug: "hat" },
   { id: 11, title: "Watches", thumbnail: "/assets/images/icons/watch-2.svg", slug: "watch" },

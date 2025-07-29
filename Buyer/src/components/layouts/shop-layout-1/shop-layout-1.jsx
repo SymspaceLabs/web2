@@ -46,7 +46,22 @@ export default function ShopLayout1({ children, noFooter = false }) {
 function ShopLayoutContent({ children, noFooter }) {
   const pathname = usePathname();
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsDesktop(window.innerWidth >= 960); // match MUI md breakpoint
+      };
+
+      handleResize(); // initial check
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, []);
+
 
   const { isAuthenticated, user } = useAuth();
 
@@ -99,14 +114,12 @@ function ShopLayoutContent({ children, noFooter }) {
   return (
     <Fragment>
 
-      {/* TOP NAVBAR */}
+      {/* TOP HEADER || Category Navbar */}
       <Sticky fixedOn={0} onSticky={toggleIsFixed} sx={{ zIndex: 100 }}> 
-        {/* TOP HEADER */}
-        <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
-
-        {/* CATEGORY NAVBAR */}
-        <Navbar />
+          <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
+          <Navbar />
       </Sticky>
+     
 
       {/* BODY CONTENT */}
       {children}
@@ -119,13 +132,12 @@ function ShopLayoutContent({ children, noFooter }) {
 
       {/* LOGIN DIALOG - Only show when user is NOT authenticated and dialog is open */}
       {!isAuthenticated && dialogOpen && ( // Only render if dialogOpen is true to lazy load
-        <Suspense fallback={null}> {/* Or a simple loading spinner */}
+        <Suspense fallback={null}>
           <SymDialog dialogOpen={dialogOpen} toggleDialog={toggleDialog}>
             <Box sx={{ width: '100%', maxWidth: 580, height: { xs: 650, sm: 800 }, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', display: 'inline-flex' }}>
               <Box sx={{ width: '100%', alignSelf: 'stretch', flex: '1 1 0', position: 'relative', overflow: 'hidden' }}>
                 <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100%', textAlign: 'center' }}>
                   <Wrapper>
-                    {/* LogoWithTitle, LoginPageView, SocialButtons, LoginBottom are now lazy loaded */}
                     <LogoWithTitle title="Continue your Journey" subTitle="Log in to an existing account using your email" />
                     <LoginPageView closeDialog={toggleDialog} />
                     <SocialButtons />
@@ -163,7 +175,6 @@ function ShopLayoutContent({ children, noFooter }) {
       )}
 
       {/* FAVOURITES SIDE DRAWER - ONLY RENDER ON DESKTOP */}
-      {/* Conditionally render based on isDesktop AND wrap with Suspense */}
       {isDesktop && favouriteOpen && ( // Only render if favouriteOpen is true to lazy load
         <Suspense fallback={null}>
           <SymDrawer open={favouriteOpen} toggleOpen={toggleFavouriteOpen}>

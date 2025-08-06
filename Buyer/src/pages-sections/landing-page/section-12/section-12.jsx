@@ -49,7 +49,11 @@ export default function Section12() {
                 <Grid item xs={12} sm={6} md={6}>
                   <CustomCard2 />
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid
+                  item
+                  xs={12} sm={6} md={6}
+                  sx={{ display: { xs: 'none', sm: 'block' } }}
+                >
                   <motion.div variants={fadeInVariants}>
                     <CustomCard3 />
                   </motion.div>

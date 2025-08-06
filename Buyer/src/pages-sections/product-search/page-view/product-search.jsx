@@ -163,7 +163,7 @@ export default function ProductSearchPageView({ searchParams }) {
   };
 
   return (
-    <Box sx={{ py: 5, background: "#FFF"}} >
+    <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >
       <Container>
         <Grid container spacing={3}>
 

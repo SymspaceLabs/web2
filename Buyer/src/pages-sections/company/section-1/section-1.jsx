@@ -30,7 +30,7 @@ export default function Section1({ company }) {
   };
 
   return (
-    <Box sx={{ color: '#fff', minHeight: '400px', pb:10 }}>
+    <Box sx={{ color: '#fff', minHeight: '400px', pb:10, pt:'100px' }}>
 
       {/* BANNER BG */}
       <FlexRowCenter

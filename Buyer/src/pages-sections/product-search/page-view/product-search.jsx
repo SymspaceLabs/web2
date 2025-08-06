@@ -1,10 +1,11 @@
+// src/components/ProductSearchPageView.js
+
 "use client";
 
 // ======================================================
 // Product Search Page
 // ======================================================
 
-import { useSearchParams } from "next/navigation";
 import {
   Grid,
   Container,
@@ -40,8 +41,8 @@ function FilterControls(props) {
 // 2. Main ProductSearchPageView Component
 // ======================================================
 
-export default function ProductSearchPageView({ slug }) {
-  const searchParams = useSearchParams();
+// ACCEPT searchParams as a prop
+export default function ProductSearchPageView({ searchParams }) {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const [openDrawer, setOpenDrawer] = useState(false);
   const [sortOption, setSortOption] = useState("latest"); // Default sort option
@@ -62,31 +63,44 @@ export default function ProductSearchPageView({ slug }) {
     allColors,
     loading,
     error
-  } = useProductData();
+  } = useProductData(searchParams); // PASS searchParams to the hook
 
   // Custom hook to manage filter state and URL sync
-  const {
+    const {
     filterState,
     setFilterState,
     handleFilterChange,
     handleResetAllFilters
-  } = useProductFilters({
-    allProducts, allBrands, priceLimits, category, allGenders, allAvailabilities, allColors
-  }, searchParams);
-
+  } = useProductFilters(
+    {
+      allProducts,
+      allBrands,
+      priceLimits,
+      category,
+      allGenders,
+      allAvailabilities,
+      allColors,
+    },
+    // Pass searchParams as an object to the hook
+    searchParams 
+  );
 
   // Memoized query parameters from URL for display purposes only
   const genderQuery = useMemo(
-    () => searchParams.getAll("gender").map(g => g.toLowerCase()),
+    // Now searchParams is an object, not a hook result
+    () => (Array.isArray(searchParams.gender) ? searchParams.gender : [searchParams.gender]).filter(Boolean).map(g => g.toLowerCase()),
     [searchParams]
   );
-  const categoryQuery = useMemo(
-    () => searchParams.getAll("subcategory").map(c => c.toLowerCase()),
+  
+  // This memoized value now gets the single most specific category slug.
+  const subcategoryItemQuery = useMemo(
+    () => searchParams.subcategoryItem || searchParams.subcategory || searchParams.category,
     [searchParams]
   );
 
-  // Custom hook to apply filters and sorting
-  const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption, categoryQuery);
+  // Custom hook to apply client-side filters and sorting.
+  // We no longer pass categoryQuery or subcategoryItemQuery to this hook.
+  const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
 
   // Generate display names for filters
   const genderDisplayName = useMemo(
@@ -95,15 +109,14 @@ export default function ProductSearchPageView({ slug }) {
       : '',
     [genderQuery]
   );
-
-  // Corrected categoryDisplayName: always reflects the URL category if present
-  const categoryDisplayName = useMemo(
-    () => categoryQuery.length > 0
-      ? `'${categoryQuery.map(name => name.charAt(0).toUpperCase() + name.slice(1)).join(', ')}'`
-      : '',
-    [categoryQuery]
-  );
-
+  
+  // Corrected categoryDisplayName: safely handles null/undefined values
+  const categoryDisplayName = useMemo(() => {
+    if (typeof subcategoryItemQuery === 'string' && subcategoryItemQuery) {
+      return `'${subcategoryItemQuery.charAt(0).toUpperCase() + subcategoryItemQuery.slice(1)}'`;
+    }
+    return '';
+  }, [subcategoryItemQuery]);
 
   // Construct the display text dynamically
   const displayFilterText = useMemo(() => {
@@ -111,7 +124,7 @@ export default function ProductSearchPageView({ slug }) {
     if (genderDisplayName) {
       parts.push(genderDisplayName);
     }
-    if (categoryDisplayName) { // Always include categoryDisplayName if it has a value
+    if (categoryDisplayName) {
       parts.push(categoryDisplayName);
     }
     return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
@@ -150,7 +163,7 @@ export default function ProductSearchPageView({ slug }) {
   };
 
   return (
-    <Box sx={{ py: 5, background: "#FFF", pt: {xs:'100px', sm:'100px', md:'200px'}  }} >
+    <Box sx={{ py: 5, background: "#FFF"}} >
       <Container>
         <Grid container spacing={3}>
 

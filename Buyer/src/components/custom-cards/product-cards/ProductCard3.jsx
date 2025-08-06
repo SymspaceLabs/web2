@@ -3,6 +3,7 @@
 // Product Card 3
 // Used In:
 // - Wish List
+// - Product Search Page
 // =======================================================
 
 import { Paragraph, Span } from "components/Typography";
@@ -12,11 +13,13 @@ import Link from "next/link";
 
 // =======================================================
 function ProductCard3(props) {
-
-  const  {
+  const {
     product,
-    company={}
+    company = {}
   } = props;
+
+  // Determine if a sale price exists and is less than the original price
+  const hasSale = product.salePrice > 0 && product.salePrice < product.price;
 
   return (
     <Link href={`/products/${product.slug}`} passHref>
@@ -80,8 +83,15 @@ function ProductCard3(props) {
           <Paragraph fontSize={{ xs: 10, sm: 14 }}>
             {company?.entityName}
           </Paragraph>
+          
           <Paragraph fontWeight={600} color="primary">
-            ${product.price} <Span sx={{ textDecoration: 'line-through', color:'grey', fontWeight:400 }}>${product.salePrice}</Span>
+            {/* Conditionally display price and sale price */}
+            {hasSale ? `$${product.salePrice}` : `$${product.price}`}
+            {hasSale && (
+              <Span sx={{ textDecoration: 'line-through', color: 'grey', fontWeight: 400 }}>
+                &nbsp;${product.price}
+              </Span>
+            )}
           </Paragraph>
         </Box>
       </Card>

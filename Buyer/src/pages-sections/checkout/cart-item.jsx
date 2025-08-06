@@ -77,12 +77,12 @@ export default function CartItem({
 
         {/* PRODUCT PRICE SECTION */}
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
-          <Paragraph mt={0.5} color='#FFF' sx={{textDecoration:'line-through'}}>
-            {currency(salePrice)}
+          <Paragraph color='#FFF' sx={{textDecoration:'line-through'}}>
+            {currency(price)}
           </Paragraph>
 
           <Span fontWeight={600} color="#000">
-            {currency(price)} x {qty}
+            {currency(salePrice)} x {qty}
           </Span>
         </FlexBox>
 

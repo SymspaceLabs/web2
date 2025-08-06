@@ -130,7 +130,9 @@ export default function ProductDetails({ product }) {
 
     checkAvailability();
   }, [id, selectedColor, selectedSize]);
-  
+
+  // Conditionally check if a sale is active
+  const hasSale = salePrice > 0 && salePrice < price;  
 
   return (
     <>
@@ -170,12 +172,21 @@ export default function ProductDetails({ product }) {
 
             {/* PRICE & STOCK */}
             <FlexBox alignItems="center" gap={1} mb={2}>
-              <Paragraph sx={styles.price}>
+              {/* <Paragraph sx={styles.price}>
                 {currency(price)}
               </Paragraph>
               <Paragraph sx={styles.strikethrough}>
                 {currency(salePrice)}
+              </Paragraph> */}
+
+              <Paragraph sx={styles.price}>
+                {hasSale ? currency(salePrice) : currency(price)}
               </Paragraph>
+              {hasSale && (
+                <Paragraph sx={styles.strikethrough}>
+                  {currency(price)}
+                </Paragraph>
+              )}
 
               {/* Availabilty Status */}
               {selectedColor && selectedSize && availability?.stock < 10 && (

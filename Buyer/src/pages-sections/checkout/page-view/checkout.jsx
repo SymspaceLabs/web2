@@ -60,6 +60,7 @@ export default function MultiStepCheckout() {
         country: 'US',
         zip: ""
     });
+    
     // Stores the billing address details.
     const [billing, setBilling] = useState({
         address1: "",
@@ -144,7 +145,6 @@ export default function MultiStepCheckout() {
             setSelectedStep(step);
         }
     };
-
 
     /**
      * Handles advancing to the next step in the checkout process.

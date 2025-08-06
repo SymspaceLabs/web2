@@ -329,118 +329,67 @@ export class ProductsService {
    *
    * @param searchTerm Optional: A string to search for in product names and descriptions.
    * @param categorySlug Optional: The slug of a main category (e.g., 'clothing-shoes-accessories') to filter products by.
-   * @param subcategorySlug Optional: The slug of a subcategory (e.g., 'tops') or subcategory item (e.g., 't-shirts') to filter products by.
-   * If categorySlug is also provided, this acts as a refinement within that category.
-   * If only subcategorySlug is provided, it acts as the primary category filter.
+   * @param subcategorySlug Optional: The slug of a subcategory (e.g., 'tops') to filter products by.
+   * @param subcategoryItemSlug Optional: The slug of a subcategory item (e.g., 't-shirts') to filter products by.
    * @returns An object containing filtered products, brands, price range, categories, genders, availabilities, and colors.
    */
-  async findAll(searchTerm?: string, categorySlug?: string, subcategorySlug?: string) {
-    let relevantEntityIds: string[] = [];
-    let filterAppliedButNoMatch = false; // New flag to specifically track if a slug was provided but no entity found
+  async findAll(
+    searchTerm?: string,
+    categorySlug?: string,
+    subcategorySlug?: string,
+    subcategoryItemSlug?: string,
+ ) {
 
-    // --- Step 1: Identify all relevant Category, Subcategory, and SubcategoryItem IDs ---
+    let subcategoryItemId: string | undefined;
+    let subcategoryId: string | undefined;
+    let categoryId: string | undefined;
+    let filterAppliedButNoMatch = false;
 
-    // Prioritize categorySlug if provided
-    if (categorySlug) {
+    // Prioritize subcategoryItemSlug if provided.
+    if (subcategoryItemSlug) {
+
+      const foundSubcategoryItem = await this.subcategoryItemRepository
+        .createQueryBuilder('subcategoryItem')
+        .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+        .leftJoinAndSelect('subcategory.category', 'category')
+        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemSlug })
+        .getOne();
+
+      if (foundSubcategoryItem) {
+        subcategoryItemId = foundSubcategoryItem.id;
+      } else {
+        filterAppliedButNoMatch = true;
+      }
+    } 
+    // If no subcategoryItemSlug, check for subcategorySlug.
+    else if (subcategorySlug) {
+      const foundSubcategory = await this.subcategoryRepository.findOne({
+        where: { name: subcategorySlug }, 
+        relations: ['subcategoryItems'],
+      });
+
+      if (foundSubcategory) {
+        subcategoryId = foundSubcategory.id;
+      } else {
+        filterAppliedButNoMatch = true;
+      }
+    } 
+    // If no subcategoryItemSlug or subcategorySlug, check for categorySlug.
+    else if (categorySlug) {
       const foundCategory = await this.categoryRepository.findOne({
-        where: { name: categorySlug },
-        relations: ['subcategories', 'subcategories.subcategoryItems']
+        where: { name: categorySlug }, 
+        relations: ['subcategories', 'subcategories.subcategoryItems'],
       });
 
       if (foundCategory) {
-        relevantEntityIds.push(foundCategory.id);
-        foundCategory.subcategories?.forEach(subcat => {
-          relevantEntityIds.push(subcat.id);
-          subcat.subcategoryItems?.forEach(item => relevantEntityIds.push(item.id));
-        });
+        categoryId = foundCategory.id;
       } else {
-        // If categorySlug was provided but no matching category, set flag and short-circuit further slug checks
         filterAppliedButNoMatch = true;
       }
     }
 
-    // If subcategorySlug is provided, and either no categorySlug was given OR
-    // a categorySlug was given but didn't result in any matches (meaning subcategorySlug might be the primary filter or a deeper search)
-    if (subcategorySlug && !filterAppliedButNoMatch) {
-      let tempSubCategoryIds: string[] = []; // Collect IDs found by subcategorySlug
-      let foundSpecificSubcategory = false; // Track if we found the subcategory by name
-
-      // Try to find as a Subcategory
-      const foundSubcategory = await this.subcategoryRepository.findOne({
-        where: { name: subcategorySlug },
-        relations: ['category', 'subcategoryItems']
-      });
-
-      if (foundSubcategory) {
-        tempSubCategoryIds.push(foundSubcategory.id);
-        foundSpecificSubcategory = true;
-        // Do NOT push foundSubcategory.category.id here if the intent is to strictly filter by the subcategory itself.
-        // Also, do NOT add all subcategoryItems to the relevantEntityIds if the user specifically asked for a subcategory (e.g., 'Tops')
-        // and not a subcategory item (e.g., 'T-Shirts').
-        // Instead, only add direct matches or relevant descendants if the intent is to include items *within* 'Tops'.
-        foundSubcategory.subcategoryItems?.forEach(item => tempSubCategoryIds.push(item.id));
-
-      } else {
-        // If not a Subcategory, try to find as a SubcategoryItem
-        const foundSubcategoryItem = await this.subcategoryItemRepository.findOne({
-          where: { name: subcategorySlug },
-          relations: ['subcategory', 'subcategory.category']
-        });
-
-        if (foundSubcategoryItem) {
-          tempSubCategoryIds.push(foundSubcategoryItem.id);
-          foundSpecificSubcategory = true;
-          // Again, only add direct relevant IDs.
-          // If a subcategoryItem is found, you might want to include its parent subcategory and category for context,
-          // but not necessarily for filtering if the query is strictly for the item.
-          // For now, let's keep it simple: if 'subcategory' means the subcategory itself OR its items.
-          if (foundSubcategoryItem.subcategory) {
-            tempSubCategoryIds.push(foundSubcategoryItem.subcategory.id);
-            if (foundSubcategoryItem.subcategory.category) {
-                // If you strictly want only products whose subcategory is 'tops', do NOT add category ID here.
-                // If 'tops' implies "anything under the 'Tops' subcategory", then it's fine.
-                // Based on your problem, you want *only* products with subcategory 'tops'.
-                // So, we should be very precise with what gets added to relevantEntityIds.
-            }
-          }
-        }
-      }
-
-      // Now, combine based on whether categorySlug was already successful or not
-      if (tempSubCategoryIds.length > 0) {
-        if (categorySlug && relevantEntityIds.length > 0) {
-            // If categorySlug already found relevant IDs, then subcategorySlug acts as a refinement.
-            // We need to ensure that the tempSubCategoryIds are actually descendants of the categorySlug.
-            // This means we should filter the products where *both* category and subcategory match.
-            // The current approach of adding all category, subcategory, and subcategory item IDs
-            // into a single `relevantEntityIds` array and then using `IN` for any of them is the root cause.
-            // You need to enforce a stricter hierarchy in the query itself.
-
-            // For now, let's just make relevantEntityIds specific to the subcategory and its items
-            // IF NO broader category filter was already established or is intended.
-            relevantEntityIds = tempSubCategoryIds; // Overwrite if subcategorySlug is the primary filter
-        } else if (!categorySlug) {
-            // If no categorySlug, subcategorySlug is the primary filter.
-            relevantEntityIds = tempSubCategoryIds;
-        }
-        // If categorySlug was present and *did* find entities, but subcategorySlug didn't lead to more specific filtering
-        // (i.e., it's not a direct descendant or refinement), then `relevantEntityIds` should remain as it was from categorySlug.
-        // This part of the logic needs careful consideration based on exact filtering requirements.
-        // For your problem, if you filter by `subcategory=tops`, you only want products with that direct subcategory.
-      } else {
-        // If subcategorySlug was provided but no match found for it (and categorySlug also failed or wasn't provided)
-        if (!categorySlug || relevantEntityIds.length === 0) {
-          filterAppliedButNoMatch = true;
-        }
-      }
-    }
-
-    relevantEntityIds = Array.from(new Set(relevantEntityIds)); // Ensure unique IDs
-
-    // If a slug filter (categorySlug or subcategorySlug) was applied,
-    // AND we explicitly determined no entities matched, return empty.
-    // This check is good.
-    if ((categorySlug || subcategorySlug) && filterAppliedButNoMatch && relevantEntityIds.length === 0) {
+    // If a specific filter was applied but no matching entity was found, return empty.
+    if ((categorySlug || subcategorySlug || subcategoryItemSlug) && filterAppliedButNoMatch) {
       return {
         products: [],
         brands: [],
@@ -448,12 +397,13 @@ export class ProductsService {
         category: [],
         genders: [],
         availabilities: [],
-        colors: []
+        colors: [],
       };
     }
 
     // --- Step 2: Build the main product query ---
-    const query = this.productRepository.createQueryBuilder('product')
+    const query = this.productRepository
+      .createQueryBuilder('product')
       .leftJoinAndSelect('product.company', 'company')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.colors', 'colors')
@@ -461,40 +411,21 @@ export class ProductsService {
       .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
-      .orderBy('images.sortOrder', 'ASC'); // Ensure images are sorted
+      .orderBy('images.sortOrder', 'ASC');
 
-    // Add filtering conditions based on the determined slugs
-    if (categorySlug) {
-        // If categorySlug is present, we filter by its ID or its descendants
-        const category = await this.categoryRepository.findOne({ where: { name: categorySlug } });
-        if (category) {
-            query.andWhere('category.id = :categoryId', { categoryId: category.id });
-        }
+    // Add the most specific filter first.
+    if (subcategoryItemId) {
+      query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
+    } else if (subcategoryId) {
+      query.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
+    } else if (categoryId) {
+      query.andWhere('category.id = :categoryId', { categoryId });
     }
 
-    if (subcategorySlug) {
-        // If subcategorySlug is present, we filter by its ID or its item's ID
-        const subcategory = await this.subcategoryRepository.findOne({ where: { name: subcategorySlug } });
-        const subcategoryItem = await this.subcategoryItemRepository.findOne({ where: { name: subcategorySlug } });
-
-        if (subcategory) {
-            // Filter by the subcategory ID
-            query.andWhere('subcategory.id = :subcategoryId', { subcategoryId: subcategory.id });
-        } else if (subcategoryItem) {
-            // Or filter by the subcategory item ID
-            query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId: subcategoryItem.id });
-        } else {
-            // If subcategorySlug was provided but neither a subcategory nor subcategory item matched its name,
-            // then no products should be returned for this filter.
-            query.andWhere('1 = 0'); // Ensures no results are returned
-        }
-    }
-
-    // Add search condition if searchTerm is provided
     if (searchTerm) {
       query.andWhere(
         '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
-        { searchTerm: `%${searchTerm}%` }
+        { searchTerm: `%${searchTerm}%` },
       );
     }
 
@@ -515,8 +446,9 @@ export class ProductsService {
 
     // Step 6: Get distinct brands relevant to the filtered products
     let formattedBrands: any[] = [];
-    if (products.length > 0 || (!searchTerm && !categorySlug && !subcategorySlug)) {
-      const brandsQuery = this.productRepository.createQueryBuilder('product')
+    if (products.length > 0 || (!searchTerm && !categorySlug && !subcategorySlug && !subcategoryItemSlug)) {
+      const brandsQuery = this.productRepository
+        .createQueryBuilder('product')
         .leftJoin('product.company', 'company')
         .leftJoin('product.subcategoryItem', 'subcategoryItem')
         .leftJoin('subcategoryItem.subcategory', 'subcategory')
@@ -525,16 +457,18 @@ export class ProductsService {
         .groupBy('company.id')
         .addGroupBy('company.entityName');
 
-      if (relevantEntityIds.length > 0) {
-        brandsQuery.andWhere(
-          '(category.id IN (:...relevantEntityIds) OR subcategory.id IN (:...relevantEntityIds) OR subcategoryItem.id IN (:...relevantEntityIds))',
-          { relevantEntityIds }
-        );
+      if (subcategoryItemId) {
+        brandsQuery.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
+      } else if (subcategoryId) {
+        brandsQuery.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
+      } else if (categoryId) {
+        brandsQuery.andWhere('category.id = :categoryId', { categoryId });
       }
+
       if (searchTerm) {
         brandsQuery.andWhere(
           '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
-          { searchTerm: `%${searchTerm}%` }
+          { searchTerm: `%${searchTerm}%` },
         );
       }
       const usedBrands = await brandsQuery.getRawMany();
@@ -547,23 +481,41 @@ export class ProductsService {
     // Step 7: Get ALL categories, then enrich them with subcategories/items from products
     const allCategories = await this.categoryRepository.find({
       relations: ['subcategories', 'subcategories.subcategoryItems'],
-      order: { name: 'ASC' }
+      order: { name: 'ASC' },
     });
 
     const categoriesForFacets = allCategories.map(cat => ({
       id: cat.id,
       name: cat.name,
-      subCategory: cat.subcategories ? cat.subcategories.map(subcat => ({
-        id: subcat.id,
-        name: subcat.name,
-        subcategoryItems: subcat.subcategoryItems ? subcat.subcategoryItems.map(item => ({
-          id: item.id,
-          name: item.name
-        })) : []
-      })) : []
+      subCategory: cat.subcategories
+        ? cat.subcategories.map(subcat => ({
+            id: subcat.id,
+            name: subcat.name,
+            subcategoryItems: subcat.subcategoryItems
+              ? subcat.subcategoryItems.map(item => ({
+                  id: item.id,
+                  name: item.name,
+                }))
+              : [],
+          }))
+        : [],
     }));
 
-    const productCategoryHierarchy = new Map<string, { id: string; name: string; subCategory: Map<string, { id: string; name: string; subcategoryItems: Map<string, { id: string; name: string }> }> }>();
+    const productCategoryHierarchy = new Map<
+      string,
+      {
+        id: string;
+        name: string;
+        subCategory: Map<
+          string,
+          {
+            id: string;
+            name: string;
+            subcategoryItems: Map<string, { id: string; name: string }>;
+          }
+        >;
+      }
+    >();
 
     for (const product of products) {
       const mainCategory = product.subcategoryItem?.subcategory?.category;
@@ -575,7 +527,7 @@ export class ProductsService {
           productCategoryHierarchy.set(mainCategory.id, {
             id: mainCategory.id,
             name: mainCategory.name,
-            subCategory: new Map()
+            subCategory: new Map(),
           });
         }
         const currentCategory = productCategoryHierarchy.get(mainCategory.id)!;
@@ -585,16 +537,18 @@ export class ProductsService {
             currentCategory.subCategory.set(subcategory.id, {
               id: subcategory.id,
               name: subcategory.name,
-              subcategoryItems: new Map()
+              subcategoryItems: new Map(),
             });
           }
-          const currentSubcategory = currentCategory.subCategory.get(subcategory.id)!;
+          const currentSubcategory = currentCategory.subCategory.get(
+            subcategory.id,
+          )!;
 
           if (subcategoryItem) {
             if (!currentSubcategory.subcategoryItems.has(subcategoryItem.id)) {
               currentSubcategory.subcategoryItems.set(subcategoryItem.id, {
                 id: subcategoryItem.id,
-                name: subcategoryItem.name
+                name: subcategoryItem.name,
               });
             }
           }
@@ -604,22 +558,25 @@ export class ProductsService {
 
     const finalCategoryFacets = categoriesForFacets.map(cat => {
       const enrichedCat = { ...cat };
-
       if (productCategoryHierarchy.has(cat.id)) {
         const productHierarchyCat = productCategoryHierarchy.get(cat.id)!;
         enrichedCat.subCategory = enrichedCat.subCategory.map(subcat => {
           const enrichedSubcat = { ...subcat };
           if (productHierarchyCat.subCategory.has(subcat.id)) {
-            const productHierarchySubcat = productHierarchyCat.subCategory.get(subcat.id)!;
-            enrichedSubcat.subcategoryItems = enrichedSubcat.subcategoryItems.filter(item =>
-              productHierarchySubcat.subcategoryItems.has(item.id)
+            const productHierarchySubcat = productHierarchyCat.subCategory.get(
+              subcat.id,
+            )!;
+            enrichedSubcat.subcategoryItems = enrichedSubcat.subcategoryItems.filter(
+              item => productHierarchySubcat.subcategoryItems.has(item.id),
             );
           } else {
             enrichedSubcat.subcategoryItems = [];
           }
           return enrichedSubcat;
         });
-        enrichedCat.subCategory = enrichedCat.subCategory.filter(subcat => subcat.subcategoryItems.length > 0);
+        enrichedCat.subCategory = enrichedCat.subCategory.filter(
+          subcat => subcat.subcategoryItems.length > 0,
+        );
       } else {
         enrichedCat.subCategory = [];
       }
@@ -627,28 +584,32 @@ export class ProductsService {
     });
 
     // Step 8: Get distinct genders from the filtered products
-    const productGendersResult = this.productRepository.createQueryBuilder('product')
+    const productGendersResult = this.productRepository
+      .createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
       .where('product.gender IS NOT NULL')
       .leftJoin('product.subcategoryItem', 'subcategoryItem')
       .leftJoin('subcategoryItem.subcategory', 'subcategory')
       .leftJoin('subcategory.category', 'category');
 
-    if (relevantEntityIds.length > 0) {
-      productGendersResult.andWhere(
-        '(category.id IN (:...relevantEntityIds) OR subcategory.id IN (:...relevantEntityIds) OR subcategoryItem.id IN (:...relevantEntityIds))',
-        { relevantEntityIds }
-      );
+    if (subcategoryItemId) {
+      productGendersResult.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
+    } else if (subcategoryId) {
+      productGendersResult.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
+    } else if (categoryId) {
+      productGendersResult.andWhere('category.id = :categoryId', { categoryId });
     }
+
     if (searchTerm) {
       productGendersResult.andWhere(
         '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
-        { searchTerm: `%${searchTerm}%` }
+        { searchTerm: `%${searchTerm}%` },
       );
     }
-    const distinctProductGenders = (await productGendersResult.getRawMany()).map(g => g.gender);
-
-    const allPossibleGenders = ['women', 'men', 'unisex' ];
+    const distinctProductGenders = (await productGendersResult.getRawMany()).map(
+      g => g.gender,
+    );
+    const allPossibleGenders = ['women', 'men', 'unisex'];
     const genders = Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
 
     // Step 9: Compute availability per product & collect distinct statuses
@@ -678,6 +639,7 @@ export class ProductsService {
     const colors = Array.from(allColorsMap.values());
 
     // Step 11: Return all computed data
+
     return {
       products,
       brands: formattedBrands,
@@ -685,7 +647,7 @@ export class ProductsService {
       category: finalCategoryFacets,
       genders,
       availabilities,
-      colors
+      colors,
     };
   }
 

@@ -21,16 +21,19 @@ const CATEGORIES_DATA = [
               { title: "T-Shirts", slug: "t-shirts" },
               { title: "Sweaters", slug: "sweaters" },
               { title: "Cardigans", slug: "cardigans" },
-            ],
-          },
-          {
-            title: "Shirts",
-            child: [
               { title: "Casual Shirts", slug: "casual-shirts" },
               { title: "Dress Shirts", slug: "dress-shirts" },
               { title: "Polo Shirts", slug: "polo-shirts" },
             ],
           },
+          // {
+          //   title: "Shirts",
+          //   child: [
+          //     { title: "Casual Shirts", slug: "casual-shirts" },
+          //     { title: "Dress Shirts", slug: "dress-shirts" },
+          //     { title: "Polo Shirts", slug: "polo-shirts" },
+          //   ],
+          // },
           {
             title: "Bottoms",
             child: [

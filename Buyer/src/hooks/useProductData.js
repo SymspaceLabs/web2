@@ -1,10 +1,10 @@
 // src/hooks/useProductData.js
+
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-/**
- * Custom hook to fetch product data and initialize filter options.
- */
+// Custom hook to fetch product data and initialize filter options
+
 export function useProductData() {
   const [data, setData] = useState({
     allProducts: [],
@@ -20,15 +20,13 @@ export function useProductData() {
   const [error, setError] = useState(null);
 
   const searchParams = useSearchParams();
-  const categoryParam = searchParams.get("category");
-  const subcategoryParam = searchParams.get("subcategory");
-
 
   useEffect(() => {
     setLoading(true);
 
-    // Construct query string only if category is present
-    const queryString = subcategoryParam ? `?subcategory=${encodeURIComponent(subcategoryParam)}` : "";  
+    // Build the query string with the correct priority
+    const params = new URLSearchParams(searchParams.toString());
+    const queryString = params.toString() ? `?${params.toString()}` : "";
 
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`)
       .then(res => {
@@ -51,7 +49,7 @@ export function useProductData() {
         setError(err.message);
       })
       .finally(() => setLoading(false));
-  }, [categoryParam]); // Refetch if category changes
-
+  }, [searchParams]); // Directly depend on the searchParams object
+  
   return { ...data, loading, error };
 }

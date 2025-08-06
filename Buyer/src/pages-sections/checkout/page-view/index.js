@@ -1,1 +1,1 @@
-export { default as CartPageView } from "./checkout";
+export { default as MultiStepCheckout } from "./checkout";

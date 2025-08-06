@@ -1,3 +1,5 @@
+// src/app/products/search/[...slug]/page.js (or wherever your root page is)
+
 // ==================================================================
 // PAGE VIEW COMPONENT
 // ==================================================================
@@ -19,7 +21,8 @@ export const metadata = {
 // ==================================================================
 
 export default async function ProductSearch({
-  params
+  params,
+  searchParams // ADD THIS LINE
 }) {
-  return <ProductSearchPageView slug={params.slug} />;
+  return <ProductSearchPageView slug={params.slug} searchParams={searchParams} />;
 }

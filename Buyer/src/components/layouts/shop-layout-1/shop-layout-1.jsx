@@ -4,34 +4,34 @@
 // Shop Layout 1 - Optimized for Faster Loading
 // ==============================================================
 
-import { Box, Card, useMediaQuery, useTheme } from "@mui/material";
-import { Navbar } from "@/components/navbar"; // Navbar is likely always visible, so direct import is fine
-import { Footer } from "@/components/footer"; // Footer can be dynamically imported if often not displayed or very heavy
+import { Box, Card, useTheme } from "@mui/material";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { usePathname } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
-import { SearchInput } from "@/components/search-box"; // SearchInput likely always visible
-import { Fragment, useCallback, useState, useEffect, Suspense, lazy } from "react"; // Added Suspense, lazy
+import { SearchInput } from "@/components/search-box";
+import { Fragment, useCallback, useState, useEffect, Suspense, lazy } from "react";
 import { HeaderProvider, useHeader } from "@/components/header/hooks/use-header";
 
-import Sticky from "@/components/sticky";
-import Header from "@/components/header"; // Header is likely always visible
-import LogoWithTitle from "@/components/LogoWithTitle"; // Used in login dialog, can be lazy loaded
-import NavigationList from "@/components/navbar/nav-list/nav-list"; // NavigationList likely always visible
-import LoginCartButtons from "@/components/header/components/login-cart-buttons"; // LoginCartButtons likely always visible
+import Sticky from "@/components/sticky"; // Re-added Sticky
+import Header from "@/components/header"; // This is the old Header, we're recreating it here.
+import LogoWithTitle from "@/components/LogoWithTitle";
+import NavigationList from "@/components/navbar/nav-list/nav-list";
+import LoginCartButtons from "@/components/header/components/login-cart-buttons";
+import SimpleHeader from "@/components/SimpleHeader";
 
 // Dynamically import components that are not always immediately visible
 const MiniCart = lazy(() => import("@/components/mini-cart").then(mod => ({ default: mod.MiniCart })));
 const MiniFavorite = lazy(() => import("@/components/favourites").then(mod => ({ default: mod.MiniFavorite })));
-const SymDrawer = lazy(() => import("@/components/custom-components/SymDrawer").then(mod => ({ default: mod.default }))); // Used by MiniCart and MiniFavorite
+const SymDrawer = lazy(() => import("@/components/custom-components/SymDrawer").then(mod => ({ default: mod.default })));
 const LoginBottom = lazy(() => import("@/pages-sections/sessions/components").then(mod => ({ default: mod.LoginBottom })));
 const LoginPageView = lazy(() => import("@/pages-sections/sessions/page-view").then(mod => ({ default: mod.LoginPageView })));
-const MobileNavigationBar = lazy(() => import("@/components/mobile-navigation").then(mod => ({ default: mod.MobileNavigationBar }))); // Only on mobile
-const SocialButtons = lazy(() => import("@/components/header/components/SocialButtons").then(mod => ({ default: mod.SocialButtons }))); // Part of login dialog
-const SymDialog = lazy(() => import("@/components/custom-components/SymDialog").then(mod => ({ default: mod.default }))); // Used for login and onboarding
+const MobileNavigationBar = lazy(() => import("@/components/mobile-navigation").then(mod => ({ default: mod.MobileNavigationBar })));
+const SocialButtons = lazy(() => import("@/components/header/components/SocialButtons").then(mod => ({ default: mod.SocialButtons })));
+const SymDialog = lazy(() => import("@/components/custom-components/SymDialog").then(mod => ({ default: mod.default })));
 const OnboardingDialog = lazy(() => import("@/components/custom-dialog/OnboardingDialog").then(mod => ({ default: mod.default })));
-
 
 // ==============================================================
 
@@ -49,26 +49,27 @@ function ShopLayoutContent({ children, noFooter }) {
 
   const [isDesktop, setIsDesktop] = useState(false);
 
-    useEffect(() => {
-      const handleResize = () => {
-        setIsDesktop(window.innerWidth >= 960); // match MUI md breakpoint
-      };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 960); // match MUI md breakpoint
+    };
 
-      handleResize(); // initial check
-      window.addEventListener("resize", handleResize);
+    handleResize(); // initial check
+    window.addEventListener("resize", handleResize);
 
-      return () => {
-        window.removeEventListener("resize", handleResize);
-      };
-    }, []);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
 
   const { isAuthenticated, user } = useAuth();
 
-  const [isFixed, setIsFixed] = useState(false);
+  const [isFixed, setIsFixed] = useState(false); // Re-added isFixed state
   const [showPopup, setShowPopup] = useState(false);
 
-  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
+  const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []); // Re-added toggleIsFixed callback
+
 
   const {
     dialogOpen,
@@ -79,6 +80,7 @@ function ShopLayoutContent({ children, noFooter }) {
     toggleFavouriteOpen
   } = useHeader();
 
+  // Re-define HEADER_SLOT for the recreated Header's midSlot
   const HEADER_SLOT = (
     <FlexBox width="90%" alignItems="center" justifyContent="space-between" gap={5}>
       <NavigationList />
@@ -113,14 +115,15 @@ function ShopLayoutContent({ children, noFooter }) {
 
   return (
     <Fragment>
+      {/* TOP HEADER || Category Navbar */}
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} sx={{ zIndex: 100 }}>
+        <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
+        <Navbar />
+      </Sticky>
 
       {/* TOP HEADER || Category Navbar */}
-      <Sticky fixedOn={0} onSticky={toggleIsFixed} sx={{ zIndex: 100 }}> 
-          <Header isFixed={isFixed} midSlot={HEADER_SLOT} />
-          <Navbar />
-      </Sticky>
-     
-
+      {/* <SimpleHeader /> */}
+      
       {/* BODY CONTENT */}
       {children}
 

@@ -7,49 +7,45 @@ export const categoriesSeedData = [
       {
         id: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
         name: 'Dresses',
+        gender: ['Female', 'Kids'],
         subcategoryItems: [
           { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", name: 'Casual Dresses' },
           { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", name: 'Formal Dresses' },
-          { id: "f62e9b7d-2b23-4666-8999-f2e2d4fc2647", name: 'Tank tops' },
           { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", name: 'Summer Dresses' },
         ],
       },
       {
         id: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
         name: 'Tops',
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", name: 'Blouses' },
           { id: "9d826402-b7be-4329-97fc-bd64934eb233", name: 'T-Shirts' },
           { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", name: 'Tank tops' },
           { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: 'Sweaters' },
           { id: "9e02f7ed-ff9d-44f7-827b-89c61e80f309", name: 'Cardigans' },
-        ],
-      },
-      {
-        id: "6e5b68be-82d7-4c77-8f57-2ae926fd0c0f",
-        name: 'Shirts',
-        subcategoryItems: [
           { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", name: 'Casual Shirts' },
           { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", name: 'Dress Shirts' },
-          { id: "86fdf9b0-b8e0-46bc-bf57-05a1ad25f848", name: 'T-Shirts' },
           { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", name: 'Polo Shirts' },
         ],
       },
       {
         id: "d7c1a1c3-cda0-4686-bf84-e70241e383b3",
         name: 'Bottoms',
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: 'Jeans' },
           { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: 'Trousers' },
           { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: 'Shorts' },
           { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", name: 'Skirts' },
           { id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2", name: 'Pants' },
-          { id: "d49a2804-0665-1m23-9d8e-1e7b423f26b2", name: 'Shorts' }
+          // { id: "d49a2804-0665-1m23-9d8e-1e7b423f26b2", name: 'Shorts' }
         ],
       },
       {
         id: "9c93e575-8e62-49de-a3d9-16b61c31be2d",
         name: 'Outerwear',
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "aba0a755-cf5d-4657-b017-8d014a539d43", name: 'Jackets' },
           { id: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", name: 'Coats' },
@@ -62,6 +58,7 @@ export const categoriesSeedData = [
       {
         id: "69e7fd69-6ec4-4792-94f2-b39e4826c96f",
         name: 'Activewear',
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", name: 'Leggings' },
           { id: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", name: 'Sport bras' },
@@ -72,18 +69,19 @@ export const categoriesSeedData = [
           { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", name: "Joggers" },
           { id: "a567e980-5f8d-47be-80e9-9a75e88d3f79", name: "Gym Shorts" },
           { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", name: "Sweatshirts" },
-          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear" },
-          { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Underwear & Socks" },
-          { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", name: "Boxers" },
-          { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", name: "Briefs" },
+          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear" }
+          // { id: "", name: "Underwear & Socks" },
+          // { id: "", name: "Boxers" },
+          // { id: "", name: "Briefs" },
         ],
       },
       {
         id: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
         name: "Intimates",
+        gender: ['Female'],
         subcategoryItems: [
-          { id: "53721c65-3ae6-4ba2-880c-1ab9f237ea0b", name: "Bras" },
-          { id: "e2947c54-531f-41a6-b3ef-9e5837b702e1", name: "Panties" },
+          // { id: "53721c65-3ae6-4ba2-880c-1ab9f237ea0b", name: "Bras" },
+          // { id: "e2947c54-531f-41a6-b3ef-9e5837b702e1", name: "Panties" },
           { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", name: "Lingerie" },
           { id: "faed8236-48bb-4591-98f7-e86b3ec6b2c8", name: "Sleepwear" },
         ],
@@ -91,6 +89,7 @@ export const categoriesSeedData = [
       {
         id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
         name: "Shoes",
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Sandals" },
           { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Flats" },
@@ -106,6 +105,7 @@ export const categoriesSeedData = [
       {
         id: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
         name: "Accessories",
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags" },
           { id: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6", name: "Jewelry" },
@@ -116,11 +116,23 @@ export const categoriesSeedData = [
           { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", name: "Sunglasses" },
           { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Watches" },
           { id: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", name: "Ties" },
-          { id: "47f92a35-8b2d-4a7f-8f94-32d9c847a5b1", name: "Belts" },
-          { id: "934e7c59-2a4d-4c37-93b2-847a2d8f9e5b", name: "Hats" },
+          // { id: "47f92a35-8b2d-4a7f-8f94-32d9c847a5b1", name: "Belts" },
+          // { id: "934e7c59-2a4d-4c37-93b2-847a2d8f9e5b", name: "Hats" },
           { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", name: "Wallets" },
-          { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", name: "Sunglasses" },
+          // { id: "", name: "Sunglasses" },
           { id: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3", name: 'Backpacks ' },
+        ],
+      },
+      {
+        id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934",
+        name: "Underwear & Socks",
+        gender: ['Male'],
+        subcategoryItems: [
+          { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", name: "Boxers" },
+          { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", name: "Briefs" },
+          { id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b", name: "Bras" },
+          { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", name: "Socks" },
+          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", name: "Sleepwear" }
         ],
       },
     ],
@@ -175,7 +187,7 @@ export const categoriesSeedData = [
       }
     ]
   },
-  
+
   //Furniture
   {
     id: "0ff2b00f-9b29-4e32-bbb1-d83d0a416b84",
@@ -260,6 +272,7 @@ export const categoriesSeedData = [
       {
         id: "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
         name: 'Beauty',
+        gender: ['Male', 'Female'], // Beauty products are often gendered
         subcategoryItems: [
           { id: "c550b6c6-1945-4b98-816c-cd4db7f931f3", name: "Skincare" },
           { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers" },
@@ -290,6 +303,7 @@ export const categoriesSeedData = [
       {
         id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
         name: "Health & Wellness",
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "81d3021a-13c4-48b0-bb20-658cd9f35a74", name: "Vitamins & Supplements" },
           { id: "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", name: "Medical Equipment" },
@@ -300,6 +314,7 @@ export const categoriesSeedData = [
       {
         id: "748647ab-51a8-462c-8c33-7da71598d748",
         name: "Personal Care",
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", name: "Oral Care" },
           { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes" },
@@ -313,6 +328,33 @@ export const categoriesSeedData = [
           { id: "d9bfb47c-f789-4688-9e67-5121dfc7c5c4", name: "Shaving Cream" },
           { id: "8dcfb41c-e2f6-456c-98df-8f16c4832e56", name: "Hair Removal Devices" }
         ]
+      },
+      {
+        id: "748647ab-51a8-462c-8c33-7da71598d748",
+        name: "Pet Supplies",
+        gender: ['Male', 'Female', 'Kids'],
+        subcategoryItems: [
+          { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", name: "Dog Supplies" },
+          { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Dog Food" },
+          { id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e", name: "Cat Supplies" },
+          { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Cat Food" },
+          { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Fish & Aquatic Pets" },
+          { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Small Animals" },
+          { id: "baf0a457-472f-47e4-b87c-65fa40464f78", name: "Birds" }
+        ]
+      },
+      {
+        id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
+        name: "Pet Supplies",
+        "subcategoryItems": [
+          { id: "e21c385b-f54e-4e89-a2a1-0e625d8c3f4a", name: "Dog Supplies" },
+          { id: "f5d02e1c-7f41-4c6e-8a9d-58b29f0c7e2d", name: "Dog Food" },
+          { id: "d8a1e9c7-5b3f-4e0d-b1b4-1c2a3f4e5c6b", name: "Cat Supplies" },
+          { id: "c4d3a2b1-6e5f-4a7b-8c9d-0f1e2a3b4c5d", name: "Cat Food" },
+          { id: "b0a5f7e8-1d2c-4a3b-9e8d-7f6c5b4a3d2e", name: "Fish & Aquatic Pets" },
+          { id: "9e8d7f6c-5b4a-3d2e-1c2a-3f4e5c6b7d8a", name: "Small Animals" },
+          { id: "1b2c3d4e-5f6a-7b8c-9d0e-a1b2c3d4e5f6", name: "Birds" }
+        ]
       }
     ],
   },
@@ -325,6 +367,7 @@ export const categoriesSeedData = [
       {
         name: "Baby",
         id: "467c4295-ba5f-4ae2-9b01-0e1565143bd3",
+        gender: ['Kids'],
         subcategoryItems: [
           { name: "Diapers", id: "4f3052f9-9fe0-4018-bf97-312f4d9b787f" },
           { name: "Disposable Diapers", id: "0e2f6805-e763-4f06-a6c1-99d5d8b967c0" },
@@ -345,6 +388,7 @@ export const categoriesSeedData = [
       {
         name: "Toys",
         id: "c2a3d6ab-a10e-497d-bbeb-0016b9df6c0c",
+        gender: ['Kids', 'Male', 'Female'], // Many toys can be for boys or girls
         subcategoryItems: [
           { name: "Educational", id: "9618f89b-31eb-43ea-8868-cb1cec5f3da1" },
           { name: "Learning Toys", id: "76c0495a-d857-4492-8dc6-392d6e599009" },
@@ -360,6 +404,7 @@ export const categoriesSeedData = [
       {
         name: "Kids Clothing",
         id: "bd65878e-63b5-4d97-9f67-480923f879e8",
+        gender: ['Kids'],
         subcategoryItems: [
           { name: "Girls", id: "8c47911c-bc1d-4733-81be-c8179bb57847" },
           { name: "Boys", id: "f29b84a1-a268-40d0-805e-d4d169b390d4" }
@@ -370,7 +415,7 @@ export const categoriesSeedData = [
 
   //Groceries
   {
-    name: "Groceries & Gourmet Foods",
+    name: "Recipes",
     id: "d4227a0d-0707-4fbb-aae7-56e71fc33301",
     subcategories: [
       {
@@ -465,6 +510,7 @@ export const categoriesSeedData = [
       {
         name: "Team Sports",
         id: "c0e70967-d22b-4525-8b27-3bdef606e289",
+        gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { name: "Soccer", id: "b3241e97-2e9c-45b2-97a4-c2602256604a" },
           { name: "Balls", id: "7b946045-4001-4cd6-8c4d-13e86da47426" },
@@ -548,6 +594,7 @@ export const categoriesSeedData = [
   {
     name: "Maternity & Prenatal Care",
     id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
+    gender: ['Female'],
     subcategories: [
       {
         name: "Maternity Clothing",
@@ -556,7 +603,7 @@ export const categoriesSeedData = [
           { name: "Dresses", id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7" },
           { name: "Tops", id: "688b69a1-612c-4bd1-8451-0d735e64b7d4" },
           { name: "Bottoms", id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f" },
-          { name: "Lingerie", id: "04ab43b1-9872-4cb9-9d3d-13a90b6bd0b1" }
+          // { name: "Lingerie", id: "04ab43b1-9872-4cb9-9d3d-13a90b6bd0b1" }
         ]
       },
       {
@@ -590,6 +637,7 @@ export const categoriesSeedData = [
       {
         id: "412ec064-8b2e-4521-8c56-f3a742854324",
         name: "Health & Wellness",
+        gender: ['Male', 'Female'], // Many products in senior care can be gendered
         subcategoryItems: [
           { id: "c3747f8f-50c7-4168-b3c2-cc8a328e40b2", name: "Supplements" },
           { id: "73a41941-891e-403e-b53f-ded234949ba8", name: "Monitors" },
@@ -600,6 +648,7 @@ export const categoriesSeedData = [
       {
         id: "4e79cf49-84e3-49eb-8453-b9ad412b5d9d",
         name: "Comfort & Care",
+        gender: ['Male', 'Female'],
         subcategoryItems: [
           { id: "3e2cf0cb-0db0-45be-98c7-585da5d5a48a", name: "Recliners" },
           { id: "6a79b8f5-3e37-454e-8fc4-de8efb407254", name: "Cushions" },

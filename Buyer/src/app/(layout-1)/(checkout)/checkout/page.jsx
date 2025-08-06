@@ -2,7 +2,7 @@
 // Checkout Page
 // ==========================================================
 
-import { CartPageView } from "@/pages-sections/checkout/page-view";
+import { MultiStepCheckout } from "@/pages-sections/checkout/page-view";
 
 export const metadata = {
   title: "Checkout",
@@ -15,5 +15,5 @@ export const metadata = {
 };
 
 export default function Cart() {
-  return <CartPageView />;
+  return <MultiStepCheckout />;
 }

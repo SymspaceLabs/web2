@@ -6,7 +6,7 @@ import { arraysEqual } from "@/utils/arraysEqual"; // Import the helper function
 /**
  * Custom hook to manage product filtering logic and URL synchronization.
  * @param {object} initialData - Initial product data (allProducts, allBrands, etc.) from useProductData.
- * @param {URLSearchParams} searchParams - Current URL search parameters from useSearchParams.
+ * @param {object} urlSearchParamsObj - Current URL search parameters as a plain object.
  * @returns {{
  * filterState: object,
  * setFilterState: function,
@@ -14,9 +14,22 @@ import { arraysEqual } from "@/utils/arraysEqual"; // Import the helper function
  * handleResetAllFilters: function,
  * }} Filter state and handlers.
  */
-export function useProductFilters(initialData, searchParams) {
+export function useProductFilters(initialData, urlSearchParamsObj) {
   const router = useRouter();
   const isInitialLoadRef = useRef(true);
+
+  // Create a URLSearchParams object from the prop for easier API usage
+  const searchParams = new URLSearchParams();
+  if (urlSearchParamsObj) {
+    Object.keys(urlSearchParamsObj).forEach(key => {
+      const value = urlSearchParamsObj[key];
+      if (Array.isArray(value)) {
+        value.forEach(v => searchParams.append(key, v));
+      } else {
+        searchParams.append(key, value);
+      }
+    });
+  }
 
   // Initialize filterState with default values and initialData's limits
   const [filterState, setFilterState] = useState(() => ({
@@ -26,7 +39,7 @@ export function useProductFilters(initialData, searchParams) {
     checkedCategoryIds: [],
     selectedAvailabilities: [],
     selectedColors: [],
-    ...initialData // Include all initial data for filter options
+    ...initialData, // Include all initial data for filter options
   }));
 
   // Effect to initialize filters from URL on initial load and when initialData becomes available
@@ -37,6 +50,7 @@ export function useProductFilters(initialData, searchParams) {
         const currentGenderQuery = searchParams.getAll("gender").map(g => g.toLowerCase());
         const validGenders = initialData.allGenders;
         const filteredQueryGenders = currentGenderQuery.filter(g => validGenders.includes(g));
+
         const currentCategoryQuery = searchParams.getAll("category").map(c => c.toLowerCase());
         const initialCheckedCategoryIds = [];
         const initialCheckedCategoryNames = new Set(currentCategoryQuery);
@@ -69,7 +83,6 @@ export function useProductFilters(initialData, searchParams) {
       isInitialLoadRef.current = false; // Mark initial load as complete
     }
   }, [initialData, searchParams]); // Dependencies: initialData (for data availability) and searchParams (for URL values)
-
 
   /**
    * Constructs the target URL query string based on the current filterState.
@@ -109,19 +122,19 @@ export function useProductFilters(initialData, searchParams) {
     const currentUrlParams = new URLSearchParams(searchParams.toString());
     Array.from(currentUrlParams.keys()).forEach(key => {
       if (!['gender', 'category', 'brand', 'availability', 'color', 'price_min', 'price_max'].includes(key)) {
-          currentUrlParams.getAll(key).forEach(val => params.append(key, val));
+        currentUrlParams.getAll(key).forEach(val => params.append(key, val));
       }
     });
 
     return params.toString();
   }, [
-      filterState.selectedGenders,
-      filterState.checkedCategoryIds,
-      filterState.category,
-      filterState.selectedBrands,
-      filterState.selectedAvailabilities,
-      filterState.selectedColors,
-      searchParams
+    filterState.selectedGenders,
+    filterState.checkedCategoryIds,
+    filterState.category,
+    filterState.selectedBrands,
+    filterState.selectedAvailabilities,
+    filterState.selectedColors,
+    searchParams
   ]);
 
   // URL synchronization effect

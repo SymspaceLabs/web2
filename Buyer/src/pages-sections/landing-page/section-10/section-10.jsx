@@ -8,7 +8,6 @@ import { motion, useInView } from 'framer-motion';
 import { Paragraph } from '@/components/Typography';
 import { useRef, useState, useEffect } from 'react';
 import { Box, Container, Grid } from '@mui/material';
-import HandBagCanvas from '@/components/HandBagCanvas';
 import { SymGLTFViewer } from '@/components/custom-components';
 
 // ====================================================

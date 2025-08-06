@@ -27,7 +27,19 @@ export default function PaymentSummary({
 }) {
 
   const { state: cartState } = useCart();
-  const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+  // const getTotalPrice = () => cartState.cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+
+  // Updated getTotalPrice function with the new logic
+  const getTotalPrice = () => {
+    return cartState.cart.reduce((acc, item) => {
+      // Check if a salePrice exists and is valid (less than the original price)
+      const priceToUse = (item.salePrice > 0 && item.salePrice < item.price) 
+        ? item.salePrice 
+        : item.price;
+        
+      return acc + priceToUse * item.qty;
+    }, 0);
+  };
 
   const subtotal = getTotalPrice();
   const shipping = 4.99; // Assuming fixed shipping

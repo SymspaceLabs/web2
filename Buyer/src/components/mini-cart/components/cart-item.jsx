@@ -43,10 +43,10 @@ export default function MiniCartItem({
         </Link>
 
         <FlexBox gap={2}>
-          <Paragraph mt={0.5} color={salePriceColor} sx={{textDecoration:'line-through'}}>
+          <Paragraph  color={textColor} mt={0.5}>
             {currency(item.salePrice)}
           </Paragraph>
-          <Paragraph color={textColor} mt={0.5}> {/* Apply dynamic text color */}
+          <Paragraph color={salePriceColor} sx={{ textDecoration: 'line-through' }} mt={0.5}>
             {currency(item.price)}
           </Paragraph>
         </FlexBox>

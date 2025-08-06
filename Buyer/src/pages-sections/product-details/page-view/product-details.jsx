@@ -68,7 +68,7 @@ export default function ProductDetailsPageView({slug}) {
   }
 
   return (
-    <Box sx={{ position: 'relative', overflow: 'hidden', background: '#FFF', display: 'flex', justifyContent: 'center' }}>
+    <Box sx={{ position: 'relative', overflow: 'hidden', background: '#FFF', display: 'flex', justifyContent: 'center', pt: {xs:'100px', sm:'100px', md:'200px'} }}>
       {/* Animated blob background elements */}
       {/* Blob 1: Hero Section Left */}
       <BlobBox top="-5%" right="-10%" background="rgba(0,0,0,0.5)" widthHeight='500px' displayNoneMobile={true} /> {/* BLACK */}

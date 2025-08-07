@@ -576,16 +576,9 @@ export class AuthService {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const publicKey = await this.getApplePublicKey(decodedHeader.header.kid);
-
     try {
-      const verifiedPayload:any = jwt.verify(idToken, publicKey, {
-          algorithms: ['RS256'],
-          issuer: 'https://appleid.apple.com',
-          audience: 'com.symspacelabs.sign-in-web', // Replace with your client ID
-      });
-
-      const { email } = verifiedPayload;
+      const appleUser =  await this.parseJWT(idToken);
+      const { email } = appleUser;
 
       let user = await this.usersRepository.findOne({
         where: { email },
@@ -594,9 +587,9 @@ export class AuthService {
       if (!user) {
         user = this.usersRepository.create({
             email: email,
-            firstName: verifiedPayload.firstName || '',
-            lastName: verifiedPayload.lastName || '',
-            avatar: verifiedPayload.picture || '',
+            firstName: appleUser.firstName || '',
+            lastName: appleUser.lastName || '',
+            avatar: appleUser.picture || '',
             isVerified: true,
             role: 'buyer',
             password: '',

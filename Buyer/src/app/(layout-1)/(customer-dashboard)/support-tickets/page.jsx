@@ -2,7 +2,7 @@ import { TicketsPageView } from "pages-sections/customer-dashboard/support-ticke
 
 // import api from "utils/__api__/ticket";
 export const metadata = {
-  title: "Support Tickets  E-commerce Template",
+  title: "Support Tickets",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

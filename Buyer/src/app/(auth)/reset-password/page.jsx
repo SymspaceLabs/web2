@@ -1,6 +1,6 @@
 import { ResetPasswordPageView } from "pages-sections/sessions/page-view";
 export const metadata = {
-  title: "Reset Password  E-commerce Template",
+  title: "Reset Password",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

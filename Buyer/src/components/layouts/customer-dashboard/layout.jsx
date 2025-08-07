@@ -21,7 +21,7 @@ export default function CustomerDashboardLayout({
   children
 }) {
   return (
-    <Container className="mt-2 mb-2">
+    <Container className="mt-2 mb-2" sx={{ paddingTop: {xs:'100px', sm:'100px', md:'150px'} }}>
       <Grid container spacing={3}>
         <Grid item md={3} xs={12} sx={{ display: {xs: "none", sm: "none", md: "block"} }}>
           <MainContainer>

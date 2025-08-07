@@ -5,7 +5,7 @@
 import { OrderConfirmationPageView } from "pages-sections/order-confirmation";
 
 export const metadata = {
-  title: "Order Confirmation  E-commerce Template",
+  title: "Order Confirmation",
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",

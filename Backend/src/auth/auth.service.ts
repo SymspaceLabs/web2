@@ -582,7 +582,7 @@ export class AuthService {
       const verifiedPayload:any = jwt.verify(idToken, publicKey, {
           algorithms: ['RS256'],
           issuer: 'https://appleid.apple.com',
-          audience: 'com.symspacelabs.si', // Replace with your client ID
+          audience: 'com.symspacelabs.sign-in-web', // Replace with your client ID
       });
 
       const { email } = verifiedPayload;

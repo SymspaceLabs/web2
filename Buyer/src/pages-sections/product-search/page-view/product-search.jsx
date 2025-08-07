@@ -138,7 +138,6 @@ export default function ProductSearchPageView({ searchParams }) {
     setOpenDrawer(open);
   };
 
-
   // Props object for FilterControls component, derived from consolidated filterState
   const filterControlProps = {
     allBrands: filterState.allBrands,

@@ -18,13 +18,16 @@ const AppleSigninButton = () => {
   // Get Next.js router instance
   const router = useRouter();
 
+  const currentHost = window.location.origin;
+  console.log(currentHost);
+
   // --- Initialize AppleID JS SDK on mount ---
   useEffect(() => {
     if (window.AppleID) {
       window.AppleID.auth.init({
         clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // Apple client ID from env
         scope: "email name", // Request email and name
-        redirectURI: process.env.NEXT_PUBLIC_APPLE_CALLBACK_URL, // Redirect URI from env
+        redirectURI: `${currentHost}`, // Redirect URI from env
         state: "state-value", // Optional state
         usePopup: true, // Use popup for login
       });      

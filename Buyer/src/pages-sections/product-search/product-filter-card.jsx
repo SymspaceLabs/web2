@@ -23,36 +23,42 @@ import { CategoryAccordion } from "./category-accordion"; // LOCAL COMPONENT
 // =================================================================
 
 export default function ProductFilterCard({
-  allBrands,
-  selectedBrands,
-  setSelectedBrands,
-  priceRange,
-  setPriceRange,
-  priceLimits,
-  category,
-  checkedCategoryIds, // Prop from ProductSearchPageView
-  onCategoryFilterChange, // Prop from ProductSearchPageView to handle category toggles
-  allGenders,
-  selectedGenders,
-  onGenderFilterChange,
-  allAvailabilities,
-  selectedAvailabilities,
-  onAvailabilityFilterChange, // Changed from setSelectedAvailabilities
-  allColors,
-  selectedColors,
-  onColorFilterChange, // Changed from setSelectedColors
-  onClearAllFilters, // NEW PROP: Function from parent to clear all filters
+  allBrands, // Array of all available brands
+  selectedBrands, // Array of currently selected brands
+  setSelectedBrands, // Function to update selected brands
+  priceRange, // [min, max] price range selected
+  setPriceRange, // Function to update price range
+  priceLimits, // [min, max] allowed price values
+  category, // Category tree data
+  checkedCategoryIds, // Array of selected category IDs
+  onCategoryFilterChange, // Function to handle category selection
+  allGenders, // Array of all gender options
+  selectedGenders, // Array of selected genders
+  onGenderFilterChange, // Function to handle gender selection
+  allAvailabilities, // Array of all availability options
+  selectedAvailabilities, // Array of selected availabilities
+  onAvailabilityFilterChange, // Function to handle availability selection
+  allColors, // Array of all color options
+  selectedColors, // Array of selected colors
+  onColorFilterChange, // Function to handle color selection
+  onClearAllFilters, // Function to clear all filters
 }) {
 
+  // ADDED DEBUG LOGS
+  console.log("================== Product Filter Card Debug ==================");
+  console.log("Passed `selectedBrands`:", selectedBrands);
+  console.log("Passed `selectedGenders`:", selectedGenders);
+  console.log("Passed `checkedCategoryIds`:", checkedCategoryIds);
+  console.log("Passed `selectedAvailabilities`:", selectedAvailabilities);
+  console.log("Passed `selectedColors`:", selectedColors);
+  console.log("===============================================================");
+
+  // Handles price slider and input changes
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);
   };
 
-  /**
-   * Handles the click event for the "Clear Filters" button.
-   * This now delegates the full filter reset logic to the parent component
-   * via the `onClearAllFilters` prop.
-   */
+  // Handles "Clear Filters" button click
   const handleClearFilters = () => {
     if (typeof onClearAllFilters === 'function') {
       onClearAllFilters();
@@ -62,9 +68,8 @@ export default function ProductFilterCard({
   };
 
   return (
-    <Box pt={{sm:7}}>
-
-      {/* GENDER FILTER */}
+    <Box pt={{ sm: 7 }}>
+      {/* GENDER FILTER: Checkbox list for gender selection */}
       <H6 mb={1.25}>Gender</H6>
       <Box display="flex" flexDirection="column">
         {allGenders.map((g) => {
@@ -78,7 +83,7 @@ export default function ProductFilterCard({
                   size="small"
                   checked={isChecked}
                   onChange={() => {
-                    // This calls the generic handleFilterChange in the parent
+                    // Calls parent handler to update gender filter
                     if (onGenderFilterChange) {
                       onGenderFilterChange(g, !isChecked);
                     }
@@ -95,6 +100,7 @@ export default function ProductFilterCard({
       {/* CATEGORY VARIANT FILTER */}
       <H6 mb={1.25}>Categories</H6>
 
+      {/* CATEGORY ACCORDION || CATEGORIES ACCORDION*/}
       <CategoryAccordion
         data={category}
         checkedCategoryIds={checkedCategoryIds}
@@ -118,6 +124,7 @@ export default function ProductFilterCard({
       </Box>
 
       <FlexBetween>
+        {/* Minimum price input */}
         <TextField
           placeholder="0"
           type="number"
@@ -131,6 +138,7 @@ export default function ProductFilterCard({
         <H5 color="grey.600" px={1}>
           -
         </H5>
+        {/* Maximum price input */}
         <TextField
           placeholder="250"
           type="number"
@@ -145,12 +153,12 @@ export default function ProductFilterCard({
 
       <Box component={Divider} my={3} />
 
-      {/* BRAND VARIANT FILTER */}
+      {/* BRAND VARIANT FILTER: Checkbox list for brand selection */}
       <H6 mb={2}>Brands</H6>
-      {allBrands.map((item,index) => {
+      {allBrands.map((item, index) => {
         const isChecked = Array.isArray(selectedBrands) && selectedBrands.some(brand => brand.id === item.id);
         const handleBrandChange = () => {
-          // This calls the specific setSelectedBrands prop from the parent
+          // Calls parent handler to update brand filter
           if (typeof setSelectedBrands === 'function') {
             if (isChecked) {
               setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
@@ -177,10 +185,9 @@ export default function ProductFilterCard({
         );
       })}
 
-
       <Box component={Divider} my={3} />
 
-      {/* AVAILABILITY FILTER */}
+      {/* AVAILABILITY FILTER: Checkbox list for availability selection */}
       <H6 mb={1.25}>Availability</H6>
       <Box display="flex" flexDirection="column">
         {allAvailabilities.map((avail) => {
@@ -194,7 +201,7 @@ export default function ProductFilterCard({
                   size="small"
                   checked={isChecked}
                   onChange={() => {
-                    // Use the new onAvailabilityFilterChange prop from parent
+                    // Calls parent handler to update availability filter
                     if (onAvailabilityFilterChange) {
                       onAvailabilityFilterChange(avail, !isChecked);
                     }
@@ -202,14 +209,13 @@ export default function ProductFilterCard({
                 />
               }
             />
-          )
+          );
         })}
       </Box>
 
-
       <Box component={Divider} my={3} />
 
-      {/* COLORS VARIANT FILTER */}
+      {/* COLORS VARIANT FILTER: Checkbox list with color swatches */}
       <H6 mb={2}>Colors</H6>
       <FormGroup>
         {allColors.map((color) => (
@@ -228,6 +234,7 @@ export default function ProductFilterCard({
             }
             label={
               <Box display="flex" alignItems="center">
+                {/* Color swatch */}
                 <Box
                   sx={{
                     width: 20,
@@ -246,7 +253,6 @@ export default function ProductFilterCard({
       </FormGroup>
 
       <Box component={Divider} my={3} />
-
 
       {/* RATINGS FILTER */}
       <H6 mb={2}>Ratings</H6>

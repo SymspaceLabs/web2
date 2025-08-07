@@ -1,68 +1,53 @@
-// ==============================
-// Apple Sign-In Button Component
-// ==============================
+import { useEffect, useState } from "react";
+import { useAuth } from '../../../contexts/AuthContext';
+import Button from "@mui/material/Button";
+import axios from 'axios';
+import { useRouter } from "next/navigation";
 
-// --- React and App Context Imports ---
-import { useEffect } from "react"; // React hook for side effects
-import { useAuth } from '../../../contexts/AuthContext'; // Custom hook for authentication context
-
-// --- UI and Utility Imports ---
-import Button from "@mui/material/Button"; // MUI Button component
-import axios from 'axios'; // For HTTP requests
-import { useRouter } from "next/navigation"; // Next.js router for navigation
-
-// --- Main Apple Sign-In Button Component ---
 const AppleSigninButton = () => {
-  // Get authentication handler from context
   const { handleAuthResponse } = useAuth();
-  // Get Next.js router instance
   const router = useRouter();
 
-  const currentHost = window.location.origin;
+  // ✅ New state to store currentHost
+  const [currentHost, setCurrentHost] = useState("");
   console.log(currentHost);
 
-  // --- Initialize AppleID JS SDK on mount ---
+  // ✅ This only runs on client, so window is safe
   useEffect(() => {
-    if (window.AppleID) {
-      window.AppleID.auth.init({
-        clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID, // Apple client ID from env
-        scope: "email name", // Request email and name
-        redirectURI: `${currentHost}`, // Redirect URI from env
-        state: "state-value", // Optional state
-        usePopup: true, // Use popup for login
-      });      
+    if (typeof window !== "undefined") {
+      setCurrentHost(window.location.origin);
+
+      if (window.AppleID) {
+        window.AppleID.auth.init({
+          clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
+          scope: "email name",
+          redirectURI: window.location.origin, // or use currentHost
+          state: "state-value",
+          usePopup: true,
+        });
+      }
     }
   }, []);
 
-  // --- Handle Apple Sign-In Response ---
   const handleAppleResponse = async (response) => {
     try {
-      // Extract id_token from Apple response
       const { id_token } = response.authorization;
-    
-      // Send idToken to backend for authentication
       const result = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/login/apple`,
         { idToken: id_token }
       );
-    
-      // Save user and token in auth context
+
       handleAuthResponse(result.data.user, result.data.accessToken);
-  
-      // Redirect user to marketplace after login
       router.push('/marketplace');
     } catch (error) {
-      // Log errors for debugging
       console.error("Apple login failed:", error.response?.data || error.message);
     }
   };
-  
-  // --- Render Apple Sign-In Button ---
+
   return (
     <Button 
       onClick={() => {
-        // Trigger Apple sign-in popup
-        if (window.AppleID) {
+        if (typeof window !== "undefined" && window.AppleID) {
           window.AppleID.auth.signIn().then(handleAppleResponse).catch(console.error);
         }
       }}
@@ -82,7 +67,6 @@ const AppleSigninButton = () => {
         <img
           src="/assets/images/icons/apple-white.svg"
           style={{
-            width: "100%",
             width: 25,
             height: "auto"
           }}

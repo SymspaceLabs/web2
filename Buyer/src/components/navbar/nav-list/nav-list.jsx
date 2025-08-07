@@ -7,7 +7,7 @@ import navigation from "@/data/navbarNavigation"; // STYLED COMPONENTS
 import SymCard from "@/components/custom-components/SymCard"; // LOCAL CUSTOM COMPONENTS
 import NavItemChild from "./nav-item-child";
 import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown"; // GLOBAL CUSTOM COMPONENTS
-import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper, elementalEndFont } from "../styles"; // DATA TYPES
+import { StyledNavLink, NAV_LINK_STYLES, ChildNavListWrapper } from "../styles"; // DATA TYPES
 
 export default function NavigationList() {
   const renderNestedNav = (list = [], isRoot = false) => {
@@ -93,7 +93,7 @@ export default function NavigationList() {
               key={nav.title} 
               sx={{ 
                 background:'#000',
-                ...elementalEndFont,
+                // ...elementalEndFont,
               }}>
               {renderNestedNav(nav.child)}
             </NavItemChild>

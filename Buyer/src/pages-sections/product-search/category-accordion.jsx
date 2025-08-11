@@ -14,8 +14,6 @@ import AccordionHeader from "@/components/accordion/accordion-header";
 import CATEGORIES_DATA from "@/data/categories";
 
 export const CategoryAccordion = ({ checkedCategoryIds, onCategoryToggle }) => {
-  // ADDED DEBUG LINE HERE
-  console.log("Current checkedCategoryIds:", checkedCategoryIds);
 
   // State to manage which categories are open
   const [openCategories, setOpenCategories] = useState({});

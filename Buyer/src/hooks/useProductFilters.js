@@ -51,11 +51,19 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
         const validGenders = initialData.allGenders;
         const filteredQueryGenders = currentGenderQuery.filter(g => validGenders.includes(g));
 
+        // Extract unique subcategory item IDs from the fetched products
+        const productSubcategoryIds = [...new Set(
+          initialData.allProducts
+            .filter(product => product.subcategoryItem?.id) // Ensure subcategoryItem exists
+            .map(product => product.subcategoryItem.id)
+        )];
+
         const currentCategoryQuery = searchParams.getAll("category").map(c => c.toLowerCase());
-        const initialCheckedCategoryIds = [];
+        let initialCheckedCategoryIds = []; // Use 'let' as it will be reassigned
         const initialCheckedCategoryNames = new Set(currentCategoryQuery);
 
         if (currentCategoryQuery.length > 0 && initialData.category) {
+          // If category names are present in the URL, derive IDs from them
           initialData.category.forEach(cat => {
             cat.subCategory?.forEach(sub => {
               if (sub.subcategoryItem && initialCheckedCategoryNames.has(sub.subcategoryItem.name.toLowerCase())) {
@@ -63,12 +71,15 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
               }
             });
           });
+        } else {
+          // If no category names in URL, use the subcategory IDs from the fetched products
+          initialCheckedCategoryIds = productSubcategoryIds;
         }
 
         return {
           ...prevState,
           selectedGenders: filteredQueryGenders,
-          checkedCategoryIds: initialCheckedCategoryIds,
+          checkedCategoryIds: initialCheckedCategoryIds, // THIS IS THE KEY CHANGE
           priceRange: initialData.priceLimits, // Ensure price range is reset to initial limits
           // Also ensure allData properties from initialData are correctly set
           allProducts: initialData.allProducts,

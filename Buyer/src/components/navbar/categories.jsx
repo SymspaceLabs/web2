@@ -8,7 +8,7 @@ import { IoGrid } from "react-icons/io5";
 import NavItemChild from "./nav-list/nav-item-child";
 import SymCard from "../custom-components/SymCard";
 import styled from "@mui/material/styles/styled";
-import CATEGORIES_DATA from "@/data/categories"
+import CATEGORIES_DATA from "@/data/categories";
 
 export default function Categories() {
   return (
@@ -19,13 +19,14 @@ export default function Categories() {
 }
 
 function NavigationList() {
-  const renderNestedNav = (list = [], isRoot = false) => {
+  const renderNestedNav = (list = [], isRoot = false, level = 0) => {
     return list.map(nav => {
-      if (isRoot) {
-        if (nav.child) {
+      // Check if the current item has a child array.
+      if (nav.child) {
+        if (isRoot) {
           return (
             <FlexBox
-              sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } }}}
+              sx={{ "&:hover": { "& > .child-nav-item": { display: "block" } } }}
               key={nav.title}
               alignItems="center"
               position="relative"
@@ -37,41 +38,40 @@ function NavigationList() {
                   Categories
                 </H1>
               </CategoryMenuButton>
-
               <ChildNavListWrapper className="child-nav-item">
-                <SymCard elevation={3} sx={{ mt: 2.5, ml: 20, border:'1px solid #FFF', py: 1, minWidth: 100 }}>
-                  {renderNestedNav(nav.child)}
+                <SymCard elevation={3} sx={{ mt: 2.5, ml: 20, border: '1px solid #FFF', py: 1, minWidth: 100 }}>
+                  {renderNestedNav(nav.child, false, level + 1)}
                 </SymCard>
               </ChildNavListWrapper>
             </FlexBox>
           );
-        }
-      } else {
-        if (nav.slug) {
+        } else {
+          // Pass the level prop to NavItemChild
           return (
-            <NavLink href={`/products/search/all?subcategoryItem=${nav.slug}`} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" }, }}>
-              <MenuItem>
-                {nav.title}
-              </MenuItem>
-            </NavLink>
-          )
-        }
-
-        if (nav.child) {
-          return (
-            <NavItemChild nav={nav} key={nav.title}>
-              {renderNestedNav(nav.child)}
+            <NavItemChild nav={nav} key={nav.title} level={level}>
+              {/* This is the key: NavItemChild must also call renderNestedNav with an incremented level */}
+              {renderNestedNav(nav.child, false, level + 1)}
             </NavItemChild>
           );
         }
+      } else if (nav.slug) {
+        // This is the final link. The check for the level happens here.
+        const isFourthLevel = level === 3;
+        const subcategoryItemQuery = !isFourthLevel ? `?subcategoryItemChild=${nav.slug}` : `?subcategoryItem=${nav.slug}`;
+        
+        return (
+          <NavLink href={`/products/search/all${subcategoryItemQuery}`} key={nav.title} sx={{ "&:hover": { backgroundColor: "#000" } }}>
+            <MenuItem>
+              {nav.title}
+            </MenuItem>
+          </NavLink>
+        );
       }
     });
   };
 
-  return <FlexBox gap={4}>{renderNestedNav(CATEGORIES_DATA, true)}</FlexBox>;
+  return <FlexBox gap={4}>{renderNestedNav(CATEGORIES_DATA, true, 0)}</FlexBox>;
 }
-
-
 
 const Wrapper = styled("div", {
   shouldForwardProp: prop => prop !== "open"
@@ -82,4 +82,3 @@ const Wrapper = styled("div", {
     transition: "all 250ms ease-in-out",
   }
 }));
-

@@ -47,6 +47,7 @@ import { PromoCodesModule } from './promo-codes/promo-codes.module';
 import { UserPromoCodesModule } from './user-promo-codes/user-promo-codes.module';
 import { BraintreeModule } from './braintree/braintree.module';
 import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
+import { SubcategoryItemChildModule } from './subcategory-item-child/subcategory-item-child.module';
 
 @Module({
   imports: [
@@ -109,7 +110,8 @@ import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
     PromoCodesModule,
     UserPromoCodesModule,
     BraintreeModule,
-    PaymentMethodsModule
+    PaymentMethodsModule,
+    SubcategoryItemChildModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

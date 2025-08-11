@@ -1,5 +1,5 @@
 export const categoriesSeedData = [
-  //Clothing
+  //Clothing Backend
   {
     id: "b1f7b77d-1ff7-4d66-ae63-31811cd067e0",
     name: 'Clothing, Shoes & Accessories',
@@ -38,8 +38,20 @@ export const categoriesSeedData = [
           { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: 'Trousers' },
           { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: 'Shorts' },
           { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", name: 'Skirts' },
-          { id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2", name: 'Pants' },
-          // { id: "d49a2804-0665-1m23-9d8e-1e7b423f26b2", name: 'Shorts' }
+          {
+            id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2",
+            name: "Pants",
+            slug: "pants",
+              tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
+              optional_tags: ["color", "pattern"],
+              tag_defaults: { ar_type: "body-tracking" },
+              subcategoryItemChildren: [
+                { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", name: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", name: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", name: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                { id: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", name: "Cargos", slug: "cargos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              ],
+            },
         ],
       },
       {
@@ -70,19 +82,25 @@ export const categoriesSeedData = [
           { id: "a567e980-5f8d-47be-80e9-9a75e88d3f79", name: "Gym Shorts" },
           { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", name: "Sweatshirts" },
           { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear" }
-          // { id: "", name: "Underwear & Socks" },
-          // { id: "", name: "Boxers" },
-          // { id: "", name: "Briefs" },
         ],
       },
       {
-        id: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
+        id: "0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d", // Changed from original "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae"
+        name: "Eyewear",
+        // 'child' converted to 'subcategoryItems' for consistency
+        subcategoryItems: [
+          { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: "Prescription Glasses", slug: "prescription-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", name: "Sunglasses", slug: "sunglasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", name: "Blue Light Glasses", slug: "blue-light-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", name: "Kids' Eyewear", slug: "kids-eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
+        ],
+      },
+      {
+        id: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae", // This was originally duplicate, but the other instance was changed.
         name: "Intimates",
         gender: ['Female'],
         subcategoryItems: [
-          // { id: "53721c65-3ae6-4ba2-880c-1ab9f237ea0b", name: "Bras" },
-          // { id: "e2947c54-531f-41a6-b3ef-9e5837b702e1", name: "Panties" },
-          { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", name: "Lingerie" },
+          { id: "9f0a8d7c-3b2e-4f1a-8c9d-0e1f2a3b4c5d", name: "Lingerie" }, // Duplicate with Kids' Eyewear, replaced
           { id: "faed8236-48bb-4591-98f7-e86b3ec6b2c8", name: "Sleepwear" },
         ],
       },
@@ -107,20 +125,62 @@ export const categoriesSeedData = [
         name: "Accessories",
         gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
-          { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags" },
-          { id: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6", name: "Jewelry" },
-          { id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b", name: "Watches" },
-          { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", name: "Scarves" },
-          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", name: "Hats" },
-          { id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", name: "Belts" },
-          { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", name: "Sunglasses" },
-          { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Watches" },
-          { id: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", name: "Ties" },
-          // { id: "47f92a35-8b2d-4a7f-8f94-32d9c847a5b1", name: "Belts" },
-          // { id: "934e7c59-2a4d-4c37-93b2-847a2d8f9e5b", name: "Hats" },
-          { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", name: "Wallets" },
-          // { id: "", name: "Sunglasses" },
-          { id: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3", name: 'Backpacks ' },
+          {
+            id: "a7e1f5d6-c9b2-4d83-9a4f-5c8e2b1d7f3e",
+            name: "Bags",
+            subcategoryItemChildren: [
+              { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+              { id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e", name: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
+              { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
+              { id: "f4e3d2c1-a5b6-7c8d-9e01-2a3b4c5d6e7f", name: "Shoulder Bags", slug: "shoulder-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
+              { id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", name: "Tote Bags", slug: "tote-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
+              { id: "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c", name: "Clutches", slug: "clutches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
+            ],
+          },
+          {
+            id: "d9e8c7b6-a5f4-3e21-0c9b-8a7d6e5c4b3a", // Changed from original "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6" to be unique
+            name: "Jewelry & Watches",
+            // 'child' converted to 'subcategoryItems' for consistency
+            subcategoryItemChildren: [
+              { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "f2e1d3c4-a5b6-7c8d-9e01-2f3a4b5c6d7e", name: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
+              { id: "3b2e1d4c-5a6f-7b8c-9d01-e2f3a4b5c6d7", name: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
+              { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", name: "Bracelets", slug: "bracelets", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
+              { id: "1c2a3b4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", name: "Plated Jewelry", slug: "plated-jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
+              { id: "4e5f6a7b-8c9d-0e1f-2a3b-4c5d6e7f8a9b", name: "Men's Watches", slug: "mens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } }, // Duplicate, replaced
+              { id: "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e", name: "Women's Watches", slug: "womens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } }, // Duplicate, replaced
+              { id: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a", name: "Smartwatches", slug: "smartwatches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
+              { id: "f6a7b8c9-0d1e-2f3a-4b5c-6d7e8f9a0b1c", name: "Watch Bands & Accessories", slug: "watch-bands-accessories", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
+            ],
+          },
+          {
+            id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
+            name: "Headwear",
+            subcategoryItemChildren: [
+              { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", name: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+            ],
+          },
+          {
+            id: "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b", // Changed from original "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b" to be unique
+            name: "Seasonal Accessories",
+            // 'child' converted to 'subcategoryItems' for consistency
+            subcategoryItemChildren: [
+              { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
+              { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
+              { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "8e9f0a1b-2c3d-4e5f-6a7b-8c9d0e1f2a3b", name: "Ties", slug: "ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } }, // Duplicate, replaced
+            ],
+          },
+          {
+            id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
+            name: "Wallets & Belts",
+            subcategoryItemChildren: [
+              { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
+              { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
+            ],
+          }
         ],
       },
       {
@@ -130,15 +190,15 @@ export const categoriesSeedData = [
         subcategoryItems: [
           { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", name: "Boxers" },
           { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", name: "Briefs" },
-          { id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b", name: "Bras" },
+          { id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d", name: "Bras" }, // Duplicate, replaced
           { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", name: "Socks" },
-          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", name: "Sleepwear" }
+          { id: "b2c3d4e5-f6a7-8b9c-0d1e-2f3a4b5c6d7e", name: "Sleepwear" } // Duplicate, replaced
         ],
       },
     ],
   },
 
-  //Electronics
+  //Electronics Backend
   {
     id: "9a3ff078-60f5-4f1c-b6c7-0c5976ec6c5f",
     name: "Electronics",
@@ -188,7 +248,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Furniture
+  //Furniture Backend
   {
     id: "0ff2b00f-9b29-4e32-bbb1-d83d0a416b84",
     name: 'Home, Furniture & Appliances',
@@ -264,7 +324,7 @@ export const categoriesSeedData = [
     ],
   },
 
-  //Health
+  //Health Backend
   {
     id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
     name: 'Beauty, Health & Pets',
@@ -330,7 +390,7 @@ export const categoriesSeedData = [
         ]
       },
       {
-        id: "748647ab-51a8-462c-8c33-7da71598d748",
+        id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
         name: "Pet Supplies",
         gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
@@ -359,7 +419,7 @@ export const categoriesSeedData = [
     ],
   },
 
-  //Baby
+  //Baby Backend
   {
     name: "Baby, Kids & Toys",
     id: "7e3d391c-3910-49ba-904d-55e3e74338be",
@@ -413,7 +473,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Groceries
+  //Groceries Backend
   {
     name: "Recipes",
     id: "d4227a0d-0707-4fbb-aae7-56e71fc33301",
@@ -470,7 +530,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Sports
+  //Sports Backend
   {
     name: "Sports, Fitness & Outdoors",
     id: "426ad39f-5df5-4a69-b1a8-c63fbe61ec10",
@@ -524,7 +584,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Automotive
+  //Automotive Backend
   {
     name: "Automotive",
     id: "f4b6c0c5-85e7-4c43-98c3-816b8b17e8cf",
@@ -553,7 +613,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Special Needs
+  //Special Needs Backend
   {
     name: "Special Needs & Accessibility",
     id: "c9b589fa-96c6-46c7-a98b-ea2068a5e937",
@@ -590,7 +650,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Maternity
+  //Maternity Backend
   {
     name: "Maternity & Prenatal Care",
     id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
@@ -603,7 +663,6 @@ export const categoriesSeedData = [
           { name: "Dresses", id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7" },
           { name: "Tops", id: "688b69a1-612c-4bd1-8451-0d735e64b7d4" },
           { name: "Bottoms", id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f" },
-          // { name: "Lingerie", id: "04ab43b1-9872-4cb9-9d3d-13a90b6bd0b1" }
         ]
       },
       {
@@ -629,7 +688,7 @@ export const categoriesSeedData = [
     ]
   },
 
-  //Senior care
+  //Senior care Backend
   {
     id: "785fbee8-74f6-469f-a59b-9039969c4e13",
     name: "Senior Care",

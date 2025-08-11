@@ -44,15 +44,6 @@ export default function ProductFilterCard({
   onClearAllFilters, // Function to clear all filters
 }) {
 
-  // ADDED DEBUG LOGS
-  console.log("================== Product Filter Card Debug ==================");
-  console.log("Passed `selectedBrands`:", selectedBrands);
-  console.log("Passed `selectedGenders`:", selectedGenders);
-  console.log("Passed `checkedCategoryIds`:", checkedCategoryIds);
-  console.log("Passed `selectedAvailabilities`:", selectedAvailabilities);
-  console.log("Passed `selectedColors`:", selectedColors);
-  console.log("===============================================================");
-
   // Handles price slider and input changes
   const handlePriceChange = (event, newValue) => {
     setPriceRange(newValue);

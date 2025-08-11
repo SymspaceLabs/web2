@@ -2,125 +2,182 @@ const CATEGORIES_DATA = [
   {
     title: "Categories",
     child: [
+      //Clothing Frontend
       {
-        id: "b1f7b77d-1ff7-4d66-ae63-31811cd067e0",
-    title: 'Clothing, Shoes & Accessories',
-    child: [
-      {
-        id: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
-        title: 'Dresses',
+        uuid: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
+        title: "Clothing, Shoes & Accessories",
         child: [
-          { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", title: 'Casual Dresses', slug: 'casual-dresses' },
-          { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", title: 'Formal Dresses', slug: 'formal-dresses' },
-          { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", title: 'Summer Dresses', slug: 'summer-dresses' },
+          {
+            uuid: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64",
+            title: "Dresses",
+            child: [
+              { uuid: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", title: "Casual Dresses", slug: "casual-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", title: "Formal Dresses", slug: "formal-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "c53f5378-e3b3-45b1-a129-e2c4067c8509", title: "Summer Dresses", slug: "summer-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
+            ],
+          },
+          {
+            uuid: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
+            title: "Tops",
+            child: [
+              { uuid: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", title: "Blouses", slug: "blouses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "9d826402-b7be-4329-97fc-bd64934eb233", title: "T-Shirts", slug: "t-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", title: "Sweaters", slug: "sweaters", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Cardigans", slug: "cardigans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", title: "Casual Shirts", slug: "casual-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "1de0fd99-62b6-4386-8c92-8ca4db389599", title: "Dress Shirts", slug: "dress-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", title: "Polo Shirts", slug: "polo-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+            ],
+          },
+          {
+            uuid: "d7c1a1c3-cda0-4686-bf84-e70241e383b3",
+            title: "Bottoms",
+            child: [
+              { uuid: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Jeans", slug: "jeans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "b888c11c-b62d-4be4-9756-4151a05692f9", title: "Shorts", slug: "shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Skirts", slug: "skirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              {
+                uuid: "d49a2804-0665-4b50-9d8e-1e7b423f26b2",
+                title: "Pants",
+                slug: "pants",
+                tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
+                optional_tags: ["color", "pattern"],
+                tag_defaults: { ar_type: "body-tracking" },
+                child: [
+                  { uuid: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", title: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { uuid: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", title: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { uuid: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { uuid: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", title: "Cargos", slug: "cargos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                ],
+              },
+            ],
+          },
+          {
+            uuid: "9c93e575-8e62-49de-a3d9-16b61c31be2d",
+            title: "Outerwear",
+            child: [
+              { uuid: "aba0a755-cf5d-4657-b017-8d014a539d43", title: "Jackets", slug: "jackets", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", title: "Coats", slug: "coats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", title: "Blazers", slug: "blazers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Vests", slug: "vests", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Hoodies", slug: "hoodies", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Suits", slug: "suits", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+            ],
+          },
+          {
+            uuid: "69e7fd69-6ec4-4792-94f2-b39e4826c96f",
+            title: "Activewear",
+            child: [
+              { uuid: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", title: "Leggings", slug: "leggings", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", title: "Sport Bras", slug: "sport-bras", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", title: "Track Pants", slug: "track-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "2df96d8f-b8f9-4711-8f89-f72f167e78da", title: "Workout Tops", slug: "workout-tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "d7424957-f23b-4c95-85c7-e318e91f9a56", title: "Yoga Pants", slug: "yoga-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", title: "Sports Shorts", slug: "sports-shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Sweatshirts", slug: "sweatshirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { uuid: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Compression Wear", slug: "compression-wear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+            ],
+          },
+          {
+            uuid: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
+            title: "Eyewear",
+            child: [
+              { uuid: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Prescription Glasses", slug: "prescription-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { uuid: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Sunglasses", slug: "sunglasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { uuid: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", title: "Blue Light Glasses", slug: "blue-light-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { uuid: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", title: "Kids' Eyewear", slug: "kids-eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
+            ],
+          },
+          {
+            uuid: "faed8236-48bb-4591-98f7-e86b3ec6b2c8",
+            title: "Intimates",
+            child: [
+              { uuid: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", title: "Bras", slug: "bras", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", title: "Panties", slug: "panties", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { uuid: "7fae12d0-9635-43fb-aaf4-362ed92c1234", title: "Boxers", slug: "boxers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+              { uuid: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Briefs", slug: "briefs", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+              { uuid: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Sleepwear", slug: "sleepwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+            ],
+          },
+          {
+            uuid: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
+            title: "Shoes",
+            child: [
+              { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Sandals", slug: "sandals", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Flats", slug: "flats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Heels", slug: "heels", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking", gender: "women" } },
+              { uuid: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Boots", slug: "boots", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Sneakers", slug: "sneakers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Athletic Shoes", slug: "athletic-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Formal Shoes", slug: "formal-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { uuid: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Casual Shoes", slug: "casual-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+            ],
+          },
+          {
+            uuid: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
+            title: "Accessories",
+            child: [
+              {
+                uuid: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3",
+                title: "Bags",
+                child: [
+                  { uuid: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", title: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Shoulder Bags", slug: "shoulder-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Tote Bags", slug: "tote-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", title: "Clutches", slug: "clutches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                ],
+              },
+              {
+                uuid: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6",
+                title: "Jewelry & Watches",
+                child: [
+                  { uuid: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", title: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", title: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { uuid: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Bracelets", slug: "bracelets", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", title: "Plated Jewelry", slug: "plated-jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { uuid: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Men's Watches", slug: "mens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
+                  { uuid: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Women's Watches", slug: "womens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
+                  { uuid: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Smartwatches", slug: "smartwatches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Watch Bands & Accessories", slug: "watch-bands-accessories", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
+                ],
+              },
+              {
+                uuid: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
+                title: "Headwear",
+                child: [
+                  { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", title: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                ],
+              },
+              {
+                uuid: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b",
+                title: "Seasonal Accessories",
+                child: [
+                  { uuid: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { uuid: "d7c1a1c3-cda0-4686-bf84-e70241e383b3", title: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { uuid: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", title: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+                  { uuid: "9c93e575-8e62-49de-a3d9-16b61c31be2d", title: "Ties", slug: "ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                ],
+              },
+              {
+                uuid: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
+                title: "Wallets & Belts",
+                child: [
+                  { uuid: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", title: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
+                  { uuid: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
+                ],
+              },
+            ],
+          },
         ],
       },
-      {
-        id: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
-        title: 'Tops',
-        child: [
-          { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", title: 'Blouses', slug: 'blouses' },
-          { id: "9d826402-b7be-4329-97fc-bd64934eb233", title: 'T-Shirts', slug: 't-shirts' },
-          { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", title: 'Tank tops', slug: 'tank-tops' },
-          { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: 'Sweaters', slug: 'sweaters' },
-          { id: "9e02f7ed-ff9d-44f7-827b-89c61e80f309", title: 'Cardigans', slug: 'cardigans' },
-          { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", title: 'Casual Shirts', slug: 'casual-shirts' },
-          { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", title: 'Dress Shirts', slug: 'dress-shirts' },
-          { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", title: 'Polo Shirts', slug: 'polo-shirts' },
-        ],
-      },
-      {
-        id: "d7c1a1c3-cda0-4686-bf84-e70241e383b3",
-        title: 'Bottoms',
-        child: [
-          { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: 'Jeans', slug: 'jeans' },
-          { id: "b888c11c-b62d-4be4-9756-4151a05692f9", title: 'Trousers', slug: 'trousers' },
-          { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: 'Shorts', slug: 'shorts' },
-          { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", title: 'Skirts', slug: 'skirts' },
-          { id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2", title: 'Pants', slug: 'pants' },
-        ],
-      },
-      {
-        id: "9c93e575-8e62-49de-a3d9-16b61c31be2d",
-        title: 'Outerwear',
-        child: [
-          { id: "aba0a755-cf5d-4657-b017-8d014a539d43", title: 'Jackets', slug: 'jackets' },
-          { id: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", title: 'Coats', slug: 'coats' },
-          { id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", title: 'Blazers', slug: 'blazers' },
-          { id: "ef324850-c5c5-41d9-bc0f-f8b4b8f37a07", title: 'Vests', slug: 'vests' },
-          { id: "fde3b457-48a3-4e7c-9c19-43e1f53b738a", title: 'Hoodies', slug: 'hoodies' },
-          { id: "4a3b8f17-c5d7-4be9-b64e-29b5341d7905", title: 'Suits', slug: 'suits' },
-        ],
-      },
-      {
-        id: "69e7fd69-6ec4-4792-94f2-b39e4826c96f",
-        title: 'Activewear',
-        child: [
-          { id: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", title: 'Leggings', slug: 'leggings' },
-          { id: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", title: 'Sport bras', slug: 'sport-bras' },
-          { id: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", title: 'Track pants', slug: 'track-pants' },
-          { id: "2df96d8f-b8f9-4711-8f89-f72f167e78da", title: 'Workout Tops', slug: 'workout-tops' },
-          { id: "d7424957-f23b-4c95-85c7-e318e91f9a56", title: 'Yoga pants', slug: 'yoga-pants' },
-          { id: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", title: 'Sports shorts', slug: 'sports-shorts' },
-          { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: 'Joggers', slug: 'joggers' },
-          { id: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: 'Gym Shorts', slug: 'gym-shorts' },
-          { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: 'Sweatshirts', slug: 'sweatshirts' },
-          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", title: 'Compression Wear', slug: 'compression-wear' },
-        ],
-      },
-      {
-        id: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
-        title: 'Intimates',
-        child: [
-          { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", title: 'Lingerie', slug: 'lingerie' },
-          { id: "faed8236-48bb-4591-98f7-e86b3ec6b2c8", title: 'Sleepwear', slug: 'sleepwear' },
-        ],
-      },
-      {
-        id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
-        title: 'Shoes',
-        child: [
-          { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: 'Sandals', slug: 'sandals' },
-          { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: 'Flats', slug: 'flats' },
-          { id: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: 'Heels', slug: 'heels' },
-          { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: 'Boots', slug: 'boots' },
-          { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: 'Sneakers', slug: 'sneakers' },
-          { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: 'Athletic Shoes', slug: 'athletic-shoes' },
-          { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: 'Formal Shoes', slug: 'formal-shoes' },
-          { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: 'Casual Shoes', slug: 'casual-shoes' },
-          // { id: "94a75b62-f3d5-4c2b-a8b2-2935b08c2e4b", title: 'Boots', slug: 'boots' },
-        ],
-      },
-      {
-        id: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
-        title: 'Accessories',
-        child: [
-          { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", title: 'Handbags', slug: 'handbags' },
-          { id: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6", title: 'Jewelry', slug: 'jewelry' },
-          { id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b", title: 'Watches', slug: 'watches' },
-          { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", title: 'Scarves', slug: 'scarves' },
-          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: 'Hats', slug: 'hats' },
-          { id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", title: 'Belts', slug: 'belts' },
-          { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: 'Sunglasses', slug: 'sunglasses' },
-          // { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", title: 'Watches', slug: 'watches' },
-          { id: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", title: 'Ties', slug: 'ties' },
-          { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", title: 'Wallets', slug: 'wallets' },
-          { id: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3", title: 'Backpacks', slug: 'backpacks' },
-        ],
-      },
-      {
-        id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934",
-        title: 'Underwear & Socks',
-        child: [
-          { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", title: 'Boxers', slug: 'boxers' },
-          { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", title: 'Briefs', slug: 'briefs' },
-          { id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b", title: 'Bras', slug: 'bras' },
-          { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", title: 'Socks', slug: 'socks' },
-          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: 'Sleepwear', slug: 'sleepwear' },
-        ],
-      },
-    ],
-      },
+
+      //Electronics Frontend
       {
         id: "9a3ff078-60f5-4f1c-b6c7-0c5976ec6c5f",
         title: "Electronics",
@@ -169,6 +226,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+
+      //Furniture Frontend
       {
         id: "0ff2b00f-9b29-4e32-bbb1-d83d0a416b84",
         title: 'Home, Furniture & Appliances',
@@ -243,6 +302,9 @@ const CATEGORIES_DATA = [
           }
         ],
       },
+
+
+      //Health Frontend
       {
         id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
         title: 'Beauty, Health & Pets',
@@ -319,6 +381,8 @@ const CATEGORIES_DATA = [
           }
         ],
       },
+      
+      //Baby Frontend
       {
         title: "Baby, Kids & Toys",
         id: "7e3d391c-3910-49ba-904d-55e3e74338be",
@@ -368,6 +432,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+
+      //Groceries Frontend
       {
         title: "Recipes",
         id: "d4227a0d-0707-4fbb-aae7-56e71fc33301",
@@ -423,6 +489,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+      
+      //Sports Frontend
       {
         title: "Sports, Fitness & Outdoors",
         id: "426ad39f-5df5-4a69-b1a8-c63fbe61ec10",
@@ -474,6 +542,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+      
+      //Automotive Frontend
       {
         title: "Automotive",
         id: "f4b6c0c5-85e7-4c43-98c3-816b8b17e8cf",
@@ -501,6 +571,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+
+      //Special Needs Frontend
       {
         title: "Special Needs & Accessibility",
         id: "c9b589fa-96c6-46c7-a98b-ea2068a5e937",
@@ -536,6 +608,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+
+      //Maternity Frontend
       {
         title: "Maternity & Prenatal Care",
         id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
@@ -571,6 +645,8 @@ const CATEGORIES_DATA = [
           }
         ]
       },
+
+      //Senior care Frontend
       {
         id: "785fbee8-74f6-469f-a59b-9039969c4e13",
         title: "Senior Care",

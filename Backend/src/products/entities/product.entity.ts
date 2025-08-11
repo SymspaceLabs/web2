@@ -7,6 +7,7 @@ import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Review } from 'src/reviews/entities/review.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
@@ -40,6 +41,11 @@ export class Product {
 
   @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products)
   subcategoryItem: SubcategoryItem;
+
+  // The link to SubcategoryItemChild is now optional as requested.
+  // The property is marked with '?' and the relationship decorator includes { nullable: true }.
+  @ManyToOne(() => SubcategoryItemChild, (subcategoryItemChild) => subcategoryItemChild.products, { nullable: true })
+  subcategoryItemChild?: SubcategoryItemChild;
 
   @ManyToOne(() => Company, (company) => company.products, {
     onDelete: 'CASCADE',

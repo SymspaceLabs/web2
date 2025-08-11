@@ -14,6 +14,7 @@ import { Box, CircularProgress, Container } from "@mui/material";
 import ProductTabs from "../product-tabs";
 import { BlobBox } from "@/components/BlobBox";
 import ProductDetails from "../product-details";
+import BreadcrumbNav from "../breadcrumb-nav";
 
 // Services
 import { fetchProductBySlug } from "@/services/productService"; // Adjust the path if needed
@@ -79,6 +80,8 @@ export default function ProductDetailsPageView({slug}) {
       <BlobBox top="60%" left={'-10%'} background="#0366FE" widthHeight='500px' displayNoneMobile={true} /> {/* BLUE */}
 
       <Container className="mt-2 mb-2">
+        {/* Breadcrumbs Component */}
+        <BreadcrumbNav subcategoryItem={product.subcategoryItem.name} />
         <ProductDetails product={product} /> {/* Product introduction */}
         <ProductTabs productId={product.id} /> {/* Tabs section for detailed product information */}
       </Container>

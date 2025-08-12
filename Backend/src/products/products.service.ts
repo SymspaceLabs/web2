@@ -12,6 +12,7 @@ import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 @Injectable()
 export class ProductsService {
@@ -20,6 +21,7 @@ export class ProductsService {
     @InjectRepository(Product) private readonly productRepository: Repository<Product>,
     @InjectRepository(Company) private companiesRepository: Repository<Company>,
     @InjectRepository(SubcategoryItem) private subcategoryItemRepository: Repository<SubcategoryItem>,
+    @InjectRepository(SubcategoryItemChild) private subcategoryItemChildRepository: Repository<SubcategoryItemChild>, // Inject SubcategoryItemChildRepository
     @InjectRepository(ProductVariant) private productVariantRepository: Repository<ProductVariant>,
     @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
@@ -97,43 +99,102 @@ export class ProductsService {
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
     const {
       images,
-      threeDModels, // Destructure threeDModels from DTO
+      threeDModels,
       company,
       name,
       colors,
       sizes,
-      subcategoryItem: subcategoryItemId,
+      subcategoryItem: subcategoryItemIdFromDto, // Renamed to avoid conflict
+      subcategoryItemChild: subcategoryItemChildIdFromDto, // New: Get child ID from DTO
       ...productData
     } = dto;
 
     let product: Product;
+    let finalSubcategoryItem: SubcategoryItem | undefined; // To store the resolved SubcategoryItem
+    let finalSubcategoryItemChild: SubcategoryItemChild | undefined; // NEW: To store the resolved SubcategoryItemChild
+
+    // --- Resolve Category Hierarchy ---
+    // Ensure only one of subcategoryItemId or subcategoryItemChildId is provided
+    if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
+      throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
+    }
+
+    if (subcategoryItemChildIdFromDto) {
+      // If subcategoryItemChildId is provided, backtrack to find the subcategoryItem
+      const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
+        where: { id: subcategoryItemChildIdFromDto },
+        relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
+      });
+
+      if (!subcategoryItemChild) {
+        throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
+      }
+      finalSubcategoryItemChild = subcategoryItemChild; // Store the resolved child entity
+      finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
+    } else if (subcategoryItemIdFromDto) {
+      // If only subcategoryItemId is provided, fetch it directly
+      const subcategoryItem = await this.subcategoryItemRepository.findOne({
+        where: { id: subcategoryItemIdFromDto },
+        relations: ['subcategory', 'subcategory.category'],
+      });
+
+      if (!subcategoryItem) {
+        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
+      }
+      finalSubcategoryItem = subcategoryItem;
+      finalSubcategoryItemChild = undefined; // Ensure it's explicitly undefined if subcategoryItem is directly provided
+    } else {
+      // If neither is provided, and it's a creation, throw an error
+      if (!id) {
+         throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
+      }
+      // For updates, it's fine if no category info is provided (means no change)
+    }
 
     // === UPDATE MODE ===
     if (id) {
       product = await this.productRepository.findOne({
         where: { id },
-        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'variants', 'threeDModels'], // IMPORTANT: Load threeDModels relation here
+        // IMPORTANT: Load subcategoryItemChild relation here so it can be updated
+        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
       });
 
       if (!product) {
         throw new NotFoundException(`Product with ID ${id} not found`);
       }
 
+      // Update subcategoryItem and subcategoryItemChild if new ones were resolved
+      if (finalSubcategoryItem) {
+        product.subcategoryItem = finalSubcategoryItem;
+        product.subcategoryItemId = finalSubcategoryItem.id; // Explicitly set FK
+      } else if (subcategoryItemIdFromDto === null) { // Allow explicit clearing
+        product.subcategoryItem = null;
+        product.subcategoryItemId = null;
+      }
+
+      // NEW: Assign the resolved subcategoryItemChild and its ID
+      if (finalSubcategoryItemChild) {
+        product.subcategoryItemChild = finalSubcategoryItemChild;
+        product.subcategoryItemChildId = finalSubcategoryItemChild.id; // Explicitly set FK
+      } else if (subcategoryItemChildIdFromDto === null) { // Allow explicit clearing
+        product.subcategoryItemChild = null;
+        product.subcategoryItemChildId = null;
+      }
+
+
       // ✅ Only delete variants if user is explicitly changing variants or their dependencies (colors/sizes)
       if (
-        ('variants' in dto && dto.variants !== undefined) || // Check if variants key is present in DTO
-        ('colors' in dto && dto.colors !== undefined) ||     // Check if colors key is present in DTO
-        ('sizes' in dto && dto.sizes !== undefined)          // Check if sizes key is present in DTO
+        ('variants' in dto && dto.variants !== undefined) ||
+        ('colors' in dto && dto.colors !== undefined) ||
+        ('sizes' in dto && dto.sizes !== undefined)
       ) {
         if (product.variants && product.variants.length > 0) {
-            await this.productVariantRepository.remove(product.variants); // Clear old variants
+          await this.productVariantRepository.remove(product.variants); // Clear old variants
         }
         product.variants = []; // Reset the array on the entity
       }
 
       // --- NEW: MODEL UPDATE LOGIC ---
-      // If the 'threeDModels' key is present in the DTO, it means we should update them.
-      // This allows sending an empty 'threeDModels' array to clear existing threeDModels.
       if (threeDModels !== undefined) {
         // If there are existing threeDModels, remove them first
         if (product.threeDModels && product.threeDModels.length > 0) {
@@ -158,28 +219,16 @@ export class ProductsService {
         product.company = companyEntity;
       }
 
-      if (subcategoryItemId) {
-        const subcategoryItem = await this.subcategoryItemRepository.findOne({
-          where: { id: subcategoryItemId },
-          relations: ['subcategory', 'subcategory.category'],
-        });
-
-        if (!subcategoryItem) {
-          throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
-        }
-        product.subcategoryItem = subcategoryItem;
-      }
-
       // Re-generate slug if name or company changes
       if (name !== undefined || company !== undefined) { // Check if name or company are explicitly provided in DTO
         const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
         const updatedProductName = name !== undefined ? name : product.name;
-        
+
         if (updatedCompanyName && updatedProductName) {
           product.slug = `${this.slugify(updatedCompanyName)}-${this.slugify(updatedProductName)}`;
         }
       }
-      
+
       // Assign other product data
       Object.assign(product, productData);
       // If name is explicitly provided, update it
@@ -198,13 +247,8 @@ export class ProductsService {
         throw new NotFoundException(`Company with ID ${company} not found`);
       }
 
-      const subcategoryItem = await this.subcategoryItemRepository.findOne({
-        where: { id: subcategoryItemId },
-        relations: ['subcategory', 'subcategory.category'],
-      });
-
-      if (!subcategoryItem) {
-        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemId} not found`);
+      if (!finalSubcategoryItem) { // finalSubcategoryItem *must* be resolved for new products
+          throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
       }
 
       const slug = `${this.slugify(companyEntity.entityName)}-${this.slugify(name)}`;
@@ -214,12 +258,15 @@ export class ProductsService {
         name,
         company: companyEntity,
         slug,
-        subcategoryItem,
+        subcategoryItem: finalSubcategoryItem, // Use the resolved subcategory item
+        subcategoryItemId: finalSubcategoryItem.id, // Explicitly set FK
+        subcategoryItemChild: finalSubcategoryItemChild, // NEW: Assign the resolved child entity here
+        subcategoryItemChildId: finalSubcategoryItemChild?.id || null, // NEW: Explicitly set FK, null if not present
         variants: [], // Initialize variants as empty
-        images: [],  // Initialize images as empty
-        colors: [],  // Initialize colors as empty
-        sizes: [],   // Initialize sizes as empty
-        threeDModels: [],  // Initialize threeDModels as empty for creation
+        images: [],   // Initialize images as empty
+        colors: [],   // Initialize colors as empty
+        sizes: [],    // Initialize sizes as empty
+        threeDModels: [], // Initialize threeDModels as empty for creation
       });
 
       // --- NEW: MODEL CREATION LOGIC ---
@@ -240,33 +287,33 @@ export class ProductsService {
     if (images !== undefined) { // Check if 'images' key is present
         // If Product.images relationship uses cascade:true, simply assigning a new array will handle removal/addition
         product.images = images.map((url, i) => {
-            const img = new ProductImage();
-            img.url = url;
-            img.sortOrder = i;
-            img.product = product; // Link to the product
-            return img;
+          const img = new ProductImage();
+          img.url = url;
+          img.sortOrder = i;
+          img.product = product; // Link to the product
+          return img;
         });
     }
 
     // Colors: Replace colors if provided in DTO
     if (colors !== undefined) { // Check if 'colors' key is present
         product.colors = colors.map((color) => {
-            const c = new ProductColor();
-            c.name = color.name;
-            c.code = color.code;
-            c.product = product; // Link to the product
-            return c;
+          const c = new ProductColor();
+          c.name = color.name;
+          c.code = color.code;
+          c.product = product; // Link to the product
+          return c;
         });
     }
 
     // Sizes: Replace sizes if provided in DTO
     if (sizes !== undefined) { // Check if 'sizes' key is present
         product.sizes = sizes.map((size, i) => {
-            const s = new ProductSize();
-            s.size = size;
-            s.sortOrder = i;
-            s.product = product; // Link to the product
-            return s;
+          const s = new ProductSize();
+          s.size = size;
+          s.sortOrder = i;
+          s.product = product; // Link to the product
+          return s;
         });
     }
 
@@ -301,8 +348,8 @@ export class ProductsService {
         delete variant.product;
       });
     }
-    
-    if (savedProduct.threeDModels?.length) { 
+
+    if (savedProduct.threeDModels?.length) {
       savedProduct.threeDModels.forEach((model) => {
         delete model.product;
       });
@@ -322,37 +369,55 @@ export class ProductsService {
     return savedProduct;
   }
 
+
   /**
-   * Finds all products based on a search term and/or category/subcategory slugs.
-   * Filters products belonging to the specified category, subcategory, or subcategory item,
-   * including their direct and indirect descendants.
+   * Finds all products based on a search term and/or category/subcategory names.
+   * Filters products belonging to the specified category, subcategory, subcategory item,
+   * or subcategory item child, including their direct and indirect descendants.
    *
    * @param searchTerm Optional: A string to search for in product names and descriptions.
-   * @param categorySlug Optional: The slug of a main category (e.g., 'clothing-shoes-accessories') to filter products by.
-   * @param subcategorySlug Optional: The slug of a subcategory (e.g., 'tops') to filter products by.
-   * @param subcategoryItemSlug Optional: The slug of a subcategory item (e.g., 't-shirts') to filter products by.
+   * @param categoryName Optional: The name of a main category (e.g., 'Clothing, Shoes & Accessories') to filter products by.
+   * @param subcategoryName Optional: The name of a subcategory (e.g., 'Accessories') to filter products by.
+   * @param subcategoryItemName Optional: The name of a subcategory item (e.g., 'Bags') to filter products by.
+   * @param subcategoryItemChildName Optional: The name of a subcategory item child (e.g., 'Handbags') to filter products by.
    * @returns An object containing filtered products, brands, price range, categories, genders, availabilities, and colors.
    */
   async findAll(
     searchTerm?: string,
-    categorySlug?: string,
-    subcategorySlug?: string,
-    subcategoryItemSlug?: string,
- ) {
-
+    categoryName?: string, // Renamed from categorySlug
+    subcategoryName?: string, // Renamed from subcategorySlug
+    subcategoryItemName?: string, // Renamed from subcategoryItemSlug
+    subcategoryItemChildName?: string, // Renamed from subcategoryItemChildSlug
+  ) {
     let subcategoryItemId: string | undefined;
     let subcategoryId: string | undefined;
     let categoryId: string | undefined;
+    let resolvedSubcategoryItemChildId: string | undefined;
     let filterAppliedButNoMatch = false;
 
-    // Prioritize subcategoryItemSlug if provided.
-    if (subcategoryItemSlug) {
+    // Prioritize subcategoryItemChildName if provided.
+    if (subcategoryItemChildName) {
+        const foundSubcategoryItemChild = await this.subcategoryItemChildRepository
+            .createQueryBuilder('subcategoryItemChild')
+            .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
+            .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+            .leftJoinAndSelect('subcategory.category', 'category')
+            .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName }) // Filter by name
+            .getOne();
 
+        if (foundSubcategoryItemChild) {
+            resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
+        } else {
+            filterAppliedButNoMatch = true;
+        }
+    }
+    // Then prioritize subcategoryItemName if provided.
+    else if (subcategoryItemName) {
       const foundSubcategoryItem = await this.subcategoryItemRepository
         .createQueryBuilder('subcategoryItem')
         .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
         .leftJoinAndSelect('subcategory.category', 'category')
-        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemSlug })
+        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemName }) // Filter by name
         .getOne();
 
       if (foundSubcategoryItem) {
@@ -360,11 +425,11 @@ export class ProductsService {
       } else {
         filterAppliedButNoMatch = true;
       }
-    } 
-    // If no subcategoryItemSlug, check for subcategorySlug.
-    else if (subcategorySlug) {
+    }
+    // If no subcategoryItemName, check for subcategoryName.
+    else if (subcategoryName) {
       const foundSubcategory = await this.subcategoryRepository.findOne({
-        where: { name: subcategorySlug }, 
+        where: { name: subcategoryName }, // Filter by name
         relations: ['subcategoryItems'],
       });
 
@@ -373,11 +438,11 @@ export class ProductsService {
       } else {
         filterAppliedButNoMatch = true;
       }
-    } 
-    // If no subcategoryItemSlug or subcategorySlug, check for categorySlug.
-    else if (categorySlug) {
+    }
+    // If no subcategoryItemName or subcategoryName, check for categoryName.
+    else if (categoryName) {
       const foundCategory = await this.categoryRepository.findOne({
-        where: { name: categorySlug }, 
+        where: { name: categoryName }, // Filter by name
         relations: ['subcategories', 'subcategories.subcategoryItems'],
       });
 
@@ -389,7 +454,7 @@ export class ProductsService {
     }
 
     // If a specific filter was applied but no matching entity was found, return empty.
-    if ((categorySlug || subcategorySlug || subcategoryItemSlug) && filterAppliedButNoMatch) {
+    if ((categoryName || subcategoryName || subcategoryItemName || subcategoryItemChildName) && filterAppliedButNoMatch) {
       return {
         products: [],
         brands: [],
@@ -411,10 +476,13 @@ export class ProductsService {
       .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild') // Join with SubcategoryItemChild
       .orderBy('images.sortOrder', 'ASC');
 
     // Add the most specific filter first.
-    if (subcategoryItemId) {
+    if (resolvedSubcategoryItemChildId) {
+        query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
+    } else if (subcategoryItemId) {
       query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
     } else if (subcategoryId) {
       query.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
@@ -446,18 +514,21 @@ export class ProductsService {
 
     // Step 6: Get distinct brands relevant to the filtered products
     let formattedBrands: any[] = [];
-    if (products.length > 0 || (!searchTerm && !categorySlug && !subcategorySlug && !subcategoryItemSlug)) {
+    if (products.length > 0 || (!searchTerm && !categoryName && !subcategoryName && !subcategoryItemName && !subcategoryItemChildName)) {
       const brandsQuery = this.productRepository
         .createQueryBuilder('product')
         .leftJoin('product.company', 'company')
         .leftJoin('product.subcategoryItem', 'subcategoryItem')
         .leftJoin('subcategoryItem.subcategory', 'subcategory')
         .leftJoin('subcategory.category', 'category')
+        .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild')
         .select(['company.id AS id', 'company.entityName AS name'])
         .groupBy('company.id')
         .addGroupBy('company.entityName');
 
-      if (subcategoryItemId) {
+      if (resolvedSubcategoryItemChildId) {
+        brandsQuery.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
+      } else if (subcategoryItemId) {
         brandsQuery.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
       } else if (subcategoryId) {
         brandsQuery.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
@@ -480,7 +551,7 @@ export class ProductsService {
 
     // Step 7: Get ALL categories, then enrich them with subcategories/items from products
     const allCategories = await this.categoryRepository.find({
-      relations: ['subcategories', 'subcategories.subcategoryItems'],
+      relations: ['subcategories', 'subcategories.subcategoryItems', 'subcategories.subcategoryItems.subcategoryItemChildren'],
       order: { name: 'ASC' },
     });
 
@@ -489,15 +560,21 @@ export class ProductsService {
       name: cat.name,
       subCategory: cat.subcategories
         ? cat.subcategories.map(subcat => ({
-            id: subcat.id,
-            name: subcat.name,
-            subcategoryItems: subcat.subcategoryItems
-              ? subcat.subcategoryItems.map(item => ({
-                  id: item.id,
-                  name: item.name,
+          id: subcat.id,
+          name: subcat.name,
+          subcategoryItems: subcat.subcategoryItems
+            ? subcat.subcategoryItems.map(item => ({
+              id: item.id,
+              name: item.name,
+              subcategoryItemChildren: item.subcategoryItemChildren
+                ? item.subcategoryItemChildren.map(child => ({
+                  id: child.id,
+                  name: child.name,
                 }))
-              : [],
-          }))
+                : [],
+            }))
+            : [],
+        }))
         : [],
     }));
 
@@ -511,7 +588,7 @@ export class ProductsService {
           {
             id: string;
             name: string;
-            subcategoryItems: Map<string, { id: string; name: string }>;
+            subcategoryItems: Map<string, { id: string; name: string; subcategoryItemChildren: Map<string, { id: string; name: string }> }>;
           }
         >;
       }
@@ -521,6 +598,7 @@ export class ProductsService {
       const mainCategory = product.subcategoryItem?.subcategory?.category;
       const subcategory = product.subcategoryItem?.subcategory;
       const subcategoryItem = product.subcategoryItem;
+      const subcategoryItemChild = product.subcategoryItemChild;
 
       if (mainCategory) {
         if (!productCategoryHierarchy.has(mainCategory.id)) {
@@ -549,7 +627,20 @@ export class ProductsService {
               currentSubcategory.subcategoryItems.set(subcategoryItem.id, {
                 id: subcategoryItem.id,
                 name: subcategoryItem.name,
+                subcategoryItemChildren: new Map(),
               });
+            }
+            const currentSubcategoryItem = currentSubcategory.subcategoryItems.get(
+              subcategoryItem.id,
+            )!;
+
+            if (subcategoryItemChild) {
+              if (!currentSubcategoryItem.subcategoryItemChildren.has(subcategoryItemChild.id)) {
+                currentSubcategoryItem.subcategoryItemChildren.set(subcategoryItemChild.id, {
+                  id: subcategoryItemChild.id,
+                  name: subcategoryItemChild.name,
+                });
+              }
             }
           }
         }
@@ -566,9 +657,18 @@ export class ProductsService {
             const productHierarchySubcat = productHierarchyCat.subCategory.get(
               subcat.id,
             )!;
-            enrichedSubcat.subcategoryItems = enrichedSubcat.subcategoryItems.filter(
-              item => productHierarchySubcat.subcategoryItems.has(item.id),
-            );
+            enrichedSubcat.subcategoryItems = enrichedSubcat.subcategoryItems.map(item => {
+              const enrichedItem = { ...item };
+              if (productHierarchySubcat.subcategoryItems.has(item.id)) {
+                const productHierarchyItem = productHierarchySubcat.subcategoryItems.get(item.id)!;
+                enrichedItem.subcategoryItemChildren = enrichedItem.subcategoryItemChildren.filter(
+                  child => productHierarchyItem.subcategoryItemChildren.has(child.id)
+                );
+              } else {
+                enrichedItem.subcategoryItemChildren = [];
+              }
+              return enrichedItem;
+            }).filter(item => item.subcategoryItemChildren.length > 0);
           } else {
             enrichedSubcat.subcategoryItems = [];
           }
@@ -583,16 +683,18 @@ export class ProductsService {
       return enrichedCat;
     });
 
-    // Step 8: Get distinct genders from the filtered products
     const productGendersResult = this.productRepository
       .createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
       .where('product.gender IS NOT NULL')
       .leftJoin('product.subcategoryItem', 'subcategoryItem')
       .leftJoin('subcategoryItem.subcategory', 'subcategory')
-      .leftJoin('subcategory.category', 'category');
+      .leftJoin('subcategory.category', 'category')
+      .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild'); // Join with SubcategoryItemChild
 
-    if (subcategoryItemId) {
+    if (resolvedSubcategoryItemChildId) {
+        productGendersResult.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
+    } else if (subcategoryItemId) {
       productGendersResult.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
     } else if (subcategoryId) {
       productGendersResult.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
@@ -612,7 +714,6 @@ export class ProductsService {
     const allPossibleGenders = ['women', 'men', 'unisex'];
     const genders = Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
 
-    // Step 9: Compute availability per product & collect distinct statuses
     const availabilitySet = new Set<string>();
     for (const product of products as any[]) {
       const inStock = product.variants?.some(v => v.stock > 0);
@@ -622,7 +723,6 @@ export class ProductsService {
     }
     const availabilities = Array.from(availabilitySet);
 
-    // Step 10: Extract all distinct colors used from the filtered products
     const allColorsMap = new Map<string, { name: string; code: string }>();
     for (const product of products) {
       if (product.colors) {
@@ -638,12 +738,10 @@ export class ProductsService {
     }
     const colors = Array.from(allColorsMap.values());
 
-    // Step 11: Return all computed data
-
     return {
       products,
       brands: formattedBrands,
-      priceRange: { min: minPrice, max: maxPrice },
+      priceRange: { min: 0, max: 0 },
       category: finalCategoryFacets,
       genders,
       availabilities,
@@ -687,13 +785,22 @@ export class ProductsService {
   async findOne(productId: string): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id: productId },
-      relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
+      // Updated relations to load the full hierarchy including subcategoryItemChild
+      relations: [
+        'subcategoryItem',
+        'subcategoryItem.subcategory',
+        'subcategoryItem.subcategory.category',
+        'subcategoryItemChild', // Load the direct child relation
+        // If a product has a subcategoryItemChild, its parent subcategoryItem,
+        // subcategory, and category will also be loaded via the relations on subcategoryItemChild.
+        // We also keep the direct subcategoryItem relations for products that don't have a child.
+      ],
     });
-  
+
     if (!product) {
       throw new NotFoundException(`Product with ID ${productId} not found`);
     }
-  
+
     return product;
   }
   

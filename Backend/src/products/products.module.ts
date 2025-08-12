@@ -11,6 +11,7 @@ import { ProductVariant } from 'src/product-variant/entities/product-variant.ent
 import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity'; // Import the new entity
 
 @Module({
   imports: [
@@ -22,9 +23,8 @@ import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.
       ProductVariant,
       Product3DModel,
       Category,
-      Subcategory
-      // ProductVariantPropertyEntity,
-      // PriceEntity,
+      Subcategory,
+      SubcategoryItemChild, // <-- Added SubcategoryItemChild here
     ]),
   ],
   controllers: [ProductsController],

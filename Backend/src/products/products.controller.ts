@@ -33,9 +33,10 @@ export class ProductsController {
     @Query('search') search?: string,
     @Query('category') categorySlug?: string,
     @Query('subcategory') subcategorySlug?: string,
-    @Query('subcategoryItem') subcategoryItemSlug?: string // New parameter for subcategory item
+    @Query('subcategoryItem') subcategoryItemSlug?: string,
+    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string // Make sure this line is also in your controller
   ) {
-    return await this.productsService.findAll(search, categorySlug, subcategorySlug, subcategoryItemSlug);
+    return await this.productsService.findAll(search, categorySlug, subcategorySlug, subcategoryItemSlug, subcategoryItemChildSlug);
   }
 
   @Get('search') // This will be your dedicated search endpoint: /products/search

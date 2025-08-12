@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm'; // Added JoinColumn
 import { ProductImage } from 'src/product-images/entities/product-image.entity';
 import { Company } from 'src/companies/entities/company.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
@@ -28,8 +28,11 @@ export enum ProductGender {
   UNISEX = 'unisex',
 }
 
-@Entity()
+@Entity('product') // Explicitly naming the table 'product' is good practice
 export class Product {
+  // FIX 1: Changed to @PrimaryColumn('uuid')
+  // Use PrimaryColumn if IDs are pre-generated (e.g., from seed data, or manually assigned UUIDs).
+  // Use PrimaryGeneratedColumn if the database should generate the ID automatically on insert.
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -39,17 +42,32 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   price: number;
 
-  @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products)
+  // FIX 2: Added explicit foreign key column 'subcategoryItemId' and @JoinColumn
+  @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
+  subcategoryItemId: string;
+
+  @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products, {
+    nullable: true, // This allows a product to not be linked to a subcategory item
+    onDelete: 'SET NULL', // Or 'CASCADE' if deleting subcategoryItem should delete products
+  })
+  @JoinColumn({ name: 'subcategoryItemId' }) // Links to the subcategoryItemId column
   subcategoryItem: SubcategoryItem;
 
-  // The link to SubcategoryItemChild is now optional as requested.
-  // The property is marked with '?' and the relationship decorator includes { nullable: true }.
-  @ManyToOne(() => SubcategoryItemChild, (subcategoryItemChild) => subcategoryItemChild.products, { nullable: true })
-  subcategoryItemChild?: SubcategoryItemChild;
+  // FIX 3: Added explicit foreign key column 'subcategoryItemChildId' and @JoinColumn
+  @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item child
+  subcategoryItemChildId: string;
+
+  @ManyToOne(() => SubcategoryItemChild, (subcategoryItemChild) => subcategoryItemChild.products, {
+    nullable: true, // This allows a product to not be linked to a subcategory item child
+    onDelete: 'SET NULL', // Or 'CASCADE' if deleting subcategoryItemChild should delete products
+  })
+  @JoinColumn({ name: 'subcategoryItemChildId' }) // Links to the subcategoryItemChildId column
+  subcategoryItemChild?: SubcategoryItemChild; // Marked as optional in TypeScript
 
   @ManyToOne(() => Company, (company) => company.products, {
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE', // Keep CASCADE as it was
   })
+  @JoinColumn({ name: 'companyId' }) // Assuming 'companyId' foreign key column exists in Product table
   company: Company;
 
   @Column()
@@ -57,7 +75,6 @@ export class Product {
 
   @OneToMany(() => ProductImage, (image) => image.product, { cascade: true, eager: true })
   images: ProductImage[];
-  
 
   @Column({ type: 'text', nullable: true })
   description: string;
@@ -77,16 +94,8 @@ export class Product {
   })
   colors: ProductColor[];
 
-  // @Column({ type: 'text', nullable: true })
-  // model: string;
-
-  // Add the new OneToMany relationship to ProductModel
-  // @OneToMany(() => ProductModel, (model) => model.product, { cascade: true, eager: true }) // eager: true to load models automatically
-  // models: ProductModel[]; // Changed 'model' to 'models' (plural) as it's an array
-
-  // Add the new OneToMany relationship to ProductModel
-  @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true }) // eager: true to load models automatically
-  threeDModels: Product3DModel[]; // Changed 'model' to 'models' (plural) as it's an array
+  @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true })
+  threeDModels: Product3DModel[];
 
   @Column()
   composition: string;
@@ -108,11 +117,10 @@ export class Product {
   @Column({
     type: 'enum',
     enum: ProductGender,
-    nullable: true, // ✅ Optional
+    nullable: true, // Optional
   })
   gender?: ProductGender;
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
-
 }

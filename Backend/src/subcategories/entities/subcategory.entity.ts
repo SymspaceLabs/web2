@@ -17,7 +17,7 @@ export class Subcategory {
 
   @Column()
   name: string;
-
+  
   // The 'gender' column definition has been removed from here.
   // If you previously added it, make sure this line is gone:
   // @Column({ type: 'json', nullable: true })

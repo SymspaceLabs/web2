@@ -49,6 +49,10 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
+  subcategoryItemChild?: string;
+
+  @IsString()
+  @IsOptional()
   company?: string;
 
   @IsArray()

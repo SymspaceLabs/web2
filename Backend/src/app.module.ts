@@ -62,7 +62,7 @@ import { SubcategoryItemChildModule } from './subcategory-item-child/subcategory
         password: configService.get<string>('DB_UPASS') || '1234',
         database: configService.get<string>('DB_NAME')  || 'sympspace', 
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
         options: {
           encrypt: true,
           trustServerCertificate: true,

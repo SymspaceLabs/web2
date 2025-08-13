@@ -94,6 +94,27 @@ export class ProductsService {
 
     return this.productVariantRepository.save(variantsToSave);
   }
+
+  /**
+   * @function calculatePriceRange
+   * @description Helper function to calculate the minimum and maximum effective prices
+   * from an array of products, prioritizing `salePrice` if available.
+   * @param {Array<Product>} products - An array of product objects.
+   * @returns {{min: number, max: number}} An object containing the minimum and maximum effective prices.
+   */
+  private async calculatePriceRange(products: any[]): Promise<{ min: number; max: number; }> {
+    // Extract prices from products, prioritizing salePrice if it exists and is a number,
+    // otherwise use the regular price.
+    const prices = products.map(p =>
+      (typeof p.salePrice === 'number' && p.salePrice !== null) ? p.salePrice : p.price
+    ).filter(price => typeof price === 'number' && price !== null); // Ensure valid numbers for min/max
+
+    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+
+    return { min: minPrice, max: maxPrice };
+  }
   
   // CREATE & UPDATE PRODUCT
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
@@ -369,7 +390,6 @@ export class ProductsService {
     return savedProduct;
   }
 
-
   /**
    * Finds all products based on a search term and/or category/subcategory names.
    * Filters products belonging to the specified category, subcategory, subcategory item,
@@ -406,17 +426,17 @@ export class ProductsService {
             .getOne();
 
         // --- DEBUG LOGS START ---
-        console.log('--- Debugging subcategoryItemChildName filter ---');
-        console.log('Query parameter subcategoryItemChildName:', subcategoryItemChildName);
-        console.log('Found SubcategoryItemChild:', foundSubcategoryItemChild);
+  
+  
+  
         // --- DEBUG LOGS END ---
 
         if (foundSubcategoryItemChild) {
             resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
-            console.log('Resolved SubcategoryItemChild ID:', resolvedSubcategoryItemChildId); // Debug
+      
         } else {
             filterAppliedButNoMatch = true;
-            console.log('No SubcategoryItemChild found for name:', subcategoryItemChildName); // Debug
+      
         }
     }
     // Then prioritize subcategoryItemName if provided.
@@ -486,7 +506,7 @@ export class ProductsService {
       .orderBy('images.sortOrder', 'ASC');
 
     if (resolvedSubcategoryItemChildId) {
-        console.log('Applying resolvedSubcategoryItemChildId filter:', resolvedSubcategoryItemChildId); // Debug
+  
         query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
     } else if (subcategoryItemId) {
       query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
@@ -504,7 +524,6 @@ export class ProductsService {
     }
 
     const products = await query.getMany();
-    console.log('Fetched products count:', products.length); // Debug
 
     for (const product of products) {
       if (product.images) {
@@ -512,9 +531,12 @@ export class ProductsService {
       }
     }
 
-    const prices = products.map(p => p.price);
-    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+    // const prices = products.map(p => p.price);
+    // const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    // const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+    // --- Call the new helper function for price range ---
+    const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
 
     let formattedBrands: any[] = [];
     if (products.length > 0 || (!searchTerm && !categoryName && !subcategoryName && !subcategoryItemName && !subcategoryItemChildName)) {
@@ -743,7 +765,7 @@ export class ProductsService {
     return {
       products,
       brands: formattedBrands,
-      priceRange: { min: 0, max: 0 },
+      priceRange: { min: minPrice, max: maxPrice }, // Corrected line
       category: finalCategoryFacets,
       genders,
       availabilities,

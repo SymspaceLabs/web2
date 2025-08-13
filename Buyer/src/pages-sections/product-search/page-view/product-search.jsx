@@ -80,6 +80,8 @@ export default function ProductSearchPageView({ searchParams }) {
     searchParams
   );
 
+
+
   // Memoized query parameters from URL for display purposes only
   const genderQuery = useMemo(
     // Now searchParams is an object, not a hook result

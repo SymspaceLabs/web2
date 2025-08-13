@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 // Custom hook to fetch product data and initialize filter options
 
 export function useProductData() {
+  
   const [data, setData] = useState({
     allProducts: [],
     allBrands: [],

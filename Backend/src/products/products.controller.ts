@@ -31,12 +31,18 @@ export class ProductsController {
   @Get()
   async getAllProducts(
     @Query('search') search?: string,
-    @Query('category') categorySlug?: string,
-    @Query('subcategory') subcategorySlug?: string,
-    @Query('subcategoryItem') subcategoryItemSlug?: string,
-    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string // Make sure this line is also in your controller
+    @Query('category') categoryName?: string, // Changed from categorySlug
+    @Query('subcategory') subcategoryName?: string, // Changed from subcategorySlug
+    @Query('subcategoryItem') subcategoryItemName?: string, // Changed from subcategoryItemSlug
+    @Query('subcategoryItemChild') subcategoryItemChildName?: string // Changed from subcategoryItemChildSlug
   ) {
-    return await this.productsService.findAll(search, categorySlug, subcategorySlug, subcategoryItemSlug, subcategoryItemChildSlug);
+    return await this.productsService.findAll(
+      search,
+      categoryName,
+      subcategoryName,
+      subcategoryItemName,
+      subcategoryItemChildName
+    );
   }
 
   @Get('search') // This will be your dedicated search endpoint: /products/search

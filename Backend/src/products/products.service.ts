@@ -384,10 +384,10 @@ export class ProductsService {
    */
   async findAll(
     searchTerm?: string,
-    categoryName?: string, // Renamed from categorySlug
-    subcategoryName?: string, // Renamed from subcategorySlug
-    subcategoryItemName?: string, // Renamed from subcategoryItemSlug
-    subcategoryItemChildName?: string, // Renamed from subcategoryItemChildSlug
+    categoryName?: string,
+    subcategoryName?: string,
+    subcategoryItemName?: string,
+    subcategoryItemChildName?: string,
   ) {
     let subcategoryItemId: string | undefined;
     let subcategoryId: string | undefined;
@@ -402,13 +402,21 @@ export class ProductsService {
             .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
             .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
             .leftJoinAndSelect('subcategory.category', 'category')
-            .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName }) // Filter by name
+            .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName })
             .getOne();
+
+        // --- DEBUG LOGS START ---
+        console.log('--- Debugging subcategoryItemChildName filter ---');
+        console.log('Query parameter subcategoryItemChildName:', subcategoryItemChildName);
+        console.log('Found SubcategoryItemChild:', foundSubcategoryItemChild);
+        // --- DEBUG LOGS END ---
 
         if (foundSubcategoryItemChild) {
             resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
+            console.log('Resolved SubcategoryItemChild ID:', resolvedSubcategoryItemChildId); // Debug
         } else {
             filterAppliedButNoMatch = true;
+            console.log('No SubcategoryItemChild found for name:', subcategoryItemChildName); // Debug
         }
     }
     // Then prioritize subcategoryItemName if provided.
@@ -417,7 +425,7 @@ export class ProductsService {
         .createQueryBuilder('subcategoryItem')
         .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
         .leftJoinAndSelect('subcategory.category', 'category')
-        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemName }) // Filter by name
+        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemName })
         .getOne();
 
       if (foundSubcategoryItem) {
@@ -429,7 +437,7 @@ export class ProductsService {
     // If no subcategoryItemName, check for subcategoryName.
     else if (subcategoryName) {
       const foundSubcategory = await this.subcategoryRepository.findOne({
-        where: { name: subcategoryName }, // Filter by name
+        where: { name: subcategoryName },
         relations: ['subcategoryItems'],
       });
 
@@ -442,7 +450,7 @@ export class ProductsService {
     // If no subcategoryItemName or subcategoryName, check for categoryName.
     else if (categoryName) {
       const foundCategory = await this.categoryRepository.findOne({
-        where: { name: categoryName }, // Filter by name
+        where: { name: categoryName },
         relations: ['subcategories', 'subcategories.subcategoryItems'],
       });
 
@@ -453,7 +461,6 @@ export class ProductsService {
       }
     }
 
-    // If a specific filter was applied but no matching entity was found, return empty.
     if ((categoryName || subcategoryName || subcategoryItemName || subcategoryItemChildName) && filterAppliedButNoMatch) {
       return {
         products: [],
@@ -466,7 +473,6 @@ export class ProductsService {
       };
     }
 
-    // --- Step 2: Build the main product query ---
     const query = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.company', 'company')
@@ -476,11 +482,11 @@ export class ProductsService {
       .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
-      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild') // Join with SubcategoryItemChild
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
       .orderBy('images.sortOrder', 'ASC');
 
-    // Add the most specific filter first.
     if (resolvedSubcategoryItemChildId) {
+        console.log('Applying resolvedSubcategoryItemChildId filter:', resolvedSubcategoryItemChildId); // Debug
         query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
     } else if (subcategoryItemId) {
       query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
@@ -497,22 +503,19 @@ export class ProductsService {
       );
     }
 
-    // Step 3: Execute the main query to get products
     const products = await query.getMany();
+    console.log('Fetched products count:', products.length); // Debug
 
-    // Step 4: Post-processing for products (sorting images)
     for (const product of products) {
       if (product.images) {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
     }
 
-    // Step 5: Compute price range from the filtered products
     const prices = products.map(p => p.price);
     const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
     const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
-    // Step 6: Get distinct brands relevant to the filtered products
     let formattedBrands: any[] = [];
     if (products.length > 0 || (!searchTerm && !categoryName && !subcategoryName && !subcategoryItemName && !subcategoryItemChildName)) {
       const brandsQuery = this.productRepository
@@ -549,7 +552,6 @@ export class ProductsService {
       }));
     }
 
-    // Step 7: Get ALL categories, then enrich them with subcategories/items from products
     const allCategories = await this.categoryRepository.find({
       relations: ['subcategories', 'subcategories.subcategoryItems', 'subcategories.subcategoryItems.subcategoryItemChildren'],
       order: { name: 'ASC' },

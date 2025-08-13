@@ -19,7 +19,6 @@ import ProductsGridView from "../products-grid-view";
 import TopSortCard from "../top-sort-card";
 import ProductFilterDrawer from "../product-filter-drawer";
 import MobileProductHeader from "../mobile-product-header";
-import BreadcrumbNav from "../../product-details/breadcrumb-nav";
 
 // ======================================================
 // 1. Reusable UI Components
@@ -157,84 +156,10 @@ export default function ProductSearchPageView({ searchParams }) {
     onClearAllFilters: handleResetAllFilters, // ADDED THIS LINE
   };
 
-
-  // Helper function to get the full category path for breadcrumbs
-  const getCategoryPath = useCallback((querySlug, allCategories) => {
-    const path = [];
-    if (!querySlug || !allCategories) return path;
-
-    // Normalize query slug for comparison
-    const normalizedQuerySlug = querySlug.toLowerCase();
-
-    for (const cat of allCategories) {
-      if (cat.name.toLowerCase() === normalizedQuerySlug) {
-        path.push({ name: cat.name, href: `/products?category=${cat.name.toLowerCase()}` });
-        return path;
-      }
-      if (cat.subCategory) {
-        for (const sub of cat.subCategory) {
-          if (sub.name.toLowerCase() === normalizedQuerySlug) {
-            path.push(
-              { name: cat.name, href: `/products?category=${cat.name.toLowerCase()}` },
-              { name: sub.name, href: `/products?subcategory=${sub.name.toLowerCase()}` }
-            );
-            return path;
-          }
-          if (sub.subcategoryItem) {
-            if (sub.subcategoryItem.name.toLowerCase() === normalizedQuerySlug) {
-              path.push(
-                { name: cat.name, href: `/products?category=${cat.name.toLowerCase()}` },
-                { name: sub.name, href: `/products?subcategory=${sub.name.toLowerCase()}` },
-                { name: sub.subcategoryItem.name, href: `/products?subcategoryItem=${sub.subcategoryItem.name.toLowerCase()}` }
-              );
-              return path;
-            }
-          }
-        }
-      }
-    }
-    return path;
-  }, []);
-
-  const rawSearchParams = typeof searchParams?.value === 'string'
-    ? JSON.parse(searchParams.value)
-    : searchParams;
-
-
-
-  const categoryPath = useMemo(() => getCategoryPath(subcategoryItemQuery, category), [subcategoryItemQuery, category, getCategoryPath]);
-
   return (
     <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >
       <Container>
-        {/* Breadcrumbs Component */}
-        {/* {(rawSearchParams?.subcategoryItem || rawSearchParams?.subcategory || rawSearchParams?.category) && (
-          <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 3 }}>
-            <Link underline="hover" color="inherit" href="/products">
-              Home
-            </Link>
-            {genderDisplayName && (
-              <Link underline="hover" color="inherit" href={`/products?gender=${genderQuery[0]}`}>
-                {genderDisplayName}
-              </Link>
-            )}
-            {categoryPath.map((item) => (
-              <Link key={item.name} underline="hover" color="inherit" href={item.href}>
-                {item.name}
-              </Link>
-            ))}
-            {(!genderDisplayName && !categoryDisplayName) && (
-              <Typography color="text.primary">All Products</Typography>
-            )}
-            {(genderDisplayName || categoryDisplayName) && (
-              <Typography color="text.primary">
-                {displayFilterText.replace("for ", "").replace(/'/g, "")}
-              </Typography>
-            )}
-          </Breadcrumbs>
-        )} */}
-
-      <Grid container spacing={3}>
+        <Grid container spacing={3}>
 
           {/* Mobile-only Filter and Sort Header */}
           {isMobile && (

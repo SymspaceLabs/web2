@@ -87,7 +87,6 @@ export const categoriesSeedData = [
       {
         id: "0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d", // Changed from original "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae"
         name: "Eyewear",
-        // 'child' converted to 'subcategoryItems' for consistency
         subcategoryItems: [
           { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: "Prescription Glasses", slug: "prescription-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", name: "Sunglasses", slug: "sunglasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
@@ -140,7 +139,6 @@ export const categoriesSeedData = [
           {
             id: "d9e8c7b6-a5f4-3e21-0c9b-8a7d6e5c4b3a", // Changed from original "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6" to be unique
             name: "Jewelry & Watches",
-            // 'child' converted to 'subcategoryItems' for consistency
             subcategoryItemChildren: [
               { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "f2e1d3c4-a5b6-7c8d-9e01-2f3a4b5c6d7e", name: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
@@ -165,7 +163,6 @@ export const categoriesSeedData = [
           {
             id: "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b", // Changed from original "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b" to be unique
             name: "Seasonal Accessories",
-            // 'child' converted to 'subcategoryItems' for consistency
             subcategoryItemChildren: [
               { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
@@ -251,77 +248,455 @@ export const categoriesSeedData = [
   //Furniture Backend
   {
     id: "0ff2b00f-9b29-4e32-bbb1-d83d0a416b84",
-    name: 'Home, Furniture & Appliances',
+    name: "Home, Furniture & Appliances",
     subcategories: [
       {
         id: "26ccfa5e-8ffb-4c68-b09f-9c730b577b5b",
-        name: 'Furniture',
+        name: "Furniture",
         subcategoryItems: [
-          { id: "7a9a5e67-6c77-4b68-8c32-bb295aee9c24", name: "Living Room" },
-          { id: "fef93787-b22b-4e9e-bf85-32885d376f02", name: "Sofas" },
-          { id: "d62fd072-d47d-4fa1-b31d-b1cc5b28ad90", name: "Coffee Tables" },
-          { id: "17c8d78c-b19f-4f3f-bd45-482d0b0c5d11", name: "TV Stands" },
-          { id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de", name: "Recliners" },
-          { id: "f45e9246-0ef5-4996-b2f9-71c27ad98371", name: "Bedroom" },
-          { id: "2bdc4f4b-6f5c-45bb-8572-27a973b1c9e6", name: "Beds" },
-          { id: "4c63e2e1-f6f6-44bc-a496-21907337081d", name: "Dressers" },
-          { id: "5a8dbb56-5d36-41aa-a8d9-fc748dd97e38", name: "Nightstands" },
-          { id: "ec2c0f78-6d5a-4053-b46b-3e45c7b0df90", name: "Wardrobes" },
-          { id: "47b4e7f5-4891-4147-818e-f255d650bdb7", name: "Office" },
-          { id: "8abfbbd7-0fcb-43d6-9111-6a5a42c0702b", name: "Desks" },
-          { id: "5c1e5db5-2745-4d1e-b18b-9ff81cd83367", name: "Office Chairs" },
-          { id: "a0d92de3-59cd-4a07-8a56-f0f441045319", name: "Bookcases" },
-          { id: "497b2f65-1f53-4adf-8902-d82fa8d18ea4", name: "Outdoor" },
-          { id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90", name: "Patio Sets" },
-          { id: "94939e0b-2123-42a0-80cd-dfc4ad11d9e7", name: "Outdoor Chairs" },
-          { id: "d3c746a6-7ed5-4d99-89c5-059fe09a56a1", name: "Garden Storage" }
-        ],
+          {
+            id: "fef93787-b22b-4e9e-bf85-32885d376f02",
+            name: "Sofas",
+            child: [
+              {
+                name: "Sectional Sofas",
+                id: "02e69a1f-38e5-426d-beea-867380902c88"
+              },
+              {
+                name: "Loveseats",
+                id: "5402cd68-3d48-4adf-b5e5-1775d611e767"
+              },
+              {
+                id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de",
+                name: "Recliners"
+              },
+              {
+                name: "Chesterfields",
+                id: "3570bf56-db8d-423e-8321-c6451b4119c8"
+              },
+              {
+                name: "Sleeper Sofas",
+                id: "824d7240-6841-4ad5-97c7-3a0eb00762e6"
+              },
+              {
+                name: "Modular Sofas",
+                id: "5ca0908f-5324-4e72-84c2-6556aa4fa658"
+              }
+            ]
+          },
+          {
+            id: "d42af060-79c1-44a5-8971-d014425ca803",
+            name: "Chairs & Seating",
+            child: [
+              {
+                name: "Accent Chairs",
+                id: "6b0007fe-a568-4ac8-a662-93c33bb94b3e"
+              },
+              {
+                name: "Armchairs",
+                id: "da7cfa84-9557-44f8-a1af-baaea7ff1014"
+              },
+              {
+                name: "Club Chairs",
+                id: "4cd717fc-85a7-4e2e-8461-41ba72569348"
+              },
+              {
+                name: "Ottomans & Poufs",
+                id: "7e60b534-62ca-40cc-a56d-af450e8a40c3"
+              }
+            ],
+          },
+          {
+            id: "a2b93fa2-4e46-4335-b976-8dbf28e8e8a9",
+            name: "Tables",
+            child: [
+              {
+                id: "d62fd072-d47d-4fa1-b31d-b1cc5b28ad90",
+                name: "Coffee Tables"
+              },
+              {
+                name: "End Tables",
+                id: "60920e79-6f97-45d3-abcb-dd88914e55f3"
+              },
+              {
+                name: "Console Tables",
+                id: "bf9d0e3a-ae29-4a0b-86bb-93d9cf1c730e"
+              }
+            ],
+          },
+          {
+            name: "Media & Storage",
+            child: [
+              {
+                id: "17c8d78c-b19f-4f3f-bd45-482d0b0c5d11",
+                name: "TV Stands"
+              },
+              {
+                id: "a0d92de3-59cd-4a07-8a56-f0f441045319",
+                name: "Bookcases"
+              },
+              {
+                name: "Storage Cabinets",
+                id: "662737cf-8a24-4eb5-8e61-b2951908aa8d"
+              }
+            ],
+            id: "378a54cd-5a59-449b-bf43-4e62f2c214e4"
+          }
+        ]
+      },
+      {
+        id: "f45e9246-0ef5-4996-b2f9-71c27ad98371",
+        name: "Bedroom",
+        subcategoryItems: [
+          {
+            id: "2bdc4f4b-6f5c-45bb-8572-27a973b1c9e6",
+            name: "Beds",
+            child: [
+              {
+                name: "Platform Beds",
+                id: "36a28079-9502-45b3-b0c2-0e9d2c0bcbd6"
+              },
+              {
+                name: "Upholstered Beds",
+                id: "21903dc8-ef6c-4a34-b221-47a8b4b4f637"
+              },
+              {
+                name: "Canopy Beds",
+                id: "cb4b2b28-0b1c-4163-b9c8-8ccdd67a0236"
+              },
+              {
+                name: "Storage Beds",
+                id: "0d6158b7-2beb-4b0d-8583-18acb3338a4a"
+              },
+              {
+                name: "Adjustable Beds",
+                id: "5a15a4bf-8ef9-4113-ae4f-b9ede7178d1d"
+              }
+            ]
+          },
+          {
+            id: "4c63e2e1-f6f6-44bc-a496-21907337081d",
+            name: "Dressers & Chests",
+            child: [
+              {
+                name: "6-Drawer Dressers",
+                id: "f78bd691-cd05-4195-b38a-71065c914ea7"
+              },
+              {
+                name: "Chests of Drawers",
+                id: "db256369-53f5-4c2b-b1ea-e4c506fe3305"
+              }
+            ]
+          },
+          {
+            id: "5a8dbb56-5d36-41aa-a8d9-fc748dd97e38",
+            name: "Nightstands & Side Tables",
+            child: [
+              {
+                name: "Single Drawer Nightstands",
+                id: "bceebfde-665b-4f5d-a4bc-55068dc10b1a"
+              },
+              {
+                name: "Double Drawer Nightstands",
+                id: "5e9e56a3-5842-4f74-bc24-0ce6b08de3f3"
+              }
+            ]
+          },
+          {
+            id: "ec2c0f78-6d5a-4053-b46b-3e45c7b0df90",
+            name: "Wardrobes & Armoires",
+            child: [
+              {
+                name: "2-Door Wardrobes",
+                id: "d2e1bd8b-c009-45e3-b3d8-ff61b9f25c3d"
+              },
+              {
+                name: "Sliding Door Wardrobes",
+                id: "95346994-dca3-4892-92b2-1a1c03c3112c"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "47b4e7f5-4891-4147-818e-f255d650bdb7",
+        name: "Office",
+        subcategoryItems: [
+          {
+            id: "8abfbbd7-0fcb-43d6-9111-6a5a42c0702b",
+            name: "Desks",
+            child: [
+              {
+                name: "Writing Desks",
+                id: "9215688d-a05f-444e-ab96-c8ff54a2b504"
+              },
+              {
+                name: "Standing Desks",
+                id: "5a384129-b8f1-448b-b8ca-ac1fd66f7610"
+              },
+              {
+                name: "Executive Desks",
+                id: "d1f7b773-de48-44fc-9380-f6f9c8d9c7fd"
+              }
+            ]
+          },
+          {
+            id: "5c1e5db5-2745-4d1e-b18b-9ff81cd83367",
+            name: "Office Chairs",
+            child: [
+              {
+                name: "Ergonomic Chairs",
+                id: "f57a60c3-ec74-4f05-85d5-490885885851"
+              },
+              {
+                name: "Task Chairs",
+                id: "983beb19-8289-4f4d-8282-0e6944bac291"
+              },
+              {
+                name: "Executive Chairs",
+                id: "5aad749a-08f4-42d7-a608-cd05e17a91d8"
+              }
+            ]
+          },
+          {
+            name: "Storage",
+            child: [
+              {
+                name: "Filing Cabinets",
+                id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8"
+              },
+              {
+                name: "Bookcases & Shelving",
+                id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b"
+              }
+            ],
+            id: "fce90567-8d9e-413e-9c17-021111256c66"
+          }
+        ]
+      },
+      {
+        id: "497b2f65-1f53-4adf-8902-d82fa8d18ea4",
+        name: "Outdoor",
+        subcategoryItems: [
+          {
+            name: "Seating Sets",
+            child: [
+              {
+                id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90",
+                name: "Patio Sets"
+              },
+              {
+                name: "Sling Chairs",
+                id: "c4752303-edf7-4a3a-914b-bf9968bca34d"
+              },
+              {
+                name: "Chaise Lounges",
+                id: "dae7d09f-cdae-4cf7-8d3b-b547fbf9550a"
+              },
+              {
+                name: "Adirondack Chairs",
+                id: "34a71bfe-4388-4c2e-8a50-b7969e706387"
+              }
+            ],
+            id: "3de1373d-940e-47d2-b94d-ebfdd48fe3be"
+          },
+          {
+            name: "Tables",
+            child: [
+              {
+                name: "Dining Tables",
+                id: "77867f34-14ce-4762-9dc5-ccafe10f52cb"
+              },
+              {
+                name: "Bistro Tables",
+                id: "26c85058-8bc5-405e-821a-00813401eced"
+              }
+            ],
+            id: "af7df97b-3b0b-4b1c-820a-00621fa6b9fc"
+          },
+          {
+            name: "Shade & Shelter",
+            child: [
+              {
+                name: "Umbrellas",
+                id: "3d19f1c9-d218-45e3-9858-0ee6bc8223bc"
+              },
+              {
+                name: "Gazebos",
+                id: "f6ae668e-f7ce-40a9-b732-a739be81533b"
+              }
+            ],
+            id: "4cafadbf-4ca9-476b-9859-daae61abf11d"
+          },
+          {
+            name: "Storage",
+            child: [
+              {
+                name: "Deck Boxes",
+                id: "bf4a6563-7d12-447e-ac1d-ca7439046cd6"
+              },
+              {
+                id: "d3c746a6-7ed5-4d99-89c5-059fe09a56a1",
+                name: "Garden Sheds"
+              }
+            ],
+            id: "fa1d0870-c85a-4db9-b5b1-66beded42246"
+          }
+        ]
       },
       {
         id: "e34f58b1-f9ba-4050-90e7-285c1c2e4d71",
         name: "Home Decor",
         subcategoryItems: [
-          { id: "9ad4a4b4-8967-481f-b9b1-10f3f3b3ec36", name: "Lighting" },
-          { id: "eb5312cb-38e4-4208-84f6-75dd4a29f9e7", name: "Lamps" },
-          { id: "3d8d785a-321e-4c86-8191-77d19d8ea4b3", name: "Ceiling Lights" },
-          { id: "68f3eeb6-1985-42e0-bff5-faa70c776b5d", name: "Wall Lights" },
-          { id: "e5a29c16-e5c6-4a8a-a403-eaeaf2f49978", name: "Rugs" },
-          { id: "602c854d-144d-4b58-9c19-f2eb528a107b", name: "Wall Art" },
-          { id: "6b4f0d9b-1ae8-4b8e-9d43-82d2906010e7", name: "Clocks" },
-          { id: "15bf4ea9-d5a4-41b3-8894-c738891d8d42", name: "Mirrors" }
+          {
+            id: "9ad4a4b4-8967-481f-b9b1-10f3f3b3ec36",
+            name: "Lighting",
+            child: [
+              {
+                name: "Ceiling Fixtures",
+                id: "e5e8e3b9-fcc6-4daa-8034-b123d9985687"
+              },
+              {
+                name: "Wall Sconces",
+                id: "bbfbe2f1-c786-466d-ad8c-7ab288bf5afd"
+              },
+              {
+                name: "Table Lamps",
+                id: "a0fed5ef-c040-42af-9c56-77947ff1c712"
+              },
+              {
+                name: "Floor Lamps",
+                id: "b35b00fb-c660-40c1-b3c9-05706cc9c8e8"
+              }
+            ]
+          },
+          {
+            id: "602c854d-144d-4b58-9c19-f2eb528a107b",
+            name: "Wall Art & Mirrors",
+            child: [
+              {
+                name: "Paintings",
+                id: "421bba80-b4e9-47c7-ab07-2af8a1f98f39"
+              },
+              {
+                name: "Sculptures",
+                id: "cdbe8719-8e61-4487-af70-b4a97ee277a9"
+              },
+              {
+                id: "15bf4ea9-d5a4-41b3-8894-c738891d8d42",
+                name: "Mirrors"
+              }
+            ]
+          },
+          {
+            name: "Kitchen & Dining",
+            child: [
+              {
+                name: "Cookware",
+                id: "5d477bd4-4b2c-4fe3-88cf-f7c3b7a6293e"
+              },
+              {
+                name: "Dinnerware",
+                id: "991509eb-22ca-4a42-b763-5b823d41b690"
+              },
+              {
+                name: "Appliances",
+                id: "9d8fa0a2-04dc-4aff-8f6e-89af5ae35348"
+              },
+              {
+                name: "Storage Containers",
+                id: "8357688e-f6d6-4bb3-9789-41551ce6de94"
+              }
+            ],
+            id: "bfc88ae0-b94f-45c5-acec-7e4e322348c2"
+          }
         ]
       },
       {
         id: "59e873d9-87c3-4f4f-808f-4a3ebf6a743c",
         name: "Kitchen & Dining",
         subcategoryItems: [
-          { id: "e2f84950-f9a2-4485-a22b-63c52f233c85", name: "Cookware" },
-          { id: "d8c241c3-e732-4cf7-8e47-76529d17b5ae", name: "Pots & Pans" },
-          { id: "96de0b5e-23ec-4d1c-a645-5f8329b99d30", name: "Bakeware" },
-          { id: "4b36da5c-1e8b-4963-a61d-e8cf29924394", name: "Tableware" },
-          { id: "c073f7b3-cb7d-4f3a-a894-9e33a7597c0a", name: "Dinner Sets" },
-          { id: "2e8f3c86-7bf8-4a7c-9446-f1cfa5d34ad4", name: "Glassware" },
-          { id: "758ad15f-0833-4b69-a62c-573b34dc78cb", name: "Cutlery" },
-          { id: "2d4b0789-cf4c-4bf4-9c5b-1f8e26b2f02a", name: "Kitchen Storage" },
-          { id: "b8302364-2420-4d8f-a63d-ecae34fd0df5", name: "Containers" },
-          { id: "fc2b1e57-c3ba-4113-8dfb-e0f9f43d843d", name: "Racks & Holders" },
-          { id: "4d4707b1-2bb5-477f-9a72-e151ce672bd3", name: "Small Appliances" },
-          { id: "c32c4977-2d9d-44d1-9b3c-36e9852da4b6", name: "Toasters" },
-          { id: "10e2c4fb-345e-4f3d-a50e-4fb153d83e20", name: "Blenders" },
-          { id: "f8714f3e-7bf9-4f7b-b6a9-d99c83e37cbf", name: "Coffee Makers" }
+          {
+            id: "e2f84950-f9a2-4485-a22b-63c52f233c85",
+            name: "Cookware"
+          },
+          {
+            id: "d8c241c3-e732-4cf7-8e47-76529d17b5ae",
+            name: "Pots & Pans"
+          },
+          {
+            id: "96de0b5e-23ec-4d1c-a645-5f8329b99d30",
+            name: "Bakeware"
+          },
+          {
+            id: "4b36da5c-1e8b-4963-a61d-e8cf29924394",
+            name: "Tableware"
+          },
+          {
+            id: "c073f7b3-cb7d-4f3a-a894-9e33a7597c0a",
+            name: "Dinner Sets"
+          },
+          {
+            id: "2e8f3c86-7bf8-4a7c-9446-f1cfa5d34ad4",
+            name: "Glassware"
+          },
+          {
+            id: "758ad15f-0833-4b69-a62c-573b34dc78cb",
+            name: "Cutlery"
+          },
+          {
+            id: "2d4b0789-cf4c-4bf4-9c5b-1f8e26b2f02a",
+            name: "Kitchen Storage"
+          },
+          {
+            id: "b8302364-2420-4d8f-a63d-ecae34fd0df5",
+            name: "Containers"
+          },
+          {
+            id: "fc2b1e57-c3ba-4113-8dfb-e0f9f43d843d",
+            name: "Racks & Holders"
+          },
+          {
+            id: "4d4707b1-2bb5-477f-9a72-e151ce672bd3",
+            name: "Small Appliances"
+          },
+          {
+            id: "c32c4977-2d9d-44d1-9b3c-36e9852da4b6",
+            name: "Toasters"
+          },
+          {
+            id: "10e2c4fb-345e-4f3d-a50e-4fb153d83e20",
+            name: "Blenders"
+          },
+          {
+            id: "f8714f3e-7bf9-4f7b-b6a9-d99c83e37cbf",
+            name: "Coffee Makers"
+          }
         ]
       },
       {
         id: "fd3cbf8c-45c9-42a8-9c4f-ff89b9d6b690",
         name: "Large Appliances",
         subcategoryItems: [
-          { id: "d39810fb-9ba7-4eb7-b21d-d6a4e1703705", name: "Refrigerators" },
-          { id: "8d8d5e2b-53f4-4ea1-b2a4-3f9e824d11b4", name: "Washing Machines" },
-          { id: "c3e59b7f-3c9b-4378-b2c5-4f1c3f9a8537", name: "Ovens" },
-          { id: "d9273b49-7a49-408d-9349-45cf3879bf04", name: "Dishwashers" }
+          {
+            id: "d39810fb-9ba7-4eb7-b21d-d6a4e1703705",
+            name: "Refrigerators"
+          },
+          {
+            id: "8d8d5e2b-53f4-4ea1-b2a4-3f9e824d11b4",
+            name: "Washing Machines"
+          },
+          {
+            id: "c3e59b7f-3c9b-4378-b2c5-4f1c3f9a8537",
+            name: "Ovens"
+          },
+          {
+            id: "d9273b49-7a49-408d-9349-45cf3879bf04",
+            name: "Dishwashers"
+          }
         ]
       }
-    ],
+    ]
   },
 
   //Health Backend
@@ -332,34 +707,125 @@ export const categoriesSeedData = [
       {
         id: "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
         name: 'Beauty',
-        gender: ['Male', 'Female'], // Beauty products are often gendered
+        gender: ['Male', 'Female'],
         subcategoryItems: [
-          { id: "c550b6c6-1945-4b98-816c-cd4db7f931f3", name: "Skincare" },
-          { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers" },
-          { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", name: "Cleansers" },
-          { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", name: "Serums" },
-          { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", name: "Masks" },
-          { id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa", name: "Haircare" },
-          { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos" },
-          { id: "7f7d6869-d690-4881-8741-771a40858224", name: "Conditioners" },
-          { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments" },
-          { id: "155f940b-5f02-470c-b6aa-130bd76961b6", name: "Styling Tools" },
-          { id: "a447cd79-d503-4816-924d-34b9db78f108", name: "Makeup" },
-          { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations" },
-          { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks" },
-          { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows" },
-          { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras" },
-          { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", name: "Blushes" },
-          { id: "7728f440-4e04-42ef-b9b4-d0c051337748", name: "Makeup Tools" },
-          { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers" },
-          { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", name: "Powders" },
-          { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", name: "Eyeliners" },
-          { id: "56a805d7-8e80-4425-ae99-308fe3c6895a", name: "Brow Products" },
-          { id: "7748f268-e744-42cd-bb8c-999ef10378ea", name: "Fragrances" },
-          { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes" },
-          { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays" }
-        ],
+          {
+            id: "c550b6c6-1945-4b98-816c-cd4db7f931f3",
+            name: "Skincare",
+            subCategoryItemChildren: [
+              { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", name: "Cleansers", slug: "cleansers" },
+              { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers", slug: "moisturizers" },
+              { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", name: "Serums", slug: "serums" },
+              { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", name: "Masks", slug: "masks" },
+              { id: "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", name: "Toners", slug: "toners" },
+              { id: "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", name: "Eye Creams", slug: "eye-creams" },
+              { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", name: "Sunscreens (SPF)", slug: "sunscreens" },
+              { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", name: "Acne Treatments", slug: "acne-treatments" },
+              { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", name: "Anti-Aging Treatments", slug: "anti-aging-treatments" }
+            ]
+          },
+          {
+            id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
+            name: "Skincare Tools",
+            subCategoryItemChildren: [
+              { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Rollers", slug: "rollers" },
+              { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Facial Brushes", slug: "facial-brushes" },
+              { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", name: "LED Devices", slug: "led-devices" }
+            ]
+          },
+          {
+            id: "a447cd79-d503-4816-924d-34b9db78f108",
+            name: "Makeup",
+            subCategoryItemChildren: [
+              {
+                id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
+                name: "Face",
+                child: [
+                  { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations", slug: "foundations" },
+                  { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers", slug: "concealers" },
+                  { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", name: "Powders", slug: "powders" },
+                  { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", name: "Blushes & Highlighters", slug: "blushes-&-highlighters" }
+                ]
+              },
+              {
+                id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
+                name: "Eyes",
+                child: [
+                  { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows", slug: "eyeshadows" },
+                  { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras", slug: "mascaras" },
+                  { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", name: "Eyeliners & Brow Products", slug: "eyeliners-&-brow-products" }
+                ]
+              },
+              {
+                id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
+                name: "Lips",
+                child: [
+                  { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks", slug: "lipsticks" },
+                  { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", name: "Lip Glosses", slug: "lip-glosses" },
+                  { id: "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", name: "Lip Liners", slug: "lip-liners" }
+                ]
+              },
+              {
+                id: "7728f440-4e04-42ef-b9b4-d0c051337748",
+                name: "Makeup Tools & Removers",
+                child: [
+                  { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", name: "Brushes & Sponges", slug: "brushes-&-sponges" },
+                  { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", name: "Makeup Removers", slug: "makeup-removers" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
+            name: "Personal Care",
+            subCategoryItemChildren: [
+              {
+                id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
+                name: "Haircare",
+                child: [
+                  { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos & Conditioners", slug: "shampoos-&-conditioners" },
+                  { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments & Masks", slug: "hair-treatments-&-masks" },
+                  { id: "155f940b-5f02-470c-b6aa-130bd76961b6", name: "Styling Tools", slug: "styling-tools" }
+                ]
+              },
+              {
+                id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
+                name: "Bath & Body",
+                child: [
+                  { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", name: "Body Washes", slug: "body-washes" },
+                  { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", name: "Body Lotions & Scrubs", slug: "body-lotions-&-scrubs" }
+                ]
+              },
+              {
+                id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
+                name: "Shaving & Hair Removal",
+                child: [
+                  { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams" },
+                  { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices" }
+                ]
+              },
+              {
+                id: "7748f268-e744-42cd-bb8c-999ef10378ea",
+                name: "Fragrances & Scents",
+                child: [
+                  { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes", slug: "perfumes" },
+                  { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays", slug: "body-sprays" },
+                  { id: "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", name: "Deodorant", slug: "deodorant" }
+                ]
+              },
+              {
+                id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
+                name: "Oral Care & Hygiene",
+                child: [
+                  { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes & Pastes", slug: "toothbrushes-&-pastes" },
+                  { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", name: "Hygiene Essentials", slug: "hygiene-essentials" }
+                ]
+              }
+            ]
+          }
+        ]
       },
+
       {
         id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
         name: "Health & Wellness",
@@ -371,14 +837,13 @@ export const categoriesSeedData = [
           { id: "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", name: "Health Monitors" }
         ]
       },
+
       {
         id: "748647ab-51a8-462c-8c33-7da71598d748",
         name: "Personal Care",
         gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
           { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", name: "Oral Care" },
-          { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes" },
-          { id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e", name: "Toothpaste" },
           { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Bath & Body" },
           { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Body Wash" },
           { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Lotions" },
@@ -389,31 +854,34 @@ export const categoriesSeedData = [
           { id: "8dcfb41c-e2f6-456c-98df-8f16c4832e56", name: "Hair Removal Devices" }
         ]
       },
+
       {
         id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
-        name: "Pet Supplies",
         gender: ['Male', 'Female', 'Kids'],
+        name: "Pet Supplies",
         subcategoryItems: [
-          { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", name: "Dog Supplies" },
-          { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Dog Food" },
-          { id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e", name: "Cat Supplies" },
-          { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Cat Food" },
+          {
+            id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
+            name: "Dogs",
+            child: [
+              { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Food & Treats", slug: "dog-food-treats" },
+              { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", name: "Leashes", slug: "dog-leashes" },
+              { id: "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", name: "Beds & Furniture", slug: "dog-beds-furniture" }
+            ]
+          },
+          {
+            id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
+            name: "Cats",
+            child: [
+              { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Food & Treats", slug: "cat-food-treats" },
+              { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", name: "Toys", slug: "cat-toys" },
+              { id: "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", name: "Furniture", slug: "cat-furniture" },
+              { id: "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", name: "Litter", slug: "cat-litter" }
+            ]
+          },
           { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Fish & Aquatic Pets" },
           { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Small Animals" },
           { id: "baf0a457-472f-47e4-b87c-65fa40464f78", name: "Birds" }
-        ]
-      },
-      {
-        id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
-        name: "Pet Supplies",
-        "subcategoryItems": [
-          { id: "e21c385b-f54e-4e89-a2a1-0e625d8c3f4a", name: "Dog Supplies" },
-          { id: "f5d02e1c-7f41-4c6e-8a9d-58b29f0c7e2d", name: "Dog Food" },
-          { id: "d8a1e9c7-5b3f-4e0d-b1b4-1c2a3f4e5c6b", name: "Cat Supplies" },
-          { id: "c4d3a2b1-6e5f-4a7b-8c9d-0f1e2a3b4c5d", name: "Cat Food" },
-          { id: "b0a5f7e8-1d2c-4a3b-9e8d-7f6c5b4a3d2e", name: "Fish & Aquatic Pets" },
-          { id: "9e8d7f6c-5b4a-3d2e-1c2a-3f4e5c6b7d8a", name: "Small Animals" },
-          { id: "1b2c3d4e-5f6a-7b8c-9d0e-a1b2c3d4e5f6", name: "Birds" }
         ]
       }
     ],

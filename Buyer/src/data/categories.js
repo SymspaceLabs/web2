@@ -306,81 +306,192 @@ const CATEGORIES_DATA = [
 
       //Health Frontend
       {
-        id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
-        title: 'Beauty, Health & Pets',
-        child: [
+        "id": "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
+        "title": "Beauty, Health & Pets",
+        "slug": "beauty-health-pets",
+        "child": [
           {
-            id: "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
-            title: 'Beauty',
-            child: [
-              { id: "c550b6c6-1945-4b98-816c-cd4db7f931f3", title: "Skincare", slug: 'skincare' },
-              { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", title: "Moisturizers", slug: 'moisturizers' },
-              { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", title: "Cleansers", slug: 'cleansers' },
-              { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", title: "Serums", slug: 'serums' },
-              { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", title: "Masks", slug: 'masks' },
-              { id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa", title: "Haircare", slug: 'haircare' },
-              { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", title: "Shampoos", slug: 'shampoos' },
-              { id: "7f7d6869-d690-4881-8741-771a40858224", title: "Conditioners", slug: 'conditioners' },
-              { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", title: "Hair Treatments", slug: 'hair-treatments' },
-              { id: "155f940b-5f02-470c-b6aa-130bd76961b6", title: "Styling Tools", slug: 'styling-tools' },
-              { id: "a447cd79-d503-4816-924d-34b9db78f108", title: "Makeup", slug: 'makeup' },
-              { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", title: "Foundations", slug: 'foundations' },
-              { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", title: "Lipsticks", slug: 'lipsticks' },
-              { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", title: "Eyeshadows", slug: 'eyeshadows' },
-              { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", title: "Mascaras", slug: 'mascaras' },
-              { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", title: "Blushes", slug: 'blushes' },
-              { id: "7728f440-4e04-42ef-b9b4-d0c051337748", title: "Makeup Tools", slug: 'makeup-tools' },
-              { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", title: "Concealers", slug: 'concealers' },
-              { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", title: "Powders", slug: 'powders' },
-              { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", title: "Eyeliners", slug: 'eyeliners' },
-              { id: "56a805d7-8e80-4425-ae99-308fe3c6895a", title: "Brow Products", slug: 'brow-products' },
-              { id: "7748f268-e744-42cd-bb8c-999ef10378ea", title: "Fragrances", slug: 'fragrances' },
-              { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", title: "Perfumes", slug: 'perfumes' },
-              { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", title: "Body Sprays", slug: 'body-sprays' }
-            ],
-          },
-          {
-            id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
-            title: "Health & Wellness",
-            child: [
-              { id: "81d3021a-13c4-48b0-bb20-658cd9f35a74", title: "Vitamins & Supplements", slug: 'vitamins-supplements' },
-              { id: "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", title: "Medical Equipment", slug: 'medical-equipment' },
-              { id: "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", title: "Fitness Equipment", slug: 'fitness-equipment' },
-              { id: "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", title: "Health Monitors", slug: 'health-monitors' }
+            "id": "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
+            "title": "Beauty",
+            "slug": "beauty",
+            "gender": ["Male", "Female"],
+            "child": [
+              {
+                "id": "c550b6c6-1945-4b98-816c-cd4db7f931f3",
+                "title": "Skincare",
+                "slug": "skincare",
+                "child": [
+                  { "id": "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", "title": "Cleansers", "slug": "cleansers" },
+                  { "id": "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", "title": "Moisturizers", "slug": "moisturizers" },
+                  { "id": "ee3b5744-d734-4a5f-84e5-c785705cd2af", "title": "Serums", "slug": "serums" },
+                  { "id": "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", "title": "Masks", "slug": "masks" },
+                  { "id": "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", "title": "Toners", "slug": "toners" },
+                  { "id": "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", "title": "Eye Creams", "slug": "eye-creams" },
+                  { "id": "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", "title": "Sunscreens (SPF)", "slug": "sunscreens" },
+                  { "id": "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", "title": "Acne Treatments", "slug": "acne-treatments" },
+                  { "id": "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", "title": "Anti-Aging Treatments", "slug": "anti-aging-treatments" }
+                ]
+              },
+              {
+                "id": "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
+                "title": "Skincare Tools",
+                "slug": "skincare-tools",
+                "child": [
+                  { "id": "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", "title": "Rollers", "slug": "rollers" },
+                  { "id": "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", "title": "Facial Brushes", "slug": "facial-brushes" },
+                  { "id": "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", "title": "LED Devices", "slug": "led-devices" }
+                ]
+              },
+              {
+                "id": "a447cd79-d503-4816-924d-34b9db78f108",
+                "title": "Makeup",
+                "slug": "makeup",
+                "child": [
+                  {
+                    "id": "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
+                    "title": "Face",
+                    "slug": "face",
+                    "child": [
+                      { "id": "f27d3773-d2d1-40b2-b567-18089442fcb7", "title": "Foundations", "slug": "foundations" },
+                      { "id": "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", "title": "Concealers", "slug": "concealers" },
+                      { "id": "8bdbba63-29a3-4560-bfd2-019b82dd4a12", "title": "Powders", "slug": "powders" },
+                      { "id": "c0ff1f85-e819-4c09-94c1-40c15152eaf1", "title": "Blushes & Highlighters", "slug": "blushes-highlighters" }
+                    ]
+                  },
+                  {
+                    "id": "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
+                    "title": "Eyes",
+                    "slug": "eyes",
+                    "child": [
+                      { "id": "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", "title": "Eyeshadows", "slug": "eyeshadows" },
+                      { "id": "24cc744f-bf3f-4db4-a60b-41d6635df914", "title": "Mascaras", "slug": "mascaras" },
+                      { "id": "7d700de6-0124-4a69-8e5c-cd77e7b9b124", "title": "Eyeliners & Brow Products", "slug": "eyeliners-brow-products" }
+                    ]
+                  },
+                  {
+                    "id": "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
+                    "title": "Lips",
+                    "slug": "lips",
+                    "child": [
+                      { "id": "52c10ad4-209c-482e-9aeb-376e4aa54f11", "title": "Lipsticks", "slug": "lipsticks" },
+                      { "id": "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", "title": "Lip Glosses", "slug": "lip-glosses" },
+                      { "id": "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", "title": "Lip Liners", "slug": "lip-liners" }
+                    ]
+                  },
+                  {
+                    "id": "7728f440-4e04-42ef-b9b4-d0c051337748",
+                    "title": "Makeup Tools & Removers",
+                    "slug": "makeup-tools-removers",
+                    "child": [
+                      { "id": "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", "title": "Brushes & Sponges", "slug": "brushes-sponges" },
+                      { "id": "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", "title": "Makeup Removers", "slug": "makeup-removers" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
+                "title": "Personal Care",
+                "slug": "personal-care",
+                "child": [
+                  {
+                    "id": "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
+                    "title": "Haircare",
+                    "slug": "haircare",
+                    "child": [
+                      { "id": "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", "title": "Shampoos & Conditioners", "slug": "shampoos-conditioners" },
+                      { "id": "594a09da-b73e-44d7-9aa2-7d0950bff67a", "title": "Hair Treatments & Masks", "slug": "hair-treatments-masks" },
+                      { "id": "155f940b-5f02-470c-b6aa-130bd76961b6", "title": "Styling Tools", "slug": "styling-tools" }
+                    ]
+                  },
+                  {
+                    "id": "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
+                    "title": "Bath & Body",
+                    "slug": "bath-body",
+                    "child": [
+                      { "id": "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", "title": "Body Washes", "slug": "body-washes" },
+                      { "id": "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", "title": "Body Lotions & Scrubs", "slug": "body-lotions-scrubs" }
+                    ]
+                  },
+                  {
+                    "id": "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
+                    "title": "Shaving & Hair Removal",
+                    "slug": "shaving-hair-removal",
+                    "child": [
+                      { "id": "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", "title": "Razors & Shaving Creams", "slug": "razors-shaving-creams" },
+                      { "id": "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", "title": "Hair Removal Devices", "slug": "hair-removal-devices" }
+                    ]
+                  },
+                  {
+                    "id": "7748f268-e744-42cd-bb8c-999ef10378ea",
+                    "title": "Fragrances & Scents",
+                    "slug": "fragrances-scents",
+                    "child": [
+                      { "id": "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", "title": "Perfumes", "slug": "perfumes" },
+                      { "id": "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", "title": "Body Sprays", "slug": "body-sprays" },
+                      { "id": "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", "title": "Deodorant", "slug": "deodorant" }
+                    ]
+                  },
+                  {
+                    "id": "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
+                    "title": "Oral Care & Hygiene",
+                    "slug": "oral-care-hygiene",
+                    "child": [
+                      { "id": "9be4e746-6a3b-46d0-b142-6a8c33a536da", "title": "Toothbrushes & Pastes", "slug": "toothbrushes-pastes" },
+                      { "id": "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", "title": "Hygiene Essentials", "slug": "hygiene-essentials" }
+                    ]
+                  }
+                ]
+              }
             ]
           },
           {
-            id: "748647ab-51a8-462c-8c33-7da71598d748",
-            title: "Personal Care",
-            child: [
-              { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", title: "Oral Care", slug: 'oral-care' },
-              { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", title: "Toothbrushes", slug: 'toothbrushes' },
-              { id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e", title: "Toothpaste", slug: 'toothpaste' },
-              { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", title: "Bath & Body", slug: 'bath-body' },
-              { id: "7814a377-9a24-455e-b5d6-26d134b62f04", title: "Body Wash", slug: 'body-wash' },
-              { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", title: "Lotions", slug: 'lotions' },
-              { id: "baf0a457-472f-47e4-b87c-65fa40464f78", title: "Hand Sanitizers", slug: 'hand-sanitizers' },
-              { id: "81818e91-f86a-47bb-a4a6-9e87b4b8c2cf", title: "Shaving & Hair Removal", slug: 'shaving-hair-removal' },
-              { id: "f5229454-2b30-41a4-8f91-9d8f16f74d3b", title: "Razors", slug: 'razors' },
-              { id: "d9bfb47c-f789-4688-9e67-5121dfc7c5c4", title: "Shaving Cream", slug: 'shaving-cream' },
-              { id: "8dcfb41c-e2f6-456c-98df-8f16c4832e56", title: "Hair Removal Devices", slug: 'hair-removal-devices' }
+            "id": "8536a833-b2f6-4ae0-a51b-530dcde99077",
+            "title": "Health & Wellness",
+            "slug": "health-wellness",
+            "gender": ["Male", "Female", "Kids"],
+            "child": [
+              { "id": "81d3021a-13c4-48b0-bb20-658cd9f35a74", "title": "Vitamins & Supplements", "slug": "vitamins-supplements" },
+              { "id": "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", "title": "Medical Equipment", "slug": "medical-equipment" },
+              { "id": "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", "title": "Fitness Equipment", "slug": "fitness-equipment" },
+              { "id": "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", "title": "Health Monitors", "slug": "health-monitors" }
             ]
           },
           {
-            id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
-            title: "Pet Supplies",
-            child: [
-              { id: "e21c385b-f54e-4e89-a2a1-0e625d8c3f4a", title: "Dog Supplies", slug: 'dog-supplies' },
-              { id: "f5d02e1c-7f41-4c6e-8a9d-58b29f0c7e2d", title: "Dog Food", slug: 'dog-food' },
-              { id: "d8a1e9c7-5b3f-4e0d-b1b4-1c2a3f4e5c6b", title: "Cat Supplies", slug: 'cat-supplies' },
-              { id: "c4d3a2b1-6e5f-4a7b-8c9d-0f1e2a3b4c5d", title: "Cat Food", slug: 'cat-food' },
-              { id: "b0a5f7e8-1d2c-4a3b-9e8d-7f6c5b4a3d2e", title: "Fish & Aquatic Pets", slug: 'fish-aquatic-pets' },
-              { id: "9e8d7f6c-5b4a-3d2e-1c2a-3f4e5c6b7d8a", title: "Small Animals", slug: 'small-animals' },
-              { id: "1b2c3d4e-5f6a-7b8c-9d0e-a1b2c3d4e5f6", title: "Birds", slug: 'birds' }
+            "id": "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
+            "title": "Pet Supplies",
+            "slug": "pet-supplies",
+            "gender": ["Male", "Female", "Kids"],
+            "child": [
+              {
+                "id": "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
+                "title": "Dogs",
+                "slug": "dog-supplies",
+                "child": [
+                  { "id": "9be4e746-6a3b-46d0-b142-6a8c33a536da", "title": "Food & Treats", "slug": "dog-food-treats" },
+                  { "id": "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", "title": "Leashes", "slug": "dog-leashes" },
+                  { "id": "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", "title": "Beds & Furniture", "slug": "dog-beds-furniture" }
+                ]
+              },
+              {
+                "id": "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
+                "title": "Cats",
+                "slug": "cat-supplies",
+                "child": [
+                  { "id": "5d112e59-126c-4e17-8f8d-0b8819b065f2", "title": "Food & Treats", "slug": "cat-food-treats" },
+                  { "id": "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", "title": "Toys", "slug": "cat-toys" },
+                  { "id": "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", "title": "Furniture", "slug": "cat-furniture" },
+                  { "id": "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", "title": "Litter", "slug": "cat-litter" }
+                ]
+              },
+              { "id": "7814a377-9a24-455e-b5d6-26d134b62f04", "title": "Fish & Aquatic Pets", "slug": "fish-aquatic-pets" },
+              { "id": "1f14f741-5768-4a77-906e-53fa8b87b8a3", "title": "Small Animals", "slug": "small-animals" },
+              { "id": "baf0a457-472f-47e4-b87c-65fa40464f78", "title": "Birds", "slug": "birds" }
             ]
           }
-        ],
+        ]
       },
+
       
       //Baby Frontend
       {

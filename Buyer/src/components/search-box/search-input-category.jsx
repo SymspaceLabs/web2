@@ -1,4 +1,5 @@
-import Box from "@mui/material/Box";
+
+import { Box } from "@mui/material";
 import TextField from "@mui/material/TextField"; // LOCAL CUSTOM COMPONENTS
 
 import SearchResult from "./components/search-result";

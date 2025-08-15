@@ -4,172 +4,172 @@ const CATEGORIES_DATA = [
     child: [
       //Clothing Frontend
       {
-        uuid: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
+        id: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
         title: "Clothing, Shoes & Accessories",
         child: [
           {
-            uuid: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64",
+            id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64",
             title: "Dresses",
             child: [
-              { uuid: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", title: "Casual Dresses", slug: "casual-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", title: "Formal Dresses", slug: "formal-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "c53f5378-e3b3-45b1-a129-e2c4067c8509", title: "Summer Dresses", slug: "summer-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
+              { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", title: "Casual Dresses", slug: "casual-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", title: "Formal Dresses", slug: "formal-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", title: "Summer Dresses", slug: "summer-dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
             ],
           },
           {
-            uuid: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
+            id: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
             title: "Tops",
             child: [
-              { uuid: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", title: "Blouses", slug: "blouses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "9d826402-b7be-4329-97fc-bd64934eb233", title: "T-Shirts", slug: "t-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", title: "Sweaters", slug: "sweaters", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Cardigans", slug: "cardigans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", title: "Casual Shirts", slug: "casual-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "1de0fd99-62b6-4386-8c92-8ca4db389599", title: "Dress Shirts", slug: "dress-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", title: "Polo Shirts", slug: "polo-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", title: "Blouses", slug: "blouses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "9d826402-b7be-4329-97fc-bd64934eb233", title: "T-Shirts", slug: "t-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", title: "Sweaters", slug: "sweaters", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Cardigans", slug: "cardigans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", title: "Casual Shirts", slug: "casual-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", title: "Dress Shirts", slug: "dress-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", title: "Polo Shirts", slug: "polo-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ],
           },
           {
-            uuid: "d7c1a1c3-cda0-4686-bf84-e70241e383b3",
+            id: "d7c1a1c3-cda0-4686-bf84-e70241e383b3",
             title: "Bottoms",
             child: [
-              { uuid: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Jeans", slug: "jeans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "b888c11c-b62d-4be4-9756-4151a05692f9", title: "Shorts", slug: "shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Skirts", slug: "skirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Jeans", slug: "jeans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "b888c11c-b62d-4be4-9756-4151a05692f9", title: "Shorts", slug: "shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Skirts", slug: "skirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
               {
-                uuid: "d49a2804-0665-4b50-9d8e-1e7b423f26b2",
+                id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2",
                 title: "Pants",
                 slug: "pants",
                 tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
                 optional_tags: ["color", "pattern"],
                 tag_defaults: { ar_type: "body-tracking" },
                 child: [
-                  { uuid: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", title: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-                  { uuid: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", title: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-                  { uuid: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-                  { uuid: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", title: "Cargos", slug: "cargos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", title: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", title: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", title: "Cargos", slug: "cargos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 ],
               },
             ],
           },
           {
-            uuid: "9c93e575-8e62-49de-a3d9-16b61c31be2d",
+            id: "9c93e575-8e62-49de-a3d9-16b61c31be2d",
             title: "Outerwear",
             child: [
-              { uuid: "aba0a755-cf5d-4657-b017-8d014a539d43", title: "Jackets", slug: "jackets", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", title: "Coats", slug: "coats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", title: "Blazers", slug: "blazers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Vests", slug: "vests", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Hoodies", slug: "hoodies", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Suits", slug: "suits", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "aba0a755-cf5d-4657-b017-8d014a539d43", title: "Jackets", slug: "jackets", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", title: "Coats", slug: "coats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", title: "Blazers", slug: "blazers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Vests", slug: "vests", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Hoodies", slug: "hoodies", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Suits", slug: "suits", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ],
           },
           {
-            uuid: "69e7fd69-6ec4-4792-94f2-b39e4826c96f",
+            id: "69e7fd69-6ec4-4792-94f2-b39e4826c96f",
             title: "Activewear",
             child: [
-              { uuid: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", title: "Leggings", slug: "leggings", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", title: "Sport Bras", slug: "sport-bras", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", title: "Track Pants", slug: "track-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "2df96d8f-b8f9-4711-8f89-f72f167e78da", title: "Workout Tops", slug: "workout-tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "d7424957-f23b-4c95-85c7-e318e91f9a56", title: "Yoga Pants", slug: "yoga-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", title: "Sports Shorts", slug: "sports-shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Sweatshirts", slug: "sweatshirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { uuid: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Compression Wear", slug: "compression-wear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", title: "Leggings", slug: "leggings", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", title: "Sport Bras", slug: "sport-bras", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", title: "Track Pants", slug: "track-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "2df96d8f-b8f9-4711-8f89-f72f167e78da", title: "Workout Tops", slug: "workout-tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "d7424957-f23b-4c95-85c7-e318e91f9a56", title: "Yoga Pants", slug: "yoga-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", title: "Sports Shorts", slug: "sports-shorts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", title: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "a567e980-5f8d-47be-80e9-9a75e88d3f79", title: "Sweatshirts", slug: "sweatshirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", title: "Compression Wear", slug: "compression-wear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ],
           },
           {
-            uuid: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
+            id: "86d2b4c8-b195-4de8-b47f-8e5d98c0f5ae",
             title: "Eyewear",
             child: [
-              { uuid: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Prescription Glasses", slug: "prescription-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-              { uuid: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Sunglasses", slug: "sunglasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-              { uuid: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", title: "Blue Light Glasses", slug: "blue-light-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-              { uuid: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", title: "Kids' Eyewear", slug: "kids-eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
+              { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", title: "Prescription Glasses", slug: "prescription-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Sunglasses", slug: "sunglasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", title: "Blue Light Glasses", slug: "blue-light-glasses", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", title: "Kids' Eyewear", slug: "kids-eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
             ],
           },
           {
-            uuid: "faed8236-48bb-4591-98f7-e86b3ec6b2c8",
+            id: "faed8236-48bb-4591-98f7-e86b3ec6b2c8",
             title: "Intimates",
             child: [
-              { uuid: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", title: "Bras", slug: "bras", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", title: "Panties", slug: "panties", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-              { uuid: "7fae12d0-9635-43fb-aaf4-362ed92c1234", title: "Boxers", slug: "boxers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
-              { uuid: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Briefs", slug: "briefs", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
-              { uuid: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Sleepwear", slug: "sleepwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", title: "Bras", slug: "bras", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", title: "Panties", slug: "panties", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+              { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", title: "Boxers", slug: "boxers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+              { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Briefs", slug: "briefs", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+              { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Sleepwear", slug: "sleepwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ],
           },
           {
-            uuid: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
+            id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
             title: "Shoes",
             child: [
-              { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Sandals", slug: "sandals", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Flats", slug: "flats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Heels", slug: "heels", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking", gender: "women" } },
-              { uuid: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Boots", slug: "boots", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Sneakers", slug: "sneakers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Athletic Shoes", slug: "athletic-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Formal Shoes", slug: "formal-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { uuid: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Casual Shoes", slug: "casual-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Sandals", slug: "sandals", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Flats", slug: "flats", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Heels", slug: "heels", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking", gender: "women" } },
+              { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", title: "Boots", slug: "boots", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Sneakers", slug: "sneakers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Athletic Shoes", slug: "athletic-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Formal Shoes", slug: "formal-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Casual Shoes", slug: "casual-shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
             ],
           },
           {
-            uuid: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
+            id: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
             title: "Accessories",
             child: [
               {
-                uuid: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3",
+                id: "49382f7c-94a7-48e2-9d7c-5a39f7e5d8c3",
                 title: "Bags",
                 child: [
-                  { uuid: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", title: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Shoulder Bags", slug: "shoulder-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Tote Bags", slug: "tote-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", title: "Clutches", slug: "clutches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", title: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", title: "Shoulder Bags", slug: "shoulder-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", title: "Tote Bags", slug: "tote-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
+                  { id: "d84f7c39-5298-4b7d-a38c-72e4f91c8b03", title: "Clutches", slug: "clutches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
                 ],
               },
               {
-                uuid: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6",
+                id: "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6",
                 title: "Jewelry & Watches",
                 child: [
-                  { uuid: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", title: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", title: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } },
-                  { uuid: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Bracelets", slug: "bracelets", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", title: "Plated Jewelry", slug: "plated-jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } },
-                  { uuid: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Men's Watches", slug: "mens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
-                  { uuid: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Women's Watches", slug: "womens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
-                  { uuid: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Smartwatches", slug: "smartwatches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
-                  { uuid: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Watch Bands & Accessories", slug: "watch-bands-accessories", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", title: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", title: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", title: "Bracelets", slug: "bracelets", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", title: "Plated Jewelry", slug: "plated-jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", title: "Men's Watches", slug: "mens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
+                  { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", title: "Women's Watches", slug: "womens-watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
+                  { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", title: "Smartwatches", slug: "smartwatches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", title: "Watch Bands & Accessories", slug: "watch-bands-accessories", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
                 ],
               },
               {
-                uuid: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
+                id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
                 title: "Headwear",
                 child: [
-                  { uuid: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", title: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", title: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", title: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", title: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
                 ],
               },
               {
-                uuid: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b",
+                id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b",
                 title: "Seasonal Accessories",
                 child: [
-                  { uuid: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
-                  { uuid: "d7c1a1c3-cda0-4686-bf84-e70241e383b3", title: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-                  { uuid: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", title: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-                  { uuid: "9c93e575-8e62-49de-a3d9-16b61c31be2d", title: "Ties", slug: "ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", title: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
+                  { id: "d7c1a1c3-cda0-4686-bf84-e70241e383b3", title: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+                  { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", title: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+                  { id: "9c93e575-8e62-49de-a3d9-16b61c31be2d", title: "Ties", slug: "ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 ],
               },
               {
-                uuid: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
+                id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
                 title: "Wallets & Belts",
                 child: [
-                  { uuid: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", title: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
-                  { uuid: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
+                  { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", title: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
+                  { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", title: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
                 ],
               },
             ],
@@ -303,195 +303,185 @@ const CATEGORIES_DATA = [
         ],
       },
 
-
       //Health Frontend
       {
-        "id": "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
-        "title": "Beauty, Health & Pets",
-        "slug": "beauty-health-pets",
-        "child": [
+        id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
+        title: "Beauty, Health & Pets",
+        slug: "beauty-health-pets",
+        child: [
           {
-            "id": "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
-            "title": "Beauty",
-            "slug": "beauty",
-            "gender": ["Male", "Female"],
-            "child": [
+            id: "c550b6c6-1945-4b98-816c-cd4db7f931f3",
+            title: "Skincare",
+            slug: "skincare",
+            child: [
+              { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", title: "Cleansers", slug: "cleansers" },
+              { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", title: "Moisturizers", slug: "moisturizers" },
+              { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", title: "Serums", slug: "serums" },
+              { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", title: "Masks", slug: "masks" },
+              { id: "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", title: "Toners", slug: "toners" },
+              { id: "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", title: "Eye Creams", slug: "eye-creams" },
+              { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", title: "Sunscreens (SPF)", slug: "sunscreens" },
+              { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", title: "Acne Treatments", slug: "acne-treatments" },
+              { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", title: "Anti-Aging Treatments", slug: "anti-aging-treatments" }
+            ]
+          },
+          {
+            id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
+            title: "Skincare Tools",
+            slug: "skincare-tools",
+            child: [
+              { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", title: "Rollers", slug: "rollers" },
+              { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", title: "Facial Brushes", slug: "facial-brushes" },
+              { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", title: "LED Devices", slug: "led-devices" }
+            ]
+          },
+          {
+            id: "a447cd79-d503-4816-924d-34b9db78f108",
+            title: "Makeup",
+            slug: "makeup",
+            child: [
               {
-                "id": "c550b6c6-1945-4b98-816c-cd4db7f931f3",
-                "title": "Skincare",
-                "slug": "skincare",
-                "child": [
-                  { "id": "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", "title": "Cleansers", "slug": "cleansers" },
-                  { "id": "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", "title": "Moisturizers", "slug": "moisturizers" },
-                  { "id": "ee3b5744-d734-4a5f-84e5-c785705cd2af", "title": "Serums", "slug": "serums" },
-                  { "id": "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", "title": "Masks", "slug": "masks" },
-                  { "id": "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", "title": "Toners", "slug": "toners" },
-                  { "id": "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", "title": "Eye Creams", "slug": "eye-creams" },
-                  { "id": "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", "title": "Sunscreens (SPF)", "slug": "sunscreens" },
-                  { "id": "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", "title": "Acne Treatments", "slug": "acne-treatments" },
-                  { "id": "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", "title": "Anti-Aging Treatments", "slug": "anti-aging-treatments" }
+                id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
+                title: "Face",
+                slug: "face",
+                child: [
+                  { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", title: "Foundations", slug: "foundations" },
+                  { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", title: "Concealers", slug: "concealers" },
+                  { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", title: "Powders", slug: "powders" },
+                  { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", title: "Blushes & Highlighters", slug: "blushes-highlighters" }
                 ]
               },
               {
-                "id": "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
-                "title": "Skincare Tools",
-                "slug": "skincare-tools",
-                "child": [
-                  { "id": "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", "title": "Rollers", "slug": "rollers" },
-                  { "id": "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", "title": "Facial Brushes", "slug": "facial-brushes" },
-                  { "id": "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", "title": "LED Devices", "slug": "led-devices" }
+                id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
+                title: "Eyes",
+                slug: "eyes",
+                child: [
+                  { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", title: "Eyeshadows", slug: "eyeshadows" },
+                  { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", title: "Mascaras", slug: "mascaras" },
+                  { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", title: "Eyeliners & Brow Products", slug: "eyeliners-brow-products" }
                 ]
               },
               {
-                "id": "a447cd79-d503-4816-924d-34b9db78f108",
-                "title": "Makeup",
-                "slug": "makeup",
-                "child": [
-                  {
-                    "id": "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
-                    "title": "Face",
-                    "slug": "face",
-                    "child": [
-                      { "id": "f27d3773-d2d1-40b2-b567-18089442fcb7", "title": "Foundations", "slug": "foundations" },
-                      { "id": "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", "title": "Concealers", "slug": "concealers" },
-                      { "id": "8bdbba63-29a3-4560-bfd2-019b82dd4a12", "title": "Powders", "slug": "powders" },
-                      { "id": "c0ff1f85-e819-4c09-94c1-40c15152eaf1", "title": "Blushes & Highlighters", "slug": "blushes-highlighters" }
-                    ]
-                  },
-                  {
-                    "id": "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
-                    "title": "Eyes",
-                    "slug": "eyes",
-                    "child": [
-                      { "id": "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", "title": "Eyeshadows", "slug": "eyeshadows" },
-                      { "id": "24cc744f-bf3f-4db4-a60b-41d6635df914", "title": "Mascaras", "slug": "mascaras" },
-                      { "id": "7d700de6-0124-4a69-8e5c-cd77e7b9b124", "title": "Eyeliners & Brow Products", "slug": "eyeliners-brow-products" }
-                    ]
-                  },
-                  {
-                    "id": "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
-                    "title": "Lips",
-                    "slug": "lips",
-                    "child": [
-                      { "id": "52c10ad4-209c-482e-9aeb-376e4aa54f11", "title": "Lipsticks", "slug": "lipsticks" },
-                      { "id": "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", "title": "Lip Glosses", "slug": "lip-glosses" },
-                      { "id": "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", "title": "Lip Liners", "slug": "lip-liners" }
-                    ]
-                  },
-                  {
-                    "id": "7728f440-4e04-42ef-b9b4-d0c051337748",
-                    "title": "Makeup Tools & Removers",
-                    "slug": "makeup-tools-removers",
-                    "child": [
-                      { "id": "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", "title": "Brushes & Sponges", "slug": "brushes-sponges" },
-                      { "id": "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", "title": "Makeup Removers", "slug": "makeup-removers" }
-                    ]
-                  }
+                id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
+                title: "Lips",
+                slug: "lips",
+                child: [
+                  { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", title: "Lipsticks", slug: "lipsticks" },
+                  { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", title: "Lip Glosses", slug: "lip-glosses" },
+                  { id: "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", title: "Lip Liners", slug: "lip-liners" }
                 ]
               },
               {
-                "id": "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
-                "title": "Personal Care",
-                "slug": "personal-care",
-                "child": [
-                  {
-                    "id": "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
-                    "title": "Haircare",
-                    "slug": "haircare",
-                    "child": [
-                      { "id": "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", "title": "Shampoos & Conditioners", "slug": "shampoos-conditioners" },
-                      { "id": "594a09da-b73e-44d7-9aa2-7d0950bff67a", "title": "Hair Treatments & Masks", "slug": "hair-treatments-masks" },
-                      { "id": "155f940b-5f02-470c-b6aa-130bd76961b6", "title": "Styling Tools", "slug": "styling-tools" }
-                    ]
-                  },
-                  {
-                    "id": "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
-                    "title": "Bath & Body",
-                    "slug": "bath-body",
-                    "child": [
-                      { "id": "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", "title": "Body Washes", "slug": "body-washes" },
-                      { "id": "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", "title": "Body Lotions & Scrubs", "slug": "body-lotions-scrubs" }
-                    ]
-                  },
-                  {
-                    "id": "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
-                    "title": "Shaving & Hair Removal",
-                    "slug": "shaving-hair-removal",
-                    "child": [
-                      { "id": "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", "title": "Razors & Shaving Creams", "slug": "razors-shaving-creams" },
-                      { "id": "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", "title": "Hair Removal Devices", "slug": "hair-removal-devices" }
-                    ]
-                  },
-                  {
-                    "id": "7748f268-e744-42cd-bb8c-999ef10378ea",
-                    "title": "Fragrances & Scents",
-                    "slug": "fragrances-scents",
-                    "child": [
-                      { "id": "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", "title": "Perfumes", "slug": "perfumes" },
-                      { "id": "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", "title": "Body Sprays", "slug": "body-sprays" },
-                      { "id": "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", "title": "Deodorant", "slug": "deodorant" }
-                    ]
-                  },
-                  {
-                    "id": "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
-                    "title": "Oral Care & Hygiene",
-                    "slug": "oral-care-hygiene",
-                    "child": [
-                      { "id": "9be4e746-6a3b-46d0-b142-6a8c33a536da", "title": "Toothbrushes & Pastes", "slug": "toothbrushes-pastes" },
-                      { "id": "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", "title": "Hygiene Essentials", "slug": "hygiene-essentials" }
-                    ]
-                  }
+                id: "7728f440-4e04-42ef-b9b4-d0c051337748",
+                title: "Makeup Tools & Removers",
+                slug: "makeup-tools-removers",
+                child: [
+                  { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", title: "Brushes & Sponges", slug: "brushes-sponges" },
+                  { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", title: "Makeup Removers", slug: "makeup-removers" }
                 ]
               }
             ]
           },
           {
-            "id": "8536a833-b2f6-4ae0-a51b-530dcde99077",
-            "title": "Health & Wellness",
-            "slug": "health-wellness",
-            "gender": ["Male", "Female", "Kids"],
-            "child": [
-              { "id": "81d3021a-13c4-48b0-bb20-658cd9f35a74", "title": "Vitamins & Supplements", "slug": "vitamins-supplements" },
-              { "id": "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", "title": "Medical Equipment", "slug": "medical-equipment" },
-              { "id": "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", "title": "Fitness Equipment", "slug": "fitness-equipment" },
-              { "id": "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", "title": "Health Monitors", "slug": "health-monitors" }
+            id: "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
+            title: "Personal Care",
+            slug: "personal-care",
+            child: [
+              {
+                id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
+                title: "Haircare",
+                slug: "haircare",
+                child: [
+                  { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", title: "Shampoos & Conditioners", slug: "shampoos-conditioners" },
+                  { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", title: "Hair Treatments & Masks", slug: "hair-treatments-masks" },
+                  { id: "155f940b-5f02-470c-b6aa-130bd76961b6", title: "Styling Tools", slug: "styling-tools" }
+                ]
+              },
+              {
+                id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
+                title: "Bath & Body",
+                slug: "bath-body",
+                child: [
+                  { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", title: "Body Washes", slug: "body-washes" },
+                  { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", title: "Body Lotions & Scrubs", slug: "body-lotions-scrubs" }
+                ]
+              },
+              {
+                id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
+                title: "Shaving & Hair Removal",
+                slug: "shaving-hair-removal",
+                child: [
+                  { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", title: "Razors & Shaving Creams", slug: "razors-shaving-creams" },
+                  { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", title: "Hair Removal Devices", slug: "hair-removal-devices" }
+                ]
+              },
+              {
+                id: "7748f268-e744-42cd-bb8c-999ef10378ea",
+                title: "Fragrances & Scents",
+                slug: "fragrances-scents",
+                child: [
+                  { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", title: "Perfumes", slug: "perfumes" },
+                  { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", title: "Body Sprays", slug: "body-sprays" },
+                  { id: "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", title: "Deodorant", slug: "deodorant" }
+                ]
+              },
+              {
+                id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
+                title: "Oral Care & Hygiene",
+                slug: "oral-care-hygiene",
+                child: [
+                  { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", title: "Toothbrushes & Pastes", slug: "toothbrushes-pastes" },
+                  { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", title: "Hygiene Essentials", slug: "hygiene-essentials" }
+                ]
+              }
             ]
           },
           {
-            "id": "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
-            "title": "Pet Supplies",
-            "slug": "pet-supplies",
-            "gender": ["Male", "Female", "Kids"],
-            "child": [
+            id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
+            title: "Health & Wellness",
+            slug: "health-wellness",
+            gender: ["Male", "Female", "Kids"],
+            child: [
+              { id: "81d3021a-13c4-48b0-bb20-658cd9f35a74", title: "Vitamins & Supplements", slug: "vitamins-supplements" },
+              { id: "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", title: "Medical Equipment", slug: "medical-equipment" },
+              { id: "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", title: "Fitness Equipment", slug: "fitness-equipment" },
+              { id: "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", title: "Health Monitors", slug: "health-monitors" }
+            ]
+          },
+          {
+            id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
+            title: "Pet Supplies",
+            slug: "pet-supplies",
+            gender: ["Male", "Female", "Kids"],
+            child: [
               {
-                "id": "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
-                "title": "Dogs",
-                "slug": "dog-supplies",
-                "child": [
-                  { "id": "9be4e746-6a3b-46d0-b142-6a8c33a536da", "title": "Food & Treats", "slug": "dog-food-treats" },
-                  { "id": "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", "title": "Leashes", "slug": "dog-leashes" },
-                  { "id": "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", "title": "Beds & Furniture", "slug": "dog-beds-furniture" }
+                id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
+                title: "Dogs",
+                slug: "dog-supplies",
+                child: [
+                  { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", title: "Food & Treats", slug: "dog-food-treats" },
+                  { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", title: "Leashes", slug: "dog-leashes" },
+                  { id: "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", title: "Beds & Furniture", slug: "dog-beds-furniture" }
                 ]
               },
               {
-                "id": "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
-                "title": "Cats",
-                "slug": "cat-supplies",
-                "child": [
-                  { "id": "5d112e59-126c-4e17-8f8d-0b8819b065f2", "title": "Food & Treats", "slug": "cat-food-treats" },
-                  { "id": "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", "title": "Toys", "slug": "cat-toys" },
-                  { "id": "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", "title": "Furniture", "slug": "cat-furniture" },
-                  { "id": "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", "title": "Litter", "slug": "cat-litter" }
+                id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
+                title: "Cats",
+                slug: "cat-supplies",
+                child: [
+                  { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", title: "Food & Treats", slug: "cat-food-treats" },
+                  { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", title: "Toys", slug: "cat-toys" },
+                  { id: "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", title: "Furniture", slug: "cat-furniture" },
+                  { id: "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", title: "Litter", slug: "cat-litter" }
                 ]
               },
-              { "id": "7814a377-9a24-455e-b5d6-26d134b62f04", "title": "Fish & Aquatic Pets", "slug": "fish-aquatic-pets" },
-              { "id": "1f14f741-5768-4a77-906e-53fa8b87b8a3", "title": "Small Animals", "slug": "small-animals" },
-              { "id": "baf0a457-472f-47e4-b87c-65fa40464f78", "title": "Birds", "slug": "birds" }
+              { id: "7814a377-9a24-455e-b5d6-26d134b62f04", title: "Fish & Aquatic Pets", slug: "fish-aquatic-pets" },
+              { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", title: "Small Animals", slug: "small-animals" },
+              { id: "baf0a457-472f-47e4-b87c-65fa40464f78", title: "Birds", slug: "birds" }
             ]
           }
         ]
       },
-
       
       //Baby Frontend
       {
@@ -715,6 +705,42 @@ const CATEGORIES_DATA = [
               { title: "Ramps", id: "fab927ab-c569-4d5f-b637-d4c6ed154a54", slug: 'ramps' },
               { title: "Lifts", id: "81a6c2cc-45de-4e1c-b676-90b1b1e09c06", slug: 'lifts' },
               { title: "Accessible Furniture", id: "517fd112-58c7-4111-9cbf-fdf5c4c2bb0e", slug: 'accessible-furniture' }
+            ]
+          },
+          {
+            id: "e4a2503d-2f08-4e6f-b25c-0c1a8a2d1d0f",
+            title: "Eyecare & Vision Aids",
+            child: [
+              {
+                id: "c1f7a1b3-4f9e-4c7a-9a0d-8e5f2a1b3c4d",
+                title: "Reading Glasses",
+                slug: "reading-glasses"
+              },
+              {
+                id: "f5d9c2e0-8b1a-4d6c-8e3b-9c8f7a6d5b4e",
+                title: "Contact Lens Care",
+                slug: "contact-lens-care"
+              },
+              {
+                id: "b0a6e3d2-7c9b-4e8a-9f5a-2c4d6b8e0f1a",
+                title: "Eye Drops & Treatments",
+                slug: "eye-drops-treatments"
+              },
+              {
+                id: "a8c5f4e1-3d7b-4a9c-9f2e-0c1b3d5e7f9a",
+                title: "Blue Light Filters",
+                slug: "blue-light-filters"
+              },
+              {
+                id: "d7b4a6c9-8e5f-4d3a-8b1c-2f9e0a8d7c6b",
+                title: "Magnifiers & Low Vision Aids",
+                slug: "magnifiers-low-vision-aids"
+              },
+              {
+                id: "f9e0b1c3-6a8d-4b7e-9f0a-3c5d7e9f1a2b",
+                title: "Eye Patches & Shields",
+                slug: "eye-patches-shields"
+              }
             ]
           }
         ]

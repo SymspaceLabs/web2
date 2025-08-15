@@ -2,11 +2,12 @@
 // Search Input Component
 // ============================================
 
-import useSearch from "./hooks/use-search"; // LOCAL CUSTOM COMPONENT
-import SearchResult from "./components/search-result"; // STYLED COMPONENT
-
-import { SearchOutlinedIcon } from "./styles"; // Assuming this is correct
+import useSearch from "./hooks/use-search";
+import SearchResult from "./components/search-result";
+import { useRouter } from "next/navigation"; // <-- Import the router
+import { SearchOutlinedIcon } from "./styles";
 import { Box, Button, TextField, InputAdornment, CircularProgress, Typography } from "@mui/material";
+import { useState } from "react";
 
 // ============================================
 
@@ -18,6 +19,23 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
     loading,
     error
   } = useSearch();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter(); // <-- Initialize the router
+
+  const handleInputChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    handleSearch(event);
+  };
+
+  // New function to handle the click on the "Search Shops" item
+  const handleShopSearchClick = () => {
+    if (searchQuery) {
+      // Route the user to the search page with the query
+      router.push(`/products/search/all?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
 
   const getInputProps = (isButtonPresent) => ({
     sx: {
@@ -90,11 +108,11 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
         fullWidth
         variant="outlined"
         placeholder="Search Symspace"
-        onChange={handleSearch}
+        onChange={handleInputChange}
         InputProps={getInputProps(btn)}
       />
 
-      {(loading || error || (resultList.length > 0 && !loading && !error)) && (
+      {(searchQuery || loading || error || (resultList.length > 0 && !loading && !error)) && (
         <Box
           sx={{
             position: 'absolute',
@@ -111,6 +129,25 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
             overflowY: 'auto',
           }}
         >
+          {searchQuery && (
+            <Box
+              onClick={handleShopSearchClick} // <-- Add the onClick handler here
+              sx={{
+                p: 2,
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'action.hover',
+                },
+              }}
+            >
+              <Typography variant="body1">
+                Search "{searchQuery}" Shops
+              </Typography>
+            </Box>
+          )}
+
           {loading && (
             <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'left' }}>
               Loading suggestions...
@@ -141,7 +178,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
 
           {!loading && !error && resultList.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'left' }}>
-              No results found. {/* Changed from "No matching categories found." */}
+              No results found.
             </Typography>
           )}
         </Box>

@@ -45,7 +45,7 @@ export const categoriesSeedData = [
               tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
               optional_tags: ["color", "pattern"],
               tag_defaults: { ar_type: "body-tracking" },
-              subcategoryItemChildren: [
+              child: [
                 { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", name: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", name: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", name: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
@@ -127,7 +127,7 @@ export const categoriesSeedData = [
           {
             id: "a7e1f5d6-c9b2-4d83-9a4f-5c8e2b1d7f3e",
             name: "Bags",
-            subcategoryItemChildren: [
+            child: [
               { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
               { id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e", name: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
               { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
@@ -139,7 +139,7 @@ export const categoriesSeedData = [
           {
             id: "d9e8c7b6-a5f4-3e21-0c9b-8a7d6e5c4b3a", // Changed from original "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6" to be unique
             name: "Jewelry & Watches",
-            subcategoryItemChildren: [
+            child: [
               { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "f2e1d3c4-a5b6-7c8d-9e01-2f3a4b5c6d7e", name: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
               { id: "3b2e1d4c-5a6f-7b8c-9d01-e2f3a4b5c6d7", name: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
@@ -154,7 +154,7 @@ export const categoriesSeedData = [
           {
             id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
             name: "Headwear",
-            subcategoryItemChildren: [
+            child: [
               { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", name: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
@@ -163,7 +163,7 @@ export const categoriesSeedData = [
           {
             id: "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b", // Changed from original "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b" to be unique
             name: "Seasonal Accessories",
-            subcategoryItemChildren: [
+            child: [
               { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
               { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
@@ -173,7 +173,7 @@ export const categoriesSeedData = [
           {
             id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
             name: "Wallets & Belts",
-            subcategoryItemChildren: [
+            child: [
               { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
               { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
             ],
@@ -704,128 +704,129 @@ export const categoriesSeedData = [
     id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
     name: 'Beauty, Health & Pets',
     subcategories: [
+      // Skincare
       {
-        id: "3e207b2a-86a6-4b24-9dcf-3bb01220d62a",
-        name: 'Beauty',
-        gender: ['Male', 'Female'],
+        id: "c550b6c6-1945-4b98-816c-cd4db7f931f3",
+        name: "Skincare",
+        subcategoryItems: [
+          { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", name: "Cleansers", slug: "cleansers" },
+          { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers", slug: "moisturizers" },
+          { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", name: "Serums", slug: "serums" },
+          { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", name: "Masks", slug: "masks" },
+          { id: "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", name: "Toners", slug: "toners" },
+          { id: "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", name: "Eye Creams", slug: "eye-creams" },
+          { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", name: "Sunscreens (SPF)", slug: "sunscreens" },
+          { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", name: "Acne Treatments", slug: "acne-treatments" },
+          { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", name: "Anti-Aging Treatments", slug: "anti-aging-treatments" }
+        ]
+      },
+
+      // Skincare Tools
+      {
+        id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
+        name: "Skincare Tools",
+        subcategoryItems: [
+          { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Rollers", slug: "rollers" },
+          { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Facial Brushes", slug: "facial-brushes" },
+          { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", name: "LED Devices", slug: "led-devices" }
+        ]
+      },
+
+      // Makeup
+      {
+        id: "a447cd79-d503-4816-924d-34b9db78f108",
+        name: "Makeup",
         subcategoryItems: [
           {
-            id: "c550b6c6-1945-4b98-816c-cd4db7f931f3",
-            name: "Skincare",
-            subCategoryItemChildren: [
-              { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", name: "Cleansers", slug: "cleansers" },
-              { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers", slug: "moisturizers" },
-              { id: "ee3b5744-d734-4a5f-84e5-c785705cd2af", name: "Serums", slug: "serums" },
-              { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", name: "Masks", slug: "masks" },
-              { id: "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", name: "Toners", slug: "toners" },
-              { id: "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", name: "Eye Creams", slug: "eye-creams" },
-              { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", name: "Sunscreens (SPF)", slug: "sunscreens" },
-              { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", name: "Acne Treatments", slug: "acne-treatments" },
-              { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", name: "Anti-Aging Treatments", slug: "anti-aging-treatments" }
+            id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
+            name: "Face",
+            child: [
+              { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations", slug: "foundations" },
+              { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers", slug: "concealers" },
+              { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", name: "Powders", slug: "powders" },
+              { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", name: "Blushes & Highlighters", slug: "blushes-&-highlighters" }
             ]
           },
           {
-            id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
-            name: "Skincare Tools",
-            subCategoryItemChildren: [
-              { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Rollers", slug: "rollers" },
-              { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Facial Brushes", slug: "facial-brushes" },
-              { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", name: "LED Devices", slug: "led-devices" }
+            id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
+            name: "Eyes",
+            child: [
+              { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows", slug: "eyeshadows" },
+              { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras", slug: "mascaras" },
+              { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", name: "Eyeliners & Brow Products", slug: "eyeliners-&-brow-products" }
             ]
           },
           {
-            id: "a447cd79-d503-4816-924d-34b9db78f108",
-            name: "Makeup",
-            subCategoryItemChildren: [
-              {
-                id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
-                name: "Face",
-                child: [
-                  { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations", slug: "foundations" },
-                  { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers", slug: "concealers" },
-                  { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", name: "Powders", slug: "powders" },
-                  { id: "c0ff1f85-e819-4c09-94c1-40c15152eaf1", name: "Blushes & Highlighters", slug: "blushes-&-highlighters" }
-                ]
-              },
-              {
-                id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
-                name: "Eyes",
-                child: [
-                  { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows", slug: "eyeshadows" },
-                  { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras", slug: "mascaras" },
-                  { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", name: "Eyeliners & Brow Products", slug: "eyeliners-&-brow-products" }
-                ]
-              },
-              {
-                id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
-                name: "Lips",
-                child: [
-                  { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks", slug: "lipsticks" },
-                  { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", name: "Lip Glosses", slug: "lip-glosses" },
-                  { id: "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", name: "Lip Liners", slug: "lip-liners" }
-                ]
-              },
-              {
-                id: "7728f440-4e04-42ef-b9b4-d0c051337748",
-                name: "Makeup Tools & Removers",
-                child: [
-                  { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", name: "Brushes & Sponges", slug: "brushes-&-sponges" },
-                  { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", name: "Makeup Removers", slug: "makeup-removers" }
-                ]
-              }
+            id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
+            name: "Lips",
+            child: [
+              { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks", slug: "lipsticks" },
+              { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", name: "Lip Glosses", slug: "lip-glosses" },
+              { id: "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", name: "Lip Liners", slug: "lip-liners" }
             ]
           },
           {
-            id: "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
-            name: "Personal Care",
-            subCategoryItemChildren: [
-              {
-                id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
-                name: "Haircare",
-                child: [
-                  { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos & Conditioners", slug: "shampoos-&-conditioners" },
-                  { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments & Masks", slug: "hair-treatments-&-masks" },
-                  { id: "155f940b-5f02-470c-b6aa-130bd76961b6", name: "Styling Tools", slug: "styling-tools" }
-                ]
-              },
-              {
-                id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
-                name: "Bath & Body",
-                child: [
-                  { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", name: "Body Washes", slug: "body-washes" },
-                  { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", name: "Body Lotions & Scrubs", slug: "body-lotions-&-scrubs" }
-                ]
-              },
-              {
-                id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
-                name: "Shaving & Hair Removal",
-                child: [
-                  { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams" },
-                  { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices" }
-                ]
-              },
-              {
-                id: "7748f268-e744-42cd-bb8c-999ef10378ea",
-                name: "Fragrances & Scents",
-                child: [
-                  { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes", slug: "perfumes" },
-                  { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays", slug: "body-sprays" },
-                  { id: "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", name: "Deodorant", slug: "deodorant" }
-                ]
-              },
-              {
-                id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
-                name: "Oral Care & Hygiene",
-                child: [
-                  { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes & Pastes", slug: "toothbrushes-&-pastes" },
-                  { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", name: "Hygiene Essentials", slug: "hygiene-essentials" }
-                ]
-              }
+            id: "7728f440-4e04-42ef-b9b4-d0c051337748",
+            name: "Makeup Tools & Removers",
+            child: [
+              { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", name: "Brushes & Sponges", slug: "brushes-&-sponges" },
+              { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", name: "Makeup Removers", slug: "makeup-removers" }
             ]
           }
         ]
       },
 
+      // Personal Care
+      {
+        id: "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
+        name: "Personal Care",
+        subcategoryItems: [
+          {
+            id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
+            name: "Haircare",
+            child: [
+              { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos & Conditioners", slug: "shampoos-&-conditioners" },
+              { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments & Masks", slug: "hair-treatments-&-masks" },
+              { id: "155f940b-5f02-470c-b6aa-130bd76961b6", name: "Styling Tools", slug: "styling-tools" }
+            ]
+          },
+          {
+            id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
+            name: "Bath & Body",
+            child: [
+              { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", name: "Body Washes", slug: "body-washes" },
+              { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", name: "Body Lotions & Scrubs", slug: "body-lotions-&-scrubs" }
+            ]
+          },
+          {
+            id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
+            name: "Shaving & Hair Removal",
+            child: [
+              { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams" },
+              { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices" }
+            ]
+          },
+          {
+            id: "7748f268-e744-42cd-bb8c-999ef10378ea",
+            name: "Fragrances & Scents",
+            child: [
+              { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes", slug: "perfumes" },
+              { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays", slug: "body-sprays" },
+              { id: "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", name: "Deodorant", slug: "deodorant" }
+            ]
+          },
+          {
+            id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
+            name: "Oral Care & Hygiene",
+            child: [
+              { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes & Pastes", slug: "toothbrushes-&-pastes" },
+              { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", name: "Hygiene Essentials", slug: "hygiene-essentials" }
+            ]
+          }
+        ]
+      },
+
+      // Health & Wellness
       {
         id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
         name: "Health & Wellness",
@@ -838,23 +839,7 @@ export const categoriesSeedData = [
         ]
       },
 
-      {
-        id: "748647ab-51a8-462c-8c33-7da71598d748",
-        name: "Personal Care",
-        gender: ['Male', 'Female', 'Kids'],
-        subcategoryItems: [
-          { id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90", name: "Oral Care" },
-          { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Bath & Body" },
-          { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Body Wash" },
-          { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Lotions" },
-          { id: "baf0a457-472f-47e4-b87c-65fa40464f78", name: "Hand Sanitizers" },
-          { id: "81818e91-f86a-47bb-a4a6-9e87b4b8c2cf", name: "Shaving & Hair Removal" },
-          { id: "f5229454-2b30-41a4-8f91-9d8f16f74d3b", name: "Razors" },
-          { id: "d9bfb47c-f789-4688-9e67-5121dfc7c5c4", name: "Shaving Cream" },
-          { id: "8dcfb41c-e2f6-456c-98df-8f16c4832e56", name: "Hair Removal Devices" }
-        ]
-      },
-
+      // Pet Supplies
       {
         id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
         gender: ['Male', 'Female', 'Kids'],
@@ -897,20 +882,20 @@ export const categoriesSeedData = [
         id: "467c4295-ba5f-4ae2-9b01-0e1565143bd3",
         gender: ['Kids'],
         subcategoryItems: [
-          { name: "Diapers", id: "4f3052f9-9fe0-4018-bf97-312f4d9b787f" },
-          { name: "Disposable Diapers", id: "0e2f6805-e763-4f06-a6c1-99d5d8b967c0" },
-          { name: "Cloth Diapers", id: "d71641f3-7355-432b-ba2d-fab2e462bcc0" },
-          { name: "Feeding", id: "3022103e-af8f-4cf1-b043-d1bdd18da849" },
-          { name: "Bottles", id: "b8ef67d0-4e5a-428f-b7d6-5bbccc43f54e" },
-          { name: "Breastfeeding Accessories", id: "fe661fbe-3d66-48ac-a031-e562d169b95e" },
-          { name: "Baby Gear", id: "3a917146-0531-4b00-a890-e738eb7a8b3b" },
-          { name: "Strollers", id: "4d47a2f7-0999-45e0-bdbe-b1c0777a3ad6" },
-          { name: "Car Seats", id: "aa9567c7-001f-4575-b543-59aed7aceecd" },
-          { name: "Carriers", id: "d2b5ef6b-6ef8-4015-bffb-e94937a87341" },
-          { name: "Nursery", id: "7194a8f3-d60f-45f2-b760-356a3b633718" },
-          { name: "Cribs", id: "2bf28ced-4581-45b5-82de-4b3a09c78327" },
-          { name: "Changing Tables", id: "8c5b9dc5-199d-4ad0-81c4-4520790c3033" },
-          { name: "Baby Monitors", id: "c4f1ecac-3b77-4b13-bef2-27ff7e430b71" }
+          { id: "4f3052f9-9fe0-4018-bf97-312f4d9b787f", name: "Diapers" },
+          { id: "0e2f6805-e763-4f06-a6c1-99d5d8b967c0", name: "Disposable Diapers" },
+          { id: "d71641f3-7355-432b-ba2d-fab2e462bcc0", name: "Cloth Diapers" },
+          { id: "3022103e-af8f-4cf1-b043-d1bdd18da849", name: "Feeding" },
+          { id: "b8ef67d0-4e5a-428f-b7d6-5bbccc43f54e", name: "Bottles" },
+          { id: "fe661fbe-3d66-48ac-a031-e562d169b95e", name: "Breastfeeding Accessories" },
+          { id: "3a917146-0531-4b00-a890-e738eb7a8b3b", name: "Baby Gear" },
+          { id: "4d47a2f7-0999-45e0-bdbe-b1c0777a3ad6", name: "Strollers" },
+          { id: "aa9567c7-001f-4575-b543-59aed7aceecd", name: "Car Seats" },
+          { id: "d2b5ef6b-6ef8-4015-bffb-e94937a87341", name: "Carriers" },
+          { id: "7194a8f3-d60f-45f2-b760-356a3b633718", name: "Nursery" },
+          { id: "2bf28ced-4581-45b5-82de-4b3a09c78327", name: "Cribs" },
+          { id: "8c5b9dc5-199d-4ad0-81c4-4520790c3033", name: "Changing Tables" },
+          { id: "c4f1ecac-3b77-4b13-bef2-27ff7e430b71", name: "Baby Monitors"  }
         ]
       },
       {
@@ -918,15 +903,15 @@ export const categoriesSeedData = [
         id: "c2a3d6ab-a10e-497d-bbeb-0016b9df6c0c",
         gender: ['Kids', 'Male', 'Female'], // Many toys can be for boys or girls
         subcategoryItems: [
-          { name: "Educational", id: "9618f89b-31eb-43ea-8868-cb1cec5f3da1" },
-          { name: "Learning Toys", id: "76c0495a-d857-4492-8dc6-392d6e599009" },
-          { name: "STEM Toys", id: "06b6d031-5b87-4ce5-8541-3c49dbb87af7" },
-          { name: "Action Figures", id: "78d9ac49-78cb-4b97-9c7b-06db3714927e" },
-          { name: "Dolls & Accessories", id: "108e10ef-02a7-46fa-8949-889a99376e13" },
-          { name: "Outdoor Play", id: "b0522642-c889-42a0-bc80-4a0bd8c72c1d" },
-          { name: "Playhouses", id: "3862201f-a660-4ea5-8b79-ef1f8c3e3dec" },
-          { name: "Slides", id: "e8c3e56d-7845-4c47-a32d-359a7ac06018" },
-          { name: "Swings", id: "56bdefa5-a31d-4d80-98e1-65ad68dfb711" }
+          { id: "9618f89b-31eb-43ea-8868-cb1cec5f3da1", name: "Educational" },
+          { id: "76c0495a-d857-4492-8dc6-392d6e599009", name: "Learning Toys" },
+          { id: "06b6d031-5b87-4ce5-8541-3c49dbb87af7", name: "STEM Toys" },
+          { id: "78d9ac49-78cb-4b97-9c7b-06db3714927e", name: "Action Figures" },
+          { id: "108e10ef-02a7-46fa-8949-889a99376e13", name: "Dolls & Accessories" },
+          { id: "b0522642-c889-42a0-bc80-4a0bd8c72c1d", name: "Outdoor Play" },
+          { id: "3862201f-a660-4ea5-8b79-ef1f8c3e3dec", name: "Playhouses" },
+          { id: "e8c3e56d-7845-4c47-a32d-359a7ac06018", name: "Slides" },
+          { id: "56bdefa5-a31d-4d80-98e1-65ad68dfb711", name: "Swings"  }
         ]
       },
       {
@@ -934,8 +919,8 @@ export const categoriesSeedData = [
         id: "bd65878e-63b5-4d97-9f67-480923f879e8",
         gender: ['Kids'],
         subcategoryItems: [
-          { name: "Girls", id: "8c47911c-bc1d-4733-81be-c8179bb57847" },
-          { name: "Boys", id: "f29b84a1-a268-40d0-805e-d4d169b390d4" }
+          { id: "8c47911c-bc1d-4733-81be-c8179bb57847", name: "Girls" },
+          { id: "f29b84a1-a268-40d0-805e-d4d169b390d4", name: "Boys"  }
         ]
       }
     ]
@@ -950,49 +935,49 @@ export const categoriesSeedData = [
         name: "Fresh Produce",
         id: "747793b6-51d3-46c6-9b10-0fac1d4661bb",
         subcategoryItems: [
-          { name: "Fruits", id: "f2440f1e-dd21-4b86-8000-dec7ecdbac63" },
-          { name: "Vegetables", id: "5556ca10-fcc3-4ebd-8b95-6f5d40c7e009" }
+          { id: "f2440f1e-dd21-4b86-8000-dec7ecdbac63", name: "Fruits" },
+          { id: "5556ca10-fcc3-4ebd-8b95-6f5d40c7e009", name: "Vegetables"  }
         ]
       },
       {
         name: "Pantry Staples",
         id: "20c7b675-af74-4d38-86e1-c33f55c58c0d",
         subcategoryItems: [
-          { name: "Snacks", id: "385332b9-7f2c-4eb7-8e3a-5cd424624b45" },
-          { name: "Beverages", id: "da316995-96f8-40e4-bb91-77126d4e9550" },
-          { name: "Tea", id: "85d85b33-cc66-4fd5-a190-f6c0eccf9e26" },
-          { name: "Coffee", id: "f5e8389d-fcfa-4661-b7a9-ac87247ac1e1" },
-          { name: "Soft Drinks", id: "b596ddfb-46b0-46e7-8ca1-8283bb527075" },
-          { name: "Baking", id: "b00cd4d0-865f-4d7a-9374-1beb2933b4cf" },
-          { name: "Flour", id: "bb2ae444-bd7b-4c8d-846b-2a42cfa26f5f" },
-          { name: "Sugar", id: "a9421c7a-ca14-4f5b-a597-f987eaf6417d" },
-          { name: "Baking Mixes", id: "09f5b616-c0e4-4a2c-baa8-eaa60b950e99" }
+          { id: "385332b9-7f2c-4eb7-8e3a-5cd424624b45", name: "Snacks" },
+          { id: "da316995-96f8-40e4-bb91-77126d4e9550", name: "Beverages" },
+          { id: "85d85b33-cc66-4fd5-a190-f6c0eccf9e26", name: "Tea" },
+          { id: "f5e8389d-fcfa-4661-b7a9-ac87247ac1e1", name: "Coffee" },
+          { id: "b596ddfb-46b0-46e7-8ca1-8283bb527075", name: "Soft Drinks" },
+          { id: "b00cd4d0-865f-4d7a-9374-1beb2933b4cf", name: "Baking" },
+          { id: "bb2ae444-bd7b-4c8d-846b-2a42cfa26f5f", name: "Flour" },
+          { id: "a9421c7a-ca14-4f5b-a597-f987eaf6417d", name: "Sugar" },
+          { id: "09f5b616-c0e4-4a2c-baa8-eaa60b950e99", name: "Baking Mixes"  }
         ]
       },
       {
         name: "Meat & Seafood",
         id: "ad520439-4209-47bf-b2df-70fa4959df73",
         subcategoryItems: [
-          { name: "Fresh Meat", id: "c5ee3142-2286-4968-a654-f230e00b53b6" },
-          { name: "Seafood", id: "02edfd71-c7fe-4c09-bc83-911a0d8633cd" }
+          { id: "c5ee3142-2286-4968-a654-f230e00b53b6", name: "Fresh Meat" },
+          { id: "02edfd71-c7fe-4c09-bc83-911a0d8633cd", name: "Seafood"  }
         ]
       },
       {
         name: "Dairy",
         id: "3b76c223-e8c2-4c92-8d4f-4b0848462cd0",
         subcategoryItems: [
-          { name: "Milk", id: "b1b60a48-5a29-45fe-9a56-c8a5ed34961e" },
-          { name: "Cheese", id: "5215aabc-bf7d-439a-8d5f-ed2773a38591" },
-          { name: "Eggs", id: "b6518a17-d204-4f28-97cf-f7dbf804cd11" }
+          { id: "b1b60a48-5a29-45fe-9a56-c8a5ed34961e", name: "Milk" },
+          { id: "5215aabc-bf7d-439a-8d5f-ed2773a38591", name: "Cheese" },
+          { id: "b6518a17-d204-4f28-97cf-f7dbf804cd11", name: "Eggs"  }
         ]
       },
       {
         name: "Frozen Foods",
         id: "4a3e1fbe-e780-4b85-972e-bc8c1079e468",
         subcategoryItems: [
-          { name: "Vegetables", id: "be3dfec6-2820-4511-9bd5-d3e5b9103356" },
-          { name: "Meats", id: "086b34d4-2dc4-4148-bfa7-16c434ca5fab" },
-          { name: "Desserts", id: "77e62f7d-5bfb-4a38-bb54-b0c89bfac17a" }
+          { id: "be3dfec6-2820-4511-9bd5-d3e5b9103356", name: "Vegetables" },
+          { id: "086b34d4-2dc4-4148-bfa7-16c434ca5fab", name: "Meats" },
+          { id: "77e62f7d-5bfb-4a38-bb54-b0c89bfac17a", name: "Desserts"  }
         ]
       }
     ]
@@ -1007,32 +992,32 @@ export const categoriesSeedData = [
         name: "Fitness Equipment",
         id: "328c6f42-9a13-4c6a-95b1-e7d18f732aa8",
         subcategoryItems: [
-          { name: "Cardio Machines", id: "dfc54366-e8d5-4c98-bc48-65e4d524c456" },
-          { name: "Treadmills", id: "09c9803e-bf5c-4c68-bcf0-fb74830238f3" },
-          { name: "Exercise Bikes", id: "9f8760f6-90e4-448b-a3d4-dba6433eddf2" },
-          { name: "Strength Training", id: "48b96fa5-0ef9-4115-a7aa-4e458e28eeb2" },
-          { name: "Dumbbells", id: "eb85d9da-e2e1-4e3e-bf35-d0218e68f8f4" },
-          { name: "Weight Benches", id: "a27ac7ef-d6c6-462c-a553-f11d7d18d285" },
-          { name: "Fitness Accessories", id: "f2b28152-680b-471d-92f5-e3e51d790632" },
-          { name: "Yoga Mats", id: "69a8a342-f67f-41df-aad2-038fa3268a98" },
-          { name: "Resistance Bands", id: "03c45395-476c-4d5d-8e7d-25d66f5f6dd6" }
+          { id: "dfc54366-e8d5-4c98-bc48-65e4d524c456", name: "Cardio Machines" },
+          { id: "09c9803e-bf5c-4c68-bcf0-fb74830238f3", name: "Treadmills" },
+          { id: "9f8760f6-90e4-448b-a3d4-dba6433eddf2", name: "Exercise Bikes" },
+          { id: "48b96fa5-0ef9-4115-a7aa-4e458e28eeb2", name: "Strength Training" },
+          { id: "eb85d9da-e2e1-4e3e-bf35-d0218e68f8f4", name: "Dumbbells" },
+          { id: "a27ac7ef-d6c6-462c-a553-f11d7d18d285", name: "Weight Benches" },
+          { id: "f2b28152-680b-471d-92f5-e3e51d790632", name: "Fitness Accessories" },
+          { id: "69a8a342-f67f-41df-aad2-038fa3268a98", name: "Yoga Mats" },
+          { id: "03c45395-476c-4d5d-8e7d-25d66f5f6dd6", name: "Resistance Bands"  }
         ]
       },
       {
         name: "Outdoor Recreation",
         id: "cfd4a5c7-3d89-4328-940d-344a2674a70f",
         subcategoryItems: [
-          { name: "Camping", id: "2c03da59-6649-42da-bb22-5277f5bff87c" },
-          { name: "Tents", id: "c6d9fb12-f344-47d8-8dbb-2eaa690b3ebc" },
-          { name: "Sleeping Bags", id: "0b9b8569-f47c-401f-a0e7-b9b50e3b258f" },
-          { name: "Backpacks", id: "6b6e1ed1-26a6-4631-8973-f1d6f377a5b1" },
-          { name: "Hiking", id: "f5e91dc4-cc55-4069-99a2-9a2716a58990" },
-          { name: "Boots", id: "d0f8e994-b0d0-4fa5-85d5-bde229a08a60" },
-          { name: "Poles", id: "7baffd16-8465-4f1b-90d1-612b4b32c1a7" },
-          { name: "Gear", id: "ac4ed5ee-38c1-4761-bb48-ef8c528e7860" },
-          { name: "Water Sports", id: "3c911690-b0b6-4ee3-a41b-b6a8f8fdf4a0" },
-          { name: "Kayaks", id: "d41900d8-e426-4e48-aadb-93ea2683fc06" },
-          { name: "Life Jackets", id: "3e0f2416-6b72-4871-8a41-97e16fce3142" }
+          { id: "2c03da59-6649-42da-bb22-5277f5bff87c", name: "Camping" },
+          { id: "c6d9fb12-f344-47d8-8dbb-2eaa690b3ebc", name: "Tents" },
+          { id: "0b9b8569-f47c-401f-a0e7-b9b50e3b258f", name: "Sleeping Bags" },
+          { id: "6b6e1ed1-26a6-4631-8973-f1d6f377a5b1", name: "Backpacks" },
+          { id: "f5e91dc4-cc55-4069-99a2-9a2716a58990", name: "Hiking" },
+          { id: "d0f8e994-b0d0-4fa5-85d5-bde229a08a60", name: "Boots" },
+          { id: "7baffd16-8465-4f1b-90d1-612b4b32c1a7", name: "Poles" },
+          { id: "ac4ed5ee-38c1-4761-bb48-ef8c528e7860", name: "Gear" },
+          { id: "3c911690-b0b6-4ee3-a41b-b6a8f8fdf4a0", name: "Water Sports" },
+          { id: "d41900d8-e426-4e48-aadb-93ea2683fc06", name: "Kayaks" },
+          { id: "3e0f2416-6b72-4871-8a41-97e16fce3142", name: "Life Jackets"  }
         ]
       },
       {
@@ -1040,13 +1025,13 @@ export const categoriesSeedData = [
         id: "c0e70967-d22b-4525-8b27-3bdef606e289",
         gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
-          { name: "Soccer", id: "b3241e97-2e9c-45b2-97a4-c2602256604a" },
-          { name: "Balls", id: "7b946045-4001-4cd6-8c4d-13e86da47426" },
-          { name: "Apparel", id: "e6ef6e1f-73c2-4639-bd4f-2b05a30b1c5a" },
-          { name: "Basketball", id: "88eeb0f8-b473-4e66-aed5-4a022b2c37c4" },
-          { name: "Shoes", id: "6273cc4b-bc2e-4c55-88d8-5af4185291c2" },
-          { name: "Tennis", id: "e045c3ab-73e2-4d4f-b32e-1e8f1f67d77b" },
-          { name: "Rackets", id: "c25cba42-78ea-4f5e-83af-2827bc320c16" },
+          { id: "b3241e97-2e9c-45b2-97a4-c2602256604a", name: "Soccer" },
+          { id: "7b946045-4001-4cd6-8c4d-13e86da47426", name: "Balls" },
+          { id: "e6ef6e1f-73c2-4639-bd4f-2b05a30b1c5a", name: "Apparel" },
+          { id: "88eeb0f8-b473-4e66-aed5-4a022b2c37c4", name: "Basketball" },
+          { id: "6273cc4b-bc2e-4c55-88d8-5af4185291c2", name: "Shoes" },
+          { id: "e045c3ab-73e2-4d4f-b32e-1e8f1f67d77b", name: "Tennis" },
+          { id: "c25cba42-78ea-4f5e-83af-2827bc320c16", name: "Rackets" },
         ]
       }
     ]
@@ -1061,21 +1046,29 @@ export const categoriesSeedData = [
         name: "Vehicle Parts & Accessories",
         id: "b83443dc-20da-4fd9-a09f-d7b3443e7ad2",
         subcategoryItems: [
-          { name: "Car Electronics", id: "a76e501c-2de0-4ff2-97b1-530c9db48676" },
-          { name: "GPS", id: "9d9285b4-cf78-4243-a6ec-056164ee4b77" },
-          { name: "Stereos", id: "c7f42050-211f-4d80-a5a5-6c279d88dc4e" },
-          { name: "Tools & Equipment", id: "df490b59-6f1d-4d95-8224-21a8e1352e34" },
-          { name: "Wrenches", id: "b47ff7c5-580d-4a04-92c1-7f1f04089ef3" },
-          { name: "Jacks", id: "146c681f-8159-4601-b1d6-d4b18ec9dce3" },
-          { name: "Replacement Parts", id: "1ef03cb0-67b1-4dc5-8a64-fc8dfc83b7d6" },
-          { name: "Brakes", id: "8502e056-80f5-4aa8-9146-53a3b12d5e6c" },
-          { name: "Batteries", id: "6b6bc201-bc94-47b1-a65a-56494c03371a" },
-          { name: "Interior Accessories", id: "a02f2b1b-768c-49f5-b207-1bb5bfa16214" },
-          { name: "Seat Covers", id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70" },
-          { name: "Floor Mats", id: "03e9dd4f-853c-4a57-a9c2-d6f6d84e59e2" },
-          { name: "Exterior Accessories", id: "76b66f65-b3f2-485f-a934-f9f5f6cbe540" },
-          { name: "Car Covers", id: "cdbd08f2-6d77-4807-8859-9b5ea7e23e0b" },
-          { name: "Bike Racks", id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de" }
+          { id: "a76e501c-2de0-4ff2-97b1-530c9db48676", name: "Car Electronics" },
+          { id: "9d9285b4-cf78-4243-a6ec-056164ee4b77", name: "GPS" },
+          { id: "c7f42050-211f-4d80-a5a5-6c279d88dc4e", name: "Stereos" },
+          { id: "df490b59-6f1d-4d95-8224-21a8e1352e34", name: "Tools & Equipment" },
+          { id: "b47ff7c5-580d-4a04-92c1-7f1f04089ef3", name: "Wrenches" },
+          { id: "146c681f-8159-4601-b1d6-d4b18ec9dce3", name: "Jacks" },
+          { id: "1ef03cb0-67b1-4dc5-8a64-fc8dfc83b7d6", name: "Replacement Parts" },
+          { id: "8502e056-80f5-4aa8-9146-53a3b12d5e6c", name: "Brakes" },
+          { id: "6b6bc201-bc94-47b1-a65a-56494c03371a", name: "Batteries" },
+          { id: "a02f2b1b-768c-49f5-b207-1bb5bfa16214", name: "Interior Accessories" },
+          { id: "03e9dd4f-853c-4a57-a9c2-d6f6d84e59e2", name: "Floor Mats" },
+          { id: "76b66f65-b3f2-485f-a934-f9f5f6cbe540", name: "Exterior Accessories" },
+          { id: "cdbd08f2-6d77-4807-8859-9b5ea7e23e0b", name: "Car Covers" },
+          { id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", name: "Bike Racks" },
+          {
+            id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", 
+            name: "Auto Customization",
+            child: [
+              { id: "03d8d7b3-c1f9-4610-8b1b-410a5160a0a5", name: "Wheels & Rims" },
+              { id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70", name: "Seat Covers" },
+              { id: "6d9e03d4-b78f-4f2a-b7e1-886d34e9e436", name: "Wraps & Decals" }
+            ]
+          }
         ]
       }
     ]
@@ -1087,32 +1080,62 @@ export const categoriesSeedData = [
     id: "c9b589fa-96c6-46c7-a98b-ea2068a5e937",
     subcategories: [
       {
-        name: "Mobility Aids",
         id: "2b10ab5d-c140-45d6-9de6-b43234b14a2a",
+        name: "Mobility Aids",
         subcategoryItems: [
-          { name: "Wheelchairs", id: "b4aa65df-dc8b-4d66-931d-e9c728ec73ff" },
-          { name: "Walkers", id: "8ae9935f-14b1-46ab-a3f7-d719c4ed3db2" },
-          { name: "Canes", id: "5b4f5d7c-2673-45e2-b302-68b43e8e44de" },
-          { name: "Mobility Scooters", id: "a765eb54-410c-4b3d-b3b4-2b4ae0fb2c64" }
+          { id: "b4aa65df-dc8b-4d66-931d-e9c728ec73ff", name: "Wheelchairs" },
+          { id: "8ae9935f-14b1-46ab-a3f7-d719c4ed3db2", name: "Walkers" },
+          { id: "5b4f5d7c-2673-45e2-b302-68b43e8e44de", name: "Canes" },
+          { id: "a765eb54-410c-4b3d-b3b4-2b4ae0fb2c64", name: "Mobility Scooters" }
         ]
       },
       {
         name: "Daily Living Aids",
         id: "a79a48d6-8ed9-4b35-9f8d-3b825b8724d5",
         subcategoryItems: [
-          { name: "Dressing Aids", id: "8b23b799-fb9c-4e6e-97ff-0e843d209659" },
-          { name: "Eating Aids", id: "db312734-e146-4d03-9705-ea501c1333a2" },
-          { name: "Bathing Aids", id: "6cfaaf73-9b2b-4bd4-a4c8-81e6fba32f13" },
-          { name: "Communication Aids", id: "7b35bcf0-13e2-4943-b8f2-e19e2a5e6f68" }
+          { id: "8b23b799-fb9c-4e6e-97ff-0e843d209659", name: "Dressing Aids" },
+          { id: "db312734-e146-4d03-9705-ea501c1333a2", name: "Eating Aids" },
+          { id: "6cfaaf73-9b2b-4bd4-a4c8-81e6fba32f13", name: "Bathing Aids" },
+          { id: "7b35bcf0-13e2-4943-b8f2-e19e2a5e6f68", name: "Communication Aids" }
         ]
       },
       {
         name: "Accessibility Equipment",
         id: "d0c9b924-9293-45b3-905c-7fa5241dc132",
         subcategoryItems: [
-          { name: "Ramps", id: "fab927ab-c569-4d5f-b637-d4c6ed154a54" },
-          { name: "Lifts", id: "81a6c2cc-45de-4e1c-b676-90b1b1e09c06" },
-          { name: "Accessible Furniture", id: "517fd112-58c7-4111-9cbf-fdf5c4c2bb0e" }
+          { id: "fab927ab-c569-4d5f-b637-d4c6ed154a54", name: "Ramps" },
+          { id: "81a6c2cc-45de-4e1c-b676-90b1b1e09c06", name: "Lifts" },
+          { id: "517fd112-58c7-4111-9cbf-fdf5c4c2bb0e", name: "Accessible Furniture" }
+        ]
+      },
+      {
+        id: "e4a2503d-2f08-4e6f-b25c-0c1a8a2d1d0f",
+        name: "Eyecare & Vision Aids",
+        subcategoryItems: [
+          {
+            id: "c1f7a1b3-4f9e-4c7a-9a0d-8e5f2a1b3c4d",
+            name: "Reading Glasses"
+          },
+          {
+            id: "f5d9c2e0-8b1a-4d6c-8e3b-9c8f7a6d5b4e",
+            name: "Contact Lens Care"
+          },
+          {
+            id: "b0a6e3d2-7c9b-4e8a-9f5a-2c4d6b8e0f1a",
+            name: "Eye Drops & Treatments"
+          },
+          {
+            id: "a8c5f4e1-3d7b-4a9c-9f2e-0c1b3d5e7f9a",
+            name: "Blue Light Filters"
+          },
+          {
+            id: "d7b4a6c9-8e5f-4d3a-8b1c-2f9e0a8d7c6b",
+            name: "Magnifiers & Low Vision Aids"
+          },
+          {
+            id: "f9e0b1c3-6a8d-4b7e-9f0a-3c5d7e9f1a2b",
+            name: "Eye Patches & Shields"
+          }
         ]
       }
     ]
@@ -1128,29 +1151,29 @@ export const categoriesSeedData = [
         name: "Maternity Clothing",
         id: "bf5d468a-cfb0-47c1-b1d6-2fce6bb5c241",
         subcategoryItems: [
-          { name: "Dresses", id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7" },
-          { name: "Tops", id: "688b69a1-612c-4bd1-8451-0d735e64b7d4" },
-          { name: "Bottoms", id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f" },
+          { id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7", name: "Dresses" },
+          { id: "688b69a1-612c-4bd1-8451-0d735e64b7d4", name: "Tops" },
+          { id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f", name: "Bottoms" },
         ]
       },
       {
         name: "Prenatal Care",
         id: "ef89b1d6-e556-408f-b4f1-d60b0ae39380",
         subcategoryItems: [
-          { name: "Vitamins", id: "4bf4b308-0b37-4ee1-9255-8c413dc634b6" },
-          { name: "Support Bands", id: "91bd093d-115f-4d95-82f0-3c3c2d5e6e80" },
-          { name: "Pregnancy Pillows", id: "9bc8e2dc-6819-4d70-a8f8-5c82ed830d96" },
-          { name: "Skincare", id: "6e7a9ad7-4c59-4850-91a1-f8301b5e356c" }
+          { id: "4bf4b308-0b37-4ee1-9255-8c413dc634b6", name: "Vitamins" },
+          { id: "91bd093d-115f-4d95-82f0-3c3c2d5e6e80", name: "Support Bands" },
+          { id: "9bc8e2dc-6819-4d70-a8f8-5c82ed830d96", name: "Pregnancy Pillows" },
+          { id: "6e7a9ad7-4c59-4850-91a1-f8301b5e356c", name: "Skincare"  }
         ]
       },
       {
         name: "Baby Essentials",
         id: "de012745-2743-4b4b-a469-f7b5f7a5e8c4",
         subcategoryItems: [
-          { name: "Clothing", id: "d93c76ae-654c-499d-aed8-3b72c69fd50b" },
-          { name: "Diapers", id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457" },
-          { name: "Feeding", id: "c3256b0f-3e45-498e-a834-df8b6b1d6759" },
-          { name: "Nursery", id: "2edb6a23-6e6d-44a7-94cf-f66ec5d857b7" }
+          { id: "d93c76ae-654c-499d-aed8-3b72c69fd50b", name: "Clothing" },
+          { id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457", name: "Diapers" },
+          { id: "c3256b0f-3e45-498e-a834-df8b6b1d6759", name: "Feeding" },
+          { id: "2edb6a23-6e6d-44a7-94cf-f66ec5d857b7", name: "Nursery"  }
         ]
       }
     ]

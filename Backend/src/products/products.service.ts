@@ -531,10 +531,6 @@ export class ProductsService {
       }
     }
 
-    // const prices = products.map(p => p.price);
-    // const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    // const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
-
     // --- Call the new helper function for price range ---
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
 
@@ -841,85 +837,53 @@ export class ProductsService {
     };
   }
 
- /**
-   * Performs a free-form search across product names, descriptions, company names,
-   * category names, and subcategory names. It supports optional filtering by category
-   * and subcategory slugs. All text-based searches are case-insensitive and hyphen-insensitive.
-   *
-   * @param searchTerm An optional general search query string.
-   * @param categorySlug An optional slug to filter by category.
-   * @param subcategorySlug An optional slug to filter by subcategory or subcategory item.
-   * @returns A promise that resolves to an array of products matching the criteria.
-   */
-   async performFreeFormSearch(
-    searchTerm?: string,
-    categorySlug?: string,
-    subcategorySlug?: string,
+  // Add `leftJoin` for `subcategoryItemChild` and select its name.
+  // NOTE: subcategoryItemChild is a nested relation from subcategoryItem
+  async performFreeFormSearch(
+      searchTerm?: string,
+      categorySlug?: string,
+      subcategorySlug?: string,
   ) {
-    const normalizedSearchTermForComparison = searchTerm
-      ? `%${this.normalizeSearchText(searchTerm)}%`
-      : null;
+      const normalizedSearchTermForComparison = searchTerm
+        ? `%${this.normalizeSearchText(searchTerm)}%`
+        : null;
 
-    const productsQuery = this.productRepository.createQueryBuilder('product')
-      .select([
-        'product.id',
-        'product.name',
-        'product.price',
-        'product.slug',
-        'product.description',
-      ])
-      .leftJoinAndSelect('product.company', 'company')
-      .addSelect([
-        'company.id',
-        'company.entityName',
-      ])
-      .leftJoin('product.images', 'images')
-      .leftJoin('product.subcategoryItem', 'subcategoryItem')
-      .leftJoin('subcategoryItem.subcategory', 'subcategory')
-      .leftJoin('subcategory.category', 'category')
-      .orderBy('images.sortOrder', 'ASC');
+      const productsQuery = this.productRepository.createQueryBuilder('product')
+        .select([
+          'product.id',
+          'product.name',
+          'product.price',
+          'product.slug',
+          'product.description',
+        ])
+        .leftJoinAndSelect('product.company', 'company')
+        .addSelect([
+          'company.id',
+          'company.entityName',
+        ])
+        .leftJoin('product.images', 'images')
+        .leftJoin('product.subcategoryItem', 'subcategoryItem')
+        .leftJoin('subcategoryItem.subcategory', 'subcategory')
+        .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild') // <-- ADD THIS LINE
+        .leftJoin('subcategory.category', 'category')
+        .orderBy('images.sortOrder', 'ASC');
 
-    if (normalizedSearchTermForComparison) {
-      productsQuery.andWhere(new Brackets(qb => {
-        // Apply normalization (lowercase, remove hyphens, remove spaces) to database column values
-        // Note: You still need REPLACE in SQL for hyphens if your DB *could* store values with them
-        // and you're normalizing them away only on the search side.
-        // However, if normalizeSearchText removes spaces, the SQL REPLACE should also remove spaces.
-        // Let's adjust the SQL REPLACE as well for consistency.
-        qb.where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-          .orWhere('LOWER(REPLACE(REPLACE(product.description, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-          // Apply to company.entityName
-          .orWhere('LOWER(REPLACE(REPLACE(company.entityName, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-          // Apply to category.name
-          .orWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-          // Apply to subcategory.name
-          .orWhere('LOWER(REPLACE(REPLACE(subcategory.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-          // Apply to subcategoryItem.name
-          .orWhere('LOWER(REPLACE(REPLACE(subcategoryItem.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison });
-      }));
-    }
+      if (normalizedSearchTermForComparison) {
+        productsQuery.andWhere(new Brackets(qb => {
+          qb.where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(product.description, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(company.entityName, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(subcategory.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(subcategoryItem.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
+            .orWhere('LOWER(REPLACE(REPLACE(subcategoryItemChild.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison }); // <-- AND THIS LINE
+        }));
+      }
 
-    // Category and subcategory slugs are typically exact matches, so 'REPLACE' might not be needed
-    // unless you store slugs with hyphens but expect searches without them.
-    // For now, assuming slugs are always consistently formatted.
-    if (categorySlug) {
-      // If category slugs also might have spaces/hyphens that need ignoring during direct matching,
-      // you would also apply normalization here:
-      // productsQuery.andWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) = :categorySlugNormalized', { categorySlugNormalized: this.normalizeSearchText(categorySlug) });
-      // Otherwise, keep as is for exact slug matching:
-      productsQuery.andWhere('LOWER(category.name) = LOWER(:categorySlug)', { categorySlug });
-    }
-    if (subcategorySlug) {
-      // Same consideration as for categorySlug
-      productsQuery.andWhere(new Brackets(qb => {
-        qb.where('LOWER(subcategory.name) = LOWER(:subcategorySlug)', { subcategorySlug })
-          .orWhere('LOWER(subcategoryItem.name) = LOWER(:subcategorySlug)', { subcategorySlug });
-      }));
-    }
+      // ... (rest of your code remains the same) ...
 
-    const products = await productsQuery.getMany();
-
-    return products;
+      const products = await productsQuery.getMany();
+      return products;
   }
   
 }

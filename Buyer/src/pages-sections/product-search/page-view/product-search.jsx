@@ -6,13 +6,14 @@
 // Product Search Page
 // ======================================================
 
-import { Grid, Container, Box, useMediaQuery } from "@mui/material";
 import { useState, useMemo, useCallback } from "react";
+import { Grid, Container, Box, useMediaQuery } from "@mui/material";
 
 // Import the isolated hooks and helper
 import { useProductData } from "@/hooks/useProductData";
 import { useProductFilters } from "@/hooks/useProductFilters";
 import { useFilteredAndSortedProducts } from "@/hooks/useFilteredAndSortedProducts";
+import { useSearchParams } from "next/navigation";
 
 import ProductFilterCard from "../product-filter-card";
 import ProductsGridView from "../products-grid-view";
@@ -37,10 +38,13 @@ function FilterControls(props) {
 // ======================================================
 
 // ACCEPT searchParams as a prop
-export default function ProductSearchPageView({ searchParams }) {
+export default function ProductSearchPageView() {
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
   const [openDrawer, setOpenDrawer] = useState(false);
   const [sortOption, setSortOption] = useState("latest"); // Default sort option
+  const searchParams = useSearchParams();
+  const paramsString = searchParams.toString();
+
 
   // Define the handleSortChange function
   const handleSortChange = useCallback((event) => {
@@ -58,7 +62,7 @@ export default function ProductSearchPageView({ searchParams }) {
     allColors,
     loading,
     error
-  } = useProductData(searchParams); // PASS searchParams to the hook
+  } = useProductData(paramsString); // PASS searchParams to the hook
 
   // Custom hook to manage filter state and URL sync
   const {
@@ -80,8 +84,6 @@ export default function ProductSearchPageView({ searchParams }) {
     searchParams
   );
 
-
-
   // Memoized query parameters from URL for display purposes only
   const genderQuery = useMemo(
     // Now searchParams is an object, not a hook result
@@ -95,7 +97,7 @@ export default function ProductSearchPageView({ searchParams }) {
     [searchParams]
   );
 
-  // Custom hook to apply client-side filters and sorting.
+   // Custom hook to apply client-side filters and sorting.
   // We no longer pass categoryQuery or subcategoryItemQuery to this hook.
   const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
 
@@ -157,6 +159,10 @@ export default function ProductSearchPageView({ searchParams }) {
     onColorFilterChange: handleFilterChange.bind(null, 'colors'),
     onClearAllFilters: handleResetAllFilters, // ADDED THIS LINE
   };
+
+  // console.log('allProducts', allProducts);
+  // console.log('filterState.allProducts', filterState.allProducts);
+  // console.log('displayedProducts', displayedProducts);
 
   return (
     <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >

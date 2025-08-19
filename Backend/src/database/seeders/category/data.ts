@@ -872,112 +872,196 @@ export const categoriesSeedData = [
     ],
   },
 
-  //Baby Backend
+  //Kids Backend
   {
-    name: "Baby, Kids & Toys",
+    name: "Kids & Toys",
     id: "7e3d391c-3910-49ba-904d-55e3e74338be",
     subcategories: [
       {
-        name: "Baby",
-        id: "467c4295-ba5f-4ae2-9b01-0e1565143bd3",
-        gender: ['Kids'],
+        name: "Kids Clothing",
+        id: "84f1b8a5-d603-455b-9f93-0e8c8a1e2f3d",
         subcategoryItems: [
-          { id: "4f3052f9-9fe0-4018-bf97-312f4d9b787f", name: "Diapers" },
-          { id: "0e2f6805-e763-4f06-a6c1-99d5d8b967c0", name: "Disposable Diapers" },
-          { id: "d71641f3-7355-432b-ba2d-fab2e462bcc0", name: "Cloth Diapers" },
-          { id: "3022103e-af8f-4cf1-b043-d1bdd18da849", name: "Feeding" },
-          { id: "b8ef67d0-4e5a-428f-b7d6-5bbccc43f54e", name: "Bottles" },
-          { id: "fe661fbe-3d66-48ac-a031-e562d169b95e", name: "Breastfeeding Accessories" },
-          { id: "3a917146-0531-4b00-a890-e738eb7a8b3b", name: "Baby Gear" },
-          { id: "4d47a2f7-0999-45e0-bdbe-b1c0777a3ad6", name: "Strollers" },
-          { id: "aa9567c7-001f-4575-b543-59aed7aceecd", name: "Car Seats" },
-          { id: "d2b5ef6b-6ef8-4015-bffb-e94937a87341", name: "Carriers" },
-          { id: "7194a8f3-d60f-45f2-b760-356a3b633718", name: "Nursery" },
-          { id: "2bf28ced-4581-45b5-82de-4b3a09c78327", name: "Cribs" },
-          { id: "8c5b9dc5-199d-4ad0-81c4-4520790c3033", name: "Changing Tables" },
-          { id: "c4f1ecac-3b77-4b13-bef2-27ff7e430b71", name: "Baby Monitors"  }
+          { name: "Girls", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1e", slug: "girls" },
+          { name: "Boys", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5a", slug: "boys" }
         ]
       },
       {
         name: "Toys",
         id: "c2a3d6ab-a10e-497d-bbeb-0016b9df6c0c",
-        gender: ['Kids', 'Male', 'Female'], // Many toys can be for boys or girls
         subcategoryItems: [
-          { id: "9618f89b-31eb-43ea-8868-cb1cec5f3da1", name: "Educational" },
-          { id: "76c0495a-d857-4492-8dc6-392d6e599009", name: "Learning Toys" },
-          { id: "06b6d031-5b87-4ce5-8541-3c49dbb87af7", name: "STEM Toys" },
-          { id: "78d9ac49-78cb-4b97-9c7b-06db3714927e", name: "Action Figures" },
-          { id: "108e10ef-02a7-46fa-8949-889a99376e13", name: "Dolls & Accessories" },
-          { id: "b0522642-c889-42a0-bc80-4a0bd8c72c1d", name: "Outdoor Play" },
-          { id: "3862201f-a660-4ea5-8b79-ef1f8c3e3dec", name: "Playhouses" },
-          { id: "e8c3e56d-7845-4c47-a32d-359a7ac06018", name: "Slides" },
-          { id: "56bdefa5-a31d-4d80-98e1-65ad68dfb711", name: "Swings"  }
-        ]
-      },
-      {
-        name: "Kids Clothing",
-        id: "bd65878e-63b5-4d97-9f67-480923f879e8",
-        gender: ['Kids'],
-        subcategoryItems: [
-          { id: "8c47911c-bc1d-4733-81be-c8179bb57847", name: "Girls" },
-          { id: "f29b84a1-a268-40d0-805e-d4d169b390d4", name: "Boys"  }
+          { name: "Educational", id: "9618f89b-31eb-43ea-8868-cb1cec5f3da1", slug: "educational" },
+          { name: "Learning Toys", id: "76c0495a-d857-4492-8dc6-392d6e599009", slug: "learning" },
+          { name: "STEM Toys", id: "06b6d031-5b87-4ce5-8541-3c49dbb87af7", slug: "stem" },
+          { name: "Action Figures", id: "78d9ac49-78cb-4b97-9c7b-06db3714927e", slug: "action-figures" },
+          { name: "Dolls & Accessories", id: "108e10ef-02a7-46fa-8949-889a99376e13", slug: "dolls-&-accessories" },
+          { name: "Outdoor Play", id: "b0522642-c889-42a0-bc80-4a0bd8c72c1d", slug: "outdoor" },
+          { name: "Playhouses", id: "3862201f-a660-4ea5-8b79-ef1f8c3e3dec", slug: "playhouses" },
+          { name: "Slides", id: "e8c3e56d-7845-4c47-a32d-359a7ac06018", slug: "slides" },
+          { name: "Swings", id: "56bdefa5-a31d-4d80-98e1-65ad68dfb711", slug: "swings" }
         ]
       }
     ]
   },
 
-  //Groceries Backend
+  //Recipes Backend
   {
     name: "Recipes",
-    id: "d4227a0d-0707-4fbb-aae7-56e71fc33301",
+    id: "e4f7d2a1-c8b5-4a3e-8c6f-9d2a1c7b5e4d",
     subcategories: [
       {
-        name: "Fresh Produce",
-        id: "747793b6-51d3-46c6-9b10-0fac1d4661bb",
+        name: "Trending Weeknight Dinners",
+        id: "b7c2a1e4-d9f8-4e3a-b1c2-5d4e7f6a8b9c",
         subcategoryItems: [
-          { id: "f2440f1e-dd21-4b86-8000-dec7ecdbac63", name: "Fruits" },
-          { id: "5556ca10-fcc3-4ebd-8b95-6f5d40c7e009", name: "Vegetables"  }
+          { name: "Chicken Alfredo", id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5d", slug: "chicken-alfredo" },
+          { name: "Chicken Tacos", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d", slug: "chicken-tacos" },
+          { name: "Fried Rice (Chicken/Vegetable)", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1c", slug: "fried-rice" },
+          { name: "Baked Salmon", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5a", slug: "baked-salmon" },
+          { name: "Stir-Fry Noodles (Lo Mein/Chow Mein)", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f4", slug: "stir-fry-noodles" },
+          { name: "Shrimp Scampi", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", slug: "shrimp-scampi" }
         ]
       },
       {
-        name: "Pantry Staples",
-        id: "20c7b675-af74-4d38-86e1-c33f55c58c0d",
+        name: "Comfort Classics",
+        id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1a",
         subcategoryItems: [
-          { id: "385332b9-7f2c-4eb7-8e3a-5cd424624b45", name: "Snacks" },
-          { id: "da316995-96f8-40e4-bb91-77126d4e9550", name: "Beverages" },
-          { id: "85d85b33-cc66-4fd5-a190-f6c0eccf9e26", name: "Tea" },
-          { id: "f5e8389d-fcfa-4661-b7a9-ac87247ac1e1", name: "Coffee" },
-          { id: "b596ddfb-46b0-46e7-8ca1-8283bb527075", name: "Soft Drinks" },
-          { id: "b00cd4d0-865f-4d7a-9374-1beb2933b4cf", name: "Baking" },
-          { id: "bb2ae444-bd7b-4c8d-846b-2a42cfa26f5f", name: "Flour" },
-          { id: "a9421c7a-ca14-4f5b-a597-f987eaf6417d", name: "Sugar" },
-          { id: "09f5b616-c0e4-4a2c-baa8-eaa60b950e99", name: "Baking Mixes"  }
+          { name: "Lasagna", id: "c1b2a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p6", slug: "lasagna" },
+          { name: "Spaghetti Bolognese", id: "a0b9c8d7-e6f5-4a2b-9c8d-7e6f5a4b3c2d", slug: "spaghetti-bolognese" },
+          { name: "Beef Chili", id: "d4c3b2a1-e9f8-4e7a-b6c5-2d1e4f3a5b6c", slug: "beef-chili" },
+          { name: "Mac & Cheese", id: "e2d1c4b3-a6f5-4e8d-9c2b-1a0e5f4d3c2b", slug: "mac-and-cheese" },
+          { name: "Beef Stew", id: "b3c2a1d4-e5f6-4a7b-8c9d-1e2f3a4b5c6e", slug: "beef-stew" },
+          { name: "Chicken Parmesan", id: "f8e7d6c5-b4a3-4b2c-9d1e-8a7b6c5d4e3f", slug: "chicken-parmesan" }
         ]
       },
       {
-        name: "Meat & Seafood",
-        id: "ad520439-4209-47bf-b2df-70fa4959df73",
+        name: "Breakfast & Brunch",
+        id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3d",
         subcategoryItems: [
-          { id: "c5ee3142-2286-4968-a654-f230e00b53b6", name: "Fresh Meat" },
-          { id: "02edfd71-c7fe-4c09-bc83-911a0d8633cd", name: "Seafood"  }
+          { name: "Pancakes", id: "b9c8a7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5a", slug: "pancakes" },
+          { name: "French Toast", id: "a0b1c2d3-e4f5-4g6h-i7j8-k9l0m1n2o3p4", slug: "french-toast" },
+          { name: "Omelette", id: "c1b2a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p7", slug: "omelette" },
+          { name: "Breakfast Burritos", id: "d2e1f4a3-b6c5-4d8e-9f0a-1b2c3d4e5f6g", slug: "breakfast-burritos" },
+          { name: "Avocado Toast with Eggs", id: "a3b2c1d4-e5f6-4g7h-i8j9-k0l1m2n3o4p8", slug: "avocado-toast-eggs" }
         ]
       },
       {
-        name: "Dairy",
-        id: "3b76c223-e8c2-4c92-8d4f-4b0848462cd0",
+        name: "Baking & Desserts",
+        id: "d93c76ae-654c-499d-aed8-3b72c69fd50b",
         subcategoryItems: [
-          { id: "b1b60a48-5a29-45fe-9a56-c8a5ed34961e", name: "Milk" },
-          { id: "5215aabc-bf7d-439a-8d5f-ed2773a38591", name: "Cheese" },
-          { id: "b6518a17-d204-4f28-97cf-f7dbf804cd11", name: "Eggs"  }
+          { name: "Chocolate Chip Cookies", id: "e5f4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1b", slug: "chocolate-chip-cookies" },
+          { name: "Brownies", id: "a7b6c5d4-e3f2-4a1b-9c0d-8e7f6a5b4c3d", slug: "brownies" },
+          { name: "Banana Bread", id: "f1e2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5e", slug: "banana-bread" },
+          { name: "Cheesecake", id: "b2c1a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", slug: "cheesecake" },
+          { name: "Cupcakes", id: "a8b7c6d5-e4f3-4a2b-9c1d-8e7f6a5b4c3e", slug: "cupcakes" }
         ]
       },
       {
-        name: "Frozen Foods",
-        id: "4a3e1fbe-e780-4b85-972e-bc8c1079e468",
+        name: "Global Favorites",
+        id: "c3256b0f-3e45-498e-a834-df8b6b1d6759",
         subcategoryItems: [
-          { id: "be3dfec6-2820-4511-9bd5-d3e5b9103356", name: "Vegetables" },
-          { id: "086b34d4-2dc4-4148-bfa7-16c434ca5fab", name: "Meats" },
-          { id: "77e62f7d-5bfb-4a38-bb54-b0c89bfac17a", name: "Desserts"  }
+          {
+            name: "Italian",
+            id: "a5b4c3d2-e1f0-4a9b-8c7d-6e5f4d3c2b1a",
+            child: [
+              { name: "Carbonara", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "carbonara" },
+              { name: "Margherita Pizza", id: "d3c2b1a4-e5f6-4g7h-i8j9-k0l1m2n3o4p0", slug: "margherita-pizza" }
+            ]
+          },
+          {
+            name: "Mexican",
+            id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6b",
+            child: [
+              { name: "Tacos al Pastor", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1d", slug: "tacos-al-pastor" },
+              { name: "Chicken Enchiladas", id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3e", slug: "chicken-enchiladas" }
+            ]
+          },
+          {
+            name: "Indian",
+            id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p1",
+            child: [
+              { name: "Butter Chicken", id: "e4f3d2c1-b0a9-8c7d-6e5f-4d3c2b1a0d9c", slug: "butter-chicken" },
+              { name: "Chana Masala", id: "f1d2c3e4-a5b6-4c7d-8e9f-0a1b2c3d4e5f", slug: "chana-masala" }
+            ]
+          },
+          {
+            name: "Chinese",
+            id: "f6e5d4c3-b2a1-4e7a-b6c5-2d1e4f3a5b6d",
+            child: [
+              { name: "Kung Pao Chicken", id: "b3c2a1d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "kung-pao-chicken" },
+              { name: "Mapo Tofu", id: "e1f2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5f", slug: "mapo-tofu" }
+            ]
+          },
+          {
+            name: "Japanese",
+            id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5f",
+            child: [
+              { name: "Chicken Teriyaki", id: "d1e2f3a4-b5c6-4d7e-8f9a-0b1c2d3e4f5g", slug: "chicken-teriyaki" },
+              { name: "Katsu Curry", id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7e", slug: "katsu-curry" }
+            ]
+          },
+          {
+            name: "Thai",
+            id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6g",
+            child: [
+              { name: "Pad Thai", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f5", slug: "pad-thai" },
+              { name: "Green Curry", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p2", slug: "green-curry" }
+            ]
+          },
+          {
+            name: "Mediterranean",
+            id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1e",
+            child: [
+              { name: "Greek Salad + Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6h", slug: "greek-chicken-salad"},
+              { name: "Shakshuka", id: "e2d1c4b3-a6f5-4e8d-9c2b-1a0e5f4d3c2c", slug: "shakshuka"}
+            ]
+          }
+        ]
+      },
+      {
+        name: "Appliance-Guided",
+        id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457",
+        subcategoryItems: [
+          {
+            name: "Air Fryer",
+            id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p3",
+            child: [
+              { name: "Air Fryer Chicken Wings", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5b", slug: "air-fryer-chicken-wings" },
+              { name: "Air Fryer Salmon", id: "a3b2c1d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", slug: "air-fryer-salmon" }
+            ]
+          },
+          {
+            name: "Instant Pot / Pressure Cooker",
+            id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f6",
+            child: [
+              { name: "Instant Pot Beef Chili", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6j", slug: "instant-pot-beef-chili" },
+              { name: "Instant Pot Butter Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6k", slug: "instant-pot-butter-chicken" }
+            ]
+          },
+          {
+            name: "Oven & Sheet Pan",
+            id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1f",
+            child: [
+              { name: "Sheet-Pan Chicken & Veggies", id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6c", slug: "sheet-pan-chicken-veggies" },
+              { name: "Roasted Salmon & Potatoes", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p4", slug: "roasted-salmon-potatoes" }
+            ]
+          },
+          {
+            name: "Stovetop & Wok",
+            id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3f",
+            child: [
+              { name: "Beef Stir-Fry", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5c", slug: "beef-stir-fry" },
+              { name: "Fried Rice", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f7", slug: "fried-rice-stovetop" }
+            ]
+          }
+        ]
+      },
+      {
+        name: "Meal Prep & Bowls",
+        id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5g",
+        subcategoryItems: [
+          { name: "Chicken Burrito Bowls", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6l", slug: "chicken-burrito-bowls" },
+          { name: "Teriyaki Chicken Bowls", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1g", slug: "teriyaki-chicken-bowls" },
+          { name: "Mediterranean Grain Bowls", id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3g", slug: "mediterranean-grain-bowls" },
+          { name: "Korean Beef Bowls", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", slug: "korean-beef-bowls" }
         ]
       }
     ]
@@ -1010,14 +1094,12 @@ export const categoriesSeedData = [
           { id: "2c03da59-6649-42da-bb22-5277f5bff87c", name: "Camping" },
           { id: "c6d9fb12-f344-47d8-8dbb-2eaa690b3ebc", name: "Tents" },
           { id: "0b9b8569-f47c-401f-a0e7-b9b50e3b258f", name: "Sleeping Bags" },
-          { id: "6b6e1ed1-26a6-4631-8973-f1d6f377a5b1", name: "Backpacks" },
           { id: "f5e91dc4-cc55-4069-99a2-9a2716a58990", name: "Hiking" },
-          { id: "d0f8e994-b0d0-4fa5-85d5-bde229a08a60", name: "Boots" },
           { id: "7baffd16-8465-4f1b-90d1-612b4b32c1a7", name: "Poles" },
           { id: "ac4ed5ee-38c1-4761-bb48-ef8c528e7860", name: "Gear" },
           { id: "3c911690-b0b6-4ee3-a41b-b6a8f8fdf4a0", name: "Water Sports" },
           { id: "d41900d8-e426-4e48-aadb-93ea2683fc06", name: "Kayaks" },
-          { id: "3e0f2416-6b72-4871-8a41-97e16fce3142", name: "Life Jackets"  }
+          { id: "3e0f2416-6b72-4871-8a41-97e16fce3142", name: "Life Jackets" }
         ]
       },
       {
@@ -1059,16 +1141,16 @@ export const categoriesSeedData = [
           { id: "03e9dd4f-853c-4a57-a9c2-d6f6d84e59e2", name: "Floor Mats" },
           { id: "76b66f65-b3f2-485f-a934-f9f5f6cbe540", name: "Exterior Accessories" },
           { id: "cdbd08f2-6d77-4807-8859-9b5ea7e23e0b", name: "Car Covers" },
-          { id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", name: "Bike Racks" },
-          {
-            id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", 
-            name: "Auto Customization",
-            child: [
-              { id: "03d8d7b3-c1f9-4610-8b1b-410a5160a0a5", name: "Wheels & Rims" },
-              { id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70", name: "Seat Covers" },
-              { id: "6d9e03d4-b78f-4f2a-b7e1-886d34e9e436", name: "Wraps & Decals" }
-            ]
-          }
+          { id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", name: "Bike Racks" }
+        ]
+      },
+      {
+        id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", 
+        name: "Auto Customization",
+        subcategoryItems: [
+          { id: "03d8d7b3-c1f9-4610-8b1b-410a5160a0a5", name: "Wheels & Rims" },
+          { id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70", name: "Seat Covers" },
+          { id: "6d9e03d4-b78f-4f2a-b7e1-886d34e9e436", name: "Wraps & Decals" }
         ]
       }
     ]
@@ -1163,7 +1245,6 @@ export const categoriesSeedData = [
           { id: "4bf4b308-0b37-4ee1-9255-8c413dc634b6", name: "Vitamins" },
           { id: "91bd093d-115f-4d95-82f0-3c3c2d5e6e80", name: "Support Bands" },
           { id: "9bc8e2dc-6819-4d70-a8f8-5c82ed830d96", name: "Pregnancy Pillows" },
-          { id: "6e7a9ad7-4c59-4850-91a1-f8301b5e356c", name: "Skincare"  }
         ]
       },
       {

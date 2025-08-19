@@ -220,6 +220,7 @@ const ProductGallery = ({
                     flexWrap: 'nowrap',
                     justifyContent: 'center',
                     width: '100%',
+                    zIndex: 2
                 }}
             >
 

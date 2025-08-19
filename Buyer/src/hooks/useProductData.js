@@ -1,12 +1,7 @@
-// src/hooks/useProductData.js
-
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 
-// Custom hook to fetch product data and initialize filter options
-
-export function useProductData() {
-  
+export function useProductData(paramsString) {
   const [data, setData] = useState({
     allProducts: [],
     allBrands: [],
@@ -20,16 +15,17 @@ export function useProductData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
+  // const paramsString = searchParams.toString(); // ✅ stable dependency
 
   useEffect(() => {
     setLoading(true);
 
-    // Build the query string with the correct priority
-    const params = new URLSearchParams(searchParams.toString());
-    const queryString = params.toString() ? `?${params.toString()}` : "";
+    const queryString = paramsString ? `?${paramsString}` : "";
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`, {
+        cache: "no-store", // 👈 disable Next.js fetch cache
+      })
       .then(res => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
@@ -50,7 +46,7 @@ export function useProductData() {
         setError(err.message);
       })
       .finally(() => setLoading(false));
-  }, [searchParams]); // Directly depend on the searchParams object
-  
+  }, [paramsString]); // ✅ depends on string version
+
   return { ...data, loading, error };
 }

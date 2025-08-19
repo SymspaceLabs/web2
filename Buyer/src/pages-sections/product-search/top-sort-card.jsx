@@ -1,13 +1,16 @@
+// src/components/top-sort-card/TopSortCard.js
+
 "use client";
 
 // ==============================================
 // Top Sort Card used in Product Search Page
 // ==============================================
 
-import { Paragraph, Span } from "@/components/Typography";
+import { Paragraph } from "@/components/Typography";
 import { MenuItem, TextField } from "@mui/material";
 import { FlexBetween, FlexBox } from "@/components/flex-box";
 import { useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation"; // Import the hook
 
 // ==============================================
 
@@ -19,32 +22,59 @@ const SORT_OPTIONS = [
 ];
 
 const TopSortCard = ({
-  totalProducts,       // Prop for total count from ProductSearchPageView
-  categoryDisplayName, // Prop for formatted category name from ProductSearchPageView
-  genderDisplayName    // Prop for formatted gender name from ProductSearchPageView
+  totalProducts,
+  categoryDisplayName, // This now represents the specific category from useProductFilters
+  genderDisplayName,
 }) => {
   const [selectedOption, setSelectedOption] = useState(SORT_OPTIONS[0].value);
+  const searchParams = useSearchParams(); // Use the hook directly here
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
-    // You would typically implement sorting logic here based on the selected option
   };
 
-  // Construct the display text dynamically based on available props
+  // Construct the display text dynamically, prioritizing URL parameters.
   const displayFilterText = useMemo(() => {
+    // 1. Check for 'search' term
+    const searchTerm = searchParams.get('search');
+    if (searchTerm) {
+      return `for "${searchTerm}"`;
+    }
+
+    // 2. Check for specific subcategory/category parameters
+    const subcategoryItemChild = searchParams.get('subcategoryItemChild');
+    if (subcategoryItemChild) {
+      return `for ${subcategoryItemChild.charAt(0).toUpperCase() + subcategoryItemChild.slice(1)}`;
+    }
+
+    const subcategoryItem = searchParams.get('subcategoryItem');
+    if (subcategoryItem) {
+      return `for ${subcategoryItem.charAt(0).toUpperCase() + subcategoryItem.slice(1)}`;
+    }
+
+    const subcategory = searchParams.get('subcategory');
+    if (subcategory) {
+      return `for ${subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}`;
+    }
+
+    const category = searchParams.get('category');
+    if (category) {
+      return `for ${category.charAt(0).toUpperCase() + category.slice(1)}`;
+    }
+
+    // 3. Fallback to genderDisplayName and categoryDisplayName props
     const parts = [];
     if (genderDisplayName) {
       parts.push(genderDisplayName);
     }
-    // This part now directly uses the categoryDisplayName passed from the parent,
-    // which is already designed to reflect the URL category.
+    // Only add categoryDisplayName if it's not empty,
+    // as it might be an empty string if no specific category was found by useProductFilters.
     if (categoryDisplayName) {
       parts.push(categoryDisplayName);
     }
-    // Join the parts with " and " if both are present
-    return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
-  }, [genderDisplayName, categoryDisplayName]);
 
+    return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
+  }, [searchParams, genderDisplayName, categoryDisplayName]); // Dependencies for re-evaluation
 
   return (
     <FlexBetween
@@ -54,11 +84,9 @@ const TopSortCard = ({
       alignItems="center"
       gap={1}
     >
-      <div>
-        <Paragraph color="grey.600">
-          Total {totalProducts} results {displayFilterText}
-        </Paragraph>
-      </div>
+      <Paragraph color="grey.600">
+        Total {totalProducts} results {displayFilterText}
+      </Paragraph>
 
       <FlexBox alignItems="center" gap={2}>
         <Paragraph color="grey.600" whiteSpace="pre">

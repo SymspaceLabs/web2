@@ -415,32 +415,23 @@ export class ProductsService {
     let resolvedSubcategoryItemChildId: string | undefined;
     let filterAppliedButNoMatch = false;
 
-    // Prioritize subcategoryItemChildName if provided.
+    // Prioritize named parameters (categoryName, subcategoryName, etc.)
+    // If these are provided, they take precedence over a generic searchTerm for hierarchical filtering.
     if (subcategoryItemChildName) {
-        const foundSubcategoryItemChild = await this.subcategoryItemChildRepository
-            .createQueryBuilder('subcategoryItemChild')
-            .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
-            .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-            .leftJoinAndSelect('subcategory.category', 'category')
-            .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName })
-            .getOne();
+      const foundSubcategoryItemChild = await this.subcategoryItemChildRepository
+        .createQueryBuilder('subcategoryItemChild')
+        .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
+        .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+        .leftJoinAndSelect('subcategory.category', 'category')
+        .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName })
+        .getOne();
 
-        // --- DEBUG LOGS START ---
-  
-  
-  
-        // --- DEBUG LOGS END ---
-
-        if (foundSubcategoryItemChild) {
-            resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
-      
-        } else {
-            filterAppliedButNoMatch = true;
-      
-        }
-    }
-    // Then prioritize subcategoryItemName if provided.
-    else if (subcategoryItemName) {
+      if (foundSubcategoryItemChild) {
+        resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
+      } else {
+        filterAppliedButNoMatch = true;
+      }
+    } else if (subcategoryItemName) {
       const foundSubcategoryItem = await this.subcategoryItemRepository
         .createQueryBuilder('subcategoryItem')
         .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
@@ -453,9 +444,7 @@ export class ProductsService {
       } else {
         filterAppliedButNoMatch = true;
       }
-    }
-    // If no subcategoryItemName, check for subcategoryName.
-    else if (subcategoryName) {
+    } else if (subcategoryName) {
       const foundSubcategory = await this.subcategoryRepository.findOne({
         where: { name: subcategoryName },
         relations: ['subcategoryItems'],
@@ -466,9 +455,7 @@ export class ProductsService {
       } else {
         filterAppliedButNoMatch = true;
       }
-    }
-    // If no subcategoryItemName or subcategoryName, check for categoryName.
-    else if (categoryName) {
+    } else if (categoryName) {
       const foundCategory = await this.categoryRepository.findOne({
         where: { name: categoryName },
         relations: ['subcategories', 'subcategories.subcategoryItems'],
@@ -481,6 +468,8 @@ export class ProductsService {
       }
     }
 
+    // If a specific category/subcategory name was provided in the query params
+    // but no matching entity was found, return an empty set of results.
     if ((categoryName || subcategoryName || subcategoryItemName || subcategoryItemChildName) && filterAppliedButNoMatch) {
       return {
         products: [],
@@ -493,6 +482,7 @@ export class ProductsService {
       };
     }
 
+    // Initialize the main product query builder.
     const query = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.company', 'company')
@@ -503,11 +493,11 @@ export class ProductsService {
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
-      .orderBy('images.sortOrder', 'ASC');
+      .orderBy('images.sortOrder', 'ASC'); // Order product images by sortOrder
 
+    // Apply hierarchical filtering based on the resolved IDs (from named parameters).
     if (resolvedSubcategoryItemChildId) {
-  
-        query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
+      query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
     } else if (subcategoryItemId) {
       query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
     } else if (subcategoryId) {
@@ -516,25 +506,36 @@ export class ProductsService {
       query.andWhere('category.id = :categoryId', { categoryId });
     }
 
+    // Apply the broad search term to product name/description AND category hierarchy.
+    // This ensures that 'searchTerm' can match products directly or implicitly via categories.
     if (searchTerm) {
       query.andWhere(
-        '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
+        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
+        LOWER(category.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
         { searchTerm: `%${searchTerm}%` },
       );
     }
 
+    // Execute the product query and fetch the results.
     const products = await query.getMany();
 
+    // Sort product images to ensure consistent order.
     for (const product of products) {
       if (product.images) {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
     }
 
-    // --- Call the new helper function for price range ---
+    // Calculate the minimum and maximum prices from the fetched products.
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
 
+    // Initialize formattedBrands array.
     let formattedBrands: any[] = [];
+    // Populate brands if there are products or if no specific filters were applied (show all brands then).
     if (products.length > 0 || (!searchTerm && !categoryName && !subcategoryName && !subcategoryItemName && !subcategoryItemChildName)) {
       const brandsQuery = this.productRepository
         .createQueryBuilder('product')
@@ -547,6 +548,7 @@ export class ProductsService {
         .groupBy('company.id')
         .addGroupBy('company.entityName');
 
+      // Apply the same hierarchical filtering to the brands query.
       if (resolvedSubcategoryItemChildId) {
         brandsQuery.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
       } else if (subcategoryItemId) {
@@ -557,9 +559,15 @@ export class ProductsService {
         brandsQuery.andWhere('category.id = :categoryId', { categoryId });
       }
 
+      // Apply the broad search term to the brands query as well.
       if (searchTerm) {
         brandsQuery.andWhere(
-          '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
+          `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(product.description) LIKE LOWER(:searchTerm) OR 
+          LOWER(category.name) LIKE LOWER(:searchTerm) OR
+          LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
+          LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
+          LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
           { searchTerm: `%${searchTerm}%` },
         );
       }
@@ -570,11 +578,13 @@ export class ProductsService {
       }));
     }
 
+    // Fetch all categories and their relations for building the facet tree.
     const allCategories = await this.categoryRepository.find({
       relations: ['subcategories', 'subcategories.subcategoryItems', 'subcategories.subcategoryItems.subcategoryItemChildren'],
       order: { name: 'ASC' },
     });
 
+    // Map categories into a format suitable for facets, including their nested structure.
     const categoriesForFacets = allCategories.map(cat => ({
       id: cat.id,
       name: cat.name,
@@ -598,6 +608,7 @@ export class ProductsService {
         : [],
     }));
 
+    // Build a hierarchy map from the *filtered* products to refine the category facets.
     const productCategoryHierarchy = new Map<
       string,
       {
@@ -667,6 +678,7 @@ export class ProductsService {
       }
     }
 
+    // Filter the full category facet tree based on the products found in the current query.
     const finalCategoryFacets = categoriesForFacets.map(cat => {
       const enrichedCat = { ...cat };
       if (productCategoryHierarchy.has(cat.id)) {
@@ -703,6 +715,7 @@ export class ProductsService {
       return enrichedCat;
     });
 
+    // Query for distinct genders based on the current product set.
     const productGendersResult = this.productRepository
       .createQueryBuilder('product')
       .select('DISTINCT product.gender', 'gender')
@@ -710,10 +723,11 @@ export class ProductsService {
       .leftJoin('product.subcategoryItem', 'subcategoryItem')
       .leftJoin('subcategoryItem.subcategory', 'subcategory')
       .leftJoin('subcategory.category', 'category')
-      .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild'); // Join with SubcategoryItemChild
+      .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild');
 
+    // Apply the same hierarchical filtering to the gender query.
     if (resolvedSubcategoryItemChildId) {
-        productGendersResult.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
+      productGendersResult.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
     } else if (subcategoryItemId) {
       productGendersResult.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
     } else if (subcategoryId) {
@@ -722,27 +736,36 @@ export class ProductsService {
       productGendersResult.andWhere('category.id = :categoryId', { categoryId });
     }
 
+    // Apply the broad search term to the gender query as well.
     if (searchTerm) {
       productGendersResult.andWhere(
-        '(LOWER(product.name) LIKE LOWER(:searchTerm) OR LOWER(product.description) LIKE LOWER(:searchTerm))',
+        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
+        LOWER(category.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
+        LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
         { searchTerm: `%${searchTerm}%` },
       );
     }
     const distinctProductGenders = (await productGendersResult.getRawMany()).map(
       g => g.gender,
     );
+    // Combine distinct genders with a predefined list of all possible genders.
     const allPossibleGenders = ['women', 'men', 'unisex'];
     const genders = Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
 
+    // Determine availability statuses from the fetched products.
     const availabilitySet = new Set<string>();
     for (const product of products as any[]) {
       const inStock = product.variants?.some(v => v.stock > 0);
       const status = inStock ? 'In stock' : 'Out of stock';
-      (product as any).availability = status;
+      (product as any).availability = status; // Add availability status to each product.
       availabilitySet.add(status);
     }
     const availabilities = Array.from(availabilitySet);
 
+    // Collect all unique colors from the fetched products.
     const allColorsMap = new Map<string, { name: string; code: string }>();
     for (const product of products) {
       if (product.colors) {
@@ -758,10 +781,11 @@ export class ProductsService {
     }
     const colors = Array.from(allColorsMap.values());
 
+    // Return the comprehensive product search results.
     return {
       products,
       brands: formattedBrands,
-      priceRange: { min: minPrice, max: maxPrice }, // Corrected line
+      priceRange: { min: minPrice, max: maxPrice },
       category: finalCategoryFacets,
       genders,
       availabilities,

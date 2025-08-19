@@ -4,10 +4,10 @@
 
 import useSearch from "./hooks/use-search";
 import SearchResult from "./components/search-result";
-import { useRouter } from "next/navigation"; // <-- Import the router
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { SearchOutlinedIcon } from "./styles";
 import { Box, Button, TextField, InputAdornment, CircularProgress, Typography } from "@mui/material";
-import { useState } from "react";
 
 // ============================================
 
@@ -21,7 +21,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
   } = useSearch();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter(); // <-- Initialize the router
+  const router = useRouter();
 
   const handleInputChange = (event) => {
     const query = event.target.value;
@@ -33,7 +33,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
   const handleShopSearchClick = () => {
     if (searchQuery) {
       // Route the user to the search page with the query
-      router.push(`/products/search/all?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/products/search/all?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -131,7 +131,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
         >
           {searchQuery && (
             <Box
-              onClick={handleShopSearchClick} // <-- Add the onClick handler here
+              onClick={handleShopSearchClick}
               sx={{
                 p: 2,
                 display: 'flex',

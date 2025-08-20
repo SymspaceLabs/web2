@@ -19,11 +19,12 @@ export const elementalEnd = localFont({
 import "@/i18n";
 import RTL from "@/components/rtl";
 import CartProvider from "@/contexts/CartContext";
-import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import SettingsProvider from "@/contexts/SettingContext";
 import ProgressBar from "@/components/progress";
 import SnackbarProvider from "@/contexts/SnackbarContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
+import { TitleProvider } from "@/contexts/TitleContext";
 
 export default function RootLayout({ children }) {
   return (
@@ -43,20 +44,22 @@ export default function RootLayout({ children }) {
         </style>
       </head>
       <body>
-        <AuthProvider>
-            <SnackbarProvider>
-              <FavoritesProvider>
-                <CartProvider>
-                  <SettingsProvider>
-                    <ThemeProvider> {/* Your custom ThemeProvider */}
-                      <ProgressBar />
-                      <RTL>{children}</RTL>
-                    </ThemeProvider>
-                  </SettingsProvider>
-                </CartProvider>
-              </FavoritesProvider>
-            </SnackbarProvider>
-        </AuthProvider>
+        <TitleProvider>
+          <AuthProvider>
+              <SnackbarProvider>
+                <FavoritesProvider>
+                  <CartProvider>
+                    <SettingsProvider>
+                      <ThemeProvider> {/* Your custom ThemeProvider */}
+                        <ProgressBar />
+                        <RTL>{children}</RTL>
+                      </ThemeProvider>
+                    </SettingsProvider>
+                  </CartProvider>
+                </FavoritesProvider>
+              </SnackbarProvider>
+          </AuthProvider>
+        </TitleProvider>
       </body>
     </html>
   );

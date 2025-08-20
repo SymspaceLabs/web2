@@ -20,9 +20,6 @@ export const metadata = {
 
 // ==================================================================
 
-export default async function ProductSearch({
-  params,
-  searchParams // ADD THIS LINE
-}) {
-  return <ProductSearchPageView slug={params.slug} searchParams={searchParams} />;
+export default async function ProductSearch() {
+  return <ProductSearchPageView />;
 }

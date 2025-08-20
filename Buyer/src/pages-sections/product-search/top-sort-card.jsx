@@ -9,8 +9,9 @@
 import { Paragraph } from "@/components/Typography";
 import { MenuItem, TextField } from "@mui/material";
 import { FlexBetween, FlexBox } from "@/components/flex-box";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation"; // Import the hook
+import { useTitle } from "@/contexts/TitleContext";
 
 // ==============================================
 
@@ -28,6 +29,8 @@ const TopSortCard = ({
 }) => {
   const [selectedOption, setSelectedOption] = useState(SORT_OPTIONS[0].value);
   const searchParams = useSearchParams(); // Use the hook directly here
+  const { setTitle, setSlug } = useTitle(); // Get the setTitle function from context
+
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -75,6 +78,15 @@ const TopSortCard = ({
 
     return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
   }, [searchParams, genderDisplayName, categoryDisplayName]); // Dependencies for re-evaluation
+
+  // Update the title in the context
+  useEffect(() => {
+    const newTitle = displayFilterText
+      ? `Results for ${displayFilterText}`
+      : "Product Search"; // Use a default title if filter text is empty
+    setTitle(newTitle);
+    setSlug(displayFilterText);
+  }, [displayFilterText, setTitle]); // setTitle is stable, but include for clarity
 
   return (
     <FlexBetween

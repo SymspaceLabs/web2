@@ -198,8 +198,6 @@ export default function ProductSearchPageView() {
             {/* Top Sort Card - Only visible on desktop. */}
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
               <TopSortCard
-                products={displayedProducts}
-                slug={genderQuery[0]}
                 totalProducts={displayedProducts.length}
                 categoryDisplayName={categoryDisplayName} // Pass the corrected categoryDisplayName
                 genderDisplayName={genderDisplayName}

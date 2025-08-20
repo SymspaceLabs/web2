@@ -110,6 +110,9 @@ export class User {
   @OneToMany(() => Review, (review) => review.user)
   reviews: Review[];
 
+  @Column({ default: false })
+  isSignedUpViaMobile: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

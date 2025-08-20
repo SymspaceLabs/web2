@@ -26,6 +26,9 @@ export class Auth {
   @Column({ type: 'varchar', length: 1000, nullable: true })
   refreshToken: string;
 
+  @Column({ default: false })
+  isSignedUpViaMobile: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

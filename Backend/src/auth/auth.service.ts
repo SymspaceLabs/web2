@@ -243,6 +243,7 @@ export class AuthService {
     };
   }
 
+  // Sign Up as a Buyer
   async signUp(
     signUpDto: SignUpDto,
   ): Promise<{ message: string; token?: string }> {
@@ -250,7 +251,7 @@ export class AuthService {
     try {
       const requiredFields = ['firstName', 'lastName', 'email', 'password'];
       const missingFields = this.validateFields(signUpDto, requiredFields);
-      const { password, email } = signUpDto;
+      const { password, email, isSignedUpViaMobile = false  } = signUpDto;
     
       // Check for missing inputs
       if (missingFields.length > 0) {
@@ -293,7 +294,8 @@ export class AuthService {
         role,
         otp,
         otpExpiresAt,
-        isVerified: false, // New column to track verification status
+        isVerified: false,
+        isSignedUpViaMobile
       });
     
       await this.usersRepository.save(user);
@@ -491,7 +493,8 @@ export class AuthService {
     };
   }
 
-  async loginWithGoogle(idToken: string) {
+  // Login With Google
+  async loginWithGoogle(idToken: string, isSignedUpViaMobile: boolean = false) {
     let googleUser;
 
     try {
@@ -516,6 +519,7 @@ export class AuthService {
           role: 'buyer',
           password: '',
           authMethod: AuthMethod.GOOGLE,
+          isSignedUpViaMobile: isSignedUpViaMobile, // Added this line
         });
         await this.usersRepository.save(user);
       }
@@ -549,11 +553,6 @@ export class AuthService {
       console.error('[ERROR] Auth repository update failed:', authRepoError);
     }
 
-    const payload = { email: user.email, id: user.id }; // <<< ENSURE 'id' HERE IS THE CORRECT USER ID
-    console.log('--- JWT Generation Debug ---');
-    console.log('Payload for JWT:', payload); // Verify the ID being put into the token
-    console.log('----------------------------');
-
     return {
       accessToken,
       user: {
@@ -569,7 +568,8 @@ export class AuthService {
   }
 
 
-  async loginWithApple(idToken: string) {
+  // Login With Apple
+  async loginWithApple(idToken: string, isSignedUpViaMobile: boolean = false) {
     const decodedHeader: any = jwt.decode(idToken, { complete: true });
 
     if (!decodedHeader || !decodedHeader.header || !decodedHeader.header.kid) {
@@ -577,7 +577,7 @@ export class AuthService {
     }
 
     try {
-      const appleUser =  await this.parseJWT(idToken);
+      const appleUser = await this.parseJWT(idToken);
       const { email } = appleUser;
 
       let user = await this.usersRepository.findOne({
@@ -594,8 +594,9 @@ export class AuthService {
             role: 'buyer',
             password: '',
             authMethod: AuthMethod.APPLE,
+            isSignedUpViaMobile: isSignedUpViaMobile, // Added this line
         });
-  
+
         await this.usersRepository.save(user);
       }
 
@@ -624,26 +625,26 @@ export class AuthService {
           token: accessToken
         },
       };
-
-
-      } catch (err) {
+    } catch (err) {
         throw new UnauthorizedException('Invalid token 2');
     }
   }
 
-  async loginWithFacebook(accessToken: string) {
+
+  // Login With Facebook
+  async loginWithFacebook(accessToken: string, isSignedUpViaMobile: boolean = false) {
     try {
       // Fetch user info from Facebook
       const userInfoUrl = `https://graph.facebook.com/me?fields=id,first_name,last_name,email,picture&access_token=${accessToken}`;
       const userInfoResponse: any = await axios.get(userInfoUrl);
-  
+
       const { email, first_name, last_name, picture } = userInfoResponse.data;
-  
+
       // Check if user exists in the database
       let user = await this.usersRepository.findOne({
         where: { email },
       });
-  
+
       if (!user) {
         // Create a new user if not found
         user = this.usersRepository.create({
@@ -655,24 +656,25 @@ export class AuthService {
           role: 'buyer',
           password: '',
           authMethod: AuthMethod.FACEBOOK,
+          isSignedUpViaMobile: isSignedUpViaMobile, // Added this line
         });
-  
+
         await this.usersRepository.save(user);
       }
-  
+
       // Generate a new access token
       const newAccessToken = this.jwtService.sign(
         { userId: user.id, email: user.email },
         { secret: process.env.JWT_SECRET, expiresIn: '1h' },
       );
-  
+
       // Store the token in Redis
       await this.redisService
         .getClient()
         .set(`auth:${user.id}`, newAccessToken, 'EX', 3600);
-  
+
       await this.authRepository.update(user.id, { refreshToken: newAccessToken });
-  
+
       // Return the access token and user info
       return {
         accessToken: newAccessToken,
@@ -694,30 +696,6 @@ export class AuthService {
     }
   }
   
-  // async verifyEmail(token: string): Promise<boolean> {
-  //   try {
-  //     const { email } = this.jwtService.verify(token);
-  //     const user = await this.usersRepository.findOne({ where: { email } });
-  //     if (!user) throw new HttpException('User not found', 404);
-  //     user.isVerified = true;
-  //     await this.usersRepository.save(user);
-  //     return true;
-  //   } catch (error) {
-  //     this.logger.error(`Email verification failed: ${error.message}`);
-  //     if (error.name === 'TokenExpiredError') {
-  //       throw new HttpException(
-  //         'Email verification token has expired. Please request a new verification link.',
-  //         441,
-  //       );
-  //     } else {
-  //       throw new HttpException(
-  //         'Invalid verification token.',
-  //         400,
-  //       );
-  //     }
-  //   }
-  // }
-
   async generateResetPasswordOtp(email: string): Promise<void> {
     const user = await this.usersRepository.findOne({ where: { email } });
     

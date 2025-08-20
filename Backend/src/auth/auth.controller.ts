@@ -7,7 +7,6 @@ import {
   Req,
   Get,
   HttpStatus,
-  Query,
   BadRequestException,
   HttpCode,
   UnauthorizedException,
@@ -20,8 +19,6 @@ import { SignUpDto } from './dto/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 import { UsersService } from 'src/users/users.service';
-import { MailchimpService } from 'src/mailchimp/mailchimp.service';
-import { JwtService } from '@nestjs/jwt';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
@@ -31,9 +28,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 export class AuthController {
   usersService: UsersService;
   constructor(
-    private authService: AuthService,
-    private mailChimpService: MailchimpService,
-    private jwtService: JwtService,
+    private authService: AuthService
   ) {}
 
   // 1. Login
@@ -125,9 +120,12 @@ export class AuthController {
   // 10. Google Login
   @Post('login/google')
   @HttpCode(HttpStatus.OK)
-  async loginWithGoogle(@Body('idToken') idToken: string) {
+  async loginWithGoogle(
+    @Body('idToken') idToken: string,
+    @Body('isSignedUpViaMobile') isSignedUpViaMobile: boolean = false,
+  ) {
     try {
-      return await this.authService.loginWithGoogle(idToken);
+      return await this.authService.loginWithGoogle(idToken, isSignedUpViaMobile);
     } catch (error) {
       throw new UnauthorizedException('Google authentication failed');
     }
@@ -136,9 +134,12 @@ export class AuthController {
   // 11. Apple Login
   @Post('login/apple')
   @HttpCode(HttpStatus.OK)
-  async loginWithApple(@Body('idToken') idToken: string) {
+  async loginWithApple(
+    @Body('idToken') idToken: string,
+    @Body('isSignedUpViaMobile') isSignedUpViaMobile: boolean = false,
+  ) {
     try {
-      return await this.authService.loginWithApple(idToken);
+      return await this.authService.loginWithApple(idToken, isSignedUpViaMobile);
     } catch (error) {
       throw new UnauthorizedException('Apple authentication failed');
     }
@@ -147,9 +148,12 @@ export class AuthController {
   // 12. Facebook Login
   @Post('login/facebook')
   @HttpCode(HttpStatus.OK)
-  async loginWithFacebook(@Body('accessToken') accessToken: string) {
+  async loginWithFacebook(
+    @Body('accessToken') accessToken: string,
+    @Body('isSignedUpViaMobile') isSignedUpViaMobile: boolean = false,
+  ) {
     try {
-      return await this.authService.loginWithFacebook(accessToken);
+      return await this.authService.loginWithFacebook(accessToken, isSignedUpViaMobile);
     } catch (error) {
       if (error.response?.status === 400 && error.response?.data?.error?.type === 'OAuthException') {
         throw new UnauthorizedException('Invalid or expired Facebook access token');
@@ -179,66 +183,4 @@ export class AuthController {
     });
   }
 
-  // @Post('/send-email')
-  // async sendEmail(
-  //   @Body('email') email: string,
-  //   @Body('verificationUrl') verificationUrl: string,
-  // ) {
-  //   return this.mailChimpService.sendEmail(email, verificationUrl);
-  // }
-
-
-
-  // @Post('resend-verification')
-  // async resendVerification(@Body() resendVerificationDto: any) {
-  //   const { email } = resendVerificationDto;
-  //   const user = await this.authService.findUserByEmail(email);
-
-  //   if (!user) {
-  //     throw new HttpException(
-  //       'User not found. Please register first.',
-  //       HttpStatus.NOT_FOUND,
-  //     );
-  //   }
-    
-  //   if (user.isVerified) {
-  //     throw new HttpException(
-  //       'Account is already verified.',
-  //       HttpStatus.BAD_REQUEST,
-  //     );
-  //   }
-
-  //   // Resend the verification email
-  //   const success = await this.authService.sendVerificationEmail(user);
-  //   if (!success) {
-  //     throw new HttpException(
-  //       'Failed to send verification email. Please try again later.',
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-
-  //   return {
-  //     message: 'Verification email has been resent successfully.',
-  //     status: 'success',
-  //   };
-  // }
-
-  // @Get('verify-email')
-  // async verifyEmail(@Query('token') token: string, @Res() res) {
-  //   const { role } = this.jwtService.verify(token);
-  //   try {
-  //     await this.authService.verifyEmail(token);
-  //     let redirectUrl: string;
-  //     if (role === 'seller') {
-  //       redirectUrl = `${process.env.BUYER_URL}/vendor/dashboard`;
-  //     } else {
-  //       redirectUrl = `${process.env.BUYER_URL}/sign-in`;
-  //     }
-  //     return res.redirect(redirectUrl);
-  //   } catch (error) {
-  //     return res.redirect(
-  //       `${process.env.BUYER_URL}/email-verification-failed`,
-  //     );
-  //   }
-  // }
 }

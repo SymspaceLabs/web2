@@ -9,7 +9,7 @@ const TitleContext = createContext(null);
 // Create a provider component
 export function TitleProvider({ children }) {
   const [title, setTitle] = useState("Product Search"); // Default title
-  const [slug, setSlug] = useState("Product Search"); // Default title
+  const [slug, setSlug] = useState(""); // Default title
 
   // Effect to apply the title to the document
   useEffect(() => {
@@ -18,7 +18,7 @@ export function TitleProvider({ children }) {
   }, [title]);
 
   return (
-    <TitleContext.Provider value={{ title, setTitle }}>
+    <TitleContext.Provider value={{ title, setTitle, setSlug }}>
       {children}
     </TitleContext.Provider>
   );

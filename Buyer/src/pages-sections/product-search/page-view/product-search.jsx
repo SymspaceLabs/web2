@@ -10,10 +10,10 @@ import { useState, useMemo, useCallback } from "react";
 import { Grid, Container, Box, useMediaQuery } from "@mui/material";
 
 // Import the isolated hooks and helper
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useProductData } from "@/hooks/useProductData";
 import { useProductFilters } from "@/hooks/useProductFilters";
 import { useFilteredAndSortedProducts } from "@/hooks/useFilteredAndSortedProducts";
-import { useSearchParams } from "next/navigation";
 
 import ProductFilterCard from "../product-filter-card";
 import ProductsGridView from "../products-grid-view";
@@ -43,8 +43,9 @@ export default function ProductSearchPageView() {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [sortOption, setSortOption] = useState("latest"); // Default sort option
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const paramsString = searchParams.toString();
-
 
   // Define the handleSortChange function
   const handleSortChange = useCallback((event) => {
@@ -97,7 +98,7 @@ export default function ProductSearchPageView() {
     [searchParams]
   );
 
-   // Custom hook to apply client-side filters and sorting.
+  // Custom hook to apply client-side filters and sorting.
   // We no longer pass categoryQuery or subcategoryItemQuery to this hook.
   const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
 
@@ -129,14 +130,43 @@ export default function ProductSearchPageView() {
     return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
   }, [genderDisplayName, categoryDisplayName]);
 
-
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setOpenDrawer(open);
   };
+ 
+  // --- FIXED CODE BELOW ---
 
+  // Custom multi-select filter change handler for gender
+  const handleGenderFilterChange = useCallback(
+    (gender, isChecked) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+      const currentGenders = newParams.get('gender')?.split(',') || [];
+      
+      let updatedGenders;
+      if (isChecked) {
+        if (!currentGenders.includes(gender)) {
+          updatedGenders = [...currentGenders, gender];
+        } else {
+          updatedGenders = currentGenders; 
+        }
+      } else {
+        updatedGenders = currentGenders.filter(g => g !== gender);
+      }
+
+      if (updatedGenders.length > 0) {
+        newParams.set('gender', updatedGenders.join(','));
+      } else {
+        newParams.delete('gender');
+      }
+      
+      router.push(`${pathname}?${newParams.toString()}`);
+    },
+    [searchParams, router, pathname]
+  );
+ 
   // Props object for FilterControls component, derived from consolidated filterState
   const filterControlProps = {
     allBrands: filterState.allBrands,
@@ -147,22 +177,60 @@ export default function ProductSearchPageView() {
     priceLimits: filterState.priceLimits,
     category: filterState.category,
     checkedCategoryIds: filterState.checkedCategoryIds,
-    onCategoryFilterChange: handleFilterChange.bind(null, 'category'),
+    onCategoryFilterChange: (id, isChecked) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+      if (isChecked) {
+        newParams.set('category', id);
+      } else {
+        newParams.delete('category');
+      }
+      router.push(`${pathname}?${newParams.toString()}`);
+    },
     allGenders: filterState.allGenders,
-    selectedGenders: filterState.selectedGenders,
-    onGenderFilterChange: handleFilterChange.bind(null, 'gender'),
+    // DERIVED from URL to ensure checkbox state is always correct
+    selectedGenders: useMemo(() => {
+      const genderParam = searchParams.get('gender');
+      return genderParam ? genderParam.split(',') : [];
+    }, [searchParams]),
+    onGenderFilterChange: handleGenderFilterChange,
     allAvailabilities: filterState.allAvailabilities,
     selectedAvailabilities: filterState.selectedAvailabilities,
-    onAvailabilityFilterChange: handleFilterChange.bind(null, 'availability'),
+    onAvailabilityFilterChange: (avail, isChecked) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+      if (isChecked) {
+        newParams.set('availability', avail);
+      } else {
+        newParams.delete('availability');
+      }
+      router.push(`${pathname}?${newParams.toString()}`);
+    },
     allColors: filterState.allColors,
     selectedColors: filterState.selectedColors,
-    onColorFilterChange: handleFilterChange.bind(null, 'colors'),
+    onColorFilterChange: (color, isChecked) => {
+      const newParams = new URLSearchParams(searchParams.toString());
+      const currentColors = newParams.get('colors')?.split(',') || [];
+      
+      let updatedColors;
+      if (isChecked) {
+        if (!currentColors.includes(color.code)) {
+          updatedColors = [...currentColors, color.code];
+        } else {
+          updatedColors = currentColors;
+        }
+      } else {
+        updatedColors = currentColors.filter(c => c !== color.code);
+      }
+      
+      if (updatedColors.length > 0) {
+        newParams.set('colors', updatedColors.join(','));
+      } else {
+        newParams.delete('colors');
+      }
+      
+      router.push(`${pathname}?${newParams.toString()}`);
+    },
     onClearAllFilters: handleResetAllFilters, // ADDED THIS LINE
   };
-
-  // console.log('allProducts', allProducts);
-  // console.log('filterState.allProducts', filterState.allProducts);
-  // console.log('displayedProducts', displayedProducts);
 
   return (
     <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >

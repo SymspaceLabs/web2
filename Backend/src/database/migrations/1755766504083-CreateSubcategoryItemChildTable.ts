@@ -9,10 +9,11 @@ export class CreateSubcategoryItemChildTable1755766504083 implements MigrationIn
         columns: [
           {
             name: "id",
-            type: "uuid",
+            type: "char",
+            length: "36", // UUID stored as string
             isPrimary: true,
-            generationStrategy: "uuid",
-            default: "uuid_generate_v4()", // for Postgres; use UUID() for MySQL
+            isNullable: false,
+            default: "UUID()", // MySQL function for generating UUIDs
           },
           {
             name: "name",
@@ -26,7 +27,8 @@ export class CreateSubcategoryItemChildTable1755766504083 implements MigrationIn
           },
           {
             name: "subCategoryItemId",
-            type: "uuid",
+            type: "char",
+            length: "36", // FK to subcategory_item.id
             isNullable: false,
           },
         ],
@@ -34,14 +36,14 @@ export class CreateSubcategoryItemChildTable1755766504083 implements MigrationIn
       true
     );
 
-    // Add foreign key to subcategory_items
+    // Add foreign key to subcategory_item
     await queryRunner.createForeignKey(
       "subcategory_item_child",
       new TableForeignKey({
         columnNames: ["subCategoryItemId"],
         referencedColumnNames: ["id"],
         referencedTableName: "subcategory_item",
-        onDelete: "CASCADE", // adjust as needed (CASCADE or SET NULL)
+        onDelete: "CASCADE", // delete children if parent deleted
       })
     );
   }

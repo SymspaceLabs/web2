@@ -45,7 +45,7 @@ export const categoriesSeedData = [
               tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
               optional_tags: ["color", "pattern"],
               tag_defaults: { ar_type: "body-tracking" },
-              child: [
+              subcategoryItemChildren: [
                 { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", name: "Dress Pants", slug: "dress-pants", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", name: "Chinos", slug: "chinos", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
                 { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", name: "Joggers", slug: "joggers", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
@@ -127,7 +127,7 @@ export const categoriesSeedData = [
           {
             id: "a7e1f5d6-c9b2-4d83-9a4f-5c8e2b1d7f3e",
             name: "Bags",
-            child: [
+            subcategoryItemChildren: [
               { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } },
               { id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e", name: "Backpacks", slug: "backpacks", tags_required: ["ar_type", "gender", "material", "indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
               { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { ar_type: "static" } }, // Duplicate, replaced
@@ -139,7 +139,7 @@ export const categoriesSeedData = [
           {
             id: "d9e8c7b6-a5f4-3e21-0c9b-8a7d6e5c4b3a", // Changed from original "97c41e5f-d4e8-48b5-b9b2-09c374d8f1e6" to be unique
             name: "Jewelry & Watches",
-            child: [
+            subcategoryItemChildren: [
               { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Earrings", slug: "earrings", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "f2e1d3c4-a5b6-7c8d-9e01-2f3a4b5c6d7e", name: "Necklaces", slug: "necklaces", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
               { id: "3b2e1d4c-5a6f-7b8c-9d01-e2f3a4b5c6d7", name: "Rings", slug: "rings", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } }, // Duplicate, replaced
@@ -154,7 +154,7 @@ export const categoriesSeedData = [
           {
             id: "42f97c8a-b9f3-4e5b-832f-98134c7e5a8b",
             name: "Headwear",
-            child: [
+            subcategoryItemChildren: [
               { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Hats", slug: "hats", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", name: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
@@ -163,7 +163,7 @@ export const categoriesSeedData = [
           {
             id: "2e3f4a5b-6c7d-8e9f-0a1b-2c3d4e5f6a7b", // Changed from original "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b" to be unique
             name: "Seasonal Accessories",
-            child: [
+            subcategoryItemChildren: [
               { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Gloves", slug: "gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Scarves", slug: "scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } }, // Duplicate, replaced
               { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
@@ -173,7 +173,7 @@ export const categoriesSeedData = [
           {
             id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a",
             name: "Wallets & Belts",
-            child: [
+            subcategoryItemChildren: [
               { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "static" } },
               { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Belts", slug: "belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
             ],
@@ -257,7 +257,7 @@ export const categoriesSeedData = [
           {
             id: "fef93787-b22b-4e9e-bf85-32885d376f02",
             name: "Sofas",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Sectional Sofas",
                 id: "02e69a1f-38e5-426d-beea-867380902c88"
@@ -287,7 +287,7 @@ export const categoriesSeedData = [
           {
             id: "d42af060-79c1-44a5-8971-d014425ca803",
             name: "Chairs & Seating",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Accent Chairs",
                 id: "6b0007fe-a568-4ac8-a662-93c33bb94b3e"
@@ -309,7 +309,7 @@ export const categoriesSeedData = [
           {
             id: "a2b93fa2-4e46-4335-b976-8dbf28e8e8a9",
             name: "Tables",
-            child: [
+            subcategoryItemChildren: [
               {
                 id: "d62fd072-d47d-4fa1-b31d-b1cc5b28ad90",
                 name: "Coffee Tables"
@@ -326,7 +326,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Media & Storage",
-            child: [
+            subcategoryItemChildren: [
               {
                 id: "17c8d78c-b19f-4f3f-bd45-482d0b0c5d11",
                 name: "TV Stands"
@@ -351,7 +351,7 @@ export const categoriesSeedData = [
           {
             id: "2bdc4f4b-6f5c-45bb-8572-27a973b1c9e6",
             name: "Beds",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Platform Beds",
                 id: "36a28079-9502-45b3-b0c2-0e9d2c0bcbd6"
@@ -377,7 +377,7 @@ export const categoriesSeedData = [
           {
             id: "4c63e2e1-f6f6-44bc-a496-21907337081d",
             name: "Dressers & Chests",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "6-Drawer Dressers",
                 id: "f78bd691-cd05-4195-b38a-71065c914ea7"
@@ -391,7 +391,7 @@ export const categoriesSeedData = [
           {
             id: "5a8dbb56-5d36-41aa-a8d9-fc748dd97e38",
             name: "Nightstands & Side Tables",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Single Drawer Nightstands",
                 id: "bceebfde-665b-4f5d-a4bc-55068dc10b1a"
@@ -405,7 +405,7 @@ export const categoriesSeedData = [
           {
             id: "ec2c0f78-6d5a-4053-b46b-3e45c7b0df90",
             name: "Wardrobes & Armoires",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "2-Door Wardrobes",
                 id: "d2e1bd8b-c009-45e3-b3d8-ff61b9f25c3d"
@@ -425,7 +425,7 @@ export const categoriesSeedData = [
           {
             id: "8abfbbd7-0fcb-43d6-9111-6a5a42c0702b",
             name: "Desks",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Writing Desks",
                 id: "9215688d-a05f-444e-ab96-c8ff54a2b504"
@@ -443,7 +443,7 @@ export const categoriesSeedData = [
           {
             id: "5c1e5db5-2745-4d1e-b18b-9ff81cd83367",
             name: "Office Chairs",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Ergonomic Chairs",
                 id: "f57a60c3-ec74-4f05-85d5-490885885851"
@@ -460,7 +460,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Storage",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Filing Cabinets",
                 id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8"
@@ -480,7 +480,7 @@ export const categoriesSeedData = [
         subcategoryItems: [
           {
             name: "Seating Sets",
-            child: [
+            subcategoryItemChildren: [
               {
                 id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90",
                 name: "Patio Sets"
@@ -502,7 +502,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Tables",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Dining Tables",
                 id: "77867f34-14ce-4762-9dc5-ccafe10f52cb"
@@ -516,7 +516,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Shade & Shelter",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Umbrellas",
                 id: "3d19f1c9-d218-45e3-9858-0ee6bc8223bc"
@@ -530,7 +530,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Storage",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Deck Boxes",
                 id: "bf4a6563-7d12-447e-ac1d-ca7439046cd6"
@@ -551,7 +551,7 @@ export const categoriesSeedData = [
           {
             id: "9ad4a4b4-8967-481f-b9b1-10f3f3b3ec36",
             name: "Lighting",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Ceiling Fixtures",
                 id: "e5e8e3b9-fcc6-4daa-8034-b123d9985687"
@@ -573,7 +573,7 @@ export const categoriesSeedData = [
           {
             id: "602c854d-144d-4b58-9c19-f2eb528a107b",
             name: "Wall Art & Mirrors",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Paintings",
                 id: "421bba80-b4e9-47c7-ab07-2af8a1f98f39"
@@ -590,7 +590,7 @@ export const categoriesSeedData = [
           },
           {
             name: "Kitchen & Dining",
-            child: [
+            subcategoryItemChildren: [
               {
                 name: "Cookware",
                 id: "5d477bd4-4b2c-4fe3-88cf-f7c3b7a6293e"
@@ -740,7 +740,7 @@ export const categoriesSeedData = [
           {
             id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
             name: "Face",
-            child: [
+            subcategoryItemChildren: [
               { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations", slug: "foundations" },
               { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers", slug: "concealers" },
               { id: "8bdbba63-29a3-4560-bfd2-019b82dd4a12", name: "Powders", slug: "powders" },
@@ -750,7 +750,7 @@ export const categoriesSeedData = [
           {
             id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
             name: "Eyes",
-            child: [
+            subcategoryItemChildren: [
               { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows", slug: "eyeshadows" },
               { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras", slug: "mascaras" },
               { id: "7d700de6-0124-4a69-8e5c-cd77e7b9b124", name: "Eyeliners & Brow Products", slug: "eyeliners-&-brow-products" }
@@ -759,7 +759,7 @@ export const categoriesSeedData = [
           {
             id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
             name: "Lips",
-            child: [
+            subcategoryItemChildren: [
               { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks", slug: "lipsticks" },
               { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", name: "Lip Glosses", slug: "lip-glosses" },
               { id: "e6f9d3b8-2a1c-4b4d-9e7f-1c3a8b4d6e9f", name: "Lip Liners", slug: "lip-liners" }
@@ -768,7 +768,7 @@ export const categoriesSeedData = [
           {
             id: "7728f440-4e04-42ef-b9b4-d0c051337748",
             name: "Makeup Tools & Removers",
-            child: [
+            subcategoryItemChildren: [
               { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", name: "Brushes & Sponges", slug: "brushes-&-sponges" },
               { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", name: "Makeup Removers", slug: "makeup-removers" }
             ]
@@ -784,7 +784,7 @@ export const categoriesSeedData = [
           {
             id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
             name: "Haircare",
-            child: [
+            subcategoryItemChildren: [
               { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos & Conditioners", slug: "shampoos-&-conditioners" },
               { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments & Masks", slug: "hair-treatments-&-masks" },
               { id: "155f940b-5f02-470c-b6aa-130bd76961b6", name: "Styling Tools", slug: "styling-tools" }
@@ -793,7 +793,7 @@ export const categoriesSeedData = [
           {
             id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
             name: "Bath & Body",
-            child: [
+            subcategoryItemChildren: [
               { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", name: "Body Washes", slug: "body-washes" },
               { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", name: "Body Lotions & Scrubs", slug: "body-lotions-&-scrubs" }
             ]
@@ -801,7 +801,7 @@ export const categoriesSeedData = [
           {
             id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
             name: "Shaving & Hair Removal",
-            child: [
+            subcategoryItemChildren: [
               { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams" },
               { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices" }
             ]
@@ -809,7 +809,7 @@ export const categoriesSeedData = [
           {
             id: "7748f268-e744-42cd-bb8c-999ef10378ea",
             name: "Fragrances & Scents",
-            child: [
+            subcategoryItemChildren: [
               { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes", slug: "perfumes" },
               { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays", slug: "body-sprays" },
               { id: "e9f7a2b1-3d5e-4c6b-8a7f-9d1c2a3b4e5f", name: "Deodorant", slug: "deodorant" }
@@ -818,7 +818,7 @@ export const categoriesSeedData = [
           {
             id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
             name: "Oral Care & Hygiene",
-            child: [
+            subcategoryItemChildren: [
               { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes & Pastes", slug: "toothbrushes-&-pastes" },
               { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", name: "Hygiene Essentials", slug: "hygiene-essentials" }
             ]
@@ -848,7 +848,7 @@ export const categoriesSeedData = [
           {
             id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
             name: "Dogs",
-            child: [
+            subcategoryItemChildren: [
               { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Food & Treats", slug: "dog-food-treats" },
               { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", name: "Leashes", slug: "dog-leashes" },
               { id: "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", name: "Beds & Furniture", slug: "dog-beds-furniture" }
@@ -857,7 +857,7 @@ export const categoriesSeedData = [
           {
             id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
             name: "Cats",
-            child: [
+            subcategoryItemChildren: [
               { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Food & Treats", slug: "cat-food-treats" },
               { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", name: "Toys", slug: "cat-toys" },
               { id: "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", name: "Furniture", slug: "cat-furniture" },
@@ -961,7 +961,7 @@ export const categoriesSeedData = [
           {
             name: "Italian",
             id: "a5b4c3d2-e1f0-4a9b-8c7d-6e5f4d3c2b1a",
-            child: [
+            subcategoryItemChildren: [
               { name: "Carbonara", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "carbonara" },
               { name: "Margherita Pizza", id: "d3c2b1a4-e5f6-4g7h-i8j9-k0l1m2n3o4p0", slug: "margherita-pizza" }
             ]
@@ -969,7 +969,7 @@ export const categoriesSeedData = [
           {
             name: "Mexican",
             id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6b",
-            child: [
+            subcategoryItemChildren: [
               { name: "Tacos al Pastor", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1d", slug: "tacos-al-pastor" },
               { name: "Chicken Enchiladas", id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3e", slug: "chicken-enchiladas" }
             ]
@@ -977,7 +977,7 @@ export const categoriesSeedData = [
           {
             name: "Indian",
             id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p1",
-            child: [
+            subcategoryItemChildren: [
               { name: "Butter Chicken", id: "e4f3d2c1-b0a9-8c7d-6e5f-4d3c2b1a0d9c", slug: "butter-chicken" },
               { name: "Chana Masala", id: "f1d2c3e4-a5b6-4c7d-8e9f-0a1b2c3d4e5f", slug: "chana-masala" }
             ]
@@ -985,7 +985,7 @@ export const categoriesSeedData = [
           {
             name: "Chinese",
             id: "f6e5d4c3-b2a1-4e7a-b6c5-2d1e4f3a5b6d",
-            child: [
+            subcategoryItemChildren: [
               { name: "Kung Pao Chicken", id: "b3c2a1d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "kung-pao-chicken" },
               { name: "Mapo Tofu", id: "e1f2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5f", slug: "mapo-tofu" }
             ]
@@ -993,7 +993,7 @@ export const categoriesSeedData = [
           {
             name: "Japanese",
             id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5f",
-            child: [
+            subcategoryItemChildren: [
               { name: "Chicken Teriyaki", id: "d1e2f3a4-b5c6-4d7e-8f9a-0b1c2d3e4f5g", slug: "chicken-teriyaki" },
               { name: "Katsu Curry", id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7e", slug: "katsu-curry" }
             ]
@@ -1001,7 +1001,7 @@ export const categoriesSeedData = [
           {
             name: "Thai",
             id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6g",
-            child: [
+            subcategoryItemChildren: [
               { name: "Pad Thai", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f5", slug: "pad-thai" },
               { name: "Green Curry", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p2", slug: "green-curry" }
             ]
@@ -1009,7 +1009,7 @@ export const categoriesSeedData = [
           {
             name: "Mediterranean",
             id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1e",
-            child: [
+            subcategoryItemChildren: [
               { name: "Greek Salad + Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6h", slug: "greek-chicken-salad"},
               { name: "Shakshuka", id: "e2d1c4b3-a6f5-4e8d-9c2b-1a0e5f4d3c2c", slug: "shakshuka"}
             ]
@@ -1023,7 +1023,7 @@ export const categoriesSeedData = [
           {
             name: "Air Fryer",
             id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p3",
-            child: [
+            subcategoryItemChildren: [
               { name: "Air Fryer Chicken Wings", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5b", slug: "air-fryer-chicken-wings" },
               { name: "Air Fryer Salmon", id: "a3b2c1d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", slug: "air-fryer-salmon" }
             ]
@@ -1031,7 +1031,7 @@ export const categoriesSeedData = [
           {
             name: "Instant Pot / Pressure Cooker",
             id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f6",
-            child: [
+            subcategoryItemChildren: [
               { name: "Instant Pot Beef Chili", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6j", slug: "instant-pot-beef-chili" },
               { name: "Instant Pot Butter Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6k", slug: "instant-pot-butter-chicken" }
             ]
@@ -1039,7 +1039,7 @@ export const categoriesSeedData = [
           {
             name: "Oven & Sheet Pan",
             id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1f",
-            child: [
+            subcategoryItemChildren: [
               { name: "Sheet-Pan Chicken & Veggies", id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6c", slug: "sheet-pan-chicken-veggies" },
               { name: "Roasted Salmon & Potatoes", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p4", slug: "roasted-salmon-potatoes" }
             ]
@@ -1047,7 +1047,7 @@ export const categoriesSeedData = [
           {
             name: "Stovetop & Wok",
             id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3f",
-            child: [
+            subcategoryItemChildren: [
               { name: "Beef Stir-Fry", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5c", slug: "beef-stir-fry" },
               { name: "Fried Rice", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f7", slug: "fried-rice-stovetop" }
             ]

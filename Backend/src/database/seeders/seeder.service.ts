@@ -38,11 +38,11 @@ export class SeederService {
     console.log('🗑 Clearing existing data...');
     await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
 
-    await this.blogRepository.delete({});
-    await this.subcategoryItemChildRepository.delete({});
-    await this.subcategoryItemRepository.delete({});
-    await this.subcategoryRepository.delete({});
-    await this.categoryRepository.delete({});
+    await this.blogRepository.clear();
+    await this.subcategoryItemChildRepository.clear();
+    await this.subcategoryItemRepository.clear();
+    await this.subcategoryRepository.clear();
+    await this.categoryRepository.clear();
 
     await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
     console.log('✅ Database cleared!');

@@ -20,7 +20,7 @@ export class SeedCategoriesAndBlogs1756000000000 implements MigrationInterface {
       dataSource.getRepository(Subcategory),
       dataSource.getRepository(SubcategoryItem),
       dataSource.getRepository(SubcategoryItemChild),
-      dataSource.getRepository(Blog)
+      // dataSource.getRepository(Blog)
     );
 
     await seeder.seed();

@@ -8,8 +8,8 @@ import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 import { categoriesSeedData } from './category/data';
-import { blogSeedData } from './blog/data';
-import { Blog } from 'src/blogs/entities/blog.entity';
+// import { blogSeedData } from './blog/data';
+// import { Blog } from 'src/blogs/entities/blog.entity';
 import {
   CategorySeedData,
   SubcategorySeedData,
@@ -29,8 +29,8 @@ export class SeederService {
     private readonly subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(SubcategoryItemChild)
     private readonly subcategoryItemChildRepository: Repository<SubcategoryItemChild>,
-    @InjectRepository(Blog)
-    private readonly blogRepository: Repository<Blog>,
+    // @InjectRepository(Blog)
+    // private readonly blogRepository: Repository<Blog>,
   ) {}
 
   /** ✅ Safely wipes all relevant tables in child → parent order */
@@ -38,7 +38,7 @@ export class SeederService {
     console.log('🗑 Clearing existing data...');
     await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
 
-    await this.blogRepository.clear();
+    // await this.blogRepository.clear();
     await this.subcategoryItemChildRepository.clear();
     await this.subcategoryItemRepository.clear();
     await this.subcategoryRepository.clear();
@@ -58,7 +58,7 @@ export class SeederService {
       const subcategoryRepo = manager.getRepository(Subcategory);
       const subcategoryItemRepo = manager.getRepository(SubcategoryItem);
       const subcategoryItemChildRepo = manager.getRepository(SubcategoryItemChild);
-      const blogRepo = manager.getRepository(Blog);
+      // const blogRepo = manager.getRepository(Blog);
 
       // Insert Categories → Subcategories → Items → Children
       for (const categoryData of categoriesSeedData as CategorySeedData[]) {
@@ -102,10 +102,10 @@ export class SeederService {
       }
 
       // Insert Blogs
-      for (const blog of blogSeedData) {
-        const newBlog = blogRepo.create(blog);
-        await blogRepo.save(newBlog);
-      }
+      // for (const blog of blogSeedData) {
+      //   const newBlog = blogRepo.create(blog);
+      //   await blogRepo.save(newBlog);
+      // }
     });
 
     console.log('✅ Database seeding completed successfully!');

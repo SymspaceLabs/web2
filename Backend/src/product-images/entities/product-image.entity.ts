@@ -7,7 +7,7 @@ export class ProductImage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Expose()  // Only expose 'url' and 'altText' in the response
+  @Expose()
   @Column()
   url: string;
 

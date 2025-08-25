@@ -69,7 +69,7 @@ export default function Section8() {
                       background: "linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)",
                       border: "2px solid #FFF",
                       "& img": {
-                        content: 'url("/assets/images/sparkler-white.png")',
+                        content: 'url("/assets/images/sparkler-white.webp")',
                       },
                     },
                   }}

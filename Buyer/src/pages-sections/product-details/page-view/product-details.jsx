@@ -81,10 +81,7 @@ export default function ProductDetailsPageView({slug}) {
 
       <Container className="mt-2 mb-2">
         {/* Breadcrumbs Component */}
-        <BreadcrumbNav
-          subcategoryItemId={product?.subcategoryItemId}
-          subcategoryItemChildId={product?.subcategoryItemChildId}
-        />
+        <BreadcrumbNav product={product} />
         <ProductDetails product={product} /> {/* Product introduction */}
         <ProductTabs productId={product.id} /> {/* Tabs section for detailed product information */}
       </Container>

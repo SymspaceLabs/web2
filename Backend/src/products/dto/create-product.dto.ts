@@ -12,19 +12,7 @@ import { CreateProductColorDto } from 'src/product-colors/dto/create-product-col
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
 import { ProductGender } from '../entities/product.entity';
 import { CreateProductModelDto } from 'src/product-models/dto/create-product-model.dto';
-
-class CreateProductVariantPropertyDto {
-  @IsString()
-  key: string;
-
-  @IsString()
-  value: string;
-}
-
-class CreatePriceDto {
-  @IsNumber()
-  amount: number;
-}
+import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -56,9 +44,10 @@ export class CreateProductDto {
   company?: string;
 
   @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductImageDto)
   @IsOptional()
-  @IsString({ each: true })
-  images?: string[];
+  images?: CreateProductImageDto[];
 
   @IsArray()
   @ValidateNested({ each: true })

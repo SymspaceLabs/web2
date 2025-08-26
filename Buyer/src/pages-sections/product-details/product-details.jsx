@@ -5,21 +5,14 @@
 // - displays a product's detailed information
 // ==============================================================================
 
-import Link from "next/link";
-import styles from "./styles";
 import ProductGallery from "./product-gallery";
+import ProductInfoArea from "./product-info-area";
 
-import { currency } from "@/lib";
 import { useCart } from "@/hooks/useCart";
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react";
 import { DrawerRight } from "@/components/drawer";
-import { LazyImage } from "@/components/lazy-image";
-import { H1, Paragraph } from "@/components/Typography";
-import { FlexBox, FlexCol } from "@/components/flex-box";
-import { useHeader } from "@/components/header/hooks/use-header";
-import { SymAccordion, SymDialog } from "@/components/custom-components"
-import { Box, Button, Select, MenuItem, FormControl, Tooltip, Drawer, Grid, Rating, CircularProgress } from '@mui/material';
+import { Box, Drawer, Grid } from '@mui/material';
 
 // Services
 import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
@@ -33,14 +26,9 @@ export default function ProductDetails({ product }) {
     salePrice,
     colors,
     sizes,
-    description,
-    composition,
     name, 
     images, 
-    slug,
-    company,
-    sizeFit,
-    sizeChart
+    slug
   } = product || {};
 
   // State hooks for selected options and toggles
@@ -50,7 +38,6 @@ export default function ProductDetails({ product }) {
   const [selectedVariant, setSelectedVariant] = useState("");
 
   const { state, dispatch } = useCart();
-  const { toggleCartOpen } = useHeader();
 
   const router = useRouter();
 
@@ -58,7 +45,7 @@ export default function ProductDetails({ product }) {
   const handleColorSelect = (color) => setSelectedColor(color);
 
   // Updates the selected size
-  // const handleSizeSelect = (event) => setSelectedSize(event.target.value);
+  const handleSizeSelect = (event) => setSelectedSize(event.target.value);
 
   // Changes the cart amount based on user action
   const handleAddToCart = () => {
@@ -68,6 +55,11 @@ export default function ProductDetails({ product }) {
     }
   
     setSizeError(false);
+
+    // Find the image that matches the selected color code
+    const matchingImage = images.find(
+      (image) => image.colorCode === selectedColor.code
+    );
 
     // Check if the item already exists in the cart (matching by id + color + size)
     const existingItem = state.cart.find(
@@ -85,7 +77,7 @@ export default function ProductDetails({ product }) {
         price,
         qty: newQty,
         name,
-        imgUrl: images[0].url,
+        imgUrl: matchingImage ? matchingImage.url : images[0].url, // Use the matching image URL or fall back to the first image
         id,
         slug,
         selectedColor,
@@ -131,8 +123,14 @@ export default function ProductDetails({ product }) {
     checkAvailability();
   }, [id, selectedColor, selectedSize]);
 
-  // Conditionally check if a sale is active
-  const hasSale = salePrice > 0 && salePrice < price;  
+  const handleBuyNow = () => {
+    if (!selectedSize) {
+      setSizeError(true);
+      return;
+    }
+    handleAddToCart();
+    router.push('/checkout');
+  };
 
   return (
     <>
@@ -149,207 +147,24 @@ export default function ProductDetails({ product }) {
 
         {/* PRODUCT INFO AREA */}
         <Grid item md={6} xs={12} alignItems="center">
-          {/* Card 1 */}
-          <FlexCol gap={{ xs:0, sm:1.5 }} sx={styles.productCard}>
-            
-            {/* PRODUCT BRAND */}
-            <Paragraph sx={{ fontSize: {xs:12, sm:16}, color: '#0366FE', textTransform:'uppercase', '&:hover': {textDecoration:'underline'} }}>
-              <Link href={`/company/${company?.slug}`} passHref>
-                {company.entityName}
-              </Link>
-            </Paragraph>
-            
-            {/* PRODUCT TITLE */}
-            <H1 fontSize={{xs:18, sm:40}} color='#000' mb={1}>
-              {name}
-            </H1>
 
-            {/* PRODUCT RATING */}
-            <FlexBox alignItems="center" gap={1} mb={2}>
-              <Rating color="warn" value={4} readOnly />
-              <Paragraph lineHeight="1">(50)</Paragraph>
-            </FlexBox>
-
-            {/* PRICE & STOCK */}
-            <FlexBox alignItems="center" gap={1} mb={2}>
-              {/* <Paragraph sx={styles.price}>
-                {currency(price)}
-              </Paragraph>
-              <Paragraph sx={styles.strikethrough}>
-                {currency(salePrice)}
-              </Paragraph> */}
-
-              <Paragraph sx={styles.price}>
-                {hasSale ? currency(salePrice) : currency(price)}
-              </Paragraph>
-              {hasSale && (
-                <Paragraph sx={styles.strikethrough}>
-                  {currency(price)}
-                </Paragraph>
-              )}
-
-              {/* Availabilty Status */}
-              {selectedColor && selectedSize && availability?.stock < 10 && (
-                <Box sx={styles.statusPill}>
-                  <H1 fontSize="14px" color={availability?.statusColor}>
-                    {loadingAvailability ? <CircularProgress size={16} /> : availability?.status}
-                  </H1>
-                </Box>
-              )}
-
-            </FlexBox>
-
-            {/*Color*/}
-            <FlexBox alignItems={{xs:'left', sm:"center"}} flexDirection={{xs:'column', sm:'row'}} gap={1} mb={2}>
-              <Paragraph mb={1} fontSize='24px' color='#353535'>
-                Select Color
-              </Paragraph>
-              <FlexBox>
-                {colors.map((color) => (
-                  <Tooltip key={color.id} title={color.name || color.code} arrow>
-                    <Button
-                      onClick={() => handleColorSelect(color)}
-                      sx={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: '50%',
-                        backgroundColor: color.code,
-                        border: selectedColor.id === color.id ? '3px solid black' : '1px solid grey',
-                        margin: '0 5px',
-                        '&:hover': {
-                          backgroundColor: color.code,
-                        },
-                      }}
-                    />
-                  </Tooltip>
-                ))}
-              </FlexBox>
-            </FlexBox>
-
-            {/* Size */}
-            <FlexBox gap={{ xs:2, sm:3 }} py={{ xs:2 }}>
-              <FormControl sx={{ flexGrow: 1, width: '100%' }} error={sizeError}>
-                <Select
-                  value={selectedSize}
-                  onChange={(e) => {
-                    setSelectedSize(e.target.value);
-                    setSizeError(false); // Clear error on select
-                  }}
-                  fullWidth
-                  displayEmpty
-                  sx={{
-                    borderRadius: { xs: "999px", sm: "6px" },
-                    width: "100%",
-                    height: '100%',
-                    "& .MuiSelect-select": {
-                      borderRadius: "999px", // inner element
-                      padding: { xs:'15px 15px', sm:'20px 15px' },
-                    },
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderRadius: "999px", // outline border
-                      borderColor: sizeError ? "red" : undefined,
-                      borderWidth: "2px",
-                    },
-                  }}
-                >
-                  <MenuItem value="" disabled>
-                    <em>Select a size</em>
-                  </MenuItem>
-                  {sizes.map((size) => (
-                    <MenuItem key={size.id} value={size.id}>
-                      {size.size}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <Button sx={styles.personalised} onClick={()=>setSidenavOpen(true)}>
-                Personalized Sizing
-              </Button>
-            </FlexBox>
-
-            {/* SIZE CHART */}
-            <FlexBox justifyContent="flex-end" >
-              <Button sx={styles.sizeChart} onClick={()=>setOpenModal(true)}>
-                Size chart
-              </Button>
-            </FlexBox>
-            
-            {/* ADD TO CART BUTTON */}
-            <FlexBox alignItems="center" gap={{ xs:2, sm:3 }} py={1}>
-              <Button
-                sx={{
-                  ...styles.addToCartButton,
-                  ...(availability?.stock === 0 && {
-                      background: 'rgba(128, 128, 128, 0.55)',
-                      color: "#FFF",
-                      cursor: "not-allowed",
-                      pointerEvents: "none",
-                      border: "2px solid #FFF",
-                  }),
-                }}
-                onClick={() => {
-                  if (availability?.stock === 0) return;
-
-                  handleAddToCart();
-                  if (!selectedSize) {
-                    setSizeError(true);
-                    return;
-                  }
-                  toggleCartOpen();
-                }}
-              >
-                Add to Cart
-              </Button>
-
-              <Button
-                sx={{
-                  ...styles.buyNowButton,
-                  ...(availability?.stock === 0 && {
-                      background: 'rgba(128, 128, 128, 0.55)',
-                      color: "#FFF",
-                      cursor: "not-allowed",
-                      pointerEvents: "none",
-                      border: "2px solid #FFF",
-                  }),
-                }}
-                onClick={() => {
-                  if (availability?.stock === 0) return;
-
-                  if (!selectedSize) {
-                    setSizeError(true);
-                    return;
-                  }
-
-                  handleAddToCart();
-                  router.push('/checkout');
-                }}
-              >
-                Buy now
-              </Button>
-
-            </FlexBox>
-          </FlexCol>
-
-          <SymAccordion
-            title="Product Details"
-            content={description}
-          />
-          
-          <SymAccordion
-            title="Composition"
-            content={composition}
-          />
-
-          <SymAccordion
-            title="Brand"
-            content="Wave World aims to leverage Augmented Reality (AR) as our backbone to set ourselves apart from competitors while also providing multifaceted products. Our products embody both present and vintage fashion trends that have dominated the streetwear industry for decades. Not only are we ..."
-          />
-
-          <SymAccordion
-            title="Size and fit"
-            content={sizeFit}
-          />
-         
+          <ProductInfoArea
+            product={product}
+            selectedColor={selectedColor}
+            handleColorSelect={handleColorSelect}
+            selectedSize={selectedSize}
+            handleSizeSelect={handleSizeSelect}
+            sizeError={sizeError}
+            setSizeError={setSizeError}
+            availability={availability}
+            loadingAvailability={loadingAvailability}
+            handleAddToCart={handleAddToCart}
+            handleBuyNow={handleBuyNow}
+            setSidenavOpen={setSidenavOpen}
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+          /> 
+                   
         </Grid>
       </Grid>
 
@@ -375,18 +190,6 @@ export default function ProductDetails({ product }) {
         </Drawer>
       </Box>
 
-      {/* Size Chart Dialog */}
-      <SymDialog
-        dialogOpen={openModal} 
-        toggleDialog={() => setOpenModal(state => !state)}
-      >
-        <LazyImage
-          src={sizeChart}
-          width={500}
-          height={500}
-          alt="size-chart"
-        />
-      </SymDialog>
     </>
   );
 }

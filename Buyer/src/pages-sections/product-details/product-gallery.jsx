@@ -28,6 +28,11 @@ const ProductGallery = ({
         threeDModels = []
     } = product || {};
 
+    // UseMemo to filter images by selectedColor
+    const filteredImages = useMemo(() => {
+        return images.filter((img) => img.colorCode === selectedColor);
+    }, [images, selectedColor]);
+
     // State to track currently selected image
     const [selectedImage, setSelectedImage] = useState(0);
 
@@ -73,26 +78,32 @@ const ProductGallery = ({
         return threeDModels.filter((m) => m.colorCode === selectedColor);
     }, [threeDModels, selectedColor]);
 
-
-
     // Update visible thumbnail count based on screen size
     useEffect(() => {
         setVisibleThumbCount(isMobileQuery ? 4 : 6);
     }, [isMobileQuery]);
 
     // Total thumbnails includes the 3D model as the first thumbnail
-    const totalThumbnails = images.length + 1; // +1 for 3D model
+    const totalThumbnails = filteredImages.length + 1; // +1 for 3D model
     const maxIndex = Math.max(0, totalThumbnails - visibleThumbCount);
 
     // Index for thumbnail scroll
     const [thumbIndex, setThumbIndex] = useState(0);
 
     // Compute which thumbnails are visible in the scroll window
+    // const visibleThumbnails = useMemo(() => {
+    //     const start = thumbIndex;
+    //     const end = start + visibleThumbCount;
+    //     return [{ type: "model" }, ...images].slice(start, end);
+    // }, [thumbIndex, images, visibleThumbCount]); // Add visibleThumbCount here
+
+    // Incorrect: Uses unfiltered 'images'
+    // FIX: Use filteredImages in the useMemo hook for visibleThumbnails
     const visibleThumbnails = useMemo(() => {
         const start = thumbIndex;
         const end = start + visibleThumbCount;
-        return [{ type: "model" }, ...images].slice(start, end);
-    }, [thumbIndex, images, visibleThumbCount]); // Add visibleThumbCount here
+        return [{ type: "model" }, ...filteredImages].slice(start, end);
+    }, [thumbIndex, filteredImages, visibleThumbCount]);
     
     // Reset selected image when color changes
     useEffect(() => {
@@ -101,8 +112,26 @@ const ProductGallery = ({
     }, [selectedColor]);
 
     // Ensure selected image stays within the visible thumbnails
+    // useEffect(() => {
+    //     const totalItems = images.length + 1; // +1 for model
+    //     const visibleStart = thumbIndex;
+    //     const visibleEnd = thumbIndex + visibleThumbCount;
+      
+    //     if (selectedImage < visibleStart) {
+    //       setThumbIndex(selectedImage);
+    //     } else if (selectedImage >= visibleEnd) {
+    //       setThumbIndex(Math.min(selectedImage - visibleThumbCount + 1, totalItems - visibleThumbCount));
+    //     }
+    //   }, [selectedImage, thumbIndex, visibleThumbCount, images.length]);
+    // Reset selected image when color changes
     useEffect(() => {
-        const totalItems = images.length + 1; // +1 for model
+        setSelectedImage(0);
+        setThumbIndex(0);
+    }, [selectedColor]);
+
+    // FIX: Use filteredImages.length in the useEffect dependency array
+    useEffect(() => {
+        const totalItems = filteredImages.length + 1; // +1 for model
         const visibleStart = thumbIndex;
         const visibleEnd = thumbIndex + visibleThumbCount;
       
@@ -111,7 +140,9 @@ const ProductGallery = ({
         } else if (selectedImage >= visibleEnd) {
           setThumbIndex(Math.min(selectedImage - visibleThumbCount + 1, totalItems - visibleThumbCount));
         }
-      }, [selectedImage, thumbIndex, visibleThumbCount, images.length]);
+      }, [selectedImage, thumbIndex, visibleThumbCount, filteredImages.length]);
+      
+
       
 
     return (
@@ -154,14 +185,14 @@ const ProductGallery = ({
                     ) : (
                     <LazyImage
                         alt={name}
-                        src={product.images[selectedImage - 1]?.url}
+                        src={filteredImages[selectedImage - 1]?.url}
                         width={500}
                         height={500}
                         loading="eager"
                         sx={{
-                        objectFit: "contain",
-                        maxHeight: "100%",
-                        maxWidth: "100%",
+                            objectFit: "contain",
+                            maxHeight: "100%",
+                            maxWidth: "100%",
                         }}
                     />
                 )}
@@ -171,7 +202,9 @@ const ProductGallery = ({
             {/* Next image button */}
             <IconButton
                 onClick={() =>
-                    setSelectedImage((prev) => (prev < images?.length ? prev + 1 : 0))
+                    // setSelectedImage((prev) => (prev < images?.length ? prev + 1 : 0))
+                    setSelectedImage((prev) => (prev < filteredImages.length ? prev + 1 : 0))
+
                 }
                 style={{
                     position: "absolute",
@@ -226,7 +259,8 @@ const ProductGallery = ({
 
                 {visibleThumbnails.map((item, index) => {
                     const isModel = item.type === "model";
-                    const imageIndex = isModel ? 0 : images.indexOf(item) + 1;
+                    const imageIndex = isModel ? 0 : filteredImages.indexOf(item) + 1;
+
 
                     return (
                         <FlexRowCenter

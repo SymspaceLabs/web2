@@ -3,15 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
+import { Category } from 'src/categories/entities/category.entity';
+import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
-import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { Category } from 'src/categories/entities/category.entity';
-import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
+import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 @Injectable()
@@ -114,6 +115,33 @@ export class ProductsService {
 
 
     return { min: minPrice, max: maxPrice };
+  }
+
+  // Add this new private helper function to your ProductsService class
+  private async saveProductImages(product: Product, imageDtos: CreateProductImageDto[]): Promise<ProductImage[]> {
+    // If no image DTOs are provided, return an empty array
+    if (!imageDtos || imageDtos.length === 0) {
+      product.images = [];
+      return [];
+    }
+
+    // Create new ProductImage entities from the provided DTOs
+    const newImages = imageDtos.map((imgDto, i) => {
+      const img = new ProductImage();
+      img.url = imgDto.url;
+      img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
+      img.sortOrder = i;
+      img.product = product; // Link the image to the product
+      return img;
+    });
+
+    // Assign the new array of images to the product entity.
+    // Assuming a cascade relationship (`cascade: true`), TypeORM will handle
+    // removing old images and creating new ones on save.
+    product.images = newImages;
+
+    // The caller (upsert function) will handle the final product save.
+    return newImages;
   }
   
   // CREATE & UPDATE PRODUCT
@@ -231,7 +259,6 @@ export class ProductsService {
         });
       }
 
-
       if (company) {
         const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
         if (!companyEntity) {
@@ -307,13 +334,8 @@ export class ProductsService {
     // Images: Replace images if provided in DTO
     if (images !== undefined) { // Check if 'images' key is present
         // If Product.images relationship uses cascade:true, simply assigning a new array will handle removal/addition
-        product.images = images.map((url, i) => {
-          const img = new ProductImage();
-          img.url = url;
-          img.sortOrder = i;
-          img.product = product; // Link to the product
-          return img;
-        });
+        // Use the new helper function to handle image creation and assignment
+        await this.saveProductImages(product, images);
     }
 
     // Colors: Replace colors if provided in DTO

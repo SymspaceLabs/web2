@@ -2,10 +2,13 @@
 // Onboarding Dialog - Optimized for Faster Loading with Fetch API
 // =========================================================
 
+"use client"; // <--- Add this line here
+
 import { useState, Suspense, lazy } from "react";
 import { useRouter } from 'next/navigation';
 import CloseIcon from '@mui/icons-material/Close';
 import { useSnackbar } from "@/contexts/SnackbarContext";
+
 // Dynamically import sub-components
 const Preferences = lazy(() => import('./components').then(mod => ({ default: mod.Preferences })));
 const LogoWithTitle = lazy(() => import('./components').then(mod => ({ default: mod.LogoWithTitle })));
@@ -15,7 +18,7 @@ const DOB = lazy(() => import('./components').then(mod => ({ default: mod.DOB })
 import { useMediaQuery, IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress } from '@mui/material';
 
 
-const OnboardingDialog = ({ open, onClose, user }) => {
+const OnboardingDialog = ({ open, onClose, user, onAdvancedSettings  }) => {
 
     const router = useRouter();
 
@@ -113,6 +116,15 @@ const OnboardingDialog = ({ open, onClose, user }) => {
     // Media query to detect mobile screens
     const isMobile = useMediaQuery('(max-width:600px)');
 
+    const handleAdvancedSettingsClick = () => {
+        onClose(); // Close the dialog
+        onAdvancedSettings(); // Notify the parent to update localStorage
+        // Now, perform the navigation with a delay
+        setTimeout(() => {
+            router.push('/profile/view');
+        }, 300);
+    };
+
     return (
         <Dialog
             open={open}
@@ -209,7 +221,18 @@ const OnboardingDialog = ({ open, onClose, user }) => {
                 <Button
                     variant="outlined"
                     fullWidth
-                    onClick={() => router.push('/profile/view')} // Call the save function
+                    // onClick={() => {
+                    //     // First, close the dialog.
+                    //     onClose(); 
+                        
+                    //     // Then, navigate after a brief delay.
+                    //     // This gives the dialog component time to perform its close animation and state update.
+                    //     setTimeout(() => {
+                    //         router.push('/profile/view');
+                    //     }, 300); // 300ms is a good starting point to allow for animations
+                    // }}
+                    // onClick={onClose}
+                    onClick={handleAdvancedSettingsClick}
                     sx={{
                         fontSize: isMobile ? "10px" : "14px",
                         background: "#FFF",

@@ -75,7 +75,7 @@ export default function MiniCart({ toggleSidenav, isStandalonePage = false }) {
       <Box height="calc(100vh - 74px)">
         {cartList.length > 0 ? <Scrollbar>
             {/* Pass the determined itemMode to MiniCartItem */}
-            {cartList.map(item => <MiniCartItem item={item} key={item.id} handleCartAmountChange={handleCartAmountChange} mode={itemMode} />)}
+            {cartList.map((item,index) => <MiniCartItem item={item} key={index} handleCartAmountChange={handleCartAmountChange} mode={itemMode} />)}
           </Scrollbar> : <EmptyCartView />}
       </Box>
 

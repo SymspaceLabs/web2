@@ -51,6 +51,7 @@ const ProductGallery = ({
             name,
             salePrice,
             imgUrl: images[0].url,
+            images: images,
             id,
             slug,
             sizes: sizes.map((size) => ({

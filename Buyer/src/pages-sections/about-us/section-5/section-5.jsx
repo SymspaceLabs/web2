@@ -84,24 +84,24 @@ const staffs = [
   },
   { 
     id: 2, 
-    title: "oleh kalashnyk",
+    title: "mo mohamed",
     role: "CTO",
     imgUrl: "/assets/images/about-us/staff-2.png",
-    slug: "kalasha666"
-  },
-  { 
-    id: 3, 
-    title: "mo mohamed",
-    role: "CPO",
-    imgUrl: "/assets/images/about-us/staff-3.png",
     slug: "mo-cafe/"
   },
   { 
+    id: 3, 
+    title: "Hamza Gulistan",
+    role: "CPO",
+    imgUrl: "/assets/images/about-us/staff-3.png",
+    slug: "hamza-gulistan/"
+  },
+  { 
     id: 4,
-    title: "ben kim",
-    role: "PGM",
+    title: "allen mustacchi",
+    role: "CSO",
     imgUrl: "/assets/images/about-us/staff-4.png",
-    slug: "benjakim/"
+    slug: "allen-mustacchi-5ba28b6b/"
   },
   { 
     id: 5,

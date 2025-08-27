@@ -16,6 +16,7 @@ import { Box, Drawer, Grid } from '@mui/material';
 
 // Services
 import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
+import BreadcrumbNav from "./breadcrumb-nav";
 
 // ================================================================
 
@@ -134,6 +135,9 @@ export default function ProductDetails({ product }) {
 
   return (
     <>
+      { /* Breadcrumb */}
+      <BreadcrumbNav product={product} />
+
       <Grid container spacing={3} justifyContent="space-around">
         
         { /* IMAGE GALLERY AREA */}

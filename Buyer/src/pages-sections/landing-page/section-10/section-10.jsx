@@ -97,9 +97,12 @@ export default function Section9() {
                 animate={rightHasAnimated ? "visible" : "hidden"} // Persistent state
                 variants={rightComponentVariants}
               >
-                  <SymGLTFViewer
-                    modelUrl="/threeDModels/xander-vera-cherub-blue-angel-mini-bag/scene.gltf"
-                  />
+                <SymGLTFViewer
+                  modelUrl="/threeDModels/xander-vera-cherub-blue-angel-mini-bag/scene.gltf"
+                />
+                  {/* <SymGLTFViewer
+                    modelUrl="https://simspace-aws-s3.s3.us-east-2.amazonaws.com/xander-vera-cherub-blue-angel-mini-bag.glb"
+                  /> */}
               </motion.div>
             </Grid>
           </Grid>

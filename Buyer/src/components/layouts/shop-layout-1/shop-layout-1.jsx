@@ -108,10 +108,18 @@ function ShopLayoutContent({ children, noFooter }) {
     }
   }, [user?.isOnboardingFormFilled, isAuthenticated, pathname]);
 
-  const handleClose = () => {
-    setShowPopup(false);
-    localStorage.setItem("onboardingDialogClosed", "true");
-  };
+  const handleClose = useCallback(() => {
+      // This function should ONLY close the dialog.
+      setShowPopup(false);
+      localStorage.setItem("onboardingDialogClosed", "true");
+  }, []);
+
+  const handleAdvancedSettings = useCallback(() => {
+        // This function handles the navigation and marks the dialog as closed.
+        // Set localStorage here to ensure it's only set when the user chooses "Advanced Settings"
+        localStorage.setItem("onboardingDialogClosed", "true");
+        // No router.push here, let the child component handle that with its own state.
+    }, []);
 
   return (
     <Fragment>
@@ -160,6 +168,7 @@ function ShopLayoutContent({ children, noFooter }) {
           <OnboardingDialog
             open={showPopup}
             onClose={handleClose}
+            onAdvancedSettings={handleAdvancedSettings} // Pass the handler down
             user={user}
           />
         </Suspense>

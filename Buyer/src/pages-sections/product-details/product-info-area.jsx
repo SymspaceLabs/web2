@@ -218,7 +218,7 @@ export default function ProductInfoArea({
       <SymAccordion title="Composition" content={composition} />
       <SymAccordion
         title="Brand"
-        content="Wave World aims to leverage Augmented Reality (AR) as our backbone to set ourselves apart from competitors while also providing multifaceted products. Our products embody both present and vintage fashion trends that have dominated the streetwear industry for decades. Not only are we ..."
+        content={company.description}
       />
       <SymAccordion title="Size and fit" content={sizeFit} />
 

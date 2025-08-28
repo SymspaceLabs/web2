@@ -179,7 +179,7 @@ const ProductGallery = ({
             >
                 {selectedImage === 0 ? (
                     filteredThreeDModels.length > 0 ? (
-                        <SymGLTFViewer modelUrl={`/threeDModels/${filteredThreeDModels[0].url}`} />
+                        <SymGLTFViewer modelUrl={`${filteredThreeDModels[0].url}`} />
                     ) : (
                         <Box>No 3D model for this color</Box>
                     )

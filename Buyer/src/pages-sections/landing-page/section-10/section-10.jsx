@@ -98,11 +98,8 @@ export default function Section9() {
                 variants={rightComponentVariants}
               >
                 <SymGLTFViewer
-                  modelUrl="/threeDModels/xander-vera-cherub-blue-angel-mini-bag/scene.gltf"
+                  modelUrl="https://simspace-aws-s3.s3.us-east-2.amazonaws.com/xander-vera-cherub-blue-angel-mini-bag.glb"
                 />
-                  {/* <SymGLTFViewer
-                    modelUrl="https://simspace-aws-s3.s3.us-east-2.amazonaws.com/xander-vera-cherub-blue-angel-mini-bag.glb"
-                  /> */}
               </motion.div>
             </Grid>
           </Grid>

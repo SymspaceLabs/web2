@@ -41,7 +41,9 @@ export default function Section4() {
             btnUrl="/"
             invert={false}
           >
-            <SymGLTFViewer modelUrl="/threeDModels/xander-vera-cherub-blue-angel-mini-bag/scene.gltf" />
+            <SymGLTFViewer
+              modelUrl="https://simspace-aws-s3.s3.us-east-2.amazonaws.com/xander-vera-cherub-blue-angel-mini-bag.glb"
+            />
           </SymSection>
         </motion.div>
 

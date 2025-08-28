@@ -13,7 +13,7 @@ export default function Section1({ article }) {
   const formattedContent = article.content.replace(/\\n/g, "\n");
 
   return (
-    <FlexColCenter sx={{ minHeight:'75vh', py: 4, px:{xs:2,sm:0} }}>
+    <FlexColCenter sx={{ minHeight:'75vh', py: 4, px:{xs:2,sm:0}, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>
       <FlexCol sx={{ maxWidth:"1200px", gap:5, }} >
         
         {/* Breadcrumbs */}

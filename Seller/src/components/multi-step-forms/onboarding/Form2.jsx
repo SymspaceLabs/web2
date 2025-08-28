@@ -95,7 +95,6 @@ function Form2 ({
                 country,
                 zip,
             }
-
         });
     }, [accountNo, routingNo, wireRoutingNo, bankName, accHolderName, cardNo,
         expiryMonth,

@@ -62,7 +62,9 @@ const getCategoryPath = (queryId, allCategories) => {
 };
 
 // Main reusable BreadcrumbNav component
-export default function BreadcrumbNav({ subcategoryItemId, subcategoryItemChildId }) {
+export default function BreadcrumbNav({ product }) {
+
+  const {subcategoryItemId='', subcategoryItemChildId='' } = product; 
   // Prioritize subcategoryItemChildId. If it's null or undefined, use subcategoryItemId.
   const queryId = subcategoryItemChildId || subcategoryItemId;
   

@@ -5,8 +5,8 @@
 // =======================================================
 
 import { BlobBox } from "@/components/BlobBox";
-import { useEffect, Suspense, lazy } from "react";
-import { Box, CircularProgress } from "@mui/material";
+import { useEffect, lazy } from "react";
+import { Box } from "@mui/material";
 
 // Lazy load all your sections
 // This tells React to only load these components when they are first rendered.
@@ -92,7 +92,6 @@ export default function LandingPageView() {
       <BlobBox top="80%" left={0} /> {/*BLUE */}
 
       <Box sx={{ background: '#1F1F1F', zIndex: 2 }}>
-        {/* <Suspense fallback={null}> */}
           <Section1 /> 
           <Section2 /> 
           <Section3 /> 
@@ -109,7 +108,6 @@ export default function LandingPageView() {
           <Section14 /> 
           <Section15 /> 
           <Section16 />
-        {/* </Suspense> */}
       </Box>
     </Box>
   )

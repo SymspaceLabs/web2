@@ -128,7 +128,6 @@ const OnboardingDialog = ({
     
             if (!response.ok) throw new Error("Failed to save data");
     
-            console.log("Data saved successfully:", await response.json());
         } catch (error) {
             console.error("Error:", error.message);
         }

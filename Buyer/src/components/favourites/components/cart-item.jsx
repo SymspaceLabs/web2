@@ -32,6 +32,8 @@ export default function MiniCartItem({ item, mode = 'light' }) {
   const [currentVariantStock, setCurrentVariantStock] = useState(0); // State for current variant's stock
   const [stockWarningMessage, setStockWarningMessage] = useState(''); // State for stock warning message
   const [loadingAvailability, setLoadingAvailability] = useState(false); // New state for loading availability
+  const [displayImage, setDisplayImage] = useState(item.imgUrl); // 📸 NEW STATE: For dynamic image URL
+  const [loadingImage, setLoadingImage] = useState(false); // 📸 NEW STATE: For image loading spinner
 
   // Determine text color based on the 'mode' prop
   const textColor = mode === 'dark' ? '#000' : '#FFF';
@@ -117,6 +119,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
         qty: newQty,
         name: item.name,
         imgUrl: item.imgUrl,
+        images: item.images,
         id: item.id,
         slug: item.slug,
         selectedColor: {
@@ -150,6 +153,28 @@ export default function MiniCartItem({ item, mode = 'light' }) {
   // It's disabled if stock is 0, or if availability is still loading, or if color/size not selected
   const isAddToCartDisabled = currentVariantStock === 0 || loadingAvailability || !selectedSize || !selectedColor?.value;
 
+  // 1️⃣ NEW useEffect to handle image change
+  useEffect(() => {
+    if (selectedColor && item.images && item.images.length > 0) {
+      setLoadingImage(true); // 🚀 Set loading to true when a new color is selected
+      const newImage = item.images.find(img => img.colorCode === selectedColor.value);
+      if (newImage) {
+        setDisplayImage(newImage.url);
+        setLoadingImage(false);
+      } else {
+        // Fallback to the default image if no match is found
+        setDisplayImage(item.imgUrl);
+        setLoadingImage(false); // ✅ Add this line for a more robust fallback
+      }
+    } else {
+      // If no color is selected, revert to the default image
+      setDisplayImage(item.imgUrl);
+      setLoadingImage(false); // ✅ Add this line for initial state handling
+    }
+    
+  }, [selectedColor, item.images, item.imgUrl]); // Dependencies: selectedColor, and the item.images array
+
+
   return (
     <FlexBox
       py={2}
@@ -168,13 +193,19 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       {/* Product Image */}
       <FlexColCenter alignItems="center" sx={{ width: 100 }}>
         <Link href={`/products/${item.slug}`}>
-          <LazyImage
-            alt={item.name}
-            src={item.imgUrl}
-            width={75}
-            height={75}
-            sx={{ width: 75, height: 75 }}
-          />
+          {loadingImage ? ( // 🔄 Conditional rendering for image or spinner
+            <CircularProgress size={50} /> // Display a spinner while image loads
+          ) : (
+            <LazyImage
+              alt={item.name}
+              src={displayImage}
+              width={75}
+              height={75}
+              sx={{ width: 75, height: 75 }}
+              onLoad={() => setLoadingImage(false)} // 🚀 Set loading to false once the image has loaded
+              onError={() => setLoadingImage(false)} // Also set to false if there's an error
+            />
+          )}
         </Link>
       </FlexColCenter>
 
@@ -216,7 +247,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       </FlexCol>
 
       {/* Add to Cart & Cancel Button */}
-      <FlexCol
+      {/* <FlexCol
         sx={{ flex: 1 }}
         alignItems="flex-end"
         justifyContent="space-between"
@@ -225,7 +256,6 @@ export default function MiniCartItem({ item, mode = 'light' }) {
         <Button sx={{ height: 28, width: 28 }} onClick={handleRemoveItem}>
           <Close fontSize="small" sx={{ color: textColor }} />
         </Button>
-        {/* Stock warning message and loading spinner moved above the button */}
         {loadingAvailability ? (
           <CircularProgress size={20} sx={{ mt: 0.5 }} />
         ) : (
@@ -237,11 +267,44 @@ export default function MiniCartItem({ item, mode = 'light' }) {
             </Box>
           )
         )}
-        <FlexBox alignItems="center" gap={1}> {/* FlexBox to align button and stock message */}
+        <FlexBox alignItems="center" gap={1}>
           <Button
             sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
             onClick={handleAddToCart}
-            // disabled={isAddToCartDisabled}
+          >
+            Add to cart
+          </Button>
+        </FlexBox>
+      </FlexCol> */}
+      <FlexCol
+        sx={{ flex: 1 }}
+        alignItems="flex-end"
+        justifyContent="space-between"
+        gap={1}
+      >
+        <Button sx={{ height: 28, width: 28 }} onClick={handleRemoveItem}>
+          <Close fontSize="small" sx={{ color: textColor }} />
+        </Button>
+
+        {/* ✅ Corrected Rendering Logic ✅ */}
+        {/* If loading, show the spinner. */}
+        {loadingAvailability ? (
+          <CircularProgress size={20} sx={{ mt: 0.5 }} />
+        ) : (
+          // If not loading, but a warning exists, show the warning pill.
+          stockWarningMessage && (
+            <Box sx={styles.statusPill}>
+              <H1 fontSize="8px" color="#000">
+                {stockWarningMessage}
+              </H1>
+            </Box>
+          )
+        )}
+        
+        <FlexBox alignItems="center" gap={1}>
+          <Button
+            sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
+            onClick={handleAddToCart}
           >
             Add to cart
           </Button>

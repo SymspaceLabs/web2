@@ -7,7 +7,6 @@ import { CategoriesModule } from './categories/categories.module';
 import { OrdersModule } from './orders/orders.module';
 import { AuthModule } from './auth/auth.module';
 import { MailchimpModule } from './mailchimp/mailchimp.module';
-import { EmailModule } from './email/email.module';
 import { ProductsModule } from './products/products.module';
 import { CompaniesModule } from './companies/companies.module';
 import { SubcategoriesModule } from './subcategories/subcategories.module';
@@ -75,7 +74,6 @@ import { S3Module } from './s3/s3.module';
     OrdersModule,
     AuthModule,
     MailchimpModule,
-    EmailModule,
     ProductsModule,
     CompaniesModule,
     SubcategoriesModule,

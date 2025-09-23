@@ -11,6 +11,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { SearchSuggestion } from './products.service'; // Add this line
 
 @Controller('products')
 export class ProductsController {
@@ -45,16 +46,9 @@ export class ProductsController {
     );
   }
 
-  @Get('search') // This will be your dedicated search endpoint: /products/search
-  async search(
-    @Query('q') query?: string, // The free-form search term
-    // You might still keep these for more refined filtering,
-    // but the main 'q' parameter will drive the free-form search.
-    @Query('categorySlug') categorySlug?: string,
-    @Query('subcategorySlug') subcategorySlug?: string,
-  ) {
-    // Delegate the search logic to the service
-    const results = await this.productsService.performFreeFormSearch(query, categorySlug, subcategorySlug);
+  @Get('search') // This must be placed before the general ':id' or ':slug' route
+  async search(@Query('q') query?: string) {
+    const results = await this.productsService.performFreeFormSearch(query);
     return results;
   }
 

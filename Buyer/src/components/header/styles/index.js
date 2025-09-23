@@ -1,4 +1,4 @@
-import Container from "@mui/material/Container";
+import { Container } from "@mui/material";
 import styled from "@mui/material/styles/styled"; // CONSTANT VARIABLES
 
 import { layoutConstant } from "../../../utils/constants";

@@ -15,6 +15,13 @@ import { CreateProductImageDto } from 'src/product-images/dto/create-product-ima
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
+// Define a type for a single search suggestion result
+export interface SearchSuggestion {
+  id: string;
+  label: string;
+  type: 'company' | 'product' | 'category' | 'subcategory' | 'subcategory-child';
+}
+
 @Injectable()
 export class ProductsService {
 
@@ -883,53 +890,85 @@ export class ProductsService {
     };
   }
 
-  // Add `leftJoin` for `subcategoryItemChild` and select its name.
-  // NOTE: subcategoryItemChild is a nested relation from subcategoryItem
-  async performFreeFormSearch(
-      searchTerm?: string,
-      categorySlug?: string,
-      subcategorySlug?: string,
-  ) {
-      const normalizedSearchTermForComparison = searchTerm
-        ? `%${this.normalizeSearchText(searchTerm)}%`
-        : null;
+  async performFreeFormSearch(searchTerm?: string): Promise<SearchSuggestion[]> {
+    const normalizedSearchTerm = searchTerm ? this.normalizeSearchText(searchTerm) : null;
+    const suggestions: SearchSuggestion[] = [];
 
-      const productsQuery = this.productRepository.createQueryBuilder('product')
-        .select([
-          'product.id',
-          'product.name',
-          'product.price',
-          'product.slug',
-          'product.description',
-        ])
-        .leftJoinAndSelect('product.company', 'company')
-        .addSelect([
-          'company.id',
-          'company.entityName',
-        ])
-        .leftJoin('product.images', 'images')
-        .leftJoin('product.subcategoryItem', 'subcategoryItem')
-        .leftJoin('subcategoryItem.subcategory', 'subcategory')
-        .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild') // <-- ADD THIS LINE
-        .leftJoin('subcategory.category', 'category')
-        .orderBy('images.sortOrder', 'ASC');
+    if (!normalizedSearchTerm) {
+        return suggestions;
+    }
 
-      if (normalizedSearchTermForComparison) {
-        productsQuery.andWhere(new Brackets(qb => {
-          qb.where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(product.description, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(company.entityName, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(subcategory.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(subcategoryItem.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison })
-            .orWhere('LOWER(REPLACE(REPLACE(subcategoryItemChild.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: normalizedSearchTermForComparison }); // <-- AND THIS LINE
-        }));
-      }
+    const searchKeyword = `%${normalizedSearchTerm}%`;
 
-      // ... (rest of your code remains the same) ...
+    // 1. Check for an exact company name match first.
+    const companyMatch = await this.companiesRepository.findOne({
+        where: {
+            entityName: normalizedSearchTerm,
+        },
+    });
 
-      const products = await productsQuery.getMany();
-      return products;
+    if (companyMatch) {
+        suggestions.push({
+            id: `company-${companyMatch.id}`,
+            label: `Search '${companyMatch.entityName}' in Shops`,
+            type: 'company',
+        });
+    }
+
+    // 2. Perform a fuzzy search across multiple tables to get general suggestions.
+    
+    // Search for matching product names
+    const productSuggestions = await this.productRepository.createQueryBuilder('product')
+        .select('DISTINCT product.name', 'name')
+        .where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .limit(5)
+        .getRawMany();
+
+    // Search for matching category names
+    const categorySuggestions = await this.categoryRepository.createQueryBuilder('category')
+        .select('DISTINCT category.name', 'name')
+        .where('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .limit(5)
+        .getRawMany();
+
+    // 3. Add the query for subcategoryItemChild
+    const subcategoryItemChildSuggestions = await this.subcategoryItemChildRepository.createQueryBuilder('subcategoryItemChild')
+        .select('DISTINCT subcategoryItemChild.name', 'name')
+        .where('LOWER(REPLACE(REPLACE(subcategoryItemChild.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .limit(5)
+        .getRawMany();
+
+    // 4. Combine all suggestions into the final array.
+    for (const item of productSuggestions) {
+        suggestions.push({
+            id: `product-${item.name}`,
+            label: item.name,
+            type: 'product',
+        });
+    }
+    
+    for (const item of categorySuggestions) {
+        suggestions.push({
+            id: `category-${item.name}`,
+            label: item.name,
+            type: 'category',
+        });
+    }
+    
+    // Push the subcategoryItemChild results
+    for (const item of subcategoryItemChildSuggestions) {
+        suggestions.push({
+            id: `subcategory-child-${item.name}`,
+            label: item.name,
+            type: 'subcategory-child',
+        });
+    }
+
+    // Remove duplicates
+    const uniqueSuggestions = Array.from(new Map(suggestions.map(item => [item.label, item])).values());
+
+    return uniqueSuggestions;
   }
+
   
 }

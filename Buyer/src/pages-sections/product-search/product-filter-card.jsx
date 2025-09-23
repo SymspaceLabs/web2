@@ -100,6 +100,40 @@ export default function ProductFilterCard({
 
       <Box component={Divider} my={3} />
 
+      {/* BRAND VARIANT FILTER: Checkbox list for brand selection */}
+      <H6 mb={2}>Brands</H6>
+      {allBrands.map((item, index) => {
+        const isChecked = Array.isArray(selectedBrands) && selectedBrands.some(brand => brand.id === item.id);
+        const handleBrandChange = () => {
+          // Calls parent handler to update brand filter
+          if (typeof setSelectedBrands === 'function') {
+            if (isChecked) {
+              setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
+            } else {
+              setSelectedBrands([...selectedBrands, item]);
+            }
+          }
+        };
+
+        return (
+          <FormControlLabel
+            key={index}
+            sx={{ display: "flex" }}
+            label={<Span color="inherit">{item.entityName}</Span>}
+            control={
+              <Checkbox
+                size="small"
+                color="primary"
+                checked={isChecked}
+                onChange={handleBrandChange}
+              />
+            }
+          />
+        );
+      })}
+
+      <Box component={Divider} my={3} />
+
       {/* PRICE VARIANT FILTER */}
       <H6 mb={2}>Price Range</H6>
       <Box px={1}>
@@ -141,40 +175,6 @@ export default function ProductFilterCard({
           }
         />
       </FlexBetween>
-
-      <Box component={Divider} my={3} />
-
-      {/* BRAND VARIANT FILTER: Checkbox list for brand selection */}
-      <H6 mb={2}>Brands</H6>
-      {allBrands.map((item, index) => {
-        const isChecked = Array.isArray(selectedBrands) && selectedBrands.some(brand => brand.id === item.id);
-        const handleBrandChange = () => {
-          // Calls parent handler to update brand filter
-          if (typeof setSelectedBrands === 'function') {
-            if (isChecked) {
-              setSelectedBrands(selectedBrands.filter(brand => brand.id !== item.id));
-            } else {
-              setSelectedBrands([...selectedBrands, item]);
-            }
-          }
-        };
-
-        return (
-          <FormControlLabel
-            key={index}
-            sx={{ display: "flex" }}
-            label={<Span color="inherit">{item.entityName}</Span>}
-            control={
-              <Checkbox
-                size="small"
-                color="primary"
-                checked={isChecked}
-                onChange={handleBrandChange}
-              />
-            }
-          />
-        );
-      })}
 
       <Box component={Divider} my={3} />
 

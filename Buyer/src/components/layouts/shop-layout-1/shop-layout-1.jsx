@@ -4,13 +4,13 @@
 // Shop Layout 1 - Optimized for Faster Loading
 // ==============================================================
 
-import { Box, Card, useTheme } from "@mui/material";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { usePathname } from 'next/navigation';
 import { styled } from '@mui/material/styles';
 import { FlexBox } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
+import { Box, Card, useTheme } from "@mui/material";
 import { SearchInput } from "@/components/search-box";
 import { Fragment, useCallback, useState, useEffect, Suspense, lazy } from "react";
 import { HeaderProvider, useHeader } from "@/components/header/hooks/use-header";
@@ -69,7 +69,6 @@ function ShopLayoutContent({ children, noFooter }) {
   const [showPopup, setShowPopup] = useState(false);
 
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []); // Re-added toggleIsFixed callback
-
 
   const {
     dialogOpen,

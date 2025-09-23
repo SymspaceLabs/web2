@@ -131,6 +131,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
         // Ensure sizes are passed correctly for the cart item structure
         // Assuming item.sizes is already in the correct format for SymRoundedDropdown
         sizes: item.sizes,
+        stock: currentVariantStock, // ✅ ADDED: Include the stock attribute
       },
     });
 
@@ -245,37 +246,6 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           />
         </FlexBox>
       </FlexCol>
-
-      {/* Add to Cart & Cancel Button */}
-      {/* <FlexCol
-        sx={{ flex: 1 }}
-        alignItems="flex-end"
-        justifyContent="space-between"
-        gap={1}
-      >
-        <Button sx={{ height: 28, width: 28 }} onClick={handleRemoveItem}>
-          <Close fontSize="small" sx={{ color: textColor }} />
-        </Button>
-        {loadingAvailability ? (
-          <CircularProgress size={20} sx={{ mt: 0.5 }} />
-        ) : (
-          stockWarningMessage && (
-            <Box sx={styles.statusPill}>
-              <H1 fontSize="8px" color="#000">
-                {loadingAvailability ? <CircularProgress size={8} /> : stockWarningMessage}
-              </H1>
-            </Box>
-          )
-        )}
-        <FlexBox alignItems="center" gap={1}>
-          <Button
-            sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
-            onClick={handleAddToCart}
-          >
-            Add to cart
-          </Button>
-        </FlexBox>
-      </FlexCol> */}
       <FlexCol
         sx={{ flex: 1 }}
         alignItems="flex-end"

@@ -80,13 +80,16 @@ export default function MiniCartItem({
           handleCartAmountChange={handleCartAmountChange}
           textColor={textColor} // Pass textColor to nested component
           borderColor={borderColor} // Pass borderColor to nested component
+          stock={item.stock} 
         />
       </FlexCol>
     </FlexBox>
   );
 }
 
-const CountControlButtons = ({item, handleCartAmountChange, textColor, borderColor}) => {
+const CountControlButtons = ({item, handleCartAmountChange, textColor, borderColor, stock }) => {
+  const isIncrementDisabled = item.qty >= stock;
+
   return (
     <FlexBox alignItems="center" justifyContent="flex-end" gap={1}>
       <Button disabled={item.qty === 1} onClick={handleCartAmountChange(item.qty - 1, item)}
@@ -106,6 +109,7 @@ const CountControlButtons = ({item, handleCartAmountChange, textColor, borderCol
       </Typography>
 
       <Button
+        disabled={isIncrementDisabled} // Add the disabled prop here
         onClick={handleCartAmountChange(item.qty + 1, item)}
         sx={{
           height: 28,

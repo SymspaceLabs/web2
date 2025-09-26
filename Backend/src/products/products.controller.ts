@@ -11,7 +11,6 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
-import { SearchSuggestion } from './products.service'; // Add this line
 
 @Controller('products')
 export class ProductsController {
@@ -32,17 +31,25 @@ export class ProductsController {
   @Get()
   async getAllProducts(
     @Query('search') search?: string,
-    @Query('category') categoryName?: string, // Changed from categorySlug
-    @Query('subcategory') subcategoryName?: string, // Changed from subcategorySlug
-    @Query('subcategoryItem') subcategoryItemName?: string, // Changed from subcategoryItemSlug
-    @Query('subcategoryItemChild') subcategoryItemChildName?: string // Changed from subcategoryItemChildSlug
+    @Query('category') categorySlug?: string, // Changed from categorySlug
+    @Query('subcategory') subcategorySlug?: string, // Changed from subcategorySlug
+    // @Query('subcategoryItem') subcategoryItemSlug?: string, // Changed from subcategoryItemSlug
+    @Query('subcategoryItem') subcategoryItemSlugs?: string | string[], // <-- FIX: Expect string or array
+
+    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string // Changed from subcategoryItemChildSlug
   ) {
+
+    const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
+    ? subcategoryItemSlugs 
+    : subcategoryItemSlugs ? [subcategoryItemSlugs] : undefined;
+
+
     return await this.productsService.findAll(
       search,
-      categoryName,
-      subcategoryName,
-      subcategoryItemName,
-      subcategoryItemChildName
+      categorySlug,
+      subcategorySlug,
+      subcategoryItemSlugsArray,
+      subcategoryItemChildSlug
     );
   }
 

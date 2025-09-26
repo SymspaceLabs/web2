@@ -36,4 +36,7 @@ export class Subcategory {
     (subcategoryItem) => subcategoryItem.subcategory,
   )
   subcategoryItems: SubcategoryItem[];
+
+  @Column({ nullable: true })
+  slug: string;
 }

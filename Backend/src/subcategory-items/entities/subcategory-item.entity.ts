@@ -19,8 +19,8 @@ export class SubcategoryItem {
   @Column()
   name: string;
 
-  // @Column({ nullable: true })
-  // slug: string;
+  @Column({ nullable: true })
+  slug: string;
 
   // @Column('simple-array', { nullable: true })
   // tags_required: string[];
@@ -45,4 +45,5 @@ export class SubcategoryItem {
   // 🐛 FIX: Add the 'products' property to complete the relationship
   @OneToMany(() => Product, (product) => product.subcategoryItem)
   products: Product[];
+
 }

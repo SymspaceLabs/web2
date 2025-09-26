@@ -23,6 +23,7 @@ export interface SubcategoryItemSeedData {
 export interface SubcategorySeedData {
   id: string;
   name: string;
+  slug?: string;
   gender?: string[];
   subcategoryItems: SubcategoryItemSeedData[];
 }
@@ -30,5 +31,6 @@ export interface SubcategorySeedData {
 export interface CategorySeedData {
   id: string;
   name: string;
+  slug: string;
   subcategories: SubcategorySeedData[];
 }

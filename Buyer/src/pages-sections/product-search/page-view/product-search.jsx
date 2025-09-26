@@ -177,12 +177,12 @@ export default function ProductSearchPageView() {
     priceLimits: filterState.priceLimits,
     category: filterState.category,
     checkedCategoryIds: filterState.checkedCategoryIds,
-    onCategoryFilterChange: (id, isChecked) => {
+    onCategoryFilterChange: (slug, isChecked) => {
       const newParams = new URLSearchParams(searchParams.toString());
       if (isChecked) {
-        newParams.set('category', id);
+        newParams.set('subcategoryItem', slug);
       } else {
-        newParams.delete('category');
+        newParams.delete('subcategoryItem');
       }
       router.push(`${pathname}?${newParams.toString()}`);
     },

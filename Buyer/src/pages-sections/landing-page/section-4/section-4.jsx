@@ -72,7 +72,7 @@ export default function Section4() {
               }}
             >
               {categories.map((item,index) => (
-                <Link key={index} href={`/products/search/all?category=${item.slug}`} passHref sx={{ zIndex:1 }}>
+                <Link key={index} href={`/products/search/all?${item.slug}`} passHref sx={{ zIndex:1 }}>
                   {/* Product card */}
                   <FlexColCenter
                     sx={{
@@ -108,7 +108,7 @@ export default function Section4() {
               <Carousel ref={carouselRef} slidesToShow={isMobile? 3:6} responsive={responsive} arrows={false}>
                 {categories.map((item) => (
                   <motion.div key={item.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                    <Link href={`/products/search/all?subcategory=${item.slug}`}>
+                    <Link href={`/products/search/all?${item.slug}`}>
                       <FlexBox
                         sx={{
                           py: 5,
@@ -152,17 +152,17 @@ export default function Section4() {
 
 // Static product list as placeholder data.
 const categories = [
-  { id: 1, title: "Shirts", thumbnail: "/assets/images/icons/shirt.svg", slug: "shirts" },
-  { id: 2, title: "Hoodies", thumbnail: "/assets/images/icons/hoodie.svg", slug: "hoodie" },
-  { id: 3, title: "Pants", thumbnail: "/assets/images/icons/pants.svg", slug: "pants" },
-  { id: 4, title: "Furniture", thumbnail: "/assets/images/icons/furniture.svg", slug: "furniture" },
-  { id: 5, title: "Shoes", thumbnail: "/assets/images/icons/shoe.svg", slug: "shoe" },
-  { id: 6, title: "Dresses", thumbnail: "/assets/images/icons/dress-2.svg", slug: "dress" },
-  { id: 7, title: "Earrings", thumbnail: "/assets/images/icons/earring.svg", slug: "earring" },
-  { id: 8, title: "Accessories", thumbnail: "/assets/images/icons/accessory.svg", slug: "accessories" },
-  { id: 9, title: "Bags", thumbnail: "/assets/images/icons/bag-2.svg", slug: "bag" },
-  { id: 10, title: "Hats", thumbnail: "/assets/images/icons/hat.svg", slug: "hat" },
-  { id: 11, title: "Watches", thumbnail: "/assets/images/icons/watch-2.svg", slug: "watch" },
+  { id: 1, title: "Shirts", thumbnail: "/assets/images/icons/shirt.svg", slug: "subcategoryItem=shirts" },
+  { id: 2, title: "Hoodies", thumbnail: "/assets/images/icons/hoodie.svg", slug: "subcategoryItem=hoodie" },
+  { id: 3, title: "Pants", thumbnail: "/assets/images/icons/pants.svg", slug: "subcategoryItem=pants" },
+  { id: 4, title: "Furniture", thumbnail: "/assets/images/icons/furniture.svg", slug: "subcategory=furniture" },
+  { id: 5, title: "Shoes", thumbnail: "/assets/images/icons/shoe.svg", slug: "subcategory=shoes" },
+  { id: 6, title: "Dresses", thumbnail: "/assets/images/icons/dress-2.svg", slug: "subcategory=dress" },
+  { id: 7, title: "Earrings", thumbnail: "/assets/images/icons/earring.svg", slug: "subcategoryItem=earring" },
+  { id: 8, title: "Accessories", thumbnail: "/assets/images/icons/accessory.svg", slug: "subcategory=accessories" },
+  { id: 9, title: "Bags", thumbnail: "/assets/images/icons/bag-2.svg", slug: "subcategoryItem=bags" },
+  { id: 10, title: "Hats", thumbnail: "/assets/images/icons/hat.svg", slug: "subcategoryItem=hat" },
+  { id: 11, title: "Watches", thumbnail: "/assets/images/icons/watch-2.svg", slug: "subcategoryItem=watch" },
   { id: 12, title: "Eyewear", thumbnail: "/assets/images/icons/eyewear.svg", slug: "eyewear" },
-  { id: 13, title: "TVs", thumbnail: "/assets/images/icons/tv.svg", slug: "tv" },
+  { id: 13, title: "TVs", thumbnail: "/assets/images/icons/tv.svg", slug: "subcategoryItem=tv" },
 ];

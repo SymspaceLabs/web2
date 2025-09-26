@@ -3,42 +3,29 @@ export const categoriesSeedData = [
   {
     id: "b1f7b77d-1ff7-4d66-ae63-31811cd067e0",
     name: 'Clothing, Shoes & Accessories',
+    slug: 'clothing-shoes-accessories',
     subcategories: [
       {
         id: "a1d35d1e-4475-4c24-98bc-c678bb3d319e",
         name: 'Dresses',
         gender: ['Female', 'Kids'],
         subcategoryItems: [
-          { 
-            id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7",
-            name: 'Casual Dresses',
-            tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              ar_type: "body-tracking",
-              gender: "women"
-            }
-          },
-          { 
-            id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", name: 'Formal Dresses',
-            tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              ar_type: "body-tracking",
-              gender: "women"
-            }
-          },
-          { 
-            id: "c53f5378-e3b3-45b1-a129-e2c4067c8509",
-            name: 'Summer Dresses',
-            tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"],
-            optional_tags: ["color", "pattern", "season"],
-            tag_defaults: {
-              ar_type: "body-tracking",
-              gender: "women",
-              season: "summer"
-            }
-          },
+          { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", name: 'Casual Dresses', tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", name: 'Formal Dresses', tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", name: 'Summer Dresses', tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
+        ],
+      },
+      {
+        id: "3f7ed738-cbf9-46a7-9f39-0c77502e17b2",
+        name: "Tops",
+        subcategoryItems: [
+          { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", name: "Blouses", slug: "blouses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "9d826402-b7be-4329-97fc-bd64934eb233", name: "T-Shirts", slug: "t-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", name: "Sweaters", slug: "sweaters", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Cardigans", slug: "cardigans", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", name: "Casual Shirts", slug: "casual-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", name: "Dress Shirts", slug: "dress-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", name: "Polo Shirts", slug: "polo-shirts", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
         ],
       },
       {
@@ -46,59 +33,10 @@ export const categoriesSeedData = [
         name: "Bottoms",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          {
-            id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68",
-            name: "Jeans",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
-          {
-            id: "b888c11c-b62d-4be4-9756-4151a05692f9",
-            name: "Trousers"
-          },
-          {
-            id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a",
-            name: "Shorts",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
-          {
-            id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230",
-            name: "Skirts",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking",
-              gender: "women"
-            }
-          },
+          { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Jeans", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: "Trousers" },
+          { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: "Shorts", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", name: "Skirts", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking", gender: "women" }},
           {
             id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2",
             name: "Pants",
@@ -225,54 +163,9 @@ export const categoriesSeedData = [
               "ar_type": "body-tracking"
             }
           },
-          {
-            id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f",
-            name: "Blazers",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
-          {
-            id: "ef324850-c5c5-41d9-bc0f-f8b4b8f37a07",
-            name: "Vests",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
-          {
-            id: "fde3b457-48a3-4e7c-9c19-43e1f53b738a",
-            name: "Hoodies",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
+          { id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", name: "Blazers", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
+          { id: "ef324850-c5c5-41d9-bc0f-f8b4b8f37a07", name: "Vests", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "fde3b457-48a3-4e7c-9c19-43e1f53b738a", name: "Hoodies", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
           {
             id: "4a3b8f17-c5d7-4be9-b64e-29b5341d7905",
             name: "Suits",
@@ -414,74 +307,16 @@ export const categoriesSeedData = [
             id: "a567e980-5f8d-47be-80e9-9a75e88d3f79",
             name: "Gym Shorts"
           },
-          {
-            id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c",
-            name: "Sweatshirts",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          },
-          {
-            id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd",
-            name: "Compression Wear",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "body-tracking"
-            }
-          }
+          { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", name: "Sweatshirts", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
+          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }}
         ]
       },
       {
         id: "0a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d",
         name: "Eyewear",
         subcategoryItems: [
-          {
-            id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a",
-            name: "Prescription Glasses",
-            slug: "prescription-glasses",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "material"
-            ],
-            optional_tags: ["frame_shape"],
-            tag_defaults: {
-              "ar_type": "face-tracking"
-            }
-          },
-          {
-            id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7",
-            name: "Sunglasses",
-            slug: "sunglasses",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "material"
-            ],
-            optional_tags: ["frame_shape"],
-            tag_defaults: {
-              "ar_type": "face-tracking"
-            }
-          },
+          { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: "Prescription Glasses", slug: "prescription-glasses", tags_required: [ "ar_type", "age_group", "gender", "material" ], optional_tags: ["frame_shape"], tag_defaults: { "ar_type": "face-tracking" } },
+          { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", name: "Sunglasses", slug: "sunglasses", tags_required: [ "ar_type", "age_group", "gender", "material" ], optional_tags: ["frame_shape"], tag_defaults: { "ar_type": "face-tracking" } }, 
           {
             id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b",
             name: "Blue Light Glasses",
@@ -610,22 +445,7 @@ export const categoriesSeedData = [
         name: "Shoes",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          {
-            id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8",
-            name: "Sandals",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "feet-tracking"
-            }
-          },
+          { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Sandals", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "feet-tracking" } },
           {
             id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7",
             name: "Flats",
@@ -659,38 +479,8 @@ export const categoriesSeedData = [
               gender: "women"
             }
           },
-          {
-            id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7",
-            name: "Boots",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "feet-tracking"
-            }
-          },
-          {
-            id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3",
-            name: "Sneakers",
-            tags_required: [
-              "ar_type",
-              "age_group",
-              "gender",
-              "season",
-              "occasion",
-              "material"
-            ],
-            optional_tags: ["color", "pattern"],
-            tag_defaults: {
-              "ar_type": "feet-tracking"
-            }
-          },
+          { id: "8g3f1b54-3e40-5fd0-919g-58g2fc8496g8", name: "Boots", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "feet-tracking" }},
+          { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", name: "Sneakers", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "feet-tracking" } },
           {
             id: "e2b4f987-3218-403a-9024-c8d7b23f18a4",
             name: "Athletic Shoes",
@@ -744,76 +534,20 @@ export const categoriesSeedData = [
       {
         id: "02f35b89-9f7b-4e6c-88c4-e7f4d23872e1",
         name: "Accessories",
+        slug: "accessories",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
           {
             id: "a7e1f5d6-c9b2-4d83-9a4f-5c8e2b1d7f3e",
             name: "Bags",
+            slug: "bags", 
             subcategoryItemChildren: [
-              {
-                id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7",
-                name: "Handbags",
-                slug: "handbags",
-                tags_required: ["ar_type", "gender", "material"],
-                optional_tags: ["indoor_outdoor"],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              },
-              {
-                id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e",
-                name: "Backpacks",
-                slug: "backpacks",
-                tags_required: [
-                  "ar_type",
-                  "gender",
-                  "material",
-                  "indoor_outdoor"
-                ],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              },
-              {
-                id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a",
-                name: "Crossbody Bags",
-                slug: "crossbody-bags",
-                tags_required: ["ar_type", "gender", "material"],
-                optional_tags: ["indoor_outdoor"],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              },
-              {
-                id: "f4e3d2c1-a5b6-7c8d-9e01-2a3b4c5d6e7f",
-                name: "Shoulder Bags",
-                slug: "shoulder-bags",
-                tags_required: ["ar_type", "gender", "material"],
-                optional_tags: ["indoor_outdoor"],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              },
-              {
-                id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
-                name: "Tote Bags",
-                slug: "tote-bags",
-                tags_required: ["ar_type", "gender", "material"],
-                optional_tags: ["indoor_outdoor"],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              },
-              {
-                id: "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c",
-                name: "Clutches",
-                slug: "clutches",
-                tags_required: ["ar_type", "gender", "material"],
-                optional_tags: ["indoor_outdoor"],
-                tag_defaults: {
-                  "ar_type": "static"
-                }
-              }
+              { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "static" }},
+              { id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e", name: "Backpacks", slug: "backpacks", tags_required: [ "ar_type", "gender", "material", "indoor_outdoor" ], tag_defaults: { "ar_type": "static" } },
+              { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "static" } },
+              { id: "f4e3d2c1-a5b6-7c8d-9e01-2a3b4c5d6e7f", name: "Shoulder Bags", slug: "shoulder-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "static" } }, 
+              { id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", name: "Tote Bags", slug: "tote-bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "static" } },
+              { id: "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c", name: "Clutches", slug: "clutches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
@@ -922,26 +656,8 @@ export const categoriesSeedData = [
                   "ar_type": "face-tracking"
                 }
               },
-              {
-                id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8",
-                name: "Caps",
-                slug: "caps",
-                tags_required: ["ar_type", "gender", "season", "material"],
-                optional_tags: ["color", "pattern"],
-                tag_defaults: {
-                  "ar_type": "face-tracking"
-                }
-              },
-              {
-                id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b",
-                name: "Beanies",
-                slug: "beanies",
-                tags_required: ["ar_type", "gender", "season", "material"],
-                optional_tags: ["color", "pattern"],
-                tag_defaults: {
-                  "ar_type": "face-tracking"
-                }
-              }
+              { id: "326dgf98-6ed4-5c0c-91c0-12b8f88g8ed9", name: "Caps", slug: "caps", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "face-tracking" } }, 
+              { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", name: "Beanies", slug: "beanies", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "face-tracking" } }
             ]
           },
           {
@@ -1180,53 +896,19 @@ export const categoriesSeedData = [
       {
         id: "26ccfa5e-8ffb-4c68-b09f-9c730b577b5b",
         name: "Furniture",
+        slug: "furniture",
         subcategoryItems: [
           {
             id: "fef93787-b22b-4e9e-bf85-32885d376f02",
             name: "Sofas",
+            slug: "sofas",
             subcategoryItemChildren: [
-              {
-                name: "Sectional Sofas",
-                id: "02e69a1f-38e5-426d-beea-867380902c88",
-                tags_required: ["ar_type","indoor_outdoor","material","accessible"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false }
-              },
-              {
-                name: "Loveseats",
-                id: "5402cd68-3d48-4adf-b5e5-1775d611e767",
-                tags_required: ["ar_type","indoor_outdoor","material","accessible"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false }
-              },
-              {
-                id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de",
-                name: "Recliners",
-                tags_required: ["ar_type","indoor_outdoor","material","accessible"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": true }
-              },
-              {
-                name: "Chesterfields",
-                id: "3570bf56-db8d-423e-8321-c6451b4119c8",
-                tags_required: ["ar_type","indoor_outdoor","material"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" }
-              },
-              {
-                name: "Sleeper Sofas",
-                id: "824d7240-6841-4ad5-97c7-3a0eb00762e6",
-                tags_required: ["ar_type","indoor_outdoor","material"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" }
-              },
-              {
-                name: "Modular Sofas",
-                id: "5ca0908f-5324-4e72-84c2-6556aa4fa658",
-                tags_required: ["ar_type","indoor_outdoor","material"],
-                optional_tags: ["style"],
-                tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" }
-              }
+              { id: "02e69a1f-38e5-426d-beea-867380902c88", name: "Sectional Sofas",  tags_required: ["ar_type","indoor_outdoor","material","accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false } }, 
+              { id: "5402cd68-3d48-4adf-b5e5-1775d611e767", name: "Loveseats", tags_required: ["ar_type","indoor_outdoor","material","accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false } },
+              { id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de", name: "Recliners", tags_required: ["ar_type","indoor_outdoor","material","accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": true } }, 
+              { id: "3570bf56-db8d-423e-8321-c6451b4119c8", name: "Chesterfields", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+              { id: "824d7240-6841-4ad5-97c7-3a0eb00762e6", name: "Sleeper Sofas", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+              { id: "5ca0908f-5324-4e72-84c2-6556aa4fa658", name: "Modular Sofas", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
             ]
           },
           {

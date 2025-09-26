@@ -1,4 +1,4 @@
-import { Brackets, Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -14,6 +14,8 @@ import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
+import { slugify, normalizeSearchText } from './utils/utils';
+
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -34,122 +36,7 @@ export class ProductsService {
     @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>,
-
   ) {}
-
-  // Convert text to slug
-  slugify(text: string): string {
-    return text
-      .toLowerCase()
-      .replace(/'/g, '')               // remove apostrophes
-      .replace(/\s+/g, '-')            // replace spaces with -
-      .replace(/[^a-z0-9-]/g, '')      // remove anything not alphanumeric or dash
-      .replace(/--+/g, '-')            // collapse multiple dashes
-      .replace(/^-+|-+$/g, '');        // trim leading/trailing dashes
-  }
-
-  /**
-   * Helper function to normalize text for search: lowercase and remove hyphens.
-   * @param text The input string.
-   * @returns The normalized string.
-   */
-  private normalizeSearchText(text: string): string {
-    return text.toLowerCase().replace(/-/g, '');
-  }
-
-  // Reusable method to generate and save variants
-  private async generateVariants(product: Product, dto: CreateProductDto): Promise<ProductVariant[]> {
-    const variantsToSave: ProductVariant[] = [];
-
-    // If no dto.variants, generate cartesian product of colors and sizes
-    if (!dto.variants?.length) {
-      for (const color of product.colors) {
-        for (const size of product.sizes) {
-          const variant = new ProductVariant();
-          variant.color = color;
-          variant.size = size;
-          variant.sku = `${product.slug}-${color.code}-${size.size}`;
-          variant.price = product.price || 0;
-          variant.stock = 0;
-          variant.product = product;
-          variantsToSave.push(variant);
-        }
-      }
-    } else {
-      // Use provided variants in DTO
-      for (const v of dto.variants) {
-        const variant = new ProductVariant();
-        variant.stock = v.stock;
-        variant.sku = v.sku;
-        variant.price = v.price;
-        variant.product = product;
-
-        const matchedColor = product.colors.find((c) => c.code === v.colorCode);
-        if (!matchedColor) {
-          throw new BadRequestException(`No matching color for code ${v.colorCode}`);
-        }
-        variant.color = matchedColor;
-
-        const matchedSize = product.sizes.find((s) => s.size === v.size);
-        if (!matchedSize) {
-          throw new BadRequestException(`No matching size for ${v.size}`);
-        }
-        variant.size = matchedSize;
-
-        variantsToSave.push(variant);
-      }
-    }
-
-    return this.productVariantRepository.save(variantsToSave);
-  }
-
-  /**
-   * @function calculatePriceRange
-   * @description Helper function to calculate the minimum and maximum effective prices
-   * from an array of products, prioritizing `salePrice` if available.
-   * @param {Array<Product>} products - An array of product objects.
-   * @returns {{min: number, max: number}} An object containing the minimum and maximum effective prices.
-   */
-  private async calculatePriceRange(products: any[]): Promise<{ min: number; max: number; }> {
-    // Extract prices from products, prioritizing salePrice if it exists and is a number,
-    // otherwise use the regular price.
-    const prices = products.map(p =>
-      (typeof p.salePrice === 'number' && p.salePrice !== null) ? p.salePrice : p.price
-    ).filter(price => typeof price === 'number' && price !== null); // Ensure valid numbers for min/max
-
-    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
-
-
-    return { min: minPrice, max: maxPrice };
-  }
-
-  // Add this new private helper function to your ProductsService class
-  private async saveProductImages(product: Product, imageDtos: CreateProductImageDto[]): Promise<ProductImage[]> {
-    // If no image DTOs are provided, return an empty array
-    if (!imageDtos || imageDtos.length === 0) {
-      product.images = [];
-      return [];
-    }
-
-    // Create new ProductImage entities from the provided DTOs
-    const newImages = imageDtos.map((imgDto, i) => {
-      const img = new ProductImage();
-      img.url = imgDto.url;
-      img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
-      img.sortOrder = i;
-      img.product = product; // Link the image to the product
-      return img;
-    });
-
-    // Assign the new array of images to the product entity.
-    // Assuming a cascade relationship (`cascade: true`), TypeORM will handle
-    // removing old images and creating new ones on save.
-    product.images = newImages;
-
-    // The caller (upsert function) will handle the final product save.
-    return newImages;
-  }
   
   // CREATE & UPDATE PRODUCT
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
@@ -280,7 +167,7 @@ export class ProductsService {
         const updatedProductName = name !== undefined ? name : product.name;
 
         if (updatedCompanyName && updatedProductName) {
-          product.slug = `${this.slugify(updatedCompanyName)}-${this.slugify(updatedProductName)}`;
+          product.slug = `${slugify(updatedCompanyName)}-${slugify(updatedProductName)}`;
         }
       }
 
@@ -306,7 +193,7 @@ export class ProductsService {
           throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
       }
 
-      const slug = `${this.slugify(companyEntity.entityName)}-${this.slugify(name)}`;
+      const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
 
       product = this.productRepository.create({
         ...productData,
@@ -426,80 +313,52 @@ export class ProductsService {
    *
    * @param searchTerm Optional: A string to search for in product names and descriptions.
    * @param categoryName Optional: The name of a main category (e.g., 'Clothing, Shoes & Accessories') to filter products by.
-   * @param subcategoryName Optional: The name of a subcategory (e.g., 'Accessories') to filter products by.
-   * @param subcategoryItemName Optional: The name of a subcategory item (e.g., 'Bags') to filter products by.
-   * @param subcategoryItemChildName Optional: The name of a subcategory item child (e.g., 'Handbags') to filter products by.
+   * @param subcategorySlug Optional: The name of a subcategory (e.g., 'Accessories') to filter products by.
+   * @param subcategoryItemSlugs Optional: The SLUGS of one or more subcategory items (e.g., ['t-shirts', 'bags']) to filter products by.
+   * @param subcategoryItemChildSlug Optional: The name of a subcategory item child (e.g., 'Handbags') to filter products by.
    * @returns An object containing filtered products, brands, price range, categories, genders, availabilities, and colors.
    */
   async findAll(
     searchTerm?: string,
-    categoryName?: string,
-    subcategoryName?: string,
-    subcategoryItemName?: string,
-    subcategoryItemChildName?: string,
+    categorySlug?: string,
+    subcategorySlug?: string,
+    subcategoryItemSlugs?: string[], // <-- Corrected type in function signature
+    subcategoryItemChildSlug?: string,
   ) {
-    let subcategoryItemId: string | undefined;
-    let subcategoryId: string | undefined;
-    let categoryId: string | undefined;
-    let resolvedSubcategoryItemChildId: string | undefined;
-    let filterAppliedButNoMatch = false;
+    // 1. Build the base query for products
+    const productsQuery = this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.company', 'company')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
+      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
+      .orderBy('images.sortOrder', 'ASC');
 
-    // Prioritize named parameters (categoryName, subcategoryName, etc.)
-    // If these are provided, they take precedence over a generic searchTerm for hierarchical filtering.
-    if (subcategoryItemChildName) {
-      const foundSubcategoryItemChild = await this.subcategoryItemChildRepository
-        .createQueryBuilder('subcategoryItemChild')
-        .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
-        .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-        .leftJoinAndSelect('subcategory.category', 'category')
-        .where('LOWER(subcategoryItemChild.name) = LOWER(:name)', { name: subcategoryItemChildName })
-        .getOne();
+    // 2. Apply the category and search term filters
+    // 💡 FIX 1: Update filterParams to use the corrected `subcategoryItemSlugs` array
+    const filterParams = {
+      categorySlug,
+      subcategorySlug,
+      subcategoryItemSlugs, // <-- Using the new array parameter name
+      subcategoryItemChildSlug,
+      searchTerm,
+    };
+    
+    const filterAppliedButNoMatch = await this.applyCategoryFilters(
+      productsQuery,
+      categorySlug,
+      subcategorySlug,
+      subcategoryItemSlugs, // Correctly passing the array to applyCategoryFilters
+      subcategoryItemChildSlug
+    );
+    this.applySearchTermFilter(productsQuery, searchTerm);
 
-      if (foundSubcategoryItemChild) {
-        resolvedSubcategoryItemChildId = foundSubcategoryItemChild.id;
-      } else {
-        filterAppliedButNoMatch = true;
-      }
-    } else if (subcategoryItemName) {
-      const foundSubcategoryItem = await this.subcategoryItemRepository
-        .createQueryBuilder('subcategoryItem')
-        .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-        .leftJoinAndSelect('subcategory.category', 'category')
-        .where('LOWER(subcategoryItem.name) = LOWER(:name)', { name: subcategoryItemName })
-        .getOne();
-
-      if (foundSubcategoryItem) {
-        subcategoryItemId = foundSubcategoryItem.id;
-      } else {
-        filterAppliedButNoMatch = true;
-      }
-    } else if (subcategoryName) {
-      const foundSubcategory = await this.subcategoryRepository.findOne({
-        where: { name: subcategoryName },
-        relations: ['subcategoryItems'],
-      });
-
-      if (foundSubcategory) {
-        subcategoryId = foundSubcategory.id;
-      } else {
-        filterAppliedButNoMatch = true;
-      }
-    } else if (categoryName) {
-      const foundCategory = await this.categoryRepository.findOne({
-        where: { name: categoryName },
-        relations: ['subcategories', 'subcategories.subcategoryItems'],
-      });
-
-      if (foundCategory) {
-        categoryId = foundCategory.id;
-      } else {
-        filterAppliedButNoMatch = true;
-      }
-    }
-
-    // If a specific category/subcategory name was provided in the query params
-    // but no matching entity was found, return an empty set of results.
-    if ((categoryName || subcategoryName || subcategoryItemName || subcategoryItemChildName) && filterAppliedButNoMatch) {
+    // 3. Handle the "no match" scenario immediately
+    if (filterAppliedButNoMatch) {
       return {
         products: [],
         brands: [],
@@ -511,347 +370,70 @@ export class ProductsService {
       };
     }
 
-    // Initialize the main product query builder.
-    const query = this.productRepository
-      .createQueryBuilder('product')
-      .leftJoinAndSelect('product.company', 'company')
-      .leftJoinAndSelect('product.images', 'images')
-      .leftJoinAndSelect('product.colors', 'colors')
-      .leftJoinAndSelect('product.sizes', 'sizes')
-      .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
-      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-      .leftJoinAndSelect('subcategory.category', 'category')
-      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
-      .orderBy('images.sortOrder', 'ASC'); // Order product images by sortOrder
+    // 4. Execute the main product query
+    const products = await productsQuery.getMany();
 
-    // Apply hierarchical filtering based on the resolved IDs (from named parameters).
-    if (resolvedSubcategoryItemChildId) {
-      query.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
-    } else if (subcategoryItemId) {
-      query.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
-    } else if (subcategoryId) {
-      query.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
-    } else if (categoryId) {
-      query.andWhere('category.id = :categoryId', { categoryId });
-    }
-
-    // Apply the broad search term to product name/description AND category hierarchy.
-    // This ensures that 'searchTerm' can match products directly or implicitly via categories.
-    if (searchTerm) {
-      query.andWhere(
-        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
-        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
-        LOWER(category.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
-        { searchTerm: `%${searchTerm}%` },
-      );
-    }
-
-    // Execute the product query and fetch the results.
-    const products = await query.getMany();
-
-    // Sort product images to ensure consistent order.
+    // 5. Post-process products (sorting images, etc.)
     for (const product of products) {
       if (product.images) {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
     }
 
-    // Calculate the minimum and maximum prices from the fetched products.
+    // 6. Generate facets using the shared logic
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
+    
+    // 💡 FIX 2: Pass the correctly structured filterParams object to getBrandsFacet
+    // (Assuming getBrandsFacet's signature has been updated as well)
+    const formattedBrands = await this.getBrandsFacet(filterParams); 
+    
+    const formattedGenders = await this.getGendersFacet(filterParams);
+    const finalCategoryFacets = this.getCategoryFacets(products);
+    const { availabilities, colors } = this.getOtherFacets(products);
 
-    // Initialize formattedBrands array.
-    let formattedBrands: any[] = [];
-    // Populate brands if there are products or if no specific filters were applied (show all brands then).
-    if (products.length > 0 || (!searchTerm && !categoryName && !subcategoryName && !subcategoryItemName && !subcategoryItemChildName)) {
-      const brandsQuery = this.productRepository
-        .createQueryBuilder('product')
-        .leftJoin('product.company', 'company')
-        .leftJoin('product.subcategoryItem', 'subcategoryItem')
-        .leftJoin('subcategoryItem.subcategory', 'subcategory')
-        .leftJoin('subcategory.category', 'category')
-        .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild')
-        .select(['company.id AS id', 'company.entityName AS name'])
-        .groupBy('company.id')
-        .addGroupBy('company.entityName');
-
-      // Apply the same hierarchical filtering to the brands query.
-      if (resolvedSubcategoryItemChildId) {
-        brandsQuery.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
-      } else if (subcategoryItemId) {
-        brandsQuery.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
-      } else if (subcategoryId) {
-        brandsQuery.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
-      } else if (categoryId) {
-        brandsQuery.andWhere('category.id = :categoryId', { categoryId });
-      }
-
-      // Apply the broad search term to the brands query as well.
-      if (searchTerm) {
-        brandsQuery.andWhere(
-          `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
-          LOWER(product.description) LIKE LOWER(:searchTerm) OR 
-          LOWER(category.name) LIKE LOWER(:searchTerm) OR
-          LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
-          LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
-          LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
-          { searchTerm: `%${searchTerm}%` },
-        );
-      }
-      const usedBrands = await brandsQuery.getRawMany();
-      formattedBrands = usedBrands.map(b => ({
-        id: b.id,
-        entityName: b.name,
-      }));
-    }
-
-    // Fetch all categories and their relations for building the facet tree.
-    const allCategories = await this.categoryRepository.find({
-      relations: ['subcategories', 'subcategories.subcategoryItems', 'subcategories.subcategoryItems.subcategoryItemChildren'],
-      order: { name: 'ASC' },
-    });
-
-    // Map categories into a format suitable for facets, including their nested structure.
-    const categoriesForFacets = allCategories.map(cat => ({
-      id: cat.id,
-      name: cat.name,
-      subCategory: cat.subcategories
-        ? cat.subcategories.map(subcat => ({
-          id: subcat.id,
-          name: subcat.name,
-          subcategoryItems: subcat.subcategoryItems
-            ? subcat.subcategoryItems.map(item => ({
-              id: item.id,
-              name: item.name,
-              subcategoryItemChildren: item.subcategoryItemChildren
-                ? item.subcategoryItemChildren.map(child => ({
-                  id: child.id,
-                  name: child.name,
-                }))
-                : [],
-            }))
-            : [],
-        }))
-        : [],
-    }));
-
-    // Build a hierarchy map from the *filtered* products to refine the category facets.
-    const productCategoryHierarchy = new Map<
-      string,
-      {
-        id: string;
-        name: string;
-        subCategory: Map<
-          string,
-          {
-            id: string;
-            name: string;
-            subcategoryItems: Map<string, { id: string; name: string; subcategoryItemChildren: Map<string, { id: string; name: string }> }>;
-          }
-        >;
-      }
-    >();
-
-    for (const product of products) {
-      const mainCategory = product.subcategoryItem?.subcategory?.category;
-      const subcategory = product.subcategoryItem?.subcategory;
-      const subcategoryItem = product.subcategoryItem;
-      const subcategoryItemChild = product.subcategoryItemChild;
-
-      if (mainCategory) {
-        if (!productCategoryHierarchy.has(mainCategory.id)) {
-          productCategoryHierarchy.set(mainCategory.id, {
-            id: mainCategory.id,
-            name: mainCategory.name,
-            subCategory: new Map(),
-          });
-        }
-        const currentCategory = productCategoryHierarchy.get(mainCategory.id)!;
-
-        if (subcategory) {
-          if (!currentCategory.subCategory.has(subcategory.id)) {
-            currentCategory.subCategory.set(subcategory.id, {
-              id: subcategory.id,
-              name: subcategory.name,
-              subcategoryItems: new Map(),
-            });
-          }
-          const currentSubcategory = currentCategory.subCategory.get(
-            subcategory.id,
-          )!;
-
-          if (subcategoryItem) {
-            if (!currentSubcategory.subcategoryItems.has(subcategoryItem.id)) {
-              currentSubcategory.subcategoryItems.set(subcategoryItem.id, {
-                id: subcategoryItem.id,
-                name: subcategoryItem.name,
-                subcategoryItemChildren: new Map(),
-              });
-            }
-            const currentSubcategoryItem = currentSubcategory.subcategoryItems.get(
-              subcategoryItem.id,
-            )!;
-
-            if (subcategoryItemChild) {
-              if (!currentSubcategoryItem.subcategoryItemChildren.has(subcategoryItemChild.id)) {
-                currentSubcategoryItem.subcategoryItemChildren.set(subcategoryItemChild.id, {
-                  id: subcategoryItemChild.id,
-                  name: subcategoryItemChild.name,
-                });
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Filter the full category facet tree based on the products found in the current query.
-    const finalCategoryFacets = categoriesForFacets.map(cat => {
-      const enrichedCat = { ...cat };
-      if (productCategoryHierarchy.has(cat.id)) {
-        const productHierarchyCat = productCategoryHierarchy.get(cat.id)!;
-        enrichedCat.subCategory = enrichedCat.subCategory.map(subcat => {
-          const enrichedSubcat = { ...subcat };
-          if (productHierarchyCat.subCategory.has(subcat.id)) {
-            const productHierarchySubcat = productHierarchyCat.subCategory.get(
-              subcat.id,
-            )!;
-            enrichedSubcat.subcategoryItems = enrichedSubcat.subcategoryItems.map(item => {
-              const enrichedItem = { ...item };
-              if (productHierarchySubcat.subcategoryItems.has(item.id)) {
-                const productHierarchyItem = productHierarchySubcat.subcategoryItems.get(item.id)!;
-                enrichedItem.subcategoryItemChildren = enrichedItem.subcategoryItemChildren.filter(
-                  child => productHierarchyItem.subcategoryItemChildren.has(child.id)
-                );
-              } else {
-                enrichedItem.subcategoryItemChildren = [];
-              }
-              return enrichedItem;
-            }).filter(item => item.subcategoryItemChildren.length > 0);
-          } else {
-            enrichedSubcat.subcategoryItems = [];
-          }
-          return enrichedSubcat;
-        });
-        enrichedCat.subCategory = enrichedCat.subCategory.filter(
-          subcat => subcat.subcategoryItems.length > 0,
-        );
-      } else {
-        enrichedCat.subCategory = [];
-      }
-      return enrichedCat;
-    });
-
-    // Query for distinct genders based on the current product set.
-    const productGendersResult = this.productRepository
-      .createQueryBuilder('product')
-      .select('DISTINCT product.gender', 'gender')
-      .where('product.gender IS NOT NULL')
-      .leftJoin('product.subcategoryItem', 'subcategoryItem')
-      .leftJoin('subcategoryItem.subcategory', 'subcategory')
-      .leftJoin('subcategory.category', 'category')
-      .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild');
-
-    // Apply the same hierarchical filtering to the gender query.
-    if (resolvedSubcategoryItemChildId) {
-      productGendersResult.andWhere('product.subcategoryItemChild.id = :resolvedSubcategoryItemChildId', { resolvedSubcategoryItemChildId });
-    } else if (subcategoryItemId) {
-      productGendersResult.andWhere('subcategoryItem.id = :subcategoryItemId', { subcategoryItemId });
-    } else if (subcategoryId) {
-      productGendersResult.andWhere('subcategory.id = :subcategoryId', { subcategoryId });
-    } else if (categoryId) {
-      productGendersResult.andWhere('category.id = :categoryId', { categoryId });
-    }
-
-    // Apply the broad search term to the gender query as well.
-    if (searchTerm) {
-      productGendersResult.andWhere(
-        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
-        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
-        LOWER(category.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR
-        LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm))`,
-        { searchTerm: `%${searchTerm}%` },
-      );
-    }
-    const distinctProductGenders = (await productGendersResult.getRawMany()).map(
-      g => g.gender,
-    );
-    // Combine distinct genders with a predefined list of all possible genders.
-    const allPossibleGenders = ['women', 'men', 'unisex'];
-    const genders = Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
-
-    // Determine availability statuses from the fetched products.
-    const availabilitySet = new Set<string>();
-    for (const product of products as any[]) {
-      const inStock = product.variants?.some(v => v.stock > 0);
-      const status = inStock ? 'In stock' : 'Out of stock';
-      (product as any).availability = status; // Add availability status to each product.
-      availabilitySet.add(status);
-    }
-    const availabilities = Array.from(availabilitySet);
-
-    // Collect all unique colors from the fetched products.
-    const allColorsMap = new Map<string, { name: string; code: string }>();
-    for (const product of products) {
-      if (product.colors) {
-        for (const color of product.colors) {
-          if (!allColorsMap.has(color.code)) {
-            allColorsMap.set(color.code, {
-              name: color.name,
-              code: color.code,
-            });
-          }
-        }
-      }
-    }
-    const colors = Array.from(allColorsMap.values());
-
-    // Return the comprehensive product search results.
+    // 7. Return the final result
     return {
       products,
       brands: formattedBrands,
       priceRange: { min: minPrice, max: maxPrice },
       category: finalCategoryFacets,
-      genders,
+      genders: formattedGenders,
       availabilities,
       colors,
     };
   }
 
+  // FIND PRODUCT BY SLUG
   async findBySlug(slug: string): Promise<Product> {
-    const product = await this.productRepository.findOne({
-      where: { slug },
-      relations: [
-        'company',
-        'images',
-        'colors',
-        'sizes',
-        'subcategoryItem',
-        'subcategoryItem.subcategory',
-        'subcategoryItem.subcategory.category',
-        'variants'
-      ],
-    });
-  
+    const product = await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.company', 'company')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.variants', 'variants')
+      // Conditional joins based on the existence of subcategoryItemChild
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
+      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
+      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .where('product.slug = :slug', { slug })
+      .getOne();
+
     if (!product) {
       throw new NotFoundException(`Product with slug ${slug} not found`);
     }
-  
+
     // Sort sizes by sortOrder before returning
     if (product.sizes) {
       product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
     }
 
-    // Sort sizes by sortOrder before returning
+    // Sort images by sortOrder before returning
     if (product.images) {
       product.images.sort((a, b) => a.sortOrder - b.sortOrder);
-
     }
-  
+
     return product;
   }
     
@@ -863,10 +445,7 @@ export class ProductsService {
         'subcategoryItem',
         'subcategoryItem.subcategory',
         'subcategoryItem.subcategory.category',
-        'subcategoryItemChild', // Load the direct child relation
-        // If a product has a subcategoryItemChild, its parent subcategoryItem,
-        // subcategory, and category will also be loaded via the relations on subcategoryItemChild.
-        // We also keep the direct subcategoryItem relations for products that don't have a child.
+        'subcategoryItemChild'
       ],
     });
 
@@ -891,7 +470,7 @@ export class ProductsService {
   }
 
   async performFreeFormSearch(searchTerm?: string): Promise<SearchSuggestion[]> {
-    const normalizedSearchTerm = searchTerm ? this.normalizeSearchText(searchTerm) : null;
+    const normalizedSearchTerm = searchTerm ? normalizeSearchText(searchTerm) : null;
     const suggestions: SearchSuggestion[] = [];
 
     if (!normalizedSearchTerm) {
@@ -970,5 +549,327 @@ export class ProductsService {
     return uniqueSuggestions;
   }
 
-  
+  // ==================================================================================
+  // Reusable Functions
+  // ==================================================================================
+
+  // Reusable method to generate and save variants
+  private async generateVariants(product: Product, dto: CreateProductDto): Promise<ProductVariant[]> {
+    const variantsToSave: ProductVariant[] = [];
+
+    // If no dto.variants, generate cartesian product of colors and sizes
+    if (!dto.variants?.length) {
+      for (const color of product.colors) {
+        for (const size of product.sizes) {
+          const variant = new ProductVariant();
+          variant.color = color;
+          variant.size = size;
+          variant.sku = `${product.slug}-${color.code}-${size.size}`;
+          variant.price = product.price || 0;
+          variant.stock = 0;
+          variant.product = product;
+          variantsToSave.push(variant);
+        }
+      }
+    } else {
+      // Use provided variants in DTO
+      for (const v of dto.variants) {
+        const variant = new ProductVariant();
+        variant.stock = v.stock;
+        variant.sku = v.sku;
+        variant.price = v.price;
+        variant.product = product;
+
+        const matchedColor = product.colors.find((c) => c.code === v.colorCode);
+        if (!matchedColor) {
+          throw new BadRequestException(`No matching color for code ${v.colorCode}`);
+        }
+        variant.color = matchedColor;
+
+        const matchedSize = product.sizes.find((s) => s.size === v.size);
+        if (!matchedSize) {
+          throw new BadRequestException(`No matching size for ${v.size}`);
+        }
+        variant.size = matchedSize;
+
+        variantsToSave.push(variant);
+      }
+    }
+
+    return this.productVariantRepository.save(variantsToSave);
+  }
+
+  /**
+   * @function calculatePriceRange
+   * @description Helper function to calculate the minimum and maximum effective prices
+   * from an array of products, prioritizing `salePrice` if available.
+   * @param {Array<Product>} products - An array of product objects.
+   * @returns {{min: number, max: number}} An object containing the minimum and maximum effective prices.
+   */
+  private async calculatePriceRange(products: any[]): Promise<{ min: number; max: number; }> {
+    // Extract prices from products, prioritizing salePrice if it exists and is a number,
+    // otherwise use the regular price.
+    const prices = products.map(p =>
+      (typeof p.salePrice === 'number' && p.salePrice !== null) ? p.salePrice : p.price
+    ).filter(price => typeof price === 'number' && price !== null); // Ensure valid numbers for min/max
+
+    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+
+
+    return { min: minPrice, max: maxPrice };
+  }
+
+  // Add this new private helper function to your ProductsService class
+  private async saveProductImages(product: Product, imageDtos: CreateProductImageDto[]): Promise<ProductImage[]> {
+    // If no image DTOs are provided, return an empty array
+    if (!imageDtos || imageDtos.length === 0) {
+      product.images = [];
+      return [];
+    }
+
+    // Create new ProductImage entities from the provided DTOs
+    const newImages = imageDtos.map((imgDto, i) => {
+      const img = new ProductImage();
+      img.url = imgDto.url;
+      img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
+      img.sortOrder = i;
+      img.product = product; // Link the image to the product
+      return img;
+    });
+
+    // Assign the new array of images to the product entity.
+    // Assuming a cascade relationship (`cascade: true`), TypeORM will handle
+    // removing old images and creating new ones on save.
+    product.images = newImages;
+
+    // The caller (upsert function) will handle the final product save.
+    return newImages;
+  }
+
+  getCategoryFacets(products: any[]): any[] {
+    const categoryMap = new Map();
+
+    for (const product of products) {
+      const category = product.subcategoryItem?.subcategory?.category;
+
+      if (category) {
+        if (!categoryMap.has(category.id)) {
+          categoryMap.set(category.id, {
+            title: category.name,
+            slug: category.slug,
+            child: new Map()
+          });
+        }
+
+        const currentCategory = categoryMap.get(category.id);
+        const granularChildMap = currentCategory.child;
+
+        const granularItem = product.subcategoryItemChild || product.subcategoryItem;
+
+        if (granularItem) {
+          if (!granularChildMap.has(granularItem.id)) {
+            granularChildMap.set(granularItem.id, {
+              id: granularItem.id,
+              name: granularItem.name,
+              slug: granularItem.slug,
+            });
+          }
+        }
+      }
+    }
+    
+    return Array.from(categoryMap.values()).map(cat => ({
+      title: cat.title,
+      slug: cat.slug,
+      child: Array.from(cat.child.values())
+    }));
+  }
+
+  /**
+   * Applies hierarchical category and subcategory filters to the provided TypeORM query builder.
+   * It uses a cascading, most-to-least-specific approach, and includes an extension to 
+   * fetch parent products when a child is explicitly filtered.
+   *
+   * @param query - The TypeORM SelectQueryBuilder instance.
+   * @param categorySlug - Optional, filters by top-level category slug.
+   * @param subcategorySlug - Optional, filters by subcategory slug.
+   * @param subcategoryItemSlugs - Optional, filters by one or more subcategory item slugs (multi-select).
+   * @param subcategoryItemChildSlug - Optional, filters by a child item slug.
+   * @returns A promise that resolves to true if filters were applied but no products were found (empty result), false otherwise.
+   */
+  async applyCategoryFilters(
+    query: SelectQueryBuilder<any>,
+    categorySlug?: string,
+    subcategorySlug?: string,
+    subcategoryItemSlugs?: string[],
+    subcategoryItemChildSlug?: string,
+  ): Promise<boolean> {
+    let hasFilter = false;
+
+    // 1. Apply the MOST granular filter first: subcategoryItemChildSlug
+    //    This path is taken when the URL explicitly uses `subcategoryItemChild=handbags`.
+    if (subcategoryItemChildSlug) {
+      // Standard filtering for the child slug
+      query.andWhere('subcategoryItemChild.slug = :childSlug', { 
+          childSlug: subcategoryItemChildSlug 
+      });
+      hasFilter = true;
+    } 
+    
+    // 2. Apply the subcategory item filter (handles multi-select/array)
+    //    This path is taken for your failing request: `subcategoryItem=handbags`.
+    else if (subcategoryItemSlugs && subcategoryItemSlugs.length > 0) {
+      // 💥 THE FIX: Use an OR condition to check the provided slugs against 
+      // BOTH the subcategoryItem.slug (parent) AND the subcategoryItemChild.slug (child).
+      // This allows a single URL parameter to filter products at two hierarchy levels.
+      
+      query.andWhere(
+          '(subcategoryItem.slug IN (:...itemSlugs) OR subcategoryItemChild.slug IN (:...itemSlugs))', 
+          { itemSlugs: subcategoryItemSlugs }
+      );
+      hasFilter = true;
+    } 
+    
+    // 3. Apply the subcategory filter
+    else if (subcategorySlug) {
+      query.andWhere('subcategory.slug = :subcategorySlug', { 
+          subcategorySlug: subcategorySlug 
+      });
+      hasFilter = true;
+    } 
+    
+    // 4. Apply the top-level category filter
+    else if (categorySlug) {
+      query.andWhere('category.slug = :categorySlug', { 
+          categorySlug: categorySlug 
+      });
+      hasFilter = true;
+    }
+
+    // Check if any filter was successfully applied and if it resulted in zero matches
+    if (hasFilter) {
+      const count = await query.getCount();
+      return count === 0; // Returns TRUE if no match is found
+    }
+
+    return false; // Returns FALSE if no category filters were applied
+  }
+
+  // Example of the extracted function
+  applySearchTermFilter(query: SelectQueryBuilder<any>, searchTerm?: string) {
+    if (searchTerm) {
+      query.andWhere(
+        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
+        // ... rest of the search conditions
+        )`,
+        { searchTerm: `%${searchTerm}%` },
+      );
+    }
+  }
+
+  async getBrandsFacet(filterParams: {
+      searchTerm?: string;
+      categorySlug?: string;
+      subcategorySlug?: string;
+      // 💡 FIX 1: Update type to accept string array (multiple selection)
+      subcategoryItemSlugs?: string[]; 
+      subcategoryItemChildSlug?: string;
+  }) {
+      const brandsQuery = this.productRepository
+          .createQueryBuilder('product')
+          .leftJoin('product.company', 'company')
+          .leftJoin('product.subcategoryItem', 'subcategoryItem')
+          .leftJoin('subcategoryItem.subcategory', 'subcategory')
+          .leftJoin('subcategory.category', 'category')
+          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild')
+          .select(['company.id AS id', 'company.entityName AS name'])
+          .groupBy('company.id')
+          .addGroupBy('company.entityName');
+
+      // Apply the same category and search filters as the main product query
+      // 💡 FIX 2: Pass the correct property name from filterParams
+      await this.applyCategoryFilters(
+          brandsQuery,
+          filterParams.categorySlug,
+          filterParams.subcategorySlug,
+          filterParams.subcategoryItemSlugs, // <-- Now passing the array property
+          filterParams.subcategoryItemChildSlug
+      );
+      this.applySearchTermFilter(brandsQuery, filterParams.searchTerm);
+
+      const usedBrands = await brandsQuery.getRawMany();
+      return usedBrands.map(b => ({
+          id: b.id,
+          entityName: b.name,
+      }));
+  }
+
+  // products.service.ts
+
+  async getGendersFacet(filterParams: {
+      searchTerm?: string;
+      categorySlug?: string;
+      subcategorySlug?: string;
+      // 💡 FIX 1: Update type to accept string array (multiple selection)
+      subcategoryItemSlugs?: string[]; 
+      subcategoryItemChildSlug?: string;
+  }) {
+      const gendersQuery = this.productRepository
+          .createQueryBuilder('product')
+          .select('DISTINCT product.gender', 'gender')
+          .where('product.gender IS NOT NULL')
+          .leftJoin('product.subcategoryItem', 'subcategoryItem')
+          .leftJoin('subcategoryItem.subcategory', 'subcategory')
+          .leftJoin('subcategory.category', 'category')
+          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild');
+
+      // Apply the same category and search filters
+      // 💡 FIX 2: Pass the corrected property name from filterParams
+      await this.applyCategoryFilters(
+          gendersQuery,
+          filterParams.categorySlug,
+          filterParams.subcategorySlug,
+          filterParams.subcategoryItemSlugs, // <-- Now passing the array property
+          filterParams.subcategoryItemChildSlug
+      );
+      this.applySearchTermFilter(gendersQuery, filterParams.searchTerm);
+
+      const distinctProductGenders = (await gendersQuery.getRawMany()).map(g => g.gender);
+      const allPossibleGenders = ['women', 'men', 'unisex'];
+
+      // Combine distinct genders with a predefined list to ensure consistency
+      return Array.from(new Set([...allPossibleGenders, ...distinctProductGenders]));
+  }
+
+  getOtherFacets(products: any[]) {
+    const availabilitySet = new Set<string>();
+    const allColorsMap = new Map<string, { name: string; code: string }>();
+
+    for (const product of products) {
+      // Determine availability based on variants' stock
+      const inStock = product.variants?.some(v => v.stock > 0);
+      const status = inStock ? 'In stock' : 'Out of stock';
+      availabilitySet.add(status);
+
+      // Collect all unique colors from the products
+      if (product.colors) {
+        for (const color of product.colors) {
+          if (!allColorsMap.has(color.code)) {
+            allColorsMap.set(color.code, {
+              name: color.name,
+              code: color.code,
+            });
+          }
+        }
+      }
+    }
+
+    return {
+      availabilities: Array.from(availabilitySet),
+      colors: Array.from(allColorsMap.values()),
+    };
+  }
+
 }

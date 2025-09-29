@@ -106,7 +106,7 @@ const categories = [
   },
   {
     title:"Home & Furniture",
-    slug:"category=home-furniture-&-appliances"
+    slug:"category=home-furniture-appliances"
   },
   {
     title:"Sales & Deals",

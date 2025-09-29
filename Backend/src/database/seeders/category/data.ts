@@ -892,6 +892,7 @@ export const categoriesSeedData = [
   {
     id: "0ff2b00f-9b29-4e32-bbb1-d83d0a416b84",
     name: "Home, Furniture & Appliances",
+    slug: "home-furniture-appliances",
     subcategories: [
       {
         id: "26ccfa5e-8ffb-4c68-b09f-9c730b577b5b",

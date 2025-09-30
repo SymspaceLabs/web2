@@ -21,7 +21,15 @@ import { slugify, normalizeSearchText } from './utils/utils';
 export interface SearchSuggestion {
   id: string;
   label: string;
-  type: 'company' | 'product' | 'category' | 'subcategory' | 'subcategory-child';
+  type: 'company' | 'product' | 'category' | 'subcategory-child';
+  slug?: string;
+  link?: string;
+}
+
+// Define the new, required structure for the API response
+export interface SearchResultResponse {
+    shops: SearchSuggestion[];      // Contains results of type 'company'
+    searchResults: SearchSuggestion[]; // Contains results of type 'product', 'category', etc.
 }
 
 @Injectable()
@@ -469,84 +477,102 @@ export class ProductsService {
     };
   }
 
-  async performFreeFormSearch(searchTerm?: string): Promise<SearchSuggestion[]> {
+  async performFreeFormSearch(searchTerm?: string): Promise<SearchResultResponse> {
     const normalizedSearchTerm = searchTerm ? normalizeSearchText(searchTerm) : null;
-    const suggestions: SearchSuggestion[] = [];
+      
+    // Initialize the structured response object
+    const response: SearchResultResponse = { shops: [], searchResults: [] };
 
-    if (!normalizedSearchTerm) {
-        return suggestions;
+    if (!normalizedSearchTerm || normalizedSearchTerm.length < 2) {
+        return response; // Return empty structure on invalid/short query
     }
 
-    const searchKeyword = `%${normalizedSearchTerm}%`;
+    // ⭐️ CRITICAL PERFORMANCE FIX: Use prefix search for index utilization
+    // NOTE: ILIKE is PostgreSQL/MySQL syntax for case-insensitive LIKE.
+    // The '%' at the end allows the database to use an index (like B-tree or pg_trgm GIN).
+    const searchPrefix = `${normalizedSearchTerm}%`;
 
-    // 1. Check for an exact company name match first.
-    const companyMatch = await this.companiesRepository.findOne({
-        where: {
-            entityName: normalizedSearchTerm,
-        },
-    });
+    // ============================================
+    // 1. Search for Company/Shop Matches (Populates 'shops' array)
+    // ============================================
+    
+    // This query finds all companies whose name STARTS with the search term.
+    const companySuggestions = await this.companiesRepository.createQueryBuilder('company')
+        .select(['company.id', 'company.entityName', 'company.slug'])
+        .where('LOWER(company.entityName) LIKE :term', { term: searchPrefix })
+        .limit(3)
+        .getMany();
 
-    if (companyMatch) {
-        suggestions.push({
-            id: `company-${companyMatch.id}`,
-            label: `Search '${companyMatch.entityName}' in Shops`,
+    for (const company of companySuggestions) {
+        response.shops.push({
+            id: `company-${company.id}`,
+            label: company.entityName,
             type: 'company',
+            slug: company.slug
         });
     }
 
-    // 2. Perform a fuzzy search across multiple tables to get general suggestions.
+
+    // ============================================
+    // 2. Search for General Results (Populates 'searchResults' array)
+    // ============================================
+      
+    const generalSuggestions: SearchSuggestion[] = [];
     
-    // Search for matching product names
+    // Search for matching product names (Prefix Search)
     const productSuggestions = await this.productRepository.createQueryBuilder('product')
-        .select('DISTINCT product.name', 'name')
-        .where('LOWER(REPLACE(REPLACE(product.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .select(['product.name', 'product.id'])
+        .where('LOWER(product.name) LIKE :term', { term: searchPrefix })
         .limit(5)
-        .getRawMany();
+        .getMany(); // Use getMany() for full objects if you need IDs later
 
-    // Search for matching category names
+    // Search for matching category names (Prefix Search)
     const categorySuggestions = await this.categoryRepository.createQueryBuilder('category')
-        .select('DISTINCT category.name', 'name')
-        .where('LOWER(REPLACE(REPLACE(category.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .select(['category.name', 'category.id'])
+        .where('LOWER(category.name) LIKE :term', { term: searchPrefix })
         .limit(5)
-        .getRawMany();
+        .getMany();
 
-    // 3. Add the query for subcategoryItemChild
+    // Search for subcategory item children (Prefix Search)
     const subcategoryItemChildSuggestions = await this.subcategoryItemChildRepository.createQueryBuilder('subcategoryItemChild')
-        .select('DISTINCT subcategoryItemChild.name', 'name')
-        .where('LOWER(REPLACE(REPLACE(subcategoryItemChild.name, \'-\', \'\'), \' \', \'\')) LIKE :term', { term: searchKeyword })
+        .select(['subcategoryItemChild.name', 'subcategoryItemChild.id'])
+        .where('LOWER(subcategoryItemChild.name) LIKE :term', { term: searchPrefix })
         .limit(5)
-        .getRawMany();
+        .getMany();
 
-    // 4. Combine all suggestions into the final array.
+    // 3. Combine and Map all General Suggestions
+    
+    // Map products
     for (const item of productSuggestions) {
-        suggestions.push({
-            id: `product-${item.name}`,
+        generalSuggestions.push({
+            id: `product-${item.id}`,
             label: item.name,
             type: 'product',
         });
     }
     
+    // Map categories
     for (const item of categorySuggestions) {
-        suggestions.push({
-            id: `category-${item.name}`,
+        generalSuggestions.push({
+            id: `category-${item.id}`,
             label: item.name,
             type: 'category',
         });
     }
     
-    // Push the subcategoryItemChild results
+    // Map subcategory children
     for (const item of subcategoryItemChildSuggestions) {
-        suggestions.push({
-            id: `subcategory-child-${item.name}`,
+        generalSuggestions.push({
+            id: `subcategory-child-${item.id}`,
             label: item.name,
             type: 'subcategory-child',
         });
     }
 
-    // Remove duplicates
-    const uniqueSuggestions = Array.from(new Map(suggestions.map(item => [item.label, item])).values());
+    // Remove duplicates and assign to the response object
+    response.searchResults = Array.from(new Map(generalSuggestions.map(item => [item.label, item])).values());
 
-    return uniqueSuggestions;
+    return response;
   }
 
   // ==================================================================================

@@ -20,7 +20,7 @@ export default function Section4() {
 
         {/* Grid layout for blog cards */}
         <Grid container spacing={{xs:1, sm:2, md:3}}>
-          {blogs.map((item,index) => (
+          {categoryCards.map((item,index) => (
             <Grid item lg={4} md={4} xs={4} key={index}>
               {/* Motion wrapper for fade-in animation */}
               <motion.div
@@ -47,7 +47,7 @@ export default function Section4() {
 }
 
 // Sample blog data for demonstration purposes
-const blogs = [
+const categoryCards = [
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg1",
     title: "Shirts",

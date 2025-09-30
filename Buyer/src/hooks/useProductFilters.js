@@ -1,6 +1,6 @@
 // src/hooks/useProductFilters.js
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 /**
@@ -29,34 +29,16 @@ function deepEquals(a, b) {
 
         if (keysA.length !== keysB.length) return false;
 
+        // Ensure keys in A are also in B and values are deeply equal
         for (let key of keysA) {
             if (!keysB.includes(key) || !deepEquals(a[key], b[key])) return false;
         }
 
-        return false; // Not objects or not deeply equal
+        return true; // All checks passed for objects
     }
 
     return false; // Not objects or not deeply equal
 }
-
-/**
- * Helper function to extract IDs from the current API category response
- * @param {Array} apiCategoryResponse - The value of initialData.category
- * @returns {Array} List of checked category IDs
- */
-const extractIdsFromApiCategory = (apiCategoryResponse) => {
-    if (!apiCategoryResponse || !Array.isArray(apiCategoryResponse) || apiCategoryResponse.length === 0) {
-        return [];
-    }
-    // Granular categories are in the 'child' array of the top-level object
-    const granularCategoriesFromApi = apiCategoryResponse[0].child;
-    
-    if (granularCategoriesFromApi && Array.isArray(granularCategoriesFromApi)) {
-        // Extract all IDs from the child array. These are the filtered categories.
-        return granularCategoriesFromApi.map(item => item.id).filter(Boolean);
-    }
-    return [];
-};
 
 /**
  * Custom hook to manage product filtering logic and URL synchronization.
@@ -81,13 +63,12 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
 
     const searchParams = memoizedSearchParams; // Use this derived searchParams
 
-    // FIX 1: Correctly initialize checkedCategoryIds from the API data on mount.
+    // FIX 1: Initialize checkedCategoryIds to an empty array.
     const [filterState, setFilterState] = useState(() => ({
         selectedGenders: [],
         selectedBrands: [],
         priceRange: initialData.priceLimits || [0, 1000],
-        // Use the helper to initialize checked IDs
-        checkedCategoryIds: extractIdsFromApiCategory(initialData.category), 
+        checkedCategoryIds: [], // <-- CORRECT: Start with no categories checked by default
         selectedAvailabilities: [],
         selectedColors: [],
         allProducts: initialData.allProducts,
@@ -105,7 +86,7 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
             let newState = { ...prevState };
             let hasChanged = false;
 
-            // --- 1. Synchronize static initial data (Effect 1's role) ---
+            // --- 1. Synchronize static initial data (if they change) ---
             if (!deepEquals(prevState.allProducts, initialData.allProducts)) {
                 newState.allProducts = initialData.allProducts;
                 hasChanged = true;
@@ -114,7 +95,6 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
                 newState.allBrands = initialData.allBrands;
                 hasChanged = true;
             }
-            // Sync initialData.category
             if (!deepEquals(prevState.category, initialData.category)) {
                 newState.category = initialData.category;
                 hasChanged = true;
@@ -139,7 +119,8 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
             }
 
 
-            // --- 2. Initialize filter selections from URL parameters (Effect 2's role) ---
+            // --- 2. Initialize filter selections from URL parameters ---
+            
             // Genders
             const currentGenderQuery = searchParams.getAll("gender").map(g => g.toLowerCase());
             const validGenders = initialData.allGenders || [];
@@ -149,55 +130,28 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
                 hasChanged = true;
             }
 
-            // FIX 2: Correct Category Initialization/Sync
-            let initialCheckedCategoryIds = [];
-            const urlCategorySlug = searchParams.get("category"); // URL holds the slug (e.g., 't-shirts')
-
-            if (urlCategorySlug && initialData.category) {
-                // If URL parameter is present, we must look up the ID from the slug
-                
-                // Helper to find ID by slug within the API structure
-                const findIdBySlug = (categories) => {
-                    for (const cat of categories) {
-                        if (cat.slug === urlCategorySlug) return cat.id;
-                        if (cat.child) {
-                            const foundId = findIdBySlug(cat.child);
-                            if (foundId) return foundId;
-                        }
-                    }
-                    return null;
-                };
-
-                // NOTE: This assumes initialData.category contains the full data structure needed for lookup.
-                // In a true application, you'd search the full category tree (CATEGORIES_DATA).
-                // For simplicity, we search the `initialData.category` prop (the filtered list).
-                // The most reliable check is against the IDs returned by the API.
-
-                // If URL slug exists, rely on the API data to confirm which items are active
-                // by checking if the slug exists in the API response.
-                const currentApiIds = extractIdsFromApiCategory(initialData.category);
-                
-                if (currentApiIds.length > 0) {
-                     // Check if any of the IDs returned by the API belong to the category slug in the URL
-                     // This step is complex. The simplest, most direct fix for the T-shirt being checked is:
-                     initialCheckedCategoryIds = currentApiIds;
-                }
-                
-            } else {
-                // If no URL parameter, use the API response as the source of truth
-                initialCheckedCategoryIds = extractIdsFromApiCategory(initialData.category);
-            }
+            // FIX 2: CATEGORY FILTER SYNC REMOVED
+            // To prevent checkboxes from being checked by default based on the URL,
+            // we skip reading any category parameters from the URL.
+            // We ensure checkedCategoryIds remains [] (its initial state) unless a user interacts.
             
-            // The simplest, most effective logic: always use the API IDs unless actively filtering with a URL param.
-            // Since the API response *is* the filter result, we rely on it.
-            const newCheckedIds = extractIdsFromApiCategory(initialData.category);
-
+            /* const urlCategorySlugs = searchParams.getAll("subcategoryItem");
+            let newCheckedIds = [];
+            
+            // ... (Removed the findIdsBySlugs logic) ...
+            
             if (!deepEquals(prevState.checkedCategoryIds, newCheckedIds)) {
-                newState.checkedCategoryIds = newCheckedIds;
+                // If the user wants client-side only, we should ensure this is always []
+                // on initial load, unless other non-URL sync logic is applied.
+                newState.checkedCategoryIds = []; 
                 hasChanged = true;
             }
+            */
+            // Since `checkedCategoryIds` is initialized to `[]`, we do nothing here
+            // to maintain the state as `[]`.
 
-            // Price Range from URL logic... (kept the same)
+            
+            // Price Range from URL logic...
             const urlMinPrice = parseFloat(searchParams.get("price_min"));
             const urlMaxPrice = parseFloat(searchParams.get("price_max"));
             const defaultMin = initialData.priceLimits?.[0] || 0;
@@ -211,25 +165,27 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
                 hasChanged = true;
             }
 
-            // Brands logic... (kept the same)
+            // Brands logic...
             const urlBrandIds = searchParams.getAll("brand");
-            const newSelectedBrands = urlBrandIds.map(id => initialData.allBrands.find(b => b.id === id)).filter(Boolean);
+            // NOTE: Assuming allBrands contains objects with 'id'
+            const newSelectedBrands = urlBrandIds.map(id => initialData.allBrands?.find(b => b.id === id)).filter(Boolean);
             if (!deepEquals(prevState.selectedBrands, newSelectedBrands)) {
                 newState.selectedBrands = newSelectedBrands;
                 hasChanged = true;
             }
 
-            // Availabilities logic... (kept the same)
+            // Availabilities logic...
             const urlAvailabilities = searchParams.getAll("availability");
-            const newSelectedAvailabilities = urlAvailabilities.filter(avail => initialData.allAvailabilities.includes(avail));
+            const newSelectedAvailabilities = urlAvailabilities.filter(avail => initialData.allAvailabilities?.includes(avail));
             if (!deepEquals(prevState.selectedAvailabilities, newSelectedAvailabilities)) {
                 newState.selectedAvailabilities = newSelectedAvailabilities;
                 hasChanged = true;
             }
 
-            // Colors logic... (kept the same)
+            // Colors logic...
             const urlColorCodes = searchParams.getAll("colors");
-            const newSelectedColors = urlColorCodes.map(code => initialData.allColors.find(c => c.code === code)).filter(Boolean);
+            // NOTE: Assuming allColors contains objects with 'code'
+            const newSelectedColors = urlColorCodes.map(code => initialData.allColors?.find(c => c.code === code)).filter(Boolean);
             if (!deepEquals(prevState.selectedColors, newSelectedColors)) {
                 newState.selectedColors = newSelectedColors;
                 hasChanged = true;
@@ -241,16 +197,11 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
 
     /**
      * Generic handler for filter changes (checkboxes, radio buttons) that updates the URL.
-     *      * NOTE: Assumes the granular categories from CategoryAccordion are managed 
-     * via the URL parameter 'subcategoryItem' and should support multi-select.
-     *      * @param {string} filterType - The type of filter being changed ('category', 'gender', 'brand', etc.).
-     * @param {*} value - The value of the filter item (e.g., 't-shirts' slug, 'male', brand ID).
-     * @param {boolean} isChecked - The desired new state (true to add/set, false to remove/clear).
+     * NOTE: This function IS used to update the URL for all filters EXCEPT category,
+     * which you now manage via setFilterState in ProductSearchPageView.js
      */
     const handleFilterChange = useCallback((filterType, value, isChecked) => {
-        // Start with a copy of the current URL parameters
-        // NOTE: We MUST use new URLSearchParams(window.location.search) to get the most 
-        // up-to-date parameters, as the `searchParams` prop/memoized value is often stale.
+        // NOTE: Use window.location.search to get the most up-to-date parameters.
         const newUrlParams = new URLSearchParams(window.location.search);
 
         switch (filterType) {
@@ -266,36 +217,10 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
             }
 
             case 'category': {
-                // 🚩 THE FIX IS HERE 🚩
-                // We assume 'category' filterType from the UI must update the 
-                // multi-select URL parameter 'subcategoryItem'.
-                const itemSlug = value; 
-                const urlParamKey = 'subcategoryItem'; // The parameter key we MUST manage
-
-                // 1. Get ALL current values for 'subcategoryItem'
-                const currentItems = newUrlParams.getAll(urlParamKey);
-                let updatedItems = new Set(currentItems);
-
-                if (isChecked) {
-                    // ADD: Add the new slug
-                    updatedItems.add(itemSlug);
-                } else {
-                    // REMOVE: Delete the slug
-                    updatedItems.delete(itemSlug);
-                }
-                
-                // 2. Clear all existing entries for this key
-                newUrlParams.delete(urlParamKey);
-                
-                // 3. Clear single-select keys that might conflict
-                newUrlParams.delete('category');
-                newUrlParams.delete('subcategory');
-                newUrlParams.delete('subcategoryItemChild'); 
-
-                // 4. Re-append the combined list of unique slugs (This creates the desired multi-param URL)
-                updatedItems.forEach(slug => newUrlParams.append(urlParamKey, slug));
-
-                break;
+                // IMPORTANT: This case should now be unused if you update the category 
+                // state directly via setFilterState in the parent component.
+                console.warn("Category filter should be handled by updating setFilterState in the parent component, not pushing to URL here.");
+                return; 
             }
 
             case 'availability': {
@@ -311,7 +236,6 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
 
             case 'colors': {
                 const currentColors = newUrlParams.getAll('colors');
-                // Ensuring we get the string code, whether value is a string or an object
                 const colorCode = typeof value === 'object' && value !== null ? value.code : value; 
                 
                 let updatedColors = isChecked
@@ -325,7 +249,6 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
 
             case 'brand': {
                 const currentBrands = newUrlParams.getAll('brand');
-                // Ensuring we get the string ID, whether value is a string or an object
                 const brandId = typeof value === 'object' && value !== null ? value.id : value;
                 
                 let updatedBrands = isChecked
@@ -333,7 +256,7 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
                     : currentBrands.filter(b => b !== brandId);
                 
                 newUrlParams.delete('brand');
-                updatedBrands.forEach(b => newUrlParams.append('brand', b));
+                updatedBrands.forEach(b => newUrlParams.append('brand', brandId)); // Fix: use brandId instead of b in the append
                 break;
             }
             
@@ -360,7 +283,7 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
     const handleResetAllFilters = useCallback(() => {
         const newUrlParams = new URLSearchParams(window.location.search);
         // Remove all filter parameters that this hook manages
-        ['gender', 'category', 'price_min', 'price_max', 'brand', 'availability', 'colors', 'subcategoryItem', 'subcategoryItemChild', 'subcategory'].forEach(key => {
+        ['gender', 'price_min', 'price_max', 'brand', 'availability', 'colors', 'subcategoryItem', 'category', 'subcategory'].forEach(key => {
             newUrlParams.delete(key);
         });
         // Push the URL without filter parameters

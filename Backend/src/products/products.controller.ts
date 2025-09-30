@@ -11,12 +11,16 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { SearchResultResponse } from './products.service';
+
 
 @Controller('products')
 export class ProductsController {
   constructor(
     private productsService: ProductsService,
   ) {}
+
+  
 
   @Post()
   async create(@Body() body: CreateProductDto) {
@@ -54,9 +58,10 @@ export class ProductsController {
   }
 
   @Get('search') // This must be placed before the general ':id' or ':slug' route
-  async search(@Query('q') query?: string) {
-    const results = await this.productsService.performFreeFormSearch(query);
-    return results;
+    async search(@Query('q') query?: string): Promise<SearchResultResponse> {
+      // The service now returns the structured object { shops: [], searchResults: [] }
+      const results = await this.productsService.performFreeFormSearch(query);
+      return results;
   }
 
 

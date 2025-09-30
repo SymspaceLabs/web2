@@ -152,7 +152,7 @@ export default function Section4() {
 
 // Static product list as placeholder data.
 const categories = [
-  { id: 1, title: "Shirts", thumbnail: "/assets/images/icons/shirt.svg", slug: "subcategoryItem=shirts" },
+  { id: 1, title: "T-shirts", thumbnail: "/assets/images/icons/shirt.svg", slug: "subcategoryItem=t-shirts" },
   { id: 2, title: "Hoodies", thumbnail: "/assets/images/icons/hoodie.svg", slug: "subcategoryItem=hoodie" },
   { id: 3, title: "Pants", thumbnail: "/assets/images/icons/pants.svg", slug: "subcategoryItem=pants" },
   { id: 4, title: "Furniture", thumbnail: "/assets/images/icons/furniture.svg", slug: "subcategory=furniture" },

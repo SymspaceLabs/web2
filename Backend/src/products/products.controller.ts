@@ -13,14 +13,11 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
 import { SearchResultResponse } from './products.service';
 
-
 @Controller('products')
 export class ProductsController {
   constructor(
     private productsService: ProductsService,
   ) {}
-
-  
 
   @Post()
   async create(@Body() body: CreateProductDto) {
@@ -35,18 +32,15 @@ export class ProductsController {
   @Get()
   async getAllProducts(
     @Query('search') search?: string,
-    @Query('category') categorySlug?: string, // Changed from categorySlug
-    @Query('subcategory') subcategorySlug?: string, // Changed from subcategorySlug
-    // @Query('subcategoryItem') subcategoryItemSlug?: string, // Changed from subcategoryItemSlug
-    @Query('subcategoryItem') subcategoryItemSlugs?: string | string[], // <-- FIX: Expect string or array
-
-    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string // Changed from subcategoryItemChildSlug
+    @Query('category') categorySlug?: string,
+    @Query('subcategory') subcategorySlug?: string,
+    @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
+    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string
   ) {
 
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
     ? subcategoryItemSlugs 
     : subcategoryItemSlugs ? [subcategoryItemSlugs] : undefined;
-
 
     return await this.productsService.findAll(
       search,
@@ -80,8 +74,6 @@ export class ProductsController {
   async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
-
-
 
 }
 

@@ -344,6 +344,7 @@ export class ProductsService {
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
+      .leftJoinAndSelect('product.variants', 'variants')
       .orderBy('images.sortOrder', 'ASC');
 
     // 2. Apply the category and search term filters

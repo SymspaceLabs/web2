@@ -28,11 +28,8 @@ export enum ProductGender {
   UNISEX = 'unisex',
 }
 
-@Entity('product') // Explicitly naming the table 'product' is good practice
+@Entity('product')
 export class Product {
-  // FIX 1: Changed to @PrimaryColumn('uuid')
-  // Use PrimaryColumn if IDs are pre-generated (e.g., from seed data, or manually assigned UUIDs).
-  // Use PrimaryGeneratedColumn if the database should generate the ID automatically on insert.
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -42,7 +39,6 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   price: number;
 
-  // FIX 2: Added explicit foreign key column 'subcategoryItemId' and @JoinColumn
   @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
   subcategoryItemId: string;
 
@@ -53,7 +49,6 @@ export class Product {
   @JoinColumn({ name: 'subcategoryItemId' }) // Links to the subcategoryItemId column
   subcategoryItem: SubcategoryItem;
 
-  // FIX 3: Added explicit foreign key column 'subcategoryItemChildId' and @JoinColumn
   @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item child
   subcategoryItemChildId: string;
 
@@ -123,4 +118,34 @@ export class Product {
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
+
+  // NEW ATTRIBUTES BELOW
+  @Column({ nullable: true })
+  occasion: string;
+
+  @Column({ nullable: true })
+  season: string;
+
+  @Column({ nullable: true })
+  age_group: string;
+
+  @Column({ nullable: true })
+  ar_type: string;
+
+  @Column({ nullable: true })
+  indoor_outdoor: string;
+
+  @Column({ nullable: true })
+  material: string;
+
+  @Column({ nullable: true })
+  style: string;
+
+  @Column({ default: false })
+  accessible: boolean;
+
+  @Column({ default: false })
+  safety_certified: boolean;
+
+
 }

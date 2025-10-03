@@ -1,331 +1,356 @@
-// src/hooks/useProductFilters.js
-
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-// Assuming arraysEqual handles deep comparison for arrays of primitives.
-// We will add a more robust deepEquals for objects and nested structures.
-import { arraysEqual } from "@/utils/arraysEqual";
 
 /**
  * Helper function for deep equality comparison of objects and arrays.
- * This is crucial to prevent unnecessary state updates when references change but content does not.
- * @param {*} a - First value to compare.
- * @param {*} b - Second value to compare.
- * @returns {boolean} True if values are deeply equal, false otherwise.
  */
 function deepEquals(a, b) {
-  if (a === b) return true; // Same reference or primitive value
+    if (a === b) return true;
 
-  if (a && b && typeof a === 'object' && typeof b === 'object') {
-    if (Array.isArray(a)) {
-      if (!Array.isArray(b) || a.length !== b.length) return false;
-      for (let i = 0; i < a.length; i++) {
-        if (!deepEquals(a[i], b[i])) return false;
-      }
-      return true;
+    if (a && b && typeof a === 'object' && typeof b === 'object') {
+        if (Array.isArray(a)) {
+            if (!Array.isArray(b) || a.length !== b.length) return false;
+            for (let i = 0; i < a.length; i++) {
+                if (!deepEquals(a[i], b[i])) return false;
+            }
+            return true;
+        }
+
+        if (Array.isArray(b)) return false;
+
+        const keysA = Object.keys(a);
+        const keysB = Object.keys(b);
+
+        if (keysA.length !== keysB.length) return false;
+
+        for (let key of keysA) {
+            if (!keysB.includes(key) || !deepEquals(a[key], b[key])) return false;
+        }
+
+        return true;
     }
 
-    if (Array.isArray(b)) return false; // One is array, other is object
-
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
-
-    if (keysA.length !== keysB.length) return false;
-
-    for (let key of keysA) {
-      if (!keysB.includes(key) || !deepEquals(a[key], b[key])) return false;
-    }
-
-    return false; // Not objects or not deeply equal
-  }
-
-  return false; // Not objects or not deeply equal
+    return false;
 }
 
 /**
  * Custom hook to manage product filtering logic and URL synchronization.
- * It initializes filter state from URL parameters and updates it based on
- * user interactions. It also ensures the filterable data (like allProducts,
- * allBrands, etc.) is kept in sync with the latest data from the server.
- *
- * @param {object} initialData - Initial product data (allProducts, allBrands, etc.)
- * from the useProductData hook. This data is expected
- * to update when new products are fetched.
- * @param {object} urlSearchParamsObj - Current URL search parameters as a plain object
- * obtained from next/navigation's useSearchParams.
- * @returns {{
- * filterState: object,
- * setFilterState: function,
- * handleFilterChange: function,
- * handlePriceRangeChange: function,
- * handleResetAllFilters: function,
- * }} Filter state and handlers.
+ * Price range, Gender, Brands, AND Colors are now managed purely client-side unless initial data changes.
  */
 export function useProductFilters(initialData, urlSearchParamsObj) {
-  const router = useRouter();
-  const pathname = usePathname();
+    const router = useRouter();
+    const pathname = usePathname();
 
-  // Memoize URLSearchParams object to ensure its reference is stable.
-  const memoizedSearchParams = useMemo(() => {
-    const params = new URLSearchParams();
-    if (urlSearchParamsObj) {
-      // Use urlSearchParamsObj.entries() for robust iteration over all params,
-      // including those with multiple values for the same key.
-      for (const [key, value] of urlSearchParamsObj.entries()) {
-        params.append(key, value);
-      }
-    }
-    return params;
-  }, [urlSearchParamsObj]);
-
-  const searchParams = memoizedSearchParams; // Use this derived searchParams
-
-  // Initialize filterState with default values and initialData's limits.
-  // This state will be fully managed by the single useEffect below based on URL and initialData.
-  const [filterState, setFilterState] = useState(() => ({
-    selectedGenders: [],
-    selectedBrands: [],
-    priceRange: initialData.priceLimits || [0, 1000],
-    checkedCategoryIds: [],
-    selectedAvailabilities: [],
-    selectedColors: [],
-    allProducts: initialData.allProducts,
-    allBrands: initialData.allBrands,
-    category: initialData.category,
-    allGenders: initialData.allGenders,
-    allAvailabilities: initialData.allAvailabilities,
-    allColors: initialData.allColors,
-    priceLimits: initialData.priceLimits || [0, 1000],
-  }));
-
-  // Consolidate Data Sync and URL Filter Apply into a single useEffect.
-  // This effect is the SINGLE SOURCE OF TRUTH for initializing and updating `filterState`.
-  useEffect(() => {
-    // console.log('useProductFilters useEffect: Syncing state from URL and initialData');
-
-    setFilterState(prevState => {
-      let newState = { ...prevState };
-      let hasChanged = false;
-
-      // --- 1. Synchronize static initial data (Effect 1's role) ---
-      if (!deepEquals(prevState.allProducts, initialData.allProducts)) {
-        newState.allProducts = initialData.allProducts;
-        hasChanged = true;
-      }
-      if (!deepEquals(prevState.allBrands, initialData.allBrands)) {
-        newState.allBrands = initialData.allBrands;
-        hasChanged = true;
-      }
-      if (!deepEquals(prevState.category, initialData.category)) {
-        newState.category = initialData.category;
-        hasChanged = true;
-      }
-      if (!deepEquals(prevState.allGenders, initialData.allGenders)) {
-        newState.allGenders = initialData.allGenders;
-        hasChanged = true;
-      }
-      if (!deepEquals(prevState.allAvailabilities, initialData.allAvailabilities)) {
-        newState.allAvailabilities = initialData.allAvailabilities;
-        hasChanged = true;
-      }
-      if (!deepEquals(prevState.allColors, initialData.allColors)) {
-        newState.allColors = initialData.allColors;
-        hasChanged = true;
-      }
-      // Special handling for priceLimits, update priceRange if limits change significantly
-      if (!deepEquals(prevState.priceLimits, initialData.priceLimits)) {
-        newState.priceLimits = initialData.priceLimits;
-        newState.priceRange = initialData.priceLimits; // Reset price range to new limits
-        hasChanged = true;
-      }
-
-
-      // --- 2. Initialize filter selections from URL parameters (Effect 2's role) ---
-      // Genders
-      const currentGenderQuery = searchParams.getAll("gender").map(g => g.toLowerCase());
-      const validGenders = initialData.allGenders || [];
-      const filteredQueryGenders = currentGenderQuery.filter(g => validGenders.includes(g));
-      if (!deepEquals(prevState.selectedGenders, filteredQueryGenders)) {
-        newState.selectedGenders = filteredQueryGenders;
-        hasChanged = true;
-      }
-
-      // Categories (assuming single category selection, using 'category' param)
-      let initialCheckedCategoryIds = [];
-      const urlCategoryName = searchParams.get("category")?.toLowerCase();
-      if (urlCategoryName && initialData.category) {
-        for (const cat of initialData.category) {
-          for (const sub of cat.subCategory || []) {
-            if (sub.subcategoryItem && sub.subcategoryItem.name.toLowerCase() === urlCategoryName) {
-              initialCheckedCategoryIds.push(sub.subcategoryItem.id);
-              break; // Found it, assuming single selection
+    const memoizedSearchParams = useMemo(() => {
+        const params = new URLSearchParams();
+        if (urlSearchParamsObj) {
+            for (const [key, value] of urlSearchParamsObj.entries()) {
+                params.append(key, value);
             }
-          }
-          if (initialCheckedCategoryIds.length > 0) break;
         }
-      }
-      if (!deepEquals(prevState.checkedCategoryIds, initialCheckedCategoryIds)) {
-        newState.checkedCategoryIds = initialCheckedCategoryIds;
-        hasChanged = true;
-      }
+        return params;
+    }, [urlSearchParamsObj]);
 
-      // Price Range from URL
-      const urlMinPrice = parseFloat(searchParams.get("price_min"));
-      const urlMaxPrice = parseFloat(searchParams.get("price_max"));
-      const defaultMin = initialData.priceLimits?.[0] || 0;
-      const defaultMax = initialData.priceLimits?.[1] || 1000;
-      const newPriceRange = [
-        isNaN(urlMinPrice) ? defaultMin : Math.max(urlMinPrice, defaultMin),
-        isNaN(urlMaxPrice) ? defaultMax : Math.min(urlMaxPrice, defaultMax),
-      ];
-      if (!deepEquals(prevState.priceRange, newPriceRange)) {
-        newState.priceRange = newPriceRange;
-        hasChanged = true;
-      }
+    const searchParams = memoizedSearchParams;
 
-      // Brands
-      const urlBrandIds = searchParams.getAll("brand");
-      const newSelectedBrands = urlBrandIds.map(id => initialData.allBrands.find(b => b.id === id)).filter(Boolean);
-      if (!deepEquals(prevState.selectedBrands, newSelectedBrands)) {
-        newState.selectedBrands = newSelectedBrands;
-        hasChanged = true;
-      }
+    // Initialize state using initialData (fetched from the server/URL on load)
+    const [filterState, setFilterState] = useState(() => ({
+        selectedGenders: [], 
+        selectedBrands: [], // Now managed locally
+        priceRange: initialData.priceLimits || [0, 1000], 
+        checkedCategoryIds: [], 
+        selectedAvailabilities: [], // Remains URL-synced
+        selectedColors: [], // Now managed locally
+        allProducts: initialData.allProducts,
+        allBrands: initialData.allBrands,
+        category: initialData.category,
+        allGenders: initialData.allGenders,
+        allAvailabilities: initialData.allAvailabilities,
+        allColors: initialData.allColors,
+        priceLimits: initialData.priceLimits || [0, 1000],
+    }));
 
-      // Availabilities
-      const urlAvailabilities = searchParams.getAll("availability");
-      const newSelectedAvailabilities = urlAvailabilities.filter(avail => initialData.allAvailabilities.includes(avail));
-      if (!deepEquals(prevState.selectedAvailabilities, newSelectedAvailabilities)) {
-        newState.selectedAvailabilities = newSelectedAvailabilities;
-        hasChanged = true;
-      }
+    // Effect to synchronize all filter state with incoming data and URL parameters.
+    useEffect(() => {
+        setFilterState(prevState => {
+            let newState = { ...prevState };
+            let hasChanged = false;
 
-      // Colors
-      const urlColorCodes = searchParams.getAll("colors");
-      const newSelectedColors = urlColorCodes.map(code => initialData.allColors.find(c => c.code === code)).filter(Boolean);
-      if (!deepEquals(prevState.selectedColors, newSelectedColors)) {
-        newState.selectedColors = newSelectedColors;
-        hasChanged = true;
-      }
+            // --- 1. Synchronize static initial data (if they change) ---
+            
+            // Special handling for priceLimits
+            const limitsChanged = !deepEquals(prevState.priceLimits, initialData.priceLimits);
+            if (limitsChanged) {
+                newState.priceLimits = initialData.priceLimits;
+                newState.priceRange = initialData.priceLimits; 
+                hasChanged = true;
+            }
+            
+            // Sync other lists/objects
+            if (prevState.allProducts !== initialData.allProducts) {
+                newState.allProducts = initialData.allProducts;
+                hasChanged = true;
+            }
+            if (prevState.allBrands !== initialData.allBrands) {
+                newState.allBrands = initialData.allBrands;
+                newState.selectedBrands = []; // Reset local filter
+                hasChanged = true;
+            }
+            if (prevState.category !== initialData.category) {
+                newState.category = initialData.category;
+                hasChanged = true;
+            }
+            if (prevState.allGenders !== initialData.allGenders) {
+                newState.allGenders = initialData.allGenders;
+                newState.selectedGenders = []; // Reset local filter
+                hasChanged = true;
+            }
+            if (prevState.allAvailabilities !== initialData.allAvailabilities) {
+                newState.allAvailabilities = initialData.allAvailabilities;
+                hasChanged = true;
+            }
+            if (prevState.allColors !== initialData.allColors) {
+                newState.allColors = initialData.allColors;
+                newState.selectedColors = []; // Reset local filter
+                hasChanged = true;
+            }
 
-      return hasChanged ? newState : prevState;
-    });
-  }, [initialData, searchParams]); // Dependencies: initialData and the memoized searchParams
+            // --- 2. Initialize filter selections from URL parameters / Apply limits ---
+            
+            // Price Range from URL logic
+            const defaultMin = initialData.priceLimits?.[0] || 0;
+            const defaultMax = initialData.priceLimits?.[1] || 1000;
+            const urlMinPrice = parseFloat(searchParams.get("price_min"));
+            const urlMaxPrice = parseFloat(searchParams.get("price_max"));
+            
+            const newPriceRangeFromURL = [
+                isNaN(urlMinPrice) ? defaultMin : Math.max(urlMinPrice, defaultMin),
+                isNaN(urlMaxPrice) ? defaultMax : Math.min(urlMaxPrice, defaultMax),
+            ];
 
-  /**
-   * Generic handler for filter changes (checkboxes, radio buttons) that updates the URL.
-   * This function should NOT directly modify filterState for URL-driven filters.
-   * Instead, it constructs the new URL and pushes it. The useEffect above will then
-   * react to the URL change and update the filterState.
-   * @param {string} filterType - The type of filter being changed (e.g., 'gender', 'category').
-   * @param {*} value - The value of the filter item (e.g., 'men', {code: '#fff'}).
-   * @param {boolean} isChecked - True if the item is being selected, false if deselected.
-   */
-  const handleFilterChange = useCallback((filterType, value, isChecked) => {
-    // Start with a copy of the current URL parameters
-    const newUrlParams = new URLSearchParams(window.location.search);
-
-    switch (filterType) {
-      case 'gender': {
-        const currentGenders = newUrlParams.getAll('gender');
-        let updatedGenders = isChecked
-          ? [...new Set([...currentGenders, value])]
-          : currentGenders.filter(g => g !== value);
-        
-        newUrlParams.delete('gender');
-        updatedGenders.forEach(g => newUrlParams.append('gender', g));
-        break;
-      }
-      case 'category': {
-        // Assuming single selection for category based on previous code.
-        // Value here is the ID, but we want to store the name in the URL.
-        newUrlParams.delete('category'); // Ensure only one category is active
-        if (isChecked) {
-          // Find the category name by ID from initialData
-          let categoryName = '';
-          if (initialData.category) {
-            for (const cat of initialData.category) {
-              for (const sub of cat.subCategory || []) {
-                if (sub.subcategoryItem && sub.subcategoryItem.id === value) {
-                  categoryName = sub.subcategoryItem.name.toLowerCase();
-                  break;
+            const isLocalPriceDefault = deepEquals(prevState.priceRange, prevState.priceLimits);
+            
+            if (limitsChanged) {
+                if (!deepEquals(prevState.priceRange, newPriceRangeFromURL)) {
+                    newState.priceRange = newPriceRangeFromURL;
+                    hasChanged = true;
                 }
-              }
-              if (categoryName) break;
+            } 
+            else if (isLocalPriceDefault && !deepEquals(prevState.priceRange, newPriceRangeFromURL)) {
+                newState.priceRange = newPriceRangeFromURL;
+                hasChanged = true;
             }
-          }
-          if (categoryName) {
-            newUrlParams.set('category', categoryName);
-          }
-        }
-        // Also clean up old subcategory specific params
-        newUrlParams.delete('subcategoryItem');
-        newUrlParams.delete('subcategoryItemChild');
-        newUrlParams.delete('subcategory');
-        break;
-      }
-      case 'availability': {
-        const currentAvailabilities = newUrlParams.getAll('availability');
-        let updatedAvailabilities = isChecked
-          ? [...new Set([...currentAvailabilities, value])]
-          : currentAvailabilities.filter(a => a !== value);
 
-        newUrlParams.delete('availability');
-        updatedAvailabilities.forEach(a => newUrlParams.append('availability', a));
-        break;
-      }
-      case 'colors': {
-        const currentColors = newUrlParams.getAll('colors');
-        const colorCode = value.code; // Assuming value is { code, name }
-        let updatedColors = isChecked
-          ? [...new Set([...currentColors, colorCode])]
-          : currentColors.filter(c => c !== colorCode);
+            // --- Brands Logic REMOVED FROM HERE (Local Only) ---
+            
+            // Availabilities logic (URL Synced - KEEP THIS)
+            // const urlAvailabilities = searchParams.getAll("availability");
+            // const newSelectedAvailabilities = urlAvailabilities.filter(avail => initialData.allAvailabilities?.includes(avail));
+            // if (!deepEquals(prevState.selectedAvailabilities, newSelectedAvailabilities)) {
+            //     newState.selectedAvailabilities = newSelectedAvailabilities;
+            //     hasChanged = true;
+            // }
 
-        newUrlParams.delete('colors');
-        updatedColors.forEach(c => newUrlParams.append('colors', c));
-        break;
-      }
-      case 'brand': {
-        const currentBrands = newUrlParams.getAll('brand');
-        const brandId = value.id; // Assuming value is { id, entityName }
-        let updatedBrands = isChecked
-          ? [...new Set([...currentBrands, brandId])]
-          : currentBrands.filter(b => b !== brandId);
+            // --- Colors Logic REMOVED FROM HERE (Local Only) ---
+            
+            return hasChanged ? newState : prevState;
+        });
+    }, [initialData, searchParams]);
+    
+    // --- NEW: Client-side Brand Filter Handler ---
+
+    const handleBrandChange = useCallback((brand, isChecked) => {
+        setFilterState(prevState => {
+            const brandId = brand?.id;
+            if (!brandId) return prevState;
+
+            let newSelectedBrands;
+            
+            if (isChecked) {
+                if (!prevState.selectedBrands.some(b => b.id === brandId)) {
+                    newSelectedBrands = [...prevState.selectedBrands, brand];
+                } else {
+                    return prevState;
+                }
+            } else {
+                newSelectedBrands = prevState.selectedBrands.filter(b => b.id !== brandId);
+            }
+
+            return {
+                ...prevState,
+                selectedBrands: newSelectedBrands,
+            };
+        });
+    }, []);
+    
+    // --- NEW: Client-side Color Filter Handler ---
+    const handleColorChange = useCallback((color, isChecked) => {
+        setFilterState(prevState => {
+            const colorCode = color?.code;
+            if (!colorCode) return prevState;
+
+            let newSelectedColors;
+            
+            if (isChecked) {
+                // Correctly adds the color object if its code is not already selected
+                if (!prevState.selectedColors.some(c => c.code === colorCode)) {
+                    newSelectedColors = [...prevState.selectedColors, color];
+                } else {
+                    return prevState;
+                }
+            } else {
+                // Correctly removes the color object by code
+                newSelectedColors = prevState.selectedColors.filter(c => c.code !== colorCode);
+            }
+
+            return {
+                ...prevState,
+                selectedColors: newSelectedColors,
+            };
+        });
+    }, []);
+
+    // --- NEW: Client-side Availability Filter Handler ---
+    const handleAvailabilityChange = useCallback((avail, isChecked) => {
+      setFilterState(prevState => {
+        let newSelectedAvailabilities;
         
-        newUrlParams.delete('brand');
-        updatedBrands.forEach(b => newUrlParams.append('brand', b));
-        break;
-      }
-      default:
-        // For any filter types not explicitly handled above, do nothing or log an error.
-        console.warn(`handleFilterChange: Unhandled filterType: ${filterType}`);
-        return; // Do not push URL if nothing was changed
-    }
+        if (isChecked) {
+          if (!prevState.selectedAvailabilities.includes(avail)) {
+            newSelectedAvailabilities = [...prevState.selectedAvailabilities, avail];
+          } else {
+            return prevState;
+          }
+        } else {
+          newSelectedAvailabilities = prevState.selectedAvailabilities.filter(a => a !== avail);
+        }
 
-    // Push the new URL to trigger re-sync and filtering
-    router.push(`${pathname}?${newUrlParams.toString()}`);
-  }, [router, pathname, initialData]); // Added initialData as dependency for category name lookup
+        return {
+          ...prevState,
+          selectedAvailabilities: newSelectedAvailabilities,
+        };
+      });
+    }, []);
 
-  // Handler for price range slider/inputs, updates URL directly
-  const handlePriceRangeChange = useCallback((value) => {
-    const newUrlParams = new URLSearchParams(window.location.search);
-    newUrlParams.set('price_min', value[0].toString());
-    newUrlParams.set('price_max', value[1].toString());
-    router.push(`${pathname}?${newUrlParams.toString()}`);
-  }, [router, pathname]);
+    // --- End NEW Handlers ---
 
-  /**
-   * Resets all filters by clearing relevant URL parameters.
-   */
-  const handleResetAllFilters = useCallback(() => {
-    const newUrlParams = new URLSearchParams(window.location.search);
-    // Remove all filter parameters that this hook manages
-    ['gender', 'category', 'price_min', 'price_max', 'brand', 'availability', 'colors', 'subcategoryItem', 'subcategoryItemChild', 'subcategory'].forEach(key => {
-      newUrlParams.delete(key);
-    });
-    // Push the URL without filter parameters
-    router.push(`${pathname}?${newUrlParams.toString()}`);
-  }, [router, pathname]);
 
-  // Return the filter state and the functions to interact with it.
-  return { filterState, setFilterState, handleFilterChange, handlePriceRangeChange, handleResetAllFilters };
+    /**
+     * Generic handler for filter changes that updates the URL.
+     * Brand, Gender, Category, and COLOR are now blocked.
+     */
+    const handleFilterChange = useCallback((filterType, value, isChecked) => {
+        const newUrlParams = new URLSearchParams(window.location.search);
+
+        switch (filterType) {
+            case 'gender':
+            case 'category':
+            case 'brand':
+            case 'colors':
+            case 'availability':            
+            default:
+            return;
+        }
+
+        router.push(`${pathname}?${newUrlParams.toString()}`);
+    }, [router, pathname]);
+
+    // This handler is now for local state update
+    const handlePriceRangeChange = useCallback((value) => {
+        setFilterState(prevState => ({ 
+            ...prevState, 
+            priceRange: value 
+        }));
+    }, []);
+
+    /**
+     * Resets all filters by clearing relevant URL parameters and local state.
+     */
+    const handleResetAllFilters = useCallback(() => {
+        const newUrlParams = new URLSearchParams(window.location.search);
+        
+        // Delete all URL-synced params
+        ['price_min', 'price_max', 'availability', 'subcategoryItem', 'category', 'subcategory'].forEach(key => {
+            newUrlParams.delete(key);
+        });
+        
+        // Note: We leave 'gender', 'brand', 'colors' off the delete list because they aren't expected in the URL anymore.
+
+        // Reset local state filters immediately
+        setFilterState(prevState => ({
+            ...prevState,
+            selectedGenders: [],
+            selectedBrands: [],
+            selectedColors: [], // Reset colors locally
+            priceRange: prevState.priceLimits || [0, 1000],
+        }));
+
+        router.push(`${pathname}?${newUrlParams.toString()}`);
+    }, [router, pathname]);
+    
+    // --- NEW: Client-Side Product Filtering Logic ---
+
+    /**
+     * Memoized value to apply all client-side filters (Brands, Gender, Price Range, Colors) 
+     * to the product list.
+     */
+    const filteredProducts = useMemo(() => {
+        let products = filterState.allProducts || [];
+
+        // 1. Apply Brands Filter
+        const selectedBrandIds = filterState.selectedBrands.map(b => b.id);
+        if (selectedBrandIds.length > 0) {
+            products = products.filter(product => {
+                // Assumes product.company.id holds the brand ID
+                return selectedBrandIds.includes(product.company?.id); 
+            });
+        }
+
+        // 2. Apply Gender Filter
+        if (filterState.selectedGenders.length > 0) {
+            products = products.filter(product => 
+                filterState.selectedGenders.includes(product.gender)
+            );
+        }
+
+        // 3. Apply Price Range Filter
+        const [minPrice, maxPrice] = filterState.priceRange;
+        products = products.filter(product => {
+            const productPrice = product.salePrice !== null ? product.salePrice : product.price;
+            return productPrice >= minPrice && productPrice <= maxPrice;
+        });
+        
+        // --- Correction for Colors Filter (Assuming product.variants structure) ---
+        const selectedColorCodes = filterState.selectedColors.map(c => c.code);
+        if (selectedColorCodes.length > 0) {
+            products = products.filter(product => {
+                // Check if ANY of the product's variants' color codes are in the selected list.
+                // ASSUMPTION: product has a 'variants' array, and each variant has a 'color' object with a 'code'.
+                return product.variants.some(variant => 
+                    selectedColorCodes.includes(variant.color?.code)
+                );
+            });
+        }
+
+        return products;
+    }, [
+        filterState.allProducts, 
+        filterState.selectedBrands, 
+        filterState.selectedGenders, 
+        filterState.priceRange,
+        filterState.selectedColors // Dependency added
+    ]);
+
+    // Return the filter state, functions, AND the new filtered product list.
+    return { 
+        filterState, 
+        setFilterState, 
+        handleFilterChange, 
+        handlePriceRangeChange,
+        handleBrandChange,
+        handleColorChange, // IMPORTANT: New handler for colors
+        handleAvailabilityChange,
+        handleResetAllFilters, 
+        filteredProducts 
+    };
 }

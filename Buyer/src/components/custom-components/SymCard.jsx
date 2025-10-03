@@ -11,11 +11,11 @@ const SymCard = styled(Card, {
   theme,
   hoverEffect
 }) => ({
-  background:'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)',
+  background:'linear-gradient(180deg, rgba(62, 61, 69, 0.6) 0%, rgba(32, 32, 32, 0.9) 100%)',
   color:'#fff',
   overflow: "unset",
   borderRadius: "8px",
-  borderColor: "grey.200",
+  border: "1px solid #FFF",
   transition: "all 250ms ease-in-out",
   "&:hover": { ...(hoverEffect && {
       boxShadow: theme.shadows[3],

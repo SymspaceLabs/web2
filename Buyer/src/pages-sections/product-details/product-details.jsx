@@ -54,7 +54,14 @@ export default function ProductDetails({ product }) {
       setSizeError(true);
       return;
     }
-  
+
+    // Check if stock is available
+    if (availability && availability.stock === 0) {
+      // Optionally, show a message to the user
+      console.log("Out of stock!");
+      return;
+    }
+
     setSizeError(false);
 
     // Find the image that matches the selected color code
@@ -72,13 +79,19 @@ export default function ProductDetails({ product }) {
 
     const newQty = existingItem ? existingItem.qty + 1 : 1;
 
+    // Check against the current stock before dispatching
+    if (availability && newQty > availability.stock) {
+      console.log(`Only ${availability.stock} items available.`);
+      return;
+    }
+
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: {
         price,
         qty: newQty,
         name,
-        imgUrl: matchingImage ? matchingImage.url : images[0].url, // Use the matching image URL or fall back to the first image
+        imgUrl: matchingImage ? matchingImage.url : images[0].url,
         id,
         slug,
         selectedColor,
@@ -88,7 +101,8 @@ export default function ProductDetails({ product }) {
           label: size.size,
           value: size.id
         })),
-        variant: selectedVariant
+        variant: selectedVariant,
+        stock: availability.stock, // Correctly added the stock attribute
       },
     });
   };

@@ -4,58 +4,92 @@
 import { Breadcrumbs, Typography, Box } from "@mui/material";
 import Link from "next/link";
 import PropTypes from "prop-types";
-import CATEGORIES_DATA from "@/data/categories";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 /**
- * Helper function to get the full category path based on a given ID.
- * It now searches for both subcategoryItemChild and subcategoryItem by their `id`.
- * @param {string} queryId The ID to search for in the categories data.
- * @param {Array} allCategories The categories data array.
+ * Helper function to create a clean slug from a string.
+ * It converts the string to lowercase, removes commas and '&' symbols, and replaces spaces with dashes.
+ * @param {string} name The string to convert into a slug.
+ * @returns {string} The formatted slug.
+ */
+const createSlug = (name) => {
+  if (typeof name !== 'string') {
+    return "";
+  }
+  return name.toLowerCase().replace(/[,&]/g, "").replace(/\s+/g, "-");
+};
+
+/**
+ * Main helper function to get the full category path based on the product object.
+ * It now correctly handles cases with and without a subcategoryItemChild.
+ * @param {object} product The product data object from the API.
  * @returns {Array<Object>} An array of breadcrumb objects with `name` and `href`.
  */
-const getCategoryPath = (queryId, allCategories) => {
+const getCategoryPath = (product) => {
   const path = [];
-  if (!queryId || !allCategories) {
-    return path;
-  }
+  const { subcategoryItem, subcategoryItemChild } = product;
 
-  const topLevelCategories = allCategories[0]?.child;
-  if (!topLevelCategories) {
-    return path;
-  }
-
-  for (const clothingCategory of topLevelCategories) {
-    const categorySlug = clothingCategory.title.toLowerCase().replace(/,?\s&/g, "").replace(/\s+/g, "-");
+  // Prioritize subcategoryItemChild if it exists
+  if (subcategoryItemChild) {
+    const { subcategoryItem: parentSubcategoryItem } = subcategoryItemChild;
+    const { subcategory } = parentSubcategoryItem;
+    const { category } = subcategory;
     
-    for (const subcategory of clothingCategory.child) {
-      const subcategorySlug = subcategory.title.toLowerCase().replace(/,?\s&/g, "").replace(/\s+/g, "-");
-
-      if (subcategory.child) {
-        for (const subcategoryItem of subcategory.child) {
-          // Check for subcategoryItemChild ID first
-          if (subcategoryItem.child) {
-            for (const subcategoryItemChild of subcategoryItem.child) {
-              if (subcategoryItemChild.id === queryId) {
-                path.push({ name: clothingCategory.title, href: `/products/search/all?category=${categorySlug}` });
-                path.push({ name: subcategory.title, href: `/products/search/all?subcategory=${subcategorySlug}` });
-                path.push({ name: subcategoryItem.title, href: `/products/search/all?subcategoryItem=${subcategoryItem.slug}` });
-                path.push({ name: subcategoryItemChild.title, href: `/products/search/all?subcategoryItemChild=${subcategoryItemChild.slug}` });
-                return path;
-              }
-            }
-          }
-
-          // If no child ID match, check for subcategoryItem ID
-          if (subcategoryItem.id === queryId) {
-            path.push({ name: clothingCategory.title, href: `/products/search/all?category=${categorySlug}` });
-            path.push({ name: subcategory.title, href: `/products/search/all?subcategory=${subcategorySlug}` });
-            path.push({ name: subcategoryItem.title, href: `/products/search/all?subcategoryItem=${subcategoryItem.slug}` });
-            return path;
-          }
-        }
-      }
+    // Add top-level category
+    if (category) {
+      path.push({
+        name: category.name,
+        href: `/products/search/all?category=${createSlug(category.name)}`
+      });
     }
+
+    // Add subcategory
+    if (subcategory) {
+      path.push({
+        name: subcategory.name,
+        href: `/products/search/all?subcategory=${createSlug(subcategory.name)}`
+      });
+    }
+
+    // Add subcategory item
+    if (parentSubcategoryItem) {
+      path.push({
+        name: parentSubcategoryItem.name,
+        href: `/products/search/all?subcategoryItem=${createSlug(parentSubcategoryItem.name)}`
+      });
+    }
+
+    // Add the final subcategory item child
+    path.push({
+      name: subcategoryItemChild.name,
+      href: `/products/search/all?subcategoryItemChild=${createSlug(subcategoryItemChild.name)}`
+    });
+
+  } else if (subcategoryItem) { // Fallback to subcategoryItem if no subcategoryItemChild
+    const { subcategory } = subcategoryItem;
+    const { category } = subcategory;
+
+    // Add top-level category
+    if (category) {
+      path.push({
+        name: category.name,
+        href: `/products/search/all?category=${createSlug(category.name)}`
+      });
+    }
+
+    // Add subcategory
+    if (subcategory) {
+      path.push({
+        name: subcategory.name,
+        href: `/products/search/all?subcategory=${createSlug(subcategory.name)}`
+      });
+    }
+
+    // Add the final subcategory item
+    path.push({
+      name: subcategoryItem.name,
+      href: `/products/search/all?subcategoryItem=${createSlug(subcategoryItem.name)}`
+    });
   }
 
   return path;
@@ -63,18 +97,13 @@ const getCategoryPath = (queryId, allCategories) => {
 
 // Main reusable BreadcrumbNav component
 export default function BreadcrumbNav({ product }) {
-
-  const {subcategoryItemId='', subcategoryItemChildId='' } = product; 
-  // Prioritize subcategoryItemChildId. If it's null or undefined, use subcategoryItemId.
-  const queryId = subcategoryItemChildId || subcategoryItemId;
-  
-  const categoryPath = getCategoryPath(queryId, CATEGORIES_DATA);
+  const categoryPath = getCategoryPath(product);
   const lastItemName = categoryPath.length > 0 ? categoryPath[categoryPath.length - 1].name : null;
 
   const breadcrumbItems = [
     <Box key="home" sx={{ display: 'flex', alignItems: 'center' }}>
       <Link
-        href="/"
+        href="/products/search/all"
         style={{
           color: 'text.secondary',
           textDecoration: 'none',
@@ -89,7 +118,7 @@ export default function BreadcrumbNav({ product }) {
     </Box>,
   ];
 
-  categoryPath.slice(0, -1).forEach((item, index) => {
+  categoryPath.slice(0, -1).forEach((item) => {
     breadcrumbItems.push(
       <Box key={item.name} sx={{ display: 'flex', alignItems: 'center' }}>
         <Link
@@ -136,6 +165,28 @@ export default function BreadcrumbNav({ product }) {
 
 // Prop types for validation
 BreadcrumbNav.propTypes = {
-  subcategoryItemId: PropTypes.string,
-  subcategoryItemChildId: PropTypes.string,
+  product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    subcategoryItem: PropTypes.shape({
+      name: PropTypes.string,
+      subcategory: PropTypes.shape({
+        name: PropTypes.string,
+        category: PropTypes.shape({
+          name: PropTypes.string,
+        }),
+      }),
+    }),
+    subcategoryItemChild: PropTypes.shape({
+      name: PropTypes.string,
+      subcategoryItem: PropTypes.shape({
+        name: PropTypes.string,
+        subcategory: PropTypes.shape({
+          name: PropTypes.string,
+          category: PropTypes.shape({
+            name: PropTypes.string,
+          }),
+        }),
+      }),
+    }),
+  }).isRequired,
 };

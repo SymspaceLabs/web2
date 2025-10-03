@@ -10,4 +10,8 @@ export class Category {
 
   @OneToMany(() => Subcategory, (subcategory) => subcategory.category)
   subcategories: Subcategory[];
+
+  @Column({ nullable: true, unique: true })
+  slug: string;
+  
 }

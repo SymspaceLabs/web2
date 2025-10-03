@@ -1,12 +1,12 @@
 // ============================================
-// Search Input Component
+// SearchInput.js (FINAL VERSION)
 // ============================================
 
 import useSearch from "./hooks/use-search";
-import SearchResult from "./components/search-result";
+import SearchResult from "./components/search-result"; // Assuming this component exists
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SearchOutlinedIcon } from "./styles";
+import { SearchOutlinedIcon } from "./styles"; // Assuming SearchOutlinedIcon is imported
 import {
   Box,
   Button,
@@ -20,7 +20,8 @@ import {
 // ============================================
 
 export default function SearchInput({ btn = true, mxWidth = "670px" }) {
-  const { handleSearch, parentRef, resultList, loading, error } = useSearch();
+  // Destructure all values, including shopResultList
+  const { handleSearch, parentRef, resultList, loading, error, shopResultList } = useSearch();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -29,14 +30,14 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
   const searchParams = useSearchParams();
   const initialized = useRef(false);
 
-  // ✅ Auto populate input from ?search= param only once (on first mount)
+  // Auto populate input from ?search= param on first mount
   useEffect(() => {
     if (initialized.current) return;
     const paramValue = searchParams.get("search");
     if (paramValue) {
       setSearchQuery(paramValue);
-      handleSearch({ target: { value: paramValue } });
-      // ❌ removed setOpen(true) so dropdown doesn't auto open
+      // Pass a simulated event object expected by handleSearch
+      handleSearch({ target: { value: paramValue } }); 
     }
     initialized.current = true;
   }, [searchParams, handleSearch]);
@@ -45,17 +46,32 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
     const query = event.target.value;
     setSearchQuery(query);
     handleSearch(event);
-    setOpen(true); // ✅ only open while typing
+    setOpen(true); 
   };
 
-  const handleShopSearchClick = () => {
+  const handleGenericSearchClick = () => {
     if (searchQuery) {
+      // This is the generic action for the main search button
       router.push(
         `/products/search/all?search=${encodeURIComponent(searchQuery)}`
       );
       setOpen(false);
     }
   };
+
+  const handleCompanyNavigation = () => {
+    const company = shopResultList[0];
+    
+    // Check if a slug is available for direct navigation
+    if (company && company.slug) {
+      router.push(`/company/${company.slug}`);
+    } else {
+      // Fallback to the generic search if slug is missing
+      handleGenericSearchClick();
+    }
+    setOpen(false); // Close the dropdown
+  };
+
 
   const getInputProps = (isButtonPresent) => ({
     sx: {
@@ -81,7 +97,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
       >
         <Button
           disableElevation
-          onClick={handleShopSearchClick}
+          onClick={handleGenericSearchClick} // Main search button uses generic handler
           sx={{
             px: "1.5rem",
             height: "100%",
@@ -137,14 +153,15 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleShopSearchClick();
+              handleGenericSearchClick();
             }
           }}
-          onFocus={() => setOpen(true)} // ✅ open only when user clicks into the box
+          onFocus={() => setOpen(true)}
           InputProps={getInputProps(btn)}
         />
 
-        {open && (searchQuery || loading || error || resultList.length > 0) && (
+        {/* Dropdown visibility check: open AND (query or loading or error or any results) */}
+        {open && (searchQuery || loading || error || resultList.length > 0 || shopResultList.length > 0) && (
           <Box
             sx={{
               position: "absolute",
@@ -162,9 +179,12 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
               overflowX: "hidden",
             }}
           >
-            {searchQuery && (
+            {/* 1. CONDITIONAL SHOP SEARCH LINK */}
+            {/* Renders ONLY if the shop search list has results */}
+            {searchQuery && shopResultList.length > 0 && (
               <Box
-                onClick={handleShopSearchClick}
+                // ⭐️ NEW FIX: Direct navigation to /company/{slug}
+                onClick={handleCompanyNavigation}
                 sx={{
                   p: 2,
                   display: "flex",
@@ -176,11 +196,12 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
                 }}
               >
                 <Typography variant="body1">
-                  Search "{searchQuery}" Shops
+                  Search "{shopResultList[0].label}" Shops
                 </Typography>
               </Box>
             )}
 
+            {/* 2. LOADING MESSAGE */}
             {loading && (
               <Typography
                 variant="body2"
@@ -191,6 +212,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
               </Typography>
             )}
 
+            {/* 3. ERROR MESSAGE */}
             {error && (
               <Typography
                 variant="body2"
@@ -209,19 +231,28 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
               </Typography>
             )}
 
+            {/* 4. MAIN RESULTS LIST */}
             {!loading && !error && resultList.length > 0 && (
-              <SearchResult results={resultList} />
+              <SearchResult results={resultList} /> 
             )}
 
-            {!loading && !error && searchQuery && resultList.length === 0 && (
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ p: 2, textAlign: "left" }}
-              >
-                No results found.
-              </Typography>
-            )}
+            {/* 5. FIX: CONDITIONAL "NO RESULTS FOUND" MESSAGE */}
+            {
+                !loading && 
+                !error && 
+                searchQuery && 
+                // Show "No results found" ONLY IF *both* lists are empty
+                resultList.length === 0 && 
+                shopResultList.length === 0 && (
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ p: 2, textAlign: "left" }}
+                    >
+                        No results found.
+                    </Typography>
+                )
+            }
           </Box>
         )}
       </Box>

@@ -11,6 +11,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { SearchResultResponse } from './products.service';
 
 @Controller('products')
 export class ProductsController {
@@ -31,31 +32,35 @@ export class ProductsController {
   @Get()
   async getAllProducts(
     @Query('search') search?: string,
-    @Query('category') categoryName?: string, // Changed from categorySlug
-    @Query('subcategory') subcategoryName?: string, // Changed from subcategorySlug
-    @Query('subcategoryItem') subcategoryItemName?: string, // Changed from subcategoryItemSlug
-    @Query('subcategoryItemChild') subcategoryItemChildName?: string // Changed from subcategoryItemChildSlug
+    @Query('category') categorySlug?: string,
+    @Query('subcategory') subcategorySlug?: string,
+    @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
+    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string,
+    @Query('gender') genders?: string | string[]
   ) {
+
+    const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
+    ? subcategoryItemSlugs 
+    : subcategoryItemSlugs ? [subcategoryItemSlugs] : undefined;
+
+    const gendersArray = Array.isArray(genders) 
+      ? genders 
+      : genders ? [genders] : undefined;
+
     return await this.productsService.findAll(
       search,
-      categoryName,
-      subcategoryName,
-      subcategoryItemName,
-      subcategoryItemChildName
+      categorySlug,
+      subcategorySlug,
+      subcategoryItemSlugsArray,
+      subcategoryItemChildSlug,
+      gendersArray
     );
   }
 
-  @Get('search') // This will be your dedicated search endpoint: /products/search
-  async search(
-    @Query('q') query?: string, // The free-form search term
-    // You might still keep these for more refined filtering,
-    // but the main 'q' parameter will drive the free-form search.
-    @Query('categorySlug') categorySlug?: string,
-    @Query('subcategorySlug') subcategorySlug?: string,
-  ) {
-    // Delegate the search logic to the service
-    const results = await this.productsService.performFreeFormSearch(query, categorySlug, subcategorySlug);
-    return results;
+  @Get('search')
+    async search(@Query('q') query?: string): Promise<SearchResultResponse> {
+      const results = await this.productsService.performFreeFormSearch(query);
+      return results;
   }
 
 
@@ -74,8 +79,6 @@ export class ProductsController {
   async remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
-
-
 
 }
 

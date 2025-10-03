@@ -58,20 +58,24 @@ export default function Section1({ company }) {
       <FlexBox sx={styles.descriptionCard}> 
         <FlexBox sx={{ flexDirection: {xs:'column', sm:'column', md:'row'}, gap:5, maxWidth:'1500px', width:'100%', mt: '-90px', p:5 }}>
 
-          <LazyImage
-            src={company.logo}
-            alt="Company Logo"
-            width={500}
-            height={500}
-            sx={{
-              width: 200,
-              height: 200,
-              margin: '0 auto',
-              border: '5px solid #FFF',
-              borderRadius:'100px',
-              boxShadow: '0px 4px 23.3px 18px rgba(0, 0, 0, 0.25)'
-            }}
-          />
+        {/* SHOW LOGO ONLY WHEN EXIST */}
+        {company.logo && 
+            <LazyImage
+              src={company.logo}
+              alt="Company Logo"
+              width={500}
+              height={500}
+              sx={{
+                width: 200,
+                height: 200,
+                margin: '0 auto',
+                border: '5px solid #FFF',
+                borderRadius:'100px',
+                boxShadow: '0px 4px 23.3px 18px rgba(0, 0, 0, 0.25)'
+              }}
+            />
+        }
+          
 
           <FlexCol gap={5}>
             <Button mt={2} sx={styles.btn}>

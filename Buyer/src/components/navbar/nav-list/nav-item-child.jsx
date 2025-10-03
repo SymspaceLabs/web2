@@ -32,7 +32,7 @@ export default function NavItemChild({
       {/* Parent */}
       <MenuItem color="grey.700">
         <H1 flex="1 1 0">
-          {nav.title}
+          {nav.name}
         </H1>
         {settings.direction === "ltr" ? <ArrowRight fontSize="small" /> : <ArrowLeft fontSize="small" />}
       </MenuItem>

@@ -7,9 +7,7 @@ import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
-import { categoriesSeedData } from './category/data';
-// import { blogSeedData } from './blog/data';
-// import { Blog } from 'src/blogs/entities/blog.entity';
+import { CATEGORIES_DATA } from './category/data';
 import {
   CategorySeedData,
   SubcategorySeedData,
@@ -29,13 +27,10 @@ export class SeederService {
     private readonly subcategoryItemRepository: Repository<SubcategoryItem>,
     @InjectRepository(SubcategoryItemChild)
     private readonly subcategoryItemChildRepository: Repository<SubcategoryItemChild>,
-    // @InjectRepository(Blog)
-    // private readonly blogRepository: Repository<Blog>,
   ) {}
 
   /** ✅ Safely wipes all relevant tables in child → parent order */
   private async clearDatabase() {
-    console.log('🗑 Clearing existing data...');
     await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
 
     // await this.blogRepository.clear();
@@ -45,7 +40,6 @@ export class SeederService {
     await this.categoryRepository.clear();
 
     await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
-    console.log('✅ Database cleared!');
   }
 
   async seed() {
@@ -58,13 +52,13 @@ export class SeederService {
       const subcategoryRepo = manager.getRepository(Subcategory);
       const subcategoryItemRepo = manager.getRepository(SubcategoryItem);
       const subcategoryItemChildRepo = manager.getRepository(SubcategoryItemChild);
-      // const blogRepo = manager.getRepository(Blog);
 
       // Insert Categories → Subcategories → Items → Children
-      for (const categoryData of categoriesSeedData as CategorySeedData[]) {
+      for (const categoryData of CATEGORIES_DATA as CategorySeedData[]) {
         const category = categoryRepo.create({
           id: categoryData.id,
           name: categoryData.name,
+          slug: categoryData.slug,
         });
         await categoryRepo.save(category);
 
@@ -72,6 +66,7 @@ export class SeederService {
           const subcategory = subcategoryRepo.create({
             id: subcategoryData.id,
             name: subcategoryData.name,
+            slug: subcategoryData.slug,
             category,
           });
           await subcategoryRepo.save(subcategory);
@@ -80,6 +75,7 @@ export class SeederService {
             const subcategoryItem = subcategoryItemRepo.create({
               id: subcategoryItemData.id,
               name: subcategoryItemData.name,
+              slug: subcategoryItemData.slug,
               subcategory,
             });
             await subcategoryItemRepo.save(subcategoryItem);
@@ -92,6 +88,7 @@ export class SeederService {
                 const subcategoryItemChild = subcategoryItemChildRepo.create({
                   id: subcategoryItemChildData.id,
                   name: subcategoryItemChildData.name,
+                  slug: subcategoryItemChildData.slug,
                   subcategoryItem: subcategoryItem,
                 });
                 await subcategoryItemChildRepo.save(subcategoryItemChild);
@@ -100,14 +97,6 @@ export class SeederService {
           }
         }
       }
-
-      // Insert Blogs
-      // for (const blog of blogSeedData) {
-      //   const newBlog = blogRepo.create(blog);
-      //   await blogRepo.save(newBlog);
-      // }
     });
-
-    console.log('✅ Database seeding completed successfully!');
   }
 }

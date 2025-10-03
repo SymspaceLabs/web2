@@ -1,153 +1,130 @@
+// src/components/CategoryAccordion.js
+
 "use client";
 
 import { Span } from "@/components/Typography";
-import { Fragment, useCallback, useMemo, useState } from "react";
-import {
-  Checkbox,
-  Collapse,
-  FormControlLabel,
-  FormGroup
-} from "@mui/material";
+import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Checkbox, Collapse, FormControlLabel, FormGroup } from "@mui/material";
 import AccordionHeader from "@/components/accordion/accordion-header";
+import { Accordion } from "@mui/material"; // Assuming you need this for the full accordion structure
 
-// Import the category data directly
-import CATEGORIES_DATA from "@/data/categories";
+// NOTE: CATEGORIES_DATA is only needed if you are using it as the canonical source
+// If the category data comes fully from the 'data' prop, you might not need this.
+// For simplicity and based on your API, we'll focus on the 'data' prop.
 
-export const CategoryAccordion = ({ checkedCategoryIds, onCategoryToggle }) => {
+// Helper function to recursively extract ALL granular (leaf) categories and fix the title
+const extractGranularCategories = (categoryChildren, result = []) => {
+    if (!categoryChildren || !Array.isArray(categoryChildren)) return result;
 
-  // State to manage which categories are open
-  const [openCategories, setOpenCategories] = useState({});
+    categoryChildren.forEach(cat => {
+        const hasChildren = cat.child && Array.isArray(cat.child) && cat.child.length > 0;
+        
+        if (hasChildren) {
+            // Recursively get children
+            extractGranularCategories(cat.child, result);
+        } else if (cat.id) {
+            // 🛠️ FIX: Ensure 'name' is used for the label if 'title' doesn't exist on the leaf node.
+            // Using 'name' property from your API data: { "name": "Sofas" }
+            result.push({
+                id: cat.id,
+                name: cat.name,
+            });
+        }
+    });
 
-  const handleCheckboxChange = useCallback((itemId, isChecked) => {
-    if (onCategoryToggle) {
-      onCategoryToggle(itemId, isChecked);
-    }
-  }, [onCategoryToggle]);
+    return result;
+};
 
-  // Function to toggle the open state of a category
-  const handleToggleCategory = useCallback((categoryId) => {
-    setOpenCategories(prev => ({
-      ...prev,
-      [categoryId]: !prev[categoryId],
-    }));
-  }, []);
 
-  // Helper function to assign unique IDs and normalize the data structure
-  const normalizeCategories = useCallback((data) => {
-    if (!data || !Array.isArray(data)) {
-      return [];
-    }
+// 🛠️ FIX: The component should map over the 'data' array to render multiple top-level categories.
+// We are renaming this to CategoryFilterGroup and creating a wrapper that maps over the data.
+const CategoryItemAccordion = ({ categoryItem, checkedCategoryIds, onCategoryToggle }) => {
+    const [isOpen, setIsOpen] = useState(true);
+
+    const handleCheckboxChange = useCallback((itemId, isChecked) => {
+        if (onCategoryToggle) {
+            onCategoryToggle(itemId, isChecked);
+        }
+    }, [onCategoryToggle]);
+
+    const handleToggleCategory = useCallback(() => {
+        setIsOpen(prev => !prev);
+    }, []);
     
-    // Assign unique IDs and map 'title' to 'name', 'child' to 'subCategory'/'subcategoryItems'
-    return data.map((category) => {
-      const normalizedCategory = {
-        id: category.id || Math.random().toString(36).substring(2, 15),
-        name: category.title,
-        subCategory: [],
-      };
+    // Get all leaf-level children for this single category item
+    const granularCategories = useMemo(() => {
+        return extractGranularCategories(categoryItem.child);
+    }, [categoryItem.child]);
 
-      if (category.child && Array.isArray(category.child)) {
-        normalizedCategory.subCategory = category.child.map((sub) => {
-          const normalizedSub = {
-            id: sub.id || Math.random().toString(36).substring(2, 15),
-            name: sub.title,
-            subcategoryItems: [],
-          };
+    // Default to empty array for safe comparison
+    const safeCheckedIds = useMemo(() => checkedCategoryIds || [], [checkedCategoryIds]);
 
-          if (sub.child && Array.isArray(sub.child)) {
-            normalizedSub.subcategoryItems = sub.child.map((item) => ({
-              id: item.id || Math.random().toString(36).substring(2, 15),
-              name: item.title,
-              slug: item.slug,
-            }));
-          }
-          return normalizedSub;
-        });
-      }
-      return normalizedCategory;
-    });
-  }, []);
+    // Check availability only against the actual leaf categories available in the list
+    // NOTE: We assume ALL leaf categories are visible for now, simplifying the logic that checked the API product list.
+    const visibleCategories = granularCategories;
 
-  // Use useMemo to normalize and sort the categories
-  const sortedCategories = useMemo(() => {
-    const normalizedData = normalizeCategories(CATEGORIES_DATA[0]?.child || []);
-    const categoriesCopy = [...normalizedData];
 
-    return categoriesCopy.sort((a, b) => {
-      const aHasSubcategoryItems = a.subCategory && Array.isArray(a.subCategory) && a.subCategory.some(sub => sub.subcategoryItems && Array.isArray(sub.subcategoryItems) && sub.subcategoryItems.length > 0);
-      const bHasSubcategoryItems = b.subCategory && Array.isArray(b.subCategory) && b.subCategory.some(sub => sub.subcategoryItems && Array.isArray(sub.subcategoryItems) && sub.subcategoryItems.length > 0);
+    return (
+        <Fragment>
+            <AccordionHeader
+                open={isOpen}
+                sx={{ pl: 0, cursor: 'pointer' }}
+                onClick={handleToggleCategory}
+            >
+                <Span sx={{ fontWeight: 'bold' }}>{categoryItem.title}</Span>
+            </AccordionHeader>
 
-      if (aHasSubcategoryItems && !bHasSubcategoryItems) {
-        return -1;
-      }
-      if (!aHasSubcategoryItems && bHasSubcategoryItems) {
-        return 1;
-      }
-      return 0;
-    });
-  }, [CATEGORIES_DATA, normalizeCategories]);
+            <Collapse in={isOpen}>
+                <FormGroup sx={{ pl: 2, pt: 1, pb: 1 }}>
+                    {/* Loop through the filtered list: visibleCategories */}
+                    {visibleCategories.map((item) => (
+                        <FormControlLabel
+                            key={`granular-item-${item.id}`}
+                            sx={{ py: 0.5 }}
+                            control={
+                                <Checkbox
+                                    // 🛠️ FIX: Ensure ID is compared as string if IDs in state are strings
+                                    checked={safeCheckedIds.includes(String(item.id))} 
+                                    // 🛠️ FIX: Pass item.id to the change handler
+                                    onChange={(e) => handleCheckboxChange(item.id, e.target.checked)}
+                                    size="small"
+                                />
+                            }
+                            // 🛠️ FIX: Use 'name' (or 'title' if applicable) for the label text
+                            label={item.name} 
+                        />
+                    ))}
+                </FormGroup>
+            </Collapse>
+        </Fragment>
+    );
+}
 
-  // Helper function to render the categories and their subcategories
-  const renderCategory = (categoriesToRender) => {
-    if (!categoriesToRender || !Array.isArray(categoriesToRender)) {
-      return null;
+/**
+ * @function CategoryAccordion
+ * @description Renders a filter group for each top-level category in the 'data' prop.
+ * * @param {Array} data - Array of top-level category objects from the API.
+ * @param {Array} checkedCategoryIds - Array of currently checked category IDs (UUIDs).
+ * @param {function} onCategoryToggle - Callback (id, isChecked) for checkbox changes.
+ */
+export const CategoryAccordion = ({ data, checkedCategoryIds, onCategoryToggle }) => {
+    
+    // 1. 🛠️ FIX: Check if data is an array before trying to map.
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        return null;
     }
 
-    return categoriesToRender.map((cat) => {
-      const catKey = `cat-${cat.id}`;
-      const hasSubcategories = cat.subCategory && Array.isArray(cat.subCategory) && cat.subCategory.length > 0;
-      const isOpen = openCategories[cat.id];
-
-      return (
-        <Fragment key={catKey}>
-          {/* Main category header with a click handler and pointer cursor */}
-          <AccordionHeader
-            open={isOpen}
-            sx={{ pl: 0, cursor: 'pointer' }}
-            onClick={() => hasSubcategories && handleToggleCategory(cat.id)}
-          >
-            <Span sx={{ fontWeight: 'bold' }}>{cat.name}</Span>
-          </AccordionHeader>
-
-          {/* Render subcategories only if the parent is open */}
-          {hasSubcategories && (
-            <Collapse in={isOpen}>
-              <FormGroup>
-                {/* Iterate through all sub-categories and their items directly */}
-                {cat.subCategory.map((sub) => (
-                  <Fragment key={`sub-group-${sub.id}`}>
-                    {sub.subcategoryItems.map((item) => {
-                      if (!item || !item.id) {
-                        console.warn("Invalid subcategory item found:", item);
-                        return null;
-                      }
-                      const itemKey = `item-${item.id}`;
-                      const isChecked = checkedCategoryIds.includes(item.id);
-
-                      return (
-                        <FormControlLabel
-                          key={itemKey}
-                          sx={{ pl: 4 }}
-                          control={
-                            <Checkbox
-                              checked={isChecked}
-                              onChange={() => handleCheckboxChange(item.id, !isChecked)}
-                              size="small"
-                            />
-                          }
-                          label={item.name}
-                        />
-                      );
-                    })}
-                  </Fragment>
-                ))}
-              </FormGroup>
-            </Collapse>
-          )}
+    // 2. 🛠️ FIX: Map over the entire 'data' array to render multiple accordions.
+    return (
+        <Fragment>
+            {data.map((categoryItem) => (
+                <CategoryItemAccordion 
+                    key={categoryItem.slug || categoryItem.title} // Use a unique key
+                    categoryItem={categoryItem}
+                    checkedCategoryIds={checkedCategoryIds}
+                    onCategoryToggle={onCategoryToggle}
+                />
+            ))}
         </Fragment>
-      );
-    });
-  };
-
-  return <>{renderCategory(sortedCategories)}</>;
+    );
 };

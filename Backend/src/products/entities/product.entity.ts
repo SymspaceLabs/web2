@@ -150,20 +150,22 @@ export class Product {
   // -------------------------
   // 1. New Attribute: currency
   // -------------------------
-  @Column({ default: 'USD' })
+  @Column({ length: 10, default: 'USD' }) // Use length for VARCHAR in TypeORM
   currency: string;
 
   // -------------------------
   // 2. New Attribute: productWeight
   // -------------------------
- @Column('json') 
+  @Column('json') 
   productWeight: { unit: string; value: number | null };
 
   // NEW HOOK: Ensures default values are set before insertion
   @BeforeInsert()
   setDefaults() {
     if (this.productWeight === undefined) {
-      this.productWeight = { unit: 'lbs', value: null };
+      // Note: This default only runs when inserting a NEW entity via TypeORM.
+      // The migration's SQL default handles existing rows.
+      this.productWeight = { unit: 'lbs', value: null }; 
     }
   }
 

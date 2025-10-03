@@ -1,12 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  Column,
-} from 'typeorm';
 import { Product } from 'src/products/entities/product.entity';
-import { ProductColor } from 'src/product-colors/entities/product-color.entity';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 
 @Entity()
 export class ProductVariant {

@@ -1,12 +1,12 @@
-import { Entity, PrimaryColumn, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm'; // Added JoinColumn
-import { ProductImage } from 'src/product-images/entities/product-image.entity';
-import { Company } from 'src/companies/entities/company.entity';
-import { ProductColor } from 'src/product-colors/entities/product-color.entity';
-import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
-import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Review } from 'src/reviews/entities/review.entity';
+import { Company } from 'src/companies/entities/company.entity';
+import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+import { ProductImage } from 'src/product-images/entities/product-image.entity';
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
+import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
+import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 export enum ProductStatus {
@@ -146,6 +146,26 @@ export class Product {
 
   @Column({ default: false })
   safety_certified: boolean;
+
+  // -------------------------
+  // 1. New Attribute: currency
+  // -------------------------
+  @Column({ default: 'USD' })
+  currency: string;
+
+  // -------------------------
+  // 2. New Attribute: productWeight
+  // -------------------------
+ @Column('json') 
+  productWeight: { unit: string; value: number | null };
+
+  // NEW HOOK: Ensures default values are set before insertion
+  @BeforeInsert()
+  setDefaults() {
+    if (this.productWeight === undefined) {
+      this.productWeight = { unit: 'lbs', value: null };
+    }
+  }
 
 
 }

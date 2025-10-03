@@ -88,8 +88,43 @@ const BrandFilter = ({ allBrands, selectedBrands, setSelectedBrands }) => (
 
 // Price Filter Component
 const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
+  // Debug: Log the received priceRange and priceLimits whenever the component renders
+  console.log("PriceFilter Render: priceRange =", priceRange, "priceLimits =", priceLimits);
+
   const handlePriceChange = (event, newValue) => {
-    setPriceRange(newValue);
+    // newValue is an array [min, max] from the slider, or a custom array from the text fields.
+    console.log("handlePriceChange triggered with newValue:", newValue);
+    // Ensure newValue is an array of two numbers before setting state.
+    if (Array.isArray(newValue) && newValue.length === 2 && typeof newValue[0] === 'number' && typeof newValue[1] === 'number') {
+      setPriceRange(newValue);
+    } else {
+      console.error("Error: Invalid price range value passed to setPriceRange:", newValue);
+    }
+  };
+
+  // Corrected function for TextField updates to ensure proper number conversion and state update
+  const handleMinPriceChange = (e) => {
+    // Convert the string value to a number. If the input is empty or invalid, treat it as 0
+    const newMin = Number(e.target.value) || 0; 
+    // Create a new array to pass to setPriceRange
+    const newRange = [newMin, priceRange[1]];
+    console.log("handleMinPriceChange: New range being set:", newRange);
+    setPriceRange(newRange);
+  };
+
+  const handleMaxPriceChange = (e) => {
+    // Convert the string value to a number. If the input is empty or invalid, treat it as the max limit
+    const newMax = Number(e.target.value) || priceLimits[1]; 
+    // Create a new array to pass to setPriceRange
+    const newRange = [priceRange[0], newMax];
+    console.log("handleMaxPriceChange: New range being set:", newRange);
+    setPriceRange(newRange);
+  };
+
+  // Debug: Log when the slider is dragging (optional, but helpful)
+  const handleSliderChangeCommitted = (event, newValue) => {
+    console.log("Slider change committed (finished drag/click):", newValue);
+    // Note: The main onChange handler handles the updates during drag.
   };
 
   return (
@@ -100,35 +135,35 @@ const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
           min={priceLimits[0]}
           max={priceLimits[1]}
           size="small"
-          value={priceRange}
+          // Ensure priceRange is an array of numbers, use fallback if necessary
+          value={Array.isArray(priceRange) ? priceRange : priceLimits} 
           valueLabelDisplay="auto"
           valueLabelFormat={(v) => `$${v}`}
-          onChange={handlePriceChange}
+          onChange={handlePriceChange} // This handles the slider drag/move
+          onChangeCommitted={handleSliderChangeCommitted} // Optional: To see when the user stops dragging
         />
       </Box>
       <FlexBetween>
         <TextField
-          placeholder="0"
+          placeholder={priceLimits[0].toString()}
           type="number"
           size="small"
           fullWidth
           value={priceRange[0]}
-          onChange={(e) =>
-            handlePriceChange(null, [Number(e.target.value), priceRange[1]])
-          }
+          onChange={handleMinPriceChange} // Use the dedicated handler
+          inputProps={{ min: priceLimits[0], max: priceLimits[1] }} // Set min/max for input field
         />
         <H5 color="grey.600" px={1}>
           -
         </H5>
         <TextField
-          placeholder="250"
+          placeholder={priceLimits[1].toString()}
           type="number"
           size="small"
           fullWidth
           value={priceRange[1]}
-          onChange={(e) =>
-            handlePriceChange(null, [priceRange[0], Number(e.target.value)])
-          }
+          onChange={handleMaxPriceChange} // Use the dedicated handler
+          inputProps={{ min: priceLimits[0], max: priceLimits[1] }} // Set min/max for input field
         />
       </FlexBetween>
       <Box component={Divider} my={3} />
@@ -136,7 +171,7 @@ const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
   );
 };
 
-// Availability Filter Component
+// Availability Filter Component - FINAL FIX
 const AvailabilityFilter = ({ allAvailabilities, selectedAvailabilities, onAvailabilityFilterChange }) => (
   <>
     <H6 mb={1.25}>Availability</H6>
@@ -147,15 +182,19 @@ const AvailabilityFilter = ({ allAvailabilities, selectedAvailabilities, onAvail
           <FormControlLabel
             key={avail}
             label={<Span color="inherit">{avail}</Span>}
+            // ✅ FIX: Ensure the handler accepts the event object 'e' 
+            // to maintain proper MUI/React click handling.
+            onChange={(e) => {
+              if (onAvailabilityFilterChange) {
+                // The rest of your logic remains the same:
+                onAvailabilityFilterChange(avail, !isChecked);
+              }
+            }}
             control={
               <Checkbox
                 size="small"
                 checked={isChecked}
-                onChange={() => {
-                  if (onAvailabilityFilterChange) {
-                    onAvailabilityFilterChange(avail, !isChecked);
-                  }
-                }}
+                // No inner onChange is still correct
               />
             }
           />
@@ -166,45 +205,61 @@ const AvailabilityFilter = ({ allAvailabilities, selectedAvailabilities, onAvail
   </>
 );
 
-// Color Filter Component
-const ColorFilter = ({ allColors, selectedColors, onColorFilterChange }) => (
-  <>
-    <H6 mb={2}>Colors</H6>
-    <FormGroup>
-      {allColors.map((color) => (
-        <FormControlLabel
-          key={color.code}
-          control={
-            <Checkbox
-              checked={Array.isArray(selectedColors) && selectedColors.some((c) => c.code === color.code)}
-              onChange={() => {
-                if (onColorFilterChange) {
-                  onColorFilterChange(color, !selectedColors.some((c) => c.code === color.code));
-                }
-              }}
+// Color Filter Component - FIXED to filter/match by 'code' property
+const ColorFilter = ({ allColors, selectedColors, onColorFilterChange }) => {
+    // Extract just the codes from the selectedColors for fast lookup
+    const selectedColorCodes = useMemo(() => {
+        if (!Array.isArray(selectedColors)) return [];
+        return selectedColors.map(c => c.code);
+    }, [selectedColors]);
+
+    return (
+    <>
+      <H6 mb={2}>Colors</H6>
+      <FormGroup>
+        {allColors.map((color) => {
+          // 1. Determine the current checked status by checking if the color's 'code' exists in the selected codes array
+          const isChecked = selectedColorCodes.includes(color.code);
+
+          return (
+            <FormControlLabel
+              key={color.code}
+              control={
+                <Checkbox
+                  size="small"
+                  // 2. Bind the checked state directly to the calculated status
+                  checked={isChecked}
+                  onChange={() => {
+                    if (onColorFilterChange) {
+                      // 3. Pass the color object and the NEW state (the opposite of the current state)
+                      onColorFilterChange(color, !isChecked);
+                    }
+                  }}
+                />
+              }
+              label={
+                <Box display="flex" alignItems="center">
+                  <Box
+                    sx={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: "50%",
+                      backgroundColor: color.code,
+                      border: "1px solid #ccc",
+                      mr: 1.5,
+                    }}
+                  />
+                  <Typography variant="body2">{color.name}</Typography>
+                </Box>
+              }
             />
-          }
-          label={
-            <Box display="flex" alignItems="center">
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  backgroundColor: color.code,
-                  border: "1px solid #ccc",
-                  mr: 1.5,
-                }}
-              />
-              <Typography variant="body2">{color.name}</Typography>
-            </Box>
-          }
-        />
-      ))}
-    </FormGroup>
-    <Box component={Divider} my={3} />
-  </>
-);
+          );
+        })}
+      </FormGroup>
+      <Box component={Divider} my={3} />
+    </>
+  );
+};
 
 // Ratings Filter Component
 const RatingsFilter = () => (
@@ -289,11 +344,15 @@ export default function ProductFilterCard({
 
   return (
     <Box pt={{ sm: 7 }}>
-      <GenderFilter
-        allGenders={allGenders}
-        selectedGenders={selectedGenders}
-        onGenderFilterChange={onGenderFilterChange}
-      />
+      {
+        allGenders.length> 0 &&
+        <GenderFilter
+          allGenders={allGenders}
+          selectedGenders={selectedGenders}
+          onGenderFilterChange={onGenderFilterChange}
+        />
+      }
+      
       <CategoryAccordion
         data={category}
         productCategoryIds={productCategoryIds}

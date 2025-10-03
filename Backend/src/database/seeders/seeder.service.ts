@@ -7,7 +7,7 @@ import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
-import { categoriesSeedData } from './category/data';
+import { CATEGORIES_DATA } from './category/data';
 import {
   CategorySeedData,
   SubcategorySeedData,
@@ -54,7 +54,7 @@ export class SeederService {
       const subcategoryItemChildRepo = manager.getRepository(SubcategoryItemChild);
 
       // Insert Categories → Subcategories → Items → Children
-      for (const categoryData of categoriesSeedData as CategorySeedData[]) {
+      for (const categoryData of CATEGORIES_DATA as CategorySeedData[]) {
         const category = categoryRepo.create({
           id: categoryData.id,
           name: categoryData.name,

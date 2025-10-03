@@ -2,22 +2,17 @@
 
 "use client";
 
-// ======================================================
-// Product Search Page
-// ======================================================
-
 import { useState, useMemo, useCallback } from "react";
 import { Grid, Container, Box, useMediaQuery } from "@mui/material";
 
-// Import the isolated hooks and helper
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useProductData } from "@/hooks/useProductData";
 import { useProductFilters } from "@/hooks/useProductFilters";
+import { useSearchParams } from "next/navigation";
 import { useFilteredAndSortedProducts } from "@/hooks/useFilteredAndSortedProducts";
 
-import ProductFilterCard from "../product-filter-card";
-import ProductsGridView from "../products-grid-view";
 import TopSortCard from "../top-sort-card";
+import ProductsGridView from "../products-grid-view";
+import ProductFilterCard from "../product-filter-card";
 import ProductFilterDrawer from "../product-filter-drawer";
 import MobileProductHeader from "../mobile-product-header";
 
@@ -36,10 +31,8 @@ function FilterControls(props) {
 export default function ProductSearchPageView() {
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down("md"));
     const [openDrawer, setOpenDrawer] = useState(false);
-    const [sortOption, setSortOption] = useState("latest"); // Default sort option
+    const [sortOption, setSortOption] = useState("latest");
     const searchParams = useSearchParams();
-    const router = useRouter();
-    const pathname = usePathname();
     const paramsString = searchParams.toString();
 
     const handleSortChange = useCallback((event) => {
@@ -54,14 +47,14 @@ export default function ProductSearchPageView() {
         allGenders,
         allAvailabilities,
         allColors,
-        loading,
-        error
+        loading
     } = useProductData(paramsString); 
 
     const {
         filterState,
         setFilterState,
         handleFilterChange,
+        handleColorChange,
         handleResetAllFilters
     } = useProductFilters(
         {
@@ -76,6 +69,10 @@ export default function ProductSearchPageView() {
         searchParams
     );
 
+    // Filter products based on filterState and sort them
+    const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
+
+    // --- Memoized Display Names (no change) ---
     const genderQuery = useMemo(
         () => searchParams.get('gender')?.split(',').filter(Boolean).map(g => g.toLowerCase()) || [],
         [searchParams]
@@ -85,8 +82,6 @@ export default function ProductSearchPageView() {
         () => searchParams.get('subcategoryItem') || searchParams.get('subcategory') || searchParams.get('category'),
         [searchParams]
     );
-
-    const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
 
     const genderDisplayName = useMemo(
         () => genderQuery.length > 0
@@ -112,6 +107,7 @@ export default function ProductSearchPageView() {
         }
         return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
     }, [genderDisplayName, categoryDisplayName]);
+    // ------------------------------------------
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -119,107 +115,81 @@ export default function ProductSearchPageView() {
         }
         setOpenDrawer(open);
     };
-    
-    const handleGenderFilterChange = useCallback(
-        (gender, isChecked) => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            const currentGenders = newParams.getAll('gender'); 
-            
-            let updatedGenders;
-            if (isChecked) {
-                if (!currentGenders.includes(gender)) {
-                    updatedGenders = [...currentGenders, gender];
-                } else {
-                    updatedGenders = currentGenders; 
-                }
-            } else {
-                updatedGenders = currentGenders.filter(g => g !== gender);
-            }
-
-            newParams.delete('gender');
-            updatedGenders.forEach(g => newParams.append('gender', g));
-            
-            router.push(`${pathname}?${newParams.toString()}`);
-        },
-        [searchParams, router, pathname]
-    );
-    
+       
+    // Memoize the props passed to the FilterControls
     const filterControlProps = useMemo(() => ({
+        products: allProducts, // Pass products for CategoryAccordion
         allBrands: filterState.allBrands,
         selectedBrands: filterState.selectedBrands,
+        // Brand filter updates local state
         setSelectedBrands: (brands) => setFilterState(p => ({ ...p, selectedBrands: brands })), 
         priceRange: filterState.priceRange,
-        setPriceRange: (range) => setFilterState(p => ({ ...p, priceRange: range })),
+        // Price filter updates local state only
+        setPriceRange: (range) => {
+            setFilterState(p => ({ ...p, priceRange: range }));
+        },
         priceLimits: filterState.priceLimits,
         category: filterState.category,
-        
-        // 🛠️ FIX: Use 'checkedCategoryIds' for consistency with filter hook and product data
         checkedCategoryIds: filterState.checkedCategoryIds, 
-
-        /** Client-side category filter change handler, now manages category IDs. */
+        // Category filter updates local state only
         onCategoryFilterChange: (categoryId, isChecked) => {
             setFilterState(prevState => {
-                // Ensure to use the correct state field name: checkedCategoryIds
                 const currentIds = prevState.checkedCategoryIds || [];
-                const idAsString = String(categoryId); // Important for comparison consistency
+                const idAsString = String(categoryId);
                 let updatedIds;
                 
                 if (isChecked) {
-                    // Add ID if checked, ensuring uniqueness
                     updatedIds = [...new Set([...currentIds, idAsString])];
                 } else {
-                    // Remove ID if unchecked
                     updatedIds = currentIds.filter(id => id !== idAsString);
                 }
-
-                // Update the local state field: checkedCategoryIds
                 return { ...prevState, checkedCategoryIds: updatedIds };
             });
         },
 
         allGenders: filterState.allGenders,
-        selectedGenders: genderQuery,
-        onGenderFilterChange: handleGenderFilterChange,
+        selectedGenders: filterState.selectedGenders, // <-- Use local state
+        // Gender filter updates local state only
+        onGenderFilterChange: (gender, isChecked) => {
+             setFilterState(prevState => {
+                const currentGenders = prevState.selectedGenders || [];
+                let updatedGenders;
+                
+                if (isChecked) {
+                    updatedGenders = [...new Set([...currentGenders, gender])];
+                } else {
+                    updatedGenders = currentGenders.filter(g => g !== gender);
+                }
+                return { ...prevState, selectedGenders: updatedGenders };
+            });
+        },
 
         allAvailabilities: filterState.allAvailabilities,
         selectedAvailabilities: filterState.selectedAvailabilities,
-        // Availability filter still uses URL sync
-        onAvailabilityFilterChange: (avail, isChecked) => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            if (isChecked) {
-                newParams.set('availability', avail);
-            } else {
-                newParams.delete('availability');
-            }
-            router.push(`${pathname}?${newParams.toString()}`);
-        },
 
         allColors: filterState.allColors,
         selectedColors: filterState.selectedColors,
-        // Colors filter still uses URL sync
+        // Colors filter updates the URL
         onColorFilterChange: (color, isChecked) => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            const currentColors = newParams.get('colors')?.split(',') || [];
-            const colorCode = color.code; 
-            
-            let updatedColors;
-            if (isChecked) {
-                if (!currentColors.includes(colorCode)) {
-                    updatedColors = [...currentColors, colorCode];
+            // Call the dedicated local state handler from the hook
+            handleColorChange(color, isChecked);
+        }, 
+         // ⭐ THE MISSING HANDLER IS ADDED HERE
+        onAvailabilityFilterChange: (availability, isChecked) => {
+            setFilterState(prevState => {
+                const currentAvailabilities = prevState.selectedAvailabilities || [];
+                let updatedAvailabilities;
+                
+                if (isChecked) {
+                    updatedAvailabilities = [...new Set([...currentAvailabilities, availability])];
                 } else {
-                    updatedColors = currentColors;
+                    updatedAvailabilities = currentAvailabilities.filter(a => a !== availability);
                 }
-            } else {
-                updatedColors = currentColors.filter(c => c !== colorCode);
-            }
-            
-            newParams.delete('colors');
-            updatedColors.forEach(c => newParams.append('colors', c));
-            
-            router.push(`${pathname}?${newParams.toString()}`);
+                return { ...prevState, selectedAvailabilities: updatedAvailabilities };
+            });
         },
         onClearAllFilters: handleResetAllFilters,
-    }), [filterState, genderQuery, handleGenderFilterChange, handleResetAllFilters, searchParams, router, pathname, setFilterState]);
+    }), [filterState, handleResetAllFilters, allProducts, handleFilterChange, setFilterState]);
 
 
     return (

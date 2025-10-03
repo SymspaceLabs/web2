@@ -24,3 +24,19 @@ export function slugify(text: string): string {
 export function normalizeSearchText(text: string): string {
   return text.toLowerCase().replace(/-/g, '');
 }
+
+/**
+ * Calculates 'In stock' or 'Out of Stock' based on variants' stock count.
+ * NOTE: Assumes Product type has a 'variants' array, and each variant has a 'stock' property.
+ */
+
+// --- Helper Constants (Define these outside the findAll method) ---
+const IN_STOCK = 'In stock';
+const OUT_OF_STOCK = 'Out of stock';
+
+export function  determineProductAvailability (product: any): string  {
+  // Check if the product has variants and if at least one variant's stock is > 0
+  const isInStock = product.variants?.some(variant => (variant.stock || 0) > 0);
+  
+  return isInStock ? IN_STOCK : OUT_OF_STOCK;
+};

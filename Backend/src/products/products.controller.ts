@@ -35,19 +35,25 @@ export class ProductsController {
     @Query('category') categorySlug?: string,
     @Query('subcategory') subcategorySlug?: string,
     @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
-    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string
+    @Query('subcategoryItemChild') subcategoryItemChildSlug?: string,
+    @Query('gender') genders?: string | string[]
   ) {
 
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
     ? subcategoryItemSlugs 
     : subcategoryItemSlugs ? [subcategoryItemSlugs] : undefined;
 
+    const gendersArray = Array.isArray(genders) 
+      ? genders 
+      : genders ? [genders] : undefined;
+
     return await this.productsService.findAll(
       search,
       categorySlug,
       subcategorySlug,
       subcategoryItemSlugsArray,
-      subcategoryItemChildSlug
+      subcategoryItemChildSlug,
+      gendersArray
     );
   }
 

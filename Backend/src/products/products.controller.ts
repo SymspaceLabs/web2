@@ -57,9 +57,8 @@ export class ProductsController {
     );
   }
 
-  @Get('search') // This must be placed before the general ':id' or ':slug' route
+  @Get('search')
     async search(@Query('q') query?: string): Promise<SearchResultResponse> {
-      // The service now returns the structured object { shops: [], searchResults: [] }
       const results = await this.productsService.performFreeFormSearch(query);
       return results;
   }

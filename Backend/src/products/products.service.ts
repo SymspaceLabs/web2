@@ -530,110 +530,128 @@ export class ProductsService {
   }
 
   async performFreeFormSearch(searchTerm?: string): Promise<SearchResultResponse> {
-    const normalizedSearchTerm = searchTerm ? normalizeSearchText(searchTerm) : null;
+      const normalizedSearchTerm = searchTerm ? normalizeSearchText(searchTerm) : null;
       
-    // Initialize the structured response object
-    const response: SearchResultResponse = { shops: [], searchResults: [] };
+      // Initialize the structured response object
+      const response: SearchResultResponse = { shops: [], searchResults: [] };
 
-    if (!normalizedSearchTerm || normalizedSearchTerm.length < 2) {
-        return response; // Return empty structure on invalid/short query
-    }
+      if (!normalizedSearchTerm || normalizedSearchTerm.length < 2) {
+          return response; // Return empty structure on invalid/short query
+      }
 
-    // ⭐️ CRITICAL PERFORMANCE FIX: Use prefix search for index utilization
-    // NOTE: ILIKE is PostgreSQL/MySQL syntax for case-insensitive LIKE.
-    // The '%' at the end allows the database to use an index (like B-tree or pg_trgm GIN).
-    const searchPrefix = `${normalizedSearchTerm}%`;
+      // ⭐️ CRITICAL PERFORMANCE FIX: Use prefix search for index utilization
+      const searchPrefix = `${normalizedSearchTerm}%`;
 
-    // ============================================
-    // 1. Search for Company/Shop Matches (Populates 'shops' array)
-    // ============================================
-    
-    // This query finds all companies whose name STARTS with the search term.
-    const companySuggestions = await this.companiesRepository.createQueryBuilder('company')
-        .select(['company.id', 'company.entityName', 'company.slug'])
-        .where('LOWER(company.entityName) LIKE :term', { term: searchPrefix })
-        .limit(3)
-        .getMany();
-
-    for (const company of companySuggestions) {
-        response.shops.push({
-            id: `company-${company.id}`,
-            label: company.entityName,
-            type: 'company',
-            slug: company.slug
-        });
-    }
-
-
-    // ============================================
-    // 2. Search for General Results (Populates 'searchResults' array)
-    // ============================================
+      // ============================================
+      // 1. Search for Company/Shop Matches (Populates 'shops' array)
+      // ============================================
       
-    const generalSuggestions: SearchSuggestion[] = [];
-    
-    // Search for matching product names (Prefix Search)
-    const productSuggestions = await this.productRepository.createQueryBuilder('product')
-        .select(['product.name', 'product.id'])
-        .where('LOWER(product.name) LIKE :term', { term: searchPrefix })
-        .limit(5)
-        .getMany(); // Use getMany() for full objects if you need IDs later
+      const companySuggestions = await this.companiesRepository.createQueryBuilder('company')
+          .select(['company.id', 'company.entityName', 'company.slug'])
+          .where('LOWER(company.entityName) LIKE :term', { term: searchPrefix })
+          .limit(3)
+          .getMany();
 
-    // Search for matching category names (Prefix Search)
-    const categorySuggestions = await this.categoryRepository.createQueryBuilder('category')
-        .select(['category.name', 'category.id'])
-        .where('LOWER(category.name) LIKE :term', { term: searchPrefix })
-        .limit(5)
-        .getMany();
+      for (const company of companySuggestions) {
+          response.shops.push({
+              id: `company-${company.id}`,
+              label: company.entityName,
+              type: 'company',
+              slug: company.slug
+          });
+      }
 
-    // Search for subcategory item children (Prefix Search)
-    const subcategoryItemChildSuggestions = await this.subcategoryItemChildRepository.createQueryBuilder('subcategoryItemChild')
-        .select(['subcategoryItemChild.name', 'subcategoryItemChild.id'])
-        .where('LOWER(subcategoryItemChild.name) LIKE :term', { term: searchPrefix })
-        .limit(5)
-        .getMany();
 
-    // 3. Combine and Map all General Suggestions
-    
-    // Map products
-    for (const item of productSuggestions) {
-        generalSuggestions.push({
-            id: `product-${item.id}`,
-            label: item.name,
-            type: 'product',
-        });
-    }
-    
-    // Map categories
-    for (const item of categorySuggestions) {
-        generalSuggestions.push({
-            id: `category-${item.id}`,
-            label: item.name,
-            type: 'category',
-        });
-    }
-    
-    // Map subcategory children
-    for (const item of subcategoryItemChildSuggestions) {
-        generalSuggestions.push({
-            id: `subcategory-child-${item.id}`,
-            label: item.name,
-            type: 'subcategory-child',
-        });
-    }
+      // ============================================
+      // 2. Search for General Results (Populates 'searchResults' array)
+      // ============================================
+          
+      const generalSuggestions: SearchSuggestion[] = [];
+      
+      // Search for matching product names (Prefix Search)
+      const productSuggestions = await this.productRepository.createQueryBuilder('product')
+          // 💡 ADDED 'product.slug'
+          .select(['product.name', 'product.id', 'product.slug']) 
+          .where('LOWER(product.name) LIKE :term', { term: searchPrefix })
+          .limit(5)
+          .getMany();
 
-    // Remove duplicates and assign to the response object
-    response.searchResults = Array.from(new Map(generalSuggestions.map(item => [item.label, item])).values());
+      // Search for products belonging to matching companies
+      const companyProducts = await this.productRepository.createQueryBuilder('product')
+          .innerJoin('product.company', 'company') // Assuming 'company' is the relation name in Product entity
+          // 💡 ADDED 'product.slug'
+          .select(['product.name', 'product.id', 'product.slug', 'company.entityName']) // Select company name for better labelling
+          .where('LOWER(company.entityName) LIKE :term', { term: searchPrefix })
+          .limit(5) // Limit the number of products from companies
+          .getMany();
 
-    return response;
+      // Search for matching category names (Prefix Search)
+      const categorySuggestions = await this.categoryRepository.createQueryBuilder('category')
+          // 💡 ADDED 'category.slug'
+          .select(['category.name', 'category.id', 'category.slug'])
+          .where('LOWER(category.name) LIKE :term', { term: searchPrefix })
+          .limit(5)
+          .getMany();
+
+      // Search for subcategory item children (Prefix Search)
+      const subcategoryItemChildSuggestions = await this.subcategoryItemChildRepository.createQueryBuilder('subcategoryItemChild')
+          // 💡 ADDED 'subcategoryItemChild.slug'
+          .select(['subcategoryItemChild.name', 'subcategoryItemChild.id', 'subcategoryItemChild.slug'])
+          .where('LOWER(subcategoryItemChild.name) LIKE :term', { term: searchPrefix })
+          .limit(5)
+          .getMany();
+
+      // 3. Combine and Map all General Suggestions
+      
+      // Map products (by name match)
+      for (const item of productSuggestions) {
+          generalSuggestions.push({
+              id: `product-${item.id}`,
+              label: item.name,
+              type: 'product',
+              slug: item.slug // ✅ Now correctly available
+          });
+      }
+
+      // Map products (by company name match)
+      for (const item of companyProducts) {
+          generalSuggestions.push({
+              id: `product-${item.id}`,
+              label: `${item.name} (from ${item.company.entityName})`, // Clarify the source
+              type: 'product',
+              slug: item.slug              // ✅ Now correctly available
+          });
+      }
+      
+      // Map categories
+      for (const item of categorySuggestions) {
+          generalSuggestions.push({
+              id: `category-${item.id}`,
+              label: item.name,
+              type: 'category',
+              slug: item.slug              // ✅ Now correctly available
+          });
+      }
+      
+      // Map subcategory children
+      for (const item of subcategoryItemChildSuggestions) {
+          generalSuggestions.push({
+              id: `subcategory-child-${item.id}`,
+              label: item.name,
+              type: 'subcategory-child',
+              slug: item.slug              // ✅ Now correctly available
+          });
+      }
+
+      // Remove duplicates and assign to the response object
+      response.searchResults = Array.from(new Map(generalSuggestions.map(item => [item.label, item])).values());
+
+      return response;
   }
 
   // ==================================================================================
   // Reusable Functions
   // ==================================================================================
-
-// src/product/products.service.ts
-
-// ... other methods
 
   /**
  * Applies a gender filter to the products query, including 'unisex' products 

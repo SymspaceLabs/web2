@@ -102,6 +102,7 @@ export default function useSearch() {
               id: item.id,
               title: item.label,
               link: link, 
+              slug: item.slug, 
               type: item.type,
             };
         });

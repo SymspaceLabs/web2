@@ -22,15 +22,6 @@ export class SubcategoryItem {
   @Column({ nullable: true })
   slug: string;
 
-  // @Column('simple-array', { nullable: true })
-  // tags_required: string[];
-
-  // @Column('simple-array', { nullable: true })
-  // optional_tags: string[];
-
-  // @Column('json', { nullable: true })
-  // tag_defaults: { [key: string]: string };
-
   @Column()
   subcategoryId: string;
 

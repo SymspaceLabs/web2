@@ -13,6 +13,7 @@ import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-
 import { ProductGender } from '../entities/product.entity';
 import { CreateProductModelDto } from 'src/product-models/dto/create-product-model.dto';
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
+import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
 
 export class CreateProductDto {
   @IsString()
@@ -80,11 +81,11 @@ export class CreateProductDto {
   @IsEnum(ProductGender)
   gender?: ProductGender;
 
-  @IsArray()
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreateProductModelDto) // Add CreateProductModelDto to the DTO
-  threeDModels?: CreateProductModelDto[];
+  @Type(() => CreateProduct3dModelDto)
+  threeDModels?: CreateProduct3dModelDto[];
 
   // @IsString()
   // @IsOptional()

@@ -146,20 +146,7 @@ export class ProductsService {
       }
 
       // --- NEW: MODEL UPDATE LOGIC ---
-      // if (threeDModels !== undefined) {
-      //   // If there are existing threeDModels, remove them first
-      //   if (product.threeDModels && product.threeDModels.length > 0) {
-      //     await this.product3DModelRepository.remove(product.threeDModels);
-      //   }
-      //   // Map the new threeDModels from DTO to ProductModel entities
-      //   product.threeDModels = threeDModels.map((modelDto) => {
-      //     const newModel = new Product3DModel();
-      //     newModel.url = modelDto.url;
-      //     newModel.colorCode = modelDto.colorCode || null; // Ensure colorCode is passed or set to null
-      //     newModel.product = product; // Link to the current product entity
-      //     return newModel;
-      //   });
-      // }
+      
       if (threeDModels !== undefined) {
         // If there are existing threeDModels, remove them first
         if (product.threeDModels && product.threeDModels.length > 0) {

@@ -9,43 +9,53 @@ export class Product3DModel {
   id: string;
 
   @Column()
-  url: string; // The URL for the 3D model or image
+  url: string;
 
-  @Column({ nullable: true }) // Optional column for storing color code directly if needed
+  @Column({ nullable: true })
   colorCode: string;
 
-  // ManyToOne relationship with Product, as one product can have many models
   @ManyToOne(() => Product, (product) => product.threeDModels, {
-    onDelete: 'CASCADE', // If product is deleted, delete its models
+    onDelete: 'CASCADE',
   })
   product: Product;
 
   // -------------------------
   // New Attributes
   // -------------------------
+  
+  // Pivot is NOT NULL, so we use the @BeforeInsert hook to provide a default.
   @Column('json')
   pivot: number[];
 
-  @Column({ default: 'glb' }) // Defaults to 'glb' if not provided
+  // Format has a default set in the database, but we include it here for consistency.
+  @Column({ default: 'glb' }) // ✅ Added default decorator to match migration
   format: string;
 
+  // BoundingBox is NOT NULL. The JSON structure must match the non-null default 
+  // used in the migration (where min/max are arrays of numbers, not nulls).
   @Column('json')
-  boundingBox: { min: number | null; max: number | null };
+  boundingBox: { min: number[]; max: number[] }; // ✅ Corrected type to number[]
 
   /**
    * TypeORM Hook: Ensures default values are set before the entity is inserted
-   * into the database, bypassing the MySQL JSON default restriction.
+   * into the database to satisfy the NOT NULL constraint for the JSON columns.
    */
   @BeforeInsert()
   setDefaults() {
+    // 🎯 FIX: Match the structure and types of the migration's DEFAULT value.
     if (this.boundingBox === undefined) {
-      this.boundingBox = { min: null, max: null };
+      this.boundingBox = { min: [0, 0, 0], max: [0, 0, 0] }; 
     }
+    
     // Set the required default for 'pivot'
     if (this.pivot === undefined) {
       this.pivot = [0, 0, 0];
     }
+
+    // Optional: Explicitly set format default if it wasn't provided in the DTO,
+    // although the database default is more reliable here.
+    if (this.format === undefined) {
+        this.format = 'glb';
+    }
   }
-
-
 }

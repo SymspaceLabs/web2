@@ -431,8 +431,8 @@ export class ProductsService {
     // 6. Generate facets using the shared logic
     // Assuming calculatePriceRange, getBrandsFacet, and getGendersFacet exist
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
-    const formattedBrands = await this.getBrandsFacet(filterParams); 
-    const formattedGenders = await this.getGendersFacet(filterParams);
+    const formattedBrands = await this.getBrandsFacet(products); 
+    const formattedGenders = await this.getGendersFacet(products);
     const finalCategoryFacets = this.getCategoryFacets(products);
     
     // ⭐ UPDATED: Generates the list of available facets (e.g., ['In Stock', 'Out of Stock'])
@@ -459,11 +459,23 @@ export class ProductsService {
       .leftJoinAndSelect('product.colors', 'colors')
       .leftJoinAndSelect('product.sizes', 'sizes')
       .leftJoinAndSelect('product.variants', 'variants')
-      // Conditional joins based on the existence of subcategoryItemChild
+      
+      // ====================================================================
+      // 1. JOINS FOR PRODUCTS WITH subcategoryItemChild (Current logic)
+      // ====================================================================
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
-      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
-      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-      .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'parentSubcategoryItem') // Rename alias to avoid conflict
+      .leftJoinAndSelect('parentSubcategoryItem.subcategory', 'parentSubcategory')
+      .leftJoinAndSelect('parentSubcategory.category', 'parentCategory')
+
+      // ====================================================================
+      // 2. JOINS FOR PRODUCTS WITH ONLY subcategoryItem (MISSING/CRITICAL FIX)
+      // This is a direct join to fetch the category path when no child exists.
+      // ====================================================================
+      .leftJoinAndSelect('product.subcategoryItem', 'directSubcategoryItem')
+      .leftJoinAndSelect('directSubcategoryItem.subcategory', 'directSubcategory')
+      .leftJoinAndSelect('directSubcategory.category', 'directCategory')
+      
       .where('product.slug = :slug', { slug })
       .getOne();
 
@@ -888,141 +900,74 @@ export class ProductsService {
   // Example of the extracted function
   applySearchTermFilter(query: SelectQueryBuilder<any>, searchTerm?: string) {
     if (searchTerm) {
+      // Apply the WHERE clause, combining all search conditions with OR
       query.andWhere(
-        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
-        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
-        // ... rest of the search conditions
+        `(
+          LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(product.description) LIKE LOWER(:searchTerm) OR
+          LOWER(company.entityName) LIKE LOWER(:searchTerm) OR 
+          
+          -- New Category/Subcategory Search Fields:
+          LOWER(category.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm)
         )`,
         { searchTerm: `%${searchTerm}%` },
       );
     }
   }
 
-  // src/product/products.service.ts
+  async getBrandsFacet(products: any[]) {
+    if (!products || products.length === 0) return [];
 
-  async getBrandsFacet(filterParams: {
-      searchTerm?: string;
-      categorySlug?: string;
-      subcategorySlug?: string;
-      subcategoryItemSlugs?: string[]; 
-      subcategoryItemChildSlug?: string;
-      // --- NEW: Accept the active gender filter ---
-      genders?: string[]; 
-      // --- Note: Brands filter is often excluded here to show all available brands ---
-  }) {
-      const brandsQuery = this.productRepository
-          .createQueryBuilder('product')
-          .leftJoin('product.company', 'company')
-          .leftJoin('product.subcategoryItem', 'subcategoryItem')
-          .leftJoin('subcategoryItem.subcategory', 'subcategory')
-          .leftJoin('subcategory.category', 'category')
-          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild')
-          // Select the brand ID, name, and the count of products associated with it
-          .select(['company.id AS id', 'company.entityName AS name'])
-          .addSelect('COUNT(product.id)', 'count') // <-- Added count
-          .groupBy('company.id')
-          .addGroupBy('company.entityName')
-          .orderBy('company.entityName', 'ASC'); // Optional: sort brands alphabetically
+    const uniqueBrands = new Map<string, { id: string; entityName: string }>();
 
-      // Apply category filters
-      await this.applyCategoryFilters(
-          brandsQuery,
-          filterParams.categorySlug,
-          filterParams.subcategorySlug,
-          filterParams.subcategoryItemSlugs,
-          filterParams.subcategoryItemChildSlug
-      );
-      
-      // Apply search filter
-      this.applySearchTermFilter(brandsQuery, filterParams.searchTerm);
-      
-      // --- CRITICAL FIX: Apply the gender filter ---
-      if (filterParams.genders && filterParams.genders.length > 0) {
-          // You must reuse the same gender filter logic to ensure only relevant brands are counted.
-          // Assuming applyGenderFilter is accessible and handles the 'unisex' rule.
-          this.applyGenderFilter(brandsQuery, filterParams.genders);
+    for (const product of products) {
+      const company = product.company;
+      if (company?.id && company?.entityName) {
+        // Add only once per unique company ID
+        if (!uniqueBrands.has(company.id)) {
+          uniqueBrands.set(company.id, {
+            id: company.id,
+            entityName: company.entityName,
+          });
+        }
       }
-      
-      // Execute the query
-      const usedBrands = await brandsQuery.getRawMany();
-      
-      // Only return brands that have matching products (count > 0)
-      return usedBrands
-          .filter(b => parseInt(b.count, 10) > 0)
-          .map(b => ({
-              id: b.id,
-              entityName: b.name,
-              count: parseInt(b.count, 10), // <-- Added count to the output
-          }));
+    }
+
+    // Convert to array and sort alphabetically by entityName (optional)
+    return Array.from(uniqueBrands.values()).sort((a, b) =>
+      a.entityName.localeCompare(b.entityName),
+    );
   }
 
-  // NOTE: Ensure your applyGenderFilter method is available and correctly implemented 
-  async getGendersFacet(filterParams: {
-      searchTerm?: string;
-      categorySlug?: string;
-      subcategorySlug?: string;
-      subcategoryItemSlugs?: string[]; 
-      subcategoryItemChildSlug?: string;
-      genders?: string[]; // Includes the currently selected genders
-  }) {
-      // --- 1. Check for Active Gender Filters (Simplification) ---
-      // If a gender filter is active in the URL, the facet output should simply confirm
-      // which genders are selected. The full list of available options is only needed when no filter is active.
-      if (filterParams.genders && filterParams.genders.length > 0) {
-          // Return only the currently selected genders (e.g., ["women"]).
-          return filterParams.genders.map(g => g.toLowerCase());
+  async getGendersFacet(products: any[]) {
+    if (!products || products.length === 0) return [];
+
+    // Collect unique genders
+    const foundGenders = new Set<string>();
+
+    for (const product of products) {
+      const gender = product.gender?.toLowerCase();
+      if (!gender) continue;
+
+      if (gender === 'unisex') {
+        // Include all three if any product is unisex
+        return ['Men', 'Women', 'Unisex'];
       }
 
+      if (gender === 'men' || gender === 'male') foundGenders.add('Men');
+      else if (gender === 'women' || gender === 'female') foundGenders.add('Women');
+    }
 
-      // --- 2. Calculate Available Genders (Only runs when NO gender filter is active) ---
-      
-      // Build the base query to find ALL distinct genders available under the current category/search filters.
-      const baseGendersQuery = this.productRepository
-          .createQueryBuilder('product')
-          .select('DISTINCT product.gender', 'gender')
-          .where('product.gender IS NOT NULL') 
-          .leftJoin('product.subcategoryItem', 'subcategoryItem')
-          .leftJoin('subcategoryItem.subcategory', 'subcategory')
-          .leftJoin('subcategory.category', 'category')
-          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild');
+    // Always include 'Unisex' if both men & women are present
+    const gendersArray = Array.from(foundGenders);
+    if (foundGenders.has('Men') && foundGenders.has('Women')) {
+      gendersArray.push('Unisex');
+    }
 
-      // Apply CATEGORY and SEARCH filters (to determine available options based on context)
-      await this.applyCategoryFilters(
-          baseGendersQuery,
-          filterParams.categorySlug,
-          filterParams.subcategorySlug,
-          filterParams.subcategoryItemSlugs,
-          filterParams.subcategoryItemChildSlug
-      );
-      this.applySearchTermFilter(baseGendersQuery, filterParams.searchTerm);
-
-      // Execute the query and extract the distinct genders
-      const distinctProductGenders = (await baseGendersQuery.getRawMany())
-          .map(g => g.gender)
-          .filter(gender => Object.values(ProductGender).includes(gender));
-
-      
-      // --- 3. Implement the 'unisex' exception logic ---
-      let availableGenders = new Set(distinctProductGenders);
-
-      // If 'unisex' is present, also show 'Men' and 'Women' as filter options.
-      if (availableGenders.has(ProductGender.UNISEX)) {
-          availableGenders.add(ProductGender.MEN);
-          availableGenders.add(ProductGender.WOMEN);
-      }
-      
-      // 4. Convert the Set to a sorted array of gender names (strings)
-      let finalGendersArray = Array.from(availableGenders);
-
-      // Sort for consistent display order
-      finalGendersArray.sort((a, b) => {
-          // Use a simple ordering scheme based on your enum values
-          const order = { [ProductGender.WOMEN]: 1, [ProductGender.MEN]: 2, [ProductGender.UNISEX]: 3 };
-          return (order[a] || 99) - (order[b] || 99);
-      });
-      
-      // 5. Return the simple array of lowercase strings (e.g., ["women", "men", "unisex"])
-      return finalGendersArray.map(g => g.toLowerCase());
+    return gendersArray;
   }
 
   getOtherFacets(products: any[]) {
@@ -1053,7 +998,5 @@ export class ProductsService {
       colors: Array.from(allColorsMap.values()),
     };
   }
-
-
 
 }

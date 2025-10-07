@@ -77,6 +77,10 @@ export class SeederService {
               name: subcategoryItemData.name,
               slug: subcategoryItemData.slug,
               subcategory,
+              // ✅ NEW: Add tag properties to SubcategoryItem
+              tags_required: subcategoryItemData.tags_required,
+              optional_tags: subcategoryItemData.optional_tags,
+              tag_defaults: subcategoryItemData.tag_defaults,
             });
             await subcategoryItemRepo.save(subcategoryItem);
 
@@ -90,6 +94,10 @@ export class SeederService {
                   name: subcategoryItemChildData.name,
                   slug: subcategoryItemChildData.slug,
                   subcategoryItem: subcategoryItem,
+                  // ✅ NEW: Add tag properties to SubcategoryItemChild
+                  tags_required: subcategoryItemChildData.tags_required,
+                  optional_tags: subcategoryItemChildData.optional_tags,
+                  tag_defaults: subcategoryItemChildData.tag_defaults,
                 });
                 await subcategoryItemChildRepo.save(subcategoryItemChild);
               }

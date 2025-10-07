@@ -1,6 +1,6 @@
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product, ProductGender } from './entities/product.entity';
+import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
 import { Category } from 'src/categories/entities/category.entity';
@@ -48,294 +48,294 @@ export class ProductsService {
   
   // CREATE & UPDATE PRODUCT
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
-    const {
-      images,
-      threeDModels,
-      company,
-      name,
-      colors,
-      sizes,
-      subcategoryItem: subcategoryItemIdFromDto, // Renamed to avoid conflict
-      subcategoryItemChild: subcategoryItemChildIdFromDto, // New: Get child ID from DTO
-      ...productData
-    } = dto;
+      const {
+          images,
+          threeDModels,
+          company,
+          name,
+          colors,
+          sizes,
+          dimensions,
+          subcategoryItem: subcategoryItemIdFromDto,
+          subcategoryItemChild: subcategoryItemChildIdFromDto,
+          ...productData // Contains all other fields (including potential explicit tag values)
+      } = dto;
 
-    let product: Product;
-    let finalSubcategoryItem: SubcategoryItem | undefined; // To store the resolved SubcategoryItem
-    let finalSubcategoryItemChild: SubcategoryItemChild | undefined; // NEW: To store the resolved SubcategoryItemChild
-
-    // --- Resolve Category Hierarchy ---
-    // Ensure only one of subcategoryItemId or subcategoryItemChildId is provided
-    if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
-      throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
-    }
-
-    if (subcategoryItemChildIdFromDto) {
-      // If subcategoryItemChildId is provided, backtrack to find the subcategoryItem
-      const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
-        where: { id: subcategoryItemChildIdFromDto },
-        relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
-      });
-
-      if (!subcategoryItemChild) {
-        throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
-      }
-      finalSubcategoryItemChild = subcategoryItemChild; // Store the resolved child entity
-      finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
-    } else if (subcategoryItemIdFromDto) {
-      // If only subcategoryItemId is provided, fetch it directly
-      const subcategoryItem = await this.subcategoryItemRepository.findOne({
-        where: { id: subcategoryItemIdFromDto },
-        relations: ['subcategory', 'subcategory.category'],
-      });
-
-      if (!subcategoryItem) {
-        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
-      }
-      finalSubcategoryItem = subcategoryItem;
-      finalSubcategoryItemChild = undefined; // Ensure it's explicitly undefined if subcategoryItem is directly provided
-    } else {
-      // If neither is provided, and it's a creation, throw an error
-      if (!id) {
-         throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
-      }
-      // For updates, it's fine if no category info is provided (means no change)
-    }
-
-    // === UPDATE MODE ===
-    if (id) {
-      product = await this.productRepository.findOne({
-        where: { id },
-        // IMPORTANT: Load subcategoryItemChild relation here so it can be updated
-        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
-      });
-
-      if (!product) {
-        throw new NotFoundException(`Product with ID ${id} not found`);
-      }
-
-      // Update subcategoryItem and subcategoryItemChild if new ones were resolved
-      if (finalSubcategoryItem) {
-        product.subcategoryItem = finalSubcategoryItem;
-        product.subcategoryItemId = finalSubcategoryItem.id; // Explicitly set FK
-      } else if (subcategoryItemIdFromDto === null) { // Allow explicit clearing
-        product.subcategoryItem = null;
-        product.subcategoryItemId = null;
-      }
-
-      // NEW: Assign the resolved subcategoryItemChild and its ID
-      if (finalSubcategoryItemChild) {
-        product.subcategoryItemChild = finalSubcategoryItemChild;
-        product.subcategoryItemChildId = finalSubcategoryItemChild.id; // Explicitly set FK
-      } else if (subcategoryItemChildIdFromDto === null) { // Allow explicit clearing
-        product.subcategoryItemChild = null;
-        product.subcategoryItemChildId = null;
-      }
-
-
-      // ✅ Only delete variants if user is explicitly changing variants or their dependencies (colors/sizes)
-      if (
-        ('variants' in dto && dto.variants !== undefined) ||
-        ('colors' in dto && dto.colors !== undefined) ||
-        ('sizes' in dto && dto.sizes !== undefined)
-      ) {
-        if (product.variants && product.variants.length > 0) {
-          await this.productVariantRepository.remove(product.variants); // Clear old variants
-        }
-        product.variants = []; // Reset the array on the entity
-      }
-
-      // --- NEW: MODEL UPDATE LOGIC ---
+      let product: Product;
+      let finalSubcategoryItem: SubcategoryItem | undefined;
+      let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
       
-      if (threeDModels !== undefined) {
-        // If there are existing threeDModels, remove them first
-        if (product.threeDModels && product.threeDModels.length > 0) {
-          await this.product3DModelRepository.remove(product.threeDModels);
-        }
-        // Map the new threeDModels from DTO to ProductModel entities
-        product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new Product3DModel();
-          newModel.url = modelDto.url;
-          newModel.colorCode = modelDto.colorCode || null; 
+      // Variable to hold the applicable tag defaults
+      let tagDefaults: any = {}; 
+      
+      // --- Resolve Category Hierarchy ---
+      if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
+          throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
+      }
 
-          // ✅ FIX 1: Map the new 'pivot' value from the DTO
-          // Note: If modelDto.pivot is undefined, the @BeforeInsert hook will set [0,0,0]
-          // If it is provided (e.g., [0,10,0]), it will use that value.
-          if (modelDto.pivot !== undefined) {
-            newModel.pivot = modelDto.pivot;
+      if (subcategoryItemChildIdFromDto) {
+          const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
+              where: { id: subcategoryItemChildIdFromDto },
+              relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
+          });
+
+          if (!subcategoryItemChild) {
+              throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
           }
+          finalSubcategoryItemChild = subcategoryItemChild;
+          finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
+
+          // Get defaults from SubcategoryItemChild
+          tagDefaults = subcategoryItemChild.tag_defaults || {};
+
+      } else if (subcategoryItemIdFromDto) {
+          const subcategoryItem = await this.subcategoryItemRepository.findOne({
+              where: { id: subcategoryItemIdFromDto },
+              relations: ['subcategory', 'subcategory.category'],
+          });
+
+          if (!subcategoryItem) {
+              throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
+          }
+          finalSubcategoryItem = subcategoryItem;
+          finalSubcategoryItemChild = undefined;
+
+          // Get defaults from SubcategoryItem
+          tagDefaults = subcategoryItem.tag_defaults || {};
+      } else {
+          if (!id) {
+              throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
+          }
+      }
+
+      // --------------------------------------------------------------------------
+      // ✅ APPLY TAG DEFAULTS: Prioritize DTO values over category defaults
+      // --------------------------------------------------------------------------
+      const calculatedDefaults = {
+          ar_type: tagDefaults.ar_type,
+          indoor_outdoor: tagDefaults.indoor_outdoor,
+          accessible: tagDefaults.accessible,
+      };
+      
+      // Merge: Defaults are applied first, then overwritten by productData (DTO values)
+      Object.assign(productData, {
+          ...calculatedDefaults,
+          ...productData, 
+      });
+      // --------------------------------------------------------------------------
+
+
+      // === UPDATE MODE ===
+      if (id) {
+          product = await this.productRepository.findOne({
+              where: { id },
+              relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
+          });
+
+          if (!product) {
+              throw new NotFoundException(`Product with ID ${id} not found`);
+          }
+
+          // Update subcategoryItem and subcategoryItemChild if new ones were resolved or explicitly cleared
+          if (finalSubcategoryItem) {
+              product.subcategoryItem = finalSubcategoryItem;
+              product.subcategoryItemId = finalSubcategoryItem.id;
+          } else if (subcategoryItemIdFromDto === null) {
+              product.subcategoryItem = null;
+              product.subcategoryItemId = null;
+          }
+
+          if (finalSubcategoryItemChild) {
+              product.subcategoryItemChild = finalSubcategoryItemChild;
+              product.subcategoryItemChildId = finalSubcategoryItemChild.id;
+          } else if (subcategoryItemChildIdFromDto === null) {
+              product.subcategoryItemChild = null;
+              product.subcategoryItemChildId = null;
+          }
+
+
+          // Variants cleanup logic (only if colors/sizes/variants are explicitly changed)
+          if (
+              ('variants' in dto && dto.variants !== undefined) ||
+              ('colors' in dto && dto.colors !== undefined) ||
+              ('sizes' in dto && dto.sizes !== undefined)
+          ) {
+              if (product.variants && product.variants.length > 0) {
+                  await this.productVariantRepository.remove(product.variants);
+              }
+              product.variants = [];
+          }
+
+          // --- 3D Model Update Logic ---
+          if (threeDModels !== undefined) {
+              if (product.threeDModels && product.threeDModels.length > 0) {
+                  await this.product3DModelRepository.remove(product.threeDModels);
+              }
+              product.threeDModels = threeDModels.map((modelDto) => {
+                  const newModel = new Product3DModel();
+                  newModel.url = modelDto.url;
+                  newModel.colorCode = modelDto.colorCode || null; 
+                  if (modelDto.pivot !== undefined) {
+                      newModel.pivot = modelDto.pivot;
+                  }
+                  if (modelDto.boundingBox !== undefined) {
+                      newModel.boundingBox = modelDto.boundingBox;
+                  }
+                  newModel.product = product;
+                  return newModel;
+              });
+          }
+
+          // Company update logic
+          if (company) {
+              const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+              if (!companyEntity) {
+                  throw new NotFoundException(`Company with ID ${company} not found`);
+              }
+              product.company = companyEntity;
+          }
+
+          // Slug update logic
+          if (name !== undefined || company !== undefined) {
+              const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
+              const updatedProductName = name !== undefined ? name : product.name;
+
+              if (updatedCompanyName && updatedProductName) {
+                  product.slug = `${slugify(updatedCompanyName)}-${slugify(updatedProductName)}`;
+              }
+          }
+
+          // Assign all other product data (including dimensions and defaulted tags)
+          Object.assign(product, productData);
+          if (name !== undefined) product.name = name; // Update name explicitly
           
-          // ✅ FIX 2: Map the new 'boundingBox' value from the DTO
-          if (modelDto.boundingBox !== undefined) {
-            newModel.boundingBox = modelDto.boundingBox;
+          if (dimensions !== undefined) {
+              product.dimensions = dimensions;
+          }
+      }
+
+      // === CREATE MODE ===
+      else {
+          if (!company) {
+              throw new NotFoundException('Company not provided');
           }
 
-          newModel.product = product; // Link to the current product entity
-          return newModel;
-        });
-      }
-
-      if (company) {
-        const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
-        if (!companyEntity) {
-          throw new NotFoundException(`Company with ID ${company} not found`);
-        }
-        product.company = companyEntity;
-      }
-
-      // Re-generate slug if name or company changes
-      if (name !== undefined || company !== undefined) { // Check if name or company are explicitly provided in DTO
-        const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
-        const updatedProductName = name !== undefined ? name : product.name;
-
-        if (updatedCompanyName && updatedProductName) {
-          product.slug = `${slugify(updatedCompanyName)}-${slugify(updatedProductName)}`;
-        }
-      }
-
-      // Assign other product data
-      Object.assign(product, productData);
-      // If name is explicitly provided, update it
-      if (name !== undefined) product.name = name;
-
-    }
-
-    // === CREATE MODE ===
-    else {
-      if (!company) {
-        throw new NotFoundException('Company not provided');
-      }
-
-      const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
-      if (!companyEntity) {
-        throw new NotFoundException(`Company with ID ${company} not found`);
-      }
-
-      if (!finalSubcategoryItem) { // finalSubcategoryItem *must* be resolved for new products
-          throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
-      }
-
-      const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
-
-      product = this.productRepository.create({
-        ...productData,
-        name,
-        company: companyEntity,
-        slug,
-        subcategoryItem: finalSubcategoryItem, // Use the resolved subcategory item
-        subcategoryItemId: finalSubcategoryItem.id, // Explicitly set FK
-        subcategoryItemChild: finalSubcategoryItemChild, // NEW: Assign the resolved child entity here
-        subcategoryItemChildId: finalSubcategoryItemChild?.id || null, // NEW: Explicitly set FK, null if not present
-        variants: [], // Initialize variants as empty
-        images: [],   // Initialize images as empty
-        colors: [],   // Initialize colors as empty
-        sizes: [],    // Initialize sizes as empty
-        threeDModels: [], // Initialize threeDModels as empty for creation
-      });
-
-      // --- NEW: MODEL CREATION LOGIC ---
-      if (threeDModels?.length) { // If threeDModels are provided during creation
-        product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new Product3DModel();
-          newModel.url = modelDto.url;
-          newModel.colorCode = modelDto.colorCode || null;
-
-          // ✅ FIX 3: Map 'pivot' in CREATE MODE
-          if (modelDto.pivot !== undefined) {
-              newModel.pivot = modelDto.pivot;
-          }
-          // ✅ FIX 4: Map 'boundingBox' in CREATE MODE
-          if (modelDto.boundingBox !== undefined) {
-              newModel.boundingBox = modelDto.boundingBox;
+          const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+          if (!companyEntity) {
+              throw new NotFoundException(`Company with ID ${company} not found`);
           }
 
-          newModel.product = product; // Link to the product
-          return newModel;
-        });
+          if (!finalSubcategoryItem) {
+              throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
+          }
+
+          const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
+
+          // productData now includes all defaults merged above
+          product = this.productRepository.create({
+              ...productData, // Spreads all properties including defaulted tags
+              name,
+              company: companyEntity,
+              slug,
+              subcategoryItem: finalSubcategoryItem,
+              subcategoryItemId: finalSubcategoryItem.id,
+              subcategoryItemChild: finalSubcategoryItemChild,
+              subcategoryItemChildId: finalSubcategoryItemChild?.id || null,
+              variants: [],
+              images: [],
+              colors: [],
+              sizes: [],
+              threeDModels: [],
+              ...(dimensions && { dimensions }),
+          });
+
+          // --- 3D Model Creation Logic ---
+          if (threeDModels?.length) {
+              product.threeDModels = threeDModels.map((modelDto) => {
+                  const newModel = new Product3DModel();
+                  newModel.url = modelDto.url;
+                  newModel.colorCode = modelDto.colorCode || null;
+                  if (modelDto.pivot !== undefined) {
+                      newModel.pivot = modelDto.pivot;
+                  }
+                  if (modelDto.boundingBox !== undefined) {
+                      newModel.boundingBox = modelDto.boundingBox;
+                  }
+                  newModel.product = product;
+                  return newModel;
+              });
+          }
       }
-    }
 
-    // === Shared logic for both Create & Update ===
+      // === Shared logic for both Create & Update ===
 
-    // Images: Replace images if provided in DTO
-    if (images !== undefined) { // Check if 'images' key is present
-        // If Product.images relationship uses cascade:true, simply assigning a new array will handle removal/addition
-        // Use the new helper function to handle image creation and assignment
-        await this.saveProductImages(product, images);
-    }
+      // Images: Replace images if provided in DTO
+      if (images !== undefined) {
+          await this.saveProductImages(product, images);
+      }
 
-    // Colors: Replace colors if provided in DTO
-    if (colors !== undefined) { // Check if 'colors' key is present
-        product.colors = colors.map((color) => {
-          const c = new ProductColor();
-          c.name = color.name;
-          c.code = color.code;
-          c.product = product; // Link to the product
-          return c;
-        });
-    }
+      // Colors: Replace colors if provided in DTO
+      if (colors !== undefined) {
+          product.colors = colors.map((color) => {
+              const c = new ProductColor();
+              c.name = color.name;
+              c.code = color.code;
+              c.product = product;
+              return c;
+          });
+      }
 
-    // Sizes: Replace sizes if provided in DTO
-    if (sizes !== undefined) { // Check if 'sizes' key is present
-        product.sizes = sizes.map((size, i) => {
-          const s = new ProductSize();
-          s.size = size;
-          s.sortOrder = i;
-          s.product = product; // Link to the product
-          return s;
-        });
-    }
+      // Sizes: Replace sizes if provided in DTO
+      if (sizes !== undefined) {
+          product.sizes = sizes.map((size, i) => {
+              const s = new ProductSize();
+              s.size = size;
+              s.sortOrder = i;
+              s.product = product;
+              return s;
+          });
+      }
 
-    // Step 1: Save product (this will cascade save/update threeDModels, images, colors, sizes)
-    const savedProduct = await this.productRepository.save(product);
+      // Step 1: Save product (This saves all non-variant relations due to cascade)
+      const savedProduct = await this.productRepository.save(product);
 
-    // === Generate new variants using updated colors and sizes ===
-    // This part should run after main product and its related entities (colors, sizes) are saved.
-    // Ensure that savedProduct has the latest colors and sizes for variant generation.
-    // Reload savedProduct with relations to ensure fresh data if needed, or pass the `product` object directly
-    // which should now have its `colors` and `sizes` relations updated by the previous save.
-    if (
-      !id || // Always generate variants for new products
-      (colors !== undefined && colors.length > 0) || // If colors were explicitly provided/updated
-      (sizes !== undefined && sizes.length > 0)      // If sizes were explicitly provided/updated
-    ) {
-        // Fetch product again with updated colors and sizes to ensure accurate variant generation
-        const productWithFreshRelations = await this.productRepository.findOne({
-            where: { id: savedProduct.id },
-            relations: ['colors', 'sizes'], // Only load relations needed for generateVariants
-        });
+      // === Generate Variants ===
+      // Run if creating a new product OR if colors/sizes were explicitly provided/updated
+      if (
+          !id ||
+          (colors !== undefined) || // Check presence regardless of length for explicit update
+          (sizes !== undefined)
+      ) {
+          // Fetch product again with updated colors and sizes to ensure accurate variant generation
+          const productWithFreshRelations = await this.productRepository.findOne({
+              where: { id: savedProduct.id },
+              relations: ['colors', 'sizes'],
+          });
 
-        if (productWithFreshRelations) {
-            const savedVariants = await this.generateVariants(productWithFreshRelations, dto);
-            savedProduct.variants = savedVariants;
-        }
-    }
+          if (productWithFreshRelations) {
+              const savedVariants = await this.generateVariants(productWithFreshRelations, dto);
+              savedProduct.variants = savedVariants;
+          }
+      }
 
-    // Remove circular references before returning to prevent JSON serialization issues
-    if (savedProduct.variants?.length) {
-      savedProduct.variants.forEach((variant) => {
-        delete variant.product;
-      });
-    }
+      // Remove circular references before returning
+      if (savedProduct.variants?.length) {
+          savedProduct.variants.forEach((variant) => { delete variant.product; });
+      }
+      if (savedProduct.threeDModels?.length) {
+          savedProduct.threeDModels.forEach((model) => { delete model.product; });
+      }
+      if (savedProduct.colors?.length) {
+          savedProduct.colors.forEach(color => delete color.product);
+      }
+      if (savedProduct.sizes?.length) {
+          savedProduct.sizes.forEach(size => delete size.product);
+      }
+      if (savedProduct.images?.length) {
+          savedProduct.images.forEach(image => delete image.product);
+      }
 
-    if (savedProduct.threeDModels?.length) {
-      savedProduct.threeDModels.forEach((model) => {
-        delete model.product;
-      });
-    }
-
-    // You might also need to clear circular references for colors, sizes, images if they have 'product' properties
-    if (savedProduct.colors?.length) {
-      savedProduct.colors.forEach(color => delete color.product);
-    }
-    if (savedProduct.sizes?.length) {
-      savedProduct.sizes.forEach(size => delete size.product);
-    }
-    if (savedProduct.images?.length) {
-      savedProduct.images.forEach(image => delete image.product);
-    }
-
-    return savedProduct;
+      return savedProduct;
   }
 
   /**
@@ -431,8 +431,8 @@ export class ProductsService {
     // 6. Generate facets using the shared logic
     // Assuming calculatePriceRange, getBrandsFacet, and getGendersFacet exist
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
-    const formattedBrands = await this.getBrandsFacet(filterParams); 
-    const formattedGenders = await this.getGendersFacet(filterParams);
+    const formattedBrands = await this.getBrandsFacet(products); 
+    const formattedGenders = await this.getGendersFacet(products);
     const finalCategoryFacets = this.getCategoryFacets(products);
     
     // ⭐ UPDATED: Generates the list of available facets (e.g., ['In Stock', 'Out of Stock'])
@@ -459,11 +459,23 @@ export class ProductsService {
       .leftJoinAndSelect('product.colors', 'colors')
       .leftJoinAndSelect('product.sizes', 'sizes')
       .leftJoinAndSelect('product.variants', 'variants')
-      // Conditional joins based on the existence of subcategoryItemChild
+      
+      // ====================================================================
+      // 1. JOINS FOR PRODUCTS WITH subcategoryItemChild (Current logic)
+      // ====================================================================
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
-      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'subcategoryItem')
-      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-      .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'parentSubcategoryItem') // Rename alias to avoid conflict
+      .leftJoinAndSelect('parentSubcategoryItem.subcategory', 'parentSubcategory')
+      .leftJoinAndSelect('parentSubcategory.category', 'parentCategory')
+
+      // ====================================================================
+      // 2. JOINS FOR PRODUCTS WITH ONLY subcategoryItem (MISSING/CRITICAL FIX)
+      // This is a direct join to fetch the category path when no child exists.
+      // ====================================================================
+      .leftJoinAndSelect('product.subcategoryItem', 'directSubcategoryItem')
+      .leftJoinAndSelect('directSubcategoryItem.subcategory', 'directSubcategory')
+      .leftJoinAndSelect('directSubcategory.category', 'directCategory')
+      
       .where('product.slug = :slug', { slug })
       .getOne();
 
@@ -888,141 +900,74 @@ export class ProductsService {
   // Example of the extracted function
   applySearchTermFilter(query: SelectQueryBuilder<any>, searchTerm?: string) {
     if (searchTerm) {
+      // Apply the WHERE clause, combining all search conditions with OR
       query.andWhere(
-        `(LOWER(product.name) LIKE LOWER(:searchTerm) OR 
-        LOWER(product.description) LIKE LOWER(:searchTerm) OR 
-        // ... rest of the search conditions
+        `(
+          LOWER(product.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(product.description) LIKE LOWER(:searchTerm) OR
+          LOWER(company.entityName) LIKE LOWER(:searchTerm) OR 
+          
+          -- New Category/Subcategory Search Fields:
+          LOWER(category.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategory.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategoryItem.name) LIKE LOWER(:searchTerm) OR 
+          LOWER(subcategoryItemChild.name) LIKE LOWER(:searchTerm)
         )`,
         { searchTerm: `%${searchTerm}%` },
       );
     }
   }
 
-  // src/product/products.service.ts
+  async getBrandsFacet(products: any[]) {
+    if (!products || products.length === 0) return [];
 
-  async getBrandsFacet(filterParams: {
-      searchTerm?: string;
-      categorySlug?: string;
-      subcategorySlug?: string;
-      subcategoryItemSlugs?: string[]; 
-      subcategoryItemChildSlug?: string;
-      // --- NEW: Accept the active gender filter ---
-      genders?: string[]; 
-      // --- Note: Brands filter is often excluded here to show all available brands ---
-  }) {
-      const brandsQuery = this.productRepository
-          .createQueryBuilder('product')
-          .leftJoin('product.company', 'company')
-          .leftJoin('product.subcategoryItem', 'subcategoryItem')
-          .leftJoin('subcategoryItem.subcategory', 'subcategory')
-          .leftJoin('subcategory.category', 'category')
-          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild')
-          // Select the brand ID, name, and the count of products associated with it
-          .select(['company.id AS id', 'company.entityName AS name'])
-          .addSelect('COUNT(product.id)', 'count') // <-- Added count
-          .groupBy('company.id')
-          .addGroupBy('company.entityName')
-          .orderBy('company.entityName', 'ASC'); // Optional: sort brands alphabetically
+    const uniqueBrands = new Map<string, { id: string; entityName: string }>();
 
-      // Apply category filters
-      await this.applyCategoryFilters(
-          brandsQuery,
-          filterParams.categorySlug,
-          filterParams.subcategorySlug,
-          filterParams.subcategoryItemSlugs,
-          filterParams.subcategoryItemChildSlug
-      );
-      
-      // Apply search filter
-      this.applySearchTermFilter(brandsQuery, filterParams.searchTerm);
-      
-      // --- CRITICAL FIX: Apply the gender filter ---
-      if (filterParams.genders && filterParams.genders.length > 0) {
-          // You must reuse the same gender filter logic to ensure only relevant brands are counted.
-          // Assuming applyGenderFilter is accessible and handles the 'unisex' rule.
-          this.applyGenderFilter(brandsQuery, filterParams.genders);
+    for (const product of products) {
+      const company = product.company;
+      if (company?.id && company?.entityName) {
+        // Add only once per unique company ID
+        if (!uniqueBrands.has(company.id)) {
+          uniqueBrands.set(company.id, {
+            id: company.id,
+            entityName: company.entityName,
+          });
+        }
       }
-      
-      // Execute the query
-      const usedBrands = await brandsQuery.getRawMany();
-      
-      // Only return brands that have matching products (count > 0)
-      return usedBrands
-          .filter(b => parseInt(b.count, 10) > 0)
-          .map(b => ({
-              id: b.id,
-              entityName: b.name,
-              count: parseInt(b.count, 10), // <-- Added count to the output
-          }));
+    }
+
+    // Convert to array and sort alphabetically by entityName (optional)
+    return Array.from(uniqueBrands.values()).sort((a, b) =>
+      a.entityName.localeCompare(b.entityName),
+    );
   }
 
-  // NOTE: Ensure your applyGenderFilter method is available and correctly implemented 
-  async getGendersFacet(filterParams: {
-      searchTerm?: string;
-      categorySlug?: string;
-      subcategorySlug?: string;
-      subcategoryItemSlugs?: string[]; 
-      subcategoryItemChildSlug?: string;
-      genders?: string[]; // Includes the currently selected genders
-  }) {
-      // --- 1. Check for Active Gender Filters (Simplification) ---
-      // If a gender filter is active in the URL, the facet output should simply confirm
-      // which genders are selected. The full list of available options is only needed when no filter is active.
-      if (filterParams.genders && filterParams.genders.length > 0) {
-          // Return only the currently selected genders (e.g., ["women"]).
-          return filterParams.genders.map(g => g.toLowerCase());
+  async getGendersFacet(products: any[]) {
+    if (!products || products.length === 0) return [];
+
+    // Collect unique genders
+    const foundGenders = new Set<string>();
+
+    for (const product of products) {
+      const gender = product.gender?.toLowerCase();
+      if (!gender) continue;
+
+      if (gender === 'unisex') {
+        // Include all three if any product is unisex
+        return ['Men', 'Women', 'Unisex'];
       }
 
+      if (gender === 'men' || gender === 'male') foundGenders.add('Men');
+      else if (gender === 'women' || gender === 'female') foundGenders.add('Women');
+    }
 
-      // --- 2. Calculate Available Genders (Only runs when NO gender filter is active) ---
-      
-      // Build the base query to find ALL distinct genders available under the current category/search filters.
-      const baseGendersQuery = this.productRepository
-          .createQueryBuilder('product')
-          .select('DISTINCT product.gender', 'gender')
-          .where('product.gender IS NOT NULL') 
-          .leftJoin('product.subcategoryItem', 'subcategoryItem')
-          .leftJoin('subcategoryItem.subcategory', 'subcategory')
-          .leftJoin('subcategory.category', 'category')
-          .leftJoin('product.subcategoryItemChild', 'subcategoryItemChild');
+    // Always include 'Unisex' if both men & women are present
+    const gendersArray = Array.from(foundGenders);
+    if (foundGenders.has('Men') && foundGenders.has('Women')) {
+      gendersArray.push('Unisex');
+    }
 
-      // Apply CATEGORY and SEARCH filters (to determine available options based on context)
-      await this.applyCategoryFilters(
-          baseGendersQuery,
-          filterParams.categorySlug,
-          filterParams.subcategorySlug,
-          filterParams.subcategoryItemSlugs,
-          filterParams.subcategoryItemChildSlug
-      );
-      this.applySearchTermFilter(baseGendersQuery, filterParams.searchTerm);
-
-      // Execute the query and extract the distinct genders
-      const distinctProductGenders = (await baseGendersQuery.getRawMany())
-          .map(g => g.gender)
-          .filter(gender => Object.values(ProductGender).includes(gender));
-
-      
-      // --- 3. Implement the 'unisex' exception logic ---
-      let availableGenders = new Set(distinctProductGenders);
-
-      // If 'unisex' is present, also show 'Men' and 'Women' as filter options.
-      if (availableGenders.has(ProductGender.UNISEX)) {
-          availableGenders.add(ProductGender.MEN);
-          availableGenders.add(ProductGender.WOMEN);
-      }
-      
-      // 4. Convert the Set to a sorted array of gender names (strings)
-      let finalGendersArray = Array.from(availableGenders);
-
-      // Sort for consistent display order
-      finalGendersArray.sort((a, b) => {
-          // Use a simple ordering scheme based on your enum values
-          const order = { [ProductGender.WOMEN]: 1, [ProductGender.MEN]: 2, [ProductGender.UNISEX]: 3 };
-          return (order[a] || 99) - (order[b] || 99);
-      });
-      
-      // 5. Return the simple array of lowercase strings (e.g., ["women", "men", "unisex"])
-      return finalGendersArray.map(g => g.toLowerCase());
+    return gendersArray;
   }
 
   getOtherFacets(products: any[]) {
@@ -1053,7 +998,5 @@ export class ProductsService {
       colors: Array.from(allColorsMap.values()),
     };
   }
-
-
 
 }

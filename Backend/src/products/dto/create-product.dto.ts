@@ -15,6 +15,31 @@ import { CreateProductModelDto } from 'src/product-models/dto/create-product-mod
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
 
+// ----------------------------------------------------
+// NEW DTO: CreateProductDimensionsDto
+// ----------------------------------------------------
+export class CreateProductDimensionsDto {
+    // Unit remains mandatory if dimensions object is provided
+    @IsString()
+    @IsNotEmpty()
+    unit: string; 
+
+    // FIX: Remove '?' marker to satisfy TypeScript's strict assignment to ProductDimensions.
+    // We keep @IsOptional() to allow the field to be omitted in the JSON body.
+    @IsNumber()
+    @IsOptional()
+    length: number | null; 
+
+    @IsNumber()
+    @IsOptional()
+    width: number | null;
+
+    @IsNumber()
+    @IsOptional()
+    height: number | null;
+}
+// ----------------------------------------------------
+
 export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
@@ -87,16 +112,12 @@ export class CreateProductDto {
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
 
-  // @IsString()
-  // @IsOptional()
-  // type?: 'dynamic' | 'static';
-
-  // @IsString()
-  // @IsOptional()
-  // material?: string;
-
-  // @IsString()
-  // @IsOptional()
-  // productFitting?: 'True to Size' | 'Runs Small' | 'Runs Big';
+  // ----------------------------------------------------
+  // ADDED: Dimensions attribute (UNCOMMENTED)
+  // ----------------------------------------------------
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateProductDimensionsDto)
+  dimensions?: CreateProductDimensionsDto;
 
 }

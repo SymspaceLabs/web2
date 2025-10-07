@@ -16,14 +16,14 @@ export class SubcategoryItemChild {
   @Column({ nullable: true })
   slug: string;
 
-  // @Column('simple-array', { nullable: true })
-  // tags_required: string[];
+  @Column('simple-array', { nullable: true })
+  tags_required: string[];
 
-  // @Column('simple-array', { nullable: true })
-  // optional_tags: string[];
+  @Column('simple-array', { nullable: true })
+  optional_tags: string[];
 
-  // @Column('json', { nullable: true }) // Use 'json' for objects like tag_defaults
-  // tag_defaults: { [key: string]: string };
+  @Column('json', { nullable: true }) // Use 'json' for objects like tag_defaults
+  tag_defaults: { [key: string]: string };
 
   // This column holds the foreign key to the parent SubcategoryItem
   @Column()

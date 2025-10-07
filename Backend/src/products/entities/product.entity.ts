@@ -28,6 +28,13 @@ export enum ProductGender {
   UNISEX = 'unisex',
 }
 
+export interface ProductDimensions {
+    unit: string;
+    length: number | null;
+    width: number | null;
+    height: number | null;
+}
+
 @Entity('product')
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -92,7 +99,7 @@ export class Product {
   @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true })
   threeDModels: Product3DModel[];
 
-  @Column()
+  @Column({ nullable: true })
   composition: string;
 
   @Column({ type: 'text', nullable: true })
@@ -103,7 +110,7 @@ export class Product {
   })
   sizes: ProductSize[];
 
-  @Column()
+  @Column({ nullable: true })
   sizeChart: string;
 
   @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
@@ -147,27 +154,25 @@ export class Product {
   @Column({ default: false })
   safety_certified: boolean;
 
-  // -------------------------
-  // 1. New Attribute: currency
-  // -------------------------
   @Column({ length: 10, default: 'USD' }) // Use length for VARCHAR in TypeORM
   currency: string;
 
-  // -------------------------
-  // 2. New Attribute: productWeight
-  // -------------------------
   @Column('json') 
   productWeight: { unit: string; value: number | null };
+
+  @Column('json') 
+  dimensions: ProductDimensions;
 
   // NEW HOOK: Ensures default values are set before insertion
   @BeforeInsert()
   setDefaults() {
     if (this.productWeight === undefined) {
-      // Note: This default only runs when inserting a NEW entity via TypeORM.
-      // The migration's SQL default handles existing rows.
       this.productWeight = { unit: 'lbs', value: null }; 
     }
-  }
 
+    if (this.dimensions === undefined) {
+      this.dimensions = { unit: 'cm', length: null, width: null, height: null };
+    }
+  }
 
 }

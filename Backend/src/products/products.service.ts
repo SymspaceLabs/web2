@@ -1,6 +1,6 @@
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product, ProductGender } from './entities/product.entity';
+import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
 import { Category } from 'src/categories/entities/category.entity';
@@ -48,294 +48,294 @@ export class ProductsService {
   
   // CREATE & UPDATE PRODUCT
   async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
-    const {
-      images,
-      threeDModels,
-      company,
-      name,
-      colors,
-      sizes,
-      subcategoryItem: subcategoryItemIdFromDto, // Renamed to avoid conflict
-      subcategoryItemChild: subcategoryItemChildIdFromDto, // New: Get child ID from DTO
-      ...productData
-    } = dto;
+      const {
+          images,
+          threeDModels,
+          company,
+          name,
+          colors,
+          sizes,
+          dimensions,
+          subcategoryItem: subcategoryItemIdFromDto,
+          subcategoryItemChild: subcategoryItemChildIdFromDto,
+          ...productData // Contains all other fields (including potential explicit tag values)
+      } = dto;
 
-    let product: Product;
-    let finalSubcategoryItem: SubcategoryItem | undefined; // To store the resolved SubcategoryItem
-    let finalSubcategoryItemChild: SubcategoryItemChild | undefined; // NEW: To store the resolved SubcategoryItemChild
-
-    // --- Resolve Category Hierarchy ---
-    // Ensure only one of subcategoryItemId or subcategoryItemChildId is provided
-    if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
-      throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
-    }
-
-    if (subcategoryItemChildIdFromDto) {
-      // If subcategoryItemChildId is provided, backtrack to find the subcategoryItem
-      const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
-        where: { id: subcategoryItemChildIdFromDto },
-        relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
-      });
-
-      if (!subcategoryItemChild) {
-        throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
-      }
-      finalSubcategoryItemChild = subcategoryItemChild; // Store the resolved child entity
-      finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
-    } else if (subcategoryItemIdFromDto) {
-      // If only subcategoryItemId is provided, fetch it directly
-      const subcategoryItem = await this.subcategoryItemRepository.findOne({
-        where: { id: subcategoryItemIdFromDto },
-        relations: ['subcategory', 'subcategory.category'],
-      });
-
-      if (!subcategoryItem) {
-        throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
-      }
-      finalSubcategoryItem = subcategoryItem;
-      finalSubcategoryItemChild = undefined; // Ensure it's explicitly undefined if subcategoryItem is directly provided
-    } else {
-      // If neither is provided, and it's a creation, throw an error
-      if (!id) {
-         throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
-      }
-      // For updates, it's fine if no category info is provided (means no change)
-    }
-
-    // === UPDATE MODE ===
-    if (id) {
-      product = await this.productRepository.findOne({
-        where: { id },
-        // IMPORTANT: Load subcategoryItemChild relation here so it can be updated
-        relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
-      });
-
-      if (!product) {
-        throw new NotFoundException(`Product with ID ${id} not found`);
-      }
-
-      // Update subcategoryItem and subcategoryItemChild if new ones were resolved
-      if (finalSubcategoryItem) {
-        product.subcategoryItem = finalSubcategoryItem;
-        product.subcategoryItemId = finalSubcategoryItem.id; // Explicitly set FK
-      } else if (subcategoryItemIdFromDto === null) { // Allow explicit clearing
-        product.subcategoryItem = null;
-        product.subcategoryItemId = null;
-      }
-
-      // NEW: Assign the resolved subcategoryItemChild and its ID
-      if (finalSubcategoryItemChild) {
-        product.subcategoryItemChild = finalSubcategoryItemChild;
-        product.subcategoryItemChildId = finalSubcategoryItemChild.id; // Explicitly set FK
-      } else if (subcategoryItemChildIdFromDto === null) { // Allow explicit clearing
-        product.subcategoryItemChild = null;
-        product.subcategoryItemChildId = null;
-      }
-
-
-      // ✅ Only delete variants if user is explicitly changing variants or their dependencies (colors/sizes)
-      if (
-        ('variants' in dto && dto.variants !== undefined) ||
-        ('colors' in dto && dto.colors !== undefined) ||
-        ('sizes' in dto && dto.sizes !== undefined)
-      ) {
-        if (product.variants && product.variants.length > 0) {
-          await this.productVariantRepository.remove(product.variants); // Clear old variants
-        }
-        product.variants = []; // Reset the array on the entity
-      }
-
-      // --- NEW: MODEL UPDATE LOGIC ---
+      let product: Product;
+      let finalSubcategoryItem: SubcategoryItem | undefined;
+      let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
       
-      if (threeDModels !== undefined) {
-        // If there are existing threeDModels, remove them first
-        if (product.threeDModels && product.threeDModels.length > 0) {
-          await this.product3DModelRepository.remove(product.threeDModels);
-        }
-        // Map the new threeDModels from DTO to ProductModel entities
-        product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new Product3DModel();
-          newModel.url = modelDto.url;
-          newModel.colorCode = modelDto.colorCode || null; 
+      // Variable to hold the applicable tag defaults
+      let tagDefaults: any = {}; 
+      
+      // --- Resolve Category Hierarchy ---
+      if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
+          throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
+      }
 
-          // ✅ FIX 1: Map the new 'pivot' value from the DTO
-          // Note: If modelDto.pivot is undefined, the @BeforeInsert hook will set [0,0,0]
-          // If it is provided (e.g., [0,10,0]), it will use that value.
-          if (modelDto.pivot !== undefined) {
-            newModel.pivot = modelDto.pivot;
+      if (subcategoryItemChildIdFromDto) {
+          const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
+              where: { id: subcategoryItemChildIdFromDto },
+              relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
+          });
+
+          if (!subcategoryItemChild) {
+              throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
           }
+          finalSubcategoryItemChild = subcategoryItemChild;
+          finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
+
+          // Get defaults from SubcategoryItemChild
+          tagDefaults = subcategoryItemChild.tag_defaults || {};
+
+      } else if (subcategoryItemIdFromDto) {
+          const subcategoryItem = await this.subcategoryItemRepository.findOne({
+              where: { id: subcategoryItemIdFromDto },
+              relations: ['subcategory', 'subcategory.category'],
+          });
+
+          if (!subcategoryItem) {
+              throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
+          }
+          finalSubcategoryItem = subcategoryItem;
+          finalSubcategoryItemChild = undefined;
+
+          // Get defaults from SubcategoryItem
+          tagDefaults = subcategoryItem.tag_defaults || {};
+      } else {
+          if (!id) {
+              throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
+          }
+      }
+
+      // --------------------------------------------------------------------------
+      // ✅ APPLY TAG DEFAULTS: Prioritize DTO values over category defaults
+      // --------------------------------------------------------------------------
+      const calculatedDefaults = {
+          ar_type: tagDefaults.ar_type,
+          indoor_outdoor: tagDefaults.indoor_outdoor,
+          accessible: tagDefaults.accessible,
+      };
+      
+      // Merge: Defaults are applied first, then overwritten by productData (DTO values)
+      Object.assign(productData, {
+          ...calculatedDefaults,
+          ...productData, 
+      });
+      // --------------------------------------------------------------------------
+
+
+      // === UPDATE MODE ===
+      if (id) {
+          product = await this.productRepository.findOne({
+              where: { id },
+              relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
+          });
+
+          if (!product) {
+              throw new NotFoundException(`Product with ID ${id} not found`);
+          }
+
+          // Update subcategoryItem and subcategoryItemChild if new ones were resolved or explicitly cleared
+          if (finalSubcategoryItem) {
+              product.subcategoryItem = finalSubcategoryItem;
+              product.subcategoryItemId = finalSubcategoryItem.id;
+          } else if (subcategoryItemIdFromDto === null) {
+              product.subcategoryItem = null;
+              product.subcategoryItemId = null;
+          }
+
+          if (finalSubcategoryItemChild) {
+              product.subcategoryItemChild = finalSubcategoryItemChild;
+              product.subcategoryItemChildId = finalSubcategoryItemChild.id;
+          } else if (subcategoryItemChildIdFromDto === null) {
+              product.subcategoryItemChild = null;
+              product.subcategoryItemChildId = null;
+          }
+
+
+          // Variants cleanup logic (only if colors/sizes/variants are explicitly changed)
+          if (
+              ('variants' in dto && dto.variants !== undefined) ||
+              ('colors' in dto && dto.colors !== undefined) ||
+              ('sizes' in dto && dto.sizes !== undefined)
+          ) {
+              if (product.variants && product.variants.length > 0) {
+                  await this.productVariantRepository.remove(product.variants);
+              }
+              product.variants = [];
+          }
+
+          // --- 3D Model Update Logic ---
+          if (threeDModels !== undefined) {
+              if (product.threeDModels && product.threeDModels.length > 0) {
+                  await this.product3DModelRepository.remove(product.threeDModels);
+              }
+              product.threeDModels = threeDModels.map((modelDto) => {
+                  const newModel = new Product3DModel();
+                  newModel.url = modelDto.url;
+                  newModel.colorCode = modelDto.colorCode || null; 
+                  if (modelDto.pivot !== undefined) {
+                      newModel.pivot = modelDto.pivot;
+                  }
+                  if (modelDto.boundingBox !== undefined) {
+                      newModel.boundingBox = modelDto.boundingBox;
+                  }
+                  newModel.product = product;
+                  return newModel;
+              });
+          }
+
+          // Company update logic
+          if (company) {
+              const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+              if (!companyEntity) {
+                  throw new NotFoundException(`Company with ID ${company} not found`);
+              }
+              product.company = companyEntity;
+          }
+
+          // Slug update logic
+          if (name !== undefined || company !== undefined) {
+              const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
+              const updatedProductName = name !== undefined ? name : product.name;
+
+              if (updatedCompanyName && updatedProductName) {
+                  product.slug = `${slugify(updatedCompanyName)}-${slugify(updatedProductName)}`;
+              }
+          }
+
+          // Assign all other product data (including dimensions and defaulted tags)
+          Object.assign(product, productData);
+          if (name !== undefined) product.name = name; // Update name explicitly
           
-          // ✅ FIX 2: Map the new 'boundingBox' value from the DTO
-          if (modelDto.boundingBox !== undefined) {
-            newModel.boundingBox = modelDto.boundingBox;
+          if (dimensions !== undefined) {
+              product.dimensions = dimensions;
+          }
+      }
+
+      // === CREATE MODE ===
+      else {
+          if (!company) {
+              throw new NotFoundException('Company not provided');
           }
 
-          newModel.product = product; // Link to the current product entity
-          return newModel;
-        });
-      }
-
-      if (company) {
-        const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
-        if (!companyEntity) {
-          throw new NotFoundException(`Company with ID ${company} not found`);
-        }
-        product.company = companyEntity;
-      }
-
-      // Re-generate slug if name or company changes
-      if (name !== undefined || company !== undefined) { // Check if name or company are explicitly provided in DTO
-        const updatedCompanyName = company ? (await this.companiesRepository.findOne({ where: { id: company } }))?.entityName : product.company?.entityName;
-        const updatedProductName = name !== undefined ? name : product.name;
-
-        if (updatedCompanyName && updatedProductName) {
-          product.slug = `${slugify(updatedCompanyName)}-${slugify(updatedProductName)}`;
-        }
-      }
-
-      // Assign other product data
-      Object.assign(product, productData);
-      // If name is explicitly provided, update it
-      if (name !== undefined) product.name = name;
-
-    }
-
-    // === CREATE MODE ===
-    else {
-      if (!company) {
-        throw new NotFoundException('Company not provided');
-      }
-
-      const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
-      if (!companyEntity) {
-        throw new NotFoundException(`Company with ID ${company} not found`);
-      }
-
-      if (!finalSubcategoryItem) { // finalSubcategoryItem *must* be resolved for new products
-          throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
-      }
-
-      const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
-
-      product = this.productRepository.create({
-        ...productData,
-        name,
-        company: companyEntity,
-        slug,
-        subcategoryItem: finalSubcategoryItem, // Use the resolved subcategory item
-        subcategoryItemId: finalSubcategoryItem.id, // Explicitly set FK
-        subcategoryItemChild: finalSubcategoryItemChild, // NEW: Assign the resolved child entity here
-        subcategoryItemChildId: finalSubcategoryItemChild?.id || null, // NEW: Explicitly set FK, null if not present
-        variants: [], // Initialize variants as empty
-        images: [],   // Initialize images as empty
-        colors: [],   // Initialize colors as empty
-        sizes: [],    // Initialize sizes as empty
-        threeDModels: [], // Initialize threeDModels as empty for creation
-      });
-
-      // --- NEW: MODEL CREATION LOGIC ---
-      if (threeDModels?.length) { // If threeDModels are provided during creation
-        product.threeDModels = threeDModels.map((modelDto) => {
-          const newModel = new Product3DModel();
-          newModel.url = modelDto.url;
-          newModel.colorCode = modelDto.colorCode || null;
-
-          // ✅ FIX 3: Map 'pivot' in CREATE MODE
-          if (modelDto.pivot !== undefined) {
-              newModel.pivot = modelDto.pivot;
-          }
-          // ✅ FIX 4: Map 'boundingBox' in CREATE MODE
-          if (modelDto.boundingBox !== undefined) {
-              newModel.boundingBox = modelDto.boundingBox;
+          const companyEntity = await this.companiesRepository.findOne({ where: { id: company } });
+          if (!companyEntity) {
+              throw new NotFoundException(`Company with ID ${company} not found`);
           }
 
-          newModel.product = product; // Link to the product
-          return newModel;
-        });
+          if (!finalSubcategoryItem) {
+              throw new BadRequestException('Subcategory item could not be determined. Please provide valid subcategoryItemId or subcategoryItemChildId.');
+          }
+
+          const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
+
+          // productData now includes all defaults merged above
+          product = this.productRepository.create({
+              ...productData, // Spreads all properties including defaulted tags
+              name,
+              company: companyEntity,
+              slug,
+              subcategoryItem: finalSubcategoryItem,
+              subcategoryItemId: finalSubcategoryItem.id,
+              subcategoryItemChild: finalSubcategoryItemChild,
+              subcategoryItemChildId: finalSubcategoryItemChild?.id || null,
+              variants: [],
+              images: [],
+              colors: [],
+              sizes: [],
+              threeDModels: [],
+              ...(dimensions && { dimensions }),
+          });
+
+          // --- 3D Model Creation Logic ---
+          if (threeDModels?.length) {
+              product.threeDModels = threeDModels.map((modelDto) => {
+                  const newModel = new Product3DModel();
+                  newModel.url = modelDto.url;
+                  newModel.colorCode = modelDto.colorCode || null;
+                  if (modelDto.pivot !== undefined) {
+                      newModel.pivot = modelDto.pivot;
+                  }
+                  if (modelDto.boundingBox !== undefined) {
+                      newModel.boundingBox = modelDto.boundingBox;
+                  }
+                  newModel.product = product;
+                  return newModel;
+              });
+          }
       }
-    }
 
-    // === Shared logic for both Create & Update ===
+      // === Shared logic for both Create & Update ===
 
-    // Images: Replace images if provided in DTO
-    if (images !== undefined) { // Check if 'images' key is present
-        // If Product.images relationship uses cascade:true, simply assigning a new array will handle removal/addition
-        // Use the new helper function to handle image creation and assignment
-        await this.saveProductImages(product, images);
-    }
+      // Images: Replace images if provided in DTO
+      if (images !== undefined) {
+          await this.saveProductImages(product, images);
+      }
 
-    // Colors: Replace colors if provided in DTO
-    if (colors !== undefined) { // Check if 'colors' key is present
-        product.colors = colors.map((color) => {
-          const c = new ProductColor();
-          c.name = color.name;
-          c.code = color.code;
-          c.product = product; // Link to the product
-          return c;
-        });
-    }
+      // Colors: Replace colors if provided in DTO
+      if (colors !== undefined) {
+          product.colors = colors.map((color) => {
+              const c = new ProductColor();
+              c.name = color.name;
+              c.code = color.code;
+              c.product = product;
+              return c;
+          });
+      }
 
-    // Sizes: Replace sizes if provided in DTO
-    if (sizes !== undefined) { // Check if 'sizes' key is present
-        product.sizes = sizes.map((size, i) => {
-          const s = new ProductSize();
-          s.size = size;
-          s.sortOrder = i;
-          s.product = product; // Link to the product
-          return s;
-        });
-    }
+      // Sizes: Replace sizes if provided in DTO
+      if (sizes !== undefined) {
+          product.sizes = sizes.map((size, i) => {
+              const s = new ProductSize();
+              s.size = size;
+              s.sortOrder = i;
+              s.product = product;
+              return s;
+          });
+      }
 
-    // Step 1: Save product (this will cascade save/update threeDModels, images, colors, sizes)
-    const savedProduct = await this.productRepository.save(product);
+      // Step 1: Save product (This saves all non-variant relations due to cascade)
+      const savedProduct = await this.productRepository.save(product);
 
-    // === Generate new variants using updated colors and sizes ===
-    // This part should run after main product and its related entities (colors, sizes) are saved.
-    // Ensure that savedProduct has the latest colors and sizes for variant generation.
-    // Reload savedProduct with relations to ensure fresh data if needed, or pass the `product` object directly
-    // which should now have its `colors` and `sizes` relations updated by the previous save.
-    if (
-      !id || // Always generate variants for new products
-      (colors !== undefined && colors.length > 0) || // If colors were explicitly provided/updated
-      (sizes !== undefined && sizes.length > 0)      // If sizes were explicitly provided/updated
-    ) {
-        // Fetch product again with updated colors and sizes to ensure accurate variant generation
-        const productWithFreshRelations = await this.productRepository.findOne({
-            where: { id: savedProduct.id },
-            relations: ['colors', 'sizes'], // Only load relations needed for generateVariants
-        });
+      // === Generate Variants ===
+      // Run if creating a new product OR if colors/sizes were explicitly provided/updated
+      if (
+          !id ||
+          (colors !== undefined) || // Check presence regardless of length for explicit update
+          (sizes !== undefined)
+      ) {
+          // Fetch product again with updated colors and sizes to ensure accurate variant generation
+          const productWithFreshRelations = await this.productRepository.findOne({
+              where: { id: savedProduct.id },
+              relations: ['colors', 'sizes'],
+          });
 
-        if (productWithFreshRelations) {
-            const savedVariants = await this.generateVariants(productWithFreshRelations, dto);
-            savedProduct.variants = savedVariants;
-        }
-    }
+          if (productWithFreshRelations) {
+              const savedVariants = await this.generateVariants(productWithFreshRelations, dto);
+              savedProduct.variants = savedVariants;
+          }
+      }
 
-    // Remove circular references before returning to prevent JSON serialization issues
-    if (savedProduct.variants?.length) {
-      savedProduct.variants.forEach((variant) => {
-        delete variant.product;
-      });
-    }
+      // Remove circular references before returning
+      if (savedProduct.variants?.length) {
+          savedProduct.variants.forEach((variant) => { delete variant.product; });
+      }
+      if (savedProduct.threeDModels?.length) {
+          savedProduct.threeDModels.forEach((model) => { delete model.product; });
+      }
+      if (savedProduct.colors?.length) {
+          savedProduct.colors.forEach(color => delete color.product);
+      }
+      if (savedProduct.sizes?.length) {
+          savedProduct.sizes.forEach(size => delete size.product);
+      }
+      if (savedProduct.images?.length) {
+          savedProduct.images.forEach(image => delete image.product);
+      }
 
-    if (savedProduct.threeDModels?.length) {
-      savedProduct.threeDModels.forEach((model) => {
-        delete model.product;
-      });
-    }
-
-    // You might also need to clear circular references for colors, sizes, images if they have 'product' properties
-    if (savedProduct.colors?.length) {
-      savedProduct.colors.forEach(color => delete color.product);
-    }
-    if (savedProduct.sizes?.length) {
-      savedProduct.sizes.forEach(size => delete size.product);
-    }
-    if (savedProduct.images?.length) {
-      savedProduct.images.forEach(image => delete image.product);
-    }
-
-    return savedProduct;
+      return savedProduct;
   }
 
   /**

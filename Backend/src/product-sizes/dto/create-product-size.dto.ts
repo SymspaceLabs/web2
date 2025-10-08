@@ -1,1 +1,3 @@
-export class CreateProductSizeDto {}
+export class CreateProductSizeDto {
+    size: string;
+}

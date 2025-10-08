@@ -927,6 +927,7 @@ export const CATEGORIES_DATA = [
   //Special Needs Backend
   {
     name: "Special Needs & Accessibility",
+    slug: "special-needs-accessibility",
     id: "c9b589fa-96c6-46c7-a98b-ea2068a5e937",
     subcategories: [
       {
@@ -976,6 +977,7 @@ export const CATEGORIES_DATA = [
   //Maternity Backend
   {
     name: "Maternity & Prenatal Care",
+    slug: "maternity-prenatal-care",
     id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
     gender: [
       "Female"

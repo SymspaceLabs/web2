@@ -69,6 +69,6 @@ const products = [
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Bottoms",
     image: "/assets/images/products/Women/bottom.png",
-    slug:'tops',
+    slug:'bottoms',
   },
 ];

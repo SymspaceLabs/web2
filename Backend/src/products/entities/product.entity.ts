@@ -29,10 +29,10 @@ export enum ProductGender {
 }
 
 export interface ProductDimensions {
-    unit: string;
-    length: number | null;
-    width: number | null;
-    height: number | null;
+  unit: string;
+  length: number | null;
+  width: number | null;
+  height: number | null;
 }
 
 @Entity('product')

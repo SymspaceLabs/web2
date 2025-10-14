@@ -8,6 +8,7 @@ import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
 import { Box, Container, Button, Grid } from '@mui/material';
 import { ProductCard4 } from '@/components/custom-cards/product-cards';
+import Link from "next/link";
 
 // ==========================================================
 
@@ -38,7 +39,7 @@ export default function Section3() {
 
         {/* Call-to-action button aligned to the right */}
         <FlexBox justifyContent="end" sx={{ mt: 5 }}>
-          <Button sx={styles.buttonLight}>
+          <Button sx={styles.buttonLight} LinkComponent={Link} href="/products/search/all">
             Shop By Category
           </Button>
         </FlexBox>

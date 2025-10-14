@@ -352,16 +352,7 @@ export class ProductsService {
       .orderBy('images.sortOrder', 'ASC');
 
     // 2. Apply the category, search term, and GENDER filters
-    
-    const filterParams = {
-      categorySlug,
-      subcategorySlug,
-      subcategoryItemSlugs,
-      subcategoryItemChildSlug,
-      searchTerm,
-      genders,
-    };
-    
+        
     const filterAppliedButNoMatch = await this.applyCategoryFilters(
       productsQuery,
       categorySlug,
@@ -441,6 +432,7 @@ export class ProductsService {
       .leftJoinAndSelect('product.colors', 'colors')
       .leftJoinAndSelect('product.sizes', 'sizes')
       .leftJoinAndSelect('product.variants', 'variants')
+      .leftJoinAndSelect('product.threeDModels', 'threeDModels')
       
       // ====================================================================
       // 1. JOINS FOR PRODUCTS WITH subcategoryItemChild (Current logic)
@@ -866,10 +858,14 @@ export class ProductsService {
       hasFilter = true;
     } 
     
-    // 3. Apply the subcategory filter
+    // 3. ⭐ Apply the subcategory filter (THIS FIXES YOUR 'subcategory=tops' ISSUE)
+    //    This filters all products linked to *any* subcategory item whose 
+    //    parent is the target subcategory.
     else if (subcategorySlug) {
-      query.andWhere('subcategory.slug = :subcategorySlug', { 
-          subcategorySlug: subcategorySlug 
+      // This is the CRITICAL line. It filters based on the 'subcategory' alias 
+      // established in your findAll query (.leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')).
+      query.andWhere('subcategory.slug = :subcategorySlug', {
+        subcategorySlug: subcategorySlug,
       });
       hasFilter = true;
     } 
@@ -883,11 +879,18 @@ export class ProductsService {
     }
 
     // Check if any filter was successfully applied and if it resulted in zero matches
+    // NOTE: This .getCount() check requires careful consideration in a service method 
+    // as it executes the query prematurely.
     if (hasFilter) {
-      const count = await query.getCount();
-      return count === 0; // Returns TRUE if no match is found
+      // Temporarily clone the query to safely check for a match count
+      const countQuery = query.clone(); 
+      const count = await countQuery.getCount();
+      
+      // Return TRUE if a filter was applied but yielded no results
+      return count === 0; 
     }
 
+    // Returns FALSE if no category filters were applied, or if the initial count was non-zero.
     return false; // Returns FALSE if no category filters were applied
   }
 

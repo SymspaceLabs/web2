@@ -90,11 +90,11 @@ const categories = [
   },
   {
     title:"Kids",
-    slug:"gender=kids"
+    slug:"ageGroup=kids"
   },
   {
     title:"Maternity",
-    slug:"category=maternity-&-prenatal-care"
+    slug:"category=maternity-prenatal-care"
   },
   {
     title:"Elderly",
@@ -102,7 +102,7 @@ const categories = [
   },
   {
     title:"Assisted Aid",
-    slug:"category=special-needs-&-accessibility"
+    slug:"category=special-needs-accessibility"
   },
   {
     title:"Home & Furniture",
@@ -110,6 +110,6 @@ const categories = [
   },
   {
     title:"Sales & Deals",
-    slug:"tag=sales-&-deals"
+    slug:"tag=sales-deals"
   }
 ]

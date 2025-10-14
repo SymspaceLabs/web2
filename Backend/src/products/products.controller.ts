@@ -36,7 +36,8 @@ export class ProductsController {
     @Query('subcategory') subcategorySlug?: string,
     @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
     @Query('subcategoryItemChild') subcategoryItemChildSlug?: string,
-    @Query('gender') genders?: string | string[]
+    @Query('gender') genders?: string | string[],
+    @Query('ageGroup') ageGroups?: string | string[] // <-- CHANGED TO ageGroups (plural)
   ) {
 
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
@@ -47,13 +48,19 @@ export class ProductsController {
       ? genders 
       : genders ? [genders] : undefined;
 
+    // ⭐ NEW: Parse ageGroups into an array
+    const ageGroupsArray = Array.isArray(ageGroups) 
+        ? ageGroups 
+        : ageGroups ? [ageGroups] : undefined; 
+
     return await this.productsService.findAll(
       search,
       categorySlug,
       subcategorySlug,
       subcategoryItemSlugsArray,
       subcategoryItemChildSlug,
-      gendersArray
+      gendersArray,
+      ageGroupsArray
     );
   }
 
@@ -62,7 +69,6 @@ export class ProductsController {
       const results = await this.productsService.performFreeFormSearch(query);
       return results;
   }
-
 
   @Get(':slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {

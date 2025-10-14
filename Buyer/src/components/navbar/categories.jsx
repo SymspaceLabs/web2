@@ -31,7 +31,7 @@ function NavigationList({ isOpen, onClose, onToggle }) {
       // Base condition: Render final navigatable link item
       if (nav.slug && !nav.child) {
         // Correctly determine query parameter based on nesting level
-        const subcategoryItemQuery = level === 3 ? `?subcategoryItemChild=${nav.slug}` : `?subcategoryItem=${nav.slug}`;
+        const subcategoryItemQuery = level === 3 ? `?subcategoryItem=${nav.slug}` : `?subcategoryItem=${nav.slug}`;
 
         return (
           <NavLink

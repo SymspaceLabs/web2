@@ -37,7 +37,7 @@ export class ProductsController {
     @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
     @Query('subcategoryItemChild') subcategoryItemChildSlug?: string,
     @Query('gender') genders?: string | string[],
-    @Query('ageGroup') ageGroups?: string | string[] // <-- CHANGED TO ageGroups (plural)
+    @Query('ageGroup') ageGroups?: string | string[]
   ) {
 
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
@@ -48,7 +48,6 @@ export class ProductsController {
       ? genders 
       : genders ? [genders] : undefined;
 
-    // ⭐ NEW: Parse ageGroups into an array
     const ageGroupsArray = Array.isArray(ageGroups) 
         ? ageGroups 
         : ageGroups ? [ageGroups] : undefined; 

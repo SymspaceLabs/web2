@@ -203,22 +203,23 @@ export const CATEGORIES_DATA = [
         name: "Mobile Phones & Accessories",
         slug: "mobile-phones-accessories",
         subcategoryItems: [
-          { id: "d312a97f-2b27-4bfe-bf8d-5c1fdd5b1b79", name: "Smartphones", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "f23b7c69-dc3e-4f64-9ac4-8c48f6780ecb", name: "Cases & Covers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "56d49b33-5a6a-42d7-950d-505a9b0fdf62", name: "Screen Protectors", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "780a69a9-98b8-44d5-a8f9-c44bf9dcbf78", name: "Chargers & Cables", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "10c30a2f-5d3a-469c-bdf3-0e3e4b853a87", name: "Power Banks", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
+          { id: "d312a97f-2b27-4bfe-bf8d-5c1fdd5b1b79", name: "Smartphones", slug: "smartphones", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "f23b7c69-dc3e-4f64-9ac4-8c48f6780ecb", name: "Cases & Covers", slug: "cases-covers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "56d49b33-5a6a-42d7-950d-505a9b0fdf62", name: "Screen Protectors", slug: "screen-protectors", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "780a69a9-98b8-44d5-a8f9-c44bf9dcbf78", name: "Chargers & Cables", slug: "chargers-cables", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "10c30a2f-5d3a-469c-bdf3-0e3e4b853a87", name: "Power Banks", slug: "power-banks", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
         ]
       },
       {
         id: "302f2156-dfbc-497d-8f87-bfa13d76e94b",
         name: "Computers & Accessories",
+        slug: "computers-accessories",
         subcategoryItems: [
-          { id: "8b88334c-9531-42d9-a5fd-d4303d3c31a7", name: "Laptops", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "5157a66a-e90e-4e5b-bf88-e76cf598cfbb", name: "Desktops", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "c8034c21-6254-4717-bc9e-e2d9bafc7032", name: "Monitors", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "b5473b6b-4d3d-4987-b8a4-504bd650ff80", name: "Keyboards & Mice", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "2d7a7d73-81d9-43b3-9b35-cb2b236c2ea6", name: "Printers & Scanners", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
+          { id: "8b88334c-9531-42d9-a5fd-d4303d3c31a7", name: "Laptops", slug: "laptops", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "5157a66a-e90e-4e5b-bf88-e76cf598cfbb", name: "Desktops", slug: "desktops", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "c8034c21-6254-4717-bc9e-e2d9bafc7032", name: "Monitors", slug: "monitors", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "b5473b6b-4d3d-4987-b8a4-504bd650ff80", name: "Keyboards & Mice", slug: "keyboards-mice", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "2d7a7d73-81d9-43b3-9b35-cb2b236c2ea6", name: "Printers & Scanners", slug: "printers-scanners", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
         ]
       },
       {
@@ -227,30 +228,32 @@ export const CATEGORIES_DATA = [
         slug: "home-entertainment",
         subcategoryItems: [
           { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "77c5ab4b-beb5-4e43-b71f-0c83a02b16af", name: "Sound Systems", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "5c3a74d9-1f9e-4bfb-833f-02a32c10874c", name: "Streaming Devices", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "7b32f0d6-8e1b-4413-8b91-2552648b7dc5", name: "Blu-ray & DVD Players", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
+          { id: "77c5ab4b-beb5-4e43-b71f-0c83a02b16af", name: "Sound Systems", slug: "sound-systems", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "5c3a74d9-1f9e-4bfb-833f-02a32c10874c", name: "Streaming Devices", slug: "streaming-devices", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "7b32f0d6-8e1b-4413-8b91-2552648b7dc5", name: "Blu-ray & DVD Players", slug: "blu-ray-dvd-players", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
         ]
       },
       {
         id: "0fa9db70-0a8e-4f99-a67e-d8a2a2335e90",
         name: "Cameras & Photography",
+        slug: "cameras-photography",
         subcategoryItems: [
-          { id: "61ae3d0a-efb2-485e-8ff5-c0b79d53c75e", name: "Digital Cameras", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "10fcf01f-3ae5-49ab-b2c6-c0217b3b5641", name: "Lenses", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "84e9ed1b-d12d-4948-96b2-78728e34e5e8", name: "Tripods", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "fc0dcf91-cd0d-4f34-b5fc-874e59ea9d6f", name: "Camera Accessories", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
+          { id: "61ae3d0a-efb2-485e-8ff5-c0b79d53c75e", name: "Digital Cameras", slug: "digital-cameras", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "10fcf01f-3ae5-49ab-b2c6-c0217b3b5641", name: "Lenses", slug: "lenses", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "84e9ed1b-d12d-4948-96b2-78728e34e5e8", name: "Tripods", slug: "tripods", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "fc0dcf91-cd0d-4f34-b5fc-874e59ea9d6f", name: "Camera Accessories", slug: "camera-accessories", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
         ]
       },
       {
         id: "b3e34b9d-5f3b-4c7b-8b5e-0c3d9a78f4b5",
         name: "Smart Home Devices",
+        slug: "smart-home-devices",
         subcategoryItems: [
-          { id: "f5d0a6c7-3b9e-4a8f-b5c4-2d0a6c7d9e4a", name: "Smart Lights", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "a9e8b7c6-2a1d-4b8c-8d1e-2a4c9b3d5f8e", name: "Smart Speakers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "d1c2b3a4-8e9f-4d1c-b5a7-9e4b1c8f3e0d", name: "Security Cameras", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "e4f5d6c7-1a2b-4d3e-8c5f-6a7e8b9f1d0a", name: "Smart Plugs & Switches", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
-          { id: "f8a7b9c1-4d3e-4f5c-8a2b-1c4d9e7f8a9b", name: "Smart Thermostats", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
+          { id: "f5d0a6c7-3b9e-4a8f-b5c4-2d0a6c7d9e4a", name: "Smart Lights", slug: "smart-lights", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "a9e8b7c6-2a1d-4b8c-8d1e-2a4c9b3d5f8e", name: "Smart Speakers", slug: "smart-speakers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "d1c2b3a4-8e9f-4d1c-b5a7-9e4b1c8f3e0d", name: "Security Cameras", slug: "security-cameras", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "e4f5d6c7-1a2b-4d3e-8c5f-6a7e8b9f1d0a", name: "Smart Plugs & Switches", slug: "smart-plugs-switches", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "f8a7b9c1-4d3e-4f5c-8a2b-1c4d9e7f8a9b", name: "Smart Thermostats", slug: "smart-thermostats", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
         ]
       }
     ]
@@ -316,12 +319,12 @@ export const CATEGORIES_DATA = [
       {
         id: "f45e9246-0ef5-4996-b2f9-71c27ad98371",
         name: "Bedroom",
-        slug: "bedroom", // 👈 Added slug for 'Bedroom'
+        slug: "bedroom",
         subcategoryItems: [
           {
             id: "2bdc4f4b-6f5c-45bb-8572-27a973b1c9e6",
             name: "Beds",
-            slug: "beds", // 👈 Added slug for 'Beds'
+            slug: "beds",
             subcategoryItemChildren: [
               { id: "36a28079-9502-45b3-b0c2-0e9d2c0bcbd6", name: "Platform Beds", slug: "platform-beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false } },
               { id: "21903dc8-ef6c-4a34-b221-47a8b4b4f637", name: "Upholstered Beds", slug: "upholstered-beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor", "accessible": false } },
@@ -333,7 +336,7 @@ export const CATEGORIES_DATA = [
           {
             id: "4c63e2e1-f6f6-44bc-a496-21907337081d",
             name: "Dressers & Chests",
-            slug: "dressers-chests", // 👈 Added slug for 'Dressers & Chests'
+            slug: "dressers-chests",
             subcategoryItemChildren: [
               { id: "f78bd691-cd05-4195-b38a-71065c914ea7", name: "6-Drawer Dressers", slug: "6-drawer-dressers", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "db256369-53f5-4c2b-b1ea-e4c506fe3305", name: "Chests of Drawers", slug: "chests-of-drawers", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
@@ -342,7 +345,7 @@ export const CATEGORIES_DATA = [
           {
             id: "5a8dbb56-5d36-41aa-a8d9-fc748dd97e38",
             name: "Nightstands & Side Tables",
-            slug: "nightstands-side-tables", // 👈 Added slug for 'Nightstands & Side Tables'
+            slug: "nightstands-side-tables",
             subcategoryItemChildren: [
               { id: "bceebfde-665b-4f5d-a4bc-55068dc10b1a", name: "Single Drawer Nightstands", slug: "single-drawer-nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "5e9e56a3-5842-4f74-bc24-0ce6b08de3f3", name: "Double Drawer Nightstands", slug: "double-drawer-nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
@@ -351,7 +354,7 @@ export const CATEGORIES_DATA = [
           {
             id: "ec2c0f78-6d5a-4053-b46b-3e45c7b0df90",
             name: "Wardrobes & Armoires",
-            slug: "wardrobes-armoires", // 👈 Added slug for 'Wardrobes & Armoires'
+            slug: "wardrobes-armoires",
             subcategoryItemChildren: [
               { id: "d2e1bd8b-c009-45e3-b3d8-ff61b9f25c3d", name: "2-Door Wardrobes", slug: "2-door-wardrobes", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "95346994-dca3-4892-92b2-1a1c03c3112c", name: "Sliding Door Wardrobes", slug: "sliding-door-wardrobes", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
@@ -362,12 +365,12 @@ export const CATEGORIES_DATA = [
       {
         id: "47b4e7f5-4891-4147-818e-f255d650bdb7",
         name: "Office",
-        slug: "office", // 👈 Added slug for 'Office'
+        slug: "office",
         subcategoryItems: [
           {
             id: "8abfbbd7-0fcb-43d6-9111-6a5a42c0702b",
             name: "Desks",
-            slug: "desks", // 👈 Added slug for 'Desks'
+            slug: "desks",
             subcategoryItemChildren: [
               { id: "9215688d-a05f-444e-ab96-c8ff54a2b504", name: "Writing Desks", slug: "writing-desks", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "5a384129-b8f1-448b-b8ca-ac1fd66f7610", name: "Standing Desks", slug: "standing-desks", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
@@ -377,7 +380,7 @@ export const CATEGORIES_DATA = [
           {
             id: "5c1e5db5-2745-4d1e-b18b-9ff81cd83367",
             name: "Office Chairs",
-            slug: "office-chairs", // 👈 Added slug for 'Office Chairs'
+            slug: "office-chairs",
             subcategoryItemChildren: [
               { id: "f57a60c3-ec74-4f05-85d5-490885885851", name: "Ergonomic Chairs", slug: "ergonomic-chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "983beb19-8289-4f4d-8282-0e6944bac291", name: "Task Chairs", slug: "task-chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
@@ -387,7 +390,7 @@ export const CATEGORIES_DATA = [
           {
             id: "fce90567-8d9e-413e-9c17-021111256c66",
             name: "Storage",
-            slug: "storage", // 👈 Added slug for 'Storage'
+            slug: "storage",
             subcategoryItemChildren: [
               { id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8", name: "Filing Cabinets", slug: "filing-cabinets", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
               { id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b", name: "Bookcases & Shelving", slug: "bookcases-shelving", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
@@ -398,12 +401,12 @@ export const CATEGORIES_DATA = [
       {
         id: "497b2f65-1f53-4adf-8902-d82fa8d18ea4",
         name: "Outdoor",
-        slug: "outdoor", // 👈 Added slug for 'Outdoor'
+        slug: "outdoor",
         subcategoryItems: [
           {
             id: "3de1373d-940e-47d2-b94d-ebfdd48fe3be",
             name: "Seating Sets",
-            slug: "seating-sets", // 👈 Added slug for 'Seating Sets'
+            slug: "seating-sets",
             subcategoryItemChildren: [
               { id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90", name: "Patio Sets", slug: "patio-sets", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
               { id: "c4752303-edf7-4a3a-914b-bf9968bca34d", name: "Sling Chairs", slug: "sling-chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
@@ -414,7 +417,7 @@ export const CATEGORIES_DATA = [
           {
             id: "2d3e4f5c-6b7a-4c8d-9f0e-1a2b3c4d5e6f",
             name: "Tables",
-            slug: "tables", // 👈 Added slug for 'Tables'
+            slug: "tables",
             subcategoryItemChildren: [
               { id: "77867f34-14ce-4762-9dc5-ccafe10f52cb", name: "Dining Tables", slug: "dining-tables", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
               { id: "d0e1b2c3-4a5f-4b6c-8a7d-e9f0d1a2b3c4", name: "Bistro Tables", slug: "bistro-tables", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } }
@@ -423,7 +426,7 @@ export const CATEGORIES_DATA = [
           {
             id: "c1d2e3f4-5a6b-4c7d-8e9f-01a2b3c4d5e6",
             name: "Shade & Shelter",
-            slug: "shade-shelter", // 👈 Added slug for 'Shade & Shelter'
+            slug: "shade-shelter",
             subcategoryItemChildren: [
               { id: "a9b8c7d6-e5f4-4a3b-9d8c-7e6f5d4c3b2a", name: "Umbrellas", slug: "umbrellas", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
               { id: "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e", name: "Gazebos", slug: "gazebos", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } }
@@ -432,7 +435,7 @@ export const CATEGORIES_DATA = [
           {
             id: "e9f8d7c6-a5b4-4c3d-9e2f-1a2b3c4d5e6f",
             name: "Storage",
-            slug: "outdoor-storage", // 👈 Added slug for 'Storage' (prefixed to avoid conflict)
+            slug: "outdoor-storage",
             subcategoryItemChildren: [
               { id: "d9e8f7a6-b5c4-4d3e-9f0a-1b2c3d4e5f6a", name: "Deck Boxes", slug: "deck-boxes", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
               { id: "e7f6d5a4-c3b2-4c1d-8e9f-0a1b2c3d4e5f", name: "Garden Sheds", slug: "garden-sheds", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } }
@@ -486,11 +489,13 @@ export const CATEGORIES_DATA = [
   {
     id: "e9bd737d-7c3e-4506-80a0-f47b06b03c4d",
     name: 'Beauty, Health & Pets',
+    slug: "beauty-health-pets",
     subcategories: [
       // Skincare
       {
         id: "c550b6c6-1945-4b98-816c-cd4db7f931f3",
         name: "Skincare",
+        slug: "skincare",
         subcategoryItems: [
           { id: "d2552ae7-4f5c-4038-8f49-b6cb07a6169e", name: "Cleansers", slug: "cleansers", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "7b8e30b0-cb38-42fc-9e42-4545e8cceac2", name: "Moisturizers", slug: "moisturizers", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
@@ -508,6 +513,7 @@ export const CATEGORIES_DATA = [
       {
         id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2c",
         name: "Skincare Tools",
+        slug: "skincare-tools",
         subcategoryItems: [
           { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Rollers", slug: "rollers", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
           { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Facial Brushes", slug: "facial-brushes", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
@@ -519,10 +525,12 @@ export const CATEGORIES_DATA = [
       {
         id: "a447cd79-d503-4816-924d-34b9db78f108",
         name: "Makeup",
+        slug: "makeup",
         subcategoryItems: [
           {
             id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c",
             name: "Face",
+            slug: "face-makeup",
             subcategoryItemChildren: [
               { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Foundations", slug: "foundations", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "bb8af3eb-94e4-4c8f-a9e6-0c08c64f28d6", name: "Concealers", slug: "concealers", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
@@ -533,6 +541,7 @@ export const CATEGORIES_DATA = [
           {
             id: "b9c8a7d6-e1f2-4c3d-8e5a-9b6a7c8d9e2f",
             name: "Eyes",
+            slug: "eyes-makeup",
             subcategoryItemChildren: [
               { id: "2746a2ed-cac7-4c34-a33b-fc8d79bc6d6e", name: "Eyeshadows", slug: "eyeshadows", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "24cc744f-bf3f-4db4-a60b-41d6635df914", name: "Mascaras", slug: "mascaras", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
@@ -542,6 +551,7 @@ export const CATEGORIES_DATA = [
           {
             id: "a1b2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d",
             name: "Lips",
+            slug: "lips-makeup",
             subcategoryItemChildren: [
               { id: "52c10ad4-209c-482e-9aeb-376e4aa54f11", name: "Lipsticks", slug: "lipsticks", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "a4c2f8e6-b9d1-4e7c-8a3f-1d9e2b5c6a7e", name: "Lip Glosses", slug: "lip-glosses", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
@@ -551,6 +561,7 @@ export const CATEGORIES_DATA = [
           {
             id: "7728f440-4e04-42ef-b9b4-d0c051337748",
             name: "Makeup Tools & Removers",
+            slug: "makeup-tools-removers",
             subcategoryItemChildren: [
               { id: "d7f8a9c1-4b2e-4d5a-8e9f-1c2a3b4d5e6f", name: "Brushes & Sponges", slug: "brushes-&-sponges", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "b1c3d5e7-2a4b-4f6c-8a9d-1e3f5a7b9c1d", name: "Makeup Removers", slug: "makeup-removers", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
@@ -563,10 +574,12 @@ export const CATEGORIES_DATA = [
       {
         id: "e5f9a2b1-3d7e-4c5d-8b9a-1f2e3d4c5a6b",
         name: "Personal Care",
+        slug: "personal-care",
         subcategoryItems: [
           {
             id: "aae5ac37-58c4-4502-9c8c-d9db6fdbe8aa",
             name: "Haircare",
+            slug: "haircare",
             subcategoryItemChildren: [
               { id: "b2d67251-1e8c-4390-bfc3-6a105cdab3cb", name: "Shampoos & Conditioners", slug: "shampoos-&-conditioners", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "594a09da-b73e-44d7-9aa2-7d0950bff67a", name: "Hair Treatments & Masks", slug: "hair-treatments-&-masks", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
@@ -576,6 +589,7 @@ export const CATEGORIES_DATA = [
           {
             id: "f8d7c6b5-1a2e-4c3d-8e4a-9b6a7c8d9e2f",
             name: "Bath & Body",
+            slug: "bath-body",
             subcategoryItemChildren: [
               { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7d", name: "Body Washes", slug: "body-washes", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "c8d9e1f2-3a4b-4c5d-6e7a-8b9c1d2e3f4a", name: "Body Lotions & Scrubs", slug: "body-lotions-&-scrubs", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
@@ -584,6 +598,7 @@ export const CATEGORIES_DATA = [
           {
             id: "d9e8f7c6-5a4b-4c3d-2e1f-1a2b3c4d5e6f",
             name: "Shaving & Hair Removal",
+            slug: "shaving-hair-removal",
             subcategoryItemChildren: [
               { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
@@ -592,6 +607,7 @@ export const CATEGORIES_DATA = [
           {
             id: "7748f268-e744-42cd-bb8c-999ef10378ea",
             name: "Fragrances & Scents",
+            slug: "fragrances-scents",
             subcategoryItemChildren: [
               { id: "e283e781-3a34-4b5d-91b1-09a9fa4ec2e1", name: "Perfumes", slug: "perfumes", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "9612aa1c-8837-42b5-a856-1dcf2c0a9b7a", name: "Body Sprays", slug: "body-sprays", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
@@ -601,6 +617,7 @@ export const CATEGORIES_DATA = [
           {
             id: "b1c2d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e7f",
             name: "Oral Care & Hygiene",
+            slug: "oral-care-hygiene",
             subcategoryItemChildren: [
               { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Toothbrushes & Pastes", slug: "toothbrushes-&-pastes", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
               { id: "e8f7c6d5-a4b3-4c2e-8d9b-1a2b3c4d5e6f", name: "Hygiene Essentials", slug: "hygiene-essentials", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
@@ -613,12 +630,13 @@ export const CATEGORIES_DATA = [
       {
         id: "8536a833-b2f6-4ae0-a51b-530dcde99077",
         name: "Health & Wellness",
+        slug: "health-wellness",
         gender: ['Male', 'Female', 'Kids'],
         subcategoryItems: [
-          { id: "81d3021a-13c4-48b0-bb20-658cd9f35a74", name: "Vitamins & Supplements", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-          { id: "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", name: "Medical Equipment", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-          { id: "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", name: "Fitness Equipment", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-          { id: "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", name: "Health Monitors", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
+          { id: "81d3021a-13c4-48b0-bb20-658cd9f35a74", name: "Vitamins & Supplements", slug: "vitamins-supplements", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+          { id: "1bd839f0-d108-4f3a-a55c-235d5b49b0c1", name: "Medical Equipment", slug: "medical-equipment", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+          { id: "fc1bfa55-16d2-4f16-b9e2-3487c42b2d5f", name: "Fitness Equipment", slug: "fitness-equipment", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+          { id: "2aa6b6b4-83b0-4cb7-9b99-13e40b640ef8", name: "Health Monitors", slug: "health-monitors", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
         ]
       },
 
@@ -627,10 +645,12 @@ export const CATEGORIES_DATA = [
         id: "a9e6754b-d72b-4d4f-b6e8-2c3f71c4a03e",
         gender: ['Male', 'Female', 'Kids'],
         name: "Pet Supplies",
+        slug: "pet-supplies",
         subcategoryItems: [
           {
             id: "708785c4-b7d7-4b27-92b1-3e1a3dc78b90",
             name: "Dogs",
+            slug: "dogs",
             subcategoryItemChildren: [
               { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Food & Treats", slug: "dog-food-treats", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
               { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", name: "Leashes", slug: "dog-leashes", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
@@ -640,6 +660,7 @@ export const CATEGORIES_DATA = [
           {
             id: "0038c0a2-9c9d-482e-9b04-3e945f8c495e",
             name: "Cats",
+            slug: "cats",
             subcategoryItemChildren: [
               { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Food & Treats", slug: "cat-food-treats", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
               { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", name: "Toys", slug: "cat-toys", tags_required: ["ar_type","safety_certified"], tag_defaults: { ar_type: "static" } },
@@ -647,9 +668,9 @@ export const CATEGORIES_DATA = [
               { id: "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", name: "Litter", slug: "cat-litter", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
             ]
           },
-          { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Fish & Aquatic Pets", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-          { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Small Animals", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-          { id: "baf0a457-472f-47e4-b87c-65fa40464f78", name: "Birds", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
+          { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Fish & Aquatic Pets", slug: "fish-aquatic-pets", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+          { id: "1f14f741-5768-4a77-906e-53fa8b87b8a3", name: "Small Animals", slug: "small-animals", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+          { id: "baf0a457-472f-47e4-b87c-65fa40464f78", name: "Birds", slug: "birds", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
         ]
       }
     ],
@@ -659,53 +680,59 @@ export const CATEGORIES_DATA = [
   {
     id: "6e264d8a-669b-43d1-933e-e6a3504f2f4c",
     name: "Kids & Toys",
+    slug: "kids-toys",
     subcategories: [
-    {
-      id: "43b350f9-a86d-4729-b69c-29d91f868213",
-      name: "Kids Clothing",
-      subcategoryItems: [
-        { id: "10c4d2e7-a859-4d3f-a316-c70e7a2b9d8c", name: "Girls", slug: "girls", tags_required: ["ar_type","age_group","gender","season","occasion","material"], tag_defaults: { ar_type: "body-tracking", age_group: "kids", gender: "women" } },
-        { id: "4e9d5c8a-7b3c-4e1f-8b2d-9a0e6c1b5d4f", name: "Boys", slug: "boys", tags_required: ["ar_type","age_group","gender","season","occasion","material"], tag_defaults: { ar_type: "body-tracking", age_group: "kids", gender: "men" } }
-      ]
-    },
-    {
-      id: "9f3f4e8b-4a5c-4d2d-8b3a-1e2f3a4b5c6d",
-      name: "Toys",
-      subcategoryItems: [
-        { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7a", name: "Educational", slug: "educational", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
-        { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3b", name: "Learning", slug: "learning", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
-        { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4c", name: "STEM", slug: "stem", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
-        { id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2d", name: "Action Figures", slug: "action-figures", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
-        { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Dolls & Accessories", slug: "dolls-&-accessories", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
-        { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Outdoor", slug: "outdoor", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
-        { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", name: "Playhouses", slug: "playhouses", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
-        { id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c", name: "Slides", slug: "slides", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
-        { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Swings", slug: "swings", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } }
-      ]
-    }
-  ]
+      {
+        id: "43b350f9-a86d-4729-b69c-29d91f868213",
+        name: "Kids Clothing",
+        slug: "kids-clothing",
+        subcategoryItems: [
+          { id: "10c4d2e7-a859-4d3f-a316-c70e7a2b9d8c", name: "Girls", slug: "girls", tags_required: ["ar_type","age_group","gender","season","occasion","material"], tag_defaults: { ar_type: "body-tracking", age_group: "kids", gender: "women" } },
+          { id: "4e9d5c8a-7b3c-4e1f-8b2d-9a0e6c1b5d4f", name: "Boys", slug: "boys", tags_required: ["ar_type","age_group","gender","season","occasion","material"], tag_defaults: { ar_type: "body-tracking", age_group: "kids", gender: "men" } }
+        ]
+      },
+      {
+        id: "9f3f4e8b-4a5c-4d2d-8b3a-1e2f3a4b5c6d",
+        name: "Toys",
+        slug: "toys",
+        subcategoryItems: [
+          { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7a", name: "Educational", slug: "educational", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
+          { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3b", name: "Learning", slug: "learning", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
+          { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4c", name: "STEM", slug: "stem", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
+          { id: "f9d7c6b4-2a1e-4c8d-8b4e-7e9a8f3d1b2d", name: "Action Figures", slug: "action-figures", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
+          { id: "a7c2b5d4-9e1f-4b6c-8f9d-1e2c3b4a5d6e", name: "Dolls & Accessories", slug: "dolls-&-accessories", tags_required: ["ar_type","age_group","gender","safety_certified"], tag_defaults: { ar_type: "static" } },
+          { id: "b3f8c7a6-2d1e-4c5a-8b9d-4e1a2f3c5d6b", name: "Outdoor", slug: "outdoor", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
+          { id: "c4b9d8a7-e1f2-4c3d-8e5a-9b6a7c8d9e1f", name: "Playhouses", slug: "playhouses", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
+          { id: "d1e7c5b9-4a2e-4f8d-8b3c-6a7b8e9d4a1c", name: "Slides", slug: "slides", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
+          { id: "f27d3773-d2d1-40b2-b567-18089442fcb7", name: "Swings", slug: "swings", tags_required: ["ar_type","age_group","gender","safety_certified","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } }
+        ]
+      }
+    ]
   },
 
   //Recipes Backend
   {
-    name: "Recipes",
     id: "e4f7d2a1-c8b5-4a3e-8c6f-9d2a1c7b5e4d",
+    name: "Recipes",
+    slug: "recipes", 
     subcategories: [
       {
-        name: "Trending Weeknight Dinners",
         id: "b7c2a1e4-d9f8-4e3a-b1c2-5d4e7f6a8b9c",
+        name: "Trending Weeknight Dinners",
+        slug: "trending-weeknight-dinners",
         subcategoryItems: [
-          { name: "Chicken Alfredo", id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5d", slug: "chicken-alfredo", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Chicken Tacos", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d", slug: "chicken-tacos", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Fried Rice (Chicken/Vegetable)", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1c", slug: "fried-rice", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Baked Salmon", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5a", slug: "baked-salmon", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Stir-Fry Noodles (Lo Mein/Chow Mein)", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f4", slug: "stir-fry-noodles", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Shrimp Scampi", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", slug: "shrimp-scampi", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5d", name: "Chicken Alfredo", slug: "chicken-alfredo", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d", name: "Chicken Tacos", slug: "chicken-tacos", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1c", name: "Fried Rice (Chicken/Vegetable)", slug: "fried-rice", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5a", name: "Baked Salmon", slug: "baked-salmon", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f4", name: "Stir-Fry Noodles (Lo Mein/Chow Mein)", slug: "stir-fry-noodles", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", name: "Shrimp Scampi", slug: "shrimp-scampi", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },
       {
-        name: "Comfort Classics",
         id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1a",
+        name: "Comfort Classics",
+        slug: "comfort-classics", 
         subcategoryItems: [
           { name: "Lasagna", id: "c1b2a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p6", slug: "lasagna", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
           { name: "Spaghetti Bolognese", id: "a0b9c8d7-e6f5-4a2b-9c8d-7e6f5a4b3c2d", slug: "spaghetti-bolognese", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
@@ -718,6 +745,7 @@ export const CATEGORIES_DATA = [
       {
         name: "Breakfast & Brunch",
         id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3d",
+        slug: "breakfast-brunch", 
         subcategoryItems: [
           { name: "Pancakes", id: "b9c8a7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5a", slug: "pancakes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
           { name: "French Toast", id: "a0b1c2d3-e4f5-4g6h-i7j8-k9l0m1n2o3p4", slug: "french-toast", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
@@ -729,122 +757,137 @@ export const CATEGORIES_DATA = [
       {
         name: "Baking & Desserts",
         id: "d93c76ae-654c-499d-aed8-3b72c69fd50b",
+        slug: "baking-desserts", 
         subcategoryItems: [
-          { name: "Chocolate Chip Cookies", id: "e5f4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1b", slug: "chocolate-chip-cookies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Brownies", id: "a7b6c5d4-e3f2-4a1b-9c0d-8e7f6a5b4c3d", slug: "brownies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Banana Bread", id: "f1e2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5e", slug: "banana-bread", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Cheesecake", id: "b2c1a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", slug: "cheesecake", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Cupcakes", id: "a8b7c6d5-e4f3-4a2b-9c1d-8e7f6a5b4c3e", slug: "cupcakes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "e5f4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1b", name: "Chocolate Chip Cookies", slug: "chocolate-chip-cookies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a7b6c5d4-e3f2-4a1b-9c0d-8e7f6a5b4c3d", name: "Brownies", slug: "brownies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f1e2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5e", name: "Banana Bread", slug: "banana-bread", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "b2c1a3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", name: "Cheesecake", slug: "cheesecake", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a8b7c6d5-e4f3-4a2b-9c1d-8e7f6a5b4c3e", name: "Cupcakes", slug: "cupcakes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },
       {
-        name: "Global Favorites",
         id: "c3256b0f-3e45-498e-a834-df8b6b1d6759",
+        name: "Global Favorites",
+        slug: "global-favorites",
         subcategoryItems: [
           {
-            name: "Italian",
             id: "a5b4c3d2-e1f0-4a9b-8c7d-6e5f4d3c2b1a",
-            "subcategoryItemChildren": [
-              { name: "Carbonara", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "carbonara", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Margherita Pizza", id: "d3c2b1a4-e5f6-4g7h-i8j9-k0l1m2n3o4p0", slug: "margherita-pizza", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Italian",
+            slug: "italian",
+            subcategoryItemChildren: [
+              { id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", name: "Carbonara", slug: "carbonara", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "d3c2b1a4-e5f6-4g7h-i8j9-k0l1m2n3o4p0", name: "Margherita Pizza", slug: "margherita-pizza", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
             name: "Mexican",
+            slug: "mexican", 
             id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6b",
-            "subcategoryItemChildren": [
-              { name: "Tacos al Pastor", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1d", slug: "tacos-al-pastor", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Chicken Enchiladas", id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3e", slug: "chicken-enchiladas", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            subcategoryItemChildren: [
+              { id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1d", name: "Tacos al Pastor", slug: "tacos-al-pastor", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3e", name: "Chicken Enchiladas", slug: "chicken-enchiladas", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
             name: "Indian",
+            slug: "indian",
             id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p1",
-            "subcategoryItemChildren": [
-              { name: "Butter Chicken", id: "e4f3d2c1-b0a9-8c7d-6e5f-4d3c2b1a0d9c", slug: "butter-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Chana Masala", id: "f1d2c3e4-a5b6-4c7d-8e9f-0a1b2c3d4e5f", slug: "chana-masala", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            subcategoryItemChildren: [
+              { id: "e4f3d2c1-b0a9-8c7d-6e5f-4d3c2b1a0d9c", name: "Butter Chicken", slug: "butter-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "f1d2c3e4-a5b6-4c7d-8e9f-0a1b2c3d4e5f", name: "Chana Masala", slug: "chana-masala", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Chinese",
             id: "f6e5d4c3-b2a1-4e7a-b6c5-2d1e4f3a5b6d",
-            "subcategoryItemChildren": [
-              { name: "Kung Pao Chicken", id: "b3c2a1d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", slug: "kung-pao-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Mapo Tofu", id: "e1f2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5f", slug: "mapo-tofu", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Chinese",
+            slug: "chinese",
+            subcategoryItemChildren: [
+              { id: "b3c2a1d4-e5f6-4a7b-8c9d-1e2f3a4b5c6f", name: "Kung Pao Chicken", slug: "kung-pao-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "e1f2d3c4-b5a6-4c7b-8d9e-0f1a2b3c4d5f", name: "Mapo Tofu", slug: "mapo-tofu", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Japanese",
             id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5f",
-            "subcategoryItemChildren": [
-              { name: "Chicken Teriyaki", id: "d1e2f3a4-b5c6-4d7e-8f9a-0b1c2d3e4f5g", slug: "chicken-teriyaki", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Katsu Curry", id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7e", slug: "katsu-curry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Japanese",
+            slug: "japanese", 
+            subcategoryItemChildren: [
+              { id: "d1e2f3a4-b5c6-4d7e-8f9a-0b1c2d3e4f5g", name: "Chicken Teriyaki", slug: "chicken-teriyaki", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "a2b3c4d5-e6f7-4a8b-9c1d-2e3f4a5b6c7e", name: "Katsu Curry", slug: "katsu-curry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Thai",
             id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6g",
-            "subcategoryItemChildren": [
-              { name: "Pad Thai", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f5", slug: "pad-thai", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Green Curry", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p2", slug: "green-curry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Thai",
+            slug: "thai",
+            subcategoryItemChildren: [
+              { id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f5", name: "Pad Thai", slug: "pad-thai", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p2", name: "Green Curry", slug: "green-curry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Mediterranean",
             id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1e",
-            "subcategoryItemChildren": [
-              { name: "Greek Salad + Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6h", slug: "greek-chicken-salad", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Shakshuka", id: "e2d1c4b3-a6f5-4e8d-9c2b-1a0e5f4d3c2c", slug: "shakshuka", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Mediterranean",
+            slug: "mediterranean",
+            subcategoryItemChildren: [
+              { id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6h", name: "Greek Salad + Chicken", slug: "greek-chicken-salad", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "e2d1c4b3-a6f5-4e8d-9c2b-1a0e5f4d3c2c", name: "Shakshuka", slug: "shakshuka", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           }
         ]
       },
       {
-        name: "Appliance-Guided",
         id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457",
+        name: "Appliance-Guided",
+        slug: "appliance-guided",
         subcategoryItems: [
           {
-            name: "Air Fryer",
             id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p3",
-            "subcategoryItemChildren": [
-              { name: "Air Fryer Chicken Wings", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5b", slug: "air-fryer-chicken-wings", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Air Fryer Salmon", id: "a3b2c1d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", slug: "air-fryer-salmon", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Air Fryer",
+            slug: "air-fryer",
+            subcategoryItemChildren: [
+              { id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5b", name: "Air Fryer Chicken Wings", slug: "air-fryer-chicken-wings", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "a3b2c1d4-e5f6-4g7h-i8j9-k0l1m2n3o4p9", name: "Air Fryer Salmon", slug: "air-fryer-salmon", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Instant Pot / Pressure Cooker",
             id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f6",
-            "subcategoryItemChildren": [
-              { name: "Instant Pot Beef Chili", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6j", slug: "instant-pot-beef-chili", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Instant Pot Butter Chicken", id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6k", slug: "instant-pot-butter-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            name: "Instant Pot / Pressure Cooker",
+            slug: "instant-pot-pressure-cooker",
+            subcategoryItemChildren: [
+              { id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6j", name: "Instant Pot Beef Chili", slug: "instant-pot-beef-chili", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6k", name: "Instant Pot Butter Chicken", slug: "instant-pot-butter-chicken", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
-            name: "Oven & Sheet Pan",
             id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1f",
-            "subcategoryItemChildren": [
-              { name: "Sheet-Pan Chicken & Veggies", id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6c", slug: "sheet-pan-chicken-veggies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Roasted Salmon & Potatoes", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p4", slug: "roasted-salmon-potatoes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            slug: "oven-sheet-pan",
+            name: "Oven & Sheet Pan",
+            subcategoryItemChildren: [
+              { id: "e9f8d7c6-b5a4-4c3d-9e2b-1a0e9f8d7c6c", name: "Sheet-Pan Chicken & Veggies",  slug: "sheet-pan-chicken-veggies", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p4", name: "Roasted Salmon & Potatoes",  slug: "roasted-salmon-potatoes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           },
           {
             name: "Stovetop & Wok",
             id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3f",
-            "subcategoryItemChildren": [
-              { name: "Beef Stir-Fry", id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5c", slug: "beef-stir-fry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-              { name: "Fried Rice", id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f7", slug: "fried-rice-stovetop", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+            slug: "stovetop-wok", 
+            subcategoryItemChildren: [
+              { id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5c", name: "Beef Stir-Fry", slug: "beef-stir-fry", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+              { id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f7", name: "Fried Rice", slug: "fried-rice-stovetop", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
             ]
           }
         ]
       },
-      {
-        name: "Meal Prep & Bowls",
+      {        
         id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5g",
+        name: "Meal Prep & Bowls",
+        slug: "meal-prep-bowls", 
         subcategoryItems: [
-          { name: "Chicken Burrito Bowls", id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6l", slug: "chicken-burrito-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Teriyaki Chicken Bowls", id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1g", slug: "teriyaki-chicken-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Mediterranean Grain Bowls", id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3g", slug: "mediterranean-grain-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { name: "Korean Beef Bowls", id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", slug: "korean-beef-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "b1a2c3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6l", name: "Chicken Burrito Bowls",  slug: "chicken-burrito-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1g", name: "Teriyaki Chicken Bowls",  slug: "teriyaki-chicken-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "c7b6a5f4-e3d2-4c1b-0a9d-8c7b6a5f4e3g", name: "Mediterranean Grain Bowls",  slug: "mediterranean-grain-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a1b2c3d4-e5f6-4g7h-i8j9-k0l1m2n3o4p5", name: "Korean Beef Bowls", slug: "korean-beef-bowls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]
@@ -852,51 +895,55 @@ export const CATEGORIES_DATA = [
 
   //Sports Backend
   {
-    name: "Sports, Fitness & Outdoors",
     id: "426ad39f-5df5-4a69-b1a8-c63fbe61ec10",
+    name: "Sports, Fitness & Outdoors",
+    slug: "sports-fitness-outdoors",
     subcategories : [
       {
         name: "Fitness Equipment",
         id: "328c6f42-9a13-4c6a-95b1-e7d18f732aa8",
+        slug: "fitness-equipment",
         subcategoryItems: [
-          { id: "dfc54366-e8d5-4c98-bc48-65e4d524c456", name: "Cardio Machines", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "09c9803e-bf5c-4c68-bcf0-fb74830238f3", name: "Treadmills", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "9f8760f6-90e4-448b-a3d4-dba6433eddf2", name: "Exercise Bikes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "48b96fa5-0ef9-4115-a7aa-4e458e28eeb2", name: "Strength Training", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "eb85d9da-e2e1-4e3e-bf35-d0218e68f8f4", name: "Dumbbells", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "a27ac7ef-d6c6-462c-a553-f11d7d18d285", name: "Weight Benches", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "f2b28152-680b-471d-92f5-e3e51d790632", name: "Fitness Accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "69a8a342-f67f-41df-aad2-038fa3268a98", name: "Yoga Mats", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "03c45395-476c-4d5d-8e7d-25d66f5f6dd6", name: "Resistance Bands", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "dfc54366-e8d5-4c98-bc48-65e4d524c456", name: "Cardio Machines", slug: "cardio-machines", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "09c9803e-bf5c-4c68-bcf0-fb74830238f3", name: "Treadmills", slug: "treadmills", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "9f8760f6-90e4-448b-a3d4-dba6433eddf2", name: "Exercise Bikes", slug: "exercise-bikes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "48b96fa5-0ef9-4115-a7aa-4e458e28eeb2", name: "Strength Training", slug: "strength-training", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "eb85d9da-e2e1-4e3e-bf35-d0218e68f8f4", name: "Dumbbells", slug: "dumbbells", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a27ac7ef-d6c6-462c-a553-f11d7d18d285", name: "Weight Benches", slug: "weight-benches", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f2b28152-680b-471d-92f5-e3e51d790632", name: "Fitness Accessories", slug: "fitness-accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "69a8a342-f67f-41df-aad2-038fa3268a98", name: "Yoga Mats", slug: "yoga-mats", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "03c45395-476c-4d5d-8e7d-25d66f5f6dd6", name: "Resistance Bands", slug: "resistance-bands", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },
       {
-        name: "Outdoor Recreation",
         id: "cfd4a5c7-3d89-4328-940d-344a2674a70f",
+        name: "Outdoor Recreation",
+        slug: "outdoor-recreation",
         subcategoryItems: [
-          { id: "2c03da59-6649-42da-bb22-5277f5bff87c", name: "Camping", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "c6d9fb12-f344-47d8-8dbb-2eaa690b3ebc", name: "Tents", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "0b9b8569-f47c-401f-a0e7-b9b50e3b258f", name: "Sleeping Bags", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "f5e91dc4-cc55-4069-99a2-9a2716a58990", name: "Hiking", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "7baffd16-8465-4f1b-90d1-612b4b32c1a7", name: "Poles", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "ac4ed5ee-38c1-4761-bb48-ef8c528e7860", name: "Gear", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "3c911690-b0b6-4ee3-a41b-b6a8f8fdf4a0", name: "Water Sports", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "d41900d8-e426-4e48-aadb-93ea2683fc06", name: "Kayaks", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
-          { id: "3e0f2416-6b72-4871-8a41-97e16fce3142", name: "Life Jackets", tags_required: ["ar_type", "indoor_outdoor", "safety_certified"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor", "safety_certified": true } }
+          { id: "2c03da59-6649-42da-bb22-5277f5bff87c", name: "Camping", slug: "camping", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "c6d9fb12-f344-47d8-8dbb-2eaa690b3ebc", name: "Tents", slug: "tents", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "0b9b8569-f47c-401f-a0e7-b9b50e3b258f", name: "Sleeping Bags", slug: "sleeping-bags", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "f5e91dc4-cc55-4069-99a2-9a2716a58990", name: "Hiking", slug: "hiking", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "7baffd16-8465-4f1b-90d1-612b4b32c1a7", name: "Poles", slug: "poles", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "ac4ed5ee-38c1-4761-bb48-ef8c528e7860", name: "Gear", slug: "gear", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "3c911690-b0b6-4ee3-a41b-b6a8f8fdf4a0", name: "Water Sports", slug: "water-sports", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "d41900d8-e426-4e48-aadb-93ea2683fc06", name: "Kayaks", slug: "kayaks", tags_required: ["ar_type", "indoor_outdoor"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor" } },
+          { id: "3e0f2416-6b72-4871-8a41-97e16fce3142", name: "Life Jackets", slug: "life-jackets", tags_required: ["ar_type", "indoor_outdoor", "safety_certified"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "outdoor", "safety_certified": true } }
         ]
       },
       {
-        name: "Team Sports",
         id: "c0e70967-d22b-4525-8b27-3bdef606e289",
+        name: "Team Sports",
+        slug: "team-sports",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          { id: "b3241e97-2e9c-45b2-97a4-c2602256604a", name: "Soccer", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "7b946045-4001-4cd6-8c4d-13e86da47426", name: "Balls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "e6ef6e1f-73c2-4639-bd4f-2b05a30b1c5a", name: "Apparel", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking" } },
-          { id: "88eeb0f8-b473-4e66-aed5-4a022b2c37c4", name: "Basketball", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "6273cc4b-bc2e-4c55-88d8-5af4185291c2", name: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "feet-tracking" } },
-          { id: "e045c3ab-73e2-4d4f-b32e-1e8f1f67d77b", name: "Tennis", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "c25cba42-78ea-4f5e-83af-2827bc320c16", name: "Rackets", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "b3241e97-2e9c-45b2-97a4-c2602256604a", name: "Soccer", slug: "soccer", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "7b946045-4001-4cd6-8c4d-13e86da47426", name: "Balls", slug: "balls", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "e6ef6e1f-73c2-4639-bd4f-2b05a30b1c5a", name: "Apparel", slug: "apparel", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "88eeb0f8-b473-4e66-aed5-4a022b2c37c4", name: "Basketball", slug: "basketball", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "6273cc4b-bc2e-4c55-88d8-5af4185291c2", name: "Shoes", slug: "shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "feet-tracking" } },
+          { id: "e045c3ab-73e2-4d4f-b32e-1e8f1f67d77b", name: "Tennis", slug: "tennis", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "c25cba42-78ea-4f5e-83af-2827bc320c16", name: "Rackets", slug: "rackets", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]
@@ -904,36 +951,39 @@ export const CATEGORIES_DATA = [
 
   //Automotive Backend
   {
-    name: "Automotive",
     id: "f4b6c0c5-85e7-4c43-98c3-816b8b17e8cf",
+    name: "Automotive",
+    slug: "automotive",
     subcategories: [
       {
         name: "Vehicle Parts & Accessories",
         id: "b83443dc-20da-4fd9-a09f-d7b3443e7ad2",
+        slug: "vehicle-parts-accessories",
         subcategoryItems: [
-          { id: "a76e501c-2de0-4ff2-97b1-530c9db48676", name: "Car Electronics", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "9d9285b4-cf78-4243-a6ec-056164ee4b77", name: "GPS", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "c7f42050-211f-4d80-a5a5-6c279d88dc4e", name: "Stereos", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "df490b59-6f1d-4d95-8224-21a8e1352e34", name: "Tools & Equipment", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "b47ff7c5-580d-4a04-92c1-7f1f04089ef3", name: "Wrenches", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "146c681f-8159-4601-b1d6-d4b18ec9dce3", name: "Jacks", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "1ef03cb0-67b1-4dc5-8a64-fc8dfc83b7d6", name: "Replacement Parts", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "8502e056-80f5-4aa8-9146-53a3b12d5e6c", name: "Brakes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "6b6bc201-bc94-47b1-a65a-56494c03371a", name: "Batteries", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "a02f2b1b-768c-49f5-b207-1bb5bfa16214", name: "Interior Accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "03e9dd4f-853c-4a57-a9c2-d6f6d84e59e2", name: "Floor Mats", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "76b66f65-b3f2-485f-a934-f9f5f6cbe540", name: "Exterior Accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "cdbd08f2-6d77-4807-8859-9b5ea7e23e0b", name: "Car Covers", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", name: "Bike Racks", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "a76e501c-2de0-4ff2-97b1-530c9db48676", name: "Car Electronics", slug: "car-electronics", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "9d9285b4-cf78-4243-a6ec-056164ee4b77", name: "GPS", slug: "gps", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "c7f42050-211f-4d80-a5a5-6c279d88dc4e", name: "Stereos", slug: "stereos", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "df490b59-6f1d-4d95-8224-21a8e1352e34", name: "Tools & Equipment", slug: "tools-equipment", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "b47ff7c5-580d-4a04-92c1-7f1f04089ef3", name: "Wrenches", slug: "wrenches", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "146c681f-8159-4601-b1d6-d4b18ec9dce3", name: "Jacks", slug: "jacks", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "1ef03cb0-67b1-4dc5-8a64-fc8dfc83b7d6", name: "Replacement Parts", slug: "replacement-parts", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "8502e056-80f5-4aa8-9146-53a3b12d5e6c", name: "Brakes", slug: "brakes", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "6b6bc201-bc94-47b1-a65a-56494c03371a", name: "Batteries", slug: "batteries", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a02f2b1b-768c-49f5-b207-1bb5bfa16214", name: "Interior Accessories", slug: "interior-accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "03e9dd4f-853c-4a57-a9c2-d6f6d84e59e2", name: "Floor Mats", slug: "floor-mats", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "76b66f65-b3f2-485f-a934-f9f5f6cbe540", name: "Exterior Accessories", slug: "exterior-accessories", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "cdbd08f2-6d77-4807-8859-9b5ea7e23e0b", name: "Car Covers", slug: "car-covers", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de", name: "Bike Racks", slug: "bike-racks", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },
       {
         id: "20a7db2c-b4c7-4bd1-8bc6-6f8c3dc6e6de",
         name: "Auto Customization",
+        slug: "auto-customization",
         subcategoryItems: [
-          { id: "03d8d7b3-c1f9-4610-8b1b-410a5160a0a5", name: "Wheels & Rims", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70", name: "Seat Covers", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "6d9e03d4-b78f-4f2a-b7e1-886d34e9e436", name: "Wraps & Decals", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "03d8d7b3-c1f9-4610-8b1b-410a5160a0a5", name: "Wheels & Rims", slug: "wheels-rims", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "9b52412e-bc92-4860-9d79-d6e7a3d32b70", name: "Seat Covers", slug: "seat-covers", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "6d9e03d4-b78f-4f2a-b7e1-886d34e9e436", name: "Wraps & Decals", slug: "wraps-decals", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]
@@ -948,42 +998,46 @@ export const CATEGORIES_DATA = [
       {
         id: "2b10ab5d-c140-45d6-9de6-b43234b14a2a",
         name: "Mobility Aids",
+        slug: "mobility-aids",
         subcategoryItems: [
-          { id: "b4aa65df-dc8b-4d66-931d-e9c728ec73ff", name: "Wheelchairs", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "8ae9935f-14b1-46ab-a3f7-d719c4ed3db2", name: "Walkers", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "5b4f5d7c-2673-45e2-b302-68b43e8e44de", name: "Canes", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "a765eb54-410c-4b3d-b3b4-2b4ae0fb2c64", name: "Mobility Scooters", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
+          { id: "b4aa65df-dc8b-4d66-931d-e9c728ec73ff", name: "Wheelchairs", slug: "wheelchairs", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "8ae9935f-14b1-46ab-a3f7-d719c4ed3db2", name: "Walkers", slug: "walkers", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "5b4f5d7c-2673-45e2-b302-68b43e8e44de", name: "Canes", slug: "canes", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "a765eb54-410c-4b3d-b3b4-2b4ae0fb2c64", name: "Mobility Scooters", slug: "mobility-scooters", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
         ]
       },
       {
         name: "Daily Living Aids",
         id: "a79a48d6-8ed9-4b35-9f8d-3b825b8724d5",
+        slug: "daily-living-aids",
         subcategoryItems: [
-          { id: "8b23b799-fb9c-4e6e-97ff-0e843d209659", name: "Dressing Aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "db312734-e146-4d03-9705-ea501c1333a2", name: "Eating Aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "6cfaaf73-9b2b-4bd4-a4c8-81e6fba32f13", name: "Bathing Aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "7b35bcf0-13e2-4943-b8f2-e19e2a5e6f68", name: "Communication Aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
+          { id: "8b23b799-fb9c-4e6e-97ff-0e843d209659", name: "Dressing Aids", slug: "dressing-aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "db312734-e146-4d03-9705-ea501c1333a2", name: "Eating Aids", slug: "eating-aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "6cfaaf73-9b2b-4bd4-a4c8-81e6fba32f13", name: "Bathing Aids", slug: "bathing-aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "7b35bcf0-13e2-4943-b8f2-e19e2a5e6f68", name: "Communication Aids", slug: "communication-aids", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
         ]
       },
       {
         name: "Accessibility Equipment",
         id: "d0c9b924-9293-45b3-905c-7fa5241dc132",
+        slug: "accessibility-equipment",
         subcategoryItems: [
-          { id: "fab927ab-c569-4d5f-b637-d4c6ed154a54", name: "Ramps", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "81a6c2cc-45de-4e1c-b676-90b1b1e09c06", name: "Lifts", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
-          { id: "517fd112-58c7-4111-9cbf-fdf5c4c2bb0e", name: "Accessible Furniture", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
+          { id: "fab927ab-c569-4d5f-b637-d4c6ed154a54", name: "Ramps", slug: "ramps", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "81a6c2cc-45de-4e1c-b676-90b1b1e09c06", name: "Lifts", slug: "lifts", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } },
+          { id: "517fd112-58c7-4111-9cbf-fdf5c4c2bb0e", name: "Accessible Furniture", slug: "accessible-furniture", tags_required: ["ar_type", "accessible"], tag_defaults: { "ar_type": "static", "accessible": true } }
         ]
       },
       {
         id: "e4a2503d-2f08-4e6f-b25c-0c1a8a2d1d0f",
         name: "Eyecare & Vision Aids",
+        slug: "eyecare-vision-aids",
         subcategoryItems: [
-          { id: "c1f7a1b3-4f9e-4c7a-9a0d-8e5f2a1b3c4d", name: "Reading Glasses", tags_required: ["ar_type"], tag_defaults: { "ar_type": "face-tracking" } },
-          { id: "f5d9c2e0-8b1a-4d6c-8e3b-9c8f7a6d5b4e", name: "Contact Lens Care", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "b0a6e3d2-7c9b-4e8a-9f5a-2c4d6b8e0f1a", name: "Eye Drops & Treatments", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "a8c5f4e1-3d7b-4a9c-9f2e-0c1b3d5e7f9a", name: "Blue Light Filters", tags_required: ["ar_type"], tag_defaults: { "ar_type": "face-tracking" } },
-          { id: "d7b4a6c9-8e5f-4d3a-8b1c-2f9e0a8d7c6b", name: "Magnifiers & Low Vision Aids", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "f9e0b1c3-6a8d-4b7e-9f0a-3c5d7e9f1a2b", name: "Eye Patches & Shields", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "c1f7a1b3-4f9e-4c7a-9a0d-8e5f2a1b3c4d", name: "Reading Glasses", slug: "reading-glasses", tags_required: ["ar_type"], tag_defaults: { "ar_type": "face-tracking" } },
+          { id: "f5d9c2e0-8b1a-4d6c-8e3b-9c8f7a6d5b4e", name: "Contact Lens Care", slug: "contact-lens-care", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "b0a6e3d2-7c9b-4e8a-9f5a-2c4d6b8e0f1a", name: "Eye Drops & Treatments", slug: "eye-drops-treatments", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "a8c5f4e1-3d7b-4a9c-9f2e-0c1b3d5e7f9a", name: "Blue Light Filters", slug: "blue-light-filters", tags_required: ["ar_type"], tag_defaults: { "ar_type": "face-tracking" } },
+          { id: "d7b4a6c9-8e5f-4d3a-8b1c-2f9e0a8d7c6b", name: "Magnifiers & Low Vision Aids", slug: "magnifiers-low-vision-aids", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f9e0b1c3-6a8d-4b7e-9f0a-3c5d7e9f1a2b", name: "Eye Patches & Shields", slug: "eye-patches-shields", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]
@@ -991,39 +1045,40 @@ export const CATEGORIES_DATA = [
 
   //Maternity Backend
   {
+    id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
     name: "Maternity & Prenatal Care",
     slug: "maternity-prenatal-care",
-    id: "b12911d2-5286-49a6-8431-6c3e1c8b3b9b",
-    gender: [
-      "Female"
-    ],
+    gender: ["Female"],
     subcategories: [
       {
-        name: "Maternity Clothing",
         id: "bf5d468a-cfb0-47c1-b1d6-2fce6bb5c241",
+        name: "Maternity Clothing",
+        slug: "maternity-clothing",
         subcategoryItems: [
-          { id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7", name: "Dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } },
-          { id: "688b69a1-612c-4bd1-8451-0d735e64b7d4", name: "Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } },
-          { id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f", name: "Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } }
+          { id: "e8d8e6c6-c2bb-4053-b5b2-e9075b5946f7", name: "Dresses", slug: "dresses", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } },
+          { id: "688b69a1-612c-4bd1-8451-0d735e64b7d4", name: "Tops", slug: "tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } },
+          { id: "6acb8fb6-6820-4235-9cc6-f66f7b527a7f", name: "Bottoms", slug: "bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "adult", gender: "women" } }
         ]
       },
       {
-        name: "Prenatal Care",
         id: "ef89b1d6-e556-408f-b4f1-d60b0ae39380",
+        name: "Prenatal Care",
+        slug: "prenatal-care", 
         subcategoryItems: [
-          { id: "4bf4b308-0b37-4ee1-9255-8c413dc634b6", name: "Vitamins", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "91bd093d-115f-4d95-82f0-3c3c2d5e6e80", name: "Support Bands", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "9bc8e2dc-6819-4d70-a8f8-5c82ed830d96", name: "Pregnancy Pillows", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "4bf4b308-0b37-4ee1-9255-8c413dc634b6", name: "Vitamins", slug: "vitamins", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "91bd093d-115f-4d95-82f0-3c3c2d5e6e80", name: "Support Bands", slug: "support-bands", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "9bc8e2dc-6819-4d70-a8f8-5c82ed830d96", name: "Pregnancy Pillows", slug: "pregnancy-pillows", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },
       {
         name: "Baby Essentials",
         id: "de012745-2743-4b4b-a469-f7b5f7a5e8c4",
+        slug: "baby-essentials",
         subcategoryItems: [
-          { id: "d93c76ae-654c-499d-aed8-3b72c69fd50b", name: "Clothing", tags_required: ["ar_type", "age_group", "gender", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "baby" } },
-          { id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457", name: "Diapers", tags_required: ["ar_type", "age_group", "gender", "safety_certified"], tag_defaults: { "ar_type": "static", "age_group": "baby" } },
-          { id: "c3256b0f-3e45-498e-a834-df8b6b1d6759", name: "Feeding", tags_required: ["ar_type", "age_group", "gender"], tag_defaults: { "ar_type": "static", "age_group": "baby" } },
-          { id: "2edb6a23-6e6d-44a7-94cf-f66ec5d857b7", name: "Nursery", tags_required: ["ar_type", "material", "accessible"], tag_defaults: { "ar_type": "static" } }
+          { id: "d93c76ae-654c-499d-aed8-3b72c69fd50b", name: "Clothing", slug: "baby-clothing", tags_required: ["ar_type", "age_group", "gender", "material"], tag_defaults: { "ar_type": "body-tracking", "age_group": "baby" } },
+          { id: "4b5b8328-909c-4e7f-aafe-d4d7e5b0e457", name: "Diapers", slug: "diapers", tags_required: ["ar_type", "age_group", "gender", "safety_certified"], tag_defaults: { "ar_type": "static", "age_group": "baby" } },
+          { id: "c3256b0f-3e45-498e-a834-df8b6b1d6759", name: "Feeding", slug: "feeding", tags_required: ["ar_type", "age_group", "gender"], tag_defaults: { "ar_type": "static", "age_group": "baby" } },
+          { id: "2edb6a23-6e6d-44a7-94cf-f66ec5d857b7", name: "Nursery", slug: "nursery", tags_required: ["ar_type", "material", "accessible"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]
@@ -1033,41 +1088,39 @@ export const CATEGORIES_DATA = [
   {
     id: "785fbee8-74f6-469f-a59b-9039969c4e13",
     name: "Senior Care",
+    slug: "senior-care",
     subcategories: [
       {
         id: "412ec064-8b2e-4521-8c56-f3a742854324",
         name: "Health & Wellness",
-        gender: [
-          "Male",
-          "Female"
-        ],
+        slug: "health-wellness", 
+        gender: ["Male","Female"],
         subcategoryItems: [
-          { id: "c3747f8f-50c7-4168-b3c2-cc8a328e40b2", name: "Supplements", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
-          { id: "73a41941-891e-403e-b53f-ded234949ba8", name: "Monitors", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
-          { id: "a6d22dfb-40de-4ca5-88bb-36caeaff3b9d", name: "Mobility Aids", tags_required: ["ar_type", "age_group", "accessible", "safety_certified"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true, "safety_certified": true } },
-          { id: "02ea08b4-7ab7-465d-9a05-a8b11b1433dd", name: "Vision & Hearing", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } }
+          { id: "c3747f8f-50c7-4168-b3c2-cc8a328e40b2", name: "Supplements", slug: "supplements", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
+          { id: "73a41941-891e-403e-b53f-ded234949ba8", name: "Monitors", slug: "monitors", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
+          { id: "a6d22dfb-40de-4ca5-88bb-36caeaff3b9d", name: "Mobility Aids", slug: "mobility-aids", tags_required: ["ar_type", "age_group", "accessible", "safety_certified"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true, "safety_certified": true } },
+          { id: "02ea08b4-7ab7-465d-9a05-a8b11b1433dd", name: "Vision & Hearing", slug: "vision-hearing", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } }
         ]
       },
       {
         id: "4e79cf49-84e3-49eb-8453-b9ad412b5d9d",
         name: "Comfort & Care",
-        gender: [
-          "Male",
-          "Female"
-        ],
+        slug: "comfort-care",
+        gender: ["Male","Female"],
         subcategoryItems: [
-          { id: "3e2cf0cb-0db0-45be-98c7-585da5d5a48a", name: "Recliners", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } },
-          { id: "6a79b8f5-3e37-454e-8fc4-de8efb407254", name: "Cushions", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
-          { id: "2b706c34-7cbe-419c-afc0-42bc9cedbd5a", name: "Adjustable Beds", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } },
-          { id: "d0c2f399-9228-40af-9914-faacd023ab07", name: "Daily Living Aids", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } }
+          { id: "3e2cf0cb-0db0-45be-98c7-585da5d5a48a", name: "Recliners", slug: "recliners", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } },
+          { id: "6a79b8f5-3e37-454e-8fc4-de8efb407254", name: "Cushions", slug: "cushions", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
+          { id: "2b706c34-7cbe-419c-afc0-42bc9cedbd5a", name: "Adjustable Beds", slug: "adjustable-beds", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } },
+          { id: "d0c2f399-9228-40af-9914-faacd023ab07", name: "Daily Living Aids", slug: "daily-living-aids", tags_required: ["ar_type", "age_group", "accessible"], tag_defaults: { "ar_type": "static", "age_group": "senior", "accessible": true } }
         ]
       },
       {
         id: "1eb7dd80-805d-4b50-a305-f6a9633e6e26",
         name: "Recreation & Leisure",
+        slug: "recreation-leisure",
         subcategoryItems: [
-          { id: "9db34332-ea0b-492b-aa38-931e5ea3e410", name: "Puzzles", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
-          { id: "26e80424-db5d-49d1-a83e-4ed850fa5941", name: "Books", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
+          { id: "9db34332-ea0b-492b-aa38-931e5ea3e410", name: "Puzzles", slug: "puzzles", tags_required: ["ar_type", "age_group"], tag_defaults: { "ar_type": "static", "age_group": "senior" } },
+          { id: "26e80424-db5d-49d1-a83e-4ed850fa5941", name: "Books", slug: "books", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       }
     ]

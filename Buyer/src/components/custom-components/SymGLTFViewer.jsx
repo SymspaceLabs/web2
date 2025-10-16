@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, Stage, useGLTF, Html } from '@react-three/drei';
+import { OrbitControls, Stage, useGLTF, useFBX, Html } from '@react-three/drei';
 import React, { Suspense, useState, useEffect } from 'react';
 import JSZip from 'jszip';
 // Corrected import paths for GLTFLoader and FBXLoader with .js extension
@@ -59,10 +59,33 @@ function Model({ url }) {
     }
     return <primitive object={gltfFromZip.scene} scale={0.5} />;
   } else if (isFBX) {
-    // Use useLoader with FBXLoader for FBX files
-    const fbx = useLoader(FBXLoader, url);
-    return <primitive object={fbx} scale={0.5} />;
-  } else if (isGLTF) {
+      const fbx = useLoader(FBXLoader, url);
+
+      useEffect(() => {
+        if (fbx) {
+          fbx.traverse((child) => {
+            if (child.isMesh) {
+              // 1. Always compute normals for shading fixes
+              child.geometry.computeVertexNormals();
+
+              if (child.material) {
+                // 2. Fix PBR-related darkness if model is using MeshStandardMaterial
+                if (child.material.isMeshStandardMaterial) {
+                  // Default values if they are missing in the FBX data
+                  child.material.metalness = child.material.metalness === undefined ? 0 : child.material.metalness;
+                  child.material.roughness = child.material.roughness === undefined ? 1 : child.material.roughness;
+                }
+                
+                // 3. Force update the material properties in the renderer
+                child.material.needsUpdate = true;
+              }
+            }
+          });
+        }
+      }, [fbx]);
+
+      return <primitive object={fbx} scale={0.5} />;
+  }  else if (isGLTF) {
     // Use useGLTF for direct GLTF/GLB files
     const { scene } = useGLTF(url);
     return <primitive object={scene} scale={0.5} />;
@@ -99,11 +122,31 @@ function Loader() {
 
 export default function SymGLTFViewer({ modelUrl }) {
   return (
-    <div style={{ width: '100%', height: '50vh'  }}> {/* Added background for better visibility */}
+    <div style={{ width: '100%', height: '50vh' }}>
       <Canvas camera={{ position: [0, 0, 150], fov: 45 }}>
-        <ambientLight intensity={0.8} />
+        
+        {/* 🌟 ENHANCED LIGHTING: Much higher intensities for maximum visibility 🌟 */}
+        
+        {/* 1. Ambient Light (Increased from 0.8 to 1.5 for better overall fill) */}
+        <ambientLight intensity={1.5} /> 
+        
+        {/* 2. Primary Directional Light (Increased from 3 to 5 for strong key light) */}
+        <directionalLight 
+          position={[5, 10, 5]} // Key light (front-top)
+          intensity={5} 
+          color="#ffffff"
+        />
+
+        {/* 3. Secondary Fill Light (Added to reduce harsh shadows and boost overall brightness) */}
+        <directionalLight 
+          position={[-5, 5, 10]} // Fill light (back-side)
+          intensity={2} 
+          color="#cccccc" // Slightly softer color
+        />
+
         <Suspense fallback={<Loader />}>
-          <Stage environment="city" intensity={0.6}>
+          {/* Stage Environment (Increased from 0.6 to 1.2 to brighten reflections) */}
+          <Stage environment="city" intensity={1.2}>
             <Model url={modelUrl} />
           </Stage>
         </Suspense>

@@ -1,8 +1,9 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
-import { Box, Typography, Container, Button, styled, StepConnector  } from "@mui/material";
-import { H3 } from "../../../../components/Typography"; // Local CUSTOM COMPONENT
+import { useState } from "react";
+import { H1 } from "@/components/Typography";
+import { Box, Container, Button, styled, StepConnector } from "@mui/material";
+
 import ProductForm1 from "../product-form-1";
 import ProductForm2 from "../product-form-2";
 
@@ -103,7 +104,54 @@ const ProductCreatePageView = () => {
     router.push('/vendor/products');
   };
 
-  
+  // --- API LOGIC ---
+  const createProduct = async (data) => {
+    setLoading(true);
+    console.log("--- API CALL: CREATE PRODUCT (Step 0) ---");
+    console.log("Data to send:", data);
+
+    // --- SIMULATED API CALL ---
+    await new Promise(resolve => setTimeout(resolve, 1500)); 
+    const mockResponse = { success: true, id: 'prod_' + Date.now(), ...data };
+    // --- END SIMULATED API CALL ---
+
+    setLoading(false);
+
+    if (mockResponse.success) {
+        console.log("Product CREATED successfully. ID:", mockResponse.id);
+        // Store the newly created ID and merge data
+        setProductId(mockResponse.id);
+        setProductData(mockResponse);
+        return mockResponse;
+    } else {
+        console.error("Product creation failed.");
+        return null;
+    }
+  };
+
+  const updateProduct = async (data) => {
+    setLoading(true);
+    console.log(`--- API CALL: UPDATE PRODUCT (Step ${activeStep}) ---`);
+    console.log("Product ID:", productId);
+    console.log("Data to send:", data);
+
+    // --- SIMULATED API CALL ---
+    await new Promise(resolve => setTimeout(resolve, 800)); 
+    const mockResponse = { success: true, ...data };
+    // --- END SIMULATED API CALL ---
+    
+    setLoading(false);
+
+    if (mockResponse.success) {
+        console.log("Product UPDATED successfully.");
+        setProductData(mockResponse);
+        return mockResponse;
+    } else {
+        console.error("Product update failed.");
+        return null;
+    }
+  };
+  // --- END API LOGIC ---
 
   return (
     <Box sx={{background: 'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '0 0 15px 15px', overflow:'hidden'}}>
@@ -111,53 +159,45 @@ const ProductCreatePageView = () => {
         <H1 sx={{mb:2, color:'#fff' }}>
           Add New Product
         </H1>
-        
         <Box sx={{ py:4, background: 'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '15px' }}>
-          
-        <Container>
-          <Stepper activeStep={activeStep} alternativeLabel connector={<CustomStepConnector />}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel
-                  sx={{
-                    '& .MuiStepLabel-label': {
-                      fontFamily:'Elemental End',
-                      textTransform:'lowercase',
-                      color: 'white',
-                    },
-                    '& .MuiStepLabel-root': {
-                      flexDirection: 'column-reverse',
-                      color: 'white',
-                    },
-                    '& .Mui-active .MuiStepLabel-label': {
-                      color: 'white',
-                    },
-                    '& .Mui-completed .MuiStepLabel-label': {
-                      color: 'white',
-                    },
-                    '& .Mui-disabled .MuiStepLabel-label': {
-                      color: 'white',
-                    },
-                  }}
-                >
-                  {label}
-                </StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </Container>
-
-
-
-
+          <Container>
+            <Stepper activeStep={activeStep} alternativeLabel connector={<CustomStepConnector />}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel
+                    sx={{
+                      '& .MuiStepLabel-label': {
+                        fontFamily:'Elemental End',
+                        textTransform:'lowercase',
+                        color: 'white',
+                      },
+                      '& .MuiStepLabel-root': {
+                        flexDirection: 'column-reverse',
+                        color: 'white',
+                      },
+                      '& .Mui-active .MuiStepLabel-label': {
+                        color: 'white',
+                      },
+                      '& .Mui-completed .MuiStepLabel-label': {
+                        color: 'white',
+                      },
+                      '& .Mui-disabled .MuiStepLabel-label': {
+                        color: 'white',
+                      },
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </Container>
           {activeStep===0 ?
             <ProductForm1 initialValues={INITIAL_VALUES} handleFormSubmit={handleFormSubmit} handleNext={handleNext} handleBack={handleBack} />
             :
             <ProductForm2 initialValues={INITIAL_VALUES} handleFormSubmit={handleFormSubmit} handleNext={handleNext} handleBack={handleBack} />
-
           }
-          
-           <Container>
+          <Container>
               <Box sx={{ display:'flex', justifyContent:'space-between' }}>
                 <Button onClick={handleBack} variant="contained" color="info" type="submit" sx={{ padding: '5px 46px', background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)', boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)', backdropFilter: 'blur(50px)', borderRadius: '12px' }}>
                   Back
@@ -172,10 +212,8 @@ const ProductCreatePageView = () => {
                 </Box>
                 
               </Box>
-            </Container>
+          </Container>
         </Box>
-
-
       </Box>
     </Box>
     );

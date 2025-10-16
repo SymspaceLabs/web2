@@ -12,9 +12,28 @@ export class ProductVariantsService {
     private readonly variantRepo: Repository<ProductVariant>,
   ) {}
 
+    /**
+   * Fetches a specific product variant by its ID.
+   * Includes relations for product, color, and size.
+   * @param variantId The ID of the product variant.
+   * @returns The found ProductVariant entity.
+   * @throws {NotFoundException} if the variant is not found.
+   */
+  async getVariantById(variantId: string): Promise<ProductVariant> {
+    const variant = await this.variantRepo.findOne({
+      where: { id: variantId }
+    });
+
+    if (!variant) {
+      throw new NotFoundException(`Product Variant with ID "${variantId}" not found`);
+    }
+
+    return variant;
+  }
+
   async getVariantStocksByProduct(productId: string) {
     const variants = await this.variantRepo.find({
-      // where: { product: { id: productId } }, // might fail if the relation isn't loaded
+      where: { product: { id: productId } }, // might fail if the relation isn't loaded
       relations: ['product', 'color', 'size'], // include 'product' too
     });
   
@@ -25,6 +44,13 @@ export class ProductVariantsService {
       color: variant.color?.name ?? null,
       size: variant.size?.size ?? null,
       sku: variant.sku ?? null,
+
+      //NEW ATTRIBUTES
+      salePrice : variant.salePrice,
+      productWeight : variant.productWeight,
+      dimensions : variant.dimensions,
+      sizeChart : variant.sizeChart,
+      sizeFit : variant.sizeFit,
     }));
   }
   

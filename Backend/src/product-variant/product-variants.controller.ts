@@ -7,12 +7,17 @@ import { UpdateVariantStockDto } from './dto/update-variant-stock.dto';
 export class ProductVariantsController {
   constructor(private readonly variantsService: ProductVariantsService) {}
 
-    @Get('stocks/:productId')
+    @Get('product/:productId')
     async getVariantStocksByProduct(@Param('productId') productId: string) {
         return this.variantsService.getVariantStocksByProduct(productId);
     }
 
-    @Patch('stocks/:productId')
+    @Get(':id')
+    async getVariantById(@Param('id') id: string) {
+        return this.variantsService.getVariantById(id);
+    }
+
+    @Patch('product/:productId')
     async updateStockForVariants(
       @Param('productId') productId: string,
       @Body() updateList: UpdateVariantStockDto[],

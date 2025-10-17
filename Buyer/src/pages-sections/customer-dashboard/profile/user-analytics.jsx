@@ -7,10 +7,15 @@ import { FlexBetween, FlexBox, FlexCol } from "@/components/flex-box";
 import { Box, Card, Avatar, Typography, Button } from "@mui/material";
 import { H1, H3, Paragraph, Small } from "@/components/Typography";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import ProfilePicUpload from "./profile-pic-upload";
 
 // ==============================================================
 export default function UserAnalytics({
-  user
+  user,
+  avatarUrl,
+  setAvatarUrl,
+  isEdit=false,
+  onFileSelect
 }) {
 
   const { state: favState } = useFavorites();
@@ -33,14 +38,15 @@ export default function UserAnalytics({
         <FlexBox flexWrap="wrap" gap={1}>
           <Box sx={{ width: { xs: '100%', md: 'calc(50% - 12px)' } }}>
             <Card sx={styles.glassCard1}>
-              <Avatar
-                alt={user.firstName}
-                src={user?.avatar}
-                sx={{
-                  height: { xs: 60, sm: 100 }, // Smaller on extra-small (mobile), default on small and up
-                  width: { xs: 60, sm: 100 }   // Smaller on extra-small (mobile), default on small and up
-                }}
+              
+              <ProfilePicUpload
+                user={user}
+                avatarUrl={avatarUrl}
+                setAvatarUrl={setAvatarUrl}
+                isEdit={isEdit}
+                onFileSelect={onFileSelect}
               />
+              
               <FlexBetween flexWrap="wrap" flex={1}>
                 <div>
                   <H1
@@ -144,11 +150,13 @@ const styles = {
     gap: 1,
     height: "100%",
     display: "flex",
-    p: {xs:"1rem", sm:"1rem 1.5rem"}, // Adjusted padding for xs
+    p: {xs:"1rem", sm:"1rem 1rem"},
     alignItems: "center",
     background:'transparent',
     boxShadow:'none',
     color:'#FFF',
+    display:'flex',
+    alignItems: 'center'
   },
   glassCard2 : {
     height: "100%",

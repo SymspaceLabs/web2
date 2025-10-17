@@ -34,6 +34,8 @@ export class MinioService {
     };
 
     try {
+      // Ensure this is called when the bucket is first created, and possibly on startup 
+      // if you need to ensure the policy is always public.
       await this.minioClient.setBucketPolicy(this.bucketName, JSON.stringify(policy));
       console.log(`Bucket policy set for bucket: ${this.bucketName}`);
     } catch (error) {
@@ -45,7 +47,6 @@ export class MinioService {
   async uploadFile(filename: string, file: any): Promise<string> {
     const fileStream = Readable.from(file.buffer);
     const cleanedFilename = filename.trim().replace(/\s+/g, '-');
-
 
     // Ensure the bucket exists
     const bucketExists = await this.minioClient.bucketExists(this.bucketName);
@@ -62,10 +63,24 @@ export class MinioService {
     // Upload the file with metadata
     await this.minioClient.putObject(this.bucketName, cleanedFilename, fileStream, file.size, metaData);
 
+    // --- FIX APPLIED HERE ---
+    
     // Construct the public URL using the public endpoint and SSL setting
     const protocol = this.configService.get<boolean>('MINIO_USE_SSL') ? 'https' : 'http';
-    const publicEndpoint = this.configService.get<string>('MINIO_PUBLIC_ENDPOINT');
     
+    let publicEndpoint = this.configService.get<string>('MINIO_PUBLIC_ENDPOINT');
+
+    // 💡 FIX: Strip protocol from the endpoint variable 
+    // to prevent the URL from becoming "https://https//..."
+    if (publicEndpoint.startsWith('http://')) {
+        publicEndpoint = publicEndpoint.substring(7);
+    } else if (publicEndpoint.startsWith('https://')) {
+        publicEndpoint = publicEndpoint.substring(8);
+    }
+    
+    // Remove trailing slash if present
+    publicEndpoint = publicEndpoint.replace(/\/$/, '');
+
     // The public URL should NOT include the port (Nginx handles that)
     const fileUrl = `${protocol}://${publicEndpoint}/${this.bucketName}/${cleanedFilename}`;
 

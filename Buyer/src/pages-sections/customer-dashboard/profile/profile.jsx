@@ -64,11 +64,7 @@ const Profile = () => {
   if (loading) return <CircularProgress />
 
   return (
-    <Card sx={[cardStyle, {flexDirection:'column'}]}>
-      {user && (
-        <ProfilePicUpload user={user} />
-      )}
-      
+    <Card sx={[cardStyle, {flexDirection:'column'}]}>     
       {user && (
         <ProfileForm
           firstName={firstName}

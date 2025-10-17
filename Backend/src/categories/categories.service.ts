@@ -29,175 +29,262 @@ export class CategoriesService {
     });
   }
 
-  async findAllMobile(): Promise<any[]> {
-    // 1. Fetch the data with all three levels
-    const categoriesData = await this.categoriesRepository.createQueryBuilder('category')
-      .leftJoinAndSelect('category.subcategories', 'subcategory')
-      .leftJoinAndSelect('subcategory.subcategoryItems', 'subcategoryItem')
-      .leftJoinAndSelect('subcategoryItem.subcategoryItemChildren', 'subcategoryItemChild')
-      
-      // Filter: Only include Categories that have at least one Subcategory with mobileLevel1 set.
-      .where((qb) => {
-        const subQuery = qb.subQuery()
-          .select('1')
-          .from('subcategory', 'sub')
-          .where('sub.categoryId = category.id')
-          .andWhere('sub.mobileLevel1 IS NOT NULL')
-          .getQuery();
-        return 'EXISTS ' + subQuery;
-      })
-      
-      // Select all necessary fields
-      .select([
-        'category.name', 
-        'subcategory.mobileLevel1', 
-        'subcategoryItem.name', 
-        'subcategoryItem.mobileLevel2',
-        'subcategoryItemChild.name',
-        'subcategoryItemChild.mobileLevel3',
-      ])
-      .getMany(); 
+  /**
+   * Assumed Interface definition for clarity:
+   * interface MobileMenuItem {
+   * name: string;
+   * items: (string | MobileMenuItem)[];
+   * }
+   */
+  async findAllMobile(): Promise<any[]> { // Using 'any' for return type to match original signature
+      // 1. Fetch the data (No change)
+      const categoriesData = await this.categoriesRepository.createQueryBuilder('category')
+          .leftJoinAndSelect('category.subcategories', 'subcategory')
+          .leftJoinAndSelect('subcategory.subcategoryItems', 'subcategoryItem')
+          .leftJoinAndSelect('subcategoryItem.subcategoryItemChildren', 'subcategoryItemChild')
+          .where((qb) => {
+              const subQuery = qb.subQuery()
+                  .select('1')
+                  .from('subcategory', 'sub')
+                  .where('sub.categoryId = category.id')
+                  .andWhere('sub.mobileLevel1 IS NOT NULL')
+                  .getQuery();
+              return 'EXISTS ' + subQuery;
+          })
+          .select([
+              'category.name',
+              'subcategory.mobileLevel1',
+              'subcategoryItem.name',
+              'subcategoryItem.mobileLevel2',
+              'subcategoryItemChild.name',
+              'subcategoryItemChild.mobileLevel3',
+              'subcategoryItemChild.subCategoryItemId',
+          ])
+          .getMany();
 
   // ------------------------------------------------------------------------------------
 
-    // 2. Initial grouping by mobileLevel1 (L1)
-    const finalGroupedResults = new Map();
+      // 2. Initial grouping by mobileLevel1 (L1) (MODIFIED to hide parent name)
+      const finalGroupedResults = new Map<string, any>();
 
-    for (const category of categoriesData) {
-      if (category.subcategories) {
-        for (const subcategory of category.subcategories) {
-          const L1Key = subcategory.mobileLevel1;
-          
-          if (!L1Key) continue;
+      for (const category of categoriesData) {
+          if (!category.subcategories) continue;
+          for (const subcategory of category.subcategories) {
+              const L1Key = subcategory.mobileLevel1;
+              if (!L1Key) continue;
+              if (!finalGroupedResults.has(L1Key)) {
+                  finalGroupedResults.set(L1Key, { name: L1Key, mergedSubcategoryItems: [] });
+              }
 
-          if (!finalGroupedResults.has(L1Key)) {
-            finalGroupedResults.set(L1Key, { name: L1Key, mergedSubcategoryItems: [] });
+              if (subcategory.subcategoryItems) {
+                  for (const item of subcategory.subcategoryItems) {
+                      
+                      let hasL3Child = false;
+                      
+                      // Check for L3-tagged children first
+                      if (item.subcategoryItemChildren) {
+                          for (const child of item.subcategoryItemChildren) {
+                              // If a child has mobileLevel3, it will be grouped later
+                              if (child.mobileLevel3) {
+                                  hasL3Child = true;
+                                  // Push L3-tagged children for later processing
+                                  finalGroupedResults.get(L1Key).mergedSubcategoryItems.push(child);
+                              }
+                          }
+                      }
+
+                      // CRITICAL CHANGE: Only push the parent item (subcategoryItem) 
+                      // if it has NO L3-tagged children. This prevents the parent name 
+                      // from appearing when its children are being grouped by L3.
+                      if (!hasL3Child) {
+                          finalGroupedResults.get(L1Key).mergedSubcategoryItems.push(item);
+                      }
+                  }
+              }
           }
-          
-          if (subcategory.subcategoryItems) {
-            finalGroupedResults.get(L1Key).mergedSubcategoryItems.push(...subcategory.subcategoryItems);
-          }
-        }
       }
-    }
 
   // ------------------------------------------------------------------------------------
 
-    // 3. Final structure processing: Group L2 items and handle hierarchy
-    return Array.from(finalGroupedResults.values()).map(group => {
-      
-      const L2GroupMap = new Map<string, MobileMenuItem>();
-      const flatItems: string[] = []; 
-      const uniqueL2ItemNames = new Set(); 
+      // 3. Final structure processing: Group L2/L3 items and handle hierarchy (MODIFIED for flat objects and type fixes)
+      return Array.from(finalGroupedResults.values()).map(group => {
 
-      for (const item of group.mergedSubcategoryItems) {
-        const L3Children = item.subcategoryItemChildren;
-        const L2Name = item.name;
-        
-        // Skip items that have no grouping defined and no children
-        if (item.mobileLevel2 === null && (!L3Children || L3Children.length === 0)) {
-            continue;
-        }
-
-        // Deduplication
-        if (uniqueL2ItemNames.has(L2Name)) {
-          continue;
-        }
-        uniqueL2ItemNames.add(L2Name);
-        
-        // CRITICAL: If an item HAS children, it MUST be treated as a nested object (Scenario 2 priority)
-        const mustBeNestedObject = L3Children && L3Children.length > 0;
-        
-        // Grouping Key: Use mobileLevel2 IF it's not a must-be-nested-object. Otherwise, use L2Name.
-        const groupingKey = (!mustBeNestedObject && item.mobileLevel2) ? item.mobileLevel2 : L2Name;
-        
-        // This flag is now ONLY true if the item uses mobileLevel2 AND has NO children (e.g., "Blouses" under "Tops")
-        const isFlatMobileLevel2Group = !!item.mobileLevel2 && !mustBeNestedObject; 
-        
-        
-        // Initialize the L2 group based on the determined groupingKey
-        if (!L2GroupMap.has(groupingKey)) {
-            L2GroupMap.set(groupingKey, { name: groupingKey, items: [] });
-        }
-        const L2Group = L2GroupMap.get(groupingKey)!;
-
-        
-        // --- Determine the Final Structure ---
-        
-        if (mustBeNestedObject) {
-            // SCENARIO 2 (Priority): Has children (e.g., 'Bags' -> 'Handbags').
-            const childNames = L3Children.map((child: { name: string }) => child.name);
-            
-            // Check for and handle the redundant L2->L3 naming (e.g., "Bags" contains "Bags")
-            if (groupingKey === L2Name) {
-                // If the grouping key (L2/outer group) is the same as the item name,
-                // we skip creating the inner object and just promote the children directly to L2Group.
-                // e.g., instead of {name: Bags, items: [{name: Bags, items: Handbags}]}, we get {name: Bags, items: [Handbags]}
-                L2Group.items.push(...childNames);
-            } else {
-                // If the grouping key is different (e.g., L2 group is 'Accessories', item name is 'Bags'),
-                // we create the nested object as required by the structure.
-                const nestedItem: MobileMenuItem = {
-                    name: L2Name,
-                    items: childNames,
-                };
-                L2Group.items.push(nestedItem);
-            }
-            
-        } else if (isFlatMobileLevel2Group) {
-            // SCENARIO 1 (Flat L3 item): Grouped by mobileLevel2 but has NO children.
-            L2Group.items.push(L2Name);
-        } else {
-            // SCENARIO 3: Simple flat L2 item 
-            flatItems.push(L2Name);
-        }
-      }
-      
-      // Combine the grouped objects and flat strings
-      let finalItems: (string | MobileMenuItem)[] = Array.from(L2GroupMap.values());
-      finalItems.push(...flatItems);
-
-// ------------------------------------------------------------------------------------
-
-      // Handle Redundant L1/L2 Layer (FLATTENING)
-      const redundantIndex = finalItems.findIndex(item => typeof item !== 'string' && item.name === group.name);
-
-      if (redundantIndex !== -1) {
-          const redundantGroup = finalItems[redundantIndex] as MobileMenuItem;
-          finalItems.splice(redundantIndex, 1); 
+          const L2L3GroupMap = new Map<string, any>(); // Map<string, MobileMenuItem>
+          const groupNames = new Set<string>();
           
-          // Promote L3 children 
-          finalItems.push(...redundantGroup.items);
-      }
-      
-      // Sort L2/L3 items
-      finalItems.sort((a, b) => {
-          let nameA: string;
-          let nameB: string;
-          
-          nameA = typeof a === 'string' ? a : (a as MobileMenuItem).name;
-          nameB = typeof b === 'string' ? b : (b as MobileMenuItem).name;
-          
-          return nameA.localeCompare(nameB);
-      });
-      
-      // Ensure nested children (L3/L4 items) are also sorted (using the robust filter fix)
-      finalItems.forEach(item => {
-          if (typeof item !== 'string' && item && 'items' in item && Array.isArray(item.items)) {
+          const nestedItemNames = new Set<string>();
+          const handledL2Items = new Set<string>();
+          const finalFlatStrings = new Set<string>(); // Collects ALL items that will be converted to { name: X, items: [] }
+
+          for (const item of group.mergedSubcategoryItems) {
+              const itemL2Name = item.name;
+              const mobileLevel2 = item.mobileLevel2;
+              const mobileLevel3 = item.mobileLevel3;
+              const L4Children = item.subcategoryItemChildren;
+
+              // --- SCENARIO 3: L3 Grouping (mobileLevel3 is the parent name) ---
+              if (mobileLevel3) {
+                  handledL2Items.add(itemL2Name);
+                  
+                  // If the L2 item name matches the L3 group name, it's a standalone promotion item
+                  if (itemL2Name === mobileLevel3) {
+                      finalFlatStrings.add(itemL2Name); // Directly add to the final set
+                  } else { // Item is a child under a different L3 group
+                      nestedItemNames.add(itemL2Name);
+                      groupNames.add(mobileLevel3);
+                      const L3Group = L2L3GroupMap.get(mobileLevel3);
+                      if (!L3Group) {
+                          L2L3GroupMap.set(mobileLevel3, { name: mobileLevel3, items: [itemL2Name] });
+                      } else {
+                          L3Group.items.push(itemL2Name);
+                      }
+                  }
+                  continue;
+              }
+
+              // --- SCENARIO 1 & 2: L2 Grouping ---
               
-              // Filter to ensure only strings remain, resolving TypeScript 'localeCompare' issue
-              const stringItems = item.items.filter((i): i is string => typeof i === 'string');
-              
-              // Deduplicate and sort the array of strings
-              (item as MobileMenuItem).items = [...new Set(stringItems)].sort((a, b) => a.localeCompare(b));
+              const mustBeNestedObject = L4Children && L4Children.length > 0;
+              const groupingKey = (!mustBeNestedObject && mobileLevel2) ? mobileLevel2 : itemL2Name;
+              const isFlatMobileLevel2Group = !!mobileLevel2 && !mustBeNestedObject;
+
+              if (mustBeNestedObject) {
+                  // SCENARIO 2 (L2 -> L4): Creates a nested object.
+                  groupNames.add(groupingKey);
+                  handledL2Items.add(itemL2Name);
+
+                  const childrenToAdd: string[] = [];
+
+                  for (const child of L4Children) {
+                      const childL3 = child.mobileLevel3;
+                      const childName = child.name;
+
+                      // RULE: If L3 matches the L2 name, promote the child.
+                      if (childL3 && childL3 === mobileLevel2) {
+                          finalFlatStrings.add(childName); // Directly add promoted item to final set
+                      } else {
+                          childrenToAdd.push(childName);
+                          nestedItemNames.add(childName);
+                      }
+                  }
+
+                  if (childrenToAdd.length > 0) {
+                      let L2Group = L2L3GroupMap.get(groupingKey);
+                      if (!L2Group) {
+                          L2Group = { name: groupingKey, items: [] };
+                          L2L3GroupMap.set(groupingKey, L2Group);
+                      }
+
+                      if (groupingKey === itemL2Name) {
+                          L2Group.items.push(...childrenToAdd);
+                      } else {
+                          const nestedItem: any = { // MobileMenuItem
+                              name: itemL2Name,
+                              items: childrenToAdd,
+                          };
+                          L2Group.items.push(nestedItem);
+                      }
+                  }
+
+              } else if (isFlatMobileLevel2Group) {
+                  // SCENARIO 1 (Flat L3 item): Pushes item name into L2 Group
+                  groupNames.add(groupingKey);
+                  nestedItemNames.add(itemL2Name);
+                  handledL2Items.add(itemL2Name);
+
+                  let L2Group = L2L3GroupMap.get(groupingKey);
+                  if (!L2Group) {
+                      L2Group = L2L3GroupMap.set(groupingKey, { name: groupingKey, items: [itemL2Name] }).get(groupingKey);
+                  } else {
+                      L2Group.items.push(itemL2Name);
+                  }
+
+              } else {
+                  // SCENARIO 4: Simple flat L2 item (No grouping/children).
+                  if (!handledL2Items.has(itemL2Name)) {
+                      finalFlatStrings.add(itemL2Name);
+                      handledL2Items.add(itemL2Name);
+                  }
+              }
           }
-      });
 
-      return {
-        name: group.name,
-        items: finalItems,
-      };
-    });
+          // --- L2 Group Redundancy Suppression ---
+          let filteredGroups = Array.from(L2L3GroupMap.values()).filter(group => {
+              if (group.name === 'Jewelry & Watches') {
+                  if (L2L3GroupMap.has('Jewelry') && L2L3GroupMap.has('Watches')) return false;
+              }
+              if (group.name === 'Wallets & Belts') {
+                  if (L2L3GroupMap.has('Wallets') && L2L3GroupMap.has('Belts')) return false;
+              }
+              return true;
+          });
+
+          // Remove any groups that became empty
+          filteredGroups = filteredGroups.filter(group => group.items.length > 0);
+
+          const finalItems: (string | any)[] = []; // (string | MobileMenuItem)[]
+
+          for (const item of filteredGroups) {
+              // Flatten Redundant Single-Child Objects
+              if (item.items.length === 1 && item.items[0] === item.name) {
+                  finalFlatStrings.add(item.name);
+                  groupNames.delete(item.name);
+              } else {
+                  finalItems.push(item);
+              }
+          }
+
+          // --- FINAL ARRAY ASSEMBLY (Deduplication Guarantee) ---
+          
+          // MODIFICATION: Convert ALL items in finalFlatStrings into objects with empty items array.
+          const flatObjects = Array.from(finalFlatStrings)
+              .sort((a, b) => a.localeCompare(b))
+              .map(name => ({ name: name, items: [] }));
+
+          // Add these new objects to the final items array
+          finalItems.push(...flatObjects);
+
+          // ------------------------------------------------------------------------------------
+
+          // Handle Redundant L1/L2 Layer (FLATTENING)
+          const redundantIndex = finalItems.findIndex(item => typeof item !== 'string' && item.name === group.name);
+
+          if (redundantIndex !== -1) {
+              const redundantGroup = finalItems[redundantIndex] as any; // MobileMenuItem
+              finalItems.splice(redundantIndex, 1);
+              // Ensure items are only strings/objects before pushing
+              finalItems.push(...redundantGroup.items.filter((i: any) => typeof i === 'string' || typeof i === 'object')); 
+          }
+
+          // Final sort of all items (strings and objects) - FIXED TYPE ERROR
+          finalItems.sort((a, b) => {
+              // Extract the name string safely using 'any' casting for object properties
+              const nameA = typeof a === 'string' ? a : (a as any).name;
+              const nameB = typeof b === 'string' ? b : (b as any).name;
+              
+              // Cast to string to satisfy localeCompare
+              return (nameA as string).localeCompare(nameB as string);
+          });
+
+          // Final deduplication and sort of children within any remaining objects - FIXED TYPE ERROR
+          finalItems.forEach(item => {
+              if (typeof item !== 'string' && item && 'items' in item && Array.isArray(item.items)) {
+                  const stringItems = item.items.filter((i): i is string => typeof i === 'string');
+                  const objectItems = item.items.filter((i): i is any => typeof i !== 'string'); // MobileMenuItem
+                  
+                  // Fix: Explicitly type the sort callback arguments as 'string'
+                  (item as any).items = [ // MobileMenuItem
+                      ...objectItems, 
+                      ...[...new Set(stringItems)].sort((a: string, b: string) => a.localeCompare(b)) 
+                  ];
+              }
+          });
+
+          return {
+              name: group.name,
+              items: finalItems,
+          };
+      });
   }
 
   async findOne(id: string): Promise<Category> {

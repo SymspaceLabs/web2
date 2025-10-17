@@ -51,9 +51,9 @@ export default function Section4() {
 const categoryCards = [
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg1",
-    title: "Shirts",
+    title: "T-shirts",
     image: "/assets/images/products/Men/shirt.png",
-    slug:'shirts',
+    slug:'t-shirts',
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",

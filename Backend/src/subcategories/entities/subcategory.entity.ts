@@ -34,4 +34,10 @@ export class Subcategory {
 
   @Column({ nullable: true })
   slug: string;
+
+
+  //NEW ATTRIBUTE
+  @Column({ nullable: true })
+  mobileLevel1: string;
+
 }

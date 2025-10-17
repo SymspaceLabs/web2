@@ -30,11 +30,14 @@ export class SubcategoryItemChild {
   subCategoryItemId: string;
 
   // FIX 2: Add @JoinColumn to explicitly define the foreign key for the ManyToOne relationship.
-  // This links the 'subCategoryItemId' column in this table to the 'id' of the SubcategoryItem.
   @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.subcategoryItemChildren)
   @JoinColumn({ name: 'subCategoryItemId' }) // The name of the foreign key column in this entity's table
   subcategoryItem: SubcategoryItem;
 
   @OneToMany(() => Product, (product) => product.subcategoryItemChild)
   products: Product[];
+
+  //NEW ATTRIBUTE
+  @Column({ nullable: true })
+  mobileLevel3: string;
 }

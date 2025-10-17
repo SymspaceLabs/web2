@@ -48,4 +48,10 @@ export class SubcategoryItem {
 
   @OneToMany(() => Product, (product) => product.subcategoryItem)
   products: Product[];
+
+  //NEW ATTRIBUTE
+  @Column({ nullable: true })
+  mobileLevel2: string;
+
+
 }

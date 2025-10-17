@@ -67,6 +67,7 @@ export class SeederService {
             id: subcategoryData.id,
             name: subcategoryData.name,
             slug: subcategoryData.slug,
+            mobileLevel1: subcategoryData.mobileLevel1,
             category,
           });
           await subcategoryRepo.save(subcategory);
@@ -81,6 +82,7 @@ export class SeederService {
               tags_required: subcategoryItemData.tags_required,
               optional_tags: subcategoryItemData.optional_tags,
               tag_defaults: subcategoryItemData.tag_defaults,
+              mobileLevel2: subcategoryItemData.mobileLevel2,
             });
             await subcategoryItemRepo.save(subcategoryItem);
 
@@ -98,6 +100,7 @@ export class SeederService {
                   tags_required: subcategoryItemChildData.tags_required,
                   optional_tags: subcategoryItemChildData.optional_tags,
                   tag_defaults: subcategoryItemChildData.tag_defaults,
+                  mobileLevel3: subcategoryItemChildData.mobileLevel3,
                 });
                 await subcategoryItemChildRepo.save(subcategoryItemChild);
               }

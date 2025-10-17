@@ -62,10 +62,10 @@ export default function VendorDashboardLayout({
         />
   
         {/* Simulation overlay - only shows when both dialogs are closed */}
-        <SimulationOverlay
+        {/* <SimulationOverlay
           open={!onboardingDialogOpen && !storeDialogOpen}
           setStoreDialogOpen={setStoreDialogOpen}
-        />
+        /> */}
         
         
         {/* Main Body */}

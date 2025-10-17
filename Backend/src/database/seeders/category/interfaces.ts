@@ -1,6 +1,7 @@
 // src/seed/category/interfaces.ts
 
 export interface SubcategoryItemChildSeedData {
+  mobileLevel3: string;
   id: string;
   name: string;
   slug?: string;
@@ -10,6 +11,7 @@ export interface SubcategoryItemChildSeedData {
 }
 
 export interface SubcategoryItemSeedData {
+  mobileLevel2: string;
   id: string;
   name: string;
   slug?: string;
@@ -21,6 +23,8 @@ export interface SubcategoryItemSeedData {
 }
 
 export interface SubcategorySeedData {
+  mobileLevel2: string;
+  mobileLevel1: string;
   id: string;
   name: string;
   slug?: string;

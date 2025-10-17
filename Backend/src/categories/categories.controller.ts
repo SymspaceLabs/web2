@@ -25,6 +25,13 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  //=========================MOBILE=====================//
+  @Get('/mobile')
+  findAllMobile() {
+    return this.categoriesService.findAllMobile();
+  }
+  //=========================MOBILE=====================//
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.categoriesService.findOne(id);
@@ -42,4 +49,5 @@ export class CategoriesController {
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
   }
+
 }

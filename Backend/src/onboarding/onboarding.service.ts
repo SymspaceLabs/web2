@@ -101,6 +101,7 @@ export class OnboardingService {
     user.dob = userData?.dob ? new Date(userData.dob) : user.dob;
     user.firstName = userData?.firstName ?? user.firstName;
     user.lastName = userData?.lastName ?? user.lastName;
+    user.avatar = userData?.avatar ?? user.avatar;    
     user.isOnboardingFormFilled = true;
   
     await this.usersRepository.save(user);
@@ -111,6 +112,7 @@ export class OnboardingService {
       user: {
         id: user.id,
         dob: user.dob,
+        avatar: user.dob,
       },
       isOnboardingFormFilled: user.isOnboardingFormFilled,
       measurement: existingMeasurement,

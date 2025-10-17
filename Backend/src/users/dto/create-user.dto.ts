@@ -25,5 +25,10 @@ export class CreateUserDto {
   @Type(() => Date)
   @IsDate()
   dob?: Date;
+  
+  @IsOptional()
+  @IsString()
+  avatar?: string;
+
 
 }

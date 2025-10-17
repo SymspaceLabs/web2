@@ -14,9 +14,11 @@ import { ProfileForm, MeasurementForm, PreferenceForm } from "@/components/custo
 import { fetchUserById } from "@/services/userService";
 
 import Person from "@mui/icons-material/Person";
-import ProfilePicUpload from "../profile-pic-upload";
 import UserAnalytics from "../user-analytics";
 import { SymDashboardHeader } from "@/components/custom-components";
+
+import { uploadFileToMinIO } from "@/services/minioService";
+
 // ===========================================================
 
 export default function ProfilePageView({
@@ -69,6 +71,15 @@ export default function ProfilePageView({
   const [brands, setBrands] = useState([]); // Initialize as empty array
   const [colors, setColors] = useState([]); // Initialize as empty array
   
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState([]);
+
+  // Function to receive the file from ProfilePicUpload
+  const handleFileSelection = (file) => {
+    setSelectedFile(file);
+  };
+
+
   useEffect(() => {
     // Use the new service function to fetch user data
     const getUserData = async () => {
@@ -94,6 +105,7 @@ export default function ProfilePageView({
       setFirstName(userData.firstName || '');
       setLastName(userData.lastName || '');
       setDob(userData.dob || ''); // dob is a string like "YYYY-MM-DD"
+      setAvatarUrl(userData.avatar || '')
 
       const fetchedIsMetric = userData.measurement?.isMetric ?? true; // Default to true if undefined
       const fetchedHeightCm = userData.measurement?.height || 0;
@@ -166,62 +178,77 @@ export default function ProfilePageView({
   }
 
   const handleSave = async () => {
-
     setLoading(true);
-    
-    const requestBody = {
-      "measurement" : {
-          "weight": weight.kg, // Ensure this is kg for the payload
-          "height": height.cm, // Ensure this is cm for the payload
-          "isMetric": isMetric,
-          "chest": chest,
-          "waist": waist
-      },
-      "preference" : {
-        "gender": gender,
-        "tops": tops,
-        "bottoms":bottoms,
-        "outerwears": outerwears,
-        "accessories": accessories,
-        "styles": styles,
-        "fits": fits,
-        "brands": brands,
-        "colors": colors
-      },
-      "user": {
-        "dob": dob,
-        "firstName": firstName,
-        "lastName": lastName,
-        
-      }
-    };
+    let finalAvatarUrl = avatarUrl; // Start with the current URL
 
     try {
-        // Make the POST request
+        // 1. CONDITIONAL MINIO UPLOAD (Only if a new file is selected)
+        if (selectedFile) {
+            showSnackbar("Uploading new profile image...", "info");
+            const uploadResponse = await uploadFileToMinIO(selectedFile);
+            
+            if (uploadResponse?.imageUrl) {
+                finalAvatarUrl = uploadResponse.imageUrl;
+                // Update the state so the Avatar displays the new permanent URL 
+                // after submission, not just the local preview URL.
+                setAvatarUrl(finalAvatarUrl); 
+                setSelectedFile(null); // Clear the file after successful upload
+            } else {
+                throw new Error("MinIO upload failed to return a valid URL.");
+            }
+        }
+        
+        // 2. BUILD REQUEST BODY WITH NEW/EXISTING AVATAR URL
+        const requestBody = {
+            "measurement" : {
+                "weight": weight.kg, // Ensure this is kg for the payload
+                "height": height.cm, // Ensure this is cm for the payload
+                "isMetric": isMetric,
+                "chest": chest,
+                "waist": waist
+            },
+            "preference" : {
+                "gender": gender,
+                "tops": tops,
+                "bottoms":bottoms,
+                "outerwears": outerwears,
+                "accessories": accessories,
+                "styles": styles,
+                "fits": fits,
+                "brands": brands,
+                "colors": colors
+            },
+            "user": {
+                "dob": dob,
+                "firstName": firstName,
+                "lastName": lastName,
+                "avatar": finalAvatarUrl // ** USE THE NEWLY UPLOADED/EXISTING URL **
+            }
+        };
+
+        // 3. SUBMIT FORM DATA TO BACKEND
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/onboarding/user/${user.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Include authorization if needed:
-            // 'Authorization': `Bearer ${yourToken}`,
-          },
-          body: JSON.stringify(requestBody),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include authorization if needed:
+                // 'Authorization': `Bearer ${yourToken}`,
+            },
+            body: JSON.stringify(requestBody),
         });
 
         if (res.status === 201) {
-          showSnackbar("Changes saved!", "success");
-          router.push("/profile/view");
-
+            showSnackbar("Profile changes saved successfully!", "success");
+            router.push("/profile/view");
         } else {
-          // You can optionally handle other status codes here
-          // alert("Failed to create onboarding. Please try again.");
+              showSnackbar("Failed to save changes.", "error");
         }
         
-    }   catch (error) {
-        console.error("Error creating onboarding:", error);
-        // alert("An error occurred while creating onboarding.");
+    } 	catch (error) {
+        console.error("Error during save operation:", error);
+        showSnackbar("An error occurred. Check console for details.", "error");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   }
     
@@ -235,12 +262,15 @@ export default function ProfilePageView({
           onClick={isEdit? handleSave : ()=>router.push('/profile/edit')}
           loading={loading}
         />
-        <UserAnalytics user={userData} />
+        <UserAnalytics
+          user={userData}
+          avatarUrl={avatarUrl}
+          setAvatarUrl={setAvatarUrl}
+          isEdit={isEdit}
+          onFileSelect={handleFileSelection}
+        />
       </Box>
       <Card sx={[style.card, {flexDirection:'column', }]}>
-        
-        <ProfilePicUpload user={user} />
-
         <ProfileForm
           firstName={firstName}
           setFirstName={setFirstName}

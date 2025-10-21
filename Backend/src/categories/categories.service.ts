@@ -29,13 +29,6 @@ export class CategoriesService {
     });
   }
 
-  /**
-   * Assumed Interface definition for clarity:
-   * interface MobileMenuItem {
-   * name: string;
-   * items: (string | MobileMenuItem)[];
-   * }
-   */
   async findAllMobile(): Promise<any[]> { // Using 'any' for return type to match original signature
       // 1. Fetch the data (No change)
       const categoriesData = await this.categoriesRepository.createQueryBuilder('category')
@@ -56,8 +49,10 @@ export class CategoriesService {
               'subcategory.mobileLevel1',
               'subcategoryItem.name',
               'subcategoryItem.mobileLevel2',
+              'subcategoryItem.mobileLevel2Name',
               'subcategoryItemChild.name',
               'subcategoryItemChild.mobileLevel3',
+              'subcategoryItemChild.mobileLevel3Name',
               'subcategoryItemChild.subCategoryItemId',
           ])
           .getMany();
@@ -117,7 +112,22 @@ export class CategoriesService {
           const finalFlatStrings = new Set<string>(); // Collects ALL items that will be converted to { name: X, items: [] }
 
           for (const item of group.mergedSubcategoryItems) {
-              const itemL2Name = item.name;
+
+            let itemL2Name: string;
+
+            // ⭐ NEW LOGIC for SubcategoryItem: Prioritize mobileLevel2Name
+            if (!item.mobileLevel3 && item.mobileLevel2Name && item.mobileLevel2Name !== null) {
+                itemL2Name = item.mobileLevel2Name;
+            }
+            // Existing logic for SubcategoryItemChild (L3): Prioritize mobileLevel3Name
+            else if (item.mobileLevel3 && item.mobileLevel3Name && item.mobileLevel3Name !== null) {
+                 itemL2Name = item.mobileLevel3Name;
+            }
+            // Fallback to the original 'name'
+            else {
+                itemL2Name = item.name;
+            }
+
               const mobileLevel2 = item.mobileLevel2;
               const mobileLevel3 = item.mobileLevel3;
               const L4Children = item.subcategoryItemChildren;
@@ -156,8 +166,13 @@ export class CategoriesService {
                   const childrenToAdd: string[] = [];
 
                   for (const child of L4Children) {
-                      const childL3 = child.mobileLevel3;
-                      const childName = child.name;
+                    const childL3 = child.mobileLevel3;
+                    // ⭐ NEW: Determine the child's display name
+                    const childName = child.mobileLevel3Name 
+                        && child.mobileLevel3Name !== null 
+                        && child.mobileLevel3
+                        ? child.mobileLevel3Name
+                        : child.name;
 
                       // RULE: If L3 matches the L2 name, promote the child.
                       if (childL3 && childL3 === mobileLevel2) {

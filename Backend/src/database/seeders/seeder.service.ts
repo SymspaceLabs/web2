@@ -83,6 +83,7 @@ export class SeederService {
               optional_tags: subcategoryItemData.optional_tags,
               tag_defaults: subcategoryItemData.tag_defaults,
               mobileLevel2: subcategoryItemData.mobileLevel2,
+              mobileLevel2Name: subcategoryItemData.mobileLevel2Name,
             });
             await subcategoryItemRepo.save(subcategoryItem);
 
@@ -96,11 +97,11 @@ export class SeederService {
                   name: subcategoryItemChildData.name,
                   slug: subcategoryItemChildData.slug,
                   subcategoryItem: subcategoryItem,
-                  // ✅ NEW: Add tag properties to SubcategoryItemChild
                   tags_required: subcategoryItemChildData.tags_required,
                   optional_tags: subcategoryItemChildData.optional_tags,
                   tag_defaults: subcategoryItemChildData.tag_defaults,
                   mobileLevel3: subcategoryItemChildData.mobileLevel3,
+                  mobileLevel3Name: subcategoryItemChildData.mobileLevel3Name,
                 });
                 await subcategoryItemChildRepo.save(subcategoryItemChild);
               }

@@ -244,7 +244,7 @@ export const CATEGORIES_DATA = [
         slug: "home-entertainment",
         mobileLevel1:"Electronics",
         subcategoryItems: [
-          { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "Televisions", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
+          { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "TVs", mobileLevel2Name: "TVs", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
           { id: "77c5ab4b-beb5-4e43-b71f-0c83a02b16af", name: "Sound Systems", slug: "sound-systems", mobileLevel2: "Sound Systems", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
           { id: "5c3a74d9-1f9e-4bfb-833f-02a32c10874c", name: "Streaming Devices", slug: "streaming-devices", mobileLevel2: "Streaming Devices", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } },
           { id: "7b32f0d6-8e1b-4413-8b91-2552648b7dc5", name: "Blu-ray & DVD Players", slug: "blu-ray-dvd-players", mobileLevel2: "Other Electronics", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "static", "indoor_outdoor": "indoor" } }
@@ -529,7 +529,7 @@ export const CATEGORIES_DATA = [
           { id: "5b56302e-d2e6-4e50-8d16-0a8c85c1742c", name: "Masks", slug: "masks", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "b2f6e91d-4f11-4a87-b9c1-54e7d44c9b3a", name: "Toners", slug: "toners", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "c18d19a2-72c6-4d1a-8e2b-f8f4133458e6", name: "Eye Creams", slug: "eye-creams", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
-          { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", name: "Sunscreens (SPF)", slug: "sunscreens", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "a5c7f8e3-54b9-4d2c-8a1a-8f13456b9c7e", name: "Sunscreens (SPF)", slug: "sunscreens", mobileLevel2:"Skincare", mobileLevel2Name:"Sunscreens", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "d8c1e4c7-1d2a-4f5e-8b6c-6a7b8e9d4a3c", name: "Acne Treatments", slug: "acne-treatments", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } },
           { id: "e1f9a2b5-3d4e-4f6c-8a7b-9c8d1e2f3a4b", name: "Anti-Aging Treatments", slug: "anti-aging-treatments", mobileLevel2:"Skincare", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "face-tracking" } }
         ]
@@ -630,7 +630,7 @@ export const CATEGORIES_DATA = [
             slug: "shaving-hair-removal",
             subcategoryItemChildren: [
               { id: "f2c1d3e4-5a6b-4c7d-8e9f-1a2b3c4d5e6f", name: "Razors & Shaving Creams", slug: "razors-&-shaving-creams", mobileLevel3:"Personal Care", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } },
-              { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices", mobileLevel3:"Personal Care", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
+              { id: "a4b5c6d7-e8f9-4a1b-2c3d-4e5f6a7b8c9d", name: "Hair Removal Devices", slug: "hair-removal-devices", mobileLevel3:"Personal Care", mobileLevel3Name:"Hair Removal", tags_required: ["ar_type","age_group","gender"], tag_defaults: { ar_type: "static" } }
             ]
           },
           {
@@ -683,9 +683,9 @@ export const CATEGORIES_DATA = [
             name: "Dogs",
             slug: "dogs",
             subcategoryItemChildren: [
-              { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Food & Treats", slug: "dog-food-treats", mobileLevel3: "Pets", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-              { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", name: "Leashes", slug: "dog-leashes", mobileLevel3: "Pets", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
-              { id: "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", name: "Beds & Furniture", slug: "dog-beds-furniture", mobileLevel3: "Pets", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "indoor" } }
+              { id: "9be4e746-6a3b-46d0-b142-6a8c33a536da", name: "Food & Treats", slug: "dog-food-treats", mobileLevel3: "Pets", mobileLevel3Name: "Dog Food & Treats", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+              { id: "b8c7a6d5-e4f3-4c2d-9e1b-3a4d5e6f7a8b", name: "Leashes", slug: "dog-leashes", mobileLevel3: "Pets", mobileLevel3Name:"Dog Leashes", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "outdoor" } },
+              { id: "c1a2b3d4-e5f6-4c7d-8e9f-1a2b3c4d5e7a", name: "Beds & Furniture", slug: "dog-beds-furniture", mobileLevel3: "Pets", mobileLevel3Name: "Dog Beds & Furniture", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "indoor" } }
             ]
           },
           {
@@ -693,10 +693,10 @@ export const CATEGORIES_DATA = [
             name: "Cats",
             slug: "cats",
             subcategoryItemChildren: [
-              { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Food & Treats", slug: "cat-food-treats", mobileLevel3: "Pets", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
-              { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", name: "Toys", slug: "cat-toys", mobileLevel3: "Pets", tags_required: ["ar_type","safety_certified"], tag_defaults: { ar_type: "static" } },
-              { id: "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", name: "Furniture", slug: "cat-furniture", mobileLevel3: "Pets", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "indoor" } },
-              { id: "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", name: "Litter", slug: "cat-litter", mobileLevel3: "Pets", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
+              { id: "5d112e59-126c-4e17-8f8d-0b8819b065f2", name: "Food & Treats", slug: "cat-food-treats", mobileLevel3: "Pets", mobileLevel3Name: "Cat Food & Treats", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
+              { id: "d9e8f7c6-a5b4-4c3e-8d2f-1a3b5c7d9e1f", name: "Toys", slug: "cat-toys", mobileLevel3: "Pets", mobileLevel3Name: "Cat Toys", tags_required: ["ar_type","safety_certified"], tag_defaults: { ar_type: "static" } },
+              { id: "e6d5c4b3-a2f1-4e8c-9d7b-1a2c3b4d5e6f", name: "Furniture", slug: "cat-furniture", mobileLevel3: "Pets", mobileLevel3Name: "Cat Furniture", tags_required: ["ar_type","material","indoor_outdoor"], tag_defaults: { ar_type: "static", indoor_outdoor: "indoor" } },
+              { id: "f7a6b5c4-d3e2-4f1d-9c8a-1b2c3d4e5f6a", name: "Litter", slug: "cat-litter", mobileLevel3: "Pets", mobileLevel3Name: "Cat Litter", tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } }
             ]
           },
           { id: "7814a377-9a24-455e-b5d6-26d134b62f04", name: "Fish & Aquatic Pets", slug: "fish-aquatic-pets", mobileLevel2: "Pets",  tags_required: ["ar_type"], tag_defaults: { ar_type: "static" } },
@@ -757,9 +757,9 @@ export const CATEGORIES_DATA = [
         subcategoryItems: [
           { id: "a9b8c7d6-e5f4-4a3b-9c2d-1e0f2d3c4b5d", name: "Chicken Alfredo", slug: "chicken-alfredo", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
           { id: "c1a2b3d4-e5f6-4a7b-8c9d-1e2f3a4b5c6d", name: "Chicken Tacos", slug: "chicken-tacos", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1c", name: "Fried Rice (Chicken/Vegetable)", slug: "fried-rice", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "f5e4d3c2-b1a0-49b8-8c7d-6a5f4e3d2c1c", name: "Fried Rice (Chicken/Vegetable)", slug: "fried-rice", mobileLevel2: "Trending Dinners", mobileLevel2Name: "Fried Rice", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
           { id: "d1c2b3a4-e5f6-4d7e-8f9a-0b1c2d3e4f5a", name: "Baked Salmon", slug: "baked-salmon", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
-          { id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f4", name: "Stir-Fry Noodles (Lo Mein/Chow Mein)", slug: "stir-fry-noodles", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
+          { id: "e8c7b6a5-d4e3-4f2b-a1c0-b9d8c7a6e5f4", name: "Stir-Fry Noodles (Lo Mein/Chow Mein)", slug: "stir-fry-noodles", mobileLevel2: "Trending Dinners",  mobileLevel2Name: "Stir-Fry Noodles", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } },
           { id: "3e7f2a1b-9d4c-4580-b617-a9c8b7d6e5f0", name: "Shrimp Scampi", slug: "shrimp-scampi", mobileLevel2: "Trending Dinners", tags_required: ["ar_type"], tag_defaults: { "ar_type": "static" } }
         ]
       },

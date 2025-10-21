@@ -9,7 +9,7 @@ import { Divider } from "@mui/material";
 import { H1 } from "@/components/Typography"; // CUSTOM ICON COMPONENT
 import { usePathname } from "next/navigation";
 import { FlexBox } from "@/components/flex-box";
-import { MainContainer, StyledNavLink } from "./styles";
+import { StyledNavLink } from "./styles";
 
 import Place from "@mui/icons-material/Place";
 import Person from "@mui/icons-material/Person";
@@ -81,12 +81,14 @@ const MENUS = [{
     title: "Orders",
     Icon: ShoppingBagOutlined,
     count: 5
-  }, {
-    href: "/wish-list",
-    title: "Favorites",
-    Icon: FavoriteBorder,
-    count: 19
-  }, {
+  },
+  // {
+  //   href: "/wish-list",
+  //   title: "Favorites",
+  //   Icon: FavoriteBorder,
+  //   count: 19
+  // },
+  {
     href: "/support-tickets",
     title: "Support Tickets",
     Icon: CustomerService,

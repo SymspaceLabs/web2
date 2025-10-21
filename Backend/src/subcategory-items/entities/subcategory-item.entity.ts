@@ -22,10 +22,6 @@ export class SubcategoryItem {
 
   @Column()
   subcategoryId: string;
-
-  // ----------------------------------------------------------------------
-  // ✅ FIX: ADD THE MISSING TAG COLUMNS
-  // ----------------------------------------------------------------------
   
   @Column('simple-array', { nullable: true })
   tags_required: string[];
@@ -33,11 +29,9 @@ export class SubcategoryItem {
   @Column('simple-array', { nullable: true })
   optional_tags: string[];
 
-  @Column('json', { nullable: true }) // ⬅️ CORRECTED: Using 'json' for MySQL
+  @Column('json', { nullable: true })
   tag_defaults: Record<string, any>; 
   
-  // ----------------------------------------------------------------------
-
   @ManyToOne(() => Subcategory, (subcategory) => subcategory.subcategoryItems, {
     onDelete: 'CASCADE',
   })
@@ -49,9 +43,11 @@ export class SubcategoryItem {
   @OneToMany(() => Product, (product) => product.subcategoryItem)
   products: Product[];
 
-  //NEW ATTRIBUTE
   @Column({ nullable: true })
   mobileLevel2: string;
 
+  //NEW ATTRIBUTE
+  @Column({ nullable: true })
+  mobileLevel2Name: string;
 
 }

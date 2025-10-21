@@ -25,12 +25,12 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
-  //=========================MOBILE=====================//
+  //====================== MOBILE ==================//
   @Get('/mobile')
   findAllMobile() {
     return this.categoriesService.findAllMobile();
   }
-  //=========================MOBILE=====================//
+  //===================== MOBILE =====================//
 
   @Get(':id')
   findOne(@Param('id') id: string) {

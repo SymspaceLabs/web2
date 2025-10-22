@@ -1,5 +1,11 @@
 "use client";
 
+//////////////////////////////////////////////////////////////////////////////
+// RTL stands for Right-to-Left.
+// It refers to a method of displaying text and overall page layout 
+// where content flows from the right side of the screen to the left.
+///////////////////////////////////////////////////////////////////////////////
+
 import { useEffect } from "react";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";

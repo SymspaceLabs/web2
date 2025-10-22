@@ -1,11 +1,12 @@
 // https://github.com/apal21/nextjs-progressbar/issues/86
 "use client";
 
+import "nprogress/nprogress.css";
 import { useEffect } from "react";
 import NProgress from "nprogress";
 import useTheme from "@mui/material/styles/useTheme";
 import GlobalStyles from "@mui/material/GlobalStyles";
-import "nprogress/nprogress.css";
+
 export default function ProgressBar() {
   const theme = useTheme();
   useEffect(() => {

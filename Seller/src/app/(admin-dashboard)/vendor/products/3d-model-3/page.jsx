@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
-import { useRef, useEffect } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { proxy, useSnapshot } from "valtio"
-import { useGLTF, useTexture, AccumulativeShadows, RandomizedLight, Decal, Environment, Center } from '@react-three/drei'
-import { easing } from 'maath'
+import { useRef, useEffect, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { proxy, useSnapshot } from "valtio";
+import { useGLTF, useTexture, AccumulativeShadows, RandomizedLight, Decal, Environment, Center } from '@react-three/drei';
+import { easing } from 'maath';
 import Head from 'next/head';
-import { Box } from "@mui/material"
+import { Box } from "@mui/material";
+import * as React from 'react'; // Ensure React is imported for component definition
 
 const state = proxy({
   intro: false,
@@ -16,29 +17,52 @@ const state = proxy({
   decal: "three2",
 });
 
+// --- Main Exported Component ---
 export default function ProductReviews({ position = [0, 0, 2.5], fov = 25 }) {
-  const canvasRef = useRef()
+  // CRITICAL FIX: Use state to track client-side mounting
+  const [hasMounted, setHasMounted] = useState(false);
+  const canvasRef = useRef();
 
+  // Set hasMounted to true only after the component is mounted in the browser
   useEffect(() => {
+    setHasMounted(true);
+    // Access document here to attach event source, now guaranteed to be on the client
     if (canvasRef.current) {
-      // Client-side only code here
-      canvasRef.current.eventSource = document.getElementById('root')
+      canvasRef.current.eventSource = document.getElementById('root');
     }
-  }, [])
+  }, []);
+  
+  // Display loading content or nothing during SSR/initial client load
+  if (!hasMounted) {
+    return (
+      <div style={{ 
+        height: '65vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        backgroundColor: '#333',
+        color: 'white',
+        borderRadius: '8px'
+      }}>
+          Loading 3D Product Customizer...
+      </div>
+    );
+  }
 
+  // Render the heavy, browser-dependent content only after mounting
   return (
     <Box sx={{border:'1px solid black', position:'relative'}}>
       <Head>
         <style>{`
+          /* ... (Your original CSS styles) ... */
           html,
           body,
           #root,
           #main {
             overflow: hidden;
           }
- 
-          /* CUSTOMIZER */
 
+          /* CUSTOMIZER */
           .customizer {
             
           }
@@ -68,7 +92,7 @@ export default function ProductReviews({ position = [0, 0, 2.5], fov = 25 }) {
           }
 
           .circle {
-             
+            
           }
 
           .circle:hover {
@@ -123,8 +147,6 @@ export default function ProductReviews({ position = [0, 0, 2.5], fov = 25 }) {
             display: flex;
             gap: 20px;
           }
-
-
         `}</style>
       </Head>
       <Canvas
@@ -136,7 +158,8 @@ export default function ProductReviews({ position = [0, 0, 2.5], fov = 25 }) {
         style={{ width: '100%', height: '65vh' }}
       >
         <ambientLight intensity={0.5} />
-        <Environment files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr" />
+        {/* Placeholder: Use a local path for Environment or remove if not necessary for initial compile */}
+        <Environment files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/potsdamer_platz_1k.hdr" /> 
         <CameraRig>
           <Backdrop />
           <Center>
@@ -150,11 +173,12 @@ export default function ProductReviews({ position = [0, 0, 2.5], fov = 25 }) {
     </Box>
   );
 }
+// --- Helper Components (Moved here to be self-contained) ---
 
 function Customizer() {
   const snap = useSnapshot(state)
   return (
-   
+    
     <Box sx={{display: 'flex', justifyContent: 'flex-end', flexDirection: 'column', alignItems: 'center', height: '100%', width: '100%', marginBottom: '25px' }}>
       <Box sx={{display: 'flex', gap:'10px', marginBottom: '20px' }}>
         {snap.colors.map((color) => (
@@ -180,7 +204,8 @@ function Customizer() {
 
 function Backdrop() {
   const shadows = useRef()
-  useFrame((state, delta) => easing.dampC(shadows.current.getMesh().material.color, state.color, 0.25, delta))
+  // NOTE: Assuming state.color is always a valid color string for dampC
+  useFrame((state, delta) => easing.dampC(shadows.current.getMesh().material.color, state.color, 0.25, delta)) 
   return (
     <AccumulativeShadows ref={shadows} temporal frames={60} alphaTest={0.85} scale={10} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -0.14]}>
       <RandomizedLight amount={4} radius={9} intensity={0.55} ambient={0.25} position={[5, 5, -10]} />
@@ -201,6 +226,7 @@ function CameraRig({ children }) {
 
 function Shirt(props) {
   const snap = useSnapshot(state)
+  // useTexture and useGLTF paths must be resolvable at runtime, assume assets are in /public
   const texture = useTexture(`/${snap.decal}.png`)
   const { nodes, materials } = useGLTF('/shirt_baked_collapsed.glb')
 
@@ -221,6 +247,7 @@ function Shirt(props) {
   )
 }
 
-
+// Preload calls should be outside the component render logic if possible
+// Though in Next.js/R3F, these patterns are common. Keeping them here.
 useGLTF.preload('/shirt_baked_collapsed.glb');
 ['/react.png', '/three2.png', '/pmndrs.png'].forEach(useTexture.preload)

@@ -1,16 +1,22 @@
-import React, { useState } from "react";
-import { Autocomplete, TextField, Menu, MenuItem, Box, Card, Typography, Button, Grid, Tooltip, IconButton, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox } from "@mui/material";
-import { Formik } from "formik";
+//========================================================================
+// Creare Product Form 2
+//========================================================================
+
 import * as yup from "yup";
-import SymTextField from './components/SymTextField';
-import styles from './styles';  // Import the styles
-import { FlexBox } from "../../../components/flex-box"; 
-import DropZone from "../../../components/DropZone";
-import { UploadImageBox, StyledClear } from "../styles"; // FORM FIELDS VALIDATION SCHEMA
-import { InfoOutlined } from "@mui/icons-material";
-import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
+import styles from './styles';
 import DropZone3D from './components/DropZone3D';
+import DropZone from "../../../components/DropZone";
+import SymTextField from './components/SymTextField';
+
+import { Formik } from "formik";
+import { useState } from "react";
 import { H1 } from "@/components/Typography";
+import { InfoOutlined } from "@mui/icons-material";
+import { UploadImageBox, StyledClear } from "../styles";
+import { Box, Card, Typography, Grid, Tooltip, IconButton } from "@mui/material";
+import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
+
+//========================================================================
 
 // SortableItem component to render each image with label and highlight effect
 const SortableItem = SortableElement(({ file, index, fileIndex, isDragging, selected, handleClick, handleFileDelete }) => (

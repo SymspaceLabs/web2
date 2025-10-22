@@ -2,7 +2,7 @@ import { ProductReviewsPageView } from "../../../../../pages-sections/vendor-das
 
 export const metadata = {
   title: "Product Reviews",
-  description: `Symspace is an Ecommerce Website`,
+  description: "Symspace is an Ecommerce Website",
   authors: [{
     name: "SYMSPACE",
     url: "https://www.symspacelabs.com"

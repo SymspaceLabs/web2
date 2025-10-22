@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react"; // Import useRef
+import { useState, useRef } from "react";
 import { H1 } from "@/components/Typography";
 import { Box, Container, Button, styled, StepConnector } from "@mui/material";
 

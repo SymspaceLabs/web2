@@ -5,26 +5,44 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { useGLTF, ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import { HexColorPicker } from "react-colorful"
 import { proxy, useSnapshot } from "valtio"
-
-// export const metadata = {
-//   title: "Product Reviews",
-//   description: `Symspace is an Ecommerce Website`,
-//   authors: [{
-//     name: "SYMSPACE",
-//     url: "https://www.symspacelabs.com"
-//   }],
-//   keywords: ["e-commerce"]
-// };
+import * as React from 'react'; // Explicitly import React for consistency
 
 const state = proxy({
   current: null,
   items: { laces: "#fff", mesh: "#fff", caps: "#fff", inner: "#fff", sole: "#fff", stripes: "#fff", band: "#fff", patch: "#fff" },
 })
-export default async function ProductReviews() {
 
+// --- Main Exported Component ---
+export default function ProductReviews() {
+  // CRITICAL FIX: Use state to track client-side mounting
+  const [hasMounted, setHasMounted] = useState(false);
+
+  // Set hasMounted to true only after the component is mounted in the browser
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+  
+  // Display a loading placeholder during SSR/initial client load
+  if (!hasMounted) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        backgroundColor: '#f0f0f0',
+        color: '#333',
+        borderRadius: '8px'
+      }}>
+          Loading 3D Shoe Customizer...
+      </div>
+    );
+  }
+  
+  // Render the heavy, browser-dependent content only after mounting
   return (
-    <>
-      <Canvas shadows camera={{ position: [0, 0, 5] }} style={{ width: '100%', height: '100vh' }}>
+    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+      <Canvas shadows camera={{ position: [0, 0, 5] }} >
         <ambientLight intensity={0.7} />
         <spotLight intensity={0.5} angle={0.1} penumbra={1} position={[10, 15, 10]} castShadow />
         <Shoe />
@@ -33,7 +51,7 @@ export default async function ProductReviews() {
         <OrbitControls minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} enableZoom={false} enablePan={false} />
       </Canvas>
       <Picker />
-    </>
+    </div>
   );
 }
 
@@ -41,9 +59,11 @@ export default async function ProductReviews() {
 function Shoe() {
   const ref = useRef()
   const snap = useSnapshot(state)
+  // useGLTF path must be resolvable at runtime, assume asset is in /public
   const { nodes, materials } = useGLTF("/shoe.glb")
   const [hovered, set] = useState(null)
 
+  // Animation logic
   useFrame((state) => {
     const t = state.clock.getElapsedTime()
     ref.current.rotation.set(
@@ -54,11 +74,14 @@ function Shoe() {
     ref.current.position.y = (1 + Math.sin(t / 1.5)) / 10
   })
 
+  // Cursor change logic (browser-specific)
   useEffect(() => {
+    // SVG definitions for custom cursor
     const cursor = `<svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0)"><path fill="rgba(255, 255, 255, 0.5)" d="M29.5 54C43.031 54 54 43.031 54 29.5S43.031 5 29.5 5 5 15.969 5 29.5 15.969 54 29.5 54z" stroke="#000"/><g filter="url(#filter0_d)"><path d="M29.5 47C39.165 47 47 39.165 47 29.5S39.165 12 29.5 12 12 19.835 12 29.5 19.835 47 29.5 47z" fill="${
-      snap.items[hovered]
-    }"/></g><path d="M2 2l11 2.947L4.947 13 2 2z" fill="#000"/><text fill="#000" style="#fff-space:pre" font-family="Inter var, sans-serif" font-size="10" letter-spacing="-.01em"><tspan x="35" y="63">${hovered}</tspan></text></g><defs><clipPath id="clip0"><path fill="#fff" d="M0 0h64v64H0z"/></clipPath><filter id="filter0_d" x="6" y="8" width="47" height="47" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feOffset dy="2"/><feGaussianBlur stdDeviation="3"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/><feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/><feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/></filter></defs></svg>`
+      snap.items[hovered] || '#ffffff' // Fallback color
+    }"/></g><path d="M2 2l11 2.947L4.947 13 2 2z" fill="#000"/><text fill="#000" style="#fff-space:pre" font-family="Inter var, sans-serif" font-size="10" letter-spacing="-.01em"><tspan x="35" y="63">${hovered || ''}</tspan></text></g><defs><clipPath id="clip0"><path fill="#fff" d="M0 0h64v64H0z"/></clipPath><filter id="filter0_d" x="6" y="8" width="47" height="47" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feOffset dy="2"/><feGaussianBlur stdDeviation="3"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/><feBlend in2="BackgroundImageFix" result="effect1_dropShadow"/><feBlend in="SourceGraphic" in2="effect1_dropShadow" result="shape"/></filter></defs></svg>`
     const auto = `<svg width="64" height="64" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255, 255, 255, 0.5)" d="M29.5 54C43.031 54 54 43.031 54 29.5S43.031 5 29.5 5 5 15.969 5 29.5 15.969 54 29.5 54z" stroke="#000"/><path d="M2 2l11 2.947L4.947 13 2 2z" fill="#000"/></svg>`
+    
     if (hovered) {
       document.body.style.cursor = `url('data:image/svg+xml;base64,${btoa(
         cursor
@@ -67,8 +90,11 @@ function Shoe() {
         (document.body.style.cursor = `url('data:image/svg+xml;base64,${btoa(
           auto
         )}'), auto`)
+    } else {
+      // Clear cursor if not hovered
+      document.body.style.cursor = 'auto';
     }
-  }, [hovered])
+  }, [hovered, snap.items]) // Added snap.items as a dependency to update color instantly
 
   return (
     <group
@@ -145,7 +171,7 @@ function Shoe() {
 function Picker() {
   const snap = useSnapshot(state)
   return (
-    <div style={{ display: snap.current ? "block" : "none" }}>
+    <div style={{ position: 'absolute', top: '20px', left: '20px', padding: '10px', background: 'rgba(255,255,255,0.8)', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', display: snap.current ? "flex" : "none", flexDirection: 'column', alignItems: 'center' }}>
       <HexColorPicker
         className="picker"
         color={snap.items[snap.current]}
@@ -154,30 +180,14 @@ function Picker() {
             state.items[snap.current] = color
           }
         }}
+        style={{ width: '120px', height: '120px' }}
       />
-      <h1>{snap.current}</h1>
+      <h1 style={{ marginTop: '10px', fontSize: '1rem', fontWeight: 'bold', textTransform: 'uppercase', color: '#333' }}>
+        {snap.current}
+      </h1>
     </div>
   )
 }
 
-const handlePointerOver = (e) => {
-  e.stopPropagation()
-  const newHovered = e.object.material.name
-  if (newHovered !== hovered) {
-    set(newHovered)
-  }
-}
-
-const handlePointerOut = (e) => {
-  if (e.intersections.length === 0) {
-    set(null)
-  }
-}
-
-const handleClick = (e) => {
-  e.stopPropagation()
-  const newCurrent = e.object.material.name
-  if (state.current !== newCurrent) {
-    state.current = newCurrent
-  }
-}
+// Preload the model outside the component to help with loading
+useGLTF.preload('/shoe.glb');

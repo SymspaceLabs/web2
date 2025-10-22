@@ -1,23 +1,39 @@
-import React from 'react';
+"use client"
+
+// ===============================================
+// Custom Multi-select Dropdown Input
+// ===============================================
+
 import { FlexBox } from '../flex-box';
-import { H1 } from '../Typography';
-import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
+import { Small } from '../Typography';
+import { useState, useEffect } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Box, Select, MenuItem, Checkbox, ListItemText, useMediaQuery } from '@mui/material';
+
+// ===============================================
 
 const SymMultiSelectDropdown = ({
     title,
     selectedValue,
     handleChange,
     options,
-    isEdit=true,
+    isBrand = false,
+    isColor = false,
+    isEdit,
 }) => {
     const downMd = useMediaQuery(theme => theme.breakpoints.down("sm"));
+
+    const [menuContainer, setMenuContainer] = useState(null);
+
+    useEffect(() => {
+        setMenuContainer(document.getElementById('root'));
+    }, []);
 
     return (
         <FlexBox
             flexDirection="column"
             sx={{
-                flex: 1,
+                flex:1,
                 minWidth: "100px",
                 padding: 0,
                 margin: 0,
@@ -27,9 +43,9 @@ const SymMultiSelectDropdown = ({
                 }),
             }}
         >
-            <H1 color="white" mb={0.5}>
+            <Small color="white" mb={0.5}>
                 {title}
-            </H1>
+            </Small>
             <Select
                 multiple
                 value={Array.isArray(selectedValue) ? selectedValue : []} // Ensure value is an array
@@ -37,6 +53,7 @@ const SymMultiSelectDropdown = ({
                 displayEmpty
                 sx={{
                     background: "#000",
+                    border: "1px solid #fff",
                     borderRadius: "5px",
                     color: "#fff",
                     width: "100%",
@@ -46,9 +63,10 @@ const SymMultiSelectDropdown = ({
                         paddingBottom: '8px',
                         paddingLeft: '10px',
                     },
+                    // 👇 This ensures the icon appears and is colored correctly
                     ".MuiSelect-icon": {
-                        color: "white", // 👈 fix: color the arrow
-                        right: '10px',  // 👈 fix: adjust spacing
+                        color: "#fff",
+                        right: "10px",
                     },
                     "& .MuiPopover-root": {
                         zIndex: 1400, // Higher than the Drawer
@@ -58,7 +76,7 @@ const SymMultiSelectDropdown = ({
                     },
                 }}
                 MenuProps={{
-                    container: document.getElementById('root'), // Adjust this to your app's root container ID
+                    container: menuContainer, // Adjust this to your app's root container ID
                     disablePortal: false, // Ensures the dropdown is not restricted by parent stacking context
                     PaperProps: {
                         sx: {
@@ -70,17 +88,40 @@ const SymMultiSelectDropdown = ({
                 disabled={!isEdit} // Disable the Select if isEdit is false
                 renderValue={(selected) => {
                     if (!selected || selected.length === 0) {
-                        return <em>Select options</em>; // Ensures a valid UI fallback
+                        return "Select options";
                     }
-                    return selected.join(", "); // Displays selected options correctly
+                    return selected
+                        .map((id) => {
+                            const item = options.find((option) => option.id === id);
+                            return item ? item.label : id;
+                        })
+                        .join(", ");
                 }}
             >
-                {options.map((item) => (
-                    <MenuItem key={item} value={item}>
-                        <Checkbox checked={(selectedValue ?? []).includes(item)} />
-                        <ListItemText primary={item} />
-                    </MenuItem>
-                ))}
+                {options.map((item) => {
+                    const valueKey = isBrand || isColor ? item.id : item;
+                    return (
+                        <MenuItem key={valueKey} value={valueKey}>
+                            <Checkbox checked={(selectedValue ?? []).includes(valueKey)} />
+                            {isColor ? (
+                                <Box display="flex" alignItems="center">
+                                    <Box
+                                        sx={{
+                                            width: 16,
+                                            height: 8,
+                                            borderRadius: "50%",
+                                            backgroundColor: item.value,
+                                            marginRight: "8px",
+                                        }}
+                                    />
+                                    <ListItemText primary={item.label} />
+                                </Box>
+                            ) : (
+                                <ListItemText primary={isBrand ? item.label : item} />
+                            )}
+                        </MenuItem>
+                    );
+                })}
             </Select>
         </FlexBox>
     );

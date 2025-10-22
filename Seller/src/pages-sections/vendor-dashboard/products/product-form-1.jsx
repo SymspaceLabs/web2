@@ -1,3 +1,7 @@
+//========================================================================
+// Creare Product Form 2
+//========================================================================
+
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
@@ -14,6 +18,8 @@ import SymMultiSelectChip from './components/SymMultiSelectChip';
 import SymMultiLevelSelect from './components/SymMultiLevelSelect';
 import ProductVariantsTable from './components/product-variants-1';
 import SymRichTextInputBox from './components/SymRichTextInputBox';
+
+//========================================================================
 
 const VALIDATION_SCHEMA = yup.object().shape({
   name: yup.string().required("Product Name is required!"),

@@ -11,7 +11,7 @@ export const ABOUT_LINKS = ["Careers", "Our Stores", "Our Cares", "Terms & Condi
 export const CUSTOMER_CARE_LINKS = ["Help Center", "Track Your Order", "Corporate & Bulk Purchasing", "Returns & Refunds"];
 export const SOCIAL_ICON_LINKS = [{
   Icon: LinkedIn,
-  url: "https://www.google.com/search?q=ui-lib.com"
+  url: "https://www.google.com/search?q=symspace.com"
 }, {
   Icon: Instagram,
   url: "https://www.instagram.com/uilibofficial/"

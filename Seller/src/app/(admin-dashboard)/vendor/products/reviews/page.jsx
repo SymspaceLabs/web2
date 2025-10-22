@@ -1,14 +1,15 @@
-import { ProductReviewsPageView } from "../../../../../pages-sections/vendor-dashboard/products/page-view"; // API FUNCTIONS
+import { ProductReviewsPageView } from "../../../../../pages-sections/vendor-dashboard/products/page-view";
 
 export const metadata = {
-  title: "Product Reviews - Bazaar Next.js E-commerce Template",
-  description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  title: "Product Reviews",
+  description: `Symspace is an Ecommerce Website`,
   authors: [{
-    name: "UI-LIB",
-    url: "https://ui-lib.com"
+    name: "SYMSPACE",
+    url: "https://www.symspacelabs.com"
   }],
-  keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
+  keywords: ["e-commerce"]
 };
+
 export default async function ProductReviews() {
   const reviews = []
   return <ProductReviewsPageView reviews={reviews} />;

@@ -1,11 +1,11 @@
 import { RefundRequestPageView } from "../../../../pages-sections/vendor-dashboard/refund-request/page-view"; // API FUNCTIONS
 
 export const metadata = {
-  title: "Refund Request - Bazaar Next.js E-commerce Template",
-  description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  title: "Refund Request",
+  description: `Symspace is an Ecommerce Website`,
   authors: [{
     name: "SYMSPACE LABS",
-    url: "https://ui-lib.com"
+    url: "https://www.symspacelabs.com"
   }],
   keywords: ["e-commerce"]
 };

@@ -13,6 +13,11 @@ import { StyledNavLink } from "./styles";
 
 import Place from "@mui/icons-material/Place";
 import Person from "@mui/icons-material/Person";
+import PeopleIcon from '@mui/icons-material/People';
+import StraightenIcon from '@mui/icons-material/Straighten';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+
+import TuneIcon from '@mui/icons-material/Tune';
 import CreditCard from "@mui/icons-material/CreditCard";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import CustomerService from "@/icons/CustomerService"; // STYLED COMPONENTS
@@ -104,12 +109,12 @@ const MENUS = [{
   }, {
     href: "/measurements",
     title: "Measurements",
-    Icon: Person,
+    Icon: StraightenIcon,
     count: 3
   }, {
     href: "/preferences",
     title: "Preferences",
-    Icon: Person,
+    Icon: TuneIcon,
     count: 3
   },{
     href: "/address",
@@ -127,12 +132,12 @@ const MENUS = [{
   list: [{
     href: "/refer-a-friend",
     title: "Refer A Friend",
-    Icon: Person,
+    Icon: PeopleIcon,
     count: 3
   }, {
     href: `${process.env.NEXT_PUBLIC_SELLER_URL}`,
     title: "Business Portal",
-    Icon: Person,
+    Icon: StorefrontIcon,
     count: 3
   }]
 }];

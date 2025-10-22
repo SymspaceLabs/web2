@@ -222,8 +222,8 @@ const ProductForm1 = props => {
                         id="product-type-label"
                         value={values.productType}
                         options={[
-                          { value: "static", label: "Static (Fixed Dimensions)" },
-                          { value: "dynamic", label: "Dynamic (Sizechart Required)" },
+                          { value: "static", label: "Static" },
+                          { value: "dynamic", label: "Dynamic" },
                         ]}
                         onChange={handleChange}
                         error={!!touched.productType && !!errors.productType}

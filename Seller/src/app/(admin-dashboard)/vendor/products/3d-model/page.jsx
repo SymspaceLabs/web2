@@ -1,13 +1,11 @@
 "use client"
 
-// import { ProductReviewsPageView } from "../../../../../pages-sections/vendor-dashboard/products/page-view"; // API FUNCTIONS
 import { useRef, useState, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { useGLTF, ContactShadows, Environment, OrbitControls } from "@react-three/drei"
 import { HexColorPicker } from "react-colorful"
 import { proxy, useSnapshot } from "valtio"
 
-// import api from "../../../../../utils/__api__/dashboard";
 // export const metadata = {
 //   title: "Product Reviews - Bazaar Next.js E-commerce Template",
 //   description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
@@ -23,7 +21,7 @@ const state = proxy({
   items: { laces: "#fff", mesh: "#fff", caps: "#fff", inner: "#fff", sole: "#fff", stripes: "#fff", band: "#fff", patch: "#fff" },
 })
 export default async function ProductReviews() {
-  // const reviews = await api.reviews();
+
   return (
     <>
       <Canvas shadows camera={{ position: [0, 0, 5] }} style={{ width: '100%', height: '100vh' }}>

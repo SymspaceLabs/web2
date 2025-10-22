@@ -1,10 +1,10 @@
 import { SiteSettingsPageView } from "../../../../pages-sections/vendor-dashboard/site-settings/page-view";
 export const metadata = {
-  title: "Site Settings - Bazaar Next.js E-commerce Template",
-  description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  title: "Site Settings",
+  description: `Symspace is an Ecommerce Website`,
   authors: [{
     name: "SYMSPACE LABS",
-    url: "https://ui-lib.com"
+    url: "https://www.symspacelabs.com"
   }],
   keywords: ["e-commerce"]
 };

@@ -11,7 +11,7 @@ export const metadata = {
   description: `Symspace is an E-commerce website.`,
   authors: [{
     name: "SYMSPACE LABS",
-    url: "https://ui-lib.com"
+    url: "https://www.symspacelabs.com"
   }],
   keywords: ["e-commerce"]
 };

@@ -1,12 +1,12 @@
 import { ProductCreatePageView } from "../../../../../pages-sections/vendor-dashboard/products/page-view";
 export const metadata = {
   title: "Create Product",
-  description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  description: `Symspace is an Ecommerce Website`,
   authors: [{
-    name: "UI-LIB",
-    url: "https://ui-lib.com"
+    name: "SYMSPACE",
+    url: "https://www.symspacelabs.com"
   }],
-  keywords: ["e-commerce", "e-commerce template", "next.js", "react"]
+  keywords: ["e-commerce"]
 };
 export default function ProductCreate() {
   return <ProductCreatePageView />;

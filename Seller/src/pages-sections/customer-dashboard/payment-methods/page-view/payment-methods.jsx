@@ -20,7 +20,7 @@ const PAYMENT_METHODS = [{
   id: "1050017AC",
   exp: "N/A",
   payment_method: "PayPal",
-  card_no: "ui-lib@email.com"
+  card_no: "test@email.com"
 }, {
   id: "1050017AD",
   exp: "08 / 2022",

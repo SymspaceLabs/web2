@@ -3,10 +3,10 @@ import VendorDashboardLayout from "../components/layouts/vendor-dashboard";
 
 export const metadata = {
   title: "Seller Dashboard",
-  description: `Bazaar is a React Next.js E-commerce template. Build SEO friendly Online store, delivery app and Multi vendor store`,
+  description: `Symspace is an Ecommerce Website`,
   authors: [{
     name: "SYMSPACE LABS",
-    url: "https://ui-lib.com"
+    url: "https://www.symspacelabs.com"
   }],
   keywords: ["e-commerce"]
 };

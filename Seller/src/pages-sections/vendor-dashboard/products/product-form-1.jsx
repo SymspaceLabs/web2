@@ -1,5 +1,5 @@
 //========================================================================
-// Creare Product Form 2
+// Creare Product Form 1
 //========================================================================
 
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import { FlexBox } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
 import { Autocomplete, TextField, MenuItem, Box, Card, Typography, Button, Grid, Tooltip, IconButton, Chip, Checkbox } from "@mui/material";
 
+import dynamic from "next/dynamic";
 import SizeDialog from './components/SizeDialog';
 import ColorDialog from './components/ColorDialog';
 import SymTextField from './components/SymTextField';
@@ -17,9 +18,19 @@ import SymRadioButton from './components/SymRadioButton';
 import SymMultiSelectChip from './components/SymMultiSelectChip';
 import SymMultiLevelSelect from './components/SymMultiLevelSelect';
 import ProductVariantsTable from './components/product-variants-1';
-import SymRichTextInputBox from './components/SymRichTextInputBox';
+// import SymRichTextInputBox from './components/SymRichTextInputBox';
 
 //========================================================================
+
+const DynamicRichTextInputBox = dynamic(
+  () => import("./components/SymRichTextInputBox"),
+  { 
+    // This is the CRUCIAL part: prevent it from running on the server
+    ssr: false, 
+    // Optional: Add a placeholder while it loads on the client
+    loading: () => <p>Loading editor...</p> 
+  }
+);
 
 const VALIDATION_SCHEMA = yup.object().shape({
   name: yup.string().required("Product Name is required!"),
@@ -307,7 +318,7 @@ const ProductForm1 = props => {
 
                     {/* Description */}
                     <Grid item xs={12} sx={{ mt: 2.5 }}>
-                      <SymRichTextInputBox
+                      <DynamicRichTextInputBox
                         label="Description" // Corrected label from "Dimensions"
                         name="description"
                         id='rich-editor'

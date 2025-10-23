@@ -1,8 +1,8 @@
-import { ProductCreatePageView } from "../../../../../pages-sections/vendor-dashboard/products/page-view";
+import { ProductCreatePageView } from "@/pages-sections/vendor-dashboard/products/page-view";
 
 export const metadata = {
   title: "Create Product",
-  description: `Symspace is an Ecommerce Website`,
+  description: "Symspace is an E-commerce Website",
   authors: [{
     name: "SYMSPACE",
     url: "https://www.symspacelabs.com"

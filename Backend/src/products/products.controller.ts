@@ -37,7 +37,8 @@ export class ProductsController {
     @Query('subcategoryItem') subcategoryItemSlugs?: string | string[],
     @Query('subcategoryItemChild') subcategoryItemChildSlug?: string,
     @Query('gender') genders?: string | string[],
-    @Query('ageGroup') ageGroups?: string | string[]
+    @Query('ageGroup') ageGroups?: string | string[],
+    @Query('companyId') companyId?: string,
   ) {
 
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
@@ -59,7 +60,8 @@ export class ProductsController {
       subcategoryItemSlugsArray,
       subcategoryItemChildSlug,
       gendersArray,
-      ageGroupsArray
+      ageGroupsArray,
+      companyId
     );
   }
 

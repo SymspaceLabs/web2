@@ -1,4 +1,10 @@
-import { ProductsPageView } from "../../../../pages-sections/vendor-dashboard/products/page-view"; // API FUNCTIONS
+// ==============================================================
+// Product List Page
+// ==============================================================
+
+import { ProductsPageView } from "@/pages-sections/vendor-dashboard/products/page-view";
+
+// ==============================================================
 
 export const metadata = {
   title: "Products",
@@ -10,7 +16,8 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
+// ==============================================================
+
 export default async function Products() {
-  const products = [];
-  return <ProductsPageView products={products} />;
+  return <ProductsPageView />;
 }

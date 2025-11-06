@@ -8,7 +8,7 @@ import { useState } from "react";
 import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
-import { Autocomplete, TextField, MenuItem, Box, Card, Typography, Button, Grid, Tooltip, IconButton, Chip, Checkbox } from "@mui/material";
+import { Autocomplete, TextField, MenuItem, Box, Card, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
 
 import dynamic from "next/dynamic";
 import SizeDialog from './components/SizeDialog';
@@ -98,7 +98,8 @@ const ProductForm1 = props => {
   const [chipData2, setChipData2] = useState([]);
   const [openColorDialog, setOpenColorDialog] = useState(false);
   const [openSizeDialog, setOpenSizeDialog] = useState(false); // State to handle size dialog visibility
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  // selectedCategory will now hold the full path string for display
+  const [selectedCategory, setSelectedCategory] = useState(null); 
   const [newColor, setNewColor] = useState('');
   const [newSize, setNewSize] = useState('');
   const [color, setColor] = useState('#fff');
@@ -108,10 +109,6 @@ const ProductForm1 = props => {
   const [selectedAgeGroup, setSelectedAgeGroup] = useState([]);
   const [selectedGender, setSelectedGender] = useState([]);
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category); // Store the selected category in state
-    console.log("Selected category:", category); // You can log it or perform other actions
-  };
 
   //COLOR
   const handleOpenColorDialog = () => setOpenColorDialog(true);
@@ -155,6 +152,34 @@ const ProductForm1 = props => {
     }
   };
 
+  // --- New Function for API Request ---
+  const fetchCategoryItems = async () => {
+      const url = `${pprocess.env.NEXT_PUBLIC_BACKEND_URL}/subcategory-items/${SUBCATEGORY_ID_TO_FETCH}`;
+      
+      console.log(`🚀 Fetching category items from: ${url}`);
+      
+      try {
+          const response = await fetch(url);
+
+          if (!response.ok) {
+              // Throw an error if the response status is not 2xx
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          
+          // Display the fetched record to the console as requested
+          console.log('✅ Fetched Subcategory Record:', data);
+          
+          return data;
+      } catch (error) {
+          console.error('❌ Error fetching subcategory items:', error);
+          // Return null or throw the error, depending on how you want to handle failure
+          return null; 
+      }
+  };
+  // ------------------------------------
+
   return (
     <Formik 
       onSubmit={handleFormSubmit} 
@@ -173,29 +198,54 @@ const ProductForm1 = props => {
         setFieldTouched 
       }) => {
         
-        // Category Selection handler using Formik's state setters
-        const handleCategorySelect = (category) => {
-          // 1. Update Formik field value: Set to an array of the value string for Yup's array.min(1)
-          setFieldValue('category', category ? [category.value] : []);
+        /**
+         * Category Selection handler - Now assumes it receives the full category path string.
+         * It uses the full path for display but extracts the final category name for Formik's value.
+         * @param {string | null} pathString The full category path (e.g., "Clothing... > Handbags")
+         */
+        const handleCategorySelect = (pathString) => {
+          let categoryArray = [];
           
-          // 2. Mark Formik field as touched (to show error immediately)
+          if (pathString && typeof pathString === 'string') {
+              // 1. Extract the final category name from the full path string for validation/submission
+              const pathParts = pathString.split(' > ').map(p => p.trim()).filter(p => p.length > 0);
+              const finalCategoryName = pathParts.pop(); 
+              categoryArray = finalCategoryName ? [finalCategoryName] : [];
+
+              // 2. Update local state with the full path string for component display
+              setSelectedCategory(pathString); 
+          } else {
+              // Handle clear/null selection
+              setSelectedCategory(null);
+          }
+          
+          // 3. Update Formik field value (must be an array of strings for Yup validation)
+          setFieldValue('category', categoryArray); 
+          
+          // 4. Mark Formik field as touched (to show error immediately)
           setFieldTouched('category', true);
-          
-          // 3. Update local state for component rendering (SymMultiLevelSelect uses this)
-          setSelectedCategory(category); 
         };
 
         return (
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={3} sx={{pr: 4}}>
+            {/* Main Flex Container: Stack Left Card and Status Card vertically */}
+            <FlexBox flexDirection="column" gap={3} sx={{ pr: 4, position: 'relative' }}>
               
-              {/*Left Card STARTS*/}
-              <Grid item lg={9} md={12}>
+              {/*Left Card STARTS - Full Width*/}
+              <Box 
+                sx={{ 
+                  // Removed flexBasis and flexGrow - defaults to full width
+                  overflow: 'visible', 
+                  position: 'relative', 
+                  zIndex: 2 
+                }}
+              >
                 <Card sx={{ p: 6, background: 'transparent' }}>
-                  <Grid container spacing={3}>
+                  {/* REPLACED Grid container with FlexBox column layout. Gap defines vertical spacing. */}
+                  <FlexBox flexDirection="column" gap={4}> 
 
                     {/* Product Name */}
-                    <Grid item sm={12} xs={12}>
+                    <Box>
                       <SymTextField
                         label="Product Name"
                         name="name"
@@ -206,10 +256,10 @@ const ProductForm1 = props => {
                         error={!!touched.name && !!errors.name}
                         helperText={touched.name && errors.name}
                       />
-                    </Grid>
+                    </Box>
 
                     {/* Category */}
-                    <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
+                    <Box>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap:2  }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', minWidth:'250px' }}>
                           <H1  color='#FFF'>
@@ -229,10 +279,10 @@ const ProductForm1 = props => {
                           helperText={touched.category && errors.category}
                         />
                       </Box>
-                    </Grid>
-
+                    </Box>
+                    
                     {/* Product Type */}
-                    <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
+                    <Box>
                       <SymRadioButton
                         label="Product Type"
                         name="productType"
@@ -245,12 +295,12 @@ const ProductForm1 = props => {
                         onChange={handleChange}
                         error={!!touched.productType && !!errors.productType}
                         helperText={touched.productType && errors.productType}
-                      />                     
-                    </Grid>
+                      />                        
+                    </Box>
 
                     {/* Dimensions */}
                     {values.productType === "static" && (
-                      <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
+                      <Box>
                         <SymTextField
                           label="Dimensions"
                           name="dimensions"
@@ -261,12 +311,12 @@ const ProductForm1 = props => {
                           error={!!touched.dimensions && !!errors.dimensions}
                           helperText={touched.dimensions && errors.dimensions}
                         />
-                      </Grid>
+                      </Box>
                     )}
 
                     {/* Product Sizechart (Conditional for Dynamic) */}
                     {values.productType === "dynamic" && (
-                      <Grid item sm={12} xs={12} sx={{ mt: 2.5 }}>
+                      <Box>
                         <SymTextField
                           label="Product Sizechart URL"
                           name="productSizechart"
@@ -277,12 +327,12 @@ const ProductForm1 = props => {
                           error={!!touched.productSizechart && !!errors.productSizechart}
                           helperText={touched.productSizechart && errors.productSizechart}
                         />
-                      </Grid>
+                      </Box>
                     )}
 
                     {/* Category Tags */}
                     {selectedCategory && (
-                      <Grid item sm={12} xs={12} sx={{ mt: 5 }}>
+                      <Box>
                         <FlexBox gap={1} flexDirection="column">
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <H1 color='#FFF' mr={1}>
@@ -313,11 +363,11 @@ const ProductForm1 = props => {
                             allLabel="Unisex"
                           />
                         </FlexBox>
-                      </Grid>
+                      </Box>
                     )}
 
                     {/* Description */}
-                    <Grid item xs={12} sx={{ mt: 2.5 }}>
+                    <Box>
                       <DynamicRichTextInputBox
                         label="Description" // Corrected label from "Dimensions"
                         name="description"
@@ -331,10 +381,10 @@ const ProductForm1 = props => {
                         error={!!touched.description && !!errors.description}
                         helperText={touched.description && errors.description}
                       />
-                    </Grid>
+                    </Box>
 
                     {/* Product Variant */}
-                    <Grid item sm={12} xs={12} sx={{ mt: 5 }}>
+                    <Box>
                       <FlexBox gap={1} flexDirection="column">
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                           <Typography color='#FFF'>
@@ -471,15 +521,15 @@ const ProductForm1 = props => {
                               backdropFilter: 'blur(50px)', borderRadius: '12px',
                             }}
                           >
-                            Custom Size
+                            Add Size
                           </Button>
                         </Box>
 
                       </FlexBox>
-                    </Grid>
+                    </Box>
                   
                     {/* Product Variant Table */}
-                    <Grid item sm={12} xs={12} sx={{ mt: 5 }}>
+                    <Box>
                       {!(selectedColors.length == 0 && selectedSizes.length == 0) ? (
                         <ProductVariantsTable
                           colors={selectedColors.map((color) => color.name)}
@@ -487,30 +537,35 @@ const ProductForm1 = props => {
                         />
                       ) : null
                       }
-                    </Grid>
+                    </Box>
 
-                  </Grid>
+                  </FlexBox> {/* End FlexBox */}
                 </Card>
-              </Grid>
+              </Box>
+              {/*Left Card ENDS*/}
 
-              {/*RIGHT CARD START*/}
-              <Grid item lg={3} md={12}>
+              {/*STATUS CARD START - Full Width, now positioned below the main form*/}
+              <Box sx={{ 
+                // Removed flexBasis and minWidth - defaults to full width
+                position: 'relative', 
+                zIndex: 1 
+              }}>
                 <Card
                   sx={{
-                    mt: 10,
+                    // Removed mt: 10
                     p: 4,
                     background:
-                      'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 235, 0.367354) 4.2%, rgba(224, 224, 224, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
+                      'linear-gradient(117.54deg, rgba(255, 255, 255, 0.5) -19.85%, rgba(235, 235, 255, 0.367354) 4.2%, rgba(224, 224, 254, 0.287504) 13.88%, rgba(212, 212, 212, 0.21131) 27.98%, rgba(207, 207, 207, 0.175584) 37.8%, rgba(202, 202, 202, 0.143432) 44.38%, rgba(200, 200, 200, 0.126299) 50.54%, rgba(196, 196, 196, 0.1) 60.21%)',
                     boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)',
                     backdropFilter: 'blur(12px)',
                     borderRadius: '15px',
                   }}
                 >
-                  <H1 color='#fff' fontSize={14} pb={2} >
+                  <H1 color='#FFF' fontSize={14} pb={2} >
                     Status
                   </H1>
-                  <Grid container spacing={3}>
-                    <Grid item sm={12} xs={12}>
+                  {/* REPLACED Grid container and item with a simple Box */}
+                  <Box>
                        <TextField
                         select
                         fullWidth
@@ -535,13 +590,12 @@ const ProductForm1 = props => {
                           </span>
                         </Tooltip>
                       </TextField>
-                    </Grid>
-                  </Grid>
+                  </Box>
                 </Card>
-              </Grid>
-              {/*RIGHT CARD ENDS*/}
+              </Box>
+              {/*STATUS CARD ENDS*/}
 
-            </Grid>
+            </FlexBox> {/* Closed the main FlexBox wrapper */}
 
               {/* Custom Color Dialog */}
               <ColorDialog
@@ -573,4 +627,3 @@ const ProductForm1 = props => {
 
 
 export default ProductForm1;
- 

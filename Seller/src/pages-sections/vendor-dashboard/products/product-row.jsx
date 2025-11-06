@@ -18,6 +18,7 @@ import { StyledTableRow, CategoryWrapper, StyledTableCell, StyledIconButton } fr
 const ProductRow = ({
   product
 }) => {
+
   const {
     category,
     name,
@@ -39,7 +40,6 @@ const ProductRow = ({
 
           <div>
             <Paragraph fontWeight={600}>{name}</Paragraph>
-            <Small color="grey.600">#{id.split("-")[0]}</Small>
           </div>
         </FlexBox>
       </StyledTableCell>
@@ -63,7 +63,7 @@ const ProductRow = ({
       </StyledTableCell>
 
       <StyledTableCell align="center">
-        <StyledIconButton onClick={() => router.push(`/admin/products/${slug}`)}>
+        <StyledIconButton onClick={() => router.push(`/vendor/products/${slug}`)}>
           <Edit />
         </StyledIconButton>
 

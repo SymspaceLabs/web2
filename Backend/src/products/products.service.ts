@@ -332,7 +332,8 @@ export class ProductsService {
     subcategoryItemSlugs?: string[],
     subcategoryItemChildSlug?: string,
     genders?: string[],
-    ageGroups?: string[]
+    ageGroups?: string[],
+    companyId?: string,
   ) {
     // 1. Build the base query for products
     const productsQuery = this.productRepository
@@ -350,6 +351,12 @@ export class ProductsService {
       .leftJoinAndSelect('variants.size', 'variantSize') 
       .leftJoinAndSelect('product.threeDModels', 'threeDModels')
       .orderBy('images.sortOrder', 'ASC');
+
+    // ⭐ NEW LOGIC: Apply Company ID Filter
+    if (companyId) {
+      // Since we left-joined product.company as 'company', we filter on company.id
+      productsQuery.andWhere('company.id = :companyId', { companyId });
+    }
 
     // 2. Apply the category, search term, and GENDER filters
         
@@ -845,18 +852,18 @@ export class ProductsService {
     } 
     
     // 2. Apply the subcategory item filter (handles multi-select/array)
-    //    This path is taken for your failing request: `subcategoryItem=handbags`.
     else if (subcategoryItemSlugs && subcategoryItemSlugs.length > 0) {
-      // 💥 THE FIX: Use an OR condition to check the provided slugs against 
-      // BOTH the subcategoryItem.slug (parent) AND the subcategoryItemChild.slug (child).
-      // This allows a single URL parameter to filter products at two hierarchy levels.
+      // 💥 CRITICAL FIX: Use an OR condition to check the provided slugs/names against 
+      // 1. subcategoryItem.slug (standard slug)
+      // 2. subcategoryItem.mobileLevel2Name (new mobile alias/name)
+      // 3. subcategoryItemChild.slug (existing cross-hierarchy filter)
       
       query.andWhere(
-          '(subcategoryItem.slug IN (:...itemSlugs) OR subcategoryItemChild.slug IN (:...itemSlugs))', 
+          '(subcategoryItem.slug IN (:...itemSlugs) OR subcategoryItem.mobileLevel2Name IN (:...itemSlugs) OR subcategoryItemChild.slug IN (:...itemSlugs))', 
           { itemSlugs: subcategoryItemSlugs }
       );
       hasFilter = true;
-    } 
+    }
     
     // 3. ⭐ Apply the subcategory filter (THIS FIXES YOUR 'subcategory=tops' ISSUE)
     //    This filters all products linked to *any* subcategory item whose 

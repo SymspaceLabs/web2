@@ -77,7 +77,7 @@ const ProductsPageView = ({
         <H1 mb={2} sx={{ color:'#fff' }}>
           Product List
         </H1>
-        <SearchArea handleSearch={() => {}} buttonText="Add Product" url="/admin/products/create" searchPlaceholder="Search Product..." />
+        <SearchArea handleSearch={() => {}} buttonText="Add Product" url="/vendor/products/create" searchPlaceholder="Search Product..." />
         <Card>
           <Scrollbar autoHide={false}>
             <TableContainer sx={{ minWidth: 900 }}>

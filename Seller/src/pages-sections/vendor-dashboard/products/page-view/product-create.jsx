@@ -54,10 +54,12 @@ const ProductCreatePageView = () => {
 
   // --- MODIFIED handleNext to use the formRef ---
   const handleNext = () => {
+    setActiveStep(prev => prev + 1);
+    
     // Trigger the submit function exposed by the current form component
-    if (formRef.current) {
-      formRef.current.submitForm();
-    }
+    // if (formRef.current) {
+    //   formRef.current.submitForm();
+    // }
   };
 
   // This function is called by the individual form's onSubmit handler *after* validation succeeds

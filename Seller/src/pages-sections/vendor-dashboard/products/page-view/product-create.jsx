@@ -34,15 +34,15 @@ const CustomStepConnector = styled(StepConnector)(({ theme }) => ({
 }));
 
 const ProductCreatePageView = () => {
+
+  const formRef = useRef(null); 
+
   const [activeStep, setActiveStep] = useState(0);
   const [completed, setCompleted] = useState({});
-  // Ref to access the current form's submit function
-  const formRef = useRef(null); 
-  
-  // State to hold collected form data across steps
   const [formData, setFormData] = useState({});
-  
-  // Assuming 'router' is passed as a prop or imported from 'next/navigation'
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
+
   const router = { push: (path) => console.log('Navigating to:', path) }; 
   const [loading, setLoading] = useState(false);
   const [productId, setProductId] = useState(null);
@@ -203,7 +203,11 @@ const ProductCreatePageView = () => {
             key={0} // Important for remounting/re-initializing Formik
             initialValues={currentInitialValues} 
             handleFormSubmit={handleFormSubmit}
-            formRef={formRef} // Pass ref
+            formRef={formRef}
+            selectedColors={selectedColors}
+            setSelectedColors={setSelectedColors}
+            selectedSizes={selectedSizes}
+            setSelectedSizes={setSelectedSizes}
           />
         );
       case 1:
@@ -212,7 +216,9 @@ const ProductCreatePageView = () => {
             key={1}
             initialValues={currentInitialValues}
             handleFormSubmit={handleFormSubmit}
-            formRef={formRef} // Pass ref
+            formRef={formRef}
+            selectedColors={selectedColors}
+            selectedSizes={selectedSizes}
           />
         );
       // ... Add cases for step 2 and 3 using their respective components

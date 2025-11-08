@@ -5,12 +5,13 @@
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
-import { H1 } from "@/components/Typography";
+import { H1, Paragraph } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
 import { Autocomplete, TextField, MenuItem, Box, Card, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
 
 import dynamic from "next/dynamic";
+import slugify from "@/services/slugify";
 import SizeDialog from './components/SizeDialog';
 import ColorDialog from './components/ColorDialog';
 import SymTextField from './components/SymTextField';
@@ -18,7 +19,6 @@ import SymRadioButton from './components/SymRadioButton';
 import SymMultiSelectChip from './components/SymMultiSelectChip';
 import SymMultiLevelSelect from './components/SymMultiLevelSelect';
 import ProductVariantsTable from './components/product-variants-1';
-// import SymRichTextInputBox from './components/SymRichTextInputBox';
 
 //========================================================================
 
@@ -38,7 +38,6 @@ const VALIDATION_SCHEMA = yup.object().shape({
   category: yup.array().min(1, "At least one category must be selected!").required("Category is required!"),
   description: yup.string().min(20, "Description must be at least 20 characters.").required("Description is required!"),
   status: yup.string().required("Status is required!"),
-  productType: yup.string().oneOf(["static", "dynamic"], "Product type is required.").required("Product type is required!"),
 
   // Conditional Validation for Static Products
   dimensions: yup.string().when("productType", {
@@ -82,7 +81,14 @@ const genders = [
 ];
 
 const ProductForm1 = props => {
-  const { initialValues: initialValuesProp, handleFormSubmit } = props;
+  const { 
+    initialValues: initialValuesProp, 
+    handleFormSubmit,
+    selectedColors,
+    setSelectedColors,
+    selectedSizes,
+    setSelectedSizes
+  } = props;
 
     // Enhance initialValues to include defaults for new validated fields
   const initialValues = {
@@ -104,11 +110,11 @@ const ProductForm1 = props => {
   const [newSize, setNewSize] = useState('');
   const [color, setColor] = useState('#fff');
   const [size, setSize] = useState();
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedAgeGroup, setSelectedAgeGroup] = useState([]);
   const [selectedGender, setSelectedGender] = useState([]);
 
+  // ✨ NEW STATE TO STORE API RESPONSE DETAILS
+  const [subcategoryDetails, setSubcategoryDetails] = useState(null);
 
   //COLOR
   const handleOpenColorDialog = () => setOpenColorDialog(true);
@@ -152,33 +158,36 @@ const ProductForm1 = props => {
     }
   };
 
-  // --- New Function for API Request ---
-  const fetchCategoryItems = async () => {
-      const url = `${pprocess.env.NEXT_PUBLIC_BACKEND_URL}/subcategory-items/${SUBCATEGORY_ID_TO_FETCH}`;
-      
-      console.log(`🚀 Fetching category items from: ${url}`);
-      
-      try {
-          const response = await fetch(url);
+  // --- Updated Function for API Request ---------
+  const fetchCategoryItems = async (categorySlug) => {
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/subcategory-items/slug/${categorySlug}`;
+    
+    console.log(`🚀 Fetching category items from: ${url}`);
+    
+    try {
+        const response = await fetch(url);
 
-          if (!response.ok) {
-              // Throw an error if the response status is not 2xx
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
+        if (!response.ok) {
+            // Throw a custom error with the status for easier debugging downstream
+            throw new Error(`Failed to fetch category items. HTTP status: ${response.status}`);
+        }
 
-          const data = await response.json();
-          
-          // Display the fetched record to the console as requested
-          console.log('✅ Fetched Subcategory Record:', data);
-          
-          return data;
-      } catch (error) {
-          console.error('❌ Error fetching subcategory items:', error);
-          // Return null or throw the error, depending on how you want to handle failure
-          return null; 
-      }
+        const data = await response.json();
+        
+        console.log('✅ Fetched Subcategory Record:', data);
+
+        // ✨ NEW: Store the fetched data in state
+        setSubcategoryDetails(data);
+        
+        return data;
+    } catch (error) {
+        console.error('❌ Error fetching subcategory items:', error);
+        // Clear the state on error
+        setSubcategoryDetails(null);
+        throw error; 
+    }
   };
-  // ------------------------------------
+  // ---------------------------------------------
 
   return (
     <Formik 
@@ -199,30 +208,78 @@ const ProductForm1 = props => {
       }) => {
         
         /**
-         * Category Selection handler - Now assumes it receives the full category path string.
-         * It uses the full path for display but extracts the final category name for Formik's value.
-         * @param {string | null} pathString The full category path (e.g., "Clothing... > Handbags")
+         * Category Selection handler - Now assumes it receives an object containing id, name, path, and slug.
+         * It uses the extracted categorySlug (string) to call the API.
+         * @param {object | null} categoryObject { id, name, path, slug }
          */
-        const handleCategorySelect = (pathString) => {
+        const handleCategorySelect = async (categoryObject) => { // ✨ MADE ASYNC
           let categoryArray = [];
-          
-          if (pathString && typeof pathString === 'string') {
-              // 1. Extract the final category name from the full path string for validation/submission
-              const pathParts = pathString.split(' > ').map(p => p.trim()).filter(p => p.length > 0);
-              const finalCategoryName = pathParts.pop(); 
-              categoryArray = finalCategoryName ? [finalCategoryName] : [];
 
-              // 2. Update local state with the full path string for component display
-              setSelectedCategory(pathString); 
+          if (categoryObject && typeof categoryObject === 'object' && categoryObject.id) {
+
+            // 1. ✨ DESTRUCTURE & EXTRACT VALUES
+            const { name: categoryName, path: pathString, slug: apiSlug } = categoryObject;
+
+            // 2. CREATE THE SLUGIFIED VERSION OF THE NAME
+            const slugifiedName = slugify(categoryName);
+            
+            // NOTE: Using the simple slugifiedName for the API call to match the simple response slug structure.
+            // const finalCategorySlug = `${slugifiedName}-${apiSlug}`; 
+            const finalCategorySlug = slugifiedName;
+
+
+            // Optional Check: Ensure the slug exists before proceeding.
+            if (!finalCategorySlug || typeof finalCategorySlug !== 'string') {
+                console.error("❌ Error: Category slug is missing or invalid in the selected object.", categoryObject);
+                // Clean up Formik state and exit if slug is vital.
+                setSelectedCategory(null);
+                setFieldValue('category', []);
+                setFieldTouched('category', true);
+                return;
+            }
+
+            // 3. Extract the final category name for Formik validation (optional)
+            const pathParts = pathString.split(' > ').map(p => p.trim()).filter(p => p.length > 0);
+            const finalCategoryName = pathParts.pop();
+            categoryArray = finalCategoryName ? [finalCategoryName] : [];
+
+            // 4. Update local state for display
+            setSelectedCategory(pathString); 
+            
+            // 5. **CALL API AND WAIT FOR DATA**
+            console.log("🚀 Calling API with Slug:", finalCategorySlug); 
+            
+            try {
+                const apiData = await fetchCategoryItems(finalCategorySlug); // ✨ AWAIT the data
+
+                // 6. **POPULATE PRODUCT TYPE FIELD BASED ON AR_TYPE**
+                if (apiData?.tag_defaults?.ar_type) {
+
+                  setFieldValue('productType', arType);
+                  
+                } else {
+                    // Default to 'static' if ar_type is missing
+                    setFieldValue('productType', 'static');
+                    console.log("⚠️ ar_type not found in defaults, defaulting productType to static.");
+                }
+
+            } catch (error) {
+                console.error("Error setting product type after category fetch:", error);
+                setFieldValue('productType', 'static'); // Default on failure
+            }
+            
+            // 7. LOG THE OBJECT
+            console.log("Selected Category Object:", categoryObject);
+
           } else {
-              // Handle clear/null selection
-              setSelectedCategory(null);
+            // Handle deselection or null case
+            setSelectedCategory(null);
+            categoryArray = [];
+            setFieldValue('productType', 'static'); // Reset product type on deselection
           }
-          
-          // 3. Update Formik field value (must be an array of strings for Yup validation)
+
+          // 8. Update Formik field value
           setFieldValue('category', categoryArray); 
-          
-          // 4. Mark Formik field as touched (to show error immediately)
           setFieldTouched('category', true);
         };
 
@@ -282,21 +339,26 @@ const ProductForm1 = props => {
                     </Box>
                     
                     {/* Product Type */}
-                    <Box>
-                      <SymRadioButton
-                        label="Product Type"
-                        name="productType"
-                        id="product-type-label"
-                        value={values.productType}
-                        options={[
-                          { value: "static", label: "Static" },
-                          { value: "dynamic", label: "Dynamic" },
-                        ]}
-                        onChange={handleChange}
-                        error={!!touched.productType && !!errors.productType}
-                        helperText={touched.productType && errors.productType}
-                      />                        
-                    </Box>
+                    {values.category.length > 0 && (
+                      <FlexBox alignItems="center" gap={2}>
+                        <H1 sx={{ color:'#FFF' }}>
+                          Product Type
+                        </H1>
+                        <TextField
+                          InputProps={{
+                            style: {
+                                backgroundColor: 'white',
+                                color: '#000',
+                                boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
+                                borderRadius: '8px'
+                              }
+                          }}
+                          color="info"
+                          size="medium"
+                          value={values.productType}
+                        />      
+                      </FlexBox>
+                    )}
 
                     {/* Dimensions */}
                     {values.productType === "static" && (
@@ -524,28 +586,15 @@ const ProductForm1 = props => {
                             Add Size
                           </Button>
                         </Box>
-
                       </FlexBox>
                     </Box>
-                  
-                    {/* Product Variant Table */}
-                    <Box>
-                      {!(selectedColors.length == 0 && selectedSizes.length == 0) ? (
-                        <ProductVariantsTable
-                          colors={selectedColors.map((color) => color.name)}
-                          sizes={selectedSizes.map((size) => size.name)}
-                        />
-                      ) : null
-                      }
-                    </Box>
-
                   </FlexBox> {/* End FlexBox */}
                 </Card>
               </Box>
               {/*Left Card ENDS*/}
 
               {/*STATUS CARD START - Full Width, now positioned below the main form*/}
-              <Box sx={{ 
+              {/* <Box sx={{ 
                 // Removed flexBasis and minWidth - defaults to full width
                 position: 'relative', 
                 zIndex: 1 
@@ -564,60 +613,60 @@ const ProductForm1 = props => {
                   <H1 color='#FFF' fontSize={14} pb={2} >
                     Status
                   </H1>
-                  {/* REPLACED Grid container and item with a simple Box */}
+
                   <Box>
-                       <TextField
-                        select
-                        fullWidth
-                        color="info"
-                        size="medium"
-                        name="status"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.status}
-                        label=""
-                        InputProps={{ style: { backgroundColor: 'white' } }}
-                        SelectProps={{ multiple: false }}
-                        error={!!touched.status && !!errors.status}
-                        helperText={touched.status && errors.status}
-                      >
-                        <MenuItem value="draft">Draft</MenuItem>
-                        <Tooltip title="This option is currently disabled" arrow placement="right">
-                          <span>
-                            <MenuItem value="active" disabled>
-                              Active
-                            </MenuItem>
-                          </span>
-                        </Tooltip>
-                      </TextField>
+                    <TextField
+                      select
+                      fullWidth
+                      color="info"
+                      size="medium"
+                      name="status"
+                      onBlur={handleBlur}
+                      onChange={handleChange}
+                      value={values.status}
+                      label=""
+                      InputProps={{ style: { backgroundColor: 'white' } }}
+                      SelectProps={{ multiple: false }}
+                      error={!!touched.status && !!errors.status}
+                      helperText={touched.status && errors.status}
+                    >
+                      <MenuItem value="draft">Draft</MenuItem>
+                      <Tooltip title="This option is currently disabled" arrow placement="right">
+                        <span>
+                          <MenuItem value="active" disabled>
+                            Active
+                          </MenuItem>
+                        </span>
+                      </Tooltip>
+                    </TextField>
                   </Box>
                 </Card>
-              </Box>
+              </Box> */}
               {/*STATUS CARD ENDS*/}
 
             </FlexBox> {/* Closed the main FlexBox wrapper */}
 
-              {/* Custom Color Dialog */}
-              <ColorDialog
-                color={color}
-                setColor={setColor}
-                open={openColorDialog}
-                onClose={handleCloseColorDialog}
-                newColor={newColor}
-                onChangeColor={(e) => setNewColor(e.target.value)}
-                handleColorChange={handleColorChange}
-                handleCloseColorDialog={handleCloseColorDialog}
-                handleAddCustomColor={handleAddCustomColor}
-              />
+            {/* Custom Color Dialog */}
+            <ColorDialog
+              color={color}
+              setColor={setColor}
+              open={openColorDialog}
+              onClose={handleCloseColorDialog}
+              newColor={newColor}
+              onChangeColor={(e) => setNewColor(e.target.value)}
+              handleColorChange={handleColorChange}
+              handleCloseColorDialog={handleCloseColorDialog}
+              handleAddCustomColor={handleAddCustomColor}
+            />
             
-              {/* Custom Size Dialog */}
-              <SizeDialog
-                newSize={newSize}
-                open={openSizeDialog}
-                onClose={handleCloseSizeDialog}
-                handleChangeSize={(e) => setNewSize(e.target.value)}
-                handleAddCustomSize={handleAddCustomSize}
-              />
+            {/* Custom Size Dialog */}
+            <SizeDialog
+              newSize={newSize}
+              open={openSizeDialog}
+              onClose={handleCloseSizeDialog}
+              handleChangeSize={(e) => setNewSize(e.target.value)}
+              handleAddCustomSize={handleAddCustomSize}
+            />
           </form>
         )
       }}

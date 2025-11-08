@@ -1,10 +1,10 @@
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import styled from "@mui/material/styles/styled";
 import Category from "@/icons/Category"; // Assuming you have this icon path
-import { FlexBox } from "@/components/flex-box"; // Assuming you have this component path
+
 import { CATEGORIES_DATA } from "@/data/categoryMenus"; 
 import { useCallback, useEffect, useState } from "react";
-import { Card, Button, Typography, Box } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 
 // --- LEVEL 0: Main Component ---
 const SymMultiLevelSelect = ({ onCategorySelect, selectedCategory }) => {
@@ -49,63 +49,76 @@ function CategoryMenu({ render, onCategorySelect }) {
       {/* Start of Level 1 dropdown, passing CATEGORIES_DATA (Level 1 array) */}
       <NestedCategoryList 
           open={open} 
-          onCategorySelect={onCategorySelect} 
-          list={CATEGORIES_DATA} // The new source data
-          isRoot={true} // Mark this as the first list
-          currentPath="" // Start with an empty path for the root level
+          onCategorySelect={onCategorySelect}
+          onMenuClose={() => setOpen(false)} // Pass a function to close the menu
+          list={CATEGORIES_DATA}
+          isRoot={true} 
+          currentPath=""
+          level={1} // Start at level 1 for the root list 
       />
     </Wrapper>
   );
 }
 
 // --- LEVEL 1, 2, 3: The Recursive Nested List Component ---
-// This component replaces CategoryList, MegaMenu1, and MegaMenu2 for the sequential flow
-function NestedCategoryList({ open, onCategorySelect, list, isRoot = false, currentPath }) {
-  const [activeItem, setActiveItem] = useState(null); // State to track the active option
+function NestedCategoryList({ open, onCategorySelect, onMenuClose, list, isRoot = false, currentPath, level }) {
+  const [activeItem, setActiveItem] = useState(null);
   
   // Conditionally apply style root only for the main dropdown
   const ListComponent = isRoot ? StyledRoot : StyledNestedRoot;
 
   return (
-    <ListComponent open={open} position={isRoot ? "absolute" : "static"}>
+    <ListComponent open={open} position={isRoot ? "absolute" : "static"} level={level}>
       {list.map((item) => {
-        // Determine the current level and the next level's data array
         let nextLevelData = [];
         let isFinalLevel = false;
 
-        if (item.subcategories) { // Level 1: Has 'subcategories' (Level 2 data)
+        // Logic to determine the next level data
+        if (item.subcategories) {
             nextLevelData = item.subcategories;
-        } else if (item.subcategoryItems) { // Level 2: Has 'subcategoryItems' (Level 3 data)
+        } else if (item.subcategoryItems) {
             nextLevelData = item.subcategoryItems;
-        } else if (item.subcategoryItemChildren) { // Level 3: Has 'subcategoryItemChildren' (Level 4 data, the final one)
+        } else if (item.subcategoryItemChildren) {
             nextLevelData = item.subcategoryItemChildren;
         } else {
-            isFinalLevel = true; // This is the final selectable item (Level 4)
+            isFinalLevel = true; 
         }
 
         const title = item.name;
-        // Construct the new path for the next level/final selection
         const nextPath = currentPath ? `${currentPath} > ${title}` : title;
+        
+        // Logic to handle selection and pass ID
+        const handleItemClick = (e) => {
+            e.stopPropagation(); 
+            if (isFinalLevel) {
+                onCategorySelect({ 
+                    id: item.id,
+                    name: item.name,
+                    path: nextPath,
+                }); 
+            }
+            onMenuClose();
+        };
 
         return (
           <CategoryListItem
             key={item.id}
             title={title}
-            caret={!!nextLevelData.length} // Show caret if there is a next level
-            // If it's the final level, call onCategorySelect with the FULL path (nextPath)
-            onClick={() => isFinalLevel && onCategorySelect(nextPath)} 
+            caret={!!nextLevelData.length}
+            onClick={handleItemClick}
             isActive={activeItem === title} 
-            // Hover logic to show the next level
             onHover={() => setActiveItem(title)} 
             render={
               nextLevelData.length ? (
-                // Recursively render the next level, passing the calculated nextPath
-                <NestedCategoryList 
-                  open={activeItem === title} // Only open if this item is active
-                  onCategorySelect={onCategorySelect} 
+                // Recursive call to the next level
+                <NestedCategoryList
+                  open={activeItem === title}
+                  onCategorySelect={onCategorySelect}
+                  onMenuClose={onMenuClose}
                   list={nextLevelData} 
                   isRoot={false}
-                  currentPath={nextPath} // Pass the path down
+                  currentPath={nextPath}
+                  level={level + 1} // Increment the level for the next list
                 />
               ) : null
             }
@@ -116,7 +129,7 @@ function NestedCategoryList({ open, onCategorySelect, list, isRoot = false, curr
   );
 }
 
-// --- Generic List Item for All Levels (CategoryListItem is renamed to avoid confusion with the old structure) ---
+// --- Generic List Item for All Levels ---
 function CategoryListItem({ title, onClick, render, caret = true, icon: Icon, isActive, onHover }) {
   return (
     <Wrapper1 
@@ -136,13 +149,12 @@ function CategoryListItem({ title, onClick, render, caret = true, icon: Icon, is
   );
 }
 
-// --- Styled Components (Minimal changes to support the sequential flow) ---
+// --- Styled Components ---
 
 // StyledRoot is for the main (Level 1) dropdown
 const StyledRoot = styled("div")(({ theme, position, open }) => ({
-  // ... (existing styles for the main dropdown)
   left: 0,
-  zIndex: 10000, // 👈 INCREASED Z-INDEX HERE
+  zIndex: 10000, 
   right: "auto",
   borderRadius: 4,
   padding: "0.5rem 0px",
@@ -153,27 +165,18 @@ const StyledRoot = styled("div")(({ theme, position, open }) => ({
   transform: open ? "scaleY(1)" : "scaleY(0)",
   backgroundColor: theme.palette.background.paper,
   top: position === "absolute" ? "calc(100% + 0.7rem)" : "0.5rem",
-  minWidth: "280px", // Ensure main list has width
+  minWidth: "280px",
 }));
 
-// StyledNestedRoot is for Level 2 and Level 3 dropdowns
-// New width variable based on CategoryListItem's minWidth
 const CATEGORY_ITEM_WIDTH = "278px";
 
-// StyledNestedRoot is for Level 2 and Level 3 dropdowns
-// StyledNestedRoot is for Level 2, 3, etc. dropdowns
+// FIX APPLIED HERE: Simplified positioning by removing the redundant left calculation.
 const StyledNestedRoot = styled("div")(({ theme, open, level }) => ({
     display: open ? 'block' : 'none',
-    position: 'absolute', 
+    position: 'absolute',
     top: 0,
     zIndex: 99,
-    // 🚨 CORRECTED POSITIONING: 
-    // Shift the menu by one extra list width (278px) if the current menu level is 3 or higher.
-    // Level 2 (level=2) -> left: 100% (correct)
-    // Level 3 (level=3) -> left: calc(100% + 278px) (correctly aligns with Level 2's starting point)
-    // Level 4 (level=4) -> left: calc(100% + 278px) (which will align with Level 3's starting point)
-    left: level >= 3 ? `calc(100% + ${CATEGORY_ITEM_WIDTH})` : "100%", 
-    
+    left: 0, 
     borderRadius: 4,
     padding: "0.5rem 0px",
     boxShadow: theme.shadows[3],
@@ -183,17 +186,16 @@ const StyledNestedRoot = styled("div")(({ theme, open, level }) => ({
 
 
 const Wrapper = styled("div")(({ open, theme: { direction } }) => ({
-  // ... (existing styles)
   cursor: "pointer",
   position: "relative",
   "& .dropdown-icon": {
     transition: "all 250ms ease-in-out",
+    // ⬇️ FIX APPLIED HERE: The closing parenthesis for 'rotate()' is now inside the template literal (before the final backtick)
     transform: `rotate(${open ? (direction === "rtl" ? "-90deg" : "90deg") : "0deg"})`,
   },
 }));
 
 const CategoryMenuButton = styled(Button)(({ theme }) => ({
-  // ... (existing styles)
   width: "100%",
   borderRadius: 4,
   backgroundColor: theme.palette.grey[100],
@@ -207,6 +209,9 @@ const CategoryMenuButton = styled(Button)(({ theme }) => ({
 }));
 
 const Wrapper1 = styled("div")(({ theme }) => ({
+  // Set position relative for the list item to serve as the anchor for the mega-menu
+  position: "relative", // 👈 This is crucial for absolute positioning of nested menus
+  
   "& .category-dropdown-link": {
     height: 40,
     display: "flex",
@@ -216,9 +221,7 @@ const Wrapper1 = styled("div")(({ theme }) => ({
     padding: "0px 1rem",
     alignItems: "center",
     transition: "all 300ms ease-in-out",
-    
-    // Default color for the link itself
-    color: theme.palette.text.primary, // Ensure default text color is applied
+    color: theme.palette.text.primary,
 
     ".title": {
       flexGrow: 1,
@@ -226,16 +229,12 @@ const Wrapper1 = styled("div")(({ theme }) => ({
     },
   },
   
-  // 🚨 CORRECTED STYLES: 
-  // 1. Only apply primary color and background to the current item on hover/active.
-  // 2. Do NOT change color at the top level of Wrapper1.
   "& .category-dropdown-link:hover, &.active > .category-dropdown-link": {
-    color: theme.palette.primary.main, // ⬅️ ONLY apply blue color here
+    color: theme.palette.primary.main,
   },
   
-  ":hover, &.active": { // Apply hover and active styles to the container
-    // Removed 'color: theme.palette.primary.main,' from here.
-    background: theme.palette.action.hover, // Apply the light background
+  ":hover, &.active": {
+    background: theme.palette.action.hover,
     
     "& > .mega-menu > div": {
       display: "block",
@@ -245,13 +244,9 @@ const Wrapper1 = styled("div")(({ theme }) => ({
   ".mega-menu": {
     top: 0,
     zIndex: 99,
-    left: "100%",
+    left: "100%", // This shifts the nested list 100% to the right of the list item
     position: "absolute",
   },
 }));
-
-
-// Removed unused components (MegaMenu1, ColumnList, MegaMenu2, StyledRoot1) 
-// as they are no longer necessary for the sequential dropdown structure.
 
 export default SymMultiLevelSelect;

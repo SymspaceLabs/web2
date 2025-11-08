@@ -32,6 +32,15 @@ export class SubcategoryItemsController {
     return this.subcategoryItemsService.findOne(id);
   }
 
+  // 🌟 NEW ENDPOINT: Find Subcategory Item by Slug
+  // The route is set to 'by-slug/:slug' to avoid collision with ':id'.
+  @Get('slug/:slug')
+  findOneBySlug(@Param('slug') slug: string) {
+    // This calls the new method in the service
+    return this.subcategoryItemsService.findOneBySlug(slug);
+  }
+  // ----------------------------------------------
+
   @Patch(':id')
   update(
     @Param('id') id: string,

@@ -8,6 +8,7 @@ import {
   Paper,
   IconButton,
   Collapse,
+  TextField
 } from '@mui/material';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -22,7 +23,7 @@ import SymTextField from './SymTextField'; // <-- Placeholder: Import your gener
 import ImageIcon from '@mui/icons-material/Image';
 
 
-import { StyledTableCell, tableContainerStyles, tableFooterTextStyles, StyledTableRow  } from './TableStyles';
+import { StyledTableCell, tableContainerStyles, tableFooterTextStyles, StyledTableRow  } from './TableStyles';
 
 // 1. UPDATED: Add material and image to data structure
 function createData(color, size, price, salePrice, supply, cost, profit, material, image) {
@@ -58,7 +59,7 @@ function generateVariants(colors, sizes, masterValues) {
         masterValues.cost, 
         profit,
         masterValues.material || '', // Default material
-        masterValues.image || null    // Default image
+        masterValues.image || null   // Default image
       ));
     } else {
       // Create a row for each size under the color
@@ -73,7 +74,7 @@ function generateVariants(colors, sizes, masterValues) {
           masterValues.cost, 
           profit,
           masterValues.material || '', // Default material
-          masterValues.image || null    // Default image
+          masterValues.image || null   // Default image
         ));
       });
     }
@@ -96,7 +97,7 @@ function ProductVariantsTable({ colors, sizes }) {
     cost: '',
     profit: '',
     material: '', // New field
-    image: null,  // New field (assuming this will hold a file or URL)
+    image: null,  // New field (assuming this will hold a file or URL)
   });
   const [totalProfit, setTotalProfit] = useState(0);
 
@@ -215,7 +216,7 @@ function ProductVariantsTable({ colors, sizes }) {
                 cost: existingRow.cost || newRow.cost,
                 profit: existingRow.profit || newRow.profit,
                 material: existingRow.material || newRow.material, // Keep existing material
-                image: existingRow.image || newRow.image,      // Keep existing image
+                image: existingRow.image || newRow.image,      // Keep existing image
               }
             : newRow;
         }
@@ -224,7 +225,7 @@ function ProductVariantsTable({ colors, sizes }) {
             ...existingRow, 
             ...newRow, 
             material: existingRow.material || newRow.material, // Keep existing material
-            image: existingRow.image || newRow.image,          // Keep existing image
+            image: existingRow.image || newRow.image,          // Keep existing image
         } : newRow;
       });
     });
@@ -321,21 +322,13 @@ function ProductVariantsTable({ colors, sizes }) {
     <TableContainer component={Paper} sx={tableContainerStyles}>
       <Table sx={{ minWidth: 1200 }} aria-label="customized table">
 
-        {/* TABLE HEAD - Material Tooltip Removed */}
+        {/* TABLE HEAD */}
         <TableHead>
           <TableRow>
             <StyledTableCell padding="checkbox" />
             <StyledTableCell sx={{ width: '150px', textAlign: 'left' }}>
               Variant
               <SymTooltip title="Select the product variant" />
-            </StyledTableCell>
-            {/* ❌ REMOVED TOOLTIP from header column */}
-            <StyledTableCell sx={{ width: '150px', textAlign: 'left' }}>
-              Material
-            </StyledTableCell>
-            <StyledTableCell sx={{ width: '50px', textAlign: 'center' }}>
-              Image
-              <SymTooltip title="Variant Image" />
             </StyledTableCell>
             <StyledTableCell align="right" sx={{ width: '120px' }}>
               Price
@@ -357,6 +350,13 @@ function ProductVariantsTable({ colors, sizes }) {
               Profit
               <SymTooltip title="Select the product variant" />
             </StyledTableCell>
+            <StyledTableCell sx={{ width: '150px', textAlign: 'left' }}>
+              Material
+            </StyledTableCell>
+            <StyledTableCell sx={{ width: '50px', textAlign: 'center' }}>
+              Image
+              <SymTooltip title="Variant Image" />
+            </StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -365,30 +365,21 @@ function ProductVariantsTable({ colors, sizes }) {
           <StyledTableRow>
             <StyledTableCell />
             <StyledTableCell>Update All Variants</StyledTableCell>
-            {/* ✅ Master Material Input (SymTooltip removed from inside here) */}
-            <StyledTableCell align="left">
-              <SymTextField
-                // ❌ SymTooltip component removed here
-                value={masterValues.material}
-                onChange={(e) => handleMasterChange('material', e.target.value)}
-                placeholder="e.g. Cotton, Silk"
-              />
-            </StyledTableCell>
-            {/* ✅ Master Image Placeholder (Image is usually not mass-updated) */}
-            <StyledTableCell /> 
-            
+                        
             <StyledTableCell align="right">
               <SymMoneyTextField
                 value={masterValues.price}
                 onChange={(e) => handleMasterChange('price', e.target.value)}
               />
             </StyledTableCell>
+
             <StyledTableCell align="right">
               <SymMoneyTextField
                 value={masterValues.salePrice}
                 onChange={(e) => handleMasterChange('salePrice', e.target.value)}
               />
             </StyledTableCell>
+
             <StyledTableCell align="right">
               <SymNumberTextField
                 value={masterValues.supply}
@@ -398,12 +389,14 @@ function ProductVariantsTable({ colors, sizes }) {
                 }}
               />
             </StyledTableCell>
+
             <StyledTableCell align="right">
               <SymMoneyTextField
                 value={masterValues.cost}
                 onChange={(e) => handleMasterChange('cost', e.target.value)}
               />
             </StyledTableCell>
+
             <StyledTableCell align="right">
               <SymMoneyTextField
                 value={masterValues.profit}
@@ -413,6 +406,30 @@ function ProductVariantsTable({ colors, sizes }) {
                 isProfit={true}
               />
             </StyledTableCell>
+
+            {/* 🎯 Master Material Input: SymTooltip removed */}
+            <StyledTableCell align="left">
+              <TextField
+                InputProps={{
+                  style: {
+                      backgroundColor: 'white',
+                      color: '#000',
+                      boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
+                      borderRadius: '8px'
+                  }
+                }}
+                variant="outlined" // Or 'standard' or 'filled', depending on your design
+                size="small"
+                fullWidth
+                value={masterValues.material}
+                onChange={(e) => handleMasterChange('material', e.target.value)}
+                placeholder="e.g. Cotton, Silk"
+              />
+            
+            </StyledTableCell>
+            {/* ✅ Master Image Placeholder (Image is usually not mass-updated) */}
+            <StyledTableCell /> 
+
           </StyledTableRow>
           {Object.keys(groupedVariants).map((color) => (
             <React.Fragment key={color}>
@@ -426,22 +443,7 @@ function ProductVariantsTable({ colors, sizes }) {
                 <StyledTableCell component="th" scope="row" sx={{ textAlign: 'left' }}>
                   {color}
                 </StyledTableCell>
-                {/* ✅ Parent Material Input (SymTooltip removed from input area) */}
-                <StyledTableCell align="left">
-                  <SymTextField
-                    // ❌ SymTooltip component removed here
-                    value={groupedVariants[color][0].material}
-                    onChange={(e) => handleParentChange(color, 'material', e.target.value)}
-                  />
-                </StyledTableCell>
-                {/* ✅ Parent Image Placeholder */}
-                <StyledTableCell align="center">
-                  {groupedVariants[color][0].image ? (
-                    <ImageIcon color="primary" /> // Display icon if image exists
-                  ) : (
-                    <ImageIcon color="disabled" /> // Placeholder icon
-                  )}
-                </StyledTableCell>
+
 
                 <StyledTableCell align="right">
                   <SymMoneyTextField
@@ -449,12 +451,14 @@ function ProductVariantsTable({ colors, sizes }) {
                     onChange={(e) => handleParentChange(color, 'price', e.target.value)}
                   />
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <SymMoneyTextField
                     value={groupedVariants[color][0].salePrice}
                     onChange={(e) => handleParentChange(color, 'salePrice', e.target.value)}
                   />
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <SymNumberTextField
                     value={groupedVariants[color][0].supply}
@@ -464,12 +468,14 @@ function ProductVariantsTable({ colors, sizes }) {
                     }}
                   />
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <SymMoneyTextField
                     value={groupedVariants[color][0].cost}
                     onChange={(e) => handleParentChange(color, 'cost', e.target.value)}
                   />
                 </StyledTableCell>
+
                 <StyledTableCell align="right">
                   <SymMoneyTextField
                     value={groupedVariants[color][0].profit}
@@ -479,13 +485,42 @@ function ProductVariantsTable({ colors, sizes }) {
                     isProfit={true}
                   />
                 </StyledTableCell>
+
+                {/* 🎯 Parent Material Input: SymTooltip removed */}
+                <StyledTableCell align="left">
+                  <TextField
+                    InputProps={{
+                      style: {
+                          backgroundColor: 'white',
+                          color: '#000',
+                          boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
+                          borderRadius: '8px'
+                      }
+                    }}
+                    value={groupedVariants[color][0].material}
+                    onChange={(e) => handleParentChange(color, 'material', e.target.value)}
+                    variant="outlined" // Or 'standard' or 'filled', depending on your design
+                    size="small"
+                    fullWidth
+                  />
+                </StyledTableCell>
+
+                {/* ✅ Parent Image Placeholder */}
+                <StyledTableCell align="center">
+                  {groupedVariants[color][0].image ? (
+                    <ImageIcon color="primary" /> // Display icon if image exists
+                  ) : (
+                    <ImageIcon color="disabled" /> // Placeholder icon
+                  )}
+                </StyledTableCell>
+
               </StyledTableRow>
 
               {/* Collapsible child rows */}
               <StyledTableRow>
                 <StyledTableCell colSpan={9}> 
                   <Collapse in={expanded[color]} timeout="auto" unmountOnExit>
-                    <Table sx={{ minWidth: 1200 }}  size="small" aria-label="variants" >
+                    <Table sx={{ minWidth: 1200 }}  size="small" aria-label="variants" >
                       <TableBody>
                         {groupedVariants[color].map((row, index) => {
                           // Skip the color-only row in the collapsible section
@@ -502,10 +537,10 @@ function ProductVariantsTable({ colors, sizes }) {
                                 {row.size || color}
                               </StyledTableCell>
 
-                              {/* ✅ Child Material Input (NO TOOLTIP) */}
+                              {/* 🎯 Child Material Input: SymTooltip removed */}
                               <StyledTableCell sx={{ minWidth: '150px' }}>
                                 <SymTextField
-                                  // ❌ SymTooltip component removed here
+                                  // REMOVED: <SymTooltip title="Material description" />
                                   value={variantValues[key]?.material || ''}
                                   onChange={(e) => handleVariantChange(key, 'material', e.target.value)}
                                 />

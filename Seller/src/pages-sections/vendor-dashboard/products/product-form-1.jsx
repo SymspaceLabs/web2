@@ -254,7 +254,10 @@ const ProductForm1 = props => {
 
                 // 6. **POPULATE PRODUCT TYPE FIELD BASED ON AR_TYPE**
                 if (apiData?.tag_defaults?.ar_type) {
-
+                  // Extract the ar_type value
+                  const arType = apiData.tag_defaults.ar_type;
+                  
+                  // Set the Formik field value for 'productType'
                   setFieldValue('productType', arType);
                   
                 } else {
@@ -345,18 +348,26 @@ const ProductForm1 = props => {
                           Product Type
                         </H1>
                         <TextField
+                          // 1. Remove the 'disabled' prop.
+                          // 2. Add InputProps for readOnly and style overrides
                           InputProps={{
+                            // Apply the standard readOnly attribute to the native <input>
+                            readOnly: true, 
+                            
                             style: {
-                                backgroundColor: 'white',
-                                color: '#000',
-                                boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
-                                borderRadius: '8px'
-                              }
+                              backgroundColor: 'white',
+                              color: '#000', // Text color will be correct by default
+                              boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
+                              borderRadius: '8px',
+                              
+                              // CRITICAL: Prevents clicking, focus, and cursor appearance
+                              pointerEvents: 'none', 
+                            }
                           }}
                           color="info"
                           size="medium"
                           value={values.productType}
-                        />      
+                        />
                       </FlexBox>
                     )}
 

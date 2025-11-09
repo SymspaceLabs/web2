@@ -244,7 +244,7 @@ export const CATEGORIES_DATA = [
         slug: "home-entertainment",
         mobileLevel1:"Electronics",
         subcategoryItems: [
-         //vertical-plane detection{ id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "Televisions", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+          { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "Televisions", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
           { id: "77c5ab4b-beb5-4e43-b71f-0c83a02b16af", name: "Sound Systems", slug: "sound-systems", mobileLevel2: "Sound Systems", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "5c3a74d9-1f9e-4bfb-833f-02a32c10874c", name: "Streaming Devices", slug: "streaming-devices", mobileLevel2: "Streaming Devices", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "7b32f0d6-8e1b-4413-8b91-2552648b7dc5", name: "Blu-ray & DVD Players", slug: "blu-ray-dvd-players", mobileLevel2: "Other Electronics", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
@@ -416,7 +416,7 @@ export const CATEGORIES_DATA = [
             slug: "storage",
             subcategoryItemChildren: [
               { id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8", name: "Filing Cabinets", slug: "filing-cabinets", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-             //vertical-plane detection { id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b", name: "Bookcases & Shelving", slug: "bookcases-shelving", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b", name: "Bookcases & Shelving", slug: "bookcases-shelving", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } }
             ],
           }
         ]
@@ -479,7 +479,7 @@ export const CATEGORIES_DATA = [
             slug: "lighting",
             subcategoryItemChildren: [
               { id: "1a2b3c4d-5e6f-7a8b-9c0d-e1f2a3b4c5d6", name: "Ceiling Fixtures", slug: "ceiling-fixtures", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-             //vertical-plane detection { id: "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e", name: "Wall Sconces", slug: "wall-sconces", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e", name: "Wall Sconces", slug: "wall-sconces", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
               { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Table Lamps", slug: "table-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
               { id: "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f90", name: "Floor Lamps", slug: "floor-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ],

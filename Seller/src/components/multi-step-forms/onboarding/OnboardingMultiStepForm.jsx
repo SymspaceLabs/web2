@@ -68,7 +68,7 @@ const OnboardingMultiStepForm = ({
             }
 
             {/* Show Congrats, step==0 */}
-            {(step === 5 && !user.isSellerOnboardingFormFilled1) && 
+            {(step === 5 && !user?.isSellerOnboardingFormFilled1) && 
                 <CongratsCard
                     openStoreDialog={handleOpenStoreDialog}
                 />

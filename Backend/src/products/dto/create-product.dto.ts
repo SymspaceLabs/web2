@@ -53,6 +53,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   price: number;
 
+  @IsNumber()
+  @IsOptional()
+  salePrice?: number;
+
   @IsString()
   @IsOptional()
   category?: string;

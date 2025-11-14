@@ -21,7 +21,7 @@ const SymDivider = ({
             </Typography>
             {toolTipText && (
                 <Tooltip title={toolTipText} arrow>
-                    <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                    <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                 </Tooltip>
             )}
         </FlexBox>

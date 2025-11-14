@@ -40,7 +40,7 @@ const SymTextField = ({
         {mandatory && <H5 color="error.main">*</H5>}
         {toolTipText && (
           <Tooltip title={toolTipText} arrow>
-            <InfoOutlined sx={{ color: isLight ? "#000" : "#fff", fontSize: 16 }} />
+            <InfoOutlined sx={{ color: isLight ? "#000" : "#fff", fontSize: 10 }} />
           </Tooltip>
         )}
       </FlexBox>

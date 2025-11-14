@@ -6,24 +6,104 @@ import { CATEGORIES_DATA } from "@/data/categoryMenus";
 import { useCallback, useEffect, useState } from "react";
 import { Button, Typography, Box } from "@mui/material";
 
-// --- LEVEL 0: Main Component ---
-const SymMultiLevelSelect = ({ onCategorySelect, selectedCategory }) => {
+// --- Utility Function: Find Category Path by ID ---
+/**
+ * Recursively searches through the category lists to find the full path and name 
+ * of an item given its ID.
+ */
+const findCategoryDetails = (lists, targetId, currentPath = "") => {
+  for (const item of lists) {
+    const newPath = currentPath ? `${currentPath} > ${item.name}` : item.name;
+
+    // 1. Check if the current item is the target
+    if (item.id === targetId) {
+      return { id: item.id, name: item.name, path: newPath };
+    }
+
+    // 2. Determine the next list for recursion (using existing component logic)
+    let nextLevelData = [];
+    if (item.subcategories) {
+      nextLevelData = item.subcategories;
+    } else if (item.subcategoryItems) {
+      nextLevelData = item.subcategoryItems;
+    } else if (item.subcategoryItemChildren) {
+      nextLevelData = item.subcategoryItemChildren;
+    }
+
+    // 3. Recurse if there are subcategories
+    if (nextLevelData.length) {
+      const found = findCategoryDetails(nextLevelData, targetId, newPath);
+      if (found) {
+        return found; // Return the path if found in a sub-level
+      }
+    }
+  }
+  return null; // Not found in this level
+};
+
+// --- LEVEL 0: Main Component (Fixed for Display Logic) ---
+const SymMultiLevelSelect = ({ onCategorySelect, selectedCategory, error, helperText }) => {
+  // State to hold the display text (breadcrumb or just the name)
+  // This state manages what appears on the button
+  const [displayText, setDisplayText] = useState(null);
+
+  // Function to handle selection from the menu
+  const handleCategorySelectWrapper = ({ id, name, path }) => {
+    // 1. Set the display text immediately upon selection
+    setDisplayText(path);
+    // 2. Call the original handler (passes full object to parent)
+    onCategorySelect({ id, name, path }); 
+  };
+  
+  // Effect to determine the correct display text from the 'selectedCategory' prop
+  useEffect(() => {
+    if (!selectedCategory) {
+      setDisplayText(null);
+      return;
+    }
+
+    // Check if the prop is an ID (number) or a string (already the name/path)
+    // We treat any number (or string representation of a number) as an ID to search
+    if (typeof selectedCategory === 'number' || (typeof selectedCategory === 'string' && !isNaN(parseInt(selectedCategory)))) {
+      
+      const idToSearch = typeof selectedCategory === 'string' ? parseInt(selectedCategory, 10) : selectedCategory;
+      const details = findCategoryDetails(CATEGORIES_DATA, idToSearch);
+      
+      if (details) {
+        setDisplayText(details.path);
+      } else {
+        // Fallback: If ID is present but not found, clear display
+        setDisplayText(null); 
+      }
+    } else if (typeof selectedCategory === 'string') {
+      // SCENARIO 2: Prop is already the name/path string (e.g., "Electronics > TV")
+      setDisplayText(selectedCategory);
+    }
+  }, [selectedCategory]);
+
+
   return (
     <Box sx={{ width: "100%" }}>
       <CategoryMenu
-        onCategorySelect={onCategorySelect}
+        onCategorySelect={handleCategorySelectWrapper} 
         render={(handler) => (
-          <CategoryMenuButton variant="text" onClick={(e) => handler(e)}>
+          <CategoryMenuButton variant="text" error={error} onClick={(e) => handler(e)}>
             <div className="prefix">
               <Category fontSize="small" />
               <Typography sx={{textTransform: "capitalize",}}>
-                Categories {selectedCategory ? ` - ${selectedCategory}` : ""}
+                Categories {displayText ? ` - ${displayText}` : ""} 
               </Typography>
             </div>
             <ChevronRight className="dropdown-icon" fontSize="small" />
           </CategoryMenuButton>
         )}
       />
+      {/* Optional helper/error text display */}
+      {error && helperText && (
+          <Typography variant="caption" color="error" sx={{ml: 1}}>
+              {helperText}
+          </Typography>
+      )}
     </Box>
   );
 };
@@ -170,13 +250,10 @@ const StyledRoot = styled("div")(({ theme, position, open }) => ({
 
 const CATEGORY_ITEM_WIDTH = "278px";
 
-// FIX APPLIED HERE: Simplified positioning by removing the redundant left calculation.
+// FIX APPLIED HERE: Nested list relies on the parent's .mega-menu for absolute positioning (left: 100%).
 const StyledNestedRoot = styled("div")(({ theme, open, level }) => ({
     display: open ? 'block' : 'none',
-    position: 'absolute',
-    top: 0,
-    zIndex: 99,
-    left: 0, 
+    // position, top, left, and zIndex are handled by the .mega-menu parent in Wrapper1
     borderRadius: 4,
     padding: "0.5rem 0px",
     boxShadow: theme.shadows[3],
@@ -190,15 +267,22 @@ const Wrapper = styled("div")(({ open, theme: { direction } }) => ({
   position: "relative",
   "& .dropdown-icon": {
     transition: "all 250ms ease-in-out",
-    // ⬇️ FIX APPLIED HERE: The closing parenthesis for 'rotate()' is now inside the template literal (before the final backtick)
     transform: `rotate(${open ? (direction === "rtl" ? "-90deg" : "90deg") : "0deg"})`,
   },
 }));
 
-const CategoryMenuButton = styled(Button)(({ theme }) => ({
+const CategoryMenuButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'error' && prop !== 'helperText',
+})(({ theme, error }) => ({
   width: "100%",
-  borderRadius: 4,
-  backgroundColor: theme.palette.grey[100],
+  justifyContent: "space-between",
+  alignItems: "center",
+  textTransform: "none",
+  padding: theme.spacing(1, 2),
+  borderRadius: "8px",
+  backgroundColor: 'white',
+  color: 'black',
+  border: error ? '2px solid red' : '1px solid grey',
   ".prefix": {
     gap: 8,
     flex: 1,
@@ -210,7 +294,7 @@ const CategoryMenuButton = styled(Button)(({ theme }) => ({
 
 const Wrapper1 = styled("div")(({ theme }) => ({
   // Set position relative for the list item to serve as the anchor for the mega-menu
-  position: "relative", // 👈 This is crucial for absolute positioning of nested menus
+  position: "relative", 
   
   "& .category-dropdown-link": {
     height: 40,
@@ -236,6 +320,7 @@ const Wrapper1 = styled("div")(({ theme }) => ({
   ":hover, &.active": {
     background: theme.palette.action.hover,
     
+    // This targets the StyledNestedRoot component (which is the div inside .mega-menu)
     "& > .mega-menu > div": {
       display: "block",
     },

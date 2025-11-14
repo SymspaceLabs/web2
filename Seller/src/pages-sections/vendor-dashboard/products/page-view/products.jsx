@@ -103,7 +103,7 @@ const ProductsPageView = () => {
     name: item.name,
     brand: item.brand,
     price: item.price,
-    image: item.images[0].url,
+    image: item?.images[0]?.url,
     published: item.published,
     category: item.categories?.[0] || 'N/A'
   }));

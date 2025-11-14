@@ -41,7 +41,7 @@ const SymRichTextInputBox = ({ id, placeholder, value, onChange, simple }) => {
             </FormLabel>
             <Tooltip title="Provide a detailed description of the product">
                 <IconButton>
-                    <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                    <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                 </IconButton>
             </Tooltip>
         </Box>

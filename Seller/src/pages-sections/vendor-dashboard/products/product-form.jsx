@@ -63,7 +63,7 @@ const ProductForm = props => {
                     </H1>
                     <Tooltip title="Enter the product's name">
                       <IconButton>
-                        <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                        <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -79,7 +79,7 @@ const ProductForm = props => {
                       </FormLabel>
                       <Tooltip title="Select the product type">
                         <IconButton>
-                          <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                          <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                         </IconButton>
                       </Tooltip>
                     </Box>
@@ -98,7 +98,7 @@ const ProductForm = props => {
                     </H1>
                     <Tooltip title="Specify the dimensions">
                       <IconButton>
-                        <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                        <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -113,7 +113,7 @@ const ProductForm = props => {
                     </H1>
                     <Tooltip title="Choose a category for the product">
                       <IconButton>
-                        <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                        <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                       </IconButton>
                     </Tooltip>
                   </Box>
@@ -133,7 +133,7 @@ const ProductForm = props => {
                         </FormLabel>
                         <Tooltip title="Provide a detailed description of the product">
                           <IconButton>
-                            <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                            <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                           </IconButton>
                         </Tooltip>
                       </Box>

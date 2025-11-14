@@ -5,17 +5,18 @@
 import * as yup from "yup";
 import styles from './styles';
 import DropZone3D from './components/DropZone3D';
-import DropZone from "../../../components/DropZone";
 import SymTextField from './components/SymTextField';
 
 import { Formik } from "formik";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { H1 } from "@/components/Typography";
 import { InfoOutlined } from "@mui/icons-material";
-import { UploadImageBox, StyledClear } from "../styles";
-import { Box, Card, Typography, Tooltip, IconButton } from "@mui/material"; 
-import { SortableContainer, SortableElement, arrayMove } from "react-sortable-hoc";
+
+import { Box, Card, Tooltip, IconButton } from "@mui/material"; 
+import { arrayMove } from "react-sortable-hoc";
 import ProductVariantsTable from "./components/product-variants-1";
+import ProductImageUploader from './components/ProductImageUploader';
+import { SortableList } from "./components/ImageUploadComponents";
 
 //========================================================================
 
@@ -32,7 +33,7 @@ const ProductVariantsTablePlaceholder = ({selectedColors,selectedSizes}) => (
               </H1>
               <Tooltip title="Manage variations like Color, Size, and corresponding SKUs/Prices">
                   <IconButton>
-                      <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                      <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                   </IconButton>
               </Tooltip>
             </Box>
@@ -48,56 +49,6 @@ const ProductVariantsTablePlaceholder = ({selectedColors,selectedSizes}) => (
 );
 // ---------------------------------------------
 
-
-// SortableItem component... (KEEP UNCHANGED)
-const SortableItem = SortableElement(({ file, index, fileIndex, isDragging, selected, handleClick, handleFileDelete }) => (
-    <UploadImageBox 
-        key={index} 
-        onClick={() => handleClick(index)} 
-        sx={{
-            position: 'relative',
-            border: selected ? '3px solid white' : 'none', 
-            opacity: isDragging ? 0.7 : 1, 
-            cursor: 'grab',
-        }}
-    >
-        <Box component="img" src={file.preview} width="100%" />
-        <Typography 
-            variant="caption" 
-            sx={{
-                position: 'absolute',
-                top: 8,
-                left: 8,
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                color: 'white',
-                padding: '2px 5px',
-                borderRadius: '4px',
-            }}
-        >
-            {fileIndex + 1} 
-        </Typography>
-        <StyledClear onClick={() => handleFileDelete(file)} />
-    </UploadImageBox>
-));
-
-// SortableList component... (KEEP UNCHANGED)
-const SortableList = SortableContainer(({ files, selectedImage, handleClick, handleFileDelete }) => {
-    return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, flexWrap: 'wrap', gap: 1 }}>
-            {files.map((file, index) => (
-                <SortableItem 
-                    key={`item-${index}`} 
-                    index={index} 
-                    file={file}
-                    fileIndex={index}
-                    selected={selectedImage === index} 
-                    handleClick={handleClick}
-                    handleFileDelete={handleFileDelete} 
-                />
-            ))}
-        </Box>
-    );
-});
 
 const VALIDATION_SCHEMA = yup.object().shape({
     name: yup.string().required("Name is required!"),
@@ -126,6 +77,23 @@ const ProductForm2 = props => {
         );
         setProductImages(prevImages => [...prevImages, ...newFiles]);
     };
+
+    // New, clean function for deleting an image by index
+    const handleImageDelete = useCallback((fileToDelete) => {
+        console.log("Attempting to delete file:", fileToDelete.name); // DEBUG 1
+        
+        setProductImages(prevImages => {
+            const newImages = prevImages.filter(item => item !== fileToDelete);
+            console.log("Images remaining:", newImages.length); // DEBUG 2
+            
+            // OPTIONAL: Reset selected image if the primary image was deleted
+            if (selectedImage !== null && newImages[selectedImage] === fileToDelete) {
+                setSelectedImage(null);
+            }
+            
+            return newImages;
+        });
+    }, [/* dependencies like selectedImage, setSelectedImage */]);
     
     const handleModelDrop = (acceptedFiles) => {
         const newFiles = acceptedFiles.map(file =>
@@ -195,33 +163,16 @@ const ProductForm2 = props => {
                             />
 
                             {/* IMAGES */}
-                            <Box>
-                                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                    <H1 color='#FFF' mr={1}>
-                                        Product Images
-                                    </H1>
-                                    <Tooltip title="Choose a category for the product">
-                                        <IconButton>
-                                            <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-                                <DropZone
-                                    onChange={handleImageDrop}
-                                    title="Drag & drop product images here"
-                                    imageSize="Upload 280*280 images"
-                                    acceptFormats={{ "image/*": [".png", ".jpeg", ".jpg", ".gif"] }}
-                                    multiple={true}
-                                />
-                                <SortableList 
-                                    files={productImages} 
-                                    selectedImage={selectedImage} 
-                                    handleClick={handleClick} 
-                                    handleFileDelete={handleFileDelete(productImages, setProductImages)} 
-                                    onSortEnd={onSortEnd(setProductImages)}
-                                    axis="xy" 
-                                />
-                            </Box>
+                            {/* 🚀 CALLING THE REUSABLE IMAGE UPLOADER COMPONENT 🚀 */}
+                            <ProductImageUploader
+                                files={productImages} 
+                                handleDrop={handleImageDrop} 
+                                handleDelete={handleImageDelete} 
+                                handleSortEnd={onSortEnd(setProductImages)}
+                                title="Product Images"
+                                tooltip="The first image will be used as the product thumbnail."
+                            />
+
 
                             {/* 3D MODELS */}
                             <Box>
@@ -231,7 +182,7 @@ const ProductForm2 = props => {
                                     </H1>
                                     <Tooltip title="Upload 3D model files like .glb">
                                         <IconButton>
-                                            <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                                            <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                                         </IconButton>
                                     </Tooltip>
                                 </Box>

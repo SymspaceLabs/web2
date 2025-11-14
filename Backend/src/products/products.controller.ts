@@ -71,7 +71,7 @@ export class ProductsController {
       return results;
   }
 
-  @Get(':slug')
+  @Get('slug/:slug')
   async getProductBySlug(@Param('slug') slug: string): Promise<Product> {
     return this.productsService.findBySlug(slug);
   }

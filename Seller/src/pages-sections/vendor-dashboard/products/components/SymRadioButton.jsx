@@ -15,7 +15,7 @@ const SymRadioButton = ({ label, name, id, value, options, onChange }) => {
                 </H1>
                 <Tooltip title="Enter the product's name">
                 <IconButton>
-                    <InfoOutlined sx={{ color: '#fff', fontSize: 16 }} />
+                    <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
                 </IconButton>
                 </Tooltip>
             </Box>

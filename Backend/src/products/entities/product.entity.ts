@@ -46,6 +46,9 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   price: number;
 
+  @Column({ type: 'float', nullable: true })
+  salePrice: number;
+
   @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
   subcategoryItemId: string;
 
@@ -87,9 +90,6 @@ export class Product {
     default: ProductStatus.DRAFT,
   })
   status: ProductStatus;
-
-  @Column({ type: 'float', nullable: true })
-  salePrice: number;
 
   @OneToMany(() => ProductColor, (color) => color.product, {
     cascade: true,

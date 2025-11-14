@@ -43,7 +43,7 @@ const ColorDialog = ({
                             </H1>
                             <Tooltip title="Enter the product's name">
                             <IconButton>
-                                <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
+                                <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
                             </IconButton>
                             </Tooltip>
                         </Box>
@@ -56,7 +56,7 @@ const ColorDialog = ({
                             </H1>
                             <Tooltip title="Enter the product's name">
                                 <IconButton>
-                                <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
+                                <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
                                 </IconButton>
                             </Tooltip>
                         </Box>
@@ -82,7 +82,7 @@ const ColorDialog = ({
                         </H1>
                         <Tooltip title="Select a base color">
                             <IconButton>
-                            <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
+                            <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
                             </IconButton>
                         </Tooltip>
                         </Box>

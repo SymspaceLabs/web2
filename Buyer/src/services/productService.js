@@ -1,15 +1,75 @@
-// lib/api.js or services/productService.js
+// services/productService.js
+// Consolidated product service functions, including the missing updateProduct.
 
-export async function fetchProducts() {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products`);
-    if (!response.ok) throw new Error("Failed to fetch");
-    const data = await response.json();
-    return { products: data.products, error: null };
-  } catch (error) {
-    return { products: [], error };
-  }
-}
+/**
+ * Fetches product data by ID from the backend API.
+ * This is required for loading product data in the edit mode (useEffect in ProductCreatePageView).
+ * @param {string} id - The ID of the product to fetch.
+ * @returns {Promise<Object>} A promise that resolves to the product data.
+ */
+export const fetchProductById = async (id) => {
+    console.log(`[API CALL] Fetching product by ID: ${id}`);
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch product by ID");
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching product by ID:", error);
+        // Re-throw to allow the calling component to handle it.
+        throw error; 
+    }
+};
+
+/**
+ * Creates a new product on the backend API (Required for Step 1 of the create flow).
+ * @param {Object} productData - The product data to create.
+ * @returns {Promise<Object>} A promise that resolves to the newly created product object.
+ */
+export const createProduct = async (productData) => {
+    console.log("[API CALL] Creating product with data:", productData);
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(productData),
+        });
+        if (!response.ok) throw new Error("Failed to create product");
+        const createdProduct = await response.json();
+        return createdProduct; 
+    } catch (error) {
+        console.error("Error creating product:", error);
+        throw error;
+    }
+};
+
+/**
+ * Updates an existing product on the backend API (THE MISSING FUNCTION).
+ * Sends a PUT request to update the product data.
+ * @param {string} id - The ID of the product to update.
+ * @param {Object} updatedData - The partial product data to update.
+ * @returns {Promise<Object>} A promise that resolves to the updated product object.
+ */
+export const updateProduct = async (id, updatedData) => {
+    console.log(`[API CALL] Updating product ${id} with data:`, updatedData);
+    try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`, {
+            method: 'PUT', // Use PUT or PATCH based on your backend convention
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`Failed to update product ${id}. Status: ${response.status}. Body: ${errorBody}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error updating product:", error);
+        throw error; 
+    }
+};
 
 /**
  * Fetches product data by slug from the backend API.
@@ -19,7 +79,7 @@ export async function fetchProducts() {
  */
 export const fetchProductBySlug = async (slug) => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${slug}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/slug/${slug}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch product data: ${response.statusText}`);
     }
@@ -64,3 +124,6 @@ export const fetchProductAvailability = async (productId, colorId, sizeId) => {
     throw error; // Re-throw to allow the calling component to handle it.
   }
 };
+
+// Removed the 'fetchProducts' function and the final export block,
+// replacing them with 'export const' on each function definition.

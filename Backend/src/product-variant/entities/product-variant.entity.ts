@@ -28,7 +28,7 @@ export class ProductVariant {
   @ManyToOne(() => ProductSize, { eager: true, nullable: true, onDelete: 'CASCADE' })
   size?: ProductSize;  
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', nullable: true })
   price: number;
 
   @Column({ type: 'int' })
@@ -40,9 +40,7 @@ export class ProductVariant {
   @Column({ nullable: true })
   sku?: string;
 
-  // NEW ATTRIBUTES
-
-  @Column({ type: 'float' })
+  @Column({ type: 'float', nullable: true })
   salePrice: number;
 
   @Column('json') 

@@ -15,19 +15,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SymMoneyTextField from './SymMoneyTextField';
 import SymNumberTextField from './SymNumberTextField';
 import SymTooltip from './SymTooltip';
-// You might need to import a generic TextField component for 'material' input
-// Assuming a SymTextField component exists or using a basic <input> or <TextField>
-import SymTextField from './SymTextField'; // <-- Placeholder: Import your generic text field
-
-// Placeholder for Image Icon (replace with your actual icon/image handling)
-import ImageIcon from '@mui/icons-material/Image';
-
+import SymTextField from './SymTextField';
 
 import { StyledTableCell, tableContainerStyles, tableFooterTextStyles, StyledTableRow  } from './TableStyles';
 
-// 1. UPDATED: Add material and image to data structure
-function createData(color, size, price, salePrice, supply, cost, profit, material, image) {
-  return { color, size, price, salePrice, supply, cost, profit, material, image };
+// 1. UPDATED: Add material to data structure
+function createData(color, size, price, salePrice, supply, cost, profit, material) {
+  return { color, size, price, salePrice, supply, cost, profit, material };
 }
 
 function groupVariantsByColor(variants) {
@@ -42,7 +36,7 @@ function groupVariantsByColor(variants) {
   return grouped;
 }
 
-// 1. UPDATED: Pass material and image when generating variants
+// 1. UPDATED: Pass material when generating variants
 function generateVariants(colors, sizes, masterValues) {
   const variants = [];
 
@@ -58,8 +52,7 @@ function generateVariants(colors, sizes, masterValues) {
         masterValues.supply, 
         masterValues.cost, 
         profit,
-        masterValues.material || '', // Default material
-        masterValues.image || null   // Default image
+        masterValues.material || '' // Default material
       ));
     } else {
       // Create a row for each size under the color
@@ -73,8 +66,7 @@ function generateVariants(colors, sizes, masterValues) {
           masterValues.supply, 
           masterValues.cost, 
           profit,
-          masterValues.material || '', // Default material
-          masterValues.image || null   // Default image
+          masterValues.material || '' // Default material
         ));
       });
     }
@@ -89,15 +81,14 @@ function ProductVariantsTable({ colors, sizes }) {
   const [expanded, setExpanded] = useState({});
   const [selected, setSelected] = useState([]);
   
-  // 2. UPDATED: Add material and image to masterValues state
+  // 2. UPDATED: Add material to masterValues state
   const [masterValues, setMasterValues] = useState({
     price: '',
     salePrice: '',
     supply: 0,
     cost: '',
     profit: '',
-    material: '', // New field
-    image: null,  // New field (assuming this will hold a file or URL)
+    material: ''
   });
   const [totalProfit, setTotalProfit] = useState(0);
 
@@ -204,7 +195,7 @@ function ProductVariantsTable({ colors, sizes }) {
           (prevRow) => prevRow.color === newRow.color && prevRow.size === newRow.size
         );
 
-        // Preserve material/image on un-grouped rows if they exist
+        // Preserve material on un-grouped rows if they exist
         if (newRow.size === null) {
           return existingRow
             ? {
@@ -215,8 +206,7 @@ function ProductVariantsTable({ colors, sizes }) {
                 supply: existingRow.supply || newRow.supply,
                 cost: existingRow.cost || newRow.cost,
                 profit: existingRow.profit || newRow.profit,
-                material: existingRow.material || newRow.material, // Keep existing material
-                image: existingRow.image || newRow.image,      // Keep existing image
+                material: existingRow.material || newRow.material // Keep existing material
               }
             : newRow;
         }
@@ -224,8 +214,7 @@ function ProductVariantsTable({ colors, sizes }) {
         return existingRow ? { 
             ...existingRow, 
             ...newRow, 
-            material: existingRow.material || newRow.material, // Keep existing material
-            image: existingRow.image || newRow.image,          // Keep existing image
+            material: existingRow.material || newRow.material // Keep existing material
         } : newRow;
       });
     });
@@ -236,7 +225,7 @@ function ProductVariantsTable({ colors, sizes }) {
 
       newRows.forEach((row) => {
         const key = `${row.color}-${row.size || 'null'}`;
-        // Preserve existing variant values (material, image, etc.) if they exist
+        // Preserve existing variant values (material, etc.) if they exist
         updatedValues[key] = updatedValues[key] ? { ...updatedValues[key], ...row } : { ...row };
       });
 
@@ -253,7 +242,7 @@ function ProductVariantsTable({ colors, sizes }) {
     setTotalProfit(total);
 
 
-  }, [colors, sizes, masterValues.price, masterValues.salePrice, masterValues.cost, masterValues.supply, masterValues.material, masterValues.image]); // 2. UPDATED: Added material and image to dependencies
+  }, [colors, sizes, masterValues.price, masterValues.salePrice, masterValues.cost, masterValues.supply, masterValues.material ]); // 2. UPDATED: Added material to dependencies
   
   
   const handleExpandClick = (color) => {
@@ -353,10 +342,6 @@ function ProductVariantsTable({ colors, sizes }) {
             <StyledTableCell sx={{ width: '150px', textAlign: 'left' }}>
               Material
             </StyledTableCell>
-            <StyledTableCell sx={{ width: '50px', textAlign: 'center' }}>
-              Image
-              <SymTooltip title="Variant Image" />
-            </StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -427,8 +412,6 @@ function ProductVariantsTable({ colors, sizes }) {
               />
             
             </StyledTableCell>
-            {/* ✅ Master Image Placeholder (Image is usually not mass-updated) */}
-            <StyledTableCell /> 
 
           </StyledTableRow>
           {Object.keys(groupedVariants).map((color) => (
@@ -505,15 +488,6 @@ function ProductVariantsTable({ colors, sizes }) {
                   />
                 </StyledTableCell>
 
-                {/* ✅ Parent Image Placeholder */}
-                <StyledTableCell align="center">
-                  {groupedVariants[color][0].image ? (
-                    <ImageIcon color="primary" /> // Display icon if image exists
-                  ) : (
-                    <ImageIcon color="disabled" /> // Placeholder icon
-                  )}
-                </StyledTableCell>
-
               </StyledTableRow>
 
               {/* Collapsible child rows */}
@@ -536,25 +510,6 @@ function ProductVariantsTable({ colors, sizes }) {
                               <StyledTableCell sx={{ minWidth: '150px' }}>
                                 {row.size || color}
                               </StyledTableCell>
-
-                              {/* 🎯 Child Material Input: SymTooltip removed */}
-                              <StyledTableCell sx={{ minWidth: '150px' }}>
-                                <SymTextField
-                                  // REMOVED: <SymTooltip title="Material description" />
-                                  value={variantValues[key]?.material || ''}
-                                  onChange={(e) => handleVariantChange(key, 'material', e.target.value)}
-                                />
-                              </StyledTableCell>
-
-                              {/* ✅ Child Image Input/Display */}
-                              <StyledTableCell align="center" sx={{ minWidth: '50px' }}>
-                                {/* Example: Display actual image or an upload button */}
-                                <IconButton size="small" onClick={() => alert(`Upload image for ${key}`)}>
-                                  {/* Using a placeholder Icon for image upload */}
-                                  <ImageIcon />
-                                </IconButton>
-                              </StyledTableCell>
-
 
                               <StyledTableCell align="right" sx={{ minWidth: '120px' }}>
                                 <SymMoneyTextField
@@ -591,6 +546,13 @@ function ProductVariantsTable({ colors, sizes }) {
                                   readOnly={true}
                                   allowNegative={true}
                                   isProfit={true}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell sx={{ minWidth: '150px' }}>
+                                <SymTextField
+                                  showTooltip={false}
+                                  value={variantValues[key]?.material || ''}
+                                  onChange={(e) => handleVariantChange(key, 'material', e.target.value)}
                                 />
                               </StyledTableCell>
                             </StyledTableRow>

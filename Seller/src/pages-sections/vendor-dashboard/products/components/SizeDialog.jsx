@@ -2,6 +2,7 @@ import React from 'react'
 import { TextField, MenuItem, Box, Typography, Button, Tooltip, IconButton, Dialog, DialogTitle,  DialogContent, DialogActions } from "@mui/material";
 import { InfoOutlined } from "@mui/icons-material";
 import { H1 } from '@/components/Typography';
+import { FlexBox, FlexCol } from '@/components/flex-box';
 
 const baseSizes = [
     { name: 'S' },
@@ -16,8 +17,10 @@ const SizeDialog = ({
     newSize,
     open,
     onClose,
+    sizeChartUrl,
     handleChangeSize,
     handleAddCustomSize,
+    handleChangeSizeChartUrl
 }) => {
   return (
     <div>
@@ -29,26 +32,26 @@ const SizeDialog = ({
                 {/* Size name */}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <H1 sx={{ color: '#000' }}>
-                    Size name
+                        Size name
                     </H1>
                     <Tooltip title="Enter the product's name">
                     <IconButton>
-                        <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
+                        <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
                     </IconButton>
                     </Tooltip>
                 </Box>
                 <TextField fullWidth label="" value={newSize} onChange={handleChangeSize} h="Enter a color" InputProps={{ style: { backgroundColor: 'white', color: '#000', borderRadius: '2px', },}} />
 
                 {/* Base size */}
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                <H1 sx={{ color: '#000' }}>
-                    Base size
-                </H1>
-                <Tooltip title="Select a base color">
-                    <IconButton>
-                    <InfoOutlined sx={{ color: '#000', fontSize: 16 }} />
-                    </IconButton>
-                </Tooltip>
+                <Box sx={{ display: 'flex', alignItems: 'center', pt: 3 }}>
+                    <H1 sx={{ color: '#000' }}>
+                        Base size
+                    </H1>
+                    <Tooltip title="Select a base color">
+                        <IconButton>
+                        <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
                 <TextField
                     select
@@ -70,6 +73,36 @@ const SizeDialog = ({
                         </MenuItem>
                     ))}
                 </TextField>
+
+                <FlexCol sx={{ pt: 3 }}>
+                    <FlexBox sx={{ alignItems: 'center' }}>
+                        <H1 sx={{ color: '#000' }}>
+                            Size Chart Url
+                        </H1>
+                        <Tooltip title="Enter the product's name">
+                        <IconButton>
+                            <InfoOutlined sx={{ color: '#000', fontSize: 10 }} />
+                        </IconButton>
+                        </Tooltip>
+                    </FlexBox>
+
+                    <TextField 
+                        fullWidth
+                        label=""
+                        value={sizeChartUrl}
+                        onChange={handleChangeSizeChartUrl}
+                        h="Enter a color"
+                        InputProps={{ 
+                            style: { 
+                                backgroundColor: 'white', 
+                                color: '#000', 
+                                borderRadius: '2px'
+                            }
+                        }}
+                    />
+                </FlexCol>
+                
+
             </DialogContent>
             <DialogActions sx={{ width:'100%'}}>
                 <Button onClick={onClose}>Cancel</Button>

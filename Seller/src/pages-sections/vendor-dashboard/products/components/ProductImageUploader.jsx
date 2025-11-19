@@ -13,24 +13,40 @@ import {
     Accordion, 
     AccordionSummary, 
     AccordionDetails,
-    Chip // Added Chip for visual feedback on the color
+    Chip 
 } from "@mui/material"; 
-import { SortableContainer, SortableElement } from "react-sortable-hoc"; 
-
 
 // ========================================================================
-// 1. Helper Functions (Unchanged)
+// 🛑 DND-KIT IMPORTS
+// ========================================================================
+import { 
+    DndContext, 
+    closestCenter, 
+    KeyboardSensor, 
+    PointerSensor, 
+    useSensor, 
+    useSensors, 
+} from '@dnd-kit/core';
+import { 
+    SortableContext, 
+    useSortable, 
+    // ✅ FIX: Using rectSortingStrategy for grid/wrapping layout
+    rectSortingStrategy, 
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+// ========================================================================
+// 1. Helper Functions
 // ========================================================================
 const getImageUrl = (file) => {
     return file.preview || (typeof file === 'string' ? file : null);
 }
 
-
 // ========================================================================
-// 2. Styled Components (Unchanged)
+// 2. Styled Components (Minimal changes)
 // ========================================================================
 
-// Styled Box for the image container (unchanged)
+// Styled Box for the image container 
 const ImageWrapper = styled(Box, {
     shouldForwardProp: (prop) => prop !== 'isPrimary' && prop !== 'isPlaceholder',
 })(({ isPrimary, isPlaceholder, theme }) => ({
@@ -39,7 +55,7 @@ const ImageWrapper = styled(Box, {
     height: 150, 
     borderRadius: '8px',
     overflow: 'hidden',
-    cursor: isPlaceholder ? 'pointer' : 'grab',
+    cursor: isPlaceholder ? 'pointer' : 'grab', 
     border: isPlaceholder 
         ? `2px dashed ${theme.palette.grey[400]}` 
         : (isPrimary ? `2px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.grey[300]}`),
@@ -92,7 +108,6 @@ const DeleteButton = styled(IconButton)({
     zIndex: 11,
 });
 
-
 // ========================================================================
 // 3. DropZone Component (Internal - Unchanged)
 // ========================================================================
@@ -140,85 +155,127 @@ const SimpleDropZone = ({
     );
 }
 
+// ========================================================================
+// 4. SortableItem Component (DND-KIT)
+// ========================================================================
+export const SortableItem = ({ file, fileIndex, selected, handleClick, handleFileDelete }) => {
+    
+    // Ensure unique ID exists (file.id for existing, file.path for new)
+    const uniqueId = file.id || file.path; 
 
-// ========================================================================
-// 4. SortableItem Component (Unchanged)
-// ========================================================================
-export const SortableItem = SortableElement(({ file, fileIndex, isDragging, selected, handleClick, handleFileDelete }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: uniqueId });
+
+    const style = {
+        // Use dnd-kit utility for transforming, crucial for smooth movement
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: isDragging ? 20 : 1, // Elevate dragged item
+    };
+    
     const isPrimary = fileIndex === 0;
     const imageUrl = getImageUrl(file);
-    
-    // Content of the image item
-    const ImageContent = (
-        <ImageWrapper 
-            isPrimary={isPrimary} 
-            sx={{ opacity: isDragging ? 0.7 : 1 }}
-            onClick={() => handleClick && handleClick(fileIndex)}
-        >
-            {/* Display the sequence number */}
-            <IndexCircle>{fileIndex + 1}</IndexCircle>
-            
-            {/* Delete button: e.stopPropagation() is crucial here! */}
-            <DeleteButton 
-                className="delete-button" 
-                onClick={(e) => { 
-                    e.stopPropagation(); 
-                    console.log('--- DEBUG: Delete Clicked for:', file.name);
-                    handleFileDelete(file); 
-                }} 
-                size="small"
-            >
-                <Close />
-            </DeleteButton>
-            
-            {/* Image content */}
-            {imageUrl && (
-                <Box 
-                    component="img" 
-                    src={imageUrl} 
-                    alt={`Product Image ${fileIndex + 1}`} 
-                    sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                />
-            )}
-        </ImageWrapper>
-    );
 
     return (
-        <Box sx={{ p: 0.5 }}>
-            {isPrimary ? (
-                // Primary Image: Wrap in Tooltip
-                <Tooltip title="This image will be used as the primary thumbnail for this variant" placement="top">
-                    {ImageContent}
-                </Tooltip>
-            ) : (
-                // Other images: Just render content
-                ImageContent
-            )}
+        <Box 
+            ref={setNodeRef} 
+            style={style} 
+            sx={{ p: 0.5, touchAction: 'none' }} // touchAction: 'none' helps with mobile dragging
+        >
+            <ImageWrapper 
+                isPrimary={isPrimary} 
+                sx={{ opacity: isDragging ? 0.7 : 1 }} 
+                onClick={() => handleClick && handleClick(fileIndex)}
+                
+                // Spread listeners and attributes for drag functionality on the whole item
+                {...attributes}
+                {...listeners}
+            >
+                {/* Display the sequence number */}
+                <IndexCircle>{fileIndex + 1}</IndexCircle>
+                
+                {/* Delete button: Stop propagation to prevent drag start */}
+                <DeleteButton
+                    className="delete-button" 
+                    onClick={(e) => { 
+                        e.stopPropagation(); 
+                        handleFileDelete(file); 
+                    }} 
+                    size="small"
+                    sx={{ zIndex: 12 }} 
+                >
+                    <Close />
+                </DeleteButton>
+                
+                {/* Image content */}
+                {imageUrl && (
+                    <Box 
+                        component="img" 
+                        src={imageUrl} 
+                        alt={`Product Image ${fileIndex + 1}`}
+                        draggable="false" 
+                        sx={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    />
+                )}
+            </ImageWrapper>
         </Box>
     );
-});
-
+};
 
 // ========================================================================
-// 5. SortableList Component (Unchanged)
+// 5. SortableList Component (DND-KIT Wrapper)
 // ========================================================================
-export const SortableList = SortableContainer(({ files, selectedImage, handleClick, handleFileDelete, maxFiles = 10, handleDrop }) => {
+export const SortableList = ({ files, selectedImage, handleClick, handleFileDelete, maxFiles = 10, handleDrop, onSortEnd }) => {
+    
+    // Map files to their unique IDs for SortableContext
+    const items = files.map(file => file.id || file.path); 
     const canUpload = files.length < maxFiles;
+    
+    // Set up sensors for drag-and-drop
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor),
+    );
 
-    return (
+    // DND-KIT Drag End Handler
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+
+        if (active.id !== over.id) {
+            const oldIndex = items.indexOf(active.id);
+            const newIndex = items.indexOf(over.id);
+            
+            // Call the external handler
+            onSortEnd({ oldIndex, newIndex });
+        }
+    };
+    
+    // The visual layout container (Box)
+    const listContainer = (
         <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, flexWrap: 'wrap', gap: 2 }}>
-            {/* Render Uploaded Images */}
-            {files.map((file, index) => (
-                <SortableItem 
-                    key={`item-${index}`} 
-                    index={index} 
-                    file={file}
-                    fileIndex={index} 
-                    selected={selectedImage === index} 
-                    handleClick={handleClick}
-                    handleFileDelete={handleFileDelete} 
-                />
-            ))}
+            <SortableContext 
+                items={items} 
+                // ✅ FIX APPLIED HERE: Use rectSortingStrategy for the grid layout
+                strategy={rectSortingStrategy} 
+            >
+                {/* Render Uploaded Images */}
+                {files.map((file, index) => (
+                    <SortableItem 
+                        key={file.id || file.path} 
+                        file={file}
+                        fileIndex={index} 
+                        selected={selectedImage === index} 
+                        handleClick={handleClick}
+                        handleFileDelete={handleFileDelete} 
+                    />
+                ))}
+            </SortableContext>
             
             {/* Render DropZone Placeholder */}
             {canUpload && (
@@ -230,18 +287,26 @@ export const SortableList = SortableContainer(({ files, selectedImage, handleCli
             )}
         </Box>
     );
-});
+
+    return (
+        <DndContext 
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+        >
+            {listContainer}
+        </DndContext>
+    );
+};
 
 
 // ========================================================================
-// 6. Accordion Uploader Component (Renamed/Modified for Clarity)
+// 6. Accordion Uploader Component (Unchanged)
 // ========================================================================
-/**
- * A self-contained image uploader wrapped in an MUI Accordion for a single variant.
- */
 const ColorVariantImageUploader = ({ 
-    colorName, // The color variant name (e.g., 'blue')
-    files, 
+    colorName,
+    files,
+    handleDropAndUpload,
     handleDrop, 
     handleDelete, 
     handleSortEnd,
@@ -251,14 +316,13 @@ const ColorVariantImageUploader = ({
 }) => {
     const title = `${colorName.charAt(0).toUpperCase() + colorName.slice(1)} Images`;
     
-    // Simple color style for the chip based on the color name
     const colorStyle = {
         bgcolor: colorName,
         color: ['white', 'black', 'yellow', 'lime'].includes(colorName.toLowerCase()) ? 'black' : 'white',
     };
 
     return (
-        <Accordion sx={{ mb: 2, bgcolor: 'background.paper', borderRadius: '8px !important' }} defaultExpanded>
+        <Accordion sx={{ mb: 2, bgcolor: 'background.paper', borderRadius: '8px !important' }} >
             {/* Accordion Summary/Header */}
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -286,17 +350,16 @@ const ColorVariantImageUploader = ({
 
             {/* Accordion Details/Content */}
             <AccordionDetails>
-                {/* SortableList which now includes the DropZone placeholder */}
+                {/* SortableList */}
                 <SortableList 
-                    files={files} 
+                    files={files}
+                    handleDropAndUpload={handleDropAndUpload}
                     selectedImage={selectedImage}
                     handleClick={handleClick}
                     handleFileDelete={handleDelete} 
-                    onSortEnd={handleSortEnd}
+                    onSortEnd={handleSortEnd} 
                     handleDrop={handleDrop} 
                     maxFiles={maxFiles}
-                    axis="xy" 
-                    distance={1}
                 />
                 
                 {/* Text for no images uploaded */}
@@ -315,26 +378,6 @@ const ColorVariantImageUploader = ({
 // 7. MultiAccordionProductImageUploader (Default Export - Dynamic)
 // ========================================================================
 
-/**
- * Main component to display multiple image uploaders, one for each color variant.
- * * @param {string[]} colorVariants - An array of color names (e.g., ['blue', 'red', 'green']).
- * @param {object} imageHandlerMap - An object containing files and handlers mapped by color name.
- * * * Example of imageHandlerMap structure:
- * {
- * 'blue': {
- * files: state.blueFiles, 
- * handleDrop: handleBlueDrop, 
- * handleDelete: handleBlueDelete, 
- * ...
- * },
- * 'red': {
- * files: state.redFiles, 
- * handleDrop: handleRedDrop, 
- * handleDelete: handleRedDelete, 
- * ...
- * }
- * }
- */
 const MultiAccordionProductImageUploader = ({ colorVariants, imageHandlerMap, maxFiles = 10 }) => {
 
     if (!colorVariants || colorVariants.length === 0) {
@@ -364,14 +407,19 @@ const MultiAccordionProductImageUploader = ({ colorVariants, imageHandlerMap, ma
             </Box>
             
             {/* Render one image uploader for each color variant */}
-            {colorVariants.map((colorName) => {
+            {colorVariants.map((colorVariantObject) => {
+                const colorName = colorVariantObject.name;
+
+                if (typeof colorName !== 'string') return null;
+
                 const handlers = imageHandlerMap[colorName.toLowerCase()] || {};
                 
                 return (
                     <ColorVariantImageUploader
                         key={colorName}
                         colorName={colorName}
-                        files={handlers.files || []} // Use files from the map or an empty array
+                        files={handlers.files || []}
+                        handleDropAndUpload={handlers.handleDrop || (() => console.warn(`No drop handler for ${colorName}`))}
                         handleDrop={handlers.handleDrop || (() => console.warn(`No drop handler for ${colorName}`))}
                         handleDelete={handlers.handleDelete || (() => console.warn(`No delete handler for ${colorName}`))}
                         handleSortEnd={handlers.handleSortEnd || (() => console.warn(`No sort handler for ${colorName}`))}

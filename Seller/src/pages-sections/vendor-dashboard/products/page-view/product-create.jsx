@@ -10,11 +10,11 @@ import CustomStepper from "../components/CustomStepper";
 import FooterButtons from "../components/FooterButtons";
 
 import { Box } from "@mui/material";
-import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from 'next/navigation';
 import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
-import { fetchProductById, createProduct as createProductApi, updateProduct } from "@/services/productService";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { fetchProductById, createProduct as createProductApi, updateProduct, updateProductVariantsApi } from "@/services/productService";
 
 // =============================================================================
 // @constant {string[]} steps
@@ -29,9 +29,7 @@ const steps = [
 
 // =============================================================================
 // @component ProductCreatePageView
-// A multi-step form component for creating a new product. It manages the state
-// for the active step, form data across all steps, and handles the navigation
-// and submission logic for the entire process.
+// A multi-step form component for creating a new product.
 // =============================================================================
 const ProductCreatePageView = ({ productId='' }) => {
   // A ref to hold a reference to the individual form components' imperative handles.
@@ -49,7 +47,6 @@ const ProductCreatePageView = ({ productId='' }) => {
   const [formData, setFormData] = useState({});
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
-  // FIX: Initialize loading state to true if we are in edit mode (productId exists)
   const [loading, setLoading] = useState(!!productId); 
   const [currentProductId, setCurrentProductId] = useState(productId || null);
 
@@ -64,51 +61,49 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Triggers the submission of the currently active child form component via its ref.
   // =============================================================================
   const handleNext = () => {
-    console.log('--- DEBUG: handleNext triggered in PARENT ---');
-    
     if (formRef.current && formRef.current.submit) {
-        console.log('--- DEBUG: PARENT calling child formRef.current.submit() ---');
         formRef.current.submit();
-    } else {
-        console.error("❌ ERROR: PARENT - formRef is missing or does not expose a 'submit' method.");
     }
   };
 
   // =============================================================================
-  // @function onStepSubmitSuccess
-  // Executes API calls based on the current step.
+  // @function onStepSubmitSuccess (FIXED)
   // =============================================================================
-  const onStepSubmitSuccess = (values) => {
-    console.log(`--- DEBUG: PARENT onStepSubmitSuccess CALLBACK received from Step ${activeStep + 1} ---`);
-    
-    // NEW: Start loading indicator immediately upon successful client-side validation
-    setLoading(true);
+  const onStepSubmitSuccess = (values) => {  
+      setLoading(true);
 
-    // 1. Merge the current step's data into the total formData state.
-    const newFormData = { ...formData, ...values };
-    setFormData(newFormData);
+      let newFormData = { ...formData, ...values };
 
-    console.log('Step values:', values);
-    console.log('Accumulated Data:', newFormData);
+      // ⭐ FIX: Prevent media data from being overwritten by Step 0 (ProductForm1) submission ⭐
+      if (activeStep === 0) {
+          // ProductForm1 submission doesn't contain media data, so keep the existing arrays from formData.
+          newFormData = {
+              ...newFormData,
+              // Keep the previous productImages and productModels arrays if they exist
+              // productImages: formData.productImages || [],
+              // productModels: formData.productModels || [],
+          };
+      }
+      
+      // Update the state with the merged data
+      setFormData(newFormData);
 
-    // 2. Execute logic based on the current step.
-    if (activeStep === 0) {
-        if (currentProductId) {
-            // Edit Mode Step 1: Update the data and move to the next step.
-            console.log('--- DEBUG: PARENT updating existing product on Step 1 submit (Edit Mode) ---');
-            // Pass true for skipRedirect to tell update function not to change URL
-            handleUpdateProduct(newFormData, false, true); 
-        } else {
-            // Create Mode Step 1: Create the product and handle the URL redirect.
-            handleCreateProduct(newFormData);
-        }
-    } else if (activeStep < totalSteps() - 1) {
-      // For intermediate steps, update the existing product.
-      handleUpdateProduct(newFormData);
-    } else if (isLastStep()) {
-      // On the final step, update the product with a 'submitted' status.
-      handleUpdateProduct({ ...newFormData, status: 'submitted' }, true);
-    }
+      // 2. Execute logic based on the current step.
+      if (activeStep === 0) {
+          if (currentProductId) {
+              // Edit Mode Step 0: Update core product data
+              handleUpdateProduct(newFormData, false, true, activeStep); 
+          } else {
+              // Create Mode Step 0: Create the product
+              handleCreateProduct(newFormData);
+          }
+      } else if (activeStep < totalSteps() - 1) {
+          // Step 1 (Details/Media) and Step 2 (Safety/Compliance)
+          handleUpdateProduct(newFormData, false, false, activeStep); 
+      } else if (isLastStep()) {
+          // On the final step, update the product with a 'submitted' status.
+          handleUpdateProduct({ ...newFormData, status: 'submitted' }, true, false, activeStep);
+      }
   };
 
   // =============================================================================
@@ -116,11 +111,10 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Creates the product on Step 1 and handles the URL update (moving from /create to /:id).
   // =============================================================================
   const handleCreateProduct = async (data) => {
-    // 👇 UPDATED: Add selectedSizes and selectedColors to the requestBody
     const transformedSizes = selectedSizes.map(size => size.name);
     const transformedColors = selectedColors.map(color => ({
       name: color.name,
-      code: color.hex, // Renaming 'hex' to 'colorCode'
+      code: color.hex,
     }));
 
     const requestBody = {
@@ -134,7 +128,6 @@ const ProductCreatePageView = ({ productId='' }) => {
 
     console.log(requestBody)
 
-    // setLoading(true) removed here, now handled in onStepSubmitSuccess
     try {
         const response = await createProductApi(requestBody);
         const newProductId = response.id; 
@@ -148,7 +141,7 @@ const ProductCreatePageView = ({ productId='' }) => {
 
         // 3. CHANGE THE URL (Necessary for creation flow)
         const newUrl = `/vendor/products/${response.id}`;
-        console.log(`URL changed from /create to: ${newUrl}`);
+
         router.replace(newUrl); // ⬅️ IMPORTANT URL UPDATE
 
     } catch (error) {
@@ -161,54 +154,106 @@ const ProductCreatePageView = ({ productId='' }) => {
 
   // =============================================================================
   // @function handleUpdateProduct (Wrapper for the external API function)
+  // @param {object} data - The accumulated form data, including media arrays.
   // @param {boolean} isFinalStep - True if this is the final submission.
-  // @param {boolean} skipRedirect - True if we should update and immediately move to next step without URL change.
+  // @param {boolean} skipRedirect - True if we should update and immediately move to next step without URL change. (Not used in the final logic, but kept in signature)
+  // @param {number} currentStep - The step index from which the call originated.
   // =============================================================================
-  const handleUpdateProduct = async (data, isFinalStep = false, skipRedirect = false) => {
-    console.log('1');
+  // =============================================================================
+  // @function handleUpdateProduct (Updated to conditionally include images/models on Step 1)
+  // =============================================================================
+  const handleUpdateProduct = async (data, isFinalStep = false, skipRedirect = false, currentStep) => {
+    // --- Data Transformation ---
+    
+    // Media data transformation happens regardless, but is only included in the requestBody below
+    const transformedImages = (data.productImages || []).map(img => ({
+        url: img.url,
+        colorCode: img.colorCode, 
+    }));
+    
+    const transformedModels = (data.productModels || []).map(model => ({
+        url: model.url,
+        colorName: model.colorName, 
+    }));
 
-    // 👇 UPDATED: Add selectedSizes and selectedColors to the requestBody
+    const transformedSizes = selectedSizes.map(size => size.name);
+    const transformedColors = selectedColors.map(color => ({
+        name: color.name,
+        code: color.hex, 
+    }));
+
+    // --- Build Request Body ---
     const requestBody = {
-      name: data.name,
-      company : user?.company?.id,
-      subcategoryItem : data.category,
-      colors : selectedColors, // ⬅️ UPDATED
-      sizes : selectedSizes // ⬅️ UPDATED
+        name: data.name,
+        company : user?.company?.id,
+        subcategoryItem : data.category,
+        
+        // Fields from ProductForm1
+        colors : transformedColors, 
+        sizes : transformedSizes, 
+        
+        // Fields from ProductForm2 (sent from Step 1 onwards)
+        bulletPoints: data.bulletPoints,
+        composition: data.composition,
+    };
+    
+    // ⭐ CONDITIONAL FIX: Only include images/models if the current step is 1 ⭐
+    if (currentStep === 1) {
+        requestBody.images = transformedImages;
+        requestBody.models = transformedModels;
     }
-    // 👆 END UPDATED BLOCK
+    // For Step 0, images/models will be omitted from the requestBody, preventing overwrite.
+    // For Step 2/3, they will also be omitted, as they don't contain media inputs.
 
-    return ;
 
     const idToUpdate = currentProductId || productId; 
     if (!idToUpdate) {
-      console.error("Cannot update: Product ID is missing.");
-      setLoading(false); // Make sure to clear loading state if we bail early
-      return;
+        console.error("Cannot update: Product ID is missing.");
+        setLoading(false);
+        return;
     }
 
-    // setLoading(true) removed here, now handled in onStepSubmitSuccess
     try {
+        // 1. CORE PRODUCT UPDATE API CALL
         const response = await updateProduct(idToUpdate, requestBody); 
 
-        // If successful, update state
-        setFormData(prev => ({ ...prev, ...response }));
-      
+        // 2. State Update (Crucial for persistence across steps)
+        // We use the data accumulated locally in 'data' to update the state, 
+        // ensuring media (productImages/productModels) is carried over to the next step.
+        setFormData(prev => ({ 
+            ...prev, 
+            ...response,
+            images: data.images || prev.images, 
+            threeDModels: data.threeDModels || prev.threeDModels,
+            // Explicitly persist the media and variant arrays for subsequent steps
+            productImages: data.productImages || [],
+            productModels: data.productModels || [], 
+            variants: data.variants || [],
+        }));
+    
+        // 3. CONDITIONAL STEP-SPECIFIC UPDATE (If submitted from Step 1, update Variants)
+        if (currentStep === 1) {
+            await handleUpdateVariants(data); 
+            return;
+        }
+
+        // 4. MOVE TO NEXT STEP (Standard Flow for all other steps)
         if (isFinalStep) {
-          handleComplete();
-          console.log("Final submission complete! Data:", response);
+            handleComplete();
         } else {
-          // If in edit mode on step 1, we just move to the next step in the UI
-          moveToNextStep();
+            moveToNextStep();
         }
 
     } catch (error) {
-      console.error("Product update failed:", error.message);
-      // Handle error display to the user if needed
+        console.error("Product update failed:", error.message);
+        // Handle error display to the user if needed
     } finally {
-      setLoading(false);
+        if (currentStep !== 1) {
+            setLoading(false);
+        }
     }
   };
-
+  
   // =============================================================================
   // @function moveToNextStep
   // Calculates and sets the next active step. If the current step is the last one
@@ -244,17 +289,6 @@ const ProductCreatePageView = ({ productId='' }) => {
   };
 
   // =============================================================================
-  // @function handleReset
-  // Resets the entire form state, returning to the first step and clearing all data.
-  // =============================================================================
-  const handleReset = () => {
-    setActiveStep(0);
-    setCompleted({});
-    setFormData({});
-    // setProductId(null);
-  };
-
-  // =============================================================================
   // @function handleFormSubmit
   // Alias for `onStepSubmitSuccess`. This is passed as a prop to child forms
   // to be called upon successful form submission.
@@ -266,46 +300,84 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Saves the current accumulated form data as a draft and navigates the user away.
   // =============================================================================
   const handleSaveAndExit = () => {
-    console.log("Saving Draft Data:", formData);
-    // In a real application, you would trigger an API call here to save the draft.
     router.push('/vendor/products');
   };
 
   // =============================================================================
-  //  Load Product Data for Editing
+  // HELPER FUNCTIONS FOR DATA TRANSFORMATION
+  // =============================================================================
+  const transformColorsForForm = (apiColors) => {
+      return apiColors?.map(c => ({
+          name: c.name,
+          hex: c.code,
+      })) || [];
+  };
+
+  // Transforms API size objects (e.g., { size: 'S' }) 
+  // into the format expected by the Autocomplete/Chip component ({ name: 'S' }).
+  const transformSizesForForm = (apiSizes) => {
+      return apiSizes?.map(s => ({
+          // Map the API's 'size' field to the form's internal 'name' field
+          name: s.size,
+      })) || [];
+  };
+
+  // =============================================================================
+  // Load Product Data for Editing (UPDATED useEffect)
   // =============================================================================
   useEffect(() => {
-    // Only fetch if a productId is provided (i.e., we are in edit mode)
-    if (productId) { 
-        const loadProductData = async () => {
-            setLoading(true); 
-            try {
-                // Fetch the complete product object by ID
-                const data = await fetchProductById(productId);
-                
-                // 1. Set the core form data. This populates the initialValues prop.
-                setFormData(data);
-                
-                // 2. Set any non-Formik-controlled state based on the fetched data
-                if (data.colors) setSelectedColors(data.colors);
-                if (data.sizes) setSelectedSizes(data.sizes);
-                
-            } catch (error) {
-                console.error('Error loading product for editing:', error);
-                // In case of error, still stop loading
-            } finally {
-                setLoading(false); // <-- Loading ends, triggers re-render
-            }
-        };
-        loadProductData();
-    }
-// Add the prop as a dependency
-}, [productId]);
+      if (productId) {
+          const loadProductData = async () => {
+              setLoading(true);
+              try {
+                  const data = await fetchProductById(productId);
+                  
+                  setFormData(data); // Set core form data
+
+                  // 1. Handle Colors Transformation
+                  if (data.colors && Array.isArray(data.colors)) {                     
+                      const initialColors = data.colors.map(c => ({
+                          name: c.name,
+                          hex: c.code
+                      }));
+                      
+                      setSelectedColors(initialColors);
+                  } else {
+                      // This will now only log if the product truly has NO color data
+                      console.warn("⚠️ PARENT WARNING: Product has no initial 'colors' data.");
+                      setSelectedColors([]);
+                  }
+                  
+                  // 2. Handle Sizes Transformation
+                  if (data.sizes && Array.isArray(data.sizes)) {
+                      
+                      // Transform API sizes array into the required state format: { name: '...' }
+                      const initialSizes = data.sizes.map(s => ({
+                          name: s.size, // Mapped 'size' (e.g., 'S', 'M') to 'name' state property
+                      }));
+                      
+                      setSelectedSizes(initialSizes);
+
+                    } else {
+                      // This will now only log if the product truly has NO size data
+                      console.warn("⚠️ PARENT WARNING: Product has no initial 'sizes' data.");
+                      setSelectedSizes([]);
+                  }
+
+              } catch (error) {
+                  console.error('Error loading product for editing:', error);
+              } finally {
+                  setLoading(false); 
+              }
+          };
+          loadProductData();
+      }
+  }, [productId]);
 
 
-// FIX: Move useMemo call to the top level of the component to obey the Rules of Hooks.
-// The initialValues for the form are memoized to ensure stability.
-const currentInitialValues = useMemo(() => formData, [formData]);
+  // FIX: Move useMemo call to the top level of the component to obey the Rules of Hooks.
+  // The initialValues for the form are memoized to ensure stability.
+  const currentInitialValues = useMemo(() => formData, [formData]);
 
   // =============================================================================
   // @function renderStepContent
@@ -315,7 +387,6 @@ const currentInitialValues = useMemo(() => formData, [formData]);
   // =============================================================================
   const renderStepContent = (step) => {
     // Use the memoized value defined in the component scope.
-    // const currentInitialValues = useMemo(() => formData, [formData]); <-- REMOVED HOOK CALL
 
     switch (step) {
       case 0:
@@ -342,14 +413,56 @@ const currentInitialValues = useMemo(() => formData, [formData]);
             selectedSizes={selectedSizes}
           />
         );
+      case 2:
+        return (
+          <H1>Hello</H1>
+        );
       // Add cases for step 2 and 3 with their respective components
       default:
         return <Box sx={{ p: 3, textAlign: 'center' }}>Step {step + 1} Content (Missing component)</Box>;
     }
   };
 
-    // Determine if we are in a state where we are editing and still waiting for data
-    const showLoadingPlaceholder = productId && loading;
+  // Determine if we are in a state where we are editing and still waiting for data
+  const showLoadingPlaceholder = productId && loading;
+ 
+  // =============================================================================
+  // @function handleUpdateVariants (REFRESHED as a Helper)
+  // Updates the product variants using the dedicated endpoint and request structure.
+  // Does NOT manage loading or step transition.
+  // =============================================================================
+  const handleUpdateVariants = async (data) => {
+    const idToUpdate = currentProductId || productId; 
+    
+    // We rely on the core update to have checked for ID and set loading, 
+    // but check data.variants presence for a cleaner error:
+    const variantsToUpdate = (data.variants || []).map(variant => ({
+        id: variant.id,
+        stock: variant.stock,
+        price: variant.price,
+        isActive: variant.isActive, 
+        sku: variant.sku,
+    }));
+    
+    if (variantsToUpdate.length === 0) {
+        // If no variants to update, just log a warning and return success.
+        console.warn("No variants to update for Step 1.");
+        return; 
+    }
+    
+    try {
+        const response = await updateProductVariantsApi(idToUpdate, variantsToUpdate); 
+
+        // Update the overall product state with the new variant info 
+        setFormData(prev => ({ ...prev, variants: response }));
+      
+    } catch (error) {
+      console.error("Product variant update failed:", error.message);
+      // Re-throw the error so handleUpdateProduct catches it and handles loading state.
+      throw error; 
+    }
+    // REMOVE the redundant setLoading(false) and moveToNextStep()
+  };
 
   return (
     <Box sx={{ background: 'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '0 0 15px 15px', overflow: 'hidden' }}>

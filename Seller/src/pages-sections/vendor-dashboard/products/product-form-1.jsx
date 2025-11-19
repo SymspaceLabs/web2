@@ -2,7 +2,7 @@
 // Create Product Form 1
 //========================================================================
 
-import { useState, useRef, useImperativeHandle, forwardRef } from "react";import { H1 } from "@/components/Typography";
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
 import { Autocomplete, TextField, Box, Card, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
@@ -62,6 +62,10 @@ const ProductForm1 = forwardRef((props, ref) => {
     setSelectedSizes,
   } = props;
 
+  // 🕵️ CHILD DEBUG 1: Log Props Received from Parent
+  useEffect(() => {
+  }, [selectedColors, selectedSizes]);
+
   // ➡️ 1. NEW LOGIC TO CONSTRUCT THE INITIAL PATH FROM NESTED DATA ⬅️
   const getInitialCategoryPath = (initialData) => {
       // Fallback 1: If categoryPath is directly provided
@@ -85,10 +89,6 @@ const ProductForm1 = forwardRef((props, ref) => {
 
   // Use the new function to derive the correct starting value for the display field
   const initialCategoryValue = getInitialCategoryPath(initialValuesProp);
-
-  // const initialCategoryValue = initialValuesProp.categoryPath 
-  //                            ? initialValuesProp.categoryPath 
-  //                            : initialValuesProp.category || null;
 
   // --- LOCAL STATE FOR FORM DATA AND ERRORS (Formik replacements) ---
   const [values, setValues] = useState(() => ({
@@ -141,7 +141,6 @@ const ProductForm1 = forwardRef((props, ref) => {
   // 4. IMPERATIVE VALIDATION LOGIC
   // Now takes currentValues as an argument (or uses the state `values`)
   const validateForm = (currentValues) => {
-    console.log('--- DEBUG: Running imperative client-side validation ---');
     let newErrors = {};
     let isValid = true;
 
@@ -177,16 +176,12 @@ const ProductForm1 = forwardRef((props, ref) => {
      * Submit the form programmatically (Called by parent's handleNext)
      */
     submit: () => {
-      console.log('--- DEBUG: CHILD formRef.current.submit() called by PARENT ---');
       
       const isValid = validateForm(values);
       
       if (isValid) {
-        console.log('--- DEBUG: Plain React Validation SUCCESSFUL ---');
         // ✅ PASS THE LATEST VALUES BACK TO THE PARENT
         handleFormSubmit(values); 
-      } else {
-        console.error("❌ ERROR: Plain React Validation Failed.");
       }
     }
   }));
@@ -236,7 +231,6 @@ const ProductForm1 = forwardRef((props, ref) => {
   const fetchCategoryItems = async (categorySlug) => {
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/subcategory-items/slug/${categorySlug}`;
     
-    console.log(`🚀 Fetching category items from: ${url}`);
     
     try {
         const response = await fetch(url);
@@ -247,7 +241,6 @@ const ProductForm1 = forwardRef((props, ref) => {
 
         const data = await response.json();
         
-        console.log('✅ Fetched Subcategory Record:', data);
         setSubcategoryDetails(data);
         
         return data;
@@ -280,7 +273,6 @@ const ProductForm1 = forwardRef((props, ref) => {
 
             setSelectedCategory(pathString); 
             
-            console.log("🚀 Calling API with Slug:", finalCategorySlug); 
             
             try {
                 const apiData = await fetchCategoryItems(finalCategorySlug);
@@ -291,7 +283,6 @@ const ProductForm1 = forwardRef((props, ref) => {
                   setFieldValue('category', apiData?.id); // ✅ SETS THE ID ON SUCCESS
                 } else {
                     setFieldValue('productType', 'static');
-                    console.log("⚠️ ar_type not found in defaults, defaulting productType to static.");
                     setFieldValue('category', apiData?.id); // ✅ Still set the ID even if no AR type
                 }
 
@@ -301,7 +292,6 @@ const ProductForm1 = forwardRef((props, ref) => {
                 setFieldValue('category', ""); // ⬅️ Clear 'category' on API failure
             }
             
-            console.log("Selected Category Object:", categoryObject);
 
           } else {
             setSelectedCategory(null);
@@ -486,56 +476,110 @@ const ProductForm1 = forwardRef((props, ref) => {
                       disableCloseOnSelect
                       multiple
                       freeSolo
-                      options={[...baseColors.map(c => c.name), ...chipData2.map(c => c.name)]}
-                      value={selectedColors.map((color) => color.name)}
+                      // 🔍 DEBUG POINT 1: Check the list of available options
+                      options={(() => {
+                          const currentOptions = [...baseColors.map(c => c.name), ...chipData2.map(c => c.name)];
+                          return currentOptions;
+                      })()}
+                      
+                      // 🔍 DEBUG POINT 2: Check the value array being passed (should be an array of strings)
+                      value={(() => {
+                          const currentValue = selectedColors.map((color) => color.name);
+                          return currentValue;
+                      })()}                      
                       onChange={(_, newValue) => {
-                        const allColors = [...baseColors, ...chipData2];
-                        const updatedColors = newValue.map((name) => {
-                          const colorObj = allColors.find((color) => color.name === name);
-                          return colorObj || { name, hex: '' };
-                        });
-                        setSelectedColors(updatedColors);
+                          // 🔍 DEBUG POINT 3: Check what the user selected or removed
+                          
+                          const allColors = [...baseColors, ...chipData2];
+                          const updatedColors = newValue.map((name) => {
+                              const colorObj = allColors.find((color) => color.name === name);
+                              // 🔍 DEBUG POINT 3A: Check if the color object was found in the source lists
+                              if (!colorObj) {
+                                  console.warn(`🕵️ DEBUG 3A: Color object not found for name: ${name}`);
+                              }
+                              return colorObj || { name, hex: '' };
+                          });
+                          setSelectedColors(updatedColors);
                       }}
+                      
                       renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                          <Checkbox checked={selected} style={{ marginRight: 8 }} />
-                          {option}
-                        </li>
+                          <li {...props}>
+                              <Checkbox checked={selected} style={{ marginRight: 8 }} />
+                              {option}
+                          </li>
                       )}
-                      renderTags={(value, getTagProps) =>
-                        selectedColors.map((option, index) => (
-                          <Chip
-                            label={(
-                              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Box
-                                  sx={{
-                                    width: 18, height: 18, borderRadius: '50%', marginRight: 1,
-                                    bgcolor: option.hex || 'transparent',
-                                    border: option.hex ? 'none' : '1px solid grey'
-                                  }}
+                      
+                      // You can also place a log here to confirm the selectedColors state is populated correctly
+                      // renderTags={(value, getTagProps) => {
+                      //     // 🔍 DEBUG POINT 4: Check the final array used to render the chips
+
+                      //     return selectedColors.map((option, index) => (
+                      //         <Chip
+                      //             label={(
+                      //                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      //                     <Box
+                      //                         sx={{
+                      //                             width: 18, height: 18, borderRadius: '50%', marginRight: 1,
+                      //                             bgcolor: option.hex || 'transparent',
+                      //                             border: option.hex ? 'none' : '1px solid grey'
+                      //                         }}
+                      //                     />
+                      //                     {option.name}
+                      //                 </Box>
+                      //             )}
+                      //             {...getTagProps({ index })}
+                      //             onDelete={getTagProps({ index }).onDelete}
+                      //             color="info"
+                      //             variant="outlined"
+                      //             sx={{ color: 'grey' }}
+                      //         />
+                      //     ))
+                      // }}
+                      renderTags={(chipNames, getTagProps) => { // Renamed 'value' to 'chipNames' for clarity
+                        
+                        // 1. Iterate over the array of strings (chipNames) provided by Autocomplete.
+                        return chipNames.map((name, index) => {
+                            
+                            // 2. Find the full color object from your state using the name.
+                            const option = selectedColors.find(color => color.name === name) || { name, hex: 'transparent' };
+                            
+                            // 3. Now render the Chip using the rich 'option' object.
+                            return (
+                                <Chip
+                                    key={name} // Use the name as the key
+                                    label={(
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <Box
+                                                sx={{
+                                                    width: 18, height: 18, borderRadius: '50%', marginRight: 1,
+                                                    bgcolor: option.hex || 'transparent',
+                                                    border: option.hex ? 'none' : '1px solid grey'
+                                                }}
+                                            />
+                                            {option.name}
+                                        </Box>
+                                    )}
+                                    // getTagProps uses the index of the Autocomplete's internal value array (chipNames)
+                                    {...getTagProps({ index })} 
+                                    onDelete={getTagProps({ index }).onDelete}
+                                    color="info"
+                                    variant="outlined"
+                                    sx={{ color: 'grey' }}
                                 />
-                                {option.name}
-                              </Box>
-                            )}
-                            {...getTagProps({ index })}
-                            onDelete={getTagProps({ index }).onDelete}
-                            color="info"
-                            variant="outlined"
-                            sx={{ color: 'grey' }}
-                          />
-                        ))
-                      }
+                            );
+                        });
+                    }}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Select Colors"
-                          sx={{ width: '500px' }}
-                          InputProps={{ ...params.InputProps, style: { backgroundColor: 'white' } }}
-                          InputLabelProps={{ style: { color: 'black' } }}
-                        />
+                          <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Select Colors"
+                              sx={{ width: '500px' }}
+                              InputProps={{ ...params.InputProps, style: { backgroundColor: 'white' } }}
+                              InputLabelProps={{ style: { color: 'black' } }}
+                          />
                       )}
-                    />
+                  />
                     <Button
                       onClick={handleOpenColorDialog}
                       sx={{
@@ -556,42 +600,69 @@ const ProductForm1 = forwardRef((props, ref) => {
                       disableCloseOnSelect
                       multiple
                       freeSolo
-                      options={baseSizes.map((option) => option.name)}
-                      value={selectedSizes.map((size) => size.name)}
+                      
+                      // 🔍 DEBUG 1: Check the list of available size options (should contain base sizes + API-loaded sizes for edit)
+                      options={(() => {
+                          // FIX: Ensure API-loaded sizes are included in options when in edit mode
+                          const allSizes = [...baseSizes.map((option) => option.name), ...selectedSizes.map((size) => size.name)];
+                          const uniqueSizeOptions = [...new Set(allSizes)];
+                          
+                          return uniqueSizeOptions;
+                      })()}
+                      
+                      // 🔍 DEBUG 2: Check the current value being passed (should be an array of size names/strings)
+                      value={(() => {
+                          const currentValue = selectedSizes.map((size) => size.name);
+                          return currentValue;
+                      })()}
+                      
                       onChange={(_, newValue) => {
-                        const updatedSizes = newValue.map((name) => {
-                          const sizeObj = baseSizes.find((size) => size.name === name);
-                          return sizeObj || { name };
-                        });
-                        setSelectedSizes(updatedSizes);
+                          // 🔍 DEBUG 3: Check what the user selected or removed
+                          
+                          const updatedSizes = newValue.map((name) => {
+                              // Need to search across baseSizes AND any existing selectedSizes (if it was a custom size)
+                              const allSources = [...baseSizes, ...selectedSizes]; 
+                              const sizeObj = allSources.find((size) => size.name === name);
+                              
+                              // 🔍 DEBUG 3A: Check if the size object was found in the source lists
+                              if (!sizeObj) {
+                                  console.warn(`🕵️ SIZE DEBUG 3A: Size object not found for name: ${name}`);
+                              }
+                              return sizeObj || { name };
+                          });
+                          setSelectedSizes(updatedSizes);
                       }}
+                      
                       renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                          <Checkbox checked={selected} style={{ marginRight: 8 }} />
-                          {option}
-                        </li>
+                          <li {...props}>
+                              <Checkbox checked={selected} style={{ marginRight: 8 }} />
+                              {option}
+                          </li>
                       )}
-                      renderTags={(value, getTagProps) =>
-                        selectedSizes.map((option, index) => (
-                          <Chip
-                            label={option.name}
-                            {...getTagProps({ index })}
-                            onDelete={getTagProps({ index }).onDelete}
-                            color="info"
-                            variant="outlined"
-                            sx={{ color: 'grey' }}
-                          />
-                        ))
-                      }
+                      
+                      renderTags={(value, getTagProps) => {
+                          // 🔍 DEBUG 4: Check the final array used to render the chips (should be objects: [{ name: 'S' }])
+                          
+                          return selectedSizes.map((option, index) => (
+                              <Chip
+                                  label={option.name}
+                                  {...getTagProps({ index })}
+                                  onDelete={getTagProps({ index }).onDelete}
+                                  color="info"
+                                  variant="outlined"
+                                  sx={{ color: 'grey' }}
+                              />
+                          ))
+                      }}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Select Sizes"
-                          sx={{ width: '500px' }}
-                          InputProps={{ ...params.InputProps, style: { backgroundColor: 'white' } }}
-                          InputLabelProps={{ style: { color: 'black' } }}
-                        />
+                          <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Select Sizes"
+                              sx={{ width: '500px' }}
+                              InputProps={{ ...params.InputProps, style: { backgroundColor: 'white' } }}
+                              InputLabelProps={{ style: { color: 'black' } }}
+                          />
                       )}
                     />
                     <Button

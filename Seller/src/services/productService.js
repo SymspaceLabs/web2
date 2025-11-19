@@ -199,3 +199,34 @@ export const fetchProductAvailability = async (productId, colorId, sizeId) => {
     throw error; // Re-throw to allow the calling component to handle it.
   }
 };
+
+/**
+ * Uploads a raw File object to the Minio backend and returns the resulting URL.
+ * @param {File} file - The raw file object from the user's input.
+ * @returns {Promise<string>} The permanent public URL of the uploaded file.
+ */
+export const uploadFileToBackend = async (file) => {
+    const formData = new FormData();
+    // 'file' must match the key used by NestJS's @UseInterceptors(FileInterceptor('file'))
+    formData.append('file', file); 
+
+    try {
+        // NOTE: Adjust the endpoint URL as necessary
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/file`, { 
+            method: 'POST',
+            body: formData,
+            // DO NOT manually set Content-Type for FormData; the browser handles it.
+        });
+
+        if (!response.ok) {
+            throw new Error(`Upload failed with status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.url; // Returns the fileUrl from the NestJS controller
+        
+    } catch (error) {
+        console.error("Image upload failed:", error);
+        throw error;
+    }
+};

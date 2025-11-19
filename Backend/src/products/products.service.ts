@@ -482,11 +482,18 @@ export class ProductsService {
       where: { id: productId },
       // Updated relations to load the full hierarchy including subcategoryItemChild
       relations: [
-        'subcategoryItem',
+        'company', 
+        'images', 
+        'colors', 
+        'sizes', 
+        'subcategoryItem', 
+        'subcategoryItemChild', 
+        'variants', 
+        'threeDModels',
         'subcategoryItem.subcategory',
         'subcategoryItem.subcategory.category',
-        'subcategoryItemChild'
       ],
+
     });
 
     if (!product) {

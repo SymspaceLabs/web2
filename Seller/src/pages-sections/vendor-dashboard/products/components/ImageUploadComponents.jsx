@@ -74,7 +74,7 @@ export function DropZone({
 // --- SortableItem Component ---
 
 // Styled Box for the image container, to handle the primary image border
-const ImageWrapper = styled(Box, {
+export const ImageWrapper = styled(Box, {
     shouldForwardProp: (prop) => prop !== 'isPrimary',
 })(({ isPrimary }) => ({
     position: 'relative',
@@ -83,7 +83,7 @@ const ImageWrapper = styled(Box, {
     borderRadius: '8px',
     overflow: 'hidden',
     cursor: 'grab',
-    border: isPrimary ? '2px solid black' : '2px solid transparent', // Black stroke for the first image
+    border: isPrimary ? '2px solid black' : '2px solid transparent',
     transition: 'border 0.2s',
     '&:hover .delete-button': {
         opacity: 1,
@@ -91,7 +91,7 @@ const ImageWrapper = styled(Box, {
 }));
 
 // Styled Box for the index number in a circle
-const IndexCircle = styled(Box)({
+export const IndexCircle = styled(Box)({
     position: 'absolute',
     top: 4,
     left: 4,
@@ -109,7 +109,7 @@ const IndexCircle = styled(Box)({
 });
 
 // Styled IconButton for delete
-const DeleteButton = styled(IconButton)({
+export const DeleteButton = styled(IconButton)({
     position: 'absolute',
     top: 0,
     right: 0,
@@ -118,7 +118,7 @@ const DeleteButton = styled(IconButton)({
     height: 24,
     color: 'white',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    opacity: 0, // Hidden by default, shown on hover
+    opacity: 0,
     transition: 'opacity 0.2s',
     '&:hover': {
         backgroundColor: 'rgba(0, 0, 0, 0.7)',

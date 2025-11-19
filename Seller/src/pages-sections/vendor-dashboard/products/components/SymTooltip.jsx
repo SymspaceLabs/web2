@@ -7,7 +7,12 @@ const SymTooltip = ({ title="" }) => {
     <>
         <Tooltip title={title}>
             <IconButton size="small" aria-label="info">
-                <InfoOutlinedIcon fontSize="small" sx={{ color: 'white' }} />
+                <InfoOutlinedIcon
+                  sx={{
+                    color: 'white',
+                    fontSize: 10
+                  }}
+                />
             </IconButton>
         </Tooltip>
     </>

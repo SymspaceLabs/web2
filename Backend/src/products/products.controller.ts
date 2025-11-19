@@ -78,8 +78,7 @@ export class ProductsController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const productDetail = await this.productsService.findOne(id);
-    return productDetail;
+    return this.productsService.findOne(id);
   }
 
   @Delete(':id')

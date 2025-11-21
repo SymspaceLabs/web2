@@ -4,6 +4,7 @@ import { SortableContainer } from "react-sortable-hoc";
 import { Box } from "@mui/material";
 import ModelVariantDropZone from './ModelVariantDropZone'; // Import the new DropZone
 import { SortableItem } from "./ImageUploadComponents"; // Reuse the SortableItem (it should handle non-image files if possible, see Note below)
+import ModelSortableItem from './ModelSortableItem'; // Use the dedicated component
 
 // ========================================================================
 // 5. SortableList Component for Models
@@ -15,7 +16,7 @@ const ModelSortableList = SortableContainer(({ files, handleFileDelete, maxFiles
         <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2, flexWrap: 'wrap', gap: 2 }}>
             {/* Render Uploaded Models (using the same SortableItem for dragging/deleting) */}
             {files.map((file, index) => (
-                <SortableItem 
+                <ModelSortableItem 
                     key={`model-item-${index}`} 
                     index={index} 
                     file={file}

@@ -88,7 +88,6 @@ export const updateProduct = async (id, updatedData) => {
         }
 
         const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`;
-        console.log("--- API CALL: UPDATE PRODUCT ---", url, updatedData);
 
         const response = await fetch(url, {
             method: 'PATCH', 

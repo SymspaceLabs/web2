@@ -1,4 +1,4 @@
-import { Repository, SelectQueryBuilder } from 'typeorm';
+import { QueryFailedError, Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -249,30 +249,34 @@ export class ProductsService {
           product.sizes = mapProductSizes(sizes.map(size => ({ size })), product);
       }
 
-      // Colors: Replace colors if provided in DTO
-      // if (colors !== undefined) {
-      //     product.colors = colors.map((color) => {
-      //         const c = new ProductColor();
-      //         c.name = color.name;
-      //         c.code = color.code;
-      //         c.product = product;
-      //         return c;
-      //     });
-      // }
+      let savedProduct: Product;
+      
+      try {
+        // Step 1: Save product (This saves all non-variant relations due to cascade)
+        savedProduct = await this.productRepository.save(product);
+      } catch (error) {
+        // 1. Check if it's the specific TypeORM QueryFailedError
+        if (error instanceof QueryFailedError) {
+            const errorMessage = error.message;
 
-      // Sizes: Replace sizes if provided in DTO
-      // if (sizes !== undefined) {
-      //     product.sizes = sizes.map((size, i) => {
-      //         const s = new ProductSize();
-      //         s.size = size;
-      //         s.sortOrder = i;
-      //         s.product = product;
-      //         return s;
-      //     });
-      // }
-
-      // Step 1: Save product (This saves all non-variant relations due to cascade)
-      const savedProduct = await this.productRepository.save(product);
+            // 2. Check for the specific "Data too long" message and column
+            if (errorMessage.includes("Data too long for column 'composition'")) {
+                // Re-throw as a NestJS exception with a descriptive message
+                throw new BadRequestException(
+                    "The data provided for the 'composition' field is too long. Please shorten it and try again."
+                );
+            }
+            
+            // For other QueryFailedErrors, you might throw a generic 500 or another BadRequest
+            // Depending on how specific you want to be.
+            if (errorMessage.includes('Duplicate entry')) {
+                 throw new BadRequestException('A product with this unique field already exists.');
+            }
+            
+            // Re-throw other TypeORM errors as a generic error or log it
+            throw new BadRequestException('Database error: Invalid data provided.');
+        }
+      }
 
       // === Generate Variants ===
       // Run if creating a new product OR if colors/sizes were explicitly provided/updated

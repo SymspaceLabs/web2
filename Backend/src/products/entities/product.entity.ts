@@ -99,7 +99,7 @@ export class Product {
   @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true })
   threeDModels: Product3DModel[];
 
-  @Column({ nullable: true })
+  @Column({ type: 'text', nullable: true })
   composition: string;
 
   @Column({ type: 'text', nullable: true })

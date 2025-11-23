@@ -229,3 +229,65 @@ export const uploadFileToBackend = async (file) => {
         throw error;
     }
 };
+
+/**
+ * Uploads a raw GLB/3D Model File object to the Minio/S3 backend and returns the resulting URL.
+ * It is expected that the backend's /upload/file endpoint handles the storage (S3/Minio).
+ * * @param {File} file - The raw file object from the user's input (expected to be .glb).
+ * @param {string} productId - The ID of the product this model belongs to (for context/naming, if needed).
+ * @returns {Promise<string>} The permanent public URL of the uploaded 3D model.
+ */
+export const uploadProductModel = async (file, productId) => {
+    // 1. Basic Validation
+    if (!file) {
+        throw new Error("No file provided for upload.");
+    }
+    
+    // Optional: Add specific file type validation (e.g., check for .glb extension)
+    const fileNameLower = file.name.toLowerCase();
+    if (!fileNameLower.endsWith('.glb') && !fileNameLower.endsWith('.gltf')) {
+        console.warn(`Uploading file with non-standard 3D model extension: ${file.name}`);
+        // Consider throwing an error here if strict file type enforcement is necessary.
+    }
+
+    // 2. Prepare FormData
+    const formData = new FormData();
+    // 'file' must match the key used by NestJS's @UseInterceptors(FileInterceptor('file'))
+    formData.append('file', file); 
+    
+    // Optionally include product context in the FormData if the backend requires it 
+    // for pathing/organizing (e.g., bucket/product_id/model.glb)
+    // formData.append('productId', productId); 
+
+    try {
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/s3/upload`;
+                
+        // 3. API Call
+        const response = await fetch(url, { 
+            method: 'POST',
+            body: formData,
+            // DO NOT set Content-Type for FormData
+        });
+
+        // 4. Handle Response
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+                `3D Model upload failed: ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`
+            );
+        }
+
+        const data = await response.json();
+        
+        // Ensure the backend returns the URL as expected
+        if (!data || !data.url) {
+            throw new Error("3D Model upload succeeded, but response is missing the 'url' field.");
+        }
+        
+        return data.url; // The S3/Minio URL
+        
+    } catch (error) {
+        console.error("3D Model upload failed:", error);
+        throw error;
+    }
+};

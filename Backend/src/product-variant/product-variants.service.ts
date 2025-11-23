@@ -54,13 +54,25 @@ export class ProductVariantsService {
     }));
   }
   
+  // Assuming UpdateVariantStockDto contains: 
+  // { id, stock, dimensions?, productWeight?, sizeChart?, sizeFit? }
+
   async updateStockForVariants(
     productId: string,
     updateList: UpdateVariantStockDto[],
-  ): Promise<{ message: string; updated: { id: string; stock: number }[] }> {
+  ): Promise<{ message: string; updated: { id: string; stock: number; sku: string }[] }> {
     const results: { id: string; stock: number; sku: string }[] = [];
 
-    for (const { id, stock } of updateList) {
+    // Destructure all possible update fields from the DTO
+    for (const { 
+      id, 
+      stock, 
+      dimensions, 
+      productWeight, 
+      sizeChart, // New field from DTO
+      sizeFit    // New field from DTO
+    } of updateList) {
+      
       // 1. Load the variant along with its product relation
       const variant = await this.variantRepo.findOne({
         where: { id },
@@ -74,8 +86,39 @@ export class ProductVariantsService {
         );
       }
       
-      // 3. Update and save
-      variant.stock = stock;
+      // 3. Update all fields and save
+      
+      // Update stock (required in your DTO)
+      variant.stock = stock; 
+      
+      // 3a. Handle Partial JSON Updates (dimensions)
+      if (dimensions !== undefined) {
+        // Merge existing dimensions with new dimensions, preserving existing fields not provided in the update.
+        variant.dimensions = { 
+          ...variant.dimensions, 
+          ...dimensions 
+        };
+      }
+      
+      // 3b. Handle Partial JSON Updates (productWeight)
+      if (productWeight !== undefined) {
+        // Merge existing weight with new weight.
+        variant.productWeight = { 
+          ...variant.productWeight, 
+          ...productWeight 
+        };
+      }
+      
+      // 3c. Handle Optional Scalar Field Updates (sizeChart)
+      if (sizeChart !== undefined) {
+        variant.sizeChart = sizeChart;
+      }
+      
+      // 3d. Handle Optional Scalar Field Updates (sizeFit)
+      if (sizeFit !== undefined) {
+        variant.sizeFit = sizeFit;
+      }
+
       await this.variantRepo.save(variant);
 
       // 4. Include sku in the result
@@ -84,13 +127,13 @@ export class ProductVariantsService {
         stock: variant.stock,
         sku: variant.sku,
       });
-      }
+    }
 
-    return {
-      message: 'Stock updated successfully',
-      updated: results,
-    };
-  }
+  return {
+    message: 'Stock updated successfully',
+    updated: results,
+  };
+}
   
   async checkAvailability(productId: string, color: string, size: string) {
     const variant = await this.variantRepo.findOne({

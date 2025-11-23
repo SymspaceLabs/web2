@@ -77,6 +77,7 @@ export function applyTagDefaults(productData: any, tagDefaults: any): void {
         ar_type: tagDefaults.ar_type,
         indoor_outdoor: tagDefaults.indoor_outdoor,
         accessible: tagDefaults.accessible,
+        gender: tagDefaults.gender,
     };
 
     // Apply default only if the DTO value (in productData) is missing (undefined)

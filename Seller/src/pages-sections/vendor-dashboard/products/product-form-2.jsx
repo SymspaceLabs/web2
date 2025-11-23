@@ -1,3 +1,5 @@
+// In ProductForm2.jsx
+
 //========================================================================
 // Create Product Form 2
 //========================================================================
@@ -12,7 +14,7 @@ import { H1 } from "@/components/Typography";
 import { arrayMove } from "react-sortable-hoc";
 import { InfoOutlined } from "@mui/icons-material";
 import { Box, Card, Tooltip, IconButton } from "@mui/material"; 
-import { uploadFileToBackend } from '@/services/productService';
+import { uploadFileToBackend, uploadProductModel } from '@/services/productService';
 import { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 
 //========================================================================
@@ -108,20 +110,38 @@ const ProductForm2 = forwardRef((props, ref) => {
 
 
     const initialVariantModels = useMemo(() => {
-        // Use 'threeDModels' from the API response (or 'models' if renamed)
+        // Use 'threeDModels' from the API response
         const models = initialValues.threeDModels || []; 
         
+        // ➡️ DEBUG: Check the map built from selectedColors
+        console.log("DEBUG: Color Code to Name Map:", colorCodeToNameMap);
+        
         return (models).reduce((acc, model) => {
-            // Assuming 3D models ALSO use colorCode
+            // Ensure colorCode from API is standardized for lookup (e.g., lowercase)
             const colorCode = model.colorCode ? model.colorCode.toLowerCase() : null;
+            
+            // ➡️ DEBUG: Check model data coming from initialValues
+            console.log(`DEBUG: Processing Model URL: ${model.url} with ColorCode: ${colorCode}`);
+            
+            // Look up the color name using the code map
             const colorName = colorCodeToNameMap[colorCode]; 
             
+            // ➡️ DEBUG: Check lookup result
+            if (!colorName) {
+                console.warn(`WARNING: Could not find color name for code ${colorCode}. Model will not be prepopulated.`);
+            }
+
             if (model.url && colorName) {
-                acc[colorName] = [...(acc[colorName] || []), model.url];
+                // Group models by the actual colorName (e.g., 'green')
+                const lowerCaseName = colorName.toLowerCase();
+                acc[lowerCaseName] = [...(acc[lowerCaseName] || []), model.url];
+                
+                // ➡️ DEBUG: Model successfully mapped
+                console.log(`DEBUG: Mapped Model to Color: ${lowerCaseName}`);
             }
             return acc;
         }, {});
-    }, [initialValues.threeDModels, colorCodeToNameMap]);
+    }, [initialValues.threeDModels, colorCodeToNameMap]); // This dependency array looks correct
 
     const [formValues, setFormValues] = useState(() => ({
         ...initialValues,
@@ -173,41 +193,51 @@ const ProductForm2 = forwardRef((props, ref) => {
     }, [uploadFileToBackend]);
 
     // ----------------------------------------------------------------------------------
-    // 4. 3D MODEL UPLOAD LOGIC 
+    // 4. 3D MODEL UPLOAD LOGIC (UPDATED TO CALL updateProduct)
     // ----------------------------------------------------------------------------------
     const handleModelDropUploadAndUpdateState = useCallback(async (acceptedFiles, colorName) => {
         const lowerCaseName = colorName.toLowerCase();
         
+        // 1. Preview: Create temporary file objects for UI feedback
         const filesWithPreviews = acceptedFiles.map(file => 
             Object.assign(file, { preview: URL.createObjectURL(file), isUploading: true })
         );
         
+        // 2. Update State: Show temporary preview immediately
         setVariantModels(prev => ({
             ...prev,
             [lowerCaseName]: [...(prev[lowerCaseName] || []).filter(item => typeof item === 'string'), ...filesWithPreviews] 
         }));
         
-        const uploadPromises = acceptedFiles.map(file => uploadFileToBackend(file));
+        // 3. Upload: Send to S3 (using product ID if available, or 'temp')
+        const productId = formValues.id || 'temp';
+        const uploadPromises = acceptedFiles.map(file => uploadProductModel(file, productId));
         
         try {
             const uploadedUrls = await Promise.all(uploadPromises);
             
+            // 4. Success: Replace temporary previews with permanent S3 URLs in local state
             setVariantModels(prev => {
                 const existingPermanentFiles = (prev[lowerCaseName] || []).filter(item => typeof item === 'string');
                 const finalFiles = [...existingPermanentFiles, ...uploadedUrls];
                 return { ...prev, [lowerCaseName]: finalFiles };
             });
             
+            // Clean up previews
             filesWithPreviews.forEach(file => URL.revokeObjectURL(file.preview));
+
+            // 🛑 NO API CALL (updateProduct) HERE. 
+            // The URL is now in local state, waiting for the user to click "Next".
 
         } catch (error) {
             console.error(`Failed to upload models for ${colorName}:`, error);
+            // Revert state on error
             setVariantModels(prev => ({
                 ...prev,
                 [lowerCaseName]: (prev[lowerCaseName] || []).filter(item => typeof item === 'string')
             }));
         }
-    }, [uploadFileToBackend]);
+    }, [formValues.id, uploadProductModel]); // Removed updateProduct dependency
 
 
     // --- FORM HANDLERS (Manual Implementation) ---
@@ -272,24 +302,29 @@ const ProductForm2 = forwardRef((props, ref) => {
                 }));
             });
 
-            // Transform variantModels into a flat array of { url, colorCode, colorName }
+            // ⭐ THIS LOGIC SENDS THE URLS TO THE PARENT ⭐
+            // It reads from the local 'variantModels' state we updated in step 1 & 2
+            // 1. Prepare 3D Models Data for API Payload
             const allProductModels = Object.entries(variantModels).flatMap(([colorKey, urls]) => {
                 const colorVariant = selectedColors.find(c => c.name.toLowerCase() === colorKey);
-                const colorCode = colorVariant ? colorVariant.hex : '#FFFFFF';
-                const originalColorName = colorVariant ? colorVariant.name : colorKey;
+                
+                // Use the color code associated with the color name
+                const colorCode = colorVariant ? colorVariant.hex : '#FFFFFF'; 
 
-                // Filter out non-string items (i.e., temporary file objects) before submitting
+                // Filter out any files still uploading (objects) and keep only S3 URLs (strings)
                 return urls.filter(item => typeof item === 'string').map(url => ({
-                    url: url,
-                    colorCode: colorCode, // Include colorCode for models too, for consistency
-                    colorName: originalColorName, 
+                    // ⭐ FIELD NAME CHANGE: API requires 'url'
+                    url: url, 
+                    // ⭐ FIELD NAME CHANGE: API requires 'colorCode'
+                    colorCode: colorCode, 
+                    // We omit 'key' and 'colorName' as they are not needed in this specific API format.
                 }));
             });
 
             const finalData = {
                 ...formValues,
-                productImages: allProductImages, // Transformed for API payload
-                productModels: allProductModels, // Transformed for API payload
+                productImages: allProductImages, 
+                threeDModels: allProductModels, // ✅ The updated list of S3 URLs
             };
             
             handleFormSubmit(finalData);
@@ -324,13 +359,24 @@ const ProductForm2 = forwardRef((props, ref) => {
         });
     }, [onSortEndUtility]);
 
-    // **⭐ NEW: Model-specific handlers (Extracted using useCallback for stability) ⭐**
-    const handleModelDelete = useCallback((colorName, urlToDelete) => {
+    // --- FIX: Updated handleModelDelete to persist deletion ---
+    const handleModelDelete = useCallback((colorName, fileKeyToDelete) => {
         const lowerCaseName = colorName.toLowerCase();
-        setVariantModels(prev => ({
-            ...prev,
-            [lowerCaseName]: (prev[lowerCaseName] || []).filter(item => item !== urlToDelete)
-        }));
+        
+        setVariantModels(prev => {
+            const currentFiles = prev[lowerCaseName] || [];
+            
+            // Filter out the item (whether it's a string URL or a File object)
+            const updatedFiles = currentFiles.filter(item => {
+                if (typeof item === 'string') return item !== fileKeyToDelete;
+                if (item && item.preview) return item.preview !== fileKeyToDelete;
+                return true;
+            });
+            
+            return { ...prev, [lowerCaseName]: updatedFiles };
+        });
+        
+        // 🛑 NO API CALL HERE.
     }, []);
 
     const handleModelSortEnd = useCallback((colorName, { oldIndex, newIndex }) => {

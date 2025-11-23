@@ -72,16 +72,18 @@ const ProductCreatePageView = ({ productId='' }) => {
   const onStepSubmitSuccess = (values) => {  
       setLoading(true);
 
+      // ➡️ DEBUG: Check incoming 3D models from the form (Step 1)
+      if (activeStep === 1) {
+          console.log("➡️ DEBUG: Incoming 3D Models from ProductForm2 (Key: threeDModels):", values.threeDModels);
+      }
+
       let newFormData = { ...formData, ...values };
 
       // ⭐ FIX: Prevent media data from being overwritten by Step 0 (ProductForm1) submission ⭐
       if (activeStep === 0) {
           // ProductForm1 submission doesn't contain media data, so keep the existing arrays from formData.
           newFormData = {
-              ...newFormData,
-              // Keep the previous productImages and productModels arrays if they exist
-              // productImages: formData.productImages || [],
-              // productModels: formData.productModels || [],
+              ...newFormData
           };
       }
       
@@ -171,9 +173,9 @@ const ProductCreatePageView = ({ productId='' }) => {
         colorCode: img.colorCode, 
     }));
     
-    const transformedModels = (data.productModels || []).map(model => ({
+    const transformedModels = (data.threeDModels || []).map(model => ({
         url: model.url,
-        colorName: model.colorName, 
+        colorCode: model.colorCode,
     }));
 
     const transformedSizes = selectedSizes.map(size => size.name);
@@ -200,11 +202,13 @@ const ProductCreatePageView = ({ productId='' }) => {
     // ⭐ CONDITIONAL FIX: Only include images/models if the current step is 1 ⭐
     if (currentStep === 1) {
         requestBody.images = transformedImages;
-        requestBody.models = transformedModels;
+        requestBody.threeDModels = transformedModels;
     }
     // For Step 0, images/models will be omitted from the requestBody, preventing overwrite.
     // For Step 2/3, they will also be omitted, as they don't contain media inputs.
 
+    // ➡️ DEBUG: Check the final API payload before the call
+    console.log("➡️ DEBUG: API Request Body for Update (Step:", currentStep, "):", requestBody);
 
     const idToUpdate = currentProductId || productId; 
     if (!idToUpdate) {
@@ -224,10 +228,9 @@ const ProductCreatePageView = ({ productId='' }) => {
             ...prev, 
             ...response,
             images: data.images || prev.images, 
-            threeDModels: data.threeDModels || prev.threeDModels,
             // Explicitly persist the media and variant arrays for subsequent steps
             productImages: data.productImages || [],
-            productModels: data.productModels || [], 
+            threeDModels: data.threeDModels || [],
             variants: data.variants || [],
         }));
     
@@ -311,6 +314,41 @@ const ProductCreatePageView = ({ productId='' }) => {
           name: c.name,
           hex: c.code,
       })) || [];
+  };
+
+  /**
+   * Transforms the API's flat threeDModels array into the nested object 
+   * structure used by the form state (variantModels).
+   * @param {Array} apiModels - The array from response.threeDModels
+   * @param {Array} selectedColors - The array of color objects (used for lookup)
+   * @returns {Object} The state object { 'colorName': ['url1', 'url2'] }
+   */
+  const mapApiModelsToState = (apiModels, selectedColors) => {
+      const modelState = {};
+
+      if (!apiModels || apiModels.length === 0) {
+          return modelState;
+      }
+
+      apiModels.forEach(model => {
+          const colorHex = model.colorCode;
+          
+          // 1. Find the color object using the HEX code
+          const colorVariant = selectedColors.find(c => c.hex === colorHex);
+
+          if (colorVariant) {
+              // 2. Use the lowercase color NAME as the key for the state object
+              const colorNameKey = colorVariant.name.toLowerCase();
+
+              // 3. Store the URL in the corresponding array
+              if (!modelState[colorNameKey]) {
+                  modelState[colorNameKey] = [];
+              }
+              modelState[colorNameKey].push(model.url);
+          }
+      });
+
+      return modelState;
   };
 
   // Transforms API size objects (e.g., { size: 'S' }) 

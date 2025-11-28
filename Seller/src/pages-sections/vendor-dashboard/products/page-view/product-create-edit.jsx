@@ -47,8 +47,12 @@ const ProductCreatePageView = ({ productId='' }) => {
   const [formData, setFormData] = useState({});
   const [selectedColors, setSelectedColors] = useState([]);
   const [selectedSizes, setSelectedSizes] = useState([]);
+  // NEW STATE to store the initial values for comparison
+  const [initialColors, setInitialColors] = useState([]);
+  const [initialSizes, setInitialSizes] = useState([]);
   const [loading, setLoading] = useState(!!productId); 
   const [currentProductId, setCurrentProductId] = useState(productId || null);
+  const [step1Variants, setStep1Variants] = useState([]);
 
   // --- STEPPER HELPER FUNCTIONS ---
   const totalSteps = () => steps.length;
@@ -63,30 +67,22 @@ const ProductCreatePageView = ({ productId='' }) => {
   const handleNext = () => {
     if (formRef.current && formRef.current.submit) {
         formRef.current.submit();
+    } else {
+        // If there is no child form (like in Step 2/3 placeholders), 
+        // manually call the success handler with current data.
+        console.log(`Step ${activeStep}: No explicit form submit, proceeding with current data.`);
+        onStepSubmitSuccess(formData);
     }
   };
 
   // =============================================================================
   // @function onStepSubmitSuccess (FIXED)
   // =============================================================================
-  const onStepSubmitSuccess = (values) => {  
+  const onStepSubmitSuccess = (values) => {  
       setLoading(true);
-
-      // ➡️ DEBUG: Check incoming 3D models from the form (Step 1)
-      if (activeStep === 1) {
-          console.log("➡️ DEBUG: Incoming 3D Models from ProductForm2 (Key: threeDModels):", values.threeDModels);
-      }
 
       let newFormData = { ...formData, ...values };
 
-      // ⭐ FIX: Prevent media data from being overwritten by Step 0 (ProductForm1) submission ⭐
-      if (activeStep === 0) {
-          // ProductForm1 submission doesn't contain media data, so keep the existing arrays from formData.
-          newFormData = {
-              ...newFormData
-          };
-      }
-      
       // Update the state with the merged data
       setFormData(newFormData);
 
@@ -100,12 +96,16 @@ const ProductCreatePageView = ({ productId='' }) => {
               handleCreateProduct(newFormData);
           }
       } else if (activeStep < totalSteps() - 1) {
-          // Step 1 (Details/Media) and Step 2 (Safety/Compliance)
+          // Step 1, Step 2, and Step 3 (Non-final steps)
+          // Step 1 is handled in handleUpdateProduct's conditional logic
+          // Step 2 and 3 can be standard updates for their fields, 
+          // but the key is moving to the next step.
           handleUpdateProduct(newFormData, false, false, activeStep); 
       } else if (isLastStep()) {
-          // On the final step, update the product with a 'submitted' status.
-          handleUpdateProduct({ ...newFormData, status: 'submitted' }, true, false, activeStep);
+          // On the final step (Step 3)
+          handleUpdateProduct({ ...newFormData }, true, false, activeStep);
       }
+
   };
 
   // =============================================================================
@@ -113,7 +113,7 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Creates the product on Step 1 and handles the URL update (moving from /create to /:id).
   // =============================================================================
   const handleCreateProduct = async (data) => {
-    const transformedSizes = selectedSizes.map(size => size.name);
+    const transformedSizes = (selectedSizes || []).map(size => size.name);
     const transformedColors = selectedColors.map(color => ({
       name: color.name,
       code: color.hex,
@@ -126,6 +126,8 @@ const ProductCreatePageView = ({ productId='' }) => {
       colors : transformedColors,
       sizes : transformedSizes,
       salePrice: 0.00,
+      cost: data.cost, 
+      material: data.material,
     }
 
     console.log(requestBody)
@@ -184,31 +186,46 @@ const ProductCreatePageView = ({ productId='' }) => {
         code: color.hex, 
     }));
 
-    // --- Build Request Body ---
-    const requestBody = {
-        name: data.name,
-        company : user?.company?.id,
-        subcategoryItem : data.category,
-        
-        // Fields from ProductForm1
-        colors : transformedColors, 
-        sizes : transformedSizes, 
-        
-        // Fields from ProductForm2 (sent from Step 1 onwards)
-        bulletPoints: data.bulletPoints,
-        composition: data.composition,
-    };
-    
-    // ⭐ CONDITIONAL FIX: Only include images/models if the current step is 1 ⭐
-    if (currentStep === 1) {
-        requestBody.images = transformedImages;
-        requestBody.threeDModels = transformedModels;
-    }
-    // For Step 0, images/models will be omitted from the requestBody, preventing overwrite.
-    // For Step 2/3, they will also be omitted, as they don't contain media inputs.
+    // --- Build Request Body (STRICTLY CONDTIONALIZED) ---
+    let requestBody = {};
 
-    // ➡️ DEBUG: Check the final API payload before the call
-    console.log("➡️ DEBUG: API Request Body for Update (Step:", currentStep, "):", requestBody);
+    const arraysEqual = (a, b) => {
+      if (a.length !== b.length) return false;
+      // Simple stringify comparison works for arrays of simple objects like {name, hex} or {name}
+      return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+    };
+
+    // Check if colors/sizes have changed
+    const colorsChanged = !arraysEqual(transformedColors, initialColors.map(c => ({ name: c.name, code: c.hex })));
+    const sizesChanged = !arraysEqual(transformedSizes, initialSizes.map(s => s.name));
+    
+    // Only include images/models if the current step is 1 ⭐
+    if (currentStep === 0) {
+        requestBody = {
+          name: data.name,
+          company : user?.company?.id,
+          subcategoryItem : data.category,
+          // Only include colors and sizes if they have changed
+          ...(colorsChanged && { colors : transformedColors }), 
+          ...(sizesChanged && { sizes : transformedSizes }), 
+        };
+    } else if (currentStep === 1) {
+        // Fields from ProductForm2 (Details/Media/Variants)
+        requestBody = {
+          composition: data.composition,
+          images: transformedImages, 
+          threeDModels: transformedModels
+        };
+    } else if (currentStep === 2) {
+        // ⭐ FIX: Fields from Step 2 (Safety & Compliance) - Assume these are placeholders for now
+        requestBody = {
+          // Add safety and compliance fields here
+          safety_data: data.safety_data || 'placeholder', 
+        };
+    } else if (currentStep === 3) {
+        // ⭐ FIX: Fields for Final Step (Review & Submit)
+        requestBody = {};
+    }
 
     const idToUpdate = currentProductId || productId; 
     if (!idToUpdate) {
@@ -217,27 +234,44 @@ const ProductCreatePageView = ({ productId='' }) => {
         return;
     }
 
+    // Check if the request body is empty for Step 0
+    if (currentStep === 0 && Object.keys(requestBody).length === 0) {
+      console.log("Skipping API call: No changes detected in Step 0 data (name, category, colors, sizes).");
+      moveToNextStep();
+      setLoading(false);
+      return;
+    }
+
+    // For Step 2 & 3, if the request body is empty, we still proceed to next step to allow flow
+    if ((currentStep === 2 || currentStep === 3) && Object.keys(requestBody).length === 0) {
+      console.log(`Step ${currentStep} has no data to submit. Moving to next step.`);
+      if (isFinalStep) {
+          handleComplete();
+      } else {
+          moveToNextStep();
+      }
+      setLoading(false);
+      return;
+    }
+
     try {
         // 1. CORE PRODUCT UPDATE API CALL
         const response = await updateProduct(idToUpdate, requestBody); 
 
-        // 2. State Update (Crucial for persistence across steps)
-        // We use the data accumulated locally in 'data' to update the state, 
-        // ensuring media (productImages/productModels) is carried over to the next step.
+        // 2. State Update
         setFormData(prev => ({ 
             ...prev, 
             ...response,
             images: data.images || prev.images, 
-            // Explicitly persist the media and variant arrays for subsequent steps
             productImages: data.productImages || [],
             threeDModels: data.threeDModels || [],
             variants: data.variants || [],
         }));
     
-        // 3. CONDITIONAL STEP-SPECIFIC UPDATE (If submitted from Step 1, update Variants)
+        // 3. CONDITIONAL STEP-SPECIFIC UPDATE
         if (currentStep === 1) {
-            await handleUpdateVariants(data); 
-            return;
+          await handleUpdateVariants(data); 
+          return;
         }
 
         // 4. MOVE TO NEXT STEP (Standard Flow for all other steps)
@@ -247,13 +281,10 @@ const ProductCreatePageView = ({ productId='' }) => {
             moveToNextStep();
         }
 
+        setLoading(false);
+
     } catch (error) {
-        console.error("Product update failed:", error.message);
-        // Handle error display to the user if needed
-    } finally {
-        if (currentStep !== 1) {
-            setLoading(false);
-        }
+        setLoading(false); // Ensure loading is stopped on failure
     }
   };
   
@@ -288,7 +319,7 @@ const ProductCreatePageView = ({ productId='' }) => {
       ...completed,
       [activeStep]: true,
     });
-    moveToNextStep();
+    router.push('/vendor/products');
   };
 
   // =============================================================================
@@ -307,110 +338,93 @@ const ProductCreatePageView = ({ productId='' }) => {
   };
 
   // =============================================================================
-  // HELPER FUNCTIONS FOR DATA TRANSFORMATION
-  // =============================================================================
-  const transformColorsForForm = (apiColors) => {
-      return apiColors?.map(c => ({
-          name: c.name,
-          hex: c.code,
-      })) || [];
-  };
-
-  /**
-   * Transforms the API's flat threeDModels array into the nested object 
-   * structure used by the form state (variantModels).
-   * @param {Array} apiModels - The array from response.threeDModels
-   * @param {Array} selectedColors - The array of color objects (used for lookup)
-   * @returns {Object} The state object { 'colorName': ['url1', 'url2'] }
-   */
-  const mapApiModelsToState = (apiModels, selectedColors) => {
-      const modelState = {};
-
-      if (!apiModels || apiModels.length === 0) {
-          return modelState;
-      }
-
-      apiModels.forEach(model => {
-          const colorHex = model.colorCode;
-          
-          // 1. Find the color object using the HEX code
-          const colorVariant = selectedColors.find(c => c.hex === colorHex);
-
-          if (colorVariant) {
-              // 2. Use the lowercase color NAME as the key for the state object
-              const colorNameKey = colorVariant.name.toLowerCase();
-
-              // 3. Store the URL in the corresponding array
-              if (!modelState[colorNameKey]) {
-                  modelState[colorNameKey] = [];
-              }
-              modelState[colorNameKey].push(model.url);
-          }
-      });
-
-      return modelState;
-  };
-
-  // Transforms API size objects (e.g., { size: 'S' }) 
-  // into the format expected by the Autocomplete/Chip component ({ name: 'S' }).
-  const transformSizesForForm = (apiSizes) => {
-      return apiSizes?.map(s => ({
-          // Map the API's 'size' field to the form's internal 'name' field
-          name: s.size,
-      })) || [];
-  };
-
-  // =============================================================================
   // Load Product Data for Editing (UPDATED useEffect)
   // =============================================================================
   useEffect(() => {
-      if (productId) {
-          const loadProductData = async () => {
-              setLoading(true);
-              try {
-                  const data = await fetchProductById(productId);
-                  
-                  setFormData(data); // Set core form data
+    if (productId) {
+        const loadProductData = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchProductById(productId);
+                
+                setFormData(data); // Set core form data
 
-                  // 1. Handle Colors Transformation
-                  if (data.colors && Array.isArray(data.colors)) {                     
-                      const initialColors = data.colors.map(c => ({
-                          name: c.name,
-                          hex: c.code
-                      }));
-                      
-                      setSelectedColors(initialColors);
+                // 1. Handle Colors Transformation
+                if (data.colors && Array.isArray(data.colors)) {                     
+                    const initialColors = data.colors.map(c => ({
+                        name: c.name,
+                        hex: c.code
+                    }));
+                    
+                    setSelectedColors(initialColors);
+                    setInitialColors(initialColors);
+                } else {
+                    // This will now only log if the product truly has NO color data
+                    console.warn("⚠️ PARENT WARNING: Product has no initial 'colors' data.");
+                    setSelectedColors([]);
+                    setInitialColors([]);
+                }
+                
+                // 2. Handle Sizes Transformation
+                if (data.sizes && Array.isArray(data.sizes)) {
+                    
+                    // Transform API sizes array into the required state format: { name: '...' }
+                    const initialSizes = data.sizes.map(s => ({
+                        name: s.size, // Mapped 'size' (e.g., 'S', 'M') to 'name' state property
+                    }));
+                    
+                    setSelectedSizes(initialSizes);
+                    setInitialSizes(initialSizes);
+
                   } else {
-                      // This will now only log if the product truly has NO color data
-                      console.warn("⚠️ PARENT WARNING: Product has no initial 'colors' data.");
-                      setSelectedColors([]);
-                  }
-                  
-                  // 2. Handle Sizes Transformation
-                  if (data.sizes && Array.isArray(data.sizes)) {
-                      
-                      // Transform API sizes array into the required state format: { name: '...' }
-                      const initialSizes = data.sizes.map(s => ({
-                          name: s.size, // Mapped 'size' (e.g., 'S', 'M') to 'name' state property
-                      }));
-                      
-                      setSelectedSizes(initialSizes);
+                    // This will now only log if the product truly has NO size data
+                    console.warn("⚠️ PARENT WARNING: Product has no initial 'sizes' data.");
+                    setSelectedSizes([]);
+                    setInitialSizes([]);
+                }
 
-                    } else {
-                      // This will now only log if the product truly has NO size data
-                      console.warn("⚠️ PARENT WARNING: Product has no initial 'sizes' data.");
-                      setSelectedSizes([]);
-                  }
+                // 3. **Initial Variant Load:** Use the variants received from the API fetch 
+                //    to set the state used by Step 1.
+                if (data.variants && Array.isArray(data.variants)) {
+                    setStep1Variants(data.variants);
+                } else {
+                    setStep1Variants([]);
+                }
 
-              } catch (error) {
-                  console.error('Error loading product for editing:', error);
-              } finally {
-                  setLoading(false); 
-              }
-          };
-          loadProductData();
-      }
-  }, [productId]);
+            } catch (error) {
+                console.error('Error loading product for editing:', error);
+            } finally {
+                setLoading(false); 
+            }
+        };
+        // ⭐ NEW CONDITION: Fetch data if we have an ID AND we just moved to Step 1 
+        // OR if the component just mounted (initial load).
+        if (activeStep === 1 || !currentProductId) {
+            // currentProductId is null only on the initial mount for a new product
+            // If activeStep === 1, it means the user reached Form 2, fetch fresh data.
+            loadProductData();
+        } else if (activeStep === 0 && currentProductId) {
+            // If we are back on step 0, ensure the data is loaded once, 
+            // but subsequent changes don't re-fetch needlessly.
+            loadProductData(); 
+        }
+    }
+  }, [productId, activeStep]);
+
+  // =============================================================================
+  // @function useEffect (Scroll to Top on Step Change)
+  // Scrolls the window to the top (0, 0) whenever the activeStep state changes.
+  // =============================================================================
+  useEffect(() => {
+    // Check if the window object is available (necessary for Next.js/SSR environments)
+    if (typeof window !== 'undefined') {
+      console.log(`Scrolling to top for step: ${activeStep}`);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Optional: for a smooth scrolling effect
+      });
+    }
+  }, [activeStep]); // Dependency array: Re-run this effect whenever activeStep changes
 
 
   // FIX: Move useMemo call to the top level of the component to obey the Rules of Hooks.
@@ -424,8 +438,6 @@ const ProductCreatePageView = ({ productId='' }) => {
   // It passes down initial values from the accumulated `formData` and the submission handler.
   // =============================================================================
   const renderStepContent = (step) => {
-    // Use the memoized value defined in the component scope.
-
     switch (step) {
       case 0:
         return (
@@ -444,18 +456,28 @@ const ProductCreatePageView = ({ productId='' }) => {
         return (
           <ProductForm2
             key={1}
-            initialValues={currentInitialValues}
+            initialValues={{ ...currentInitialValues, variants: step1Variants}}
             handleFormSubmit={handleFormSubmit}
             ref={formRef}
             selectedColors={selectedColors}
             selectedSizes={selectedSizes}
+            setParentVariants={setStep1Variants}
           />
         );
       case 2:
         return (
-          <H1>Hello</H1>
+          <Box sx={{ p: 4 }}>
+            <H1 sx={{ color: '#fff' }}>Step 3: Safety & Compliance</H1>
+            <p style={{ color: '#ccc' }}>Placeholder content for safety data forms.</p>
+          </Box>
         );
-      // Add cases for step 2 and 3 with their respective components
+      case 3:
+        return (
+          <Box sx={{ p: 4 }}>
+            <H1 sx={{ color: '#fff' }}>Step 4: Review & Submit</H1>
+            <p style={{ color: '#ccc' }}>Review accumulated data before final submission.</p>
+          </Box>
+        );
       default:
         return <Box sx={{ p: 3, textAlign: 'center' }}>Step {step + 1} Content (Missing component)</Box>;
     }
@@ -478,14 +500,18 @@ const ProductCreatePageView = ({ productId='' }) => {
         id: variant.id,
         stock: variant.stock,
         price: variant.price,
-        isActive: variant.isActive, 
-        sku: variant.sku,
+        salePrice: variant.salePrice,
+        cost: variant.cost,
+        material: variant.material,
     }));
-    
+
     if (variantsToUpdate.length === 0) {
-        // If no variants to update, just log a warning and return success.
         console.warn("No variants to update for Step 1.");
-        return; 
+        
+        // ⭐ Move to next step if no variants were present
+        moveToNextStep(); 
+        setLoading(false);
+        return;
     }
     
     try {
@@ -493,11 +519,16 @@ const ProductCreatePageView = ({ productId='' }) => {
 
         // Update the overall product state with the new variant info 
         setFormData(prev => ({ ...prev, variants: response }));
+
+        // ⭐ Move to the next step and stop loading upon successful variant update
+        moveToNextStep();
+        setLoading(false);
       
     } catch (error) {
       console.error("Product variant update failed:", error.message);
-      // Re-throw the error so handleUpdateProduct catches it and handles loading state.
-      throw error; 
+      setLoading(false); // Ensure loading is stopped on error
+      // If you want to stop the main flow on error, re-throw is correct:
+      throw error;
     }
     // REMOVE the redundant setLoading(false) and moveToNextStep()
   };

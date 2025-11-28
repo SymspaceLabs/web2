@@ -291,3 +291,95 @@ export const uploadProductModel = async (file, productId) => {
         throw error;
     }
 };
+
+// =============================================================================
+// @function updateProductVariantsApi (Using native fetch())
+// =============================================================================
+/**
+ * Triggers the backend PATCH endpoint to update specific fields for multiple variants.
+ * @param {string} productId - The ID of the parent product.
+ * @param {Array<Object>} updateList - An array of variant objects to update (UpdateVariantStockDto[]).
+ * @returns {Promise<Array<Object>>} A promise that resolves to the array of updated variants.
+ */
+export const updateProductVariantsApi = async (productId, updateList) => {
+    // 1. Define the URL for the PATCH endpoint
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/product-variants/product/${productId}`; // Adjust with your full base URL if necessary (e.g., 'https://api.yourdomain.com' + url)
+
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            // 2. Set headers to indicate we are sending and expecting JSON
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any necessary authorization headers here (e.g., Bearer Token)
+                // 'Authorization': `Bearer ${yourAuthToken}`, 
+            },
+            // 3. Convert the request body (updateList) to a JSON string
+            body: JSON.stringify(updateList),
+        });
+
+        // 4. Handle HTTP errors (4xx or 5xx status codes)
+        if (!response.ok) {
+            // Attempt to parse the error message from the response body
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch {
+                errorData = { message: `HTTP error! Status: ${response.status}` };
+            }
+            throw new Error(errorData.message || `Failed to update variants. Status: ${response.status}`);
+        }
+
+        // 5. Parse the successful JSON response
+        const data = await response.json();
+
+        // 6. Return the 'updated' array as per the backend contract
+        return data.updated;
+        
+    } catch (error) {
+        console.error("Error updating product variants using fetch():", error.message);
+        // Re-throw the error to be handled by the calling function (handleUpdateVariants)
+        throw error;
+    }
+};
+
+// =============================================================================
+// NEW FUNCTION: deleteProduct
+// =============================================================================
+/**
+ * Deletes a product by its ID on the backend API.
+ * @param {string} id - The ID of the product to delete.
+ * @returns {Promise<void>} A promise that resolves when the product is successfully deleted.
+ * @throws {Error} If the network request fails or the API returns an error status.
+ */
+export const deleteProduct = async (id) => {
+    try {
+        if (!id) {
+          throw new Error("Product ID is required for deleting a product.");
+        }
+
+        const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`;
+
+        const response = await fetch(url, {
+            method: 'DELETE', 
+            // Add Authorization header here if needed
+        });
+
+        if (!response.ok) {
+            // Attempt to get more detail from the error response body if possible
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+                `Failed to delete product ${id}: ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`
+            );
+        }
+
+        // A successful DELETE request often returns a 204 No Content, 
+        // so we don't expect a body.
+        console.log(`[API SUCCESS] Product ID: ${id} successfully deleted.`);
+        return;
+
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        throw error;
+    }
+};

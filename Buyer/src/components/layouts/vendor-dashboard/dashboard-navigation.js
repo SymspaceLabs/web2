@@ -92,9 +92,6 @@ export const navigation = [{
   name: "Earnings",
   icon: duotone.ProjectChart,
   children: [{
-    name: "Earning History",
-    path: "/vendor/earning-history"
-  }, {
     name: "Payouts",
     path: "/vendor/payouts"
   }, {

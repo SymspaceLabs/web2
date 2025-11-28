@@ -43,6 +43,12 @@ export class ProductVariant {
   @Column({ type: 'float', nullable: true })
   salePrice: number;
 
+  @Column({ type: 'float', nullable: true }) 
+  cost: number;
+
+  @Column({ nullable: true })
+  material: string;
+
   @Column('json') 
   productWeight: { unit: string; value: number | null };
 

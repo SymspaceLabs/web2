@@ -6,14 +6,12 @@
 
 import styles from './styles';
 import SymTextField from './components/SymTextField';
-import ProductVariantsTable from "./components/product-variants-1";
+import ProductVariantsTable from "./components/ProductVariantsTable";
 import ProductImageUploader from './components/ProductImageUploader';
 import ProductModelUploader from './components/ProductModelUploader';
 
-import { H1 } from "@/components/Typography";
 import { arrayMove } from "react-sortable-hoc";
-import { InfoOutlined } from "@mui/icons-material";
-import { Box, Card, Tooltip, IconButton } from "@mui/material"; 
+import { Box, Card } from "@mui/material"; 
 import { uploadFileToBackend, uploadProductModel } from '@/services/productService';
 import { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 
@@ -21,7 +19,7 @@ import { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 
 
 const validateField = (name, value) => {
     let error = "";
-    if (name === "bulletPoints" || name === "composition") {
+    if (name === "composition") {
         if (!value || String(value).trim() === "") {
             error = `${name.charAt(0).toUpperCase() + name.slice(1)} is required!`;
         }
@@ -31,46 +29,13 @@ const validateField = (name, value) => {
 
 //========================================================================
 
-const ProductVariantsTableComponent = ({ variants, setFormValues, selectedColors, selectedSizes }) => (
-    
-    <Box sx={{ p: 4, textAlign: 'center' }}>
-        {!(selectedColors.length === 0 && selectedSizes.length === 0) ? (
-            <>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                    <H1 color='#FFF' mr={1}>
-                        Product Variants
-                    </H1>
-                    <Tooltip title="Manage variations like Color, Size, and corresponding SKUs/Prices">
-                        <IconButton>
-                            <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-                {/* * NOTE: ProductVariantsTable must handle its own internal state 
-                  * or manage variants via the `variants` prop and update via `setFormValues`.
-                 */}
-                <ProductVariantsTable
-                    initialVariants={variants} // Use initialVariants if the component handles internal initialization
-                    colors={selectedColors.map((color) => color.name)}
-                    sizes={selectedSizes.map((size) => size.name)}
-                    // Assuming the table component provides a mechanism to update variants back to the form's state:
-                    onVariantsChange={(newVariants) => {
-                        setFormValues(prev => ({ ...prev, variants: newVariants }));
-                    }}
-                />
-            </>
-        ) : null
-        }
-    </Box>
-);
-// ---------------------------------------------
-
 const ProductForm2 = forwardRef((props, ref) => {
     const { 
         initialValues, 
         handleFormSubmit,
         selectedColors, // This contains { name, hex } from the parent
-        selectedSizes
+        selectedSizes,
+        setParentVariants,
     } = props;
 
     // =============================================================================
@@ -147,6 +112,7 @@ const ProductForm2 = forwardRef((props, ref) => {
         ...initialValues,
         variants: initialValues.variants || [], 
     }));
+
     const [errors, setErrors] = useState({});
     const [touched, setTouched] = useState({});
 
@@ -154,6 +120,10 @@ const ProductForm2 = forwardRef((props, ref) => {
     const [variantImages, setVariantImages] = useState(initialVariantImages);
     const [variantModels, setVariantModels] = useState(initialVariantModels); 
     const [selectedImage, setSelectedImage] = useState(null); // For image selection/preview
+
+
+    // 🚨 1. Use a dedicated state for variants based on initialValues.variants
+    const [variants, setVariants] = useState(initialValues.variants || []);
 
     // ----------------------------------------------------------------------------------
     // 3. IMAGE UPLOAD LOGIC 
@@ -268,7 +238,7 @@ const ProductForm2 = forwardRef((props, ref) => {
             e.preventDefault();
         }
         
-        const fieldsToCheck = ["bulletPoints", "composition"]; 
+        const fieldsToCheck = ["composition"]; 
         let newErrors = {};
         let formIsValid = true;
 
@@ -286,6 +256,9 @@ const ProductForm2 = forwardRef((props, ref) => {
         setErrors(newErrors);
 
         if (formIsValid) {
+
+            // ⭐ CALL TRANSFORMATION FUNCTION HERE
+            const finalVariantsForAPI = getTransformedVariantsForAPI(variants);
             
             // Transform variantImages into a flat array of { url, colorCode, colorName }
             const allProductImages = Object.entries(variantImages).flatMap(([colorKey, urls]) => {
@@ -324,13 +297,13 @@ const ProductForm2 = forwardRef((props, ref) => {
             const finalData = {
                 ...formValues,
                 productImages: allProductImages, 
-                threeDModels: allProductModels, // ✅ The updated list of S3 URLs
+                threeDModels: allProductModels,
+                variants: finalVariantsForAPI,
             };
             
             handleFormSubmit(finalData);
         }
     }, [formValues, handleFormSubmit, variantImages, variantModels, selectedColors]);
-
 
     // --- UTILITY/MEDIA HANDLERS ---
     const onSortEndUtility = useCallback((filesArray, oldIndex, newIndex) => {
@@ -388,7 +361,6 @@ const ProductForm2 = forwardRef((props, ref) => {
         });
     }, [onSortEndUtility]);
 
-
     // --- DYNAMICALLY BUILD THE imageHandlerMap ---
     const imageHandlerMap = useMemo(() => {
         return selectedColors.reduce((map, colorVariantObject) => {
@@ -428,34 +400,58 @@ const ProductForm2 = forwardRef((props, ref) => {
         submit: handleSubmit,
     }));
 
+    // ⭐ TRANSFORMER FUNCTION (Adjusted to final API structure) ⭐
+    const getTransformedVariantsForAPI = useCallback((currentRawVariantValues) => {
+        return Object.values(currentRawVariantValues).map(v => {
+            // NOTE: We only keep the fields required by the final API structure.
+            
+            // Ensure price fields are converted from string inputs back to numbers
+            const priceValue = parseFloat(v.price) || 0;
+            const salePriceValue = parseFloat(v.salePrice) || 0;
+            const costValue = parseFloat(v.cost) || 0;
+            
+            // Ensure 'supply' is mapped to 'stock' and converted to a number
+            const stockValue = parseInt(v.supply) || 0;
+            const materialValue = v.material || "";
+
+            return {
+                // Keep the ID for updating existing records
+                "id": v.id, 
+                
+                // Map the cleaned numerical values
+                "price": priceValue,
+                "stock": stockValue, 
+                "salePrice": salePriceValue,
+                "cost": costValue,
+                "material": materialValue
+                // CRITICAL: We DO NOT include 'color', 'size', 'cost', or 'material' 
+                // as they are not in your desired final structure.
+            };
+        });
+    }, []);
+
     return (
         <form onSubmit={handleSubmit}>
-            {/* 1. First Form Card (Product Details & Media) */}
             <Card sx={{ ...styles.leftCard, mb: 3 }}>
-                
-                {/* Product Variants Table (Updates formValues.variants) */}
-                <ProductVariantsTableComponent
-                    variants={formValues.variants}
-                    setFormValues={setFormValues} 
-                    selectedColors={selectedColors}
-                    selectedSizes={selectedSizes}
-                />
+
+                {/* Product Variants Table */}
+                {!(selectedColors.length === 0 && selectedSizes.length === 0) ? (
+                        <ProductVariantsTable
+                            initialVariants={initialValues.variants || []}
+                            colors={selectedColors.map((color) => color.name)}
+                            sizes={selectedSizes.map((size) => size.name)}
+                            onVariantsChange={(newVariants) => {
+                                // 🚨 Update the local state
+                                setVariants(newVariants);
+                                // 🚨 Update the parent state immediately (optional, but safer)
+                                setParentVariants(newVariants); 
+                            }}
+                        />
+                    ) : null
+                }
                 
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     
-                    {/* Bullet Points */}
-                    <SymTextField
-                        label="Bullet Points"
-                        name="bulletPoints"
-                        placeholder="Begin listing key bullet points describing your product for customers to quickly view"
-                        value={formValues.bulletPoints || ''} 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={!!touched.bulletPoints && !!errors.bulletPoints}
-                        helperText={touched.bulletPoints && errors.bulletPoints}
-                        multiline={true}
-                    />
-
                     {/* Composition */}
                     <SymTextField
                         label="Composition"

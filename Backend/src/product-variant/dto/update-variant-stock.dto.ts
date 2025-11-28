@@ -54,6 +54,25 @@ export class UpdateVariantStockDto {
   stock: number;
 
   @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price?: number; 
+  
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  salePrice?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  cost?: number; 
+
+  @IsOptional()
+  @IsString()
+  material?: string;
+
+  @IsOptional()
   @ValidateNested()
   @Type(() => PartialProductDimensionsDto)
   dimensions?: PartialProductDimensionsDto;
@@ -63,8 +82,6 @@ export class UpdateVariantStockDto {
   @Type(() => PartialProductWeightDto)
   productWeight?: PartialProductWeightDto;
 
-  // ⭐ FIX: Add the missing properties: sizeChart and sizeFit
-
   @IsOptional()
   @IsString()
   sizeChart?: string;
@@ -72,4 +89,5 @@ export class UpdateVariantStockDto {
   @IsOptional()
   @IsString()
   sizeFit?: string;
+
 }

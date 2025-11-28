@@ -27,10 +27,6 @@ const tableHeading = [{
   label: "Category",
   align: "left"
 }, {
-  id: "brand",
-  label: "Brand",
-  align: "left"
-}, {
   id: "price",
   label: "Price",
   align: "left"
@@ -54,7 +50,7 @@ const ProductsPageView = ({
     id: item.id,
     slug: item.slug,
     name: item.title,
-    brand: item.brand,
+    // brand: item.brand,
     price: item.price,
     image: item.thumbnail,
     published: item.published,

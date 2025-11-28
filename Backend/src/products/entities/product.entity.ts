@@ -49,6 +49,10 @@ export class Product {
   @Column({ type: 'float', nullable: true })
   salePrice: number;
 
+  // Attribute
+  @Column({ type: 'float', nullable: true })
+  cost: number;
+
   @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
   subcategoryItemId: string;
 

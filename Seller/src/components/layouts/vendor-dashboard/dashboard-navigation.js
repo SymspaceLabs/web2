@@ -188,13 +188,6 @@ export const navigation = [
     }]
   },
 
-  //TEAM
-  {
-    name: "Team",
-    icon: duotone.ProjectChart,
-    path: "/vendor/earning-history"
-
-  },
 
   //SUPPORT
   {

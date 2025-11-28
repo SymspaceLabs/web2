@@ -55,18 +55,21 @@ export class ProductVariantsService {
   }
   
   // Assuming UpdateVariantStockDto contains: 
-  // { id, stock, dimensions?, productWeight?, sizeChart?, sizeFit? }
-
   async updateStockForVariants(
     productId: string,
     updateList: UpdateVariantStockDto[],
   ): Promise<{ message: string; updated: { id: string; stock: number; sku: string }[] }> {
+    
     const results: { id: string; stock: number; sku: string }[] = [];
 
     // Destructure all possible update fields from the DTO
     for (const { 
       id, 
-      stock, 
+      stock,
+      price,
+      salePrice,
+      cost,
+      material,
       dimensions, 
       productWeight, 
       sizeChart, // New field from DTO
@@ -91,7 +94,26 @@ export class ProductVariantsService {
       // Update stock (required in your DTO)
       variant.stock = stock; 
       
-      // 3a. Handle Partial JSON Updates (dimensions)
+      // 3a. Update Price Fields  <-- NEW PRICE LOGIC
+      if (price !== undefined) {
+        variant.price = price;
+      }
+
+      if (salePrice !== undefined) {
+        variant.salePrice = salePrice;
+      }
+
+      // 2a. Handle NEW Field: cost
+      if (cost !== undefined) {
+        variant.cost = cost; 
+      }
+    
+      // 2b. Handle NEW Field: material
+      if (material !== undefined) {
+        variant.material = material;
+      }
+    
+      // 3b. Handle Partial JSON Updates (dimensions) (rest of the logic remains)
       if (dimensions !== undefined) {
         // Merge existing dimensions with new dimensions, preserving existing fields not provided in the update.
         variant.dimensions = { 
@@ -129,12 +151,12 @@ export class ProductVariantsService {
       });
     }
 
-  return {
-    message: 'Stock updated successfully',
-    updated: results,
-  };
-}
-  
+    return {
+      message: 'Stock updated successfully',
+      updated: results,
+    };
+  }
+    
   async checkAvailability(productId: string, color: string, size: string) {
     const variant = await this.variantRepo.findOne({
       where: {

@@ -27,6 +27,7 @@ export async function resolveCategoryHierarchy(
 }> {
     const { subcategoryItem: subcategoryItemIdFromDto, subcategoryItemChild: subcategoryItemChildIdFromDto } = dto;
 
+    // Constraint: Ensure only one field is provided explicitly
     if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
         throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
     }
@@ -35,6 +36,9 @@ export async function resolveCategoryHierarchy(
     let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
     let tagDefaults: any = {};
 
+    // ----------------------------------------------------------------------
+    // Case 1: subcategoryItemChild is explicitly provided
+    // ----------------------------------------------------------------------
     if (subcategoryItemChildIdFromDto) {
         const subcategoryItemChild = await subcategoryItemChildRepository.findOne({
             where: { id: subcategoryItemChildIdFromDto },
@@ -47,23 +51,48 @@ export async function resolveCategoryHierarchy(
         finalSubcategoryItemChild = subcategoryItemChild;
         finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
         tagDefaults = subcategoryItemChild.tag_defaults || {};
-
-    } else if (subcategoryItemIdFromDto) {
-        const subcategoryItem = await subcategoryItemRepository.findOne({
+    } 
+    
+    // ----------------------------------------------------------------------
+    // Case 2: subcategoryItem is provided (Dual Check Logic)
+    // ----------------------------------------------------------------------
+    else if (subcategoryItemIdFromDto) {
+        
+        // 1. ATTEMPT A: Check if the ID belongs to a SubcategoryItemChild
+        // This is the modification to satisfy the requirement: check child table first.
+        const childAsCandidate = await subcategoryItemChildRepository.findOne({
             where: { id: subcategoryItemIdFromDto },
-            relations: ['subcategory', 'subcategory.category'],
+            relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
         });
 
-        if (!subcategoryItem) {
-            throw new NotFoundException(`Subcategory item with ID ${subcategoryItemIdFromDto} not found.`);
+        if (childAsCandidate) {
+            // Match found in the child table
+            finalSubcategoryItemChild = childAsCandidate;
+            finalSubcategoryItem = childAsCandidate.subcategoryItem; // Retrieve the parent via the relation
+            tagDefaults = childAsCandidate.tag_defaults || {};
+
+        } else {
+            // 2. ATTEMPT B: Check if the ID belongs to a SubcategoryItem (Parent)
+            const subcategoryItem = await subcategoryItemRepository.findOne({
+                where: { id: subcategoryItemIdFromDto },
+                relations: ['subcategory', 'subcategory.category'],
+            });
+
+            if (!subcategoryItem) {
+                // Not found in either table
+                throw new NotFoundException(`Category ID ${subcategoryItemIdFromDto} not found as a Subcategory Item OR Subcategory Item Child.`);
+            }
+
+            // Match found in the parent table
+            finalSubcategoryItem = subcategoryItem;
+            finalSubcategoryItemChild = undefined; // Explicitly set child to undefined
+            tagDefaults = subcategoryItem.tag_defaults || {};
         }
-        finalSubcategoryItem = subcategoryItem;
-        tagDefaults = subcategoryItem.tag_defaults || {};
     }
 
+    // Final check to ensure a main category was resolved (important for new products)
     if (!finalSubcategoryItem) {
-         // Should be caught in the main upsert function for new products, but good practice to throw here.
-         throw new BadRequestException('Subcategory item could not be determined. Please provide valid IDs.');
+        throw new BadRequestException('Subcategory item could not be determined. Please provide valid IDs.');
     }
 
     return { finalSubcategoryItem, finalSubcategoryItemChild, tagDefaults };

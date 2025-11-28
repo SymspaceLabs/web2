@@ -4,7 +4,7 @@
 // Product List Page
 // ==============================================================
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // Added useCallback
 import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
 import { TableHeader, TablePagination } from "@/components/data-table";
@@ -26,10 +26,6 @@ const tableHeading = [{
 }, {
   id: "category",
   label: "Category",
-  align: "left"
-}, {
-  id: "brand",
-  label: "Brand",
   align: "left"
 }, {
   id: "price",
@@ -55,53 +51,60 @@ const ProductsPageView = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Use the reusable function inside useEffect
-  useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Destructure the 'products' array and 'error' object from the service result
-        const { products, error } = await fetchProductsByCompanyId(user?.company?.id);
-        
-        if (error) {
-          throw new Error(error.message || "Failed to fetch products.");
-        }
-
-        // CRITICAL FIX: Ensure 'products' is an array before setting state
-        if (Array.isArray(products)) {
-            setProductList(products);
-        } else {
-            console.error("API returned products data that is not an array:", products);
-            throw new Error("Invalid data format received from the server.");
-        }
-      } catch (e) {
-        // FIX: Ensure error state is correctly set. This is critical for preventing the .map() crash.
-        setError(e.message || "An unknown error occurred during product fetch."); 
-        console.error("Error loading products:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Only load products if we have a company ID to filter by
-    if (user?.company?.id) {
-        loadProducts();
-    } else {
-        // If no user or company ID, stop loading and ensure state is an empty array
+  // 1. Extracted product loading logic into a reusable function
+  const loadProducts = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // Only load products if we have a company ID to filter by
+      if (!user?.company?.id) {
         setLoading(false);
         setProductList([]);
+        return;
+      }
+
+      // Destructure the 'products' array and 'error' object from the service result
+      const { products, error } = await fetchProductsByCompanyId(user.company.id);
+      
+      if (error) {
+        throw new Error(error.message || "Failed to fetch products.");
+      }
+
+      // CRITICAL FIX: Ensure 'products' is an array before setting state
+      if (Array.isArray(products)) {
+          setProductList(products);
+      } else {
+          console.error("API returned products data that is not an array:", products);
+          throw new Error("Invalid data format received from the server.");
+      }
+    } catch (e) {
+      // FIX: Ensure error state is correctly set. This is critical for preventing the .map() crash.
+      setError(e.message || "An unknown error occurred during product fetch."); 
+      console.error("Error loading products:", e);
+    } finally {
+      setLoading(false);
     }
-  }, [user]); // Added 'user' to dependency array to refetch if user data changes
+  }, [user]); // Dependency on user
+
+  // 2. Initial load of products
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]); // Dependency on loadProducts (which is wrapped in useCallback)
   
   
+  // 3. New handler to refetch the list after a successful product deletion
+  const handleProductDeleteSuccess = useCallback(() => {
+    // Instead of filtering the list locally, we call the reusable loadProducts function
+    // to refetch the data from the server, ensuring the list is fully synchronized.
+    loadProducts();
+  }, [loadProducts]);
+
+
   // RESHAPE THE PRODUCT LIST BASED TABLE HEAD CELL ID
-  // This is now safe, as productList is guaranteed to be an array (initial []) or the fetched array.
   const filteredProducts = productList.map(item => ({
     id: item.id,
     slug: item.slug,
     name: item.name,
-    brand: item.brand,
     price: item.price,
     image: item?.images[0]?.url,
     published: item.published,
@@ -154,8 +157,9 @@ const ProductsPageView = () => {
                 <TableBody>
                   {filteredList.map((product, index) => 
                     <ProductRow
-                      key={index}
+                      key={product.id} // Changed key to product.id for better stability
                       product={product}
+                      onDeleteSuccess={handleProductDeleteSuccess} // <-- Passed the new handler here
                     />
                   )}
                 </TableBody>

@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from './entities/product-variant.entity';
 import { UpdateVariantStockDto } from './dto/update-variant-stock.dto';
+import { UpdateVariantDimensionsRequestDto } from './dto/update-variant-dimensions.dto';
 
 @Injectable()
 export class ProductVariantsService {
@@ -193,6 +194,49 @@ export class ProductVariantsService {
       status,
       statusColor,
     };
+  }
+
+    /**
+   * Updates the dimensions and size chart file for a single product variant.
+   * @param variantId The unique ID of the variant to update.
+   * @param updateData The data transfer object containing the new dimensions and file path.
+   * @returns The updated ProductVariant entity.
+   * @throws {NotFoundException} if the variant is not found.
+   */
+  async updateVariantDimensions(
+    variantId: string, 
+    updateData: UpdateVariantDimensionsRequestDto
+  ): Promise<ProductVariant> {
+    // 1. Load the variant
+    const variant = await this.variantRepo.findOne({
+      where: { id: variantId },
+    });
+
+    // 2. Check existence
+    if (!variant) {
+      throw new NotFoundException(`Product Variant with ID "${variantId}" not found`);
+    }
+
+    // 3. Update fields
+    const { dimensions, sizeChartFile } = updateData;
+
+    // Handle Partial JSON Update for dimensions
+    if (dimensions !== undefined) {
+      // Merge existing dimensions with new dimensions
+      variant.dimensions = {
+        ...variant.dimensions,
+        ...dimensions,
+      };
+    }
+
+    // Handle Optional Scalar Field Update for sizeChart
+    if (sizeChartFile !== undefined) {
+      // Assuming 'sizeChart' is the field name in your entity
+      variant.sizeChart = sizeChartFile;
+    }
+
+    // 4. Save and return the updated variant
+    return this.variantRepo.save(variant);
   }
   
   

@@ -30,33 +30,33 @@ export class CategoriesService {
     }
 
     async findAllMobile(): Promise<any[]> { // Using 'any' for return type to match original signature
-      
+    
         // 1. Fetch the data (No change)
-      const categoriesData = await this.categoriesRepository.createQueryBuilder('category')
-          .leftJoinAndSelect('category.subcategories', 'subcategory')
-          .leftJoinAndSelect('subcategory.subcategoryItems', 'subcategoryItem')
-          .leftJoinAndSelect('subcategoryItem.subcategoryItemChildren', 'subcategoryItemChild')
-          .where((qb) => {
-              const subQuery = qb.subQuery()
-                  .select('1')
-                  .from('subcategory', 'sub')
-                  .where('sub.categoryId = category.id')
-                  .andWhere('sub.mobileLevel1 IS NOT NULL')
-                  .getQuery();
-              return 'EXISTS ' + subQuery;
-          })
-          .select([
-              'category.name',
-              'subcategory.mobileLevel1',
-              'subcategoryItem.name',
-              'subcategoryItem.mobileLevel2',
-              'subcategoryItem.mobileLevel2Name',
-              'subcategoryItemChild.name',
-              'subcategoryItemChild.mobileLevel3',
-              'subcategoryItemChild.mobileLevel3Name',
-              'subcategoryItemChild.subCategoryItemId',
-          ])
-          .getMany();
+        const categoriesData = await this.categoriesRepository.createQueryBuilder('category')
+            .leftJoinAndSelect('category.subcategories', 'subcategory')
+            .leftJoinAndSelect('subcategory.subcategoryItems', 'subcategoryItem')
+            .leftJoinAndSelect('subcategoryItem.subcategoryItemChildren', 'subcategoryItemChild')
+            .where((qb) => {
+                const subQuery = qb.subQuery()
+                    .select('1')
+                    .from('subcategory', 'sub')
+                    .where('sub.categoryId = category.id')
+                    .andWhere('sub.mobileLevel1 IS NOT NULL')
+                    .getQuery();
+                return 'EXISTS ' + subQuery;
+            })
+            .select([
+                'category.name',
+                'subcategory.mobileLevel1',
+                'subcategoryItem.name',
+                'subcategoryItem.mobileLevel2',
+                'subcategoryItem.mobileLevel2Name',
+                'subcategoryItemChild.name',
+                'subcategoryItemChild.mobileLevel3',
+                'subcategoryItemChild.mobileLevel3Name',
+                'subcategoryItemChild.subCategoryItemId',
+            ])
+            .getMany();
 
         // ------------------------------------------------------------------------------------
 
@@ -232,19 +232,18 @@ export class CategoriesService {
 
             filteredGroups = filteredGroups.filter(group => group.items.length > 0);
 
-            const finalItems: (string | any)[] = [];
+            const finalItems: any[] = []; // Changed to any[] to simplify typing, but it will only contain objects
 
             for (const item of filteredGroups) {
-              // ⭐ MODIFIED: Flatten ANY Single-Child Group
-              if (item.items.length === 1 && typeof item.items[0] === 'string') {
-                  // Instead of promoting the child (e.g., "Televisions"), 
-                   // we promote the parent group name (e.g., "TVs") to the final flat list.
-                  finalFlatStrings.add(item.name as string); // <--- CHANGE HERE
-                  groupNames.delete(item.name);
-              } else {
-                  finalItems.push(item);
-              }
-          }
+                // ⭐ MODIFIED: Flatten ANY Single-Child Group
+                if (item.items.length === 1 && typeof item.items[0] === 'string') {
+                    // Promote the parent group name (e.g., "TVs") to the final flat list.
+                    finalFlatStrings.add(item.name as string); 
+                    groupNames.delete(item.name);
+                } else {
+                    finalItems.push(item);
+                }
+            }
 
             // --- FINAL ARRAY ASSEMBLY (Deduplication Guarantee) ---
             
@@ -264,22 +263,33 @@ export class CategoriesService {
             if (redundantIndex !== -1) {
                 const redundantGroup = finalItems[redundantIndex] as any;
                 finalItems.splice(redundantIndex, 1);
-                finalItems.push(...redundantGroup.items.filter((i: any) => typeof i === 'string' || typeof i === 'object')); 
+                
+                // ⭐ CRITICAL FIX: Convert any plain string children in the redundant group
+                // into the required object format ({name: X, items: []}) before re-adding.
+                const itemsToPush = redundantGroup.items.map((i: any) => {
+                    if (typeof i === 'string') {
+                        return { name: i, items: [] };
+                    }
+                    return i;
+                });
+
+                // Push only the converted objects (or existing objects) back
+                finalItems.push(...itemsToPush.filter((i: any) => typeof i === 'object')); 
             }
 
-            // Final sort of all items (strings and objects) - FIXED TYPE ERROR
+            // Final sort of all items (objects only now)
             finalItems.sort((a, b) => {
-                const nameA = typeof a === 'string' ? a : (a as any).name;
-                const nameB = typeof b === 'string' ? b : (b as any).name;
+                const nameA = a.name;
+                const nameB = b.name;
                 
                 return (nameA as string).localeCompare(nameB as string);
             });
 
-            // Final deduplication and sort of children within any remaining objects - FIXED TYPE ERROR
+            // Final deduplication and sort of children within any remaining objects
             finalItems.forEach(item => {
-                if (typeof item !== 'string' && item && 'items' in item && Array.isArray(item.items)) {
-                    const stringItems = item.items.filter((i): i is string => typeof i === 'string');
-                    const objectItems = item.items.filter((i): i is any => typeof i !== 'string');
+                if (item && 'items' in item && Array.isArray(item.items)) {
+                    const stringItems = item.items.filter((i: any): i is string => typeof i === 'string');
+                    const objectItems = item.items.filter((i: any): i is any => typeof i !== 'string');
                     
                     (item as any).items = [
                         ...objectItems, 

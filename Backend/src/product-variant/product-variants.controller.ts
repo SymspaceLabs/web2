@@ -2,6 +2,7 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
 import { ProductVariantsService } from './product-variants.service';
 import { UpdateVariantStockDto } from './dto/update-variant-stock.dto';
+import { UpdateVariantDimensionsRequestDto } from './dto/update-variant-dimensions.dto';
 
 @Controller('product-variants')
 export class ProductVariantsController {
@@ -34,6 +35,13 @@ export class ProductVariantsController {
     ) {
       return this.variantsService.checkAvailability(productId, color, size);
     }
-    
+  
+    @Patch(':variantId/dimensions')
+    async updateVariantDimensions(
+      @Param('variantId') variantId: string,
+      @Body() updateData: UpdateVariantDimensionsRequestDto,
+    ) {
+      return this.variantsService.updateVariantDimensions(variantId, updateData);
+    }
 
 }

@@ -27,7 +27,7 @@ export default function VendorDashboardLayout({
   const [storeDialogOpen, setStoreDialogOpen] = useState(false);
   
   useEffect(() => {
-    if (user && user.company.isOnboardingFormFilled === false) {
+    if (user && user.company?.isOnboardingFormFilled === false) {
       setOnboardingDialogOpen(true);
     }
   }, [user]);

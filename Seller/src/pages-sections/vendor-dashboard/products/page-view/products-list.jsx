@@ -42,7 +42,7 @@ const tableHeading = [{
 }];
 
 // =============================================================================
-const ProductsPageView = () => {
+const ProductsListPageView = () => {
 
   // Fetch User
   const { user } = useAuth();
@@ -176,4 +176,4 @@ const ProductsPageView = () => {
   );
 };
 
-export default ProductsPageView;
+export default ProductsListPageView;

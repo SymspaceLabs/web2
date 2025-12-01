@@ -28,17 +28,19 @@ const OnboardingDialog = ({
 
 
     useEffect(() => {
+        if (!user || !user.id) return;
+
         const fetchUser = async () => {
           try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/${user.id}`);
             const data = await response.json();
             setUserData(data);
           } catch (error) {
-            console.error("Error fetching blogs:", error);
+            console.error("Error fetching user:", error);
           }
         };
         fetchUser();
-    }, [step]);
+    }, [step, user?.id]);
 
 
     const handleClose = () => setOpen(false);

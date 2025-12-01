@@ -9,9 +9,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { Formik } from "formik";
 import * as yup from "yup"; // DATA
 
-import countryList from "../../../../data/countryList"; // GLOBAL CUSTOM COMPONENT
+import countryList from "@/data/countryList"; // GLOBAL CUSTOM COMPONENT
 
-import { H3 } from "../../../../components/Typography"; // Local CUSTOM COMPONENT
+import { H3 } from "@/components/Typography"; // Local CUSTOM COMPONENT
 
 import CoverPicSection from "../cover-pic-section";
 const ACCOUNT_SCHEMA = yup.object().shape({
@@ -37,8 +37,9 @@ const AccountSettingsPageView = () => {
     console.log(values.city);
   };
 
-  return <Box py={4}>
-      <H3 mb={2}>Account Setting</H3>
+  return (
+    <Box py={4}>
+      <H3 mb={2}>Profile</H3>
 
       <Card sx={{
       p: 4
@@ -95,7 +96,8 @@ const AccountSettingsPageView = () => {
             </form>}
         </Formik>
       </Card>
-    </Box>;
+    </Box>
+  );
 };
 
 export default AccountSettingsPageView;

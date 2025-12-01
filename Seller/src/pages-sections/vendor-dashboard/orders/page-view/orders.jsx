@@ -21,7 +21,7 @@ import { tableHeading } from "../table-heading"; // ============================
 
 // =============================================================================
 const OrdersPageView = ({
-  orders
+  orders = []
 }) => {
   // RESHAPE THE ORDER LIST BASED TABLE HEAD CELL ID
   const filteredOrders = orders.map(item => ({

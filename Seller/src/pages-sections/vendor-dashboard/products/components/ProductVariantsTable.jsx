@@ -1,3 +1,7 @@
+// =============================================================
+// Product Variants Table 
+// =============================================================
+
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
     Table, TableBody, TableContainer, TableHead, TableRow, Paper,
@@ -27,6 +31,8 @@ import {
 } from './utils';
 
 import EditDimensionsModal from './EditDimentionsModal';
+
+// =============================================================
 
 // --- MAIN COMPONENT ---
 
@@ -154,9 +160,15 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
             
             setTotalProfit(newTotalProfit);
             
-            setRows(prevRows => prevRows.map(row => 
-                (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
-            ));
+            // setRows(prevRows => prevRows.map(row => 
+            //     (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
+            // ));
+
+            setRows(prevRows => prevRows.map(row => {
+                const key = `${row.color}-${row.size || 'null'}`;
+                // Use the new value if it exists, otherwise keep the old row.
+                return updatedValues[key] || row; 
+            }));
             
             return updatedValues; 
         });
@@ -195,7 +207,7 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
                 newTotalProfit += v.profit;
             });
             setTotalProfit(newTotalProfit);
-            
+
             setRows(prevRows => prevRows.map(row => 
                 (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
             ));
@@ -234,14 +246,20 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
                     
                     updatedValues[key] = updatedVariant;
                     
-                    setRows(prevRows => prevRows.map(row => 
-                        (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
-                    ));
+                    // setRows(prevRows => prevRows.map(row => 
+                    //     (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
+                    // ));
                 }
                 newTotalProfit += updatedValues[key].profit;
             });
             
             setTotalProfit(newTotalProfit);
+
+            setRows(prevRows => prevRows.map(row => {
+                const key = `${row.color}-${row.size || 'null'}`;
+                return updatedValues[key] || row; 
+            }));
+
             return updatedValues;
         });
     }, [setVariantValues, setRows, setTotalProfit]);

@@ -81,13 +81,13 @@ export const navigation = [
     icon: duotone.Order,
     children: [{
       name: "Order List",
-      path: "/admin/orders"
+      path: "/vendor/orders"
     }, {
       name: "Orders Pending",
-      path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
+      path: "/vendor/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
     }, {
       name: "Orders Complete",
-      path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
+      path: "/vendor/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
     }]
   },
 
@@ -97,13 +97,13 @@ export const navigation = [
     icon: duotone.Accounts,
     children: [{
       name: "Returns Received",
-      path: "/admin/categories"
+      path: "/vendor/categories"
     }, {
       name: "Returns Complete",
-      path: "/admin/categories/create"
+      path: "/vendor/categories/create"
     }, {
       name: "Refunds Complete",
-      path: "/admin/categories/create"
+      path: "/vendor/categories/create"
     }]
   },
 
@@ -126,10 +126,10 @@ export const navigation = [
 //   icon: duotone.Refund,
 //   children: [{
 //     name: "Refund Request",
-//     path: "/admin/refund-request"
+//     path: "/vendor/refund-request"
 //   }, {
 //     name: "Refund Settings",
-//     path: "/admin/refund-setting"
+//     path: "/vendor/refund-setting"
 //   }]
 // },
 //  {
@@ -137,22 +137,22 @@ export const navigation = [
 //   icon: duotone.Seller,
 //   children: [{
 //     name: "Seller List",
-//     path: "/admin/sellers"
+//     path: "/vendor/sellers"
 //   }, {
 //     name: "Seller Package",
-//     path: "/admin/seller-package"
+//     path: "/vendor/seller-package"
 //   }, {
 //     name: "Package Payments",
-//     path: "/admin/package-payments"
+//     path: "/vendor/package-payments"
 //   }, {
 //     name: "Earning History",
-//     path: "/admin/earning-history"
+//     path: "/vendor/earning-history"
 //   }, {
 //     name: "Payouts",
-//     path: "/admin/payouts"
+//     path: "/vendor/payouts"
 //   }, {
 //     name: "Payout Request",
-//     path: "/admin/payout-requests"
+//     path: "/vendor/payout-requests"
 //   }]
 // }, 
 {

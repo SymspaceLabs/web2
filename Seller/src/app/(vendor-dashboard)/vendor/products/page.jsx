@@ -2,7 +2,7 @@
 // Product List Page
 // ==============================================================
 
-import { ProductsPageView } from "@/pages-sections/vendor-dashboard/products/page-view";
+import { ProductsListPageView } from "@/pages-sections/vendor-dashboard/products/page-view";
 
 // ==============================================================
 
@@ -19,5 +19,5 @@ export const metadata = {
 // ==============================================================
 
 export default async function Products() {
-  return <ProductsPageView />;
+  return <ProductsListPageView />;
 }

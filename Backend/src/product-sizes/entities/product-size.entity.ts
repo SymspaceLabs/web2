@@ -8,6 +8,9 @@ export class ProductSize {
 
   @Column()
   size: string;
+  
+  @Column({ type: 'varchar', nullable: true })
+  sizeChartUrl: string | null;
 
   @Column({ type: 'int', default: 0 })
   sortOrder: number;

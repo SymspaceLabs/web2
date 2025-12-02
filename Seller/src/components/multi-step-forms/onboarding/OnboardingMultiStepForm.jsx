@@ -28,9 +28,10 @@ const OnboardingMultiStepForm = ({
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
             {/* Show WelcomeDialog, step==0 */}
-            {step === 0 && 
+            {(step === 0 && !user?.isSellerOnboardingFormFilled1) && 
                 <WelcomeCard />
-            } 
+            }
+
             {step === 1 && 
                 <Form1 
                     setFormData={setFormData}

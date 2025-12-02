@@ -28,7 +28,7 @@ const OnboardingMultiStepForm = ({
         <FlexBox flexDirection="column" gap={3} sx={{ width: '100%' }}>
             
             {/* Show WelcomeDialog, step==0 */}
-            {(step === 0 && !user?.isSellerOnboardingFormFilled1) && 
+            {(step === 0) && 
                 <WelcomeCard />
             }
 
@@ -69,7 +69,7 @@ const OnboardingMultiStepForm = ({
             }
 
             {/* Show Congrats, step==0 */}
-            {(step === 5 && !user?.isSellerOnboardingFormFilled1) && 
+            {(step === 5 && user?.isSellerOnboardingFormFilled1) && 
                 <CongratsCard
                     openStoreDialog={handleOpenStoreDialog}
                 />

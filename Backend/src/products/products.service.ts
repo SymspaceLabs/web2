@@ -1,20 +1,18 @@
-import { QueryFailedError, Repository, SelectQueryBuilder } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
 import { Category } from 'src/categories/entities/category.entity';
+import { QueryFailedError, Repository, SelectQueryBuilder } from 'typeorm';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
-import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { ProductImage } from '../product-images/entities/product-image.entity';
-import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 import { slugify, normalizeSearchText, determineProductAvailability } from './utils/utils';
+import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProductColors, mapProductSizes } from './utils/product.utils';
 
 // Define a type for a single search suggestion result
@@ -202,8 +200,18 @@ export class ProductsService {
       if (colors !== undefined) {
           product.colors = mapProductColors(colors, product);
       }
+
+      // ⭐ UPDATE: Pass the full size object including sizeChartUrl
       if (sizes !== undefined) {
-          product.sizes = mapProductSizes(sizes.map(size => ({ size })), product);
+        // ⭐ FIX: Convert the string array into the required DTO object array
+        const mappedSizeDtos = sizes.map((s, index) => ({
+            // Extract properties directly from the incoming size object 's'
+            size: s.size, // ⬅️ FIX: Access the 'size' property of the object
+            sortOrder: s.sortOrder !== undefined ? s.sortOrder : index, // Use payload sortOrder or array index
+            sizeChartUrl: s.sizeChartUrl || null, // ⬅️ FIX: Access the 'sizeChartUrl' property
+        }));
+        
+        product.sizes = mapProductSizes(mappedSizeDtos, product);
       }
 
       let savedProduct: Product;
@@ -598,7 +606,7 @@ export class ProductsService {
               id: `product-${item.id}`,
               label: `${item.name} (from ${item.company.entityName})`, // Clarify the source
               type: 'product',
-              slug: item.slug              // ✅ Now correctly available
+              slug: item.slug              // ✅ Now correctly available
           });
       }
       
@@ -608,7 +616,7 @@ export class ProductsService {
               id: `category-${item.id}`,
               label: item.name,
               type: 'category',
-              slug: item.slug              // ✅ Now correctly available
+              slug: item.slug              // ✅ Now correctly available
           });
       }
       
@@ -618,7 +626,7 @@ export class ProductsService {
               id: `subcategory-child-${item.id}`,
               label: item.name,
               type: 'subcategory-child',
-              slug: item.slug              // ✅ Now correctly available
+              slug: item.slug              // ✅ Now correctly available
           });
       }
 

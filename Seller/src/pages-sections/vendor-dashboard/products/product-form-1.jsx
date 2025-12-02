@@ -220,11 +220,23 @@ const ProductForm1 = forwardRef((props, ref) => {
     setNewSize('');
   };
 
-  const handleAddCustomSize = () => {
+  const handleAddCustomSize = (finalUrl) => { // ⬅️ 1. Must accept the final URL from the dialog
     if (newSize) {
-      const customSize = { name: newSize };
-      setSelectedSizes((prevSelected) => [...prevSelected, customSize]);
-      handleCloseSizeDialog();
+        // 2. Create the new size object including the uploaded URL
+        const customSize = { 
+            name: newSize, 
+            sizeChartUrl: finalUrl || null, // Ensure the URL is stored
+        };
+        
+        // 3. Update the main list of selected sizes
+        setSelectedSizes((prevSelected) => [...prevSelected, customSize]);
+        
+        // 4. Clean up parent state for the next use
+        setNewSize('');       // Reset the size name input field
+        setSizeChartUrl(null); // ⬅️ CRITICAL: Reset the size chart image reference
+        
+        // 5. Close the dialog
+        handleCloseSizeDialog();
     }
   };
 
@@ -704,7 +716,7 @@ const ProductForm1 = forwardRef((props, ref) => {
         onClose={handleCloseSizeDialog}
         handleChangeSize={(e) => setNewSize(e.target.value)}
         handleAddCustomSize={handleAddCustomSize}
-        handleChangeSizeChartUrl={(e) => setSizeChartUrl(e.target.value)}
+        handleChangeSizeChartUrl={(file) => setSizeChartUrl(file)}
       />
     </form>
   )

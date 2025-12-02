@@ -14,6 +14,7 @@ import { ProductGender } from '../entities/product.entity';
 import { CreateProductModelDto } from 'src/product-models/dto/create-product-model.dto';
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
+import { CreateProductSizeDto } from 'src/product-sizes/dto/create-product-size.dto';
 
 // ----------------------------------------------------
 // NEW DTO: CreateProductDimensionsDto
@@ -98,8 +99,10 @@ export class CreateProductDto {
   sizeFit?: string;
 
   @IsArray()
+  @ValidateNested({ each: true }) // ⬅️ Tells class-validator to check each item
+  @Type(() => CreateProductSizeDto) // ⬅️ Tells class-transformer what class to use
   @IsOptional()
-  sizes?: string[];
+  sizes?: CreateProductSizeDto[]; 
 
   @IsArray()
   @ValidateNested({ each: true })

@@ -148,12 +148,20 @@ export function mapProductColors(colorsDto: CreateProductColorDto[], product: Pr
 export function mapProductSizes(sizesDto: CreateProductSizeDto[], product: Product): ProductSize[] {
     if (!sizesDto || sizesDto.length === 0) return [];
     
-    return sizesDto.map((size, i) => {
-        const s = new ProductSize();
-        s.size = size.size; // Assign the correct property from CreateProductSizeDto
-        s.sortOrder = i;
-        s.product = product;
-        return s;
+    return sizesDto.map((dto, i) => {
+        const productSize = new ProductSize();
+        
+        productSize.size = dto.size; 
+        
+        // ⭐ NEW: Assign the sizeChartUrl if it exists in the DTO
+        productSize.sizeChartUrl = dto.sizeChartUrl || null; 
+        
+        // Use the DTO's sortOrder if provided, otherwise use the array index
+        productSize.sortOrder = dto.sortOrder !== undefined ? dto.sortOrder : i;
+        
+        productSize.product = product;
+        
+        return productSize;
     });
 }
 

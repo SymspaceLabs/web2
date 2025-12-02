@@ -113,7 +113,14 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Creates the product on Step 1 and handles the URL update (moving from /create to /:id).
   // =============================================================================
   const handleCreateProduct = async (data) => {
-    const transformedSizes = (selectedSizes || []).map(size => size.name);
+    
+    // ⭐ UPDATED: Map selectedSizes into the DTO object structure
+    const transformedSizes = (selectedSizes || []).map((size, index) => ({
+        size: size.name, // Assuming the size value is stored in 'name'
+        sortOrder: index,
+        sizeChartUrl: size.sizeChartUrl || null, // Include the new field
+    }));
+
     const transformedColors = selectedColors.map(color => ({
       name: color.name,
       code: color.hex,
@@ -180,7 +187,13 @@ const ProductCreatePageView = ({ productId='' }) => {
         colorCode: model.colorCode,
     }));
 
-    const transformedSizes = selectedSizes.map(size => size.name);
+    // ⭐ UPDATED: Map selectedSizes into the DTO object structure
+    const transformedSizes = selectedSizes.map((size, index) => ({
+        size: size.name,
+        sortOrder: index,
+        sizeChartUrl: size.sizeChartUrl || null, // Include the new field
+    }));
+
     const transformedColors = selectedColors.map(color => ({
         name: color.name,
         code: color.hex, 
@@ -189,15 +202,45 @@ const ProductCreatePageView = ({ productId='' }) => {
     // --- Build Request Body (STRICTLY CONDTIONALIZED) ---
     let requestBody = {};
 
-    const arraysEqual = (a, b) => {
-      if (a.length !== b.length) return false;
-      // Simple stringify comparison works for arrays of simple objects like {name, hex} or {name}
-      return JSON.stringify(a.sort()) === JSON.stringify(b.sort());
+    // ⭐ FIX 1: Add a custom sorting function for objects based on a key (e.g., 'name' or 'size')
+    const deepSortAndStringify = (arr, key = 'name') => {
+        if (!arr || !Array.isArray(arr)) return '[]';
+        // Use a consistent sort key (size or name) for stable comparison
+        const sortedArr = arr.slice().sort((a, b) => {
+            if (a[key] < b[key]) return -1;
+            if (a[key] > b[key]) return 1;
+            return 0;
+        });
+        return JSON.stringify(sortedArr);
     };
 
-    // Check if colors/sizes have changed
-    const colorsChanged = !arraysEqual(transformedColors, initialColors.map(c => ({ name: c.name, code: c.hex })));
-    const sizesChanged = !arraysEqual(transformedSizes, initialSizes.map(s => s.name));
+    // ⭐ FIX 2: Refined arraysEqual using the deepSortAndStringify helper
+    const arraysEqual = (a, b, key) => {
+        if (a.length !== b.length) return false;
+        return deepSortAndStringify(a, key) === deepSortAndStringify(b, key);
+    };
+
+    // --- Prepare Arrays for Comparison ---
+    
+    // Colors must be compared by name and code
+    const currentColorsForComparison = transformedColors.map(c => ({ name: c.name, code: c.code }));
+    const initialColorsForComparison = initialColors.map(c => ({ name: c.name, code: c.hex }));
+
+    // Sizes must be compared by size (name) and sizeChartUrl
+    const currentSizesForComparison = transformedSizes.map(s => ({ 
+        size: s.size, 
+        sizeChartUrl: s.sizeChartUrl 
+    }));
+
+    // Note: initialSizes objects use 'name' for the size string, transformed uses 'size'
+    const initialSizesForComparison = initialSizes.map(s => ({ 
+        size: s.name, // Use 'name' from the state to match 'size' from transformed
+        sizeChartUrl: s.sizeChartUrl 
+    }));
+
+    // --- Check if colors/sizes have changed (using the fixed logic) ---
+    const colorsChanged = !arraysEqual(currentColorsForComparison, initialColorsForComparison, 'name');
+    const sizesChanged = !arraysEqual(currentSizesForComparison, initialSizesForComparison, 'size');
     
     // Only include images/models if the current step is 1 ⭐
     if (currentStep === 0) {
@@ -205,9 +248,10 @@ const ProductCreatePageView = ({ productId='' }) => {
           name: data.name,
           company : user?.company?.id,
           subcategoryItem : data.category,
-          // Only include colors and sizes if they have changed
-          ...(colorsChanged && { colors : transformedColors }), 
-          ...(sizesChanged && { sizes : transformedSizes }), 
+            // Only include colors and sizes if they have changed
+            ...(colorsChanged && { colors : transformedColors }), 
+            // ✅ FIX: Now conditionally included based on deep comparison
+            ...(sizesChanged && { sizes : transformedSizes }),
         };
     } else if (currentStep === 1) {
         // Fields from ProductForm2 (Details/Media/Variants)
@@ -368,9 +412,10 @@ const ProductCreatePageView = ({ productId='' }) => {
                 // 2. Handle Sizes Transformation
                 if (data.sizes && Array.isArray(data.sizes)) {
                     
-                    // Transform API sizes array into the required state format: { name: '...' }
+                    // Transform API sizes array into the required state format: { name: '...', sizeChartUrl: '...' }
                     const initialSizes = data.sizes.map(s => ({
                         name: s.size, // Mapped 'size' (e.g., 'S', 'M') to 'name' state property
+                        sizeChartUrl: s.sizeChartUrl || null, // ⭐ NEW: Extract sizeChartUrl
                     }));
                     
                     setSelectedSizes(initialSizes);

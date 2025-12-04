@@ -20,7 +20,6 @@ const RegisterPartnerPageView = () => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState(''); 

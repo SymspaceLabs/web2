@@ -125,5 +125,38 @@ export const fetchProductAvailability = async (productId, colorId, sizeId) => {
   }
 };
 
-// Removed the 'fetchProducts' function and the final export block,
-// replacing them with 'export const' on each function definition.
+/**
+ * Fetches a list of products from the backend API.
+ * This is required for displaying products on the landing page/product list pages.
+ * @param {Object} [params={}] - Optional parameters for filtering or pagination (e.g., { limit: 10, category: 'newArrival' }).
+ * @returns {Promise<{products: Array, error: Object | null}>} An object containing the product list and a potential error.
+ */
+export const fetchProducts = async (params = {}) => {
+    // Construct the query string from params (e.g., ?limit=10&category=newArrival)
+    // const queryString = new URLSearchParams(params).toString();
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
+    
+    console.log(`[API CALL] Fetching products from: ${url}`);
+    
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            // Log the detailed error from the server if available
+            const errorBody = await response.text().catch(() => 'No response body');
+            console.error(`API Error: ${response.status} - ${response.statusText}`, errorBody);
+            throw new Error("Failed to fetch products list");
+        }
+
+        const responseData = await response.json();
+        const productsArray = responseData.products || [];
+        
+        // Ensure the response structure matches what the component expects
+        return { products: productsArray, error: null }; 
+
+    } catch (error) {
+        console.error("Error fetching products list:", error);
+        // Return an error object to be handled by the calling component
+        return { products: [], error: { message: error.message || "Network error" } };
+    }
+};

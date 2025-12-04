@@ -68,6 +68,9 @@ const ProductCard1 = ({ product }) => {
               textTransform: "uppercase",
               color: "rgba(255,255,255,0.5)",
               fontSize: { xs: 10, sm: 17 },
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
             }}
           >
             {product.company.entityName}

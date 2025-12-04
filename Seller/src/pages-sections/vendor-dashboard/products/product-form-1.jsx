@@ -44,6 +44,38 @@ const ProductForm1 = forwardRef((props, ref) => {
     setIsCategoryLoading
   } = props;
 
+  useEffect(() => {
+    // 1. Determine the initial category slug/ID that needs to be fetched.
+    const initialCategorySlugOrId = initialValuesProp.category_slug || 
+                                   initialValuesProp.subcategoryItem?.slug;
+
+    // 2. Only proceed if we are in an edit mode and have a category identifier.
+    // The initialValuesProp.category_slug should be passed from the parent component
+    // when loading an existing product for editing.
+    if (initialCategorySlugOrId) {
+        // Set loading state (if defined and necessary)
+        // setIsCategoryLoading(true); 
+
+        // Call the existing function to fetch the subcategory details.
+        // NOTE: fetchCategoryItems expects a slug string.
+        fetchCategoryItems(initialCategorySlugOrId)
+            .then(apiData => {
+                // Manually set the category ID in the main values state 
+                // as if the category was selected via the Autocomplete.
+                setFieldValue('category', apiData?.id);
+                // The existing useEffect for subcategoryDetails will handle
+                // setting the initial tag values based on apiData.tag_defaults.
+            })
+            .catch(error => {
+                console.error("Error fetching initial category details:", error);
+                // Handle error (e.g., set an error state)
+            })
+            // .finally(() => {
+            //     setIsCategoryLoading(false);
+            // });
+    }
+  }, []); // Empty dependency array ensures it only runs ONCE on mount
+
   // 🕵️ CHILD DEBUG 1: Log Props Received from Parent
   useEffect(() => {
   }, [selectedColors, selectedSizes]);
@@ -75,20 +107,28 @@ const ProductForm1 = forwardRef((props, ref) => {
   // --- LOCAL STATE FOR FORM DATA AND ERRORS (Formik replacements) ---
   const [values, setValues] = useState(() => ({
     name: initialValuesProp.name || "",
+    url: initialValuesProp.url || "",
     category: initialValuesProp.subcategoryItem?.id || initialValuesProp.category || "",
     description: initialValuesProp.description || "",
     status: initialValuesProp.status || "draft",
     productType: initialValuesProp.productType || "static",
     productSizechart: initialValuesProp.productSizechart || "",
-    // Add state for all potential tags to be submitted, even if they aren't visible
-    ar_type: initialValuesProp.ar_type || '', 
-    age_group: initialValuesProp.age_group || [], 
-    gender: initialValuesProp.gender || [], 
-    // season: initialValuesProp.season || [], 
-    // occasion: initialValuesProp.occasion || [], 
-    // material: initialValuesProp.material || [],
-    color: initialValuesProp.color || [], 
-    // pattern: initialValuesProp.pattern || [], 
+    ar_type: initialValuesProp.ar_type || '',
+
+    // 🛑 FIX: Ensure array type for multi-select fields, 
+    // wrapping string values in an array if they exist.
+    age_group: Array.isArray(initialValuesProp.age_group) 
+               ? initialValuesProp.age_group 
+               : (initialValuesProp.age_group ? [initialValuesProp.age_group] : []), 
+               
+    gender: Array.isArray(initialValuesProp.gender) 
+            ? initialValuesProp.gender 
+            : (initialValuesProp.gender ? [initialValuesProp.gender] : []),
+            
+    // color field is likely an array already, but ensure it too
+    color: Array.isArray(initialValuesProp.color) 
+           ? initialValuesProp.color 
+           : (initialValuesProp.color ? [initialValuesProp.color] : []),
   }));
   const [errors, setErrors] = useState({});
 
@@ -102,10 +142,6 @@ const ProductForm1 = forwardRef((props, ref) => {
   const [sizeChartUrl, setSizeChartUrl] = useState('');
   const [color, setColor] = useState('#fff');
   const [size, setSize] = useState();
-  
-  // 👇🏼 REMOVE dedicated state for ageGroup and gender, use `values` state instead
-  // const [selectedAgeGroup, setSelectedAgeGroup] = useState([]);
-  // const [selectedGender, setSelectedGender] = useState([]);
   const [subcategoryDetails, setSubcategoryDetails] = useState(null);
 
   // --- CUSTOM PLAIN REACT HANDLERS (Replacing Formik handlers) ---
@@ -184,9 +220,7 @@ const ProductForm1 = forwardRef((props, ref) => {
       return validateForm(values);
     },
 
-    /**
-     * Submit the form programmatically (Called by parent's handleNext)
-     */
+    // Submit the form programmatically (Called by parent's handleNext)
     submit: () => {
       
       const isValid = validateForm(values);
@@ -474,43 +508,41 @@ const ProductForm1 = forwardRef((props, ref) => {
                 />
               </Box>
 
+              {/* Product URL */}
+              <Box>
+                <SymTextField
+                  label="Product Url"
+                  name="productUrl"
+                  placeholder="Enter product url"
+                  value={values.url}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={!!errors.productUrl}
+                  helperText={errors.productUrl}
+                />
+              </Box>
+
               {/* Category */}
-                <FlexCol sx={{ gap:1  }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', minWidth:'250px' }}>
-                    <H1  color='#FFF'>
-                      Product Category 
-                    </H1>
-                    <Tooltip title="Choose a category for the product">
-                      <IconButton>
-                        <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-
-                  <SymMultiLevelSelect
-                    onCategorySelect={handleCategorySelect}
-                    selectedCategory={selectedCategory}
-                    error={!!errors.category}
-                    helperText={errors.category}
-                  />
-                </FlexCol>
-              
-
-              {/* Product Sizechart */}
-              {values.productType === "dynamic" && (
-                <Box>
-                  <SymTextField
-                    label="Product Sizechart URL"
-                    name="productSizechart"
-                    placeholder="Enter URL to size chart document"
-                    value={values.productSizechart}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={!!errors.productSizechart}
-                    helperText={errors.productSizechart}
-                  />
+              <FlexCol sx={{ gap:1  }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', minWidth:'250px' }}>
+                  <H1  color='#FFF'>
+                    Product Category 
+                  </H1>
+                  <Tooltip title="Choose a category for the product">
+                    <IconButton>
+                      <InfoOutlined sx={{ color: '#fff', fontSize: 10 }} />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
-              )}
+
+                <SymMultiLevelSelect
+                  onCategorySelect={handleCategorySelect}
+                  selectedCategory={selectedCategory}
+                  error={!!errors.category}
+                  helperText={errors.category}
+                />
+              </FlexCol>
+              
 
               {/* Category Tags */}
               {subcategoryDetails && (subcategoryDetails.tags_required.includes('age_group') ||  subcategoryDetails.tags_required.includes('gender')) && (

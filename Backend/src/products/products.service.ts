@@ -877,10 +877,14 @@ export class ProductsService {
       // 1. subcategoryItem.slug (standard slug)
       // 2. subcategoryItem.mobileLevel2Name (new mobile alias/name)
       // 3. subcategoryItemChild.slug (existing cross-hierarchy filter)
+
+      // (Optional) Add this to your controller or near the filter application:
+      const lowerCaseSlugs = subcategoryItemSlugs.map(s => s.toLowerCase());
       
+      // Then modify the query (if necessary for your database):
       query.andWhere(
-          '(subcategoryItem.slug IN (:...itemSlugs) OR subcategoryItem.mobileLevel2Name IN (:...itemSlugs) OR subcategoryItemChild.slug IN (:...itemSlugs))', 
-          { itemSlugs: subcategoryItemSlugs }
+          '(LOWER(subcategoryItem.slug) IN (:...itemSlugs) OR LOWER(subcategoryItem.mobileLevel2Name) IN (:...itemSlugs) OR LOWER(subcategoryItemChild.slug) IN (:...itemSlugs))', 
+          { itemSlugs: lowerCaseSlugs }
       );
       hasFilter = true;
     }

@@ -237,7 +237,6 @@ export class CategoriesService {
             for (const item of filteredGroups) {
                 // ⭐ MODIFIED: Flatten ANY Single-Child Group
                 if (item.items.length === 1 && typeof item.items[0] === 'string') {
-                    // Promote the parent group name (e.g., "TVs") to the final flat list.
                     finalFlatStrings.add(item.name as string); 
                     groupNames.delete(item.name);
                 } else {

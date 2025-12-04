@@ -2,10 +2,18 @@
 // Create Product Form 1
 //========================================================================
 
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";import { H1 } from "@/components/Typography";
-import { FlexBox } from "@/components/flex-box";
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { H1 } from "@/components/Typography";
+import { FlexBox, FlexCol } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
 import { Autocomplete, TextField, Box, Card, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
+import { 
+  baseColors, 
+  baseSizes, 
+  ageGroups, 
+  genders, 
+  TAG_CONFIG
+} from "@/utils/product-form-constants"; 
 
 import dynamic from "next/dynamic";
 import slugify from "@/services/slugify";
@@ -25,33 +33,6 @@ const DynamicRichTextInputBox = dynamic(
   }
 );
 
-const baseColors = [
-  { name: 'Red', hex: '#f44336' },
-  { name: 'Blue', hex: '#2196f3' },
-  { name: 'Green', hex: '#4caf50' },
-];
-
-const baseSizes = [
-  { name: 'S' },
-  { name: 'M' },
-  { name: 'L' },
-  { name: 'XL' },
-  { name: 'XXL' },
-];
-
-const ageGroups = [
-  { label: '0-6 months', value:'0-6 months'   },
-  { label: '6-12 months', value:'6-12 months'  },
-  { label: 'Adults', value:'adults' },
-  { label: 'All ages', value:'all' },
-];
-
-const genders = [
-  { label: 'Male', value: 'male'   },
-  { label: 'Female', value: 'female' },
-  { label: 'Unisex', value: 'unisex' },
-];
-
 const ProductForm1 = forwardRef((props, ref) => {
   const { 
     initialValues: initialValuesProp, 
@@ -60,6 +41,7 @@ const ProductForm1 = forwardRef((props, ref) => {
     setSelectedColors,
     selectedSizes,
     setSelectedSizes,
+    setIsCategoryLoading
   } = props;
 
   // 🕵️ CHILD DEBUG 1: Log Props Received from Parent
@@ -98,6 +80,15 @@ const ProductForm1 = forwardRef((props, ref) => {
     status: initialValuesProp.status || "draft",
     productType: initialValuesProp.productType || "static",
     productSizechart: initialValuesProp.productSizechart || "",
+    // Add state for all potential tags to be submitted, even if they aren't visible
+    ar_type: initialValuesProp.ar_type || '', 
+    age_group: initialValuesProp.age_group || [], 
+    gender: initialValuesProp.gender || [], 
+    // season: initialValuesProp.season || [], 
+    // occasion: initialValuesProp.occasion || [], 
+    // material: initialValuesProp.material || [],
+    color: initialValuesProp.color || [], 
+    // pattern: initialValuesProp.pattern || [], 
   }));
   const [errors, setErrors] = useState({});
 
@@ -111,8 +102,10 @@ const ProductForm1 = forwardRef((props, ref) => {
   const [sizeChartUrl, setSizeChartUrl] = useState('');
   const [color, setColor] = useState('#fff');
   const [size, setSize] = useState();
-  const [selectedAgeGroup, setSelectedAgeGroup] = useState([]);
-  const [selectedGender, setSelectedGender] = useState([]);
+  
+  // 👇🏼 REMOVE dedicated state for ageGroup and gender, use `values` state instead
+  // const [selectedAgeGroup, setSelectedAgeGroup] = useState([]);
+  // const [selectedGender, setSelectedGender] = useState([]);
   const [subcategoryDetails, setSubcategoryDetails] = useState(null);
 
   // --- CUSTOM PLAIN REACT HANDLERS (Replacing Formik handlers) ---
@@ -125,7 +118,7 @@ const ProductForm1 = forwardRef((props, ref) => {
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
   
-  // 2. Manual Set Value Handler (for Rich Text Editor, Autocomplete)
+  // 2. Manual Set Value Handler (for Rich Text Editor, Autocomplete, and Tags)
   const setFieldValue = (name, value) => {
     setValues(prev => ({ ...prev, [name]: value }));
     // Clear error on change if it exists
@@ -155,10 +148,29 @@ const ProductForm1 = forwardRef((props, ref) => {
       newErrors.category = "Product Category is required!";
       isValid = false;
     }
-
-    // NOTE: You can add conditional checks for dimensions/sizechart here if needed
+    
+    // 👇🏼 NEW CHECK: Validate required tags
+    if (subcategoryDetails?.tags_required) {
+      subcategoryDetails.tags_required.forEach(tag => {
+        // For tags like age_group and gender, we expect an array of selected values.
+        // For tags like ar_type, we expect a single string value (which is already handled by setFieldValue('productType')).
+        if (['age_group', 'gender'].includes(tag)) {
+          if (!currentValues[tag] || currentValues[tag].length === 0) {
+            newErrors[tag] = `The '${tag.replace('_', ' ')}' tag is required for this category.`;
+            isValid = false;
+          }
+        }
+      });
+    }
 
     setErrors(newErrors);
+
+    if(newErrors.age_group){
+      alert(newErrors.age_group);
+    } else if (newErrors.gender) {
+      alert(newErrors.gender);
+    }
+
     return isValid;
   };
   
@@ -253,7 +265,7 @@ const ProductForm1 = forwardRef((props, ref) => {
 
         const data = await response.json();
         
-        setSubcategoryDetails(data);
+        setSubcategoryDetails(data); // Storing the full response
         
         return data;
     } catch (error) {
@@ -283,11 +295,29 @@ const ProductForm1 = forwardRef((props, ref) => {
             const finalCategoryName = pathParts.pop();
             categoryArray = finalCategoryName ? [finalCategoryName] : [];
 
-            setSelectedCategory(pathString); 
+            setSelectedCategory(pathString);
+
+            // --- 🆕 CRITICAL: RESET TAG VALUES FOR THE NEW CATEGORY ---
+            // Reset multi-select tags to empty array
+            setFieldValue('age_group', []); 
+            setFieldValue('gender', []);
+            setFieldValue('season', []);
+            setFieldValue('occasion', []);
+            setFieldValue('material', []);
+            setFieldValue('color', []);
+            setFieldValue('pattern', []);
+            // Reset single-select tags (productType is handled below, ar_type is likely redundant)
+            setFieldValue('ar_type', ''); 
+            // --- END RESET ---
+            
+            // 🆕 1. Set loading state to true before API call
+
+            // 🆕 1. Set loading state to true before API call
+            setIsCategoryLoading(true); 
             
             
             try {
-                const apiData = await fetchCategoryItems(finalCategorySlug);
+                const apiData = await fetchCategoryItems(finalCategorySlug); // Fetches and sets subcategoryDetails
 
                 if (apiData?.tag_defaults?.ar_type) {
                   const arType = apiData.tag_defaults.ar_type;
@@ -302,6 +332,9 @@ const ProductForm1 = forwardRef((props, ref) => {
                 console.error("Error setting product type after category fetch:", error);
                 setFieldValue('productType', 'static');
                 setFieldValue('category', ""); // ⬅️ Clear 'category' on API failure
+            } finally {
+                // 🆕 2. Set loading state to false after API call completes (success or failure)
+                setIsCategoryLoading(false); 
             }
             
 
@@ -311,17 +344,120 @@ const ProductForm1 = forwardRef((props, ref) => {
             setFieldValue('productType', 'static');
             setFieldValue('category', ""); // ✅ IMPORTANT: Clears the field value when no object is selected
           }
-
-          // setFieldValue('subcategoryItem', categoryArray); 
-          // setFieldTouched('category', true);
   };
+  
+    // 🆕 EFFECT TO HANDLE DEFAULT TAGS WHEN CATEGORY DETAILS ARE LOADED
+    useEffect(() => {
+    if (subcategoryDetails) {
+        const defaults = subcategoryDetails.tag_defaults || {};
+        const requiredTags = subcategoryDetails.tags_required || [];
+
+        // Iterate over all possible multi-select tags defined in the config
+        Object.keys(TAG_CONFIG).forEach(tagFieldName => {
+        const config = TAG_CONFIG[tagFieldName];
+        const isRequired = requiredTags.includes(tagFieldName);
+        const defaultValue = defaults[tagFieldName];
+
+        if (isRequired) {
+            if (defaultValue) {
+            // Attempt to find the option object based on the default value
+            const defaultObject = config.options.find(opt => opt.value === defaultValue);
+            if (defaultObject) {
+                // Set the form value to an array containing the single default value
+                setFieldValue(tagFieldName, [defaultObject.value]);
+            } else {
+                // Default value is invalid, clear it
+                setFieldValue(tagFieldName, []);
+            }
+            } else {
+            // Required but no default, initialize to an empty array
+            setFieldValue(tagFieldName, []);
+            }
+        } else {
+            // Not required, ensure it's cleared from state
+            setFieldValue(tagFieldName, []);
+        }
+        });
+    }
+    }, [subcategoryDetails]); // Dependency on subcategoryDetails
+
+  
+
+    // Helper function for SymMultiSelectChip onChange (around line 385)
+    const handleTagSelect = (tagFieldName, newSelectedItems) => {
+        // SymMultiSelectChip returns an array of label/value objects.
+        // We only want to store the values (strings) in the `values` state for submission.
+        const newValues = newSelectedItems.map(item => item.value);
+        setFieldValue(tagFieldName, newValues);
+    };
+
+    // Helper function to convert stored string values back to objects for SymMultiSelectChip (around line 394)
+    const getSelectedTagObjects = (tagFieldName, options) => {
+        return (values[tagFieldName] || [])
+            .map(value => options.find(opt => opt.value === value))
+            .filter(item => item); // Filter out undefined/null if a value doesn't match an option
+    };
+
+    // 🆕 EFFECT TO HANDLE DEFAULT TAGS WHEN CATEGORY DETAILS ARE LOADED
+    useEffect(() => {
+    if (subcategoryDetails) {
+        const defaults = subcategoryDetails.tag_defaults || {};
+        const requiredTags = subcategoryDetails.tags_required || [];
+        
+        // --- 1. Handle Gender Default ---
+        if (requiredTags.includes('gender')) {
+        const defaultGender = defaults.gender;
+        if (defaultGender) {
+            // The SymMultiSelectChip expects an array of values (strings) in the form state.
+            // We find the option object to ensure it's a valid value, then store the value.
+            const defaultGenderObject = genders.find(g => g.value === defaultGender);
+            if (defaultGenderObject) {
+            setFieldValue('gender', [defaultGenderObject.value]); // Store as an array of values (strings)
+            } else {
+            setFieldValue('gender', []); // Default value is invalid, so clear it
+            }
+        } else {
+            // If required but no default, clear it to an empty array
+            setFieldValue('gender', []); 
+        }
+        } else {
+        // If not required/present, ensure it's cleared from state
+        setFieldValue('gender', []); 
+        }
+        
+        // --- 2. Handle Age Group Default ---
+        if (requiredTags.includes('age_group')) {
+        const defaultAgeGroup = defaults.age_group;
+        if (defaultAgeGroup) {
+            // Find the option object from the ageGroups array
+            const defaultAgeGroupObject = ageGroups.find(g => g.value === defaultAgeGroup);
+            if (defaultAgeGroupObject) {
+            // Set the form value to an array containing the single default value
+            setFieldValue('age_group', [defaultAgeGroupObject.value]); 
+            } else {
+            setFieldValue('age_group', []); // Default value is invalid, so clear it
+            }
+        } else {
+            // If required but no default (like in your example), initialize to an empty array
+            setFieldValue('age_group', []); 
+        }
+        } else {
+        // If not required/present, ensure it's cleared from state
+        setFieldValue('age_group', []);
+        }
+        
+        // Note: You may need to add similar logic for other tags like 'season', 'occasion', etc.
+        // if they can also have default values from the API.
+    }
+    }, [subcategoryDetails]); // Re-run when subcategory details are fetched
+
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); /* Ensure no accidental submission */ }}>
       <FlexBox flexDirection="column" gap={3} sx={{ pr: 4, position: 'relative' }}>
         
         <Box sx={{ overflow: 'visible', position: 'relative', zIndex: 2 }}>
-          <Card sx={{ p: 6, background: 'transparent' }}>
+          <Box sx={{ p: 6, background: 'transparent' }}>
             <FlexBox flexDirection="column" gap={4}> 
 
               {/* Product Name */}
@@ -339,8 +475,7 @@ const ProductForm1 = forwardRef((props, ref) => {
               </Box>
 
               {/* Category */}
-              <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap:2  }}>
+                <FlexCol sx={{ gap:1  }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', minWidth:'250px' }}>
                     <H1  color='#FFF'>
                       Product Category 
@@ -358,48 +493,8 @@ const ProductForm1 = forwardRef((props, ref) => {
                     error={!!errors.category}
                     helperText={errors.category}
                   />
-                </Box>
-              </Box>
+                </FlexCol>
               
-              {/* Product Type */}
-              {/* {values.category.length > 0 && (
-                <FlexBox alignItems="center" gap={2}>
-                  <H1 sx={{ color:'#FFF' }}>
-                    Product Type
-                  </H1>
-                  <TextField
-                    InputProps={{
-                      readOnly: true, 
-                      style: {
-                        backgroundColor: 'white',
-                        color: '#000',
-                        boxShadow: '0px 0px 4px rgba(48, 132, 255, 0.75)',
-                        borderRadius: '8px',
-                        pointerEvents: 'none', 
-                      }
-                    }}
-                    color="info"
-                    size="medium"
-                    value={values.productType}
-                  />
-                </FlexBox>
-              )} */}
-
-              {/* Dimensions */}
-              {/* {values.productType === "static" && (
-                <Box>
-                  <SymTextField
-                    label="Dimensions"
-                    name="dimensions"
-                    placeholder="Enter dimensions"
-                    value={values.dimensions}
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    error={!!errors.dimensions}
-                    helperText={errors.dimensions}
-                  />
-                </Box>
-              )} */}
 
               {/* Product Sizechart */}
               {values.productType === "dynamic" && (
@@ -418,7 +513,7 @@ const ProductForm1 = forwardRef((props, ref) => {
               )}
 
               {/* Category Tags */}
-              {selectedCategory && (
+              {subcategoryDetails && (subcategoryDetails.tags_required.includes('age_group') ||  subcategoryDetails.tags_required.includes('gender')) && (
                 <Box>
                   <FlexBox gap={1} flexDirection="column">
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -432,21 +527,34 @@ const ProductForm1 = forwardRef((props, ref) => {
                       </Tooltip>
                     </Box>
 
-                    <SymMultiSelectChip
-                      options={ageGroups}
-                      selectedItems={selectedAgeGroup}
-                      setSelectedItems={setSelectedAgeGroup}
-                      label="Age group"
-                      allLabel="All ages"
-                    />
+                    {/* Age Group Chip - Conditionally Rendered */}
+                    {subcategoryDetails && subcategoryDetails.tags_required.includes('age_group') && (
+                        <SymMultiSelectChip
+                            options={ageGroups}
+                            // Use the helper function to convert stored values to objects for the chip
+                            selectedItems={getSelectedTagObjects('age_group', ageGroups)}
+                            // Use the helper function to convert selected objects back to values for state
+                            setSelectedItems={(items) => handleTagSelect('age_group', items)}
+                            label="Age group"
+                            allLabel="All ages"
+                            error={errors.age_group}
+                        />
+                    )}
 
-                    <SymMultiSelectChip
-                      options={genders}
-                      selectedItems={selectedGender}
-                      setSelectedItems={setSelectedGender}
-                      label="Gender"
-                      allLabel="Unisex"
-                    />
+                    {/* Gender Chip - Conditionally Rendered */}
+                    {subcategoryDetails && subcategoryDetails.tags_required.includes('gender') && (
+                        <SymMultiSelectChip
+                            options={genders}
+                            // Use the helper function to convert stored values to objects for the chip
+                            selectedItems={getSelectedTagObjects('gender', genders)}
+                            // Use the helper function to convert selected objects back to values for state
+                            setSelectedItems={(items) => handleTagSelect('gender', items)}
+                            label="Gender"
+                            allLabel="Unisex"
+                            error={errors.gender}
+                        />
+                    )}
+
                   </FlexBox>
                 </Box>
               )}
@@ -521,32 +629,6 @@ const ProductForm1 = forwardRef((props, ref) => {
                           </li>
                       )}
                       
-                      // You can also place a log here to confirm the selectedColors state is populated correctly
-                      // renderTags={(value, getTagProps) => {
-                      //     // 🔍 DEBUG POINT 4: Check the final array used to render the chips
-
-                      //     return selectedColors.map((option, index) => (
-                      //         <Chip
-                      //             label={(
-                      //                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      //                     <Box
-                      //                         sx={{
-                      //                             width: 18, height: 18, borderRadius: '50%', marginRight: 1,
-                      //                             bgcolor: option.hex || 'transparent',
-                      //                             border: option.hex ? 'none' : '1px solid grey'
-                      //                         }}
-                      //                     />
-                      //                     {option.name}
-                      //                 </Box>
-                      //             )}
-                      //             {...getTagProps({ index })}
-                      //             onDelete={getTagProps({ index }).onDelete}
-                      //             color="info"
-                      //             variant="outlined"
-                      //             sx={{ color: 'grey' }}
-                      //         />
-                      //     ))
-                      // }}
                       renderTags={(chipNames, getTagProps) => { // Renamed 'value' to 'chipNames' for clarity
                         
                         // 1. Iterate over the array of strings (chipNames) provided by Autocomplete.
@@ -692,7 +774,7 @@ const ProductForm1 = forwardRef((props, ref) => {
                 </FlexBox>
               </Box>
             </FlexBox>
-          </Card>
+          </Box>
         </Box>
       </FlexBox>
 

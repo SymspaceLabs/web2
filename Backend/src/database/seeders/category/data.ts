@@ -244,7 +244,7 @@ export const CATEGORIES_DATA = [
         slug: "home-entertainment",
         mobileLevel1:"Electronics",
         subcategoryItems: [
-          { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "TVs", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
+          { id: "c87ba601-c1b7-4b52-a1c8-d8ec3b7b0a18", name: "Televisions", slug:"televisions", mobileLevel2: "TVs", mobileLevel2Name: "TVs", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
           { id: "77c5ab4b-beb5-4e43-b71f-0c83a02b16af", name: "Sound Systems", slug: "sound-systems", mobileLevel2: "Sound Systems", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "5c3a74d9-1f9e-4bfb-833f-02a32c10874c", name: "Streaming Devices", slug: "streaming-devices", mobileLevel2: "Streaming Devices", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "7b32f0d6-8e1b-4413-8b91-2552648b7dc5", name: "Blu-ray & DVD Players", slug: "blu-ray-dvd-players", mobileLevel2: "Other Electronics", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }

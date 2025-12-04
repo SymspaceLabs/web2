@@ -53,6 +53,8 @@ const ProductCreatePageView = ({ productId='' }) => {
   const [loading, setLoading] = useState(!!productId); 
   const [currentProductId, setCurrentProductId] = useState(productId || null);
   const [step1Variants, setStep1Variants] = useState([]);
+  const [isCategoryLoading, setIsCategoryLoading] = useState(false); 
+
 
   // --- STEPPER HELPER FUNCTIONS ---
   const totalSteps = () => steps.length;
@@ -65,8 +67,11 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Triggers the submission of the currently active child form component via its ref.
   // =============================================================================
   const handleNext = () => {
+    console.log(0)
+
     if (formRef.current && formRef.current.submit) {
         formRef.current.submit();
+        console.log(1)
     } else {
         // If there is no child form (like in Step 2/3 placeholders), 
         // manually call the success handler with current data.
@@ -78,7 +83,8 @@ const ProductCreatePageView = ({ productId='' }) => {
   // =============================================================================
   // @function onStepSubmitSuccess (FIXED)
   // =============================================================================
-  const onStepSubmitSuccess = (values) => {  
+  const onStepSubmitSuccess = (values) => { 
+      console.log(2); 
       setLoading(true);
 
       let newFormData = { ...formData, ...values };
@@ -90,7 +96,8 @@ const ProductCreatePageView = ({ productId='' }) => {
       if (activeStep === 0) {
           if (currentProductId) {
               // Edit Mode Step 0: Update core product data
-              handleUpdateProduct(newFormData, false, true, activeStep); 
+              handleUpdateProduct(newFormData, false, true, activeStep);
+              console.log(1);
           } else {
               // Create Mode Step 0: Create the product
               handleCreateProduct(newFormData);
@@ -495,6 +502,7 @@ const ProductCreatePageView = ({ productId='' }) => {
             setSelectedColors={setSelectedColors}
             selectedSizes={selectedSizes}
             setSelectedSizes={setSelectedSizes}
+            setIsCategoryLoading={setIsCategoryLoading} 
           />
         );
       case 1:
@@ -607,7 +615,7 @@ const ProductCreatePageView = ({ productId='' }) => {
                         handleBack={handleBack}
                         activeStep={activeStep}
                         handleSaveAndExit={handleSaveAndExit}
-                        loading={loading}
+                        loading={loading || isCategoryLoading} 
                         handleNext={handleNext}
                         allStepsCompleted={allStepsCompleted}
                         isLastStep={isLastStep}

@@ -1,4 +1,7 @@
-import { LoginPageView } from "../../../pages-sections/sessions/page-view";
+// ==================================================================
+// Seller Login Page
+// ==================================================================
+import { LoginPageView } from "@/pages-sections/sessions/page-view";
 
 export const metadata = {
   title: "Sign In",

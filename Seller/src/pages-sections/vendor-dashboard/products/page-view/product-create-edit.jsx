@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-//  Product Create Page View
+//  Product Create Page View || Seller
 // =============================================================================
 
 import ProductForm1 from "../product-form-1";
@@ -9,11 +9,11 @@ import ProductForm2 from "../product-form-2";
 import CustomStepper from "../components/CustomStepper";
 import FooterButtons from "../components/FooterButtons";
 
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import { H1 } from "@/components/Typography";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { fetchProductById, createProduct as createProductApi, updateProduct, updateProductVariantsApi } from "@/services/productService";
 
 // =============================================================================
@@ -67,15 +67,12 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Triggers the submission of the currently active child form component via its ref.
   // =============================================================================
   const handleNext = () => {
-    console.log(0)
 
     if (formRef.current && formRef.current.submit) {
         formRef.current.submit();
-        console.log(1)
     } else {
         // If there is no child form (like in Step 2/3 placeholders), 
         // manually call the success handler with current data.
-        console.log(`Step ${activeStep}: No explicit form submit, proceeding with current data.`);
         onStepSubmitSuccess(formData);
     }
   };
@@ -84,7 +81,6 @@ const ProductCreatePageView = ({ productId='' }) => {
   // @function onStepSubmitSuccess (FIXED)
   // =============================================================================
   const onStepSubmitSuccess = (values) => { 
-      console.log(2); 
       setLoading(true);
 
       let newFormData = { ...formData, ...values };
@@ -97,7 +93,6 @@ const ProductCreatePageView = ({ productId='' }) => {
           if (currentProductId) {
               // Edit Mode Step 0: Update core product data
               handleUpdateProduct(newFormData, false, true, activeStep);
-              console.log(1);
           } else {
               // Create Mode Step 0: Create the product
               handleCreateProduct(newFormData);
@@ -120,6 +115,9 @@ const ProductCreatePageView = ({ productId='' }) => {
   // Creates the product on Step 1 and handles the URL update (moving from /create to /:id).
   // =============================================================================
   const handleCreateProduct = async (data) => {
+
+    // ⭐ ADD AGE GROUP AND GENDER TO DTO
+    const { name, productUrl, description, category, cost, age_group, gender } = data;
     
     // ⭐ UPDATED: Map selectedSizes into the DTO object structure
     const transformedSizes = (selectedSizes || []).map((size, index) => ({
@@ -134,14 +132,17 @@ const ProductCreatePageView = ({ productId='' }) => {
     }));
 
     const requestBody = {
-      name: data.name,
+      name,
+      productUrl,
       company : user?.company?.id,
-      subcategoryItem : data.category,
+      subcategoryItem : category,
       colors : transformedColors,
       sizes : transformedSizes,
       salePrice: 0.00,
-      cost: data.cost, 
-      material: data.material,
+      cost,
+      age_group, 
+      gender,
+      description
     }
 
     console.log(requestBody)
@@ -253,8 +254,11 @@ const ProductCreatePageView = ({ productId='' }) => {
     if (currentStep === 0) {
         requestBody = {
           name: data.name,
-          company : user?.company?.id,
           subcategoryItem : data.category,
+          productUrl : data.productUrl,
+          age_group: data.age_group,
+          gender: data.gender,
+          description: data.description,
             // Only include colors and sizes if they have changed
             ...(colorsChanged && { colors : transformedColors }), 
             // ✅ FIX: Now conditionally included based on deep comparison
@@ -263,7 +267,6 @@ const ProductCreatePageView = ({ productId='' }) => {
     } else if (currentStep === 1) {
         // Fields from ProductForm2 (Details/Media/Variants)
         requestBody = {
-          composition: data.composition,
           images: transformedImages, 
           threeDModels: transformedModels
         };
@@ -287,7 +290,6 @@ const ProductCreatePageView = ({ productId='' }) => {
 
     // Check if the request body is empty for Step 0
     if (currentStep === 0 && Object.keys(requestBody).length === 0) {
-      console.log("Skipping API call: No changes detected in Step 0 data (name, category, colors, sizes).");
       moveToNextStep();
       setLoading(false);
       return;
@@ -295,7 +297,6 @@ const ProductCreatePageView = ({ productId='' }) => {
 
     // For Step 2 & 3, if the request body is empty, we still proceed to next step to allow flow
     if ((currentStep === 2 || currentStep === 3) && Object.keys(requestBody).length === 0) {
-      console.log(`Step ${currentStep} has no data to submit. Moving to next step.`);
       if (isFinalStep) {
           handleComplete();
       } else {
@@ -304,6 +305,8 @@ const ProductCreatePageView = ({ productId='' }) => {
       setLoading(false);
       return;
     }
+
+
 
     try {
         // 1. CORE PRODUCT UPDATE API CALL
@@ -316,7 +319,7 @@ const ProductCreatePageView = ({ productId='' }) => {
             images: data.images || prev.images, 
             productImages: data.productImages || [],
             threeDModels: data.threeDModels || [],
-            variants: data.variants || [],
+            variants: data.variants || prev.variants,
         }));
     
         // 3. CONDITIONAL STEP-SPECIFIC UPDATE
@@ -438,9 +441,11 @@ const ProductCreatePageView = ({ productId='' }) => {
                 // 3. **Initial Variant Load:** Use the variants received from the API fetch 
                 //    to set the state used by Step 1.
                 if (data.variants && Array.isArray(data.variants)) {
-                    setStep1Variants(data.variants);
+                  // Merge the initial variants array directly into the main formData
+                  setFormData(prev => ({ ...prev, ...data, variants: data.variants }));
                 } else {
-                    setStep1Variants([]);
+                  // If no variants, still set the core data but ensure variants is an empty array
+                  setFormData(prev => ({ ...prev, ...data, variants: [] }));
                 }
 
             } catch (error) {
@@ -470,7 +475,6 @@ const ProductCreatePageView = ({ productId='' }) => {
   useEffect(() => {
     // Check if the window object is available (necessary for Next.js/SSR environments)
     if (typeof window !== 'undefined') {
-      console.log(`Scrolling to top for step: ${activeStep}`);
       window.scrollTo({
         top: 0,
         behavior: 'smooth' // Optional: for a smooth scrolling effect
@@ -482,6 +486,14 @@ const ProductCreatePageView = ({ productId='' }) => {
   // FIX: Move useMemo call to the top level of the component to obey the Rules of Hooks.
   // The initialValues for the form are memoized to ensure stability.
   const currentInitialValues = useMemo(() => formData, [formData]);
+
+  // 🚨 Define a new callback specifically for updating the variants in formData
+  const setMasterVariants = useCallback((newVariants) => {
+    setFormData(prev => ({ 
+        ...prev, 
+        variants: newVariants 
+    }));
+  }, []);
 
   // =============================================================================
   // @function renderStepContent
@@ -509,12 +521,12 @@ const ProductCreatePageView = ({ productId='' }) => {
         return (
           <ProductForm2
             key={1}
-            initialValues={{ ...currentInitialValues, variants: step1Variants}}
+            initialValues={currentInitialValues}
             handleFormSubmit={handleFormSubmit}
             ref={formRef}
             selectedColors={selectedColors}
             selectedSizes={selectedSizes}
-            setParentVariants={setStep1Variants}
+            setParentVariants={setMasterVariants}
           />
         );
       case 2:
@@ -550,12 +562,12 @@ const ProductCreatePageView = ({ productId='' }) => {
     // We rely on the core update to have checked for ID and set loading, 
     // but check data.variants presence for a cleaner error:
     const variantsToUpdate = (data.variants || []).map(variant => ({
-        id: variant.id,
-        stock: variant.stock,
-        price: variant.price,
-        salePrice: variant.salePrice,
-        cost: variant.cost,
-        material: variant.material,
+      id: variant.id,
+      stock: variant.stock,
+      price: variant.price,
+      salePrice: variant.salePrice,
+      cost: variant.cost,
+      material: variant.material,
     }));
 
     if (variantsToUpdate.length === 0) {
@@ -603,7 +615,7 @@ const ProductCreatePageView = ({ productId='' }) => {
             {showLoadingPlaceholder ? (
                 <Box sx={{ p: 10, textAlign: 'center', color: '#fff' }}>
                     <p>Loading product data for editing...</p>
-                    {/* Placeholder for a Material UI CircularProgress spinner */}
+                    <CircularProgress />
                 </Box>
             ) : (
                 <>

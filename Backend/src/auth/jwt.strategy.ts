@@ -29,6 +29,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       console.error(`User with ID ${userIdFromPayload} not found in DB.`);
       throw new UnauthorizedException('User associated with token not found.');
     }
-    return { id: user.id, email: user.email }; // Return the actual user ID as 'id' for req.user.id
+    return { 
+        id: user.id, 
+        email: user.email,
+        role: user.role,
+      };
   }
 }

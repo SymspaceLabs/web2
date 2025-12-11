@@ -18,6 +18,13 @@ export enum AuthMethod {
   APPLE = 'apple',
 }
 
+export enum UserRole {
+  BUYER = 'buyer',
+  SELLER = 'seller',
+  ADMIN = 'admin',
+  SUPER_ADMIN = 'superAdmin'
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')

@@ -61,7 +61,7 @@ export const styles = {
     padding: { xs:'15px 5px', sm:'16px 9px' },
     border: "2px solid #000000",
     borderRadius: "50px",
-    fontSize: { xs:10, sm:14 },
+    fontSize: { xs:10, sm:12 },
     color: '#000',
     flexGrow: 1,
     width:'100%'

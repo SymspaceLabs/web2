@@ -15,14 +15,17 @@ import { H1 } from '@/components/Typography';
 import { InfoOutlined } from "@mui/icons-material";
 
 // Mocks for unused components (Replace with your actual imports)
+// NOTE: These components must exist and be exportable/importable for the code to run
 import SymNumberTextField from './SymNumberTextField'; 
 import SymMoneyTextField from './SymMoneyTextField'; 
 import SymTooltip from './SymTooltip'; 
 
 // Ensure these are imported correctly from your file structure
+// NOTE: These styles must exist and be exportable/importable for the code to run
 import { StyledTableCell, tableContainerStyles, tableFooterTextStyles, StyledTableRow } from './TableStyles';
 
 // --- IMPORTED UTILS ---
+// NOTE: These utility functions must be defined/imported correctly
 import { 
     calculateProfit, 
     groupVariantsByColor, 
@@ -159,9 +162,9 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
             });
             
             setTotalProfit(newTotalProfit);
-            
+
             // setRows(prevRows => prevRows.map(row => 
-            //     (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
+            // 	(row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
             // ));
 
             setRows(prevRows => prevRows.map(row => {
@@ -247,7 +250,7 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
                     updatedValues[key] = updatedVariant;
                     
                     // setRows(prevRows => prevRows.map(row => 
-                    //     (row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
+                    // 	(row.color === updatedVariant.color && row.size === updatedVariant.size) ? updatedVariant : row
                     // ));
                 }
                 newTotalProfit += updatedValues[key].profit;
@@ -304,7 +307,8 @@ function ProductVariantsTable({ colors, sizes, initialVariants, onVariantsChange
     const groupedVariants = groupVariantsByColor(rows); 
 
     const totalValues = {
-        // ... (Total values calculation logic)
+        // ... (Total values calculation logic) - typically sums all supply, cost, profit, etc.
+        totalSupply: Object.values(variantValues).reduce((sum, v) => sum + (Number(v.supply) || 0), 0),
     };
     
     // --- CORRECTED JSX ---

@@ -96,7 +96,7 @@ const ModelSortableItem = ({ file, id, handleDelete }) => {
                     ) : (
                         <>
                             <Typography variant="caption" color="warning.main" fontWeight={600}>
-                                Uploading to Server...
+                                Uploading ...
                             </Typography>
                         </>
                     )}

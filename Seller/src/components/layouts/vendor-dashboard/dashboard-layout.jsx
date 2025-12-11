@@ -45,7 +45,6 @@ export default function VendorDashboardLayout({
         setErrorFetching(null); // Clear previous errors
 
         try {
-          console.log('userId', user.id);
           const data = await fetchUserById(user.id); 
           setFreshUserData(data); // Store the fresh data
         } catch (error) {

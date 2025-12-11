@@ -53,18 +53,21 @@ const categoryCards = [
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg1",
     title: "T-shirts",
     image: "/assets/images/products/Men/shirt.png",
-    slug:'t-shirts',
+    slug: 't-shirts',
+    url: '/products/search/all?subcategoryItem=t-shirts'
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",
     title: "Bottoms",
     image: "/assets/images/products/Men/pants.png",
     slug:'bottoms',
+    url: '/products/search/all?subcategory=bottoms'
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Accessories",
     image: "/assets/images/products/Men/watch.png",
     slug:'accessories',
+    url: '/products/search/all?subcategory=accessories'
   },
 ];

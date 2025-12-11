@@ -17,12 +17,15 @@ export const baseSizes = [
 ];
 
 export const ageGroups = [
-  { label: '0-6 months', value:'0-6 months'   },
-  { label: '6-12 months', value:'6-12 months'  },
+  { label: "Baby", value:"baby" },
+  { label: "Toddler", value: "toddler" },
+  { label: "Kids", value: "kids" },
+  { label: "Teen", value: "teen" },
   { label: 'Adults', value:'adults' },
-  { label: 'All ages', value:'all' },
+  { label: 'Senior', value:'senior' },
 ];
 
+// "men", "women", "unisex"
 export const genders = [
   { label: 'Male', value: 'male'   },
   { label: 'Female', value: 'women' }, // Assuming you applied the fix here

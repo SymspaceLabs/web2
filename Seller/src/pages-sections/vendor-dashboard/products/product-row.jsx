@@ -31,6 +31,22 @@ import { deleteProduct } from "@/services/productService";
 import DeleteConfirmationDialog from "./components/DeleteConfirmationDialog";
 
 // ========================================================================
+
+/**
+ * Utility function to truncate a string to a specified maximum length.
+ * @param {string} str - The string to truncate.
+ * @param {number} maxLength - The maximum desired length.
+ * @returns {string} The truncated string followed by "..." if it was too long, otherwise the original string.
+ */
+const truncateName = (str, maxLength = 40) => {
+    if (!str || str.length <= maxLength) {
+        return str;
+    }
+    return str.substring(0, maxLength) + '...';
+};
+
+
+// ========================================================================
 const ProductRow = ({
   product,
   onDeleteSuccess
@@ -76,17 +92,26 @@ const ProductRow = ({
     }
   };
 
+  // Apply truncation here
+  const truncatedName = truncateName(name, 40); // You can adjust 40 to any character limit you prefer
+
   return (
     <>
       <StyledTableRow tabIndex={-1} role="checkbox">
         <StyledTableCell align="left">
           <FlexBox alignItems="center" gap={1.5}>
-            <Avatar alt={name} src={image} sx={{
-            borderRadius: 2
-          }} />
+            <Avatar
+              alt={name}
+              src={image}
+              sx={{
+                borderRadius: 2
+              }}
+            />
 
             <div>
-              <Paragraph fontWeight={600}>{name}</Paragraph>
+              <Paragraph fontWeight={600}>
+                {truncatedName}
+              </Paragraph>
             </div>
           </FlexBox>
         </StyledTableCell>

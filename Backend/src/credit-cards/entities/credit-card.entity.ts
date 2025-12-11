@@ -11,7 +11,7 @@ export class CreditCard {
   cardBrand: string; // e.g., 'Visa', 'Mastercard', 'Amex'
 
   @Column({ type: 'varchar', length: 4 })
-  @Index() // Add an index for faster lookups by last4 if needed
+  @Index('idx_credit_cards_last4') // Add an index for faster lookups by last4 if needed
   last4: string; // Last four digits of the card number
 
   @Column({ type: 'int' }) // Changed to non-nullable as per DTO validation
@@ -26,7 +26,7 @@ export class CreditCard {
   // This column stores the secure token from the payment gateway (e.g., Stripe Payment Method ID)
   // This is the crucial piece that allows you to charge the card without storing sensitive data.
   @Column({ type: 'varchar', length: 255, unique: true }) // Ensure it's unique and set appropriate length
-  @Index({ unique: true }) // Add a unique index for the token
+  @Index('idx_credit_cards_payment_token', { unique: true }) // Add a unique index for the token
   paymentGatewayToken: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true }) // Added cardHolderName back, making it nullable

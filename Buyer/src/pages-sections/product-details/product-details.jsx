@@ -154,18 +154,30 @@ export default function ProductDetails({ product }) {
 
       <Grid container spacing={3} justifyContent="space-around">
         
-        { /* IMAGE GALLERY AREA */}
-        <Grid item md={6} xs={12} alignItems="center">
-          {/* Image Gallery */}
-          <ProductGallery
-            product={product}
-            selectedColor={selectedColor.code}
-          />
+        { /* IMAGE GALLERY AREA (Left Column) */}
+        {/*
+          Apply position: sticky and top: X to the inner Box.
+          When the viewport scrolls, this Box will stick when its top
+          position reaches 100px from the top of the viewport.
+          It will stop sticking when the parent Grid item finishes scrolling.
+          The height is set to ensure it doesn't take up the full viewport height,
+          which could prevent the parent Grid container from scrolling properly.
+        */}
+        <Grid item md={6} xs={12}>
+          <Box sx={{ 
+            position: 'sticky', 
+            top: 100, // Adjust this value based on your header height/desired offset
+            height: 'fit-content' // Important to let the parent container define the scroll boundary
+          }}>
+            <ProductGallery
+              product={product}
+              selectedColor={selectedColor.code}
+            />
+          </Box>
         </Grid>
 
-        {/* PRODUCT INFO AREA */}
-        <Grid item md={6} xs={12} alignItems="center">
-
+        {/* PRODUCT INFO AREA (Right Column) */}
+        <Grid item md={6} xs={12}>
           <ProductInfoArea
             product={product}
             selectedColor={selectedColor}
@@ -182,7 +194,6 @@ export default function ProductDetails({ product }) {
             setOpenModal={setOpenModal}
             openModal={openModal}
           /> 
-                   
         </Grid>
       </Grid>
 
@@ -193,7 +204,7 @@ export default function ProductDetails({ product }) {
           onClose={toggleSidenav}
           sx={{
             zIndex: 1200, // Default z-index of the Drawer
-            overflow: 'visible', // Ensure the dropdown isn't clipped      
+            overflow: 'visible', // Ensure the dropdown isn't clipped       
             '& .MuiPaper-root': {
               background: 'linear-gradient(117.54deg,rgba(255, 255, 255, 0.95) -19.85%,rgba(245, 245, 245, 0.6) 4.2%,rgba(240, 240, 240, 0.5) 13.88%,rgba(230, 230, 230, 0.4) 27.98%,rgba(225, 225, 225, 0.35) 37.8%,rgba(220, 220, 220, 0.3) 44.38%,rgba(215, 215, 215, 0.25) 50.54%,rgba(210, 210, 210, 0.2) 60.21%)',
               backdropFilter: 'blur(5px)',

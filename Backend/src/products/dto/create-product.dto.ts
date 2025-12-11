@@ -92,10 +92,6 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  composition?: string;
-
-  @IsString()
-  @IsOptional()
   sizeFit?: string;
 
   @IsArray()

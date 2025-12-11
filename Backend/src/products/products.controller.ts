@@ -8,10 +8,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
+import { ProductsService } from './products.service';
 import { SearchResultResponse } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -86,5 +86,12 @@ export class ProductsController {
     return this.productsService.remove(id);
   }
 
+  // Dedicated endpoint to fetch products by Company ID.
+  // Route: GET /products/company/:companyId
+  @Get('company/:companyId')
+  async getProductsByCompany(@Param('companyId') companyId: string): Promise<Product[]> {
+    // Assuming ProductsService has a method to find products by company ID
+    return this.productsService.findByCompany(companyId); 
+  }
 }
 

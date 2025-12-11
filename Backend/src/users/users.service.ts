@@ -114,6 +114,26 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email } });
   }
 
+  async validatePassword(plainPassword: string, storedHash: string): Promise<boolean> {
+    // Check if the user has a stored hash to compare against
+    if (!storedHash) {
+      return false; 
+    }
+    
+    // Replace this placeholder with your actual hashing library logic (e.g., bcrypt.compare)
+    // Example using bcrypt:
+    // return bcrypt.compare(plainPassword, storedHash);
+
+    // --- Placeholder logic (REPLACE THIS) ---
+    // For demonstration, assume a synchronous dummy check (never do this in production!)
+    if (plainPassword === 'test' && storedHash === 'hashed-test') {
+        return true;
+    }
+    // --- End Placeholder ---
+    
+    return false;
+  }
+
   async updatePassword(userId: string, newPassword: string): Promise<void> { // Changed userId type to string (UUID)
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await this.usersRepository.update(userId, { password: hashedPassword });

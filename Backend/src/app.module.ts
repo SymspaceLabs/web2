@@ -48,6 +48,8 @@ import { BraintreeModule } from './braintree/braintree.module';
 import { PaymentMethodsModule } from './payment-methods/payment-methods.module';
 import { SubcategoryItemChildModule } from './subcategory-item-child/subcategory-item-child.module';
 import { S3Module } from './s3/s3.module';
+import { AdminModule } from './admin/admin.module';
+import { AdminAuthModule } from './admin-auth/admin-auth.module';
 
 @Module({
   imports: [
@@ -111,7 +113,9 @@ import { S3Module } from './s3/s3.module';
     BraintreeModule,
     PaymentMethodsModule,
     SubcategoryItemChildModule,
-    S3Module
+    S3Module,
+    AdminModule,
+    AdminAuthModule
   ],
   controllers: [AppController, UploadController],
   providers: [AppService, MinioService],

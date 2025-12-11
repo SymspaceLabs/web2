@@ -1,6 +1,6 @@
 // src/seed/seeder.service.ts
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap, Logger  } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Category } from 'src/categories/entities/category.entity';
@@ -16,7 +16,10 @@ import {
 } from './category/interfaces';
 
 @Injectable()
-export class SeederService {
+export class SeederService implements OnApplicationBootstrap {
+
+  private readonly logger = new Logger(SeederService.name); // Add a logger for visibility
+
   constructor(
     private readonly dataSource: DataSource,
     @InjectRepository(Category)
@@ -28,6 +31,16 @@ export class SeederService {
     @InjectRepository(SubcategoryItemChild)
     private readonly subcategoryItemChildRepository: Repository<SubcategoryItemChild>,
   ) {}
+
+   /** 
+   * This method runs automatically after all modules have been initialized 
+   * and a connection to the database has been established and synchronized.
+   */
+  async onApplicationBootstrap() {
+    this.logger.log('--- Starting database seeding process via lifecycle hook ---');
+    await this.seed();
+    this.logger.log('--- Database seeding process complete ---');
+  }
 
   /** ✅ Safely wipes all relevant tables in child → parent order */
   private async clearDatabase() {

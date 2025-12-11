@@ -9,5 +9,6 @@ import { MailchimpModule } from 'src/mailchimp/mailchimp.module';
   imports: [TypeOrmModule.forFeature([User]), MailchimpModule],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

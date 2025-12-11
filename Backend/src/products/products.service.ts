@@ -57,6 +57,7 @@ export class ProductsService {
           dimensions,
           subcategoryItem: subcategoryItemIdFromDto,
           subcategoryItemChild: subcategoryItemChildIdFromDto,
+          gender,
           ...productData
       } = dto;
 
@@ -87,7 +88,10 @@ export class ProductsService {
       if (id) {
         product = await this.productRepository.findOne({
             where: { id },
-            relations: ['company', 'images', 'colors', 'sizes', 'subcategoryItem', 'subcategoryItemChild', 'variants', 'threeDModels'],
+            relations: [
+              'company', 'images', 'colors', 'sizes', 'subcategoryItem',
+              'subcategoryItemChild', 'variants', 'threeDModels'
+            ],
         });
 
         if (!product) {
@@ -162,6 +166,9 @@ export class ProductsService {
 
           const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
 
+          // 2. Ensure gender is an array of the correct enum type
+          const finalGenderArray = Array.isArray(gender) ? gender : []; // Default to empty array if not present or not an array
+
           // productData now includes all defaults merged above
           product = this.productRepository.create({
               ...productData, // Spreads all properties including defaulted tags
@@ -178,6 +185,7 @@ export class ProductsService {
               sizes: [],
               threeDModels: [],
               ...(dimensions && { dimensions }),
+              gender: finalGenderArray,
           });
 
           // --- 3D Model Creation Logic ---
@@ -223,15 +231,7 @@ export class ProductsService {
         // 1. Check if it's the specific TypeORM QueryFailedError
         if (error instanceof QueryFailedError) {
             const errorMessage = error.message;
-
-            // 2. Check for the specific "Data too long" message and column
-            if (errorMessage.includes("Data too long for column 'composition'")) {
-                // Re-throw as a NestJS exception with a descriptive message
-                throw new BadRequestException(
-                    "The data provided for the 'composition' field is too long. Please shorten it and try again."
-                );
-            }
-            
+           
             // For other QueryFailedErrors, you might throw a generic 500 or another BadRequest
             // Depending on how specific you want to be.
             if (errorMessage.includes('Duplicate entry')) {
@@ -477,6 +477,7 @@ export class ProductsService {
     return product;
   }
     
+  // FIND ONE BY ID
   async findOne(productId: string): Promise<Product> {
     const product = await this.productRepository.findOne({
       where: { id: productId },
@@ -695,62 +696,100 @@ export class ProductsService {
   }
 
   // Reusable method to generate and save variants
-  // Reusable method to generate and save variants
   private async generateVariants(product: Product, dto: CreateProductDto): Promise<ProductVariant[]> {
-      const variantsToSave: ProductVariant[] = [];
+    
+    // 1. Get existing variants for lookup and cleanup
+    // CRITICAL: Ensure 'product' passed into this function is loaded with the 'variants' relation.
+    const existingVariants = product.variants || []; 
+    
+    // Map existing variants for quick lookup (Key: "COLOR_NAME-SIZE_NAME")
+    const existingVariantMap = new Map<string, ProductVariant>();
+    for (const variant of existingVariants) {
+        // Create the key using the actual color name and size name (or 'null' string if null)
+        const colorKey = variant.color?.name || 'null';
+        const sizeKey = variant.size?.size || 'null'; 
+        const key = `${colorKey}-${sizeKey}`;
+        existingVariantMap.set(key, variant);
+    }
 
-      // --- FIX: Default to [null] if a dimension list is empty ---
-      const colorsToIterate = product.colors?.length > 0 ? product.colors : [null];
-      const sizesToIterate = product.sizes?.length > 0 ? product.sizes : [null];
-      // -----------------------------------------------------------
+    const variantsToSave: ProductVariant[] = [];
 
-      // If no dto.variants, generate cartesian product of colors and sizes
-      if (!dto.variants?.length) {
-          
-          // Use the defaulted arrays for iteration
-          for (const color of colorsToIterate) {
-              for (const size of sizesToIterate) {
-                  
-                  // Skip the explicit "no dimensions" case already handled in the upsert method
-                  // Only proceed if at least one dimension is present (this check is optional 
-                  // but good for explicit clarity if the outer upsert logic is retained).
-                  if (!color && !size) { 
-                      continue; 
-                  }
+    // --- 2. Determine Dimension Iteration ---
+    // Use the product's colors and sizes, which were updated right before this call in upsert.
+    const colorsToIterate = product.colors?.length > 0 ? product.colors : [null];
+    const sizesToIterate = product.sizes?.length > 0 ? product.sizes : [null];
+    
+    // --- 3. Cartesian Product Iteration (Preserve or Create) ---
+    for (const color of colorsToIterate) {
+        for (const size of sizesToIterate) {
+            
+            // Generate the lookup key for the combination
+            const colorName = color ? color.name : null;
+            const sizeName = size ? size.size : null;
+            const key = `${colorName || 'null'}-${sizeName || 'null'}`;
+            
+            // Skip the explicit "no dimensions" case if both are null, as it was handled
+            // in the upsert method's custom default logic.
+            if (!color && !size) { 
+                 continue; 
+            }
 
-                  const variant = new ProductVariant();
-                  
-                  // Assign color and size (can be null)
-                  variant.color = color;
-                  variant.size = size;
+            // Check if this combination already exists
+            if (existingVariantMap.has(key)) {
+                // ⭐ GOAL 1: PRESERVE - Use the existing variant entity
+                const existingVariant = existingVariantMap.get(key);
+                
+                // CRITICAL: Remove from the map so that anything remaining must be deleted
+                existingVariantMap.delete(key); 
+                
+                // Update non-structural fields from the main product entity defaults (if needed)
+                existingVariant.price = product.price || existingVariant.price || 0;
+                existingVariant.salePrice = product.salePrice || existingVariant.salePrice || 0;
+                existingVariant.cost = product.cost || existingVariant.cost || 0;
+                existingVariant.material = product.material || existingVariant.material || '';
+                
+                variantsToSave.push(existingVariant);
+            } else {
+                // ⭐ GOAL 2: CREATE - New combination, create a new variant (ID will be generated)
+                const newVariant = new ProductVariant();
+                
+                // Assign relation entities and dimensions
+                newVariant.product = product;
+                newVariant.color = color;
+                newVariant.size = size;
 
-                  // Build a dynamic SKU. Use 'DEFAULT' if the dimension is null.
-                  const colorCodePart = color ? color.code : 'DEFAULT_C';
-                  const sizePart = size ? size.size : 'DEFAULT_S';
-                  
-                  variant.sku = `${product.slug}-${colorCodePart}-${sizePart}`;
-                  
-                  // Assign pricing and product relation
-                  variant.price = product.price || 0;
-                  variant.stock = 0;
-                  variant.product = product;
-                  
-                  variantsToSave.push(variant);
-              }
-          }
-      } else {
-          // --- Existing logic for processing provided variants (omitted for brevity) ---
-          // You should also update the SKU/finding logic in the ELSE block to handle nulls
-          // if the user provided variants with null colorCode or size properties.
-          // The original check `!matchedColor` and `!matchedSize` will likely be enough, 
-          // but ensure `v.colorCode` and `v.size` are optional in your DTO/schema 
-          // if you want to support user-defined variants without a color or size.
-      }
+                // Assign default pricing/stock (these will be updated later by the frontend's dedicated variant update if modified)
+                newVariant.price = product.price || 0;
+                newVariant.salePrice = product.salePrice || 0; // Use product's sale price as default
+                newVariant.cost = product.cost || 0;
+                newVariant.stock = 0;
+                newVariant.material = product.material || '';
+                
+                // Build a dynamic SKU.
+                const colorCodePart = color?.code || 'DEFAULT_C';
+                const sizePart = size?.size || 'DEFAULT_S';
+                newVariant.sku = `${product.slug}-${colorCodePart}-${sizePart}`;
 
-      // You might also need to delete existing variants before saving the new ones 
-      // to prevent duplicates or orphaned data if this is an update scenario.
+                variantsToSave.push(newVariant);
+            }
+        }
+    }
 
-      return this.productVariantRepository.save(variantsToSave);
+    // --- 4. Cleanup (Delete) ---
+    // ⭐ GOAL 3: DELETE - Any variant remaining in the map is for a color/size combination 
+    // that was deleted by the user.
+    const variantsToDelete = Array.from(existingVariantMap.values());
+    
+    if (variantsToDelete.length > 0) {
+        console.log(`[Variants] Deleting ${variantsToDelete.length} obsolete variants.`);
+        // Use remove to ensure correct cascading deletion if needed
+        await this.productVariantRepository.remove(variantsToDelete); 
+    }
+
+    // --- 5. Save All ---
+    console.log(`[Variants] Saving/Updating ${variantsToSave.length} total variants.`);
+    // Batch save the preserved (updated) and newly created variants
+    return this.productVariantRepository.save(variantsToSave);
   }
 
   /**
@@ -977,22 +1016,37 @@ export class ProductsService {
     const foundGenders = new Set<string>();
 
     for (const product of products) {
-      const gender = product.gender?.toLowerCase();
-      if (!gender) continue;
+        // Ensure product.gender is treated as an array of strings.
+        // If it's undefined, null, or not an array, default to an empty array.
+        const productGenders = Array.isArray(product.gender) ? product.gender : [];
+        
+        // Loop through each gender string in the product's gender array
+        for (const genderString of productGenders) {
+            // Safely convert to lowercase, only if the element is actually a string
+            const gender = typeof genderString === 'string' ? genderString.toLowerCase() : null;
 
-      if (gender === 'unisex') {
-        // Include all three if any product is unisex
-        return ['Men', 'Women', 'Unisex'];
-      }
+            if (!gender) continue;
 
-      if (gender === 'men' || gender === 'male') foundGenders.add('Men');
-      else if (gender === 'women' || gender === 'female') foundGenders.add('Women');
+            if (gender === 'unisex') {
+                // If any product is explicitly unisex, we assume all three main facets are relevant
+                return ['Men', 'Women', 'Unisex'];
+            }
+
+            if (gender === 'men' || gender === 'male') {
+                foundGenders.add('Men');
+            } else if (gender === 'women' || gender === 'female') {
+                foundGenders.add('Women');
+            }
+        }
     }
 
     // Always include 'Unisex' if both men & women are present
     const gendersArray = Array.from(foundGenders);
     if (foundGenders.has('Men') && foundGenders.has('Women')) {
-      gendersArray.push('Unisex');
+        // Only add 'Unisex' facet if it wasn't already determined by an item being explicitly unisex
+        if (!gendersArray.includes('Unisex')) {
+            gendersArray.push('Unisex');
+        }
     }
 
     return gendersArray;
@@ -1047,6 +1101,14 @@ export class ProductsService {
         }
         product.threeDModels = [];
     }
+  }
+
+  async findByCompany(companyId: string): Promise<Product[]> {
+    // Example logic using your repository (assuming TypeORM or similar)
+    return this.productRepository.find({
+        where: { company: { id: companyId } }, // Assuming 'company' is a relation
+        relations: ['variants', 'images', 'colors', 'sizes'], 
+    });
   }
 
 }

@@ -104,9 +104,6 @@ export class Product {
   threeDModels: Product3DModel[];
 
   @Column({ type: 'text', nullable: true })
-  composition: string;
-
-  @Column({ type: 'text', nullable: true })
   sizeFit: string;
 
   @OneToMany(() => ProductSize, (productSize) => productSize.product, {
@@ -120,17 +117,16 @@ export class Product {
   @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
   variants: ProductVariant[];
 
-  @Column({
-    type: 'enum',
-    enum: ProductGender,
-    nullable: true, // Optional
+  // 💡 Recommended Fix for Gender
+  @Column({ 
+    type: 'simple-array', // or 'json'
+    nullable: true, 
   })
-  gender?: ProductGender;
+  gender: ProductGender[];
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
 
-  // NEW ATTRIBUTES BELOW
   @Column({ nullable: true })
   occasion: string;
 
@@ -158,7 +154,7 @@ export class Product {
   @Column({ default: false })
   safety_certified: boolean;
 
-  @Column({ length: 10, default: 'USD' }) // Use length for VARCHAR in TypeORM
+  @Column({ length: 10, default: 'USD' })
   currency: string;
 
   @Column('json') 
@@ -167,7 +163,10 @@ export class Product {
   @Column('json') 
   dimensions: ProductDimensions;
 
-  // NEW HOOK: Ensures default values are set before insertion
+  @Column({ nullable: true })
+  productUrl?: string;
+
+  // Ensures default values are set before insertion
   @BeforeInsert()
   setDefaults() {
     if (this.productWeight === undefined) {

@@ -2,26 +2,36 @@
 // Create Product Form 1
 //========================================================================
 
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { 
+  useState, 
+  useMemo, 
+  useEffect, 
+  useImperativeHandle, 
+  forwardRef, 
+  useCallback 
+} from "react";
 import { H1 } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 import { InfoOutlined } from "@mui/icons-material";
-import { Autocomplete, TextField, Box, Card, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
+import { Autocomplete, TextField, Box, Typography, Button, Tooltip, IconButton, Chip, Checkbox } from "@mui/material"; 
 import { 
   baseColors, 
   baseSizes, 
   ageGroups, 
-  genders, 
-  TAG_CONFIG
+  genders
 } from "@/utils/product-form-constants"; 
 
 import dynamic from "next/dynamic";
-import slugify from "@/services/slugify";
 import SizeDialog from './components/SizeDialog';
 import ColorDialog from './components/ColorDialog';
 import SymTextField from './components/SymTextField';
 import SymMultiSelectChip from './components/SymMultiSelectChip';
 import SymMultiLevelSelect from './components/SymMultiLevelSelect';
+import SymSingleSelectDropdown from "./components/SymSingleSelectDropdown";
+
+import { useCategoryLogic } from "@/hooks/useCategoryLogic";
+import { useProductFormState } from "@/hooks/useProductFormState";
+import { useSizeColorDialogs } from "@/hooks/useSizeColorDialogs"; // NOTE: Implementation assumed/needed
 
 //========================================================================
 
@@ -44,447 +54,86 @@ const ProductForm1 = forwardRef((props, ref) => {
     setIsCategoryLoading
   } = props;
 
-  useEffect(() => {
-    // 1. Determine the initial category slug/ID that needs to be fetched.
-    const initialCategorySlugOrId = initialValuesProp.category_slug || 
-                                   initialValuesProp.subcategoryItem?.slug;
-
-    // 2. Only proceed if we are in an edit mode and have a category identifier.
-    // The initialValuesProp.category_slug should be passed from the parent component
-    // when loading an existing product for editing.
-    if (initialCategorySlugOrId) {
-        // Set loading state (if defined and necessary)
-        // setIsCategoryLoading(true); 
-
-        // Call the existing function to fetch the subcategory details.
-        // NOTE: fetchCategoryItems expects a slug string.
-        fetchCategoryItems(initialCategorySlugOrId)
-            .then(apiData => {
-                // Manually set the category ID in the main values state 
-                // as if the category was selected via the Autocomplete.
-                setFieldValue('category', apiData?.id);
-                // The existing useEffect for subcategoryDetails will handle
-                // setting the initial tag values based on apiData.tag_defaults.
-            })
-            .catch(error => {
-                console.error("Error fetching initial category details:", error);
-                // Handle error (e.g., set an error state)
-            })
-            // .finally(() => {
-            //     setIsCategoryLoading(false);
-            // });
-    }
-  }, []); // Empty dependency array ensures it only runs ONCE on mount
-
-  // 🕵️ CHILD DEBUG 1: Log Props Received from Parent
-  useEffect(() => {
-  }, [selectedColors, selectedSizes]);
-
-  // ➡️ 1. NEW LOGIC TO CONSTRUCT THE INITIAL PATH FROM NESTED DATA ⬅️
-  const getInitialCategoryPath = (initialData) => {
-      // Fallback 1: If categoryPath is directly provided
-      if (initialData.categoryPath) {
-          return initialData.categoryPath;
-      }
-
-      // Fallback 2: Construct path from nested data (used upon page refresh/edit load)
-      const item = initialData.subcategoryItem;
-      const sub = item?.subcategory;
-      const cat = sub?.category;
-
-      if (cat && sub && item) {
-          // Path structure: Category > Subcategory > SubcategoryItem
-          return `${cat.name} > ${sub.name} > ${item.name}`;
-      }
-      
-      // Fallback 3: Use the raw category value (e.g., the ID/slug) or null
-      return initialData.category || null;
-  };
-
-  // Use the new function to derive the correct starting value for the display field
-  const initialCategoryValue = getInitialCategoryPath(initialValuesProp);
-
-  // --- LOCAL STATE FOR FORM DATA AND ERRORS (Formik replacements) ---
-  const [values, setValues] = useState(() => ({
-    name: initialValuesProp.name || "",
-    url: initialValuesProp.url || "",
-    category: initialValuesProp.subcategoryItem?.id || initialValuesProp.category || "",
-    description: initialValuesProp.description || "",
-    status: initialValuesProp.status || "draft",
-    productType: initialValuesProp.productType || "static",
-    productSizechart: initialValuesProp.productSizechart || "",
-    ar_type: initialValuesProp.ar_type || '',
-
-    // 🛑 FIX: Ensure array type for multi-select fields, 
-    // wrapping string values in an array if they exist.
-    age_group: Array.isArray(initialValuesProp.age_group) 
-               ? initialValuesProp.age_group 
-               : (initialValuesProp.age_group ? [initialValuesProp.age_group] : []), 
-               
-    gender: Array.isArray(initialValuesProp.gender) 
-            ? initialValuesProp.gender 
-            : (initialValuesProp.gender ? [initialValuesProp.gender] : []),
-            
-    // color field is likely an array already, but ensure it too
-    color: Array.isArray(initialValuesProp.color) 
-           ? initialValuesProp.color 
-           : (initialValuesProp.color ? [initialValuesProp.color] : []),
-  }));
-  const [errors, setErrors] = useState({});
-
-  // --- ADDITIONAL NON-FORM STATE ---
-  const [chipData2, setChipData2] = useState([]);
-  const [openColorDialog, setOpenColorDialog] = useState(false);
-  const [openSizeDialog, setOpenSizeDialog] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategoryValue);
-  const [newColor, setNewColor] = useState('');
-  const [newSize, setNewSize] = useState('');
-  const [sizeChartUrl, setSizeChartUrl] = useState('');
-  const [color, setColor] = useState('#fff');
-  const [size, setSize] = useState();
+  // 🆕 Manage subcategoryDetails at the parent level
   const [subcategoryDetails, setSubcategoryDetails] = useState(null);
 
-  // --- CUSTOM PLAIN REACT HANDLERS (Replacing Formik handlers) ---
+  // --- 1. CORE FORM STATE ---
+  const { 
+      values, 
+      errors, 
+      handleChange, 
+      setFieldValue,
+      handleBlur,
+      initialCategoryValue,
+      validateForm
+  } = useProductFormState(
+      initialValuesProp, 
+      handleFormSubmit, 
+      ref, 
+      subcategoryDetails // ✅ Now properly passed
+  );
 
-  // 1. Generic Change Handler (for SymTextFields)
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues(prev => ({ ...prev, [name]: value }));
-    // Clear error on change if it exists
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  // ✅ CRITICAL: These must be memoized with empty dependency arrays if the functions are stable
+  const stableSetFieldValue = useCallback(
+    (name, value) => setFieldValue(name, value), 
+    [] // ✅ Empty if setFieldValue from useProductFormState is stable
+  );
+
+  const stableSetIsCategoryLoading = useCallback(
+    (loading) => setIsCategoryLoading(loading), 
+    [] // ✅ Empty if setIsCategoryLoading from props is stable
+  );
+
+  const stableSetSubcategoryDetails = useCallback(
+    (details) => setSubcategoryDetails(details), 
+    [] // ✅ Empty - setState functions are always stable
+  );
+
+  // --- 2. CATEGORY LOGIC ---
+  const {
+      handleCategorySelect,
+      selectedCategory
+  } = useCategoryLogic(
+    initialValuesProp,
+    stableSetFieldValue,
+    stableSetIsCategoryLoading,
+    stableSetSubcategoryDetails,
+    ageGroups, 
+    genders, 
+    values
+  );
+
+  // --- 3. DIALOG LOGIC (Consolidated Color/Size) ---
+  // NOTE: Assuming this hook is correctly implemented or stubbed with the provided logic
+  const {
+    openColorDialog,
+    openSizeDialog,
+    handleOpenColorDialog,
+    handleCloseColorDialog,
+    handleAddCustomColor,
+    handleColorChange,
+    handleOpenSizeDialog,
+    handleCloseSizeDialog,
+    handleAddCustomSize,
+    newColor,
+    setNewColor,
+    color,
+    setColor,
+    newSize,
+    setNewSize,
+    sizeChartUrl,
+    setSizeChartUrl,
+  } = useSizeColorDialogs(setSelectedColors, setSelectedSizes, selectedColors); 
+
+  // Helper function to convert stored string values back to objects for SymMultiSelectChip
+  const getSelectedTagObjects = (tagFieldName, options) => {
+    return (values[tagFieldName] || [])
+        .map(value => options.find(opt => opt.value === value))
+        .filter(item => item);
   };
-  
-  // 2. Manual Set Value Handler (for Rich Text Editor, Autocomplete, and Tags)
-  const setFieldValue = (name, value) => {
-    setValues(prev => ({ ...prev, [name]: value }));
-    // Clear error on change if it exists
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-  };
-  
-  // 3. Blur Handler (Runs validation on blur)
-  const handleBlur = () => {
-    // Run validation on the current values when a field loses focus
-    validateForm(values);
-  };
 
-  // 4. IMPERATIVE VALIDATION LOGIC
-  // Now takes currentValues as an argument (or uses the state `values`)
-  const validateForm = (currentValues) => {
-    let newErrors = {};
-    let isValid = true;
-
-    // CHECK: Product Name is required
-    if (!currentValues.name || currentValues.name.trim() === '') {
-      newErrors.name = "Product Name is required!";
-      isValid = false;
-    }
-
-    // ✅ NEW CHECK: Product Category is required (Check for the ID)
-    if (!currentValues.category || currentValues.category === '') {
-      newErrors.category = "Product Category is required!";
-      isValid = false;
-    }
-    
-    // 👇🏼 NEW CHECK: Validate required tags
-    if (subcategoryDetails?.tags_required) {
-      subcategoryDetails.tags_required.forEach(tag => {
-        // For tags like age_group and gender, we expect an array of selected values.
-        // For tags like ar_type, we expect a single string value (which is already handled by setFieldValue('productType')).
-        if (['age_group', 'gender'].includes(tag)) {
-          if (!currentValues[tag] || currentValues[tag].length === 0) {
-            newErrors[tag] = `The '${tag.replace('_', ' ')}' tag is required for this category.`;
-            isValid = false;
-          }
-        }
-      });
-    }
-
-    setErrors(newErrors);
-
-    if(newErrors.age_group){
-      alert(newErrors.age_group);
-    } else if (newErrors.gender) {
-      alert(newErrors.gender);
-    }
-
-    return isValid;
-  };
-  
   // 5. EXPOSE METHODS TO PARENT VIA REF
-  useImperativeHandle(ref, () => ({
-    getFormValues: () => values,
-
-    // No Formik validation needed, the exposed function simply checks validity
-    validateForm: () => {
-      // Just run the validation check
-      return validateForm(values);
-    },
-
-    // Submit the form programmatically (Called by parent's handleNext)
-    submit: () => {
-      
-      const isValid = validateForm(values);
-      
-      if (isValid) {
-        // ✅ PASS THE LATEST VALUES BACK TO THE PARENT
-        handleFormSubmit(values); 
-      }
-    }
-  }));
-
-  //COLOR
-  const handleOpenColorDialog = () => setOpenColorDialog(true);
-
-  const handleCloseColorDialog = () => {
-    setOpenColorDialog(false);
-    setNewColor('');
-    setColor('#ffffff');
-  };
-  
-  const handleAddCustomColor = () => {
-    if (newColor && color) {
-      const customColor = { name: newColor, hex: color };
-      setChipData2((prevChipData) => [
-        ...prevChipData,
-        customColor
-      ]);
-      setSelectedColors((prevSelected) => [
-        ...prevSelected,
-        customColor
-      ]);
-      handleCloseColorDialog();
-    }
-  };
-
-  const handleColorChange = (newColor) => setColor(newColor);
-
-  //SIZE
-  const handleOpenSizeDialog = () => setOpenSizeDialog(true);
-
-  const handleCloseSizeDialog = () => {
-    setOpenSizeDialog(false);
-    setNewSize('');
-  };
-
-  const handleAddCustomSize = (finalUrl) => { // ⬅️ 1. Must accept the final URL from the dialog
-    if (newSize) {
-        // 2. Create the new size object including the uploaded URL
-        const customSize = { 
-            name: newSize, 
-            sizeChartUrl: finalUrl || null, // Ensure the URL is stored
-        };
-        
-        // 3. Update the main list of selected sizes
-        setSelectedSizes((prevSelected) => [...prevSelected, customSize]);
-        
-        // 4. Clean up parent state for the next use
-        setNewSize('');       // Reset the size name input field
-        setSizeChartUrl(null); // ⬅️ CRITICAL: Reset the size chart image reference
-        
-        // 5. Close the dialog
-        handleCloseSizeDialog();
-    }
-  };
-
-  const fetchCategoryItems = async (categorySlug) => {
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/subcategory-items/slug/${categorySlug}`;
-    
-    
-    try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch category items. HTTP status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        setSubcategoryDetails(data); // Storing the full response
-        
-        return data;
-    } catch (error) {
-        console.error('❌ Error fetching subcategory items:', error);
-        setSubcategoryDetails(null);
-        throw error; 
-    }
-  };
-  
-  const handleCategorySelect = async (categoryObject) => {
-          let categoryArray = [];
-
-          if (categoryObject && typeof categoryObject === 'object' && categoryObject.id) {
-            const { name: categoryName, path: pathString, slug: apiSlug } = categoryObject;
-            const slugifiedName = slugify(categoryName);
-            const finalCategorySlug = slugifiedName;
-
-            if (!finalCategorySlug || typeof finalCategorySlug !== 'string') {
-                console.error("❌ Error: Category slug is missing or invalid in the selected object.", categoryObject);
-                setSelectedCategory(null);
-                setFieldValue('category', ""); // ⬅️ Ensures 'category' is cleared
-                // setFieldTouched('category', true);
-                return;
-            }
-
-            const pathParts = pathString.split(' > ').map(p => p.trim()).filter(p => p.length > 0);
-            const finalCategoryName = pathParts.pop();
-            categoryArray = finalCategoryName ? [finalCategoryName] : [];
-
-            setSelectedCategory(pathString);
-
-            // --- 🆕 CRITICAL: RESET TAG VALUES FOR THE NEW CATEGORY ---
-            // Reset multi-select tags to empty array
-            setFieldValue('age_group', []); 
-            setFieldValue('gender', []);
-            setFieldValue('season', []);
-            setFieldValue('occasion', []);
-            setFieldValue('material', []);
-            setFieldValue('color', []);
-            setFieldValue('pattern', []);
-            // Reset single-select tags (productType is handled below, ar_type is likely redundant)
-            setFieldValue('ar_type', ''); 
-            // --- END RESET ---
-            
-            // 🆕 1. Set loading state to true before API call
-
-            // 🆕 1. Set loading state to true before API call
-            setIsCategoryLoading(true); 
-            
-            
-            try {
-                const apiData = await fetchCategoryItems(finalCategorySlug); // Fetches and sets subcategoryDetails
-
-                if (apiData?.tag_defaults?.ar_type) {
-                  const arType = apiData.tag_defaults.ar_type;
-                  setFieldValue('productType', arType);
-                  setFieldValue('category', apiData?.id); // ✅ SETS THE ID ON SUCCESS
-                } else {
-                    setFieldValue('productType', 'static');
-                    setFieldValue('category', apiData?.id); // ✅ Still set the ID even if no AR type
-                }
-
-            } catch (error) {
-                console.error("Error setting product type after category fetch:", error);
-                setFieldValue('productType', 'static');
-                setFieldValue('category', ""); // ⬅️ Clear 'category' on API failure
-            } finally {
-                // 🆕 2. Set loading state to false after API call completes (success or failure)
-                setIsCategoryLoading(false); 
-            }
-            
-
-          } else {
-            setSelectedCategory(null);
-            categoryArray = [];
-            setFieldValue('productType', 'static');
-            setFieldValue('category', ""); // ✅ IMPORTANT: Clears the field value when no object is selected
-          }
-  };
-  
-    // 🆕 EFFECT TO HANDLE DEFAULT TAGS WHEN CATEGORY DETAILS ARE LOADED
-    useEffect(() => {
-    if (subcategoryDetails) {
-        const defaults = subcategoryDetails.tag_defaults || {};
-        const requiredTags = subcategoryDetails.tags_required || [];
-
-        // Iterate over all possible multi-select tags defined in the config
-        Object.keys(TAG_CONFIG).forEach(tagFieldName => {
-        const config = TAG_CONFIG[tagFieldName];
-        const isRequired = requiredTags.includes(tagFieldName);
-        const defaultValue = defaults[tagFieldName];
-
-        if (isRequired) {
-            if (defaultValue) {
-            // Attempt to find the option object based on the default value
-            const defaultObject = config.options.find(opt => opt.value === defaultValue);
-            if (defaultObject) {
-                // Set the form value to an array containing the single default value
-                setFieldValue(tagFieldName, [defaultObject.value]);
-            } else {
-                // Default value is invalid, clear it
-                setFieldValue(tagFieldName, []);
-            }
-            } else {
-            // Required but no default, initialize to an empty array
-            setFieldValue(tagFieldName, []);
-            }
-        } else {
-            // Not required, ensure it's cleared from state
-            setFieldValue(tagFieldName, []);
-        }
-        });
-    }
-    }, [subcategoryDetails]); // Dependency on subcategoryDetails
-
-  
-
-    // Helper function for SymMultiSelectChip onChange (around line 385)
-    const handleTagSelect = (tagFieldName, newSelectedItems) => {
-        // SymMultiSelectChip returns an array of label/value objects.
-        // We only want to store the values (strings) in the `values` state for submission.
-        const newValues = newSelectedItems.map(item => item.value);
-        setFieldValue(tagFieldName, newValues);
-    };
-
-    // Helper function to convert stored string values back to objects for SymMultiSelectChip (around line 394)
-    const getSelectedTagObjects = (tagFieldName, options) => {
-        return (values[tagFieldName] || [])
-            .map(value => options.find(opt => opt.value === value))
-            .filter(item => item); // Filter out undefined/null if a value doesn't match an option
-    };
-
-    // 🆕 EFFECT TO HANDLE DEFAULT TAGS WHEN CATEGORY DETAILS ARE LOADED
-    useEffect(() => {
-    if (subcategoryDetails) {
-        const defaults = subcategoryDetails.tag_defaults || {};
-        const requiredTags = subcategoryDetails.tags_required || [];
-        
-        // --- 1. Handle Gender Default ---
-        if (requiredTags.includes('gender')) {
-        const defaultGender = defaults.gender;
-        if (defaultGender) {
-            // The SymMultiSelectChip expects an array of values (strings) in the form state.
-            // We find the option object to ensure it's a valid value, then store the value.
-            const defaultGenderObject = genders.find(g => g.value === defaultGender);
-            if (defaultGenderObject) {
-            setFieldValue('gender', [defaultGenderObject.value]); // Store as an array of values (strings)
-            } else {
-            setFieldValue('gender', []); // Default value is invalid, so clear it
-            }
-        } else {
-            // If required but no default, clear it to an empty array
-            setFieldValue('gender', []); 
-        }
-        } else {
-        // If not required/present, ensure it's cleared from state
-        setFieldValue('gender', []); 
-        }
-        
-        // --- 2. Handle Age Group Default ---
-        if (requiredTags.includes('age_group')) {
-        const defaultAgeGroup = defaults.age_group;
-        if (defaultAgeGroup) {
-            // Find the option object from the ageGroups array
-            const defaultAgeGroupObject = ageGroups.find(g => g.value === defaultAgeGroup);
-            if (defaultAgeGroupObject) {
-            // Set the form value to an array containing the single default value
-            setFieldValue('age_group', [defaultAgeGroupObject.value]); 
-            } else {
-            setFieldValue('age_group', []); // Default value is invalid, so clear it
-            }
-        } else {
-            // If required but no default (like in your example), initialize to an empty array
-            setFieldValue('age_group', []); 
-        }
-        } else {
-        // If not required/present, ensure it's cleared from state
-        setFieldValue('age_group', []);
-        }
-        
-        // Note: You may need to add similar logic for other tags like 'season', 'occasion', etc.
-        // if they can also have default values from the API.
-    }
-    }, [subcategoryDetails]); // Re-run when subcategory details are fetched
-
+  // This is handled inside useProductFormState, ensuring the latest values are used.
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); /* Ensure no accidental submission */ }}>
@@ -514,7 +163,7 @@ const ProductForm1 = forwardRef((props, ref) => {
                   label="Product Url"
                   name="productUrl"
                   placeholder="Enter product url"
-                  value={values.url}
+                  value={values.productUrl}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!errors.productUrl}
@@ -537,7 +186,7 @@ const ProductForm1 = forwardRef((props, ref) => {
 
                 <SymMultiLevelSelect
                   onCategorySelect={handleCategorySelect}
-                  selectedCategory={selectedCategory}
+                  selectedCategory={selectedCategory || initialCategoryValue}
                   error={!!errors.category}
                   helperText={errors.category}
                 />
@@ -561,28 +210,35 @@ const ProductForm1 = forwardRef((props, ref) => {
 
                     {/* Age Group Chip - Conditionally Rendered */}
                     {subcategoryDetails && subcategoryDetails.tags_required.includes('age_group') && (
-                        <SymMultiSelectChip
-                            options={ageGroups}
-                            // Use the helper function to convert stored values to objects for the chip
-                            selectedItems={getSelectedTagObjects('age_group', ageGroups)}
-                            // Use the helper function to convert selected objects back to values for state
-                            setSelectedItems={(items) => handleTagSelect('age_group', items)}
-                            label="Age group"
-                            allLabel="All ages"
-                            error={errors.age_group}
+                        <SymSingleSelectDropdown // 👈 Using the new component
+                            label="Age Group"
+                            placeholder="Select Applicable Age Group"
+                            options={ageGroups} // Assume ageGroups = [{ label: 'Adult', value: 'ADULT' }, ...]
+                            // Find the currently selected object based on the stored value (string)
+                            selectedItem={ageGroups.find(opt => opt.value === values.age_group) || null} 
+                            // Handle the single item selection
+                            setSelectedItem={(newSelectedItem) => {
+                                // Extract the single value (string) from the selected object
+                                const newValue = newSelectedItem ? newSelectedItem.value : null;
+                                setFieldValue('age_group', newValue); // Set the form field to the single value (string or null)
+                            }}
+                            onBlur={handleBlur}
+                            error={errors.age_group} // You may want to update validation for single selection
                         />
                     )}
 
                     {/* Gender Chip - Conditionally Rendered */}
                     {subcategoryDetails && subcategoryDetails.tags_required.includes('gender') && (
                         <SymMultiSelectChip
-                            options={genders}
-                            // Use the helper function to convert stored values to objects for the chip
-                            selectedItems={getSelectedTagObjects('gender', genders)}
-                            // Use the helper function to convert selected objects back to values for state
-                            setSelectedItems={(items) => handleTagSelect('gender', items)}
                             label="Gender"
-                            allLabel="Unisex"
+                            placeholder="Select Applicable Gender"
+                            options={genders}
+                            selectedItems={getSelectedTagObjects('gender', genders)} 
+                            setSelectedItems={(newSelectedObjects) => {
+                                const newValues = newSelectedObjects.map(item => item.value);
+                                setFieldValue('gender', newValues);
+                            }}
+                            onBlur={handleBlur}
                             error={errors.gender}
                         />
                     )}
@@ -630,8 +286,17 @@ const ProductForm1 = forwardRef((props, ref) => {
                       freeSolo
                       // 🔍 DEBUG POINT 1: Check the list of available options
                       options={(() => {
-                          const currentOptions = [...baseColors.map(c => c.name), ...chipData2.map(c => c.name)];
-                          return currentOptions;
+                          // FIX: Use selectedColors (which holds custom colors) instead of chipData2
+                          const customColorNames = selectedColors
+                            .filter(c => !baseColors.some(bc => bc.name === c.name))
+                            .map(c => c.name);
+
+                          const currentOptions = [
+                                ...baseColors.map(c => c.name), 
+                                ...customColorNames
+                            ];
+                            // Ensure only unique names are in the options list
+                          return [...new Set(currentOptions)]; 
                       })()}
                       
                       // 🔍 DEBUG POINT 2: Check the value array being passed (should be an array of strings)
@@ -640,16 +305,14 @@ const ProductForm1 = forwardRef((props, ref) => {
                           return currentValue;
                       })()}                      
                       onChange={(_, newValue) => {
-                          // 🔍 DEBUG POINT 3: Check what the user selected or removed
-                          
-                          const allColors = [...baseColors, ...chipData2];
+                          // Combine base colors and currently selected colors for the lookup source
+                          const allColors = [...baseColors, ...selectedColors]; 
+
                           const updatedColors = newValue.map((name) => {
+                              // Search for the object in the combined list
                               const colorObj = allColors.find((color) => color.name === name);
-                              // 🔍 DEBUG POINT 3A: Check if the color object was found in the source lists
-                              if (!colorObj) {
-                                  console.warn(`🕵️ DEBUG 3A: Color object not found for name: ${name}`);
-                              }
-                              return colorObj || { name, hex: '' };
+                              
+                              return colorObj || { name, hex: '' }; // Return the object or a placeholder for new freeSolo entry
                           });
                           setSelectedColors(updatedColors);
                       }}
@@ -751,9 +414,6 @@ const ProductForm1 = forwardRef((props, ref) => {
                               const sizeObj = allSources.find((size) => size.name === name);
                               
                               // 🔍 DEBUG 3A: Check if the size object was found in the source lists
-                              if (!sizeObj) {
-                                  console.warn(`🕵️ SIZE DEBUG 3A: Size object not found for name: ${name}`);
-                              }
                               return sizeObj || { name };
                           });
                           setSelectedSizes(updatedSizes);

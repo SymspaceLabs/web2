@@ -10,7 +10,7 @@ export async function fetchProductsByCompanyId(companyId) {
     }
 
     // Constructing the URL with the companyId as a query parameter for filtering
-    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products?companyId=${companyId}`;
+    const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/company/${companyId}`;
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -20,7 +20,7 @@ export async function fetchProductsByCompanyId(companyId) {
     }
     
     const data = await response.json();
-    return { products: data.products, error: null };
+    return { products: data, error: null };
   } catch (error) {
     console.error("Error fetching products by company ID:", error);
     return { products: [], error };

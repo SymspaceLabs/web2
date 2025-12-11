@@ -24,8 +24,6 @@ export default function MarketplacePageView() {
       <Section6 /> {/* BANNER */}
       <Section7 /> {/* CATALOGUE */}
       <Section8 /> {/* BENTO */}
-      {/* <Section9 /> {/* 3D Animation */}
-      {/* <Section10 /> */} {/* 3D Animation */}
     </div>
   );
 }

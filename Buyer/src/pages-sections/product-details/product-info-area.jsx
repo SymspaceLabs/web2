@@ -14,6 +14,7 @@ import {
   Tooltip,
   Rating,
   CircularProgress,
+  Typography,
 } from "@mui/material";
 
 export default function ProductInfoArea({
@@ -38,7 +39,6 @@ export default function ProductInfoArea({
     colors,
     sizes,
     description,
-    composition,
     name,
     company,
     sizeFit,
@@ -53,7 +53,7 @@ export default function ProductInfoArea({
         {/* PRODUCT BRAND */}
         <Paragraph
           sx={{
-            fontSize: { xs: 12, sm: 16 },
+            fontSize: { xs: 12, sm: 14 },
             color: "#0366FE",
             textTransform: "uppercase",
             "&:hover": { textDecoration: "underline" },
@@ -65,7 +65,7 @@ export default function ProductInfoArea({
         </Paragraph>
 
         {/* PRODUCT TITLE */}
-        <H1 fontSize={{ xs: 18, sm: 40 }} color="#000" mb={1}>
+        <H1 fontSize={{ xs: 18, sm: 20 }} color="#000" mb={1}>
           {name}
         </H1>
 
@@ -99,12 +99,7 @@ export default function ProductInfoArea({
         </FlexBox>
 
         {/*Color*/}
-        <FlexBox
-          alignItems={{ xs: "left", sm: "center" }}
-          flexDirection={{ xs: "column", sm: "row" }}
-          gap={1}
-          mb={2}
-        >
+        {/* <FlexCol gap={1} mb={2}>
           <Paragraph mb={1} fontSize="24px" color="#353535">
             Select Color
           </Paragraph>
@@ -131,7 +126,73 @@ export default function ProductInfoArea({
               </Tooltip>
             ))}
           </FlexBox>
-        </FlexBox>
+        </FlexCol> */}
+
+        <FlexCol gap={1} mb={2}>
+          <Paragraph mb={1} fontSize="18px" color="#353535" sx={{ fontWeight: 600 }}>
+            SELECT COLOR
+          </Paragraph>
+          <FlexBox sx={{ gap: 1 }}>
+            {colors.map((color) => (
+              <Tooltip key={color.id} title={color.name || color.code} arrow>
+                <Button
+                  onClick={() => handleColorSelect(color)}
+                  sx={{
+                    minWidth: 0,
+                    padding: "8px 12px",
+                    borderRadius: "10px",
+                    textTransform: "none",
+                    
+                    // --- UPDATED SELECTED COLOR LOGIC ---
+                    // Set the border color based on selection status
+                    borderColor: selectedColor.id === color.id ? "rgba(0,0,0,0.25)" : "transparent",
+                    
+                    color: "text.primary",
+                    "&:hover": {
+                      borderColor: selectedColor.id === color.id ? "rgba(0,0,0,0.25)" : "transparent",
+                      // backgroundColor: "rgba(0,0,0,0.25)",
+                    },
+                    
+                    // Background color for the selected state
+                    backgroundColor: selectedColor.id === color.id ? "white" : "transparent",
+
+                    
+                    // Special styling for the selected button's outline
+                    ...(selectedColor.id === color.id && {
+                      borderWidth: "1.5px", // Make the border slightly thicker/more prominent when selected
+                      // Use a dark grey/black shadow to mimic the solid outline in the reference
+                      boxShadow: (theme) => `0 0 0 1.5px ${theme.palette.grey[900]}`, 
+                    }),
+                  }}
+                >
+                  <Box // Container for the color circle and text
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                    }}
+                  >
+                    {/* The small color circle */}
+                    <Box
+                      sx={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        backgroundColor: color.code,
+                        border: "1px solid rgba(0, 0, 0, 0.2)",
+                      }}
+                    />
+                    
+                    {/* The color label */}
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                      {color.name}
+                    </Typography>
+                  </Box>
+                </Button>
+              </Tooltip>
+            ))}
+          </FlexBox>
+        </FlexCol>
 
         {/* Size */}
         <FlexBox gap={{ xs: 2, sm: 3 }} py={{ xs: 2 }}>
@@ -215,7 +276,7 @@ export default function ProductInfoArea({
       </FlexCol>
 
       <SymAccordion title="Product Details" content={description} />
-      <SymAccordion title="Composition" content={composition} />
+
       <SymAccordion
         title="Brand"
         content={company.description}

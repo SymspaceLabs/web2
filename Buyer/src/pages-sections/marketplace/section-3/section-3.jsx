@@ -3,11 +3,11 @@
 // ==========================================================
 
 import { motion } from "framer-motion";
-import { styles } from '../page-view/styles';
+import { styles } from "../page-view/styles";
 import { H1 } from "@/components/Typography";
 import { FlexBox } from "@/components/flex-box";
-import { Box, Container, Button, Grid } from '@mui/material';
-import { ProductCard4 } from '@/components/custom-cards/product-cards';
+import { Box, Container, Button, Grid } from "@mui/material";
+import { ProductCard4 } from "@/components/custom-cards/product-cards";
 import Link from "next/link";
 
 // ==========================================================
@@ -15,8 +15,8 @@ import Link from "next/link";
 export default function Section3() {
   return (
     <Box sx={{ py: {xs:2, sm:10}, px: {xs:2} }}>
-      <Container sx={{ borderRadius:{xs:'30px', sm:'50px'}, py: 2, background: '#E0F0FD' }}>
-        <H1 fontSize={{xs:20, sm:30}} py={3} color='#000' textAlign='center'>
+      <Container sx={{ borderRadius:{xs:"30px", sm:"50px"}, py: 2, background: "#E0F0FD" }}>
+        <H1 fontSize={{xs:20, sm:30}} py={3} color="#000" textAlign="center">
           Shop Women
         </H1>
 
@@ -57,18 +57,21 @@ const products = [
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg1",
     title: "Dresses",
     image: "/assets/images/products/Women/dress.png",
-    slug:'dresses',
+    slug: "dresses",
+    url: "/products/search/all?subcategory=dresses"
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",
     title: "Tops",
     image: "/assets/images/products/Women/top.png",
-    slug:'tops',
+    slug: "tops",
+    url: "/products/search/all?subcategory=tops"
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Bottoms",
     image: "/assets/images/products/Women/bottom.png",
-    slug:'bottoms',
+    slug: "bottoms",
+    url: "/products/search/all?subcategory=bottoms"
   },
 ];

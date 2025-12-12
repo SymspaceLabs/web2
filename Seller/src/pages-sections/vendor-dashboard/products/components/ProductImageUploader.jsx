@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { H1 } from "@/components/Typography";
 import { useDropzone } from "react-dropzone";
 import Close from "@mui/icons-material/Close";

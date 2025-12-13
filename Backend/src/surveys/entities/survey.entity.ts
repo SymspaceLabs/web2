@@ -6,7 +6,9 @@ export class Survey {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.survey)
+  @ManyToOne(() => User, (user) => user.survey, {
+    onDelete: 'CASCADE'
+  })
   user: User;
 
   @Column()   //SINGLE-SELECT

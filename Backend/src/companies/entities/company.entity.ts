@@ -29,7 +29,7 @@ export class Company {
   @Column()
   ein: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' }) // <-- ADD THIS OPTION
   @JoinColumn({ name: 'userId' })
   user: User;
 

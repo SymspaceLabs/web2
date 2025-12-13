@@ -57,7 +57,9 @@ export class User {
   @Column({ nullable: true })
   avatar: string;
 
-  @OneToOne(() => Company, (company) => company.user)
+  @OneToOne(() => Company, (company) => company.user, {
+    cascade: ['remove'], // <-- ADD THIS OPTION
+  })
   company: Company;
 
   @Column({
@@ -100,7 +102,9 @@ export class User {
   @OneToMany(() => BillingAddress, (billingAddress) => billingAddress.user)
   billingAddresses: BillingAddress[];
 
-  @OneToOne(() => Survey, (survey) => survey.user)
+  @OneToOne(() => Survey, (survey) => survey.user, {
+    cascade: ['remove'],
+  })
   survey: Survey;
 
   @OneToMany(() => File, (file) => file.user)

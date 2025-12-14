@@ -2,12 +2,13 @@ import { MigrationInterface, QueryRunner, TableColumn, TableForeignKey } from 't
 
 export class AddColorIdToProductImage1765667038782 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Add the colorId column
+    // Add the colorId column - MySQL uses VARCHAR(36) for UUIDs
     await queryRunner.addColumn(
       'product_image',
       new TableColumn({
         name: 'colorId',
-        type: 'uuid',
+        type: 'varchar',
+        length: '36',
         isNullable: true,
       })
     );

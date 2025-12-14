@@ -7,5 +7,9 @@ export class CreateProductImageDto {
 
   @IsString()
   @IsOptional()
-  colorCode?: string; // Add this property
+  colorCode?: string;
+
+  @IsString()
+  @IsOptional()
+  colorId?: string;
 }

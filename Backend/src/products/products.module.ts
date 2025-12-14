@@ -12,11 +12,15 @@ import { Category } from 'src/categories/entities/category.entity';
 import { Subcategory } from 'src/subcategories/entities/subcategory.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity'; // Import the new entity
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
+import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Product,
+      ProductColor,
+      ProductSize,
       Company,
       ProductImage,
       SubcategoryItem,
@@ -24,7 +28,7 @@ import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcat
       Product3DModel,
       Category,
       Subcategory,
-      SubcategoryItemChild, // <-- Added SubcategoryItemChild here
+      SubcategoryItemChild,
     ]),
   ],
   controllers: [ProductsController],

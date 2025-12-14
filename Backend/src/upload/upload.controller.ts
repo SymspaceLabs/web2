@@ -10,24 +10,43 @@ export class UploadController {
     private readonly uploadService: UploadService,
   ) {}
 
+  /**
+   * Upload a file to MinIO and return signed URL
+   */
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadImage(@UploadedFile() file: any) {
-    try {
-      const filename = `${Date.now()}-${file.originalname}`;
-      const fileUrl = await this.minioService.uploadFile(filename, file);
-
-      return { message: 'File uploaded successfully', url: fileUrl };
-    } catch (error) {
-      return { message: 'File upload failed', error };
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      return { message: 'No file provided' };
     }
+
+    // Upload to MinIO
+    const { objectName } = await this.minioService.uploadFile(file);
+
+    // Generate signed URL
+    const signedUrl = await this.minioService.getSignedUrl(objectName);
+
+    return {
+      message: 'File uploaded successfully',
+      url: signedUrl,
+    };
   }
 
+  /**
+   * Upload file and convert to glTF (existing flow)
+   */
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const convertedFile = await this.uploadService.convertToGltf(file.filename);
-    return { message: 'File uploaded and converted successfully', url: convertedFile };
-  }
+    if (!file) {
+      return { message: 'No file provided' };
+    }
 
+    const convertedFile = await this.uploadService.convertToGltf(file.filename);
+
+    return {
+      message: 'File uploaded and converted successfully',
+      url: convertedFile,
+    };
+  }
 }

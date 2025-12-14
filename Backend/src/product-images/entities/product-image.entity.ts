@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Product } from 'src/products/entities/product.entity';
 import { Expose, Exclude } from 'class-transformer';
+import { Product } from 'src/products/entities/product.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 
 @Entity()
 export class ProductImage {
@@ -20,6 +22,14 @@ export class ProductImage {
 
   @Column({ nullable: true })
   colorCode: string;
+
+  // Add the optional colorId relationship
+  @Expose()
+  @Column({ nullable: true })
+  colorId: string;
+
+  @ManyToOne(() => ProductColor, { nullable: true, onDelete: 'SET NULL' })
+  color: ProductColor;
 
   @ManyToOne(() => Product, (product) => product.images, {
     onDelete: 'CASCADE',

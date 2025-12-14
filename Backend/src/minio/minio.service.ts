@@ -30,27 +30,20 @@ export class MinioService {
 
   async uploadFile(file: Express.Multer.File) {
     await this.ensureBucketExists();
+    await this.setBucketPolicy(); // ensure bucket is public
 
-    const objectName = `${Date.now()}-${file.originalname
-      .trim()
-      .replace(/\s+/g, '-')}`;
-
+    const objectName = `${Date.now()}-${file.originalname.trim().replace(/\s+/g, '-')}`;
     const stream = Readable.from(file.buffer);
 
-    await this.minioClient.putObject(
-      this.bucketName,
-      objectName,
-      stream,
-      file.size,
-      {
-        'Content-Type': file.mimetype,
-      },
-    );
+    await this.minioClient.putObject(this.bucketName, objectName, stream, file.size, {
+      'Content-Type': file.mimetype,
+    });
 
-    return {
-      objectName,
-    };
+    // Public URL
+    const publicBaseUrl = this.configService.get<string>('MINIO_PUBLIC_BASE_URL');
+    return `${publicBaseUrl}/${this.bucketName}/${objectName}`;
   }
+
 
   async getSignedUrl(objectName: string, expirySeconds = 3600) {
     const internalUrl = await this.minioClient.presignedGetObject(
@@ -69,4 +62,21 @@ export class MinioService {
       publicBaseUrl,
     );
   }
+
+  async setBucketPolicy() {
+    const policy = {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Principal: '*',               // anyone can read
+          Action: ['s3:GetObject'],
+          Resource: [`arn:aws:s3:::${this.bucketName}/*`],
+        },
+      ],
+    };
+
+    await this.minioClient.setBucketPolicy(this.bucketName, JSON.stringify(policy));
+  }
+
 }

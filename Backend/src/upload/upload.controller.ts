@@ -16,21 +16,16 @@ export class UploadController {
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    if (!file) {
-      return { message: 'No file provided' };
-    }
+    if (!file) return { message: 'No file provided' };
 
-    // Upload to MinIO
-    const { objectName } = await this.minioService.uploadFile(file);
-
-    // Generate signed URL
-    const signedUrl = await this.minioService.getSignedUrl(objectName);
+    const publicUrl = await this.minioService.uploadFile(file);
 
     return {
       message: 'File uploaded successfully',
-      url: signedUrl,
+      url: publicUrl,
     };
   }
+
 
   /**
    * Upload file and convert to glTF (existing flow)

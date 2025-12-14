@@ -14,6 +14,8 @@ import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item
 import { slugify, normalizeSearchText, determineProductAvailability } from './utils/utils';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProductColors, mapProductSizes } from './utils/product.utils';
+import { ProductColor } from 'src/product-colors/entities/product-color.entity';
+import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -42,6 +44,8 @@ export class ProductsService {
     @InjectRepository(Product3DModel) private product3DModelRepository: Repository<Product3DModel>,
     @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
     @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>,
+    @InjectRepository(ProductColor) private productColorRepository: Repository<ProductColor>,
+    @InjectRepository(ProductSize) private productSizeRepository: Repository<ProductSize>,
   ) {}
   
   // CREATE & UPDATE PRODUCT
@@ -204,22 +208,32 @@ export class ProductsService {
           await this.saveProductImages(product, images);
       }
 
-      // Colors & Sizes Mapping (Using external mappers)
+      // ✅ UPDATED: Colors Mapping - Use merge instead of replace
       if (colors !== undefined) {
-          product.colors = mapProductColors(colors, product);
+          if (id) {
+              // UPDATE MODE: Merge to preserve existing IDs
+              product.colors = await this.mergeProductColors(product, colors);
+          } else {
+              // CREATE MODE: Use the simple mapper since there are no existing colors
+              product.colors = mapProductColors(colors, product);
+          }
       }
 
-      // ⭐ UPDATE: Pass the full size object including sizeChartUrl
+      // ✅ UPDATED: Sizes Mapping - Use merge instead of replace
       if (sizes !== undefined) {
-        // ⭐ FIX: Convert the string array into the required DTO object array
-        const mappedSizeDtos = sizes.map((s, index) => ({
-            // Extract properties directly from the incoming size object 's'
-            size: s.size, // ⬅️ FIX: Access the 'size' property of the object
-            sortOrder: s.sortOrder !== undefined ? s.sortOrder : index, // Use payload sortOrder or array index
-            sizeChartUrl: s.sizeChartUrl || null, // ⬅️ FIX: Access the 'sizeChartUrl' property
-        }));
-        
-        product.sizes = mapProductSizes(mappedSizeDtos, product);
+          const mappedSizeDtos = sizes.map((s, index) => ({
+              size: s.size,
+              sortOrder: s.sortOrder !== undefined ? s.sortOrder : index,
+              sizeChartUrl: s.sizeChartUrl || null,
+          }));
+          
+          if (id) {
+              // UPDATE MODE: Merge to preserve existing IDs
+              product.sizes = await this.mergeProductSizes(product, mappedSizeDtos);
+          } else {
+              // CREATE MODE: Use the simple mapper since there are no existing sizes
+              product.sizes = mapProductSizes(mappedSizeDtos, product);
+          }
       }
 
       let savedProduct: Product;
@@ -515,6 +529,119 @@ export class ProductsService {
       message: 'Product has been deleted successfully',
       product,
     };
+  }
+
+  /**
+ * Merges incoming colors with existing colors, preserving IDs when possible.
+ * Only creates new entities for truly new colors.
+ * Deletes colors that were removed.
+ */
+private async mergeProductColors(
+    product: Product, 
+    incomingColors: Array<{ name: string; code: string }>
+): Promise<ProductColor[]> {
+    const existingColors = product.colors || [];
+    const mergedColors: ProductColor[] = [];
+
+    // Process each incoming color
+    for (const incomingColor of incomingColors) {
+        // Try to find existing color by BOTH name AND code (ensures exact match)
+        const existingColor = existingColors.find(
+            c => c.name.toLowerCase() === incomingColor.name.toLowerCase() && 
+                 c.code.toLowerCase() === incomingColor.code.toLowerCase()
+        );
+
+        if (existingColor) {
+            // ✅ PRESERVE: Color already exists, keep the same entity (and ID)
+            // Update properties in case of minor changes
+            existingColor.name = incomingColor.name;
+            existingColor.code = incomingColor.code;
+            mergedColors.push(existingColor);
+            
+            console.log(`[MergeColors] Preserved existing color: ${existingColor.name} (ID: ${existingColor.id})`);
+        } else {
+            // ✅ CREATE: This is a new color, create a new entity
+            const newColor = new ProductColor();
+            newColor.name = incomingColor.name;
+            newColor.code = incomingColor.code;
+            newColor.product = product;
+            mergedColors.push(newColor);
+            
+            console.log(`[MergeColors] Creating new color: ${newColor.name}`);
+        }
+    }
+
+    // ✅ DELETE: Find colors that exist in DB but not in incoming data (user removed them)
+    const colorsToDelete = existingColors.filter(
+        existing => !incomingColors.some(
+            incoming => incoming.name.toLowerCase() === existing.name.toLowerCase() && 
+                       incoming.code.toLowerCase() === existing.code.toLowerCase()
+        )
+    );
+    
+    if (colorsToDelete.length > 0) {
+        console.log(`[MergeColors] Deleting ${colorsToDelete.length} removed colors`);
+        // TypeORM will handle cascade deletion of related entities (variants, etc.)
+        await this.productColorRepository.remove(colorsToDelete);
+    }
+
+    return mergedColors;
+}
+
+  /**
+   * Merges incoming sizes with existing sizes, preserving IDs when possible.
+   * Only creates new entities for truly new sizes.
+   * Deletes sizes that were removed.
+   */
+  private async mergeProductSizes(
+      product: Product,
+      incomingSizes: Array<{ size: string; sizeChartUrl?: string; sortOrder?: number }>
+  ): Promise<ProductSize[]> {
+    const existingSizes = product.sizes || [];
+    const mergedSizes: ProductSize[] = [];
+
+    // Process each incoming size
+    for (const incomingSize of incomingSizes) {
+        // Find existing size by the 'size' value (e.g., "S", "M", "L")
+        const existingSize = existingSizes.find(
+            s => s.size.toLowerCase() === incomingSize.size.toLowerCase()
+        );
+
+        if (existingSize) {
+            // ✅ PRESERVE: Size already exists, keep the same entity (and ID)
+            // Update mutable properties
+            existingSize.size = incomingSize.size; // In case of capitalization changes
+            existingSize.sizeChartUrl = incomingSize.sizeChartUrl || existingSize.sizeChartUrl;
+            existingSize.sortOrder = incomingSize.sortOrder ?? existingSize.sortOrder;
+            mergedSizes.push(existingSize);
+            
+            console.log(`[MergeSizes] Preserved existing size: ${existingSize.size} (ID: ${existingSize.id})`);
+        } else {
+            // ✅ CREATE: This is a new size, create a new entity
+            const newSize = new ProductSize();
+            newSize.size = incomingSize.size;
+            newSize.sizeChartUrl = incomingSize.sizeChartUrl || null;
+            newSize.sortOrder = incomingSize.sortOrder ?? mergedSizes.length;
+            newSize.product = product;
+            mergedSizes.push(newSize);
+            
+            console.log(`[MergeSizes] Creating new size: ${newSize.size}`);
+        }
+    }
+
+    // ✅ DELETE: Find sizes that exist in DB but not in incoming data (user removed them)
+    const sizesToDelete = existingSizes.filter(
+        existing => !incomingSizes.some(
+            incoming => incoming.size.toLowerCase() === existing.size.toLowerCase()
+        )
+    );
+
+    if (sizesToDelete.length > 0) {
+        console.log(`[MergeSizes] Deleting ${sizesToDelete.length} removed sizes`);
+        await this.productSizeRepository.remove(sizesToDelete);
+    }
+
+    return mergedSizes;
   }
 
   async performFreeFormSearch(searchTerm?: string): Promise<SearchResultResponse> {
@@ -826,6 +953,7 @@ export class ProductsService {
       const img = new ProductImage();
       img.url = imgDto.url;
       img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
+      img.colorId = imgDto.colorId || null; 
       img.sortOrder = i;
       img.product = product; // Link the image to the product
       return img;

@@ -85,7 +85,7 @@ export default function Section7() {
 
                     {/* Products Grid */}
                     <Grid container spacing={{xs:1, sm:2}}>
-                      {products.slice(0, 4).map((product,index) => (
+                      {(products || []).slice(0, 4).map((product,index) => (
                         <Grid item lg={6} md={6} sm={6} xs={6} key={index}>
                           <ProductCard2 product={product} />
                         </Grid>

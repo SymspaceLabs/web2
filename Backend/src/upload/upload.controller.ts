@@ -18,13 +18,14 @@ export class UploadController {
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) return { message: 'No file provided' };
 
-    const publicUrl = await this.minioService.uploadFile(file);
+    const fileUrl = await this.minioService.uploadFile(file);
 
     return {
       message: 'File uploaded successfully',
-      url: publicUrl,
+      url: fileUrl,
     };
   }
+
 
 
   /**

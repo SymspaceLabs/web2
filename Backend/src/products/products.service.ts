@@ -149,7 +149,7 @@ export class ProductsService {
           if (name !== undefined) product.name = name; // Update name explicitly
           
           if (productData.productWeight === undefined) {
-              product.productWeight = null; // Assign to product, not productData
+              product.productWeight = { unit: 'lbs', value: null }; // ✅ Use object, not null
           }
 
           if (dimensions !== undefined) {
@@ -195,6 +195,9 @@ export class ProductsService {
             sizes: [],
             threeDModels: [],
             gender: finalGender,
+            productWeight: productData.productWeight ?? { unit: 'lbs', value: null }, // ✅ Add this
+            dimensions: dimensions ?? { unit: 'cm', length: null, width: null, height: null }, // ✅ Add this
+
           });
 
           // --- 3D Model Creation Logic ---

@@ -16,9 +16,7 @@ import { CreateProductImageDto } from 'src/product-images/dto/create-product-ima
 import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
 import { CreateProductSizeDto } from 'src/product-sizes/dto/create-product-size.dto';
 
-// ----------------------------------------------------
-// NEW DTO: CreateProductDimensionsDto
-// ----------------------------------------------------
+// CreateProductDimensionsDto
 export class CreateProductDimensionsDto {
     // Unit remains mandatory if dimensions object is provided
     @IsString()
@@ -39,7 +37,17 @@ export class CreateProductDimensionsDto {
     @IsOptional()
     height: number | null;
 }
-// ----------------------------------------------------
+
+export class CreateProductWeightDto {
+    @IsString()
+    @IsNotEmpty()
+    unit: string;
+
+    @IsNumber()
+    @IsOptional()
+    value: number | null;
+}
+
 
 export class CreateProductDto {
   @IsString()
@@ -115,12 +123,14 @@ export class CreateProductDto {
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
 
-  // ----------------------------------------------------
-  // ADDED: Dimensions attribute (UNCOMMENTED)
-  // ----------------------------------------------------
   @IsOptional()
   @ValidateNested()
   @Type(() => CreateProductDimensionsDto)
   dimensions?: CreateProductDimensionsDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateProductWeightDto)
+  productWeight?: CreateProductWeightDto;
 
 }

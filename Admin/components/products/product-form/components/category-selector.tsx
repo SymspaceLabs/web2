@@ -362,7 +362,7 @@ export function CategorySelector({
                 variant="ghost"
                 size="sm"
                 onClick={handleBack}
-                className="w-full justify-start text-primary hover:text-primary"
+                className="w-full justify-start text-primary hover:text-primary cursor-pointer"
               >
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Back
@@ -379,7 +379,7 @@ export function CategorySelector({
                       key={result.id}
                       type="button"
                       onClick={() => handleSearchResultClick(result)}
-                      className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2"
+                      className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2 cursor-pointer"
                     >
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{result.name}</p>
@@ -403,7 +403,7 @@ export function CategorySelector({
                         key={category.id}
                         type="button"
                         onClick={() => handleCategoryClick(category)}
-                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2"
+                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2 cursor-pointer"
                       >
                         <span className="font-medium">{category.name}</span>
                         <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -419,7 +419,7 @@ export function CategorySelector({
                         key={subcategory.id}
                         type="button"
                         onClick={() => handleSubcategoryClick(currentLevel.category, subcategory)}
-                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2"
+                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2 cursor-pointer"
                       >
                         <span className="font-medium">{subcategory.name}</span>
                         <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -441,7 +441,7 @@ export function CategorySelector({
                           key={item.id}
                           type="button"
                           onClick={() => handleItemClick(currentLevel.category, currentLevel.subcategory, item as SubcategoryItem)}
-                          className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2"
+                          className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2 cursor-pointer"
                         >
                           <span className="font-medium">{item.name}</span>
                           {hasChildren ? (
@@ -464,7 +464,7 @@ export function CategorySelector({
                         onClick={() =>
                           handleChildClick(currentLevel.category, currentLevel.subcategory, currentLevel.item, child)
                         }
-                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2"
+                        className="w-full px-4 py-3 text-left hover:bg-muted/50 transition-colors flex items-center justify-between gap-2 cursor-pointer"
                       >
                         <span className="font-medium">{child.name}</span>
                         <span className="text-xs text-green-600">Select</span>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import type { FormData } from "@/components/products/product-form"
 import { CategorySelector } from "@/components/products/product-form/components/category-selector"
+import { CompanySelector } from "./components/company-selector"
 
 type BasicInfoStepProps = {
   formData: FormData
@@ -16,6 +17,7 @@ type BasicInfoStepProps = {
   // Add these props for pre-population
   subcategoryItemId?: string
   subcategoryItemChildId?: string | null
+   companyId?: string
 }
 
 export function BasicInfoStep({ 
@@ -23,14 +25,15 @@ export function BasicInfoStep({
   updateFormData, 
   onNext,
   subcategoryItemId,
-  subcategoryItemChildId 
+  subcategoryItemChildId,
+  companyId
 }: BasicInfoStepProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
     // Validate required fields
-    if (!formData.name || !formData.category || !formData.description) {
-      alert("Please fill in all required fields (Name, Category, Description).")
+    if (!formData.name || !formData.category || !formData.description || !formData.companyId) {
+      alert("Please fill in all required fields (Name, Company, Category, Description).")
       return
     }
 
@@ -39,6 +42,7 @@ export function BasicInfoStep({
       name: formData.name,
       category: formData.category,
       description: formData.description,
+      companyId: formData.companyId,
     }
     
     // Call the parent handler
@@ -64,6 +68,15 @@ export function BasicInfoStep({
           required
         />
       </div>
+
+      <CompanySelector
+        value={formData.companyId}
+        onSelect={(company) => updateFormData({ 
+          companyId: company.id,
+          companyName: company.name
+        })}
+        companyId={companyId}
+      />
 
       <CategorySelector
         value={formData.category}

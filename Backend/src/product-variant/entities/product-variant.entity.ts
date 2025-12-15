@@ -49,10 +49,10 @@ export class ProductVariant {
   @Column({ nullable: true })
   material: string;
 
-  @Column('json') 
+  @Column('json', { nullable: true }) 
   productWeight: { unit: string; value: number | null };
 
-  @Column('json') 
+  @Column('json', { nullable: true }) 
   dimensions: ProductDimensions;
 
   @Column({ nullable: true })

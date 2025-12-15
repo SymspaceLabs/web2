@@ -165,7 +165,7 @@ export const CATEGORIES_DATA = [
               { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", name: "Men's Watches", slug: "mens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
               { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", name: "Women's Watches", slug: "womens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
               { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", name: "Smartwatches", slug: "smartwatches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
-              { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", name: "Watch Bands & Accessories", slug: "watch-bands-accessories", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
+              { id: "c1e8b6a9-2f7d-4a3c-9b5e-6d0f8a4c2e71", name: "Watch Bands & Accessories", slug: "watch-bands-accessories", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
             ]
           },
           {

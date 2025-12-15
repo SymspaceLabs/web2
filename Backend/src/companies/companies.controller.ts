@@ -22,19 +22,12 @@ export class CompaniesController {
     return this.companiesService.create(createCompanyDto);
   }
 
-  // @Get()
-  // async findAll(@Query('hasProducts') hasProducts?: string): Promise<Company[]> {
-  //   return this.companiesService.findAll(hasProducts === 'true');
-  // }
-
   @Get()
   async findAll(@Query('hasProducts') hasProducts?: string): Promise<Company[]> {
     // Pass a boolean or undefined to the service
     const onlyWithProducts = hasProducts === 'true' ? true : undefined;
     return this.companiesService.findAll(onlyWithProducts);
   }
-
-
 
   @Get(':id')
   findOne(@Param('id') id: string) {

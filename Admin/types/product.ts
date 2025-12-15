@@ -78,6 +78,8 @@ export type Product = {
 
 export type FormData = {
   name: string
+  companyId?: string
+  companyName?: string
   category: string  // Human-readable category path for display
   categoryId?: string  // ⭐ The most granular category ID (subcategoryItemChild or subcategoryItem)
   description: string

@@ -52,20 +52,6 @@ export default function EditProductClient() {
     }
   }
 
-  // useEffect(() => {
-  //   async function loadProduct() {
-  //     try {
-  //       const data = await getProduct(productId)
-  //       setProduct(data)
-  //     } catch (error) {
-  //       console.error('Failed to load product:', error)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   loadProduct()
-  // }, [productId])
-
   if (loading) return <div>Loading...</div>
 
   return (

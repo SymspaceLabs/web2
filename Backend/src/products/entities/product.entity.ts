@@ -160,7 +160,7 @@ export class Product {
   @Column('json', { nullable: true }) 
   productWeight: { unit: string; value: number | null };
 
-  @Column('json') 
+  @Column('json', { nullable: true }) 
   dimensions: ProductDimensions;
 
   @Column({ nullable: true })

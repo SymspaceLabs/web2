@@ -171,7 +171,8 @@ export class ProductsService {
           const slug = `${slugify(companyEntity.entityName)}-${slugify(name)}`;
 
           // 2. Ensure gender is an array of the correct enum type
-          const finalGenderArray = Array.isArray(gender) ? gender : []; // Default to empty array if not present or not an array
+          const finalGender = gender && typeof gender === 'string' ? gender : null;
+
 
           // productData now includes all defaults merged above
           product = this.productRepository.create({
@@ -189,7 +190,7 @@ export class ProductsService {
               sizes: [],
               threeDModels: [],
               ...(dimensions && { dimensions }),
-              gender: finalGenderArray,
+              gender: finalGender,
           });
 
           // --- 3D Model Creation Logic ---

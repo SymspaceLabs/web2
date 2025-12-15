@@ -143,7 +143,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       if (isCreateMode && currentStep === 1) {
         // CREATE MODE: First step creates product and routes to edit page
         const createPayload = buildPayload(1, updatedFormData, false)
-        const response = await createProduct({...createPayload, company: 'a74b09cc-2062-481e-87e2-d9e7df80c0e4'})
+        const response = await createProduct(createPayload)
         
         
         // Route to edit page with step 2

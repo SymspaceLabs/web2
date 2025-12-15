@@ -157,7 +157,7 @@ export class Product {
   @Column({ length: 10, default: 'USD' })
   currency: string;
 
-  @Column('json') 
+  @Column('json', { nullable: true }) 
   productWeight: { unit: string; value: number | null };
 
   @Column('json') 

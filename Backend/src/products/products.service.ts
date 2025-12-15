@@ -244,6 +244,7 @@ export class ProductsService {
       } catch (error) {
         // 1. Check if it's the specific TypeORM QueryFailedError
         if (error instanceof QueryFailedError) {
+            console.error('Full error:', error); // Add this
             const errorMessage = error.message;
            
             // For other QueryFailedErrors, you might throw a generic 500 or another BadRequest

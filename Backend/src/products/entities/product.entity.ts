@@ -117,12 +117,12 @@ export class Product {
   @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
   variants: ProductVariant[];
 
-  // 💡 Recommended Fix for Gender
   @Column({ 
-    type: 'simple-array', // or 'json'
-    nullable: true, 
+    type: 'enum',
+    enum: ProductGender,
+    nullable: true,
   })
-  gender: ProductGender[];
+  gender: ProductGender | null;
 
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];

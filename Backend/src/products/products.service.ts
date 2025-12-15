@@ -148,9 +148,14 @@ export class ProductsService {
           Object.assign(product, productData);
           if (name !== undefined) product.name = name; // Update name explicitly
           
-          if (dimensions !== undefined) {
-              product.dimensions = dimensions;
+          if (productData.productWeight === undefined) {
+              product.productWeight = null; // Assign to product, not productData
           }
+
+          if (dimensions !== undefined) {
+            product.dimensions = dimensions;
+          }
+          
       }
 
       // === CREATE MODE ===
@@ -176,21 +181,20 @@ export class ProductsService {
 
           // productData now includes all defaults merged above
           product = this.productRepository.create({
-              ...productData, // Spreads all properties including defaulted tags
-              name,
-              company: companyEntity,
-              slug,
-              subcategoryItem: finalSubcategoryItem,
-              subcategoryItemId: finalSubcategoryItem.id,
-              subcategoryItemChild: finalSubcategoryItemChild,
-              subcategoryItemChildId: finalSubcategoryItemChild?.id || null,
-              variants: [],
-              images: [],
-              colors: [],
-              sizes: [],
-              threeDModels: [],
-              ...(dimensions && { dimensions }),
-              gender: finalGender,
+            ...productData,
+            name,
+            company: companyEntity,
+            slug,
+            subcategoryItem: finalSubcategoryItem,
+            subcategoryItemId: finalSubcategoryItem.id,
+            subcategoryItemChild: finalSubcategoryItemChild,
+            subcategoryItemChildId: finalSubcategoryItemChild?.id || null,
+            variants: [],
+            images: [],
+            colors: [],
+            sizes: [],
+            threeDModels: [],
+            gender: finalGender,
           });
 
           // --- 3D Model Creation Logic ---

@@ -118,7 +118,7 @@ export const createProduct = async (
 };
 
 export async function getProduct(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   
   const res = await fetch(`${baseUrl}/products/${id}`, {
     cache: "no-store",

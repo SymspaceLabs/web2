@@ -199,17 +199,8 @@ export class ProductsService {
           // 2. Ensure gender is an array of the correct enum type
           const finalGender = gender && typeof gender === 'string' ? gender : null;
 
-          // In CREATE MODE, before the create() call, add this:
-          console.log('========== CREATE MODE DEBUG ==========');
-          console.log('productData.productWeight:', JSON.stringify(productData.productWeight));
-          console.log('dimensions from DTO:', JSON.stringify(dimensions));
-          console.log('=======================================');
-
           const finalProductWeight = productData.productWeight ?? { unit: 'lbs', value: null };
           const finalDimensions = dimensions ?? { unit: 'cm', length: null, width: null, height: null };
-
-          console.log('finalProductWeight:', JSON.stringify(finalProductWeight));
-          console.log('finalDimensions:', JSON.stringify(finalDimensions));
 
           // productData now includes all defaults merged above
           product = this.productRepository.create({
@@ -276,19 +267,6 @@ export class ProductsService {
       }
 
       let savedProduct: Product;
-
-      // ✅ ADD COMPREHENSIVE DEBUG LOGGING
-      console.log('========== PRE-SAVE DEBUG ==========');
-      console.log('Product ID:', product.id || 'NEW PRODUCT');
-      console.log('Product Name:', product.name);
-      console.log('productWeight:', JSON.stringify(product.productWeight));
-      console.log('dimensions:', JSON.stringify(product.dimensions));
-      console.log('gender:', product.gender);
-      console.log('Full product object keys:', Object.keys(product));
-      console.log('productWeight type:', typeof product.productWeight);
-      console.log('productWeight === undefined:', product.productWeight === undefined);
-      console.log('productWeight === null:', product.productWeight === null);
-      console.log('====================================');
 
       // Right before save, FORCE these values if they're still undefined
       if (!product.productWeight || product.productWeight === undefined) {
@@ -621,8 +599,6 @@ private async mergeProductColors(
             existingColor.name = incomingColor.name;
             existingColor.code = incomingColor.code;
             mergedColors.push(existingColor);
-            
-            console.log(`[MergeColors] Preserved existing color: ${existingColor.name} (ID: ${existingColor.id})`);
         } else {
             // ✅ CREATE: This is a new color, create a new entity
             const newColor = new ProductColor();
@@ -630,8 +606,6 @@ private async mergeProductColors(
             newColor.code = incomingColor.code;
             newColor.product = product;
             mergedColors.push(newColor);
-            
-            console.log(`[MergeColors] Creating new color: ${newColor.name}`);
         }
     }
 
@@ -644,7 +618,6 @@ private async mergeProductColors(
     );
     
     if (colorsToDelete.length > 0) {
-        console.log(`[MergeColors] Deleting ${colorsToDelete.length} removed colors`);
         // TypeORM will handle cascade deletion of related entities (variants, etc.)
         await this.productColorRepository.remove(colorsToDelete);
     }
@@ -678,8 +651,6 @@ private async mergeProductColors(
             existingSize.sizeChartUrl = incomingSize.sizeChartUrl || existingSize.sizeChartUrl;
             existingSize.sortOrder = incomingSize.sortOrder ?? existingSize.sortOrder;
             mergedSizes.push(existingSize);
-            
-            console.log(`[MergeSizes] Preserved existing size: ${existingSize.size} (ID: ${existingSize.id})`);
         } else {
             // ✅ CREATE: This is a new size, create a new entity
             const newSize = new ProductSize();
@@ -688,8 +659,6 @@ private async mergeProductColors(
             newSize.sortOrder = incomingSize.sortOrder ?? mergedSizes.length;
             newSize.product = product;
             mergedSizes.push(newSize);
-            
-            console.log(`[MergeSizes] Creating new size: ${newSize.size}`);
         }
     }
 
@@ -701,7 +670,6 @@ private async mergeProductColors(
     );
 
     if (sizesToDelete.length > 0) {
-        console.log(`[MergeSizes] Deleting ${sizesToDelete.length} removed sizes`);
         await this.productSizeRepository.remove(sizesToDelete);
     }
 
@@ -972,13 +940,11 @@ private async mergeProductColors(
     const variantsToDelete = Array.from(existingVariantMap.values());
     
     if (variantsToDelete.length > 0) {
-        console.log(`[Variants] Deleting ${variantsToDelete.length} obsolete variants.`);
         // Use remove to ensure correct cascading deletion if needed
         await this.productVariantRepository.remove(variantsToDelete); 
     }
 
     // --- 5. Save All ---
-    console.log(`[Variants] Saving/Updating ${variantsToSave.length} total variants.`);
     // Batch save the preserved (updated) and newly created variants
     return this.productVariantRepository.save(variantsToSave);
   }

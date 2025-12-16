@@ -146,14 +146,29 @@ export class ProductsService {
 
           // Assign all other product data (including dimensions and defaulted tags)
           Object.assign(product, productData);
-          if (name !== undefined) product.name = name; // Update name explicitly
+          if (name !== undefined) {
+            product.name = name;
+          }
           
-          if (productData.productWeight === undefined) {
-              product.productWeight = { unit: 'lbs', value: null }; // ✅ Use object, not null
+          // Handle productWeight - set default if not provided
+          if (productData.productWeight !== undefined) {
+              product.productWeight = productData.productWeight;
+          } else if (!product.productWeight) {
+              // Only set default if the existing product also doesn't have it
+              product.productWeight = { unit: 'lbs', value: null };
           }
 
+          // Handle dimensions - set default if not provided
           if (dimensions !== undefined) {
-            product.dimensions = dimensions;
+              product.dimensions = dimensions;
+          } else if (!product.dimensions) {
+              // Only set default if the existing product also doesn't have it
+              product.dimensions = { unit: 'cm', length: null, width: null, height: null };
+          }
+
+          // After the dimensions handling, add:
+          if (gender !== undefined) {
+              product.gender = gender;
           }
           
       }

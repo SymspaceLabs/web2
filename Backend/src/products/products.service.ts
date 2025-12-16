@@ -145,7 +145,13 @@ export class ProductsService {
           }
 
           // Assign all other product data (including dimensions and defaulted tags)
-          Object.assign(product, productData);
+          // Object.assign(product, productData);
+          Object.keys(productData).forEach(key => {
+              if (productData[key] !== undefined) {
+                  product[key] = productData[key];
+              }
+          });
+
           if (name !== undefined) {
             product.name = name;
           }
@@ -193,6 +199,17 @@ export class ProductsService {
           // 2. Ensure gender is an array of the correct enum type
           const finalGender = gender && typeof gender === 'string' ? gender : null;
 
+          // In CREATE MODE, before the create() call, add this:
+          console.log('========== CREATE MODE DEBUG ==========');
+          console.log('productData.productWeight:', JSON.stringify(productData.productWeight));
+          console.log('dimensions from DTO:', JSON.stringify(dimensions));
+          console.log('=======================================');
+
+          const finalProductWeight = productData.productWeight ?? { unit: 'lbs', value: null };
+          const finalDimensions = dimensions ?? { unit: 'cm', length: null, width: null, height: null };
+
+          console.log('finalProductWeight:', JSON.stringify(finalProductWeight));
+          console.log('finalDimensions:', JSON.stringify(finalDimensions));
 
           // productData now includes all defaults merged above
           product = this.productRepository.create({
@@ -210,9 +227,8 @@ export class ProductsService {
             sizes: [],
             threeDModels: [],
             gender: finalGender,
-            productWeight: productData.productWeight ?? { unit: 'lbs', value: null }, // ✅ Add this
-            dimensions: dimensions ?? { unit: 'cm', length: null, width: null, height: null }, // ✅ Add this
-
+            productWeight: finalProductWeight,
+            dimensions: finalDimensions,
           });
 
           // --- 3D Model Creation Logic ---
@@ -260,6 +276,30 @@ export class ProductsService {
       }
 
       let savedProduct: Product;
+
+      // ✅ ADD COMPREHENSIVE DEBUG LOGGING
+      console.log('========== PRE-SAVE DEBUG ==========');
+      console.log('Product ID:', product.id || 'NEW PRODUCT');
+      console.log('Product Name:', product.name);
+      console.log('productWeight:', JSON.stringify(product.productWeight));
+      console.log('dimensions:', JSON.stringify(product.dimensions));
+      console.log('gender:', product.gender);
+      console.log('Full product object keys:', Object.keys(product));
+      console.log('productWeight type:', typeof product.productWeight);
+      console.log('productWeight === undefined:', product.productWeight === undefined);
+      console.log('productWeight === null:', product.productWeight === null);
+      console.log('====================================');
+
+      // Right before save, FORCE these values if they're still undefined
+      if (!product.productWeight || product.productWeight === undefined) {
+          console.warn('⚠️ productWeight was still undefined, forcing default');
+          product.productWeight = { unit: 'lbs', value: null };
+      }
+
+      if (!product.dimensions || product.dimensions === undefined) {
+          console.warn('⚠️ dimensions was still undefined, forcing default');
+          product.dimensions = { unit: 'cm', length: null, width: null, height: null };
+      }
       
       try {
         // Step 1: Save product (This saves all non-variant relations due to cascade)

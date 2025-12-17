@@ -20,6 +20,7 @@ interface APIUser {
   email: string
   role: "admin" | "seller" | "buyer"
   isVerified: boolean
+  avatar?: string | null
   createdAt: string
   updatedAt: string
 }
@@ -28,6 +29,7 @@ interface UIUser {
   id: string
   name: string
   email: string
+  avatar?: string | null
   role: "admin" | "seller" | "buyer"
   status: "active" | "inactive"
   createdAt: string
@@ -38,6 +40,7 @@ function mapAPIUserToUI(apiUser: APIUser): UIUser {
     id: apiUser.id,
     name: `${apiUser.firstName} ${apiUser.lastName}`,
     email: apiUser.email,
+    avatar: apiUser.avatar,
     role: apiUser.role,
     status: apiUser.isVerified ? "active" : "inactive",
     createdAt: new Date(apiUser.createdAt).toLocaleDateString(),
@@ -170,8 +173,7 @@ export default function UsersPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
+                    <TableHead>User</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Created</TableHead>
@@ -181,8 +183,28 @@ export default function UsersPage() {
                 <TableBody>
                   {paginatedUsers.map((user) => (
                     <TableRow key={user.id}>
-                      <TableCell className="font-medium">{user.name}</TableCell>
-                      <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                            {user.avatar ? (
+                              <img src={user.avatar} alt={user.name} className="h-full w-full object-cover" />
+                            ) : (
+                              <span className="text-sm font-medium text-muted-foreground">
+                                {user.name
+                                  .split(" ")
+                                  .map((n) => n[0])
+                                  .join("")
+                                  .toUpperCase()
+                                  .slice(0, 2)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-medium truncate">{user.name}</div>
+                            <div className="text-sm text-muted-foreground truncate">{user.email}</div>
+                          </div>
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline" className="capitalize">
                           {user.role}

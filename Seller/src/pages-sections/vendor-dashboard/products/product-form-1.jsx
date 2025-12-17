@@ -194,7 +194,7 @@ const ProductForm1 = forwardRef((props, ref) => {
               
 
               {/* Category Tags */}
-              {subcategoryDetails && (subcategoryDetails.tags_required.includes('age_group') ||  subcategoryDetails.tags_required.includes('gender')) && (
+              {subcategoryDetails?.tags_required && (subcategoryDetails.tags_required.includes('age_group') || subcategoryDetails.tags_required.includes('gender')) && (
                 <Box>
                   <FlexBox gap={1} flexDirection="column">
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -209,7 +209,7 @@ const ProductForm1 = forwardRef((props, ref) => {
                     </Box>
 
                     {/* Age Group Chip - Conditionally Rendered */}
-                    {subcategoryDetails && subcategoryDetails.tags_required.includes('age_group') && (
+                    {subcategoryDetails?.tags_required?.includes('age_group') && (
                         <SymSingleSelectDropdown // 👈 Using the new component
                             label="Age Group"
                             placeholder="Select Applicable Age Group"

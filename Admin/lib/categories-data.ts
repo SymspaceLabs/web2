@@ -518,7 +518,7 @@ export const CATEGORIES_DATA = [
             tag_defaults: { ar_type: "feet-tracking" },
           },
           {
-            id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f",
+            id: "9b4f2e6c-1a7d-4f8e-b9a2-7c3d6f1e2a90",
             name: "Casual Shoes",
             slug: "casual-shoes",
             mobileLevel2: "Shoes",

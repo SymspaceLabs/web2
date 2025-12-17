@@ -94,9 +94,15 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       size: size.size,
       sizeChartUrl: size.sizeChartUrl || null,
     }))
+    // ✅ Build a lookup map: colorId -> colorCode
+    const colorCodeMap = new Map<string, string>()
+    data.selectedColors.forEach(color => {
+      colorCodeMap.set(color.id, color.code)
+    })
     const imagesForApi = data.images.map(img => ({
       url: img.url,
-      colorId: img.colorId ?? null
+      colorId: img.colorId ?? null,
+      colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null
     }))
 
     let payload: any = { status: isFinalSubmission ? finalStatus : "draft" }

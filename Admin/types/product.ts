@@ -107,6 +107,7 @@ export type FormData = {
     id: string
     url: string
     colorId: string | null
+    colorCode: string | null
     isPrimary: boolean
     sortOrder: number
   }>

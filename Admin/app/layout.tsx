@@ -11,7 +11,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Admin Portal - Dashboard",
-  description: "Admin Dashboard for User & Product Management",
+  description: "Admin Dashboard for User",
   generator: "v0.app",
   icons: {
     icon: [

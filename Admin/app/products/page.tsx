@@ -19,44 +19,72 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
-import { Search, Plus, Eye, Edit, Trash2 } from "lucide-react"
+import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
 import { deleteProduct } from "@/api/product"
-import { toast } from "sonner"  // ✅ Import from sonner
+import { toast } from "sonner"
 
 interface APIProduct {
   id: string
   name: string
   description: string
-  price: number
+  price: number | null
   category: string
-  images: string[]
-  status: "active" | "draft" | "disabled"
-  variants: Array<{ quantity: number }>
+  images: Array<{ url: string; id: string; sortOrder: number }>
+  status: string
+  variants: Array<{ stock: number; price: number }>
+  company: { entityName: string; id: string }
+  subcategoryItem?: { name: string; id: string }
+  subcategoryItemChild?: { name: string; id: string }
   createdAt: string
 }
 
 interface UIProduct {
   id: string
   name: string
+  thumbnail: string
   category: string
   price: number
   stock: number
+  company: string
   status: "active" | "draft" | "disabled"
   createdAt: string
 }
 
 function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
-  const totalStock = apiProduct.variants?.reduce((sum, v) => sum + (v.quantity || 0), 0) || 0
+  const totalStock = apiProduct.variants?.reduce((sum, v) => sum + (v.stock || 0), 0) || 0
+  
+  // Get the first image URL or use a placeholder
+  const thumbnail = apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
+  
+  // Get the most granular category - prefer subcategoryItemChild if available
+  const category = apiProduct.subcategoryItemChild?.name || apiProduct.subcategoryItem?.name || apiProduct.category || "Uncategorized"
+  
+  // Get company name
+  const company = apiProduct.company?.entityName || "Unknown"
+  
+  // Get price from variants if product price is null
+  const price = apiProduct.price ?? (apiProduct.variants?.[0]?.price || 0)
+  
+  // Normalize status to lowercase
+  const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"
 
   return {
     id: apiProduct.id,
     name: apiProduct.name,
-    category: apiProduct.category || "Uncategorized",
-    price: apiProduct.price,
+    thumbnail,
+    category,
+    price,
     stock: totalStock,
-    status: apiProduct.status,
+    company,
+    status,
     createdAt: new Date(apiProduct.createdAt).toLocaleDateString(),
   }
 }
@@ -119,7 +147,6 @@ export default function ProductsPage() {
     setDeleteDialogOpen(true)
   }
 
-  // ✅ Updated with Sonner toast
   const handleConfirmDelete = async () => {
     if (!productToDelete) return
 
@@ -130,7 +157,6 @@ export default function ProductsPage() {
       // Remove from local state
       setProducts((prev) => prev.filter((p) => p.id !== productToDelete.id))
       
-      // ✅ Sonner success toast
       toast.success("Product deleted", {
         description: `${productToDelete.name} has been successfully deleted.`,
       })
@@ -140,7 +166,6 @@ export default function ProductsPage() {
     } catch (error) {
       console.error("Failed to delete product:", error)
       
-      // ✅ Sonner error toast
       toast.error("Delete failed", {
         description: "Failed to delete the product. Please try again.",
       })
@@ -251,8 +276,9 @@ export default function ProductsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
+                    <TableHead>Product</TableHead>
                     <TableHead>Category</TableHead>
+                    <TableHead>Company</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Stock</TableHead>
                     <TableHead>Status</TableHead>
@@ -263,8 +289,23 @@ export default function ProductsPage() {
                 <TableBody>
                   {paginatedProducts.map((product) => (
                     <TableRow key={product.id}>
-                      <TableCell className="font-medium">{product.name}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <img 
+                              src={product.thumbnail} 
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = "https://via.placeholder.com/150?text=No+Image"
+                              }}
+                            />
+                          </div>
+                          <span className="font-medium">{product.name}</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{product.category}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{product.company}</TableCell>
                       <TableCell>${product.price}</TableCell>
                       <TableCell>
                         <Badge
@@ -278,33 +319,36 @@ export default function ProductsPage() {
                       </TableCell>
                       <TableCell className="text-sm">{product.createdAt}</TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => router.push(`/products/${product.id}`)}
-                            title="View"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => router.push(`/products/edit/${product.id}`)}
-                            title="Edit"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive"
-                            onClick={() => handleDeleteClick(product)}
-                            title="Delete"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem 
+                              onClick={() => router.push(`/products/${product.id}`)}
+                              className="cursor-pointer"
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => router.push(`/products/edit/${product.id}`)}
+                              className="cursor-pointer"
+                            >
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleDeleteClick(product)}
+                              className="text-destructive focus:text-destructive cursor-pointer"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}

@@ -11,7 +11,7 @@ import { Box, Container } from "@mui/material";
 import { TESTIMONIALS } from "@/data/testimonial";
 import { H1, Paragraph } from "@/components/Typography";
 
-export default function Section13() {
+export default function Section15() {
   return (
     <motion.div
       component={Box} // Makes motion.div behave like a Box

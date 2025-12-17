@@ -14,7 +14,7 @@ import { Box, Container, Button, Grid } from '@mui/material'; // Importing Mater
 
 // ===========================================================
 
-export default function Section8() {
+export default function Section9() {
   return (
     <Grid sx={{ background: '#EDEDED', py: 8, position: 'relative' }}>
       <motion.div

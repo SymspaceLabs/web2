@@ -31,7 +31,6 @@ export async function authFetch(endpoint: string, options?: RequestInit) {
       ...(options?.headers || {}),
     }
 
-    console.log("[v0] Auth fetch to:", endpoint)
     const response = await fetch(endpoint, {
       ...options,
       headers,
@@ -49,7 +48,6 @@ export async function authFetch(endpoint: string, options?: RequestInit) {
     }
 
     const data = await response.json()
-    console.log("[v0] Auth fetch response:", data)
     return data
   } catch (error) {
     console.error("[v0] Auth fetch error:", error)

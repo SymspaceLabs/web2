@@ -10,7 +10,7 @@ import { FlexBox } from "@/components/flex-box";
 import { Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { H1, Paragraph } from "@/components/Typography";
 
-export default function Section15() {
+export default function Section14() {
   const [expanded, setExpanded] = useState(false);
   const [isClient, setIsClient] = useState(false); // State to track if component is mounted on client
 

@@ -350,7 +350,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                     )}
                   </div>
                   <span
-                    className={`text-xs mt-2 font-medium ${
+                    className={`text-xs mt-2 font-medium text-center ${
                       currentStep >= step.number ? "text-foreground" : "text-muted-foreground"
                     }`}
                   >

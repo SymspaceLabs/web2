@@ -1,7 +1,7 @@
 "use client"
 
-import type React from "react"
-import { ArrowRight } from "lucide-react" 
+import React from "react"
+import { ArrowRight } from "lucide-react"
 import { useState } from "react"
 import { X, MoreVertical, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -36,6 +36,10 @@ interface VariantRow {
   sku: string
   stock: number
   price: number
+  salePrice: number
+  cost: number
+  profit: number
+  material: string
   colorHex?: string
 }
 
@@ -87,6 +91,10 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           sku: existing?.sku || sku,
           stock: existing?.stock || 0,
           price: existing?.price || 0,
+          salePrice: existing?.salePrice || 0,
+          cost: existing?.cost || 0,
+          profit: existing?.profit || 0,
+          material: existing?.material || "",
           colorHex: color.hex,
         })
       })
@@ -135,9 +143,9 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     newVariants[index] = {
       ...newVariants[index],
       [field]:
-        field === "stock"
+        field === "stock" || field === "profit"
           ? Number.parseInt(value.toString()) || 0
-          : field === "price"
+          : field === "price" || field === "salePrice" || field === "cost"
             ? Number.parseFloat(value.toString()) || 0
             : value,
     }
@@ -179,61 +187,68 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     setBulkStock("")
   }
 
+  // Group variants by color
+  const variantsByColor = variants.reduce((acc, variant) => {
+    if (!acc[variant.color]) {
+      acc[variant.color] = []
+    }
+    acc[variant.color].push(variant)
+    return acc
+  }, {} as Record<string, VariantRow[]>)
+
+  const handleSupermasterChange = (field: keyof VariantRow, value: string) => {
+    const newVariants = variants.map(v => ({
+      ...v,
+      [field]: field === 'stock' || field === 'profit'
+        ? (value ? Number.parseInt(value) : v[field])
+        : field === 'price' || field === 'salePrice' || field === 'cost'
+        ? (value ? Number.parseFloat(value) : v[field])
+        : (value || v[field])
+    }))
+    updateFormData({ variants: newVariants })
+  }
+
+  const handleColorMasterChange = (colorName: string, field: keyof VariantRow, value: string) => {
+    const newVariants = variants.map(v => {
+      if (v.color !== colorName) return v
+      return {
+        ...v,
+        [field]: field === 'stock' || field === 'profit'
+          ? (value ? Number.parseInt(value) : v[field])
+          : field === 'price' || field === 'salePrice' || field === 'cost'
+          ? (value ? Number.parseFloat(value) : v[field])
+          : (value || v[field])
+      }
+    })
+    updateFormData({ variants: newVariants })
+  }
+
   const handleDeleteVariant = (index: number) => {
     const variant = variants[index]
     if (confirm(`Delete variant ${variant.color} / ${variant.size}?`)) {
-      // This would require more complex logic to remove from colors/sizes
-      // For now, just remove from variants
       const newVariants = variants.filter((_, i) => i !== index)
       updateFormData({ variants: newVariants })
     }
   }
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault()
-    
-  //   // ✅ Convert back to backend format when saving
-  //   updateFormData({ 
-  //     variants,
-  //     selectedColors: colors.map(c => ({
-  //       id: c.id,
-  //       name: c.name,
-  //       code: c.hex  // ✅ Map 'hex' back to 'code'
-  //     })),
-  //     selectedSizes: sizes.map(s => ({
-  //       id: s.id,
-  //       size: s.value  // ✅ Map 'value' back to 'size'
-  //     }))
-  //   })
-    
-  //   onNext()
-  // }
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    // 1. Prepare data for submission, converting internal state back to API format
+    e.preventDefault()
+    
     const stepTwoData: Partial<FormData> = {
-        variants: variants, // Use the latest generated variants
+        variants: variants,
         selectedColors: colors.map(c => ({
-            // Keep the id, name, and map 'hex' back to 'code'
             id: c.id,
             name: c.name,
             code: c.hex, 
-            // NOTE: You might need to add other required fields from the parent's Color type here (e.g., createdAt/updatedAt)
         })),
         selectedSizes: sizes.map(s => ({
-            // Keep the id, and map 'value' back to 'size'
             id: s.id,
             size: s.value, 
-            // NOTE: You might need to add other required fields (e.g., sizeChartUrl)
         })),
     };
-    
-    // 2. Call the parent handler, passing the collected data
-    // The parent will call updateFormData and saveProduct
-    await onNext(stepTwoData) // 🔥 FIX: Now passes the required data object.
-  }
+    
+    await onNext(stepTwoData)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -394,83 +409,279 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           </div>
 
           {/* Table */}
-          <div className="rounded-lg border">
+          <div className="rounded-lg border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-12">
                     <Checkbox checked={selectedVariants.size === variants.length} onCheckedChange={handleToggleAll} />
                   </TableHead>
-                  <TableHead>Variant</TableHead>
-                  <TableHead>SKU</TableHead>
-                  <TableHead className="w-32">Price ($)</TableHead>
-                  <TableHead className="w-28">Stock</TableHead>
+                  <TableHead className="min-w-[180px]">Variant</TableHead>
+                  <TableHead className="w-28">Price ($)</TableHead>
+                  <TableHead className="w-28">Sale Price ($)</TableHead>
+                  <TableHead className="w-24">Stock</TableHead>
+                  <TableHead className="w-28">Cost ($)</TableHead>
+                  <TableHead className="w-24">Profit (%)</TableHead>
+                  <TableHead className="min-w-[150px]">Material</TableHead>
                   <TableHead className="w-12"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {variants.map((variant, index) => {
-                  const key = variantKeys[index]
+                {/* Supermaster Row */}
+                <TableRow className="bg-primary/5 hover:bg-primary/10 border-b-2">
+                  <TableCell>
+                    <Checkbox 
+                      checked={selectedVariants.size === variants.length} 
+                      onCheckedChange={handleToggleAll} 
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-bold text-sm">ALL VARIANTS</span>
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Set all"
+                      onChange={(e) => handleSupermasterChange('price', e.target.value)}
+                      className="bg-background"
+                      min="0"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Set all"
+                      onChange={(e) => handleSupermasterChange('salePrice', e.target.value)}
+                      className="bg-background"
+                      min="0"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      placeholder="Set all"
+                      onChange={(e) => handleSupermasterChange('stock', e.target.value)}
+                      className="bg-background"
+                      min="0"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="Set all"
+                      onChange={(e) => handleSupermasterChange('cost', e.target.value)}
+                      className="bg-background"
+                      min="0"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type="number"
+                      placeholder="Set all"
+                      onChange={(e) => handleSupermasterChange('profit', e.target.value)}
+                      className="bg-background"
+                      min="0"
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      placeholder="Set all materials"
+                      onChange={(e) => handleSupermasterChange('material', e.target.value)}
+                      className="bg-background"
+                    />
+                  </TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+
+                {/* Color Groups */}
+                {Object.entries(variantsByColor).map(([colorName, colorVariants]) => {
+                  const colorHex = colorVariants[0]?.colorHex || '#000000'
                   return (
-                    <TableRow key={key}>
-                      <TableCell>
-                        <Checkbox
-                          checked={selectedVariants.has(key)}
-                          onCheckedChange={() => handleToggleVariant(key)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <div
-                            className="w-4 h-4 rounded-full border flex-shrink-0"
-                            style={{ backgroundColor: variant.colorHex }}
+                    <React.Fragment key={colorName}>
+                      {/* Color Master Row */}
+                      <TableRow className="bg-muted/50 hover:bg-muted/70 border-b">
+                        <TableCell>
+                          <Checkbox 
+                            checked={colorVariants.every(v => selectedVariants.has(`${v.color}-${v.size}`))}
+                            onCheckedChange={(checked) => {
+                              const newSelected = new Set(selectedVariants)
+                              colorVariants.forEach(v => {
+                                const key = `${v.color}-${v.size}`
+                                if (checked) {
+                                  newSelected.add(key)
+                                } else {
+                                  newSelected.delete(key)
+                                }
+                              })
+                              setSelectedVariants(newSelected)
+                            }}
                           />
-                          <span className="font-medium">
-                            {variant.color} / {variant.size}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          value={variant.sku}
-                          onChange={(e) => handleVariantChange(index, "sku", e.target.value)}
-                          className="font-mono text-xs"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          value={variant.price || ""}
-                          onChange={(e) => handleVariantChange(index, "price", e.target.value)}
-                          placeholder="0.00"
-                          min="0"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Input
-                          type="number"
-                          value={variant.stock || ""}
-                          onChange={(e) => handleVariantChange(index, "stock", e.target.value)}
-                          placeholder="0"
-                          min="0"
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                              <MoreVertical className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleDeleteVariant(index)}>
-                              Delete Variant
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-4 h-4 rounded-full border flex-shrink-0"
+                              style={{ backgroundColor: colorHex }}
+                            />
+                            <span className="font-semibold text-sm">{colorName}</span>
+                            <span className="text-xs text-muted-foreground">({colorVariants.length})</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="Set price"
+                            onChange={(e) => handleColorMasterChange(colorName, 'price', e.target.value)}
+                            className="bg-background"
+                            min="0"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="Set sale"
+                            onChange={(e) => handleColorMasterChange(colorName, 'salePrice', e.target.value)}
+                            className="bg-background"
+                            min="0"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            placeholder="Set stock"
+                            onChange={(e) => handleColorMasterChange(colorName, 'stock', e.target.value)}
+                            className="bg-background"
+                            min="0"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="Set cost"
+                            onChange={(e) => handleColorMasterChange(colorName, 'cost', e.target.value)}
+                            className="bg-background"
+                            min="0"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            placeholder="Set profit"
+                            onChange={(e) => handleColorMasterChange(colorName, 'profit', e.target.value)}
+                            className="bg-background"
+                            min="0"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            placeholder="Set material"
+                            onChange={(e) => handleColorMasterChange(colorName, 'material', e.target.value)}
+                            className="bg-background"
+                          />
+                        </TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+
+                      {/* Individual Variant Rows */}
+                      {colorVariants.map((variant) => {
+                        const key = `${variant.color}-${variant.size}`
+                        const index = variants.findIndex(v => v.color === variant.color && v.size === variant.size)
+                        return (
+                          <TableRow key={key} className="hover:bg-muted/30">
+                            <TableCell className="pl-8">
+                              <Checkbox
+                                checked={selectedVariants.has(key)}
+                                onCheckedChange={() => handleToggleVariant(key)}
+                              />
+                            </TableCell>
+                            <TableCell className="pl-8">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-muted-foreground">└</span>
+                                <div>
+                                  <div className="font-medium text-sm">{variant.size}</div>
+                                  <div className="text-xs text-muted-foreground font-mono">{variant.sku}</div>
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={variant.price || ""}
+                                onChange={(e) => handleVariantChange(index, "price", e.target.value)}
+                                placeholder="0.00"
+                                min="0"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={variant.salePrice || ""}
+                                onChange={(e) => handleVariantChange(index, "salePrice", e.target.value)}
+                                placeholder="0.00"
+                                min="0"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                type="number"
+                                value={variant.stock || ""}
+                                onChange={(e) => handleVariantChange(index, "stock", e.target.value)}
+                                placeholder="0"
+                                min="0"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="0.01"
+                                value={variant.cost || ""}
+                                onChange={(e) => handleVariantChange(index, "cost", e.target.value)}
+                                placeholder="0.00"
+                                min="0"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                type="number"
+                                value={variant.profit || ""}
+                                onChange={(e) => handleVariantChange(index, "profit", e.target.value)}
+                                placeholder="0"
+                                min="0"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <Input
+                                value={variant.material || ""}
+                                onChange={(e) => handleVariantChange(index, "material", e.target.value)}
+                                placeholder="e.g., Cotton, Polyester"
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                    <MoreVertical className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleDeleteVariant(index)}>
+                                    Delete Variant
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </React.Fragment>
                   )
                 })}
               </TableBody>

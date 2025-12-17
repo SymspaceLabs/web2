@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import type { FormData } from "@/components/products/product-form"
 import { CategorySelector } from "@/components/products/product-form/components/category-selector"
 import { CompanySelector } from "./components/company-selector"
+import { RichTextEditor } from "@/components/ui/rich-text-editor"
 
 type BasicInfoStepProps = {
   formData: FormData
@@ -90,15 +91,14 @@ export function BasicInfoStep({
 
       <div className="space-y-2">
         <Label htmlFor="description">
-          Brief Description <span className="text-destructive">*</span>
+          Brief Description<span className="text-destructive">*</span>
         </Label>
-        <Textarea
+        <RichTextEditor
           id="description"
           value={formData.description}
-          onChange={(e) => updateFormData({ description: e.target.value })}
+          onChange={(value) => updateFormData({ description: value })}
           placeholder="Describe your product's key features and benefits..."
-          rows={4}
-          required
+          minHeight="150px"
         />
         <p className="text-xs text-muted-foreground">Keep it concise - detailed specifications can be added later</p>
       </div>

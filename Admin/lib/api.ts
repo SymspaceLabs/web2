@@ -2,6 +2,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://backend.sym
 
 export const API_ENDPOINTS = {
   users: `${API_BASE_URL}/admin/users`,
+  sellers: `${API_BASE_URL}/admin/companies`,
   products: `${API_BASE_URL}/admin/products`,
   auth: {
     login: `${API_BASE_URL}/admin/auth/login`,

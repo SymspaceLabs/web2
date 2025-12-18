@@ -12,6 +12,7 @@ import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 import { SearchResultResponse } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductVariantsDto } from './dto/update-product-variants.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -27,7 +28,16 @@ export class ProductsController {
   @Patch(':id')
   async update(@Param('id') id: string, @Body() body: CreateProductDto) {
     return this.productsService.upsert(id, body);
-  }  
+  }
+
+  // This is for updating variants data
+  @Patch(':id/variants')
+  async updateVariants(
+    @Param('id') productId: string,
+    @Body() dto: UpdateProductVariantsDto
+  ) {
+    return this.productsService.updateProductVariants(productId, dto);
+  }
 
   @Get()
   async getAllProducts(

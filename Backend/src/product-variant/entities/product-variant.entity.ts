@@ -21,7 +21,7 @@ export class ProductVariant {
   product: Product;
 
   // Optional color
-  @ManyToOne(() => ProductColor, { eager: true, nullable: true })
+  @ManyToOne(() => ProductColor, { eager: true, nullable: true, onDelete: 'CASCADE' })
   color?: ProductColor;
 
   // Optional size

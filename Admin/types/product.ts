@@ -63,6 +63,7 @@ export type Product = {
     color: string
     size: string
     sku: string
+    salePrice: number
     stock: number
     price: number
     colorHex?: string
@@ -70,9 +71,21 @@ export type Product = {
   images?: Array<{
     id: string
     url: string
+    colorId: string | null
+    colorCode?: string | null
+    isPrimary?: boolean
+    sortOrder?: number
+  }>
+  threeDModels?: Array<{
+    id: string
+    url: string
     colorCode: string
-    colorId: string
-    sortOrder: number
+    pivot?: [number, number, number]
+    format?: string
+    boundingBox?: {
+      max: [number, number, number]
+      min: [number, number, number]
+    }
   }>
 }
 
@@ -99,8 +112,12 @@ export type FormData = {
     color: string
     size: string
     sku: string
+    salePrice: number
+    cost: number
+    profit: number
     stock: number
     price: number
+    material: string
     colorHex?: string
   }>
   images: Array<{
@@ -112,4 +129,12 @@ export type FormData = {
     sortOrder: number
   }>
   model3d?: string
+  models?: Array<{
+    id: string
+    url: string
+    colorId: string | null
+    colorCode: string | null
+    isPrimary: boolean
+    sortOrder: number
+  }>
 }

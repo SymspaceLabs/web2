@@ -28,7 +28,7 @@ import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
       Product3DModel,
       Category,
       Subcategory,
-      SubcategoryItemChild,
+      SubcategoryItemChild
     ]),
   ],
   controllers: [ProductsController],

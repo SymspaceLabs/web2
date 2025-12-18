@@ -3,14 +3,21 @@
 import React from "react"
 import { ArrowRight } from "lucide-react"
 import { useState } from "react"
-import { X, MoreVertical, Plus } from "lucide-react"
+import { X, MoreVertical, Plus, Upload, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Checkbox } from "@/components/ui/checkbox"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import type { FormData } from "."
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+
+// Mock FormData type - replace with your actual type
+type FormData = {
+  selectedColors: Array<{ id: string; name: string; code: string }>
+  selectedSizes: Array<{ id: string; size: string; dimensions?: any; sizeChartUrl?: string }>
+  variants: VariantRow[]
+  material?: string
+}
 
 type VariantsStepProps = {
   formData: FormData
@@ -28,6 +35,13 @@ interface Color {
 interface Size {
   id: string
   value: string
+  dimensions?: {
+    length?: string
+    width?: string
+    height?: string
+    unit?: 'cm' | 'in'
+  }
+  sizeChartUrl?: string
 }
 
 interface VariantRow {
@@ -38,19 +52,16 @@ interface VariantRow {
   price: number
   salePrice: number
   cost: number
-  profit: number
-  material: string
   colorHex?: string
 }
 
 export function VariantsStep({ formData, updateFormData, onNext, onBack }: VariantsStepProps) {
-  // ✅ Initialize from formData if available, otherwise use defaults
   const [colors, setColors] = useState<Color[]>(
     formData.selectedColors.length > 0 
       ? formData.selectedColors.map(c => ({
           id: c.id,
           name: c.name,
-          hex: c.code  // ✅ Map 'code' to 'hex' for internal use
+          hex: c.code
         }))
       : []
   )
@@ -58,17 +69,129 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     formData.selectedSizes.length > 0
       ? formData.selectedSizes.map(s => ({
           id: s.id,
-          value: s.size  // ✅ Map 'size' to 'value' for internal use
+          value: s.size,
+          dimensions: s.dimensions,
+          sizeChartUrl: s.sizeChartUrl
         }))
       : [{ id: "1", value: "One Size" }]
   )
-  const [newColorName, setNewColorName] = useState("")
-  const [newColorHex, setNewColorHex] = useState("#000000")
-  const [newSize, setNewSize] = useState("")
-  const [selectedVariants, setSelectedVariants] = useState<Set<string>>(new Set())
-  const [bulkPrice, setBulkPrice] = useState("")
-  const [bulkStock, setBulkStock] = useState("")
-  const [applyTo, setApplyTo] = useState<"all" | "selected">("all")
+  
+  const [material, setMaterial] = useState(formData.material || "")
+  
+  // Color modal state
+  const [isColorModalOpen, setIsColorModalOpen] = useState(false)
+  const [editingColorId, setEditingColorId] = useState<string | null>(null)
+  const [newColorData, setNewColorData] = useState({
+    name: "",
+    hex: "#000000"
+  })
+  
+  // Size modal state
+  const [isSizeModalOpen, setIsSizeModalOpen] = useState(false)
+  const [editingSizeId, setEditingSizeId] = useState<string | null>(null)
+  const [newSizeData, setNewSizeData] = useState({
+    name: "",
+    length: "",
+    width: "",
+    height: "",
+    unit: "cm" as 'cm' | 'in',
+    sizeChartUrl: ""
+  })
+  
+  const [expandedColors, setExpandedColors] = useState<Set<string>>(new Set())
+  
+  const isColorEditMode = editingColorId !== null
+  const isSizeEditMode = editingSizeId !== null
+  
+  const toggleColorExpanded = (colorName: string) => {
+    const newExpanded = new Set(expandedColors)
+    if (newExpanded.has(colorName)) {
+      newExpanded.delete(colorName)
+    } else {
+      newExpanded.add(colorName)
+    }
+    setExpandedColors(newExpanded)
+  }
+  
+  const expandAllColors = () => {
+    const allColors = Object.keys(variantsByColor)
+    setExpandedColors(new Set(allColors))
+  }
+  
+  const collapseAllColors = () => {
+    setExpandedColors(new Set())
+  }
+
+  // Color modal functions
+  const openAddColorModal = () => {
+    setEditingColorId(null)
+    setNewColorData({
+      name: "",
+      hex: "#000000"
+    })
+    setIsColorModalOpen(true)
+  }
+
+  const openEditColorModal = (colorId: string) => {
+    const color = colors.find(c => c.id === colorId)
+    if (!color) return
+
+    setEditingColorId(colorId)
+    setNewColorData({
+      name: color.name,
+      hex: color.hex
+    })
+    setIsColorModalOpen(true)
+  }
+
+  const handleAddColor = () => {
+    if (!newColorData.name.trim()) return
+
+    const newColor: Color = {
+      id: Date.now().toString(),
+      name: newColorData.name.trim(),
+      hex: newColorData.hex,
+    }
+    setColors([...colors, newColor])
+    
+    // Reset and close modal
+    setNewColorData({ name: "", hex: "#000000" })
+    setEditingColorId(null)
+    setIsColorModalOpen(false)
+  }
+
+  const handleUpdateColor = () => {
+    if (!newColorData.name.trim() || !editingColorId) return
+
+    const updatedColors = colors.map(color => {
+      if (color.id !== editingColorId) return color
+      
+      return {
+        ...color,
+        name: newColorData.name.trim(),
+        hex: newColorData.hex
+      }
+    })
+    
+    setColors(updatedColors)
+    
+    // Reset and close modal
+    setNewColorData({ name: "", hex: "#000000" })
+    setEditingColorId(null)
+    setIsColorModalOpen(false)
+  }
+
+  const handleSaveColor = () => {
+    if (isColorEditMode) {
+      handleUpdateColor()
+    } else {
+      handleAddColor()
+    }
+  }
+
+  const handleRemoveColor = (id: string) => {
+    setColors(colors.filter((c) => c.id !== id))
+  }
 
   const generateVariants = (): VariantRow[] => {
     const newVariants: VariantRow[] = []
@@ -93,8 +216,6 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           price: existing?.price || 0,
           salePrice: existing?.salePrice || 0,
           cost: existing?.cost || 0,
-          profit: existing?.profit || 0,
-          material: existing?.material || "",
           colorHex: color.hex,
         })
       })
@@ -104,34 +225,129 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
   }
 
   const variants = generateVariants()
-  const variantKeys = variants.map((v) => `${v.color}-${v.size}`)
 
-  const handleAddColor = () => {
-    if (!newColorName.trim()) return
-
-    const newColor: Color = {
-      id: Date.now().toString(),
-      name: newColorName.trim(),
-      hex: newColorHex,
+  const variantsByColor = variants.reduce((acc, variant) => {
+    if (!acc[variant.color]) {
+      acc[variant.color] = []
     }
-    setColors([...colors, newColor])
-    setNewColorName("")
-    setNewColorHex("#000000")
+    acc[variant.color].push(variant)
+    return acc
+  }, {} as Record<string, VariantRow[]>)
+
+  const calculateProfit = (variant: VariantRow): number => {
+    const sellingPrice = variant.salePrice > 0 ? variant.salePrice : variant.price
+    const profit = (sellingPrice - variant.cost) * variant.stock
+    return Math.round(profit * 100) / 100
   }
 
-  const handleRemoveColor = (id: string) => {
-    setColors(colors.filter((c) => c.id !== id))
+  const handleSizeImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setNewSizeData(prev => ({ ...prev, sizeChartUrl: reader.result as string }))
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const openAddSizeModal = () => {
+    setEditingSizeId(null)
+    setNewSizeData({
+      name: "",
+      length: "",
+      width: "",
+      height: "",
+      unit: "cm",
+      sizeChartUrl: ""
+    })
+    setIsSizeModalOpen(true)
+  }
+
+  const openEditSizeModal = (sizeId: string) => {
+    const size = sizes.find(s => s.id === sizeId)
+    if (!size) return
+
+    setEditingSizeId(sizeId)
+    setNewSizeData({
+      name: size.value,
+      length: size.dimensions?.length || "",
+      width: size.dimensions?.width || "",
+      height: size.dimensions?.height || "",
+      unit: size.dimensions?.unit || "cm",
+      sizeChartUrl: size.sizeChartUrl || ""
+    })
+    setIsSizeModalOpen(true)
   }
 
   const handleAddSize = () => {
-    if (!newSize.trim()) return
+    if (!newSizeData.name.trim()) return
 
     const newSizeObj: Size = {
       id: Date.now().toString(),
-      value: newSize.trim(),
+      value: newSizeData.name.trim(),
+      dimensions: (newSizeData.length || newSizeData.width || newSizeData.height) ? {
+        length: newSizeData.length || undefined,
+        width: newSizeData.width || undefined,
+        height: newSizeData.height || undefined,
+        unit: newSizeData.unit
+      } : undefined,
+      sizeChartUrl: newSizeData.sizeChartUrl || undefined
     }
+    
     setSizes([...sizes, newSizeObj])
-    setNewSize("")
+    
+    setNewSizeData({
+      name: "",
+      length: "",
+      width: "",
+      height: "",
+      unit: "cm",
+      sizeChartUrl: ""
+    })
+    setEditingSizeId(null)
+    setIsSizeModalOpen(false)
+  }
+
+  const handleUpdateSize = () => {
+    if (!newSizeData.name.trim() || !editingSizeId) return
+
+    const updatedSizes = sizes.map(size => {
+      if (size.id !== editingSizeId) return size
+      
+      return {
+        ...size,
+        value: newSizeData.name.trim(),
+        dimensions: (newSizeData.length || newSizeData.width || newSizeData.height) ? {
+          length: newSizeData.length || undefined,
+          width: newSizeData.width || undefined,
+          height: newSizeData.height || undefined,
+          unit: newSizeData.unit
+        } : undefined,
+        sizeChartUrl: newSizeData.sizeChartUrl || undefined
+      }
+    })
+    
+    setSizes(updatedSizes)
+    
+    setNewSizeData({
+      name: "",
+      length: "",
+      width: "",
+      height: "",
+      unit: "cm",
+      sizeChartUrl: ""
+    })
+    setEditingSizeId(null)
+    setIsSizeModalOpen(false)
+  }
+
+  const handleSaveSize = () => {
+    if (isSizeEditMode) {
+      handleUpdateSize()
+    } else {
+      handleAddSize()
+    }
   }
 
   const handleRemoveSize = (id: string) => {
@@ -143,7 +359,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     newVariants[index] = {
       ...newVariants[index],
       [field]:
-        field === "stock" || field === "profit"
+        field === "stock"
           ? Number.parseInt(value.toString()) || 0
           : field === "price" || field === "salePrice" || field === "cost"
             ? Number.parseFloat(value.toString()) || 0
@@ -152,54 +368,10 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     updateFormData({ variants: newVariants })
   }
 
-  const handleToggleVariant = (key: string) => {
-    const newSelected = new Set(selectedVariants)
-    if (newSelected.has(key)) {
-      newSelected.delete(key)
-    } else {
-      newSelected.add(key)
-    }
-    setSelectedVariants(newSelected)
-  }
-
-  const handleToggleAll = () => {
-    if (selectedVariants.size === variants.length) {
-      setSelectedVariants(new Set())
-    } else {
-      setSelectedVariants(new Set(variantKeys))
-    }
-  }
-
-  const handleApplyBulk = () => {
-    const newVariants = variants.map((v, index) => {
-      const key = variantKeys[index]
-      const shouldUpdate = applyTo === "all" || selectedVariants.has(key)
-
-      return {
-        ...v,
-        price: shouldUpdate && bulkPrice ? Number.parseFloat(bulkPrice) : v.price,
-        stock: shouldUpdate && bulkStock ? Number.parseInt(bulkStock) : v.stock,
-      }
-    })
-
-    updateFormData({ variants: newVariants })
-    setBulkPrice("")
-    setBulkStock("")
-  }
-
-  // Group variants by color
-  const variantsByColor = variants.reduce((acc, variant) => {
-    if (!acc[variant.color]) {
-      acc[variant.color] = []
-    }
-    acc[variant.color].push(variant)
-    return acc
-  }, {} as Record<string, VariantRow[]>)
-
   const handleSupermasterChange = (field: keyof VariantRow, value: string) => {
     const newVariants = variants.map(v => ({
       ...v,
-      [field]: field === 'stock' || field === 'profit'
+      [field]: field === 'stock'
         ? (value ? Number.parseInt(value) : v[field])
         : field === 'price' || field === 'salePrice' || field === 'cost'
         ? (value ? Number.parseFloat(value) : v[field])
@@ -213,7 +385,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       if (v.color !== colorName) return v
       return {
         ...v,
-        [field]: field === 'stock' || field === 'profit'
+        [field]: field === 'stock'
           ? (value ? Number.parseInt(value) : v[field])
           : field === 'price' || field === 'salePrice' || field === 'cost'
           ? (value ? Number.parseFloat(value) : v[field])
@@ -236,6 +408,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     
     const stepTwoData: Partial<FormData> = {
         variants: variants,
+        material: material,
         selectedColors: colors.map(c => ({
             id: c.id,
             name: c.name,
@@ -243,11 +416,22 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         })),
         selectedSizes: sizes.map(s => ({
             id: s.id,
-            size: s.value, 
+            size: s.value,
+            dimensions: s.dimensions,
+            sizeChartUrl: s.sizeChartUrl
         })),
-    };
+    }
     
     await onNext(stepTwoData)
+  }
+
+  const getSizeDimensions = (sizeValue: string): string => {
+    const size = sizes.find(s => s.value === sizeValue)
+    if (!size?.dimensions) return ""
+    
+    const { length, width, height, unit } = size.dimensions
+    const parts = [length, width, height].filter(Boolean)
+    return parts.length > 0 ? `${parts.join(" × ")} ${unit}` : ""
   }
 
   return (
@@ -257,102 +441,357 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         <p className="text-sm text-muted-foreground">Configure product colors, sizes, and inventory details</p>
       </div>
 
-      <div className="space-y-4">
-        <Label className="text-base font-medium">Colors</Label>
-
-        {/* Selected Colors */}
-        {colors.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {colors.map((color) => (
-              <div key={color.id} className="flex items-center gap-2 px-3 py-1.5 rounded-full border bg-background">
-                <div className="w-4 h-4 rounded-full border" style={{ backgroundColor: color.hex }} />
-                <span className="text-sm font-medium">{color.name}</span>
-                <button type="button" onClick={() => handleRemoveColor(color.id)} className="hover:text-destructive">
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Add New Color */}
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <Input
-              placeholder="Color name (e.g., Navy Blue, Forest Green)"
-              value={newColorName}
-              onChange={(e) => setNewColorName(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault()
-                  handleAddColor()
-                }
-              }}
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <input
-                type="color"
-                value={newColorHex}
-                onChange={(e) => setNewColorHex(e.target.value)}
-                className="w-10 h-10 rounded border cursor-pointer"
-              />
-            </div>
-            <Input
-              type="text"
-              value={newColorHex}
-              onChange={(e) => setNewColorHex(e.target.value)}
-              className="w-24 font-mono text-xs"
-              placeholder="#000000"
-            />
-          </div>
-          <Button type="button" onClick={handleAddColor} variant="outline" size="default">
-            <Plus className="h-4 w-4 mr-2" />
-            Add Color
-          </Button>
-        </div>
+      {/* Product-level Material */}
+      <div className="space-y-2">
+        <Label htmlFor="material" className="text-base font-medium">Material</Label>
+        <Input
+          id="material"
+          placeholder="e.g., 100% Cotton, Polyester Blend, Genuine Leather"
+          value={material}
+          onChange={(e) => setMaterial(e.target.value)}
+          className="max-w-md"
+        />
+        <p className="text-xs text-muted-foreground">Material applies to all variants of this product</p>
       </div>
 
       <div className="border-t" />
 
+      {/* Colors Section - NEW MODAL BASED */}
       <div className="space-y-4">
-        <Label className="text-base font-medium">Sizes</Label>
+        <div className="flex items-center justify-between">
+          <Label className="text-base font-medium">Colors</Label>
+          <Button type="button" onClick={openAddColorModal} variant="outline" size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Color
+          </Button>
+        </div>
 
-        {/* Selected Sizes */}
-        {sizes.length > 0 && (
+        {colors.length > 0 && (
           <div className="flex flex-wrap gap-2">
-            {sizes.map((size) => (
-              <div key={size.id} className="flex items-center gap-2 px-3 py-1.5 rounded-full border bg-background">
-                <span className="text-sm font-medium">{size.value}</span>
-                <button type="button" onClick={() => handleRemoveSize(size.id)} className="hover:text-destructive">
-                  <X className="h-3.5 w-3.5" />
-                </button>
+            {colors.map((color) => (
+              <div key={color.id} className="group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background hover:border-primary transition-colors">
+                <div className="w-4 h-4 rounded-full border flex-shrink-0" style={{ backgroundColor: color.hex }} />
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">{color.name}</span>
+                  <span className="text-xs text-muted-foreground font-mono">{color.hex}</span>
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    type="button" 
+                    onClick={() => openEditColorModal(color.id)} 
+                    className="text-muted-foreground hover:text-primary p-1"
+                    title="Edit color"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => handleRemoveColor(color.id)} 
+                    className="text-muted-foreground hover:text-destructive p-1"
+                    title="Delete color"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         )}
+      </div>
 
-        {/* Add New Size */}
-        <div className="flex gap-3">
-          <Input
-            placeholder="Size (e.g., S, M, L, 32, 10.5)"
-            value={newSize}
-            onChange={(e) => setNewSize(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                handleAddSize()
-              }
-            }}
-            className="flex-1"
-          />
-          <Button type="button" onClick={handleAddSize} variant="outline" size="default">
+      {/* Add/Edit Color Modal */}
+      <Dialog open={isColorModalOpen} onOpenChange={(open) => {
+        setIsColorModalOpen(open)
+        if (!open) {
+          setEditingColorId(null)
+          setNewColorData({ name: "", hex: "#000000" })
+        }
+      }}>
+        <DialogContent className="sm:max-w-[450px]">
+          <DialogHeader>
+            <DialogTitle>{isColorEditMode ? 'Edit Color' : 'Add New Color'}</DialogTitle>
+            <DialogDescription>
+              {isColorEditMode 
+                ? 'Update the color name and hex code.'
+                : 'Add a new color with name and hex code.'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            {/* Color Name */}
+            <div className="space-y-2">
+              <Label htmlFor="colorName">Color Name *</Label>
+              <Input
+                id="colorName"
+                placeholder="e.g., Navy Blue, Forest Green, Crimson Red"
+                value={newColorData.name}
+                onChange={(e) => setNewColorData(prev => ({ ...prev, name: e.target.value }))}
+                autoFocus
+              />
+            </div>
+
+            {/* Color Hex Code */}
+            <div className="space-y-2">
+              <Label>Color Code *</Label>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <input
+                    type="color"
+                    value={newColorData.hex}
+                    onChange={(e) => setNewColorData(prev => ({ ...prev, hex: e.target.value }))}
+                    className="w-16 h-16 rounded-lg border-2 cursor-pointer"
+                    title="Pick a color"
+                  />
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Input
+                    type="text"
+                    value={newColorData.hex}
+                    onChange={(e) => setNewColorData(prev => ({ ...prev, hex: e.target.value }))}
+                    className="font-mono"
+                    placeholder="#000000"
+                    pattern="^#[0-9A-Fa-f]{6}$"
+                  />
+                  <p className="text-xs text-muted-foreground">Enter hex code or use color picker</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Preview */}
+            <div className="space-y-2">
+              <Label>Preview</Label>
+              <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
+                <div 
+                  className="w-12 h-12 rounded-lg border-2 shadow-sm" 
+                  style={{ backgroundColor: newColorData.hex }}
+                />
+                <div>
+                  <p className="font-medium">{newColorData.name || 'Color Name'}</p>
+                  <p className="text-sm text-muted-foreground font-mono">{newColorData.hex}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => {
+                setIsColorModalOpen(false)
+                setEditingColorId(null)
+                setNewColorData({ name: "", hex: "#000000" })
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleSaveColor}
+              disabled={!newColorData.name.trim()}
+            >
+              {isColorEditMode ? 'Update Color' : 'Add Color'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <div className="border-t" />
+
+      {/* Sizes Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label className="text-base font-medium">Sizes</Label>
+          <Button type="button" onClick={openAddSizeModal} variant="outline" size="sm">
             <Plus className="h-4 w-4 mr-2" />
             Add Size
           </Button>
         </div>
+
+        {sizes.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {sizes.map((size) => (
+              <div key={size.id} className="group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background hover:border-primary transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">{size.value}</span>
+                  {size.dimensions && (
+                    <span className="text-xs text-muted-foreground">
+                      {[size.dimensions.length, size.dimensions.width, size.dimensions.height]
+                        .filter(Boolean)
+                        .join(" × ")} {size.dimensions.unit}
+                    </span>
+                  )}
+                  {size.sizeChartUrl && (
+                    <span className="text-xs text-blue-600">📊 Chart attached</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    type="button" 
+                    onClick={() => openEditSizeModal(size.id)} 
+                    className="text-muted-foreground hover:text-primary p-1"
+                    title="Edit size"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => handleRemoveSize(size.id)} 
+                    className="text-muted-foreground hover:text-destructive p-1"
+                    title="Delete size"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* Add/Edit Size Modal */}
+      <Dialog open={isSizeModalOpen} onOpenChange={(open) => {
+        setIsSizeModalOpen(open)
+        if (!open) {
+          setEditingSizeId(null)
+          setNewSizeData({
+            name: "",
+            length: "",
+            width: "",
+            height: "",
+            unit: "cm",
+            sizeChartUrl: ""
+          })
+        }
+      }}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{isSizeEditMode ? 'Edit Size' : 'Add New Size'}</DialogTitle>
+            <DialogDescription>
+              {isSizeEditMode 
+                ? 'Update size details, dimensions, and size chart image.'
+                : 'Add a size with optional dimensions and size chart image.'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="sizeName">Size Name *</Label>
+              <Input
+                id="sizeName"
+                placeholder="e.g., S, M, L, XL, 32, 10.5"
+                value={newSizeData.name}
+                onChange={(e) => setNewSizeData(prev => ({ ...prev, name: e.target.value }))}
+                autoFocus
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Dimensions (Optional)</Label>
+              <div className="grid grid-cols-4 gap-2">
+                <Input
+                  placeholder="Length"
+                  value={newSizeData.length}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, length: e.target.value }))}
+                />
+                <Input
+                  placeholder="Width"
+                  value={newSizeData.width}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, width: e.target.value }))}
+                />
+                <Input
+                  placeholder="Height"
+                  value={newSizeData.height}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, height: e.target.value }))}
+                />
+                <select
+                  value={newSizeData.unit}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, unit: e.target.value as 'cm' | 'in' }))}
+                  className="px-3 py-2 rounded-md border bg-background text-sm"
+                >
+                  <option value="cm">cm</option>
+                  <option value="in">in</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="sizeChart">Size Chart Image (Optional)</Label>
+              <div className="flex items-center gap-3">
+                <label 
+                  htmlFor="sizeChart" 
+                  className="flex items-center gap-2 px-4 py-2 border rounded-md cursor-pointer hover:bg-muted"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span className="text-sm">Upload Image</span>
+                  <input
+                    id="sizeChart"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleSizeImageUpload}
+                    className="hidden"
+                  />
+                </label>
+                {newSizeData.sizeChartUrl && (
+                  <span className="text-xs text-green-600 flex items-center gap-1">
+                    ✓ Image uploaded
+                  </span>
+                )}
+              </div>
+              {newSizeData.sizeChartUrl && (
+                <div className="mt-2 relative w-full h-40 border rounded-md overflow-hidden">
+                  <img 
+                    src={newSizeData.sizeChartUrl} 
+                    alt="Size chart preview" 
+                    className="w-full h-full object-contain"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewSizeData(prev => ({ ...prev, sizeChartUrl: "" }))}
+                    className="absolute top-2 right-2 p-1 bg-destructive text-white rounded-full hover:bg-destructive/90"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={() => {
+                setIsSizeModalOpen(false)
+                setEditingSizeId(null)
+                setNewSizeData({
+                  name: "",
+                  length: "",
+                  width: "",
+                  height: "",
+                  unit: "cm",
+                  sizeChartUrl: ""
+                })
+              }}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleSaveSize}
+              disabled={!newSizeData.name.trim()}
+            >
+              {isSizeEditMode ? 'Update Size' : 'Add Size'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <div className="border-t" />
 
@@ -360,81 +799,31 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <Label className="text-base font-medium">Variant Details ({variants.length} variants)</Label>
+            <Button 
+              type="button" 
+              variant="ghost" 
+              size="sm"
+              onClick={expandedColors.size === 0 ? expandAllColors : collapseAllColors}
+            >
+              {expandedColors.size === 0 ? 'Expand all' : 'Collapse all'}
+            </Button>
           </div>
 
-          {/* Bulk Actions */}
-          <div className="bg-muted/50 rounded-lg p-4 space-y-3">
-            <div className="text-sm font-medium">Bulk Actions</div>
-            <div className="flex flex-wrap items-end gap-3">
-              <div className="flex-1 min-w-[140px]">
-                <Label className="text-xs text-muted-foreground mb-1.5">Price ($)</Label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  placeholder="0.00"
-                  value={bulkPrice}
-                  onChange={(e) => setBulkPrice(e.target.value)}
-                />
-              </div>
-              <div className="flex-1 min-w-[140px]">
-                <Label className="text-xs text-muted-foreground mb-1.5">Stock</Label>
-                <Input type="number" placeholder="0" value={bulkStock} onChange={(e) => setBulkStock(e.target.value)} />
-              </div>
-              <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="applyTo"
-                    checked={applyTo === "all"}
-                    onChange={() => setApplyTo("all")}
-                    className="w-4 h-4"
-                  />
-                  All variants
-                </label>
-                <label className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name="applyTo"
-                    checked={applyTo === "selected"}
-                    onChange={() => setApplyTo("selected")}
-                    className="w-4 h-4"
-                  />
-                  Selected ({selectedVariants.size})
-                </label>
-              </div>
-              <Button type="button" onClick={handleApplyBulk} disabled={!bulkPrice && !bulkStock}>
-                Apply
-              </Button>
-            </div>
-          </div>
-
-          {/* Table */}
           <div className="rounded-lg border overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox checked={selectedVariants.size === variants.length} onCheckedChange={handleToggleAll} />
-                  </TableHead>
-                  <TableHead className="min-w-[180px]">Variant</TableHead>
+                  <TableHead className="min-w-[200px]">Variant</TableHead>
                   <TableHead className="w-28">Price ($)</TableHead>
                   <TableHead className="w-28">Sale Price ($)</TableHead>
                   <TableHead className="w-24">Stock</TableHead>
                   <TableHead className="w-28">Cost ($)</TableHead>
-                  <TableHead className="w-24">Profit (%)</TableHead>
-                  <TableHead className="min-w-[150px]">Material</TableHead>
+                  <TableHead className="w-32 bg-muted/50">Profit ($)</TableHead>
                   <TableHead className="w-12"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {/* Supermaster Row */}
                 <TableRow className="bg-primary/5 hover:bg-primary/10 border-b-2">
-                  <TableCell>
-                    <Checkbox 
-                      checked={selectedVariants.size === variants.length} 
-                      onCheckedChange={handleToggleAll} 
-                    />
-                  </TableCell>
                   <TableCell>
                     <span className="font-bold text-sm">ALL VARIANTS</span>
                   </TableCell>
@@ -477,58 +866,42 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                       min="0"
                     />
                   </TableCell>
-                  <TableCell>
-                    <Input
-                      type="number"
-                      placeholder="Set all"
-                      onChange={(e) => handleSupermasterChange('profit', e.target.value)}
-                      className="bg-background"
-                      min="0"
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Input
-                      placeholder="Set all materials"
-                      onChange={(e) => handleSupermasterChange('material', e.target.value)}
-                      className="bg-background"
-                    />
+                  <TableCell className="bg-muted/50">
+                    <span className="text-xs text-muted-foreground italic">Auto-calculated</span>
                   </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
 
-                {/* Color Groups */}
                 {Object.entries(variantsByColor).map(([colorName, colorVariants]) => {
                   const colorHex = colorVariants[0]?.colorHex || '#000000'
+                  const totalProfit = colorVariants.reduce((sum, v) => sum + calculateProfit(v), 0)
+                  const isExpanded = expandedColors.has(colorName)
+                  
                   return (
                     <React.Fragment key={colorName}>
-                      {/* Color Master Row */}
-                      <TableRow className="bg-muted/50 hover:bg-muted/70 border-b">
-                        <TableCell>
-                          <Checkbox 
-                            checked={colorVariants.every(v => selectedVariants.has(`${v.color}-${v.size}`))}
-                            onCheckedChange={(checked) => {
-                              const newSelected = new Set(selectedVariants)
-                              colorVariants.forEach(v => {
-                                const key = `${v.color}-${v.size}`
-                                if (checked) {
-                                  newSelected.add(key)
-                                } else {
-                                  newSelected.delete(key)
-                                }
-                              })
-                              setSelectedVariants(newSelected)
+                      <TableRow 
+                        className="bg-muted/50 hover:bg-muted/70 border-b cursor-pointer"
+                        onClick={() => toggleColorExpanded(colorName)}
+                      >
+                        <TableCell className="cursor-pointer">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              toggleColorExpanded(colorName)
                             }}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
+                            className="flex items-center gap-2 hover:text-primary transition-colors w-full text-left cursor-pointer"
+                          >
+                            <ChevronDown 
+                              className={`h-4 w-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                            />
                             <div
                               className="w-4 h-4 rounded-full border flex-shrink-0"
                               style={{ backgroundColor: colorHex }}
                             />
                             <span className="font-semibold text-sm">{colorName}</span>
-                            <span className="text-xs text-muted-foreground">({colorVariants.length})</span>
-                          </div>
+                            <span className="text-xs text-muted-foreground">({colorVariants.length} variants)</span>
+                          </button>
                         </TableCell>
                         <TableCell>
                           <Input
@@ -536,6 +909,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                             step="0.01"
                             placeholder="Set price"
                             onChange={(e) => handleColorMasterChange(colorName, 'price', e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className="bg-background"
                             min="0"
                           />
@@ -546,6 +920,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                             step="0.01"
                             placeholder="Set sale"
                             onChange={(e) => handleColorMasterChange(colorName, 'salePrice', e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className="bg-background"
                             min="0"
                           />
@@ -555,6 +930,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                             type="number"
                             placeholder="Set stock"
                             onChange={(e) => handleColorMasterChange(colorName, 'stock', e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className="bg-background"
                             min="0"
                           />
@@ -565,47 +941,36 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                             step="0.01"
                             placeholder="Set cost"
                             onChange={(e) => handleColorMasterChange(colorName, 'cost', e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
                             className="bg-background"
                             min="0"
                           />
                         </TableCell>
-                        <TableCell>
-                          <Input
-                            type="number"
-                            placeholder="Set profit"
-                            onChange={(e) => handleColorMasterChange(colorName, 'profit', e.target.value)}
-                            className="bg-background"
-                            min="0"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input
-                            placeholder="Set material"
-                            onChange={(e) => handleColorMasterChange(colorName, 'material', e.target.value)}
-                            className="bg-background"
-                          />
+                        <TableCell className="bg-muted/50">
+                          <span className="font-semibold text-sm">
+                            ${totalProfit.toFixed(2)}
+                          </span>
                         </TableCell>
                         <TableCell></TableCell>
                       </TableRow>
 
-                      {/* Individual Variant Rows */}
-                      {colorVariants.map((variant) => {
+                      {isExpanded && colorVariants.map((variant) => {
                         const key = `${variant.color}-${variant.size}`
                         const index = variants.findIndex(v => v.color === variant.color && v.size === variant.size)
+                        const profit = calculateProfit(variant)
+                        const dimensions = getSizeDimensions(variant.size)
+                        
                         return (
                           <TableRow key={key} className="hover:bg-muted/30">
-                            <TableCell className="pl-8">
-                              <Checkbox
-                                checked={selectedVariants.has(key)}
-                                onCheckedChange={() => handleToggleVariant(key)}
-                              />
-                            </TableCell>
                             <TableCell className="pl-8">
                               <div className="flex items-center gap-2">
                                 <span className="text-sm text-muted-foreground">└</span>
                                 <div>
                                   <div className="font-medium text-sm">{variant.size}</div>
                                   <div className="text-xs text-muted-foreground font-mono">{variant.sku}</div>
+                                  {dimensions && (
+                                    <div className="text-xs text-muted-foreground">{dimensions}</div>
+                                  )}
                                 </div>
                               </div>
                             </TableCell>
@@ -648,21 +1013,10 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                                 min="0"
                               />
                             </TableCell>
-                            <TableCell>
-                              <Input
-                                type="number"
-                                value={variant.profit || ""}
-                                onChange={(e) => handleVariantChange(index, "profit", e.target.value)}
-                                placeholder="0"
-                                min="0"
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Input
-                                value={variant.material || ""}
-                                onChange={(e) => handleVariantChange(index, "material", e.target.value)}
-                                placeholder="e.g., Cotton, Polyester"
-                              />
+                            <TableCell className="bg-muted/50">
+                              <span className={`font-medium ${profit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                ${profit.toFixed(2)}
+                              </span>
                             </TableCell>
                             <TableCell>
                               <DropdownMenu>

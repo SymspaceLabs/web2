@@ -16,6 +16,7 @@ import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcat
 import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProductColors, mapProductSizes } from './utils/product.utils';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+import { UpdateProductVariantsDto, VariantInputDto } from './dto/update-product-variants.dto';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -46,6 +47,7 @@ export class ProductsService {
     @InjectRepository(Subcategory) private readonly subcategoryRepository: Repository<Subcategory>,
     @InjectRepository(ProductColor) private productColorRepository: Repository<ProductColor>,
     @InjectRepository(ProductSize) private productSizeRepository: Repository<ProductSize>,
+    @InjectRepository(ProductImage) private productImageRepository: Repository<ProductImage>
   ) {}
   
   // CREATE & UPDATE PRODUCT
@@ -572,58 +574,286 @@ export class ProductsService {
       product,
     };
   }
+  
+  // products.service.ts - FIXED VERSION
+  async updateProductVariants(
+    productId: string,
+    dto: UpdateProductVariantsDto
+  ): Promise<Product> {
+    
+    // ============================================
+    // STEP 1: Load the product with all relations
+    // ============================================
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+      relations: ['colors', 'sizes', 'variants', 'variants.color', 'variants.size', 'images'],
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product ${productId} not found`);
+    }
+
+
+    // ============================================
+    // STEP 2: Build lookup maps for incoming data
+    // ============================================
+    const incomingColorNames = new Set(dto.colors.map(c => c.name.toLowerCase()));
+    const incomingSizeNames = new Set(dto.sizes.map(s => s.size.toLowerCase()));
+    
+
+    // ============================================
+    // STEP 3: CRITICAL FIX - Clean up dependencies FIRST
+    // ============================================
+    
+    // 3a. Identify colors being removed
+    const existingColorIds = new Set(product.colors.map(c => c.id));
+    const colorsToRemoveIds = new Set<string>();
+    
+    for (const color of product.colors) {
+      if (!incomingColorNames.has(color.name.toLowerCase())) {
+        colorsToRemoveIds.add(color.id);
+      }
+    }
+    
+    // 3b. Delete variants that reference colors/sizes being removed
+    const variantsToDelete: ProductVariant[] = [];
+    
+    for (const variant of product.variants) {
+      const colorName = variant.color?.name.toLowerCase() || '';
+      const sizeName = variant.size?.size.toLowerCase() || '';
+      
+      const colorRemoved = colorName && !incomingColorNames.has(colorName);
+      const sizeRemoved = sizeName && !incomingSizeNames.has(sizeName);
+      
+      if (colorRemoved || sizeRemoved) {
+        variantsToDelete.push(variant);
+      }
+    }
+    
+    if (variantsToDelete.length > 0) {
+      await this.productVariantRepository.remove(variantsToDelete);
+      product.variants = product.variants.filter(v => !variantsToDelete.includes(v));
+    }
+    
+    // 3c. ✅ NEW: Nullify image colorIds that reference colors being removed
+    if (colorsToRemoveIds.size > 0 && product.images?.length > 0) {
+      const imagesToUpdate: ProductImage[] = [];
+      
+      for (const image of product.images) {
+        if (image.colorId && colorsToRemoveIds.has(image.colorId)) {
+          image.colorId = null;
+          imagesToUpdate.push(image);
+        }
+      }
+      
+      if (imagesToUpdate.length > 0) {
+        // Use the productImageRepository if injected, otherwise use manager
+        await this.productImageRepository.save(imagesToUpdate);
+      }
+    }
+
+    // ============================================
+    // STEP 4: Now safe to merge colors
+    // ============================================
+    const mergedColors = await this.mergeProductColors(product, dto.colors);
+    product.colors = mergedColors;
+
+    // ============================================
+    // STEP 5: Now safe to merge sizes
+    // ============================================
+    const mappedSizes = dto.sizes.map((s, i) => ({
+      size: s.size,
+      sortOrder: i,
+      sizeChartUrl: s.sizeChart || null,
+    }));
+    const mergedSizes = await this.mergeProductSizes(product, mappedSizes);
+    product.sizes = mergedSizes;
+
+    // ============================================
+    // STEP 6: Save product to persist colors/sizes and get real IDs
+    // ============================================
+    await this.productRepository.save(product);
+
+    // ============================================
+    // STEP 7: Refetch product with FRESH color/size IDs
+    // ============================================
+    const productWithFreshIds = await this.productRepository.findOne({
+      where: { id: productId },
+      relations: ['colors', 'sizes', 'variants', 'variants.color', 'variants.size'],
+    });
+
+    if (!productWithFreshIds) {
+      throw new NotFoundException('Failed to refetch product');
+    }
+
+    // ============================================
+    // STEP 8: Build color/size lookup maps
+    // ============================================
+    const colorMap = new Map<string, ProductColor>();
+    productWithFreshIds.colors.forEach(color => {
+      colorMap.set(color.name.toLowerCase(), color);
+    });
+
+    const sizeMap = new Map<string, ProductSize>();
+    productWithFreshIds.sizes.forEach(size => {
+      sizeMap.set(size.size.toLowerCase(), size);
+    });
+
+    // ============================================
+    // STEP 9: Build variant data lookup map (from DTO)
+    // ============================================
+    const variantDataMap = new Map<string, VariantInputDto>();
+    dto.variants.forEach(variantData => {
+      const key = `${variantData.colorName.toLowerCase()}-${variantData.sizeName.toLowerCase()}`;
+      variantDataMap.set(key, variantData);
+    });
+
+    // ============================================
+    // STEP 10: Build existing variant lookup map
+    // ============================================
+    const existingVariantMap = new Map<string, ProductVariant>();
+    productWithFreshIds.variants.forEach(variant => {
+      const colorKey = variant.color?.name.toLowerCase() || 'null';
+      const sizeKey = variant.size?.size.toLowerCase() || 'null';
+      const key = `${colorKey}-${sizeKey}`;
+      existingVariantMap.set(key, variant);
+    });
+
+    // ============================================
+    // STEP 11: Process each variant from the DTO
+    // ============================================
+    const variantsToSave: ProductVariant[] = [];
+
+    for (const [key, variantData] of variantDataMap.entries()) {
+      // Get the actual color and size entities
+      const color = colorMap.get(variantData.colorName.toLowerCase());
+      const size = sizeMap.get(variantData.sizeName.toLowerCase());
+
+      if (!color) {
+        console.warn(`⚠️ Color not found: ${variantData.colorName}`);
+        continue;
+      }
+      if (!size) {
+        console.warn(`⚠️ Size not found: ${variantData.sizeName}`);
+        continue;
+      }
+
+      // Check if this variant already exists
+      if (existingVariantMap.has(key)) {
+        // ✅ UPDATE existing variant
+        const existingVariant = existingVariantMap.get(key)!;
+        existingVariantMap.delete(key); // Remove from map (for cleanup later)
+
+        // Update the variant fields
+        existingVariant.color = color;
+        existingVariant.size = size;
+        existingVariant.sku = variantData.sku;
+        existingVariant.stock = variantData.stock;
+        existingVariant.price = variantData.price;
+        existingVariant.salePrice = variantData.salePrice || 0;
+        existingVariant.cost = variantData.cost;
+
+        variantsToSave.push(existingVariant);
+      } else {
+        // ✅ CREATE new variant
+        const newVariant = new ProductVariant();
+        newVariant.product = productWithFreshIds;
+        newVariant.color = color;
+        newVariant.size = size;
+        newVariant.sku = variantData.sku;
+        newVariant.stock = variantData.stock;
+        newVariant.price = variantData.price;
+        newVariant.salePrice = variantData.salePrice || 0;
+        newVariant.cost = variantData.cost;
+        newVariant.material = productWithFreshIds.material || '';
+
+        variantsToSave.push(newVariant);
+      }
+    }
+
+    // ============================================
+    // STEP 12: Delete remaining removed variants
+    // ============================================
+    const remainingVariantsToDelete = Array.from(existingVariantMap.values());
+    if (remainingVariantsToDelete.length > 0) {
+      await this.productVariantRepository.remove(remainingVariantsToDelete);
+    }
+
+    // ============================================
+    // STEP 13: Save all variants
+    // ============================================
+    const savedVariants = await this.productVariantRepository.save(variantsToSave);
+
+    // ============================================
+    // STEP 14: Return updated product
+    // ============================================
+    productWithFreshIds.variants = savedVariants;
+
+    // Remove circular references
+    if (productWithFreshIds.variants) {
+      productWithFreshIds.variants.forEach(v => delete v.product);
+    }
+    if (productWithFreshIds.colors) {
+      productWithFreshIds.colors.forEach(c => delete c.product);
+    }
+    if (productWithFreshIds.sizes) {
+      productWithFreshIds.sizes.forEach(s => delete s.product);
+    }
+
+    return productWithFreshIds;
+  }
 
   /**
  * Merges incoming colors with existing colors, preserving IDs when possible.
  * Only creates new entities for truly new colors.
  * Deletes colors that were removed.
  */
-private async mergeProductColors(
-    product: Product, 
-    incomingColors: Array<{ name: string; code: string }>
-): Promise<ProductColor[]> {
-    const existingColors = product.colors || [];
-    const mergedColors: ProductColor[] = [];
+  private async mergeProductColors(
+      product: Product, 
+      incomingColors: Array<{ name: string; code: string }>
+  ): Promise<ProductColor[]> {
+      const existingColors = product.colors || [];
+      const mergedColors: ProductColor[] = [];
 
-    // Process each incoming color
-    for (const incomingColor of incomingColors) {
-        // Try to find existing color by BOTH name AND code (ensures exact match)
-        const existingColor = existingColors.find(
-            c => c.name.toLowerCase() === incomingColor.name.toLowerCase() && 
-                 c.code.toLowerCase() === incomingColor.code.toLowerCase()
-        );
+      // Process each incoming color
+      for (const incomingColor of incomingColors) {
+          // Try to find existing color by BOTH name AND code (ensures exact match)
+          const existingColor = existingColors.find(
+              c => c.name.toLowerCase() === incomingColor.name.toLowerCase() && 
+                  c.code.toLowerCase() === incomingColor.code.toLowerCase()
+          );
 
-        if (existingColor) {
-            // ✅ PRESERVE: Color already exists, keep the same entity (and ID)
-            // Update properties in case of minor changes
-            existingColor.name = incomingColor.name;
-            existingColor.code = incomingColor.code;
-            mergedColors.push(existingColor);
-        } else {
-            // ✅ CREATE: This is a new color, create a new entity
-            const newColor = new ProductColor();
-            newColor.name = incomingColor.name;
-            newColor.code = incomingColor.code;
-            newColor.product = product;
-            mergedColors.push(newColor);
-        }
-    }
+          if (existingColor) {
+              // ✅ PRESERVE: Color already exists, keep the same entity (and ID)
+              // Update properties in case of minor changes
+              existingColor.name = incomingColor.name;
+              existingColor.code = incomingColor.code;
+              mergedColors.push(existingColor);
+          } else {
+              // ✅ CREATE: This is a new color, create a new entity
+              const newColor = new ProductColor();
+              newColor.name = incomingColor.name;
+              newColor.code = incomingColor.code;
+              newColor.product = product;
+              mergedColors.push(newColor);
+          }
+      }
 
-    // ✅ DELETE: Find colors that exist in DB but not in incoming data (user removed them)
-    const colorsToDelete = existingColors.filter(
-        existing => !incomingColors.some(
-            incoming => incoming.name.toLowerCase() === existing.name.toLowerCase() && 
-                       incoming.code.toLowerCase() === existing.code.toLowerCase()
-        )
-    );
-    
-    if (colorsToDelete.length > 0) {
-        // TypeORM will handle cascade deletion of related entities (variants, etc.)
-        await this.productColorRepository.remove(colorsToDelete);
-    }
+      // ✅ DELETE: Find colors that exist in DB but not in incoming data (user removed them)
+      const colorsToDelete = existingColors.filter(
+          existing => !incomingColors.some(
+              incoming => incoming.name.toLowerCase() === existing.name.toLowerCase() && 
+                        incoming.code.toLowerCase() === existing.code.toLowerCase()
+          )
+      );
+      
+      if (colorsToDelete.length > 0) {
+          // TypeORM will handle cascade deletion of related entities (variants, etc.)
+          await this.productColorRepository.remove(colorsToDelete);
+      }
 
-    return mergedColors;
-}
+      return mergedColors;
+  }
 
   /**
    * Merges incoming sizes with existing sizes, preserving IDs when possible.

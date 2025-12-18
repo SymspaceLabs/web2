@@ -51,8 +51,7 @@ export default function useSearch() {
     searchAbortControllerRef.current = controller;
 
     try {
-      const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || ''; 
-      const url = `${API_BASE_URL}/products/search?q=${encodeURIComponent(term)}`;
+      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products/search?q=${encodeURIComponent(term)}`;
 
       const response = await fetch(url, { signal }); 
 

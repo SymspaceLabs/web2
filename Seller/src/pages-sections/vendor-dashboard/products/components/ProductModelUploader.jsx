@@ -76,11 +76,9 @@ const ColorVariantModelUploader = ({
 // ========================================================================
 // Main Component (Dynamic Model Uploader)
 // ========================================================================
+// @param {object[]} colorVariants - An array of color variant objects from state.
+// @param {object} modelHandlerMap - An object containing files and handlers mapped by color name.
 
-/**
- * @param {object[]} colorVariants - An array of color variant objects from state.
- * @param {object} modelHandlerMap - An object containing files and handlers mapped by color name.
- */
 const ProductModelUploader = ({ colorVariants, modelHandlerMap, maxFiles = 1 }) => {
 
     if (!colorVariants || colorVariants.length === 0) {

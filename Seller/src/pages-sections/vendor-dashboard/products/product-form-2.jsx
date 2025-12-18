@@ -10,8 +10,8 @@ import ProductVariantsTable from "./components/ProductVariantsTable";
 import ProductImageUploader from './components/ProductImageUploader';
 import ProductModelUploader from './components/ProductModelUploader';
 
-import { arrayMove } from "react-sortable-hoc";
 import { Box, Card } from "@mui/material"; 
+import { arrayMove } from "react-sortable-hoc";
 import { uploadFileToBackend, uploadProductModel } from '@/services/productService';
 import { useState, useCallback, useMemo, forwardRef, useImperativeHandle } from "react";
 

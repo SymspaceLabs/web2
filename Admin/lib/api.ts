@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   auth: {
     login: `${API_BASE_URL}/admin/auth/login`,
   },
+  blogs: `${API_BASE_URL}/blogs`,
   user: (userId: string) => `${API_BASE_URL}/admin/users/${userId}`,
   product: (productId: string) => `${API_BASE_URL}/admin/products/${productId}`,
 }

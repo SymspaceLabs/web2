@@ -86,9 +86,9 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
               />
-              <a href="#" className="text-xs text-blue-600 hover:underline">
+              {/* <a href="#" className="text-xs text-blue-600 hover:underline">
                 Forgot Password?
-              </a>
+              </a> */}
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>

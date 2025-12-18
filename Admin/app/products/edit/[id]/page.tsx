@@ -14,7 +14,7 @@ export default function EditProductClient() {
   const productId = params.id as string
   const initialStep = parseInt(searchParams.get('step') || '1', 10)
   
-  const [product, setProduct] = useState(null)
+  const [product, setProduct] = useState<Product>();
   const [loading, setLoading] = useState(true);
 
   // Fetch product initially

@@ -9,7 +9,7 @@ import { BasicInfoStep } from "@/components/products/product-form/basic-info-ste
 import { VariantsStep } from "@/components/products/product-form/variants-step"
 import { MediaStep } from "@/components/products/product-form/media-step"
 import { ReviewStep } from "@/components/products/product-form/review-step"
-import { updateProduct, createProduct } from "@/api/product"
+import { updateProduct, createProduct, updateProductVariants } from "@/api/product"
 
 // ✅ Import shared types instead of redefining them
 import type { Product, FormData } from "@/types/product"
@@ -22,6 +22,23 @@ type ProductFormProps = {
 
 // Re-export FormData for other components that import it from here
 export type { FormData }
+
+// ✅ NEW: Helper function to transform API variants to form variants
+const transformApiVariantsToFormVariants = (apiVariants: any[]) => {
+  return apiVariants
+    .filter(v => v.color && v.size) // ✅ Only include variants with both color and size
+    .map(v => ({
+      id: v.id,
+      color: v.color.name,
+      size: v.size.size,
+      sku: v.sku,
+      stock: v.stock || 0,
+      price: v.price || 0,
+      salePrice: v.salePrice || 0,
+      cost: v.cost || 0,
+      colorHex: v.color.code
+    }))
+}
 
 export function ProductForm({ product, initialStep = 1, onStepChange  }: ProductFormProps) {
   const router = useRouter()
@@ -48,7 +65,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     description: product?.description || "",
     selectedColors: product?.colors || [],
     selectedSizes: product?.sizes || [],
-    variants: product?.variants || [],
+    variants: product?.variants ? transformApiVariantsToFormVariants(product.variants) : [],
     images: product?.images?.map((img, i) => ({
       id: img.id || `img_init_${i}`,
       url: img.url,
@@ -56,6 +73,17 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       isPrimary: i === 0,
       sortOrder: img.sortOrder ?? i
     })) || [],
+    models: product?.threeDModels?.map((model, i) => {
+      // Find matching color by colorCode
+      const matchingColor = product?.colors?.find(c => c.code === model.colorCode);
+      return {
+        id: model.id || `model_init_${i}`,
+        colorId: matchingColor?.id || null,
+        url: model.url,
+        fileName: model.url.split('/').pop() || `model_${i}.glb`,
+        fileSize: 0, // API doesn't provide file size
+      };
+    }) || [],
     model3d: undefined,
   })
 
@@ -105,6 +133,16 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null
     }))
 
+    // ✅ Build 3D models payload with colorId and colorCode lookup
+    const modelsForApi = (data.models || [])
+      .filter(model => model.colorId && model.url) // Only include models with both colorId and url
+      .map(model => ({
+        url: model.url,
+        colorId: model.colorId,
+        colorCode: model.colorId ? colorCodeMap.get(model.colorId) ?? null : null
+      }))
+      .filter(model => model.colorCode !== null) // Remove any models without valid color codes
+
     let payload: any = { status: isFinalSubmission ? finalStatus : "draft" }
 
     if (step === 1) {
@@ -115,18 +153,61 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         // ⭐ Send the most granular category ID to the backend
         ...(data.categoryId && { subcategoryItem: data.categoryId })
       }
-    } else if (step === 2) {
-      payload = {
-        colors: colorsForApi,
-        sizes: sizesForApi,
-      }
-    } else if (step === 3) {
-      payload = {
+    }   // Step 2: Variants (Colors, Sizes, and Variant details)
+  if (step === 2) {
+    // Build color payload
+    const colorsForApi = data.selectedColors.map(color => ({
+      name: color.name,
+      code: color.code,
+    }))
+
+    // Build size payload  
+    const sizesForApi = data.selectedSizes.map(size => ({
+      size: size.size,
+      dimensions: size.dimensions ? {
+        length: size.dimensions.length ? parseFloat(size.dimensions.length) : null,
+        width: size.dimensions.width ? parseFloat(size.dimensions.width) : null,
+        height: size.dimensions.height ? parseFloat(size.dimensions.height) : null,
+        unit: size.dimensions.unit || 'cm'
+      } : null,
+      sizeChart: size.sizeChartUrl || null,
+    }))
+
+    // Build variants payload using your UpdateVariantStockDto structure
+    const variantsForApi = data.variants.map(variant => ({
+      // If variant has an ID, it's an update; otherwise it's a create
+      ...(variant.id && { id: variant.id }),
+      
+      // Required fields
+      colorName: variant.color,  // Match color by name
+      sizeName: variant.size,    // Match size by name
+      sku: variant.sku,
+      stock: variant.stock,
+      
+      // Optional price fields
+      price: variant.price > 0 ? variant.price : undefined,
+      salePrice: variant.salePrice > 0 ? variant.salePrice : undefined,
+      cost: variant.cost > 0 ? variant.cost : undefined,
+      
+      // Material (from product level or variant level)
+      // material: data.material || undefined,
+      
+      // Dimensions (if applicable - from size)
+      // Note: This might be redundant if dimensions are on size level
+    }))
+
+    return {
+      colors: colorsForApi,
+      sizes: sizesForApi,
+      variants: variantsForApi,
+    }
+  } else if (step === 3) {
+      return {
         images: imagesForApi,
-        model3d: data.model3d,
+        threeDModels: modelsForApi.length > 0 ? modelsForApi : undefined,
       }
     } else if (step === 4 && isFinalSubmission) {
-      payload = {
+      return {
         status: finalStatus
       }
     }
@@ -142,34 +223,54 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       // Merge the new values with existing formData
       const updatedFormData = { ...formData, ...values }
       
-      
       // Update the state for UI consistency
       updateFormData(values)
 
       if (isCreateMode && currentStep === 1) {
         // CREATE MODE: First step creates product and routes to edit page
         const createPayload = buildPayload(1, updatedFormData, false)
-        const response = await createProduct(createPayload)
-        
-        
-        // Route to edit page with step 2
-        router.push(`/products/edit/${response.id}?step=2`)
-        
+        const response = await createProduct(createPayload)       
+        router.push(`/products/edit/${response.id}?step=2`) // Route to edit page with step 2
       } else if (!isCreateMode) {
-        // EDIT MODE: Update existing product
-        const payload = buildPayload(currentStep, updatedFormData, false)
+        // EDIT MODE
+        if (currentStep === 2) {
+          // ⭐ Use dedicated variants endpoint for Step 2
+          const variantsPayload = buildPayload(2, updatedFormData, false);
+          console.log('🚀 Sending variants payload:', variantsPayload);
+          await updateProductVariants(product.id, variantsPayload);
+          
+        } else {
+          // Use regular update endpoint for other steps
+          const payload = buildPayload(currentStep, updatedFormData, false);
+          await updateProduct(product.id, payload);
+        }     
         
-        await updateProduct(product.id, payload)
-        
-        
-        // ✅ CRITICAL FIX: Refetch product data to get fresh IDs
+        // Refetch fresh data
         if (onStepChange) {
           const freshProduct = await onStepChange()
-          
           
           if (freshProduct) {
             // ✅ Update formData with fresh API data (real database IDs)
             const updates: Partial<FormData> = {}
+
+            // Update colors with real IDs
+            if (freshProduct.colors && currentStep === 2) {
+              updates.selectedColors = freshProduct.colors;
+            }
+
+            // Update sizes with real IDs
+            if (freshProduct.sizes && currentStep === 2) {
+              updates.selectedSizes = freshProduct.sizes;
+            }
+
+            // Update variants with real IDs
+            if (freshProduct.variants && currentStep === 2) {
+              updates.variants = transformApiVariantsToFormVariants(freshProduct.variants);
+            }
+
+            if (Object.keys(updates).length > 0) {
+              updateFormData(updates);
+            }
             
             // ✅ STEP 2 → 3: Map old temporary color IDs to new database IDs
             if (freshProduct.colors && currentStep === 2) {
@@ -186,7 +287,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 
                 if (matchingNewColor) {
                   colorMapping.set(oldColor.id, matchingNewColor.id)
-                } else {
                 }
               })
               
@@ -202,6 +302,18 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                     return { ...img, colorId: newColorId }
                   } else {
                     return img
+                  }
+                })
+              }
+
+              // ✅ CRITICAL: Remap existing 3D models to use new color IDs
+              if (formData.models && formData.models.length > 0) {
+                updates.models = formData.models.map(model => {
+                  if (model.colorId && colorMapping.has(model.colorId)) {
+                    const newColorId = colorMapping.get(model.colorId)!
+                    return { ...model, colorId: newColorId }
+                  } else {
+                    return model
                   }
                 })
               }
@@ -222,15 +334,27 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 sortOrder: img.sortOrder ?? i
               }))
             }
+
+            // ✅ Sync 3D models from API (Step 3 only)
+            if (freshProduct.threeDModels && currentStep === 3) {
+              updates.models = freshProduct.threeDModels.map((model, i) => {
+                // Find matching color by colorCode
+                const matchingColor = freshProduct.colors?.find(c => c.code === model.colorCode);
+                return {
+                  id: model.id || `model_${i}`,
+                  colorId: matchingColor?.id || null,
+                  url: model.url,
+                  fileName: model.url.split('/').pop() || `model_${i}.glb`,
+                  fileSize: 0, // API doesn't provide file size
+                };
+              });
+            }
             
             // Apply all updates at once
             if (Object.keys(updates).length > 0) {
               updateFormData(updates)
-            } else {
             }
-          } else {
           }
-        } else {
         }
         
         if (currentStep < 4) {
@@ -260,7 +384,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       if (!isCreateMode && product?.id) {
         router.push(`/products/edit/${product.id}?step=${prevStep}`)
       }
-      
+       
       scrollToTop()
     } else {
       // Going back from step 1 returns to products list

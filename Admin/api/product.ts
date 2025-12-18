@@ -183,3 +183,21 @@ export const deleteProduct = async (
         throw error;
     }
 };
+
+export async function updateProductVariants(productId: string, data: any) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${productId}/variants`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      // Add auth headers if needed
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to update variants');
+  }
+
+  return response.json();
+}

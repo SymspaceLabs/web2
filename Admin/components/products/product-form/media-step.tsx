@@ -3,12 +3,14 @@
 import type React from "react"
 import { ArrowRight } from "lucide-react" 
 import { useRef, useState } from "react"
-import { Upload, X, Star, Loader2 } from "lucide-react"
+import { Upload, X, Star, Loader2, Box } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import type { FormData } from "@/components/products/product-form"
 import { toast } from "@/components/ui/use-toast"
+import { uploadProductModel } from "@/services/modelUploadService"
+import { useEffect } from "react"
 
 // Add type for images with loading state
 type ImageWithLoading = {
@@ -18,6 +20,17 @@ type ImageWithLoading = {
   isPrimary: boolean;
   sortOrder: number;
   isUploading?: boolean;
+}
+
+// Add type for 3D models
+type ModelWithLoading = {
+  id: string;
+  url: string;
+  colorId: string | null;
+  fileName: string;
+  fileSize: number;
+  isUploading?: boolean;
+  uploadProgress?: number;
 }
 
 /**
@@ -292,11 +305,140 @@ function ImageGrid({
   )
 }
 
+function ColorModelSection({
+  color,
+  model,
+  onUpload,
+  onDelete
+}: {
+  color: { id: string; name: string; code: string }
+  model: ModelWithLoading | null
+  onUpload: (file: File) => void
+  onDelete: () => void
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  }
+  
+  return (
+    <div className="border rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-6 h-6 rounded-full border-2 border-gray-300"
+            style={{ backgroundColor: color.code }}
+          />
+          <Label className="text-base font-medium">{color.name}</Label>
+          {!model && (
+            <span className="text-xs text-muted-foreground">No 3D model</span>
+          )}
+        </div>
+        
+        {model && !model.isUploading && (
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={onDelete}
+          >
+            <X className="h-4 w-4 mr-2" />
+            Remove
+          </Button>
+        )}
+      </div>
+
+      {!model ? (
+        <div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".glb,.gltf"
+            onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])}
+            className="hidden"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => fileInputRef.current?.click()}
+            className="w-full"
+          >
+            <Upload className="h-4 w-4 mr-2" />
+            Upload 3D Model (.glb, .gltf)
+          </Button>
+        </div>
+      ) : model.isUploading ? (
+        <div className="bg-blue-50 border border-blue-200 rounded p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-blue-900">Uploading {model.fileName}...</p>
+              <p className="text-xs text-blue-700">{formatFileSize(model.fileSize)}</p>
+            </div>
+          </div>
+          <div className="w-full bg-blue-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${model.uploadProgress || 0}%` }}
+            />
+          </div>
+          <p className="text-xs text-blue-700 mt-2 text-right">{model.uploadProgress || 0}%</p>
+        </div>
+      ) : (
+        <div className="bg-green-50 border border-green-200 rounded p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                <Box className="h-5 w-5 text-green-600" />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <svg className="w-4 h-4 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <span className="text-sm font-medium text-green-800">Uploaded Successfully</span>
+              </div>
+              <p className="text-xs text-gray-600 truncate">{model.fileName}</p>
+              <p className="text-xs text-gray-500">{formatFileSize(model.fileSize)}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaStepProps) {
   const [dragActive, setDragActive] = useState(false);
   const [viewMode, setViewMode] = useState<"byColor" | "allImages">("byColor");
   const [isUploading, setIsUploading] = useState(false);
   const sharedImageInputRef = useRef<HTMLInputElement>(null);
+  
+  // ✅ Initialize models from formData with proper loading state
+  const [models, setModels] = useState<ModelWithLoading[]>(
+    (formData.models || []).map(m => ({ 
+      ...m, 
+      isUploading: false,
+      uploadProgress: 100 // Pre-populated models are already uploaded
+    }))
+  );
+
+  // ✅ Sync models when formData.models changes (e.g., after API refresh)
+  useEffect(() => {
+    if (formData.models && formData.models.length > 0) {
+      setModels(formData.models.map(m => ({ 
+        ...m, 
+        isUploading: false,
+        uploadProgress: 100
+      })));
+    }
+  }, [formData.models]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -411,28 +553,78 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
     setIsUploading(false);
   }
 
-  const removeImage = (index: number) => {
-    const newImages = formData.images.filter((_, i) => i !== index)
-    if (formData.images[index].isPrimary && newImages.length > 0) {
-      newImages[0].isPrimary = true
-    }
-    updateFormData({ images: newImages })
-  }
+  const processAndUploadModel = async (file: File, colorId: string) => {
+    const placeholderModel: ModelWithLoading = {
+      id: `uploading-${Date.now()}`,
+      url: '',
+      colorId: colorId,
+      fileName: file.name,
+      fileSize: file.size,
+      isUploading: true,
+      uploadProgress: 0,
+    };
 
-  const setPrimaryImage = (index: number) => {
-    const newImages = formData.images.map((img, i) => ({
-      ...img,
-      isPrimary: i === index,
-    }))
-    updateFormData({ images: newImages })
-  }
+    setModels(prev => [...prev.filter(m => m.colorId !== colorId), placeholderModel]);
+
+    try {
+      const url = await uploadProductModel(file, (progress) => {
+        setModels(prev => prev.map(m =>
+          m.id === placeholderModel.id
+            ? { ...m, uploadProgress: progress }
+            : m
+        ));
+      });
+
+      const newModel: ModelWithLoading = {
+        id: `model-${Date.now()}`,
+        url: url,
+        colorId: colorId,
+        fileName: file.name,
+        fileSize: file.size,
+        isUploading: false,
+      };
+
+      setModels(prev => prev.map(m =>
+        m.id === placeholderModel.id ? newModel : m
+      ));
+
+      toast({
+        title: "Model Uploaded",
+        description: `${file.name} uploaded successfully.`,
+      });
+
+    } catch (error) {
+      console.error("Model upload failed:", error);
+      setModels(prev => prev.filter(m => m.id !== placeholderModel.id));
+      
+      toast({
+        title: "Upload Failed",
+        description: error instanceof Error ? error.message : "Could not upload 3D model.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const removeModel = (colorId: string) => {
+    setModels(prev => prev.filter(m => m.colorId !== colorId));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // ✅ Filter out uploading models and prepare final payload
+    const finalModels = models
+      .filter(m => !m.isUploading && m.url) // Only include successfully uploaded models
+      .map(m => ({
+        colorId: m.colorId,
+        url: m.url,
+        fileName: m.fileName,
+        fileSize: m.fileSize,
+      }));
+
     const stepThreeData: Partial<FormData> = {
         images: formData.images,
-        model3d: formData.model3d,
+        models: finalModels,
     };
     
     await onNext(stepThreeData)
@@ -655,23 +847,29 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         )}
       </div>
 
-      {/* 3D Model Upload (Optional) */}
-      <div className="space-y-2">
-        <Label htmlFor="model3d">
-          3D Model <span className="text-muted-foreground text-xs">(Optional)</span>
-        </Label>
-        <Input
-          id="model3d"
-          type="file"
-          accept=".glb,.gltf"
-          onChange={(e) => {
-            if (e.target.files?.[0]) {
-              updateFormData({ model3d: URL.createObjectURL(e.target.files[0]) })
-            }
-          }}
-        />
-        <p className="text-xs text-muted-foreground">Supported formats: GLB, GLTF</p>
-      </div>
+      {/* 3D Models by Color Section */}
+      {viewMode === "byColor" && formData.selectedColors.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 pt-6 border-t">
+            <Box className="h-5 w-5 text-primary" />
+            <h3 className="text-lg font-semibold">3D Models by Color</h3>
+            <span className="text-xs text-muted-foreground">(Optional)</span>
+          </div>
+          <p className="text-sm text-muted-foreground">Upload a 3D model for each color variant to enhance the product experience.</p>
+          
+          <div className="space-y-4">
+            {formData.selectedColors.map((color) => (
+              <ColorModelSection
+                key={color.id}
+                color={color}
+                model={models.find(m => m.colorId === color.id) || null}
+                onUpload={(file) => processAndUploadModel(file, color.id)}
+                onDelete={() => removeModel(color.id)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Validation Messages */}
       {formData.selectedColors.length > 0 && (
@@ -696,6 +894,8 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
           <li>Use arrow buttons to reorder images</li>
           <li>Shared images appear for all color variants</li>
           <li>Recommended: 800x800px minimum, square aspect ratio</li>
+          <li>3D models are optional but provide an immersive experience</li>
+          <li>Supported 3D formats: .glb, .gltf (GLB recommended for better compression)</li>
         </ul>
       </div>
 
@@ -703,8 +903,8 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         <Button type="button" variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button type="submit" disabled={isUploading}>
-          {isUploading ? "Uploading..." : "Next Step"}
+        <Button type="submit" disabled={isUploading || models.some(m => m.isUploading)}>
+          {isUploading || models.some(m => m.isUploading) ? "Uploading..." : "Next Step"}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>

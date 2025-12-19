@@ -6,7 +6,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BlobBox } from "@/components/BlobBox";
 
-export default function ArticlePageView({ slug }) {
+export default function ArticleDetailsPageView({ slug }) {
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
 

@@ -1,1 +1,1 @@
-export { default } from "./article-details";
+export { default as ArticleDetailsPageView } from "./article-details";

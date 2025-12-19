@@ -10,6 +10,6 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
-export default function Article() {
+export default function Articles() {
   return <ArticlesPageView />;
 }

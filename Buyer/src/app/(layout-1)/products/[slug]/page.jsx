@@ -2,7 +2,7 @@
 // Product Details Component
 // ================================================
 
-import { ProductDetailsPageView } from "../../../../pages-sections/product-details/page-view";
+import { ProductDetailsPageView } from "@/pages-sections/product-details/page-view";
 
 export const metadata = {
   title: "Product Details",
@@ -16,6 +16,7 @@ export const metadata = {
 
 export default async function ProductDetails({params}) {
   const { slug } = await params;
+  
   return (
     <ProductDetailsPageView slug={slug} />
   )

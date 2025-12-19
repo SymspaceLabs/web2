@@ -10,9 +10,7 @@ export class UploadController {
     private readonly uploadService: UploadService,
   ) {}
 
-  /**
-   * Upload a file to MinIO and return signed URL
-   */
+  // Upload a file to MinIO and return signed URL
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {

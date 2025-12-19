@@ -10,7 +10,14 @@ import { BoxLink } from "@/pages-sections/sessions/components";
 import { DateToString } from "@/services/formatDate";
 
 export default function Section1({ article }) {
-  const formattedContent = article.content.replace(/\\n/g, "\n");
+
+  // If the article prop isn't loaded yet, don't try to render the rest
+  if (!article || !article.content) {
+    return <Typography>Loading...</Typography>; 
+  }
+
+  // If article or content is missing, it defaults to an empty string
+  const formattedContent = article?.content?.replace(/\\n/g, "\n") || "";
 
   return (
     <FlexColCenter sx={{ minHeight:'75vh', py: 4, px:{xs:2,sm:0}, pt: {xs:'100px', sm:'100px', md:'200px'}  }}>

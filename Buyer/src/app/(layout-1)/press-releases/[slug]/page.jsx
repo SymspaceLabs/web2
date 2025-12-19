@@ -1,4 +1,4 @@
-import ArticleDetailsPageView from "@/pages-sections/article-details/page-view";
+import { ArticleDetailsPageView } from "@/pages-sections/article-details/page-view";
 
 export const metadata = {
   title: "Press Releases",

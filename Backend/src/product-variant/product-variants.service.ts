@@ -186,6 +186,14 @@ export class ProductVariantsService {
       status = 'Low stock';
       statusColor = '#00B934';
     }
+
+    // ========================================
+    // NEW: Add pricing information
+    // ========================================
+    const hasSale = 
+      variant.salePrice !== null && 
+      variant.salePrice > 0 && 
+      variant.salePrice < variant.price;
   
     return {
       variantId: variant.id,
@@ -193,6 +201,11 @@ export class ProductVariantsService {
       available: variant.stock > 0,
       status,
       statusColor,
+      price: variant.price,           // Regular price
+      salePrice: variant.salePrice,   // Sale price (can be null)
+      cost: variant.cost,             // Cost (optional, for admin/internal use)
+      hasSale,                        // Boolean flag for convenience
+      sku: variant.sku,               // SKU for tracking
     };
   }
 

@@ -17,6 +17,7 @@ import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProd
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { UpdateProductVariantsDto, VariantInputDto } from './dto/update-product-variants.dto';
+import { DisplayPrice } from './types/display-price.types';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -417,7 +418,6 @@ export class ProductsService {
     }
 
     // 2. Apply the category, search term, and GENDER filters
-        
     const filterAppliedButNoMatch = await this.applyCategoryFilters(
       productsQuery,
       categorySlug,
@@ -434,7 +434,7 @@ export class ProductsService {
       this.applyGenderFilter(productsQuery, genders); 
     }
 
-    // ⭐ Apply Age Group Filter (UPDATED LOGIC)
+    // Apply Age Group Filter (UPDATED LOGIC)
     if (ageGroups && ageGroups.length > 0) {
         this.applyAgeGroupFilter(productsQuery, ageGroups); 
     }
@@ -462,8 +462,11 @@ export class ProductsService {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
 
-      // ⭐ NEW LOGIC: Calculate and add the 'availability' attribute
+      // Calculate and add the 'availability' attribute
       product.availability = determineProductAvailability(product);
+
+      // Calculate display pricing
+      product.displayPrice = this.calculateDisplayPrice(product);
     }
 
     // 6. Generate facets using the shared logic
@@ -522,15 +525,16 @@ export class ProductsService {
       throw new NotFoundException(`Product with slug ${slug} not found`);
     }
 
-    // Sort sizes by sortOrder before returning
+    // Sort by sortOrder
     if (product.sizes) {
       product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
     }
-
-    // Sort images by sortOrder before returning
     if (product.images) {
       product.images.sort((a, b) => a.sortOrder - b.sortOrder);
     }
+
+    // ✅ Calculate and attach display price
+    (product as any).displayPrice = this.calculateDisplayPrice(product);
 
     return product;
   }
@@ -574,6 +578,105 @@ export class ProductsService {
       product,
     };
   }
+
+  // ======================================================
+  // Calculates the display price for a product based on its variants
+  // @param product - Product entity with variants loaded
+  // @returns DisplayPrice object with formatting and pricing logic
+  // ======================================================
+  private calculateDisplayPrice(product: Product): DisplayPrice {
+    const variants = product.variants || [];
+    
+    // Fallback to product-level pricing if no variants
+    if (variants.length === 0) {
+      const hasSale = !!product.salePrice && product.salePrice < product.price;
+      return {
+        minPrice: product.salePrice || product.price || 0,
+        maxPrice: product.salePrice || product.price || 0,
+        displayType: 'single',
+        formattedDisplay: this.formatPrice(product.salePrice || product.price || 0),
+        hasSale,
+        originalMinPrice: hasSale ? product.price : undefined,
+        originalMaxPrice: hasSale ? product.price : undefined,
+      };
+    }
+
+    // Filter out-of-stock variants (optional - remove if you want to show all prices)
+    const availableVariants = variants.filter(v => v.stock > 0);
+    const variantsToUse = availableVariants.length > 0 ? availableVariants : variants;
+
+    // Extract current and original prices
+    const currentPrices = variantsToUse.map(v => v.salePrice || v.price).filter(p => p > 0);
+    const originalPrices = variantsToUse.map(v => v.price).filter(p => p > 0);
+    
+    if (currentPrices.length === 0) {
+      return {
+        minPrice: 0,
+        maxPrice: 0,
+        displayType: 'single',
+        formattedDisplay: 'Price not available',
+        hasSale: false,
+      };
+    }
+
+    const minPrice = Math.min(...currentPrices);
+    const maxPrice = Math.max(...currentPrices);
+    const originalMin = Math.min(...originalPrices);
+    const originalMax = Math.max(...originalPrices);
+    
+    // Check if any variant has a sale
+    const hasSale = variantsToUse.some(v => v.salePrice && v.salePrice < v.price);
+    
+    // Calculate price spread percentage
+    const priceSpread = minPrice > 0 ? ((maxPrice - minPrice) / minPrice) * 100 : 0;
+    
+    // Single price point
+    if (minPrice === maxPrice) {
+      return {
+        minPrice,
+        maxPrice,
+        displayType: 'single',
+        formattedDisplay: this.formatPrice(minPrice),
+        hasSale,
+        originalMinPrice: hasSale ? originalMin : undefined,
+        originalMaxPrice: hasSale ? originalMax : undefined,
+      };
+    }
+    
+    // Small price variance (< 10%) - show "From" pricing
+    if (priceSpread < 10) {
+      return {
+        minPrice,
+        maxPrice,
+        displayType: 'from',
+        formattedDisplay: `From ${this.formatPrice(minPrice)}`,
+        hasSale,
+        originalMinPrice: hasSale ? originalMin : undefined,
+        originalMaxPrice: hasSale ? originalMax : undefined,
+      };
+    }
+    
+    // Significant price range - show full range
+    return {
+      minPrice,
+      maxPrice,
+      displayType: 'range',
+      formattedDisplay: `${this.formatPrice(minPrice)} - ${this.formatPrice(maxPrice)}`,
+      hasSale,
+      originalMinPrice: hasSale ? originalMin : undefined,
+      originalMaxPrice: hasSale ? originalMax : undefined,
+    };
+  }
+
+  // ======================================================
+  // Formats price with currency symbol
+  // ======================================================
+  private formatPrice(price: number, currency: string = 'USD'): string {
+    const symbols = { USD: '$', EUR: '€', GBP: '£' };
+    const symbol = symbols[currency] || '$';
+    return `${symbol}${price.toFixed(2)}`;
+  }
+
   
   // products.service.ts - FIXED VERSION
   async updateProductVariants(

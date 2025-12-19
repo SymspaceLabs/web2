@@ -34,8 +34,6 @@ export default function ProductInfoArea({
   openModal
 }) {
   const {
-    price,
-    salePrice,
     colors,
     sizes,
     description,
@@ -43,9 +41,34 @@ export default function ProductInfoArea({
     company,
     sizeFit,
     sizeChart,
+    displayPrice
   } = product || {};
 
-  const hasSale = salePrice > 0 && salePrice < price;
+  // ========================================
+  // DYNAMIC PRICE LOGIC
+  // ========================================
+  const getDisplayPrice = () => {
+    // If variant is selected and loaded, show exact variant price
+    if (availability && selectedColor && selectedSize) {
+      return {
+        current: availability.hasSale ? availability.salePrice : availability.price,
+        original: availability.price,
+        hasSale: availability.hasSale,
+        isVariantPrice: true
+      };
+    }
+    
+    // Otherwise, show the base display price
+    return {
+      current: displayPrice.minPrice,
+      original: displayPrice.originalMinPrice,
+      hasSale: displayPrice.hasSale,
+      isVariantPrice: false
+    };
+  };
+
+  const priceInfo = getDisplayPrice();
+
 
   return (
     <>
@@ -75,8 +98,58 @@ export default function ProductInfoArea({
           <Paragraph lineHeight="1">(50)</Paragraph>
         </FlexBox>
 
+        {/* ======================================== */}
+        {/* DYNAMIC PRICE & STOCK DISPLAY */}
+        {/* ======================================== */}
+        <FlexBox alignItems="center" gap={1} mb={2} flexWrap="wrap">
+          {/* Loading State */}
+          {loadingAvailability && selectedColor && selectedSize ? (
+            <CircularProgress size={20} />
+          ) : (
+            <>
+              {/* Current Price */}
+              <Paragraph sx={styles.price}>
+                {priceInfo.isVariantPrice 
+                  ? currency(priceInfo.current)
+                  : `${currency(priceInfo.current)}`
+                }
+              </Paragraph>
+
+              {/* Original Price (Strikethrough if on sale) */}
+              {priceInfo.hasSale && (
+                <Paragraph sx={styles.strikethrough}>
+                  {currency(priceInfo.original)}
+                </Paragraph>
+              )}
+
+              {/* Show price range when no variant selected and prices vary */}
+              {!priceInfo.isVariantPrice && 
+               displayPrice.minPrice !== displayPrice.maxPrice && (
+                <Paragraph 
+                  sx={{ 
+                    fontSize: 12, 
+                    color: 'text.secondary',
+                    fontStyle: 'italic'
+                  }}
+                >
+                  (${displayPrice.minPrice} - ${displayPrice.maxPrice})
+                </Paragraph>
+              )}
+            </>
+          )}
+
+          {/* Availability Status */}
+          {selectedColor && selectedSize && availability && availability.status && (
+            <Box sx={styles.statusPill}>
+              <H1 fontSize="14px" color={availability.statusColor}>
+                {availability.status}
+              </H1>
+            </Box>
+          )}
+        </FlexBox>
+
         {/* PRICE & STOCK */}
-        <FlexBox alignItems="center" gap={1} mb={2}>
+        {/* <FlexBox alignItems="center" gap={1} mb={2}>
           <Paragraph sx={styles.price}>
             {hasSale ? currency(salePrice) : currency(price)}
           </Paragraph>
@@ -84,7 +157,6 @@ export default function ProductInfoArea({
             <Paragraph sx={styles.strikethrough}>{currency(price)}</Paragraph>
           )}
 
-          {/* Availabilty Status */}
           {selectedColor && selectedSize && availability?.stock < 10 && (
             <Box sx={styles.statusPill}>
               <H1 fontSize="14px" color={availability?.statusColor}>
@@ -96,101 +168,73 @@ export default function ProductInfoArea({
               </H1>
             </Box>
           )}
-        </FlexBox>
+        </FlexBox> */}
 
-        {/*Color*/}
-        {/* <FlexCol gap={1} mb={2}>
-          <Paragraph mb={1} fontSize="24px" color="#353535">
-            Select Color
-          </Paragraph>
-          <FlexBox>
-            {colors.map((color) => (
-              <Tooltip key={color.id} title={color.name || color.code} arrow>
-                <Button
-                  onClick={() => handleColorSelect(color)}
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "50%",
-                    backgroundColor: color.code,
-                    border:
-                      selectedColor.id === color.id
-                        ? "3px solid black"
-                        : "1px solid grey",
-                    margin: "0 5px",
-                    "&:hover": {
-                      backgroundColor: color.code,
-                    },
-                  }}
-                />
-              </Tooltip>
-            ))}
-          </FlexBox>
-        </FlexCol> */}
-
+        {/* COLOR SELECTION */}
         <FlexCol gap={1} mb={2}>
           <Paragraph mb={1} fontSize="18px" color="#353535" sx={{ fontWeight: 600 }}>
             SELECT COLOR
           </Paragraph>
           <FlexBox sx={{ gap: 1 }}>
-            {colors.map((color) => (
-              <Tooltip key={color.id} title={color.name || color.code} arrow>
-                <Button
-                  onClick={() => handleColorSelect(color)}
-                  sx={{
-                    minWidth: 0,
-                    padding: "8px 12px",
-                    borderRadius: "10px",
-                    textTransform: "none",
-                    
-                    // --- UPDATED SELECTED COLOR LOGIC ---
-                    // Set the border color based on selection status
-                    borderColor: selectedColor.id === color.id ? "rgba(0,0,0,0.25)" : "transparent",
-                    
-                    color: "text.primary",
-                    "&:hover": {
-                      borderColor: selectedColor.id === color.id ? "rgba(0,0,0,0.25)" : "transparent",
-                      // backgroundColor: "rgba(0,0,0,0.25)",
-                    },
-                    
-                    // Background color for the selected state
-                    backgroundColor: selectedColor.id === color.id ? "white" : "transparent",
+            {colors.map((color) => {
+              // Determine if this specific pill is selected
+              const isSelected = selectedColor?.id === color.id;
 
-                    
-                    // Special styling for the selected button's outline
-                    ...(selectedColor.id === color.id && {
-                      borderWidth: "1.5px", // Make the border slightly thicker/more prominent when selected
-                      // Use a dark grey/black shadow to mimic the solid outline in the reference
-                      boxShadow: (theme) => `0 0 0 1.5px ${theme.palette.grey[900]}`, 
-                    }),
-                  }}
-                >
-                  <Box // Container for the color circle and text
+              return (
+                <Tooltip key={color.id} title={color.name || color.code} arrow>
+                  <Button
+                    onClick={() => handleColorSelect(color)}
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 0.5,
+                      minWidth: 0,
+                      padding: "8px 12px",
+                      borderRadius: "50px",
+                      textTransform: "none",
+                      backgroundColor: "white",
+                      color: "text.primary",
+                      
+                      // --- UPDATED BORDER LOGIC ---
+                      border: "2px solid",
+                      borderColor: isSelected ? "#0366FE" : "#D1D5DB", // Blue if selected, Grey if not
+                      
+                      "&:hover": {
+                        backgroundColor: "white",
+                        borderColor: isSelected ? "#0366FE" : "#9CA3AF", // Darker grey on hover if not selected
+                      },
+
+                      // Ensure the border stays visible in MUI buttons
+                      "&.MuiButton-root": {
+                        border: "2px solid",
+                        borderColor: isSelected ? "#0366FE" : "#D1D5DB",
+                      }
                     }}
                   >
-                    {/* The small color circle */}
                     <Box
                       sx={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: "50%",
-                        backgroundColor: color.code,
-                        border: "1px solid rgba(0, 0, 0, 0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
                       }}
-                    />
-                    
-                    {/* The color label */}
-                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                      {color.name}
-                    </Typography>
-                  </Box>
-                </Button>
-              </Tooltip>
-            ))}
+                    >
+                      {/* The small color circle */}
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: "50%",
+                          backgroundColor: color.code,
+                          border: "1px solid rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                      
+                      {/* The color label */}
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {color.name}
+                      </Typography>
+                    </Box>
+                  </Button>
+                </Tooltip>
+              );
+            })}
           </FlexBox>
         </FlexCol>
 

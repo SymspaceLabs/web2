@@ -30,6 +30,7 @@ import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
 import { getBlogs, deleteBlog } from "@/api/blog"
 import { Blog } from "@/types/blog"
 import { toast } from "sonner"
+import { API_ENDPOINTS, authFetch } from "@/lib/api"
 
 const ITEMS_PER_PAGE = 10
 
@@ -52,10 +53,10 @@ export default function BlogsPage() {
     async function fetchBlogs() {
       try {
         setLoading(true)
-        const blogsData = await getBlogs()
-        setBlogs(blogsData)
+        const response = await authFetch(API_ENDPOINTS.blogs)
+        setBlogs(response)
 
-        const uniqueTags = [...new Set(blogsData.map(b => b.tag).filter(Boolean))]
+        const uniqueTags = [...new Set(response.map(b => b.tag).filter(Boolean))]
         setTags(uniqueTags as string[])
       } catch (err) {
         console.error("Error fetching blogs:", err)

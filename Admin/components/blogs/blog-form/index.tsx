@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Save, FileText } from "lucide-react"
+import { ArrowLeft, Save, Bold, Italic, List, ListOrdered, Link as LinkIcon, Image as ImageIcon, Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -15,12 +15,16 @@ import { toast } from "sonner"
 
 type BlogFormProps = {
   blog?: Blog
+  onBlogUpdate?: () => Promise<Blog | void>
 }
 
-export function BlogForm({ blog }: BlogFormProps) {
+export function BlogForm({ blog, onBlogUpdate }: BlogFormProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
   const isEditMode = !!blog
+  const editorRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState<BlogFormData>({
     title: blog?.title || "",
@@ -38,6 +42,125 @@ export function BlogForm({ blog }: BlogFormProps) {
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof BlogFormData, string>>>({})
+
+  /**
+   * Uploads a raw File object to the Minio backend and returns the resulting URL.
+   * @param {File} file - The raw file object from the user's input.
+   * @returns {Promise<string>} The permanent public URL of the uploaded file.
+   */
+  const uploadFileToBackend = async (file: File): Promise<string> => {
+    const formData = new FormData()
+    formData.append('file', file)
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/file`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status: ${response.status}`)
+      }
+
+      const data = await response.json()
+      return data.url
+    } catch (error) {
+      console.error("Image upload failed:", error)
+      throw error
+    }
+  }
+
+  // Handle file selection and upload
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+    if (!validTypes.includes(file.type)) {
+      toast.error("Invalid file type", {
+        description: "Please upload a valid image file (JPG, PNG, GIF, or WebP)",
+      })
+      return
+    }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024
+    if (file.size > maxSize) {
+      toast.error("File too large", {
+        description: "Please upload an image smaller than 5MB",
+      })
+      return
+    }
+
+    setUploadingImage(true)
+    try {
+      const imageUrl = await uploadFileToBackend(file)
+      updateFormData('image', imageUrl)
+      
+      toast.success("Image uploaded", {
+        description: "Your featured image has been uploaded successfully",
+      })
+    } catch (error) {
+      toast.error("Upload failed", {
+        description: "Failed to upload image. Please try again.",
+      })
+    } finally {
+      setUploadingImage(false)
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  // Remove uploaded image
+  const handleRemoveImage = () => {
+    updateFormData('image', '')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  // Trigger file input click
+  const triggerFileUpload = () => {
+    fileInputRef.current?.click()
+  }
+  useEffect(() => {
+    if (editorRef.current && formData.content) {
+      editorRef.current.innerHTML = formData.content
+    }
+  }, [])
+
+  // Rich text editor commands
+  const execCommand = (command: string, value?: string) => {
+    document.execCommand(command, false, value)
+    editorRef.current?.focus()
+  }
+
+  const insertLink = () => {
+    const url = prompt('Enter URL:')
+    if (url) {
+      execCommand('createLink', url)
+    }
+  }
+
+  const insertImage = () => {
+    const url = prompt('Enter image URL:')
+    if (url) {
+      execCommand('insertImage', url)
+    }
+  }
+
+  const handleEditorInput = () => {
+    if (editorRef.current) {
+      const content = editorRef.current.innerHTML
+      setFormData(prev => ({ ...prev, content }))
+      if (errors.content) {
+        setErrors(prev => ({ ...prev, content: undefined }))
+      }
+    }
+  }
 
   const updateFormData = (field: keyof BlogFormData, value: string | number) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -91,6 +214,29 @@ export function BlogForm({ blog }: BlogFormProps) {
     try {
       if (isEditMode && blog) {
         await updateBlog(blog.id, formData)
+        
+        // ✅ Refetch fresh data after update
+        if (onBlogUpdate) {
+          const freshBlog = await onBlogUpdate()
+          if (freshBlog) {
+            // Update form with fresh data from server
+            setFormData({
+              title: freshBlog.title || "",
+              nickname: freshBlog.nickname || "",
+              content: freshBlog.content || "",
+              image: freshBlog.image || "",
+              newsType: freshBlog.newsType || 1,
+              author: freshBlog.author || "",
+              slug: freshBlog.slug || "",
+              handle_url: freshBlog.handle_url || "",
+              handle_url_title: freshBlog.handle_url_title || "",
+              article_source_url: freshBlog.article_source_url || "",
+              author_url: freshBlog.author_url || "",
+              tag: freshBlog.tag || "",
+            })
+          }
+        }
+        
         toast.success("Blog updated", {
           description: "Your blog post has been successfully updated.",
         })
@@ -183,46 +329,216 @@ export function BlogForm({ blog }: BlogFormProps) {
                 )}
               </div>
 
-              {/* Content */}
+              {/* Content - Rich Text Editor */}
               <div className="space-y-2">
                 <Label htmlFor="content">
                   Content <span className="text-destructive">*</span>
                 </Label>
-                <Textarea
-                  id="content"
-                  placeholder="Enter blog content"
-                  value={formData.content}
-                  onChange={(e) => updateFormData('content', e.target.value)}
-                  rows={12}
-                  className={errors.content ? "border-destructive" : ""}
+                
+                {/* Editor Toolbar */}
+                <div className="border rounded-t-md bg-muted/50 p-2 flex items-center gap-1 flex-wrap">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => execCommand('bold')}
+                    title="Bold"
+                  >
+                    <Bold className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => execCommand('italic')}
+                    title="Italic"
+                  >
+                    <Italic className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => execCommand('underline')}
+                    title="Underline"
+                  >
+                    <span className="text-sm font-bold underline">U</span>
+                  </Button>
+                  <div className="w-px h-6 bg-border mx-1" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => execCommand('insertUnorderedList')}
+                    title="Bullet List"
+                  >
+                    <List className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={() => execCommand('insertOrderedList')}
+                    title="Numbered List"
+                  >
+                    <ListOrdered className="h-4 w-4" />
+                  </Button>
+                  <div className="w-px h-6 bg-border mx-1" />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={insertLink}
+                    title="Insert Link"
+                  >
+                    <LinkIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0"
+                    onClick={insertImage}
+                    title="Insert Image"
+                  >
+                    <ImageIcon className="h-4 w-4" />
+                  </Button>
+                  <div className="w-px h-6 bg-border mx-1" />
+                  <Select
+                    value=""
+                    onValueChange={(value) => execCommand('formatBlock', value)}
+                  >
+                    <SelectTrigger className="h-8 w-32 text-xs">
+                      <SelectValue placeholder="Paragraph" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="p">Paragraph</SelectItem>
+                      <SelectItem value="h1">Heading 1</SelectItem>
+                      <SelectItem value="h2">Heading 2</SelectItem>
+                      <SelectItem value="h3">Heading 3</SelectItem>
+                      <SelectItem value="h4">Heading 4</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {/* Content Editable Area */}
+                <div
+                  ref={editorRef}
+                  contentEditable
+                  onInput={handleEditorInput}
+                  className={`min-h-[300px] max-h-[500px] overflow-y-auto border rounded-b-md p-4 prose prose-sm max-w-none focus:outline-none focus:ring-2 focus:ring-ring ${
+                    errors.content ? "border-destructive" : ""
+                  }`}
+                  style={{
+                    wordBreak: 'break-word',
+                  }}
                 />
                 {errors.content && (
                   <p className="text-sm text-destructive">{errors.content}</p>
                 )}
+                <p className="text-xs text-muted-foreground">
+                  Use the toolbar above to format your content
+                </p>
               </div>
 
-              {/* Image URL */}
+              {/* Featured Image Upload */}
               <div className="space-y-2">
-                <Label htmlFor="image">Featured Image URL</Label>
-                <Input
-                  id="image"
-                  type="url"
-                  placeholder="https://example.com/image.jpg"
-                  value={formData.image}
-                  onChange={(e) => updateFormData('image', e.target.value)}
+                <Label htmlFor="image">Featured Image</Label>
+                
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                  onChange={handleImageUpload}
+                  className="hidden"
                 />
-                {formData.image && (
-                  <div className="mt-2 w-full h-48 rounded bg-muted flex items-center justify-center overflow-hidden">
-                    <img 
-                      src={formData.image} 
-                      alt="Preview"
+                
+                {/* Upload/Preview Area */}
+                {!formData.image ? (
+                  <div
+                    onClick={triggerFileUpload}
+                    className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors hover:border-primary hover:bg-muted/50 ${
+                      uploadingImage ? 'pointer-events-none opacity-50' : ''
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                        {uploadingImage ? (
+                          <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
+                        ) : (
+                          <Upload className="h-5 w-5 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {uploadingImage ? 'Uploading...' : 'Click to upload image'}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          PNG, JPG, GIF or WebP (max 5MB)
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden bg-muted group">
+                    <img
+                      src={formData.image}
+                      alt="Featured image preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.src = "https://via.placeholder.com/400x200?text=Invalid+Image+URL"
                       }}
                     />
+                    {/* Overlay with actions */}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={triggerFileUpload}
+                        disabled={uploadingImage}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Change Image
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={handleRemoveImage}
+                        disabled={uploadingImage}
+                      >
+                        <X className="h-4 w-4 mr-2" />
+                        Remove
+                      </Button>
+                    </div>
                   </div>
                 )}
+                
+                {/* Manual URL Input (Optional) */}
+                <div className="pt-2">
+                  <details className="text-sm">
+                    <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                      Or enter image URL manually
+                    </summary>
+                    <div className="mt-2">
+                      <Input
+                        type="url"
+                        placeholder="https://example.com/image.jpg"
+                        value={formData.image}
+                        onChange={(e) => updateFormData('image', e.target.value)}
+                        disabled={uploadingImage}
+                      />
+                    </div>
+                  </details>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -342,7 +658,8 @@ export function BlogForm({ blog }: BlogFormProps) {
                   Cancel
                 </Button>
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   disabled={loading}
                   className="flex-1 gap-2"
                 >

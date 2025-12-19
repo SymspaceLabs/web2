@@ -26,11 +26,6 @@ export function EditProductClient({ initialId }: { initialId: string }) {
         }
 
         setProduct(response || {})
-        console.log('Product fetched:', response)
-        console.log('Category IDs:', {
-          subcategoryItemId: response?.subcategoryItemId,
-          subcategoryItemChildId: response?.subcategoryItemChildId
-        })
       } catch (err) {
         console.error("[EditProduct] Error fetching product:", err)
         setError("Failed to load product. Please try again.")

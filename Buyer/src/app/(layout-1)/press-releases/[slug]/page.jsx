@@ -1,3 +1,7 @@
+// ================================================
+// Article Details Component
+// ================================================
+
 import { ArticleDetailsPageView } from "@/pages-sections/article-details/page-view";
 
 export const metadata = {
@@ -10,6 +14,10 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
-export default function Article({params}) {
-  return <ArticleDetailsPageView slug={params.slug} />;
+export default async function ArticleDetails({params}) {
+  const { slug } = await params;
+
+  return (
+    <ArticleDetailsPageView slug={slug} />
+  );
 }

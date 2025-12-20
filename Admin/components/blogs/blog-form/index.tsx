@@ -10,8 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { createBlog, updateBlog } from "@/api/blog"
-import { Blog, BlogFormData } from "@/types/blog"
+import { Blog, BlogFormData } from "@/types/blog.types"
 import { toast } from "sonner"
+import { uploadImage } from "@/api/upload"
 
 type BlogFormProps = {
   blog?: Blog
@@ -49,21 +50,8 @@ export function BlogForm({ blog, onBlogUpdate }: BlogFormProps) {
    * @returns {Promise<string>} The permanent public URL of the uploaded file.
    */
   const uploadFileToBackend = async (file: File): Promise<string> => {
-    const formData = new FormData()
-    formData.append('file', file)
-
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/file`, {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        throw new Error(`Upload failed with status: ${response.status}`)
-      }
-
-      const data = await response.json()
-      return data.url
+      return await uploadImage(file)
     } catch (error) {
       console.error("Image upload failed:", error)
       throw error

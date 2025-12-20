@@ -257,7 +257,13 @@ export class ProductsService {
           const mappedSizeDtos = sizes.map((s, index) => ({
               size: s.size,
               sortOrder: s.sortOrder !== undefined ? s.sortOrder : index,
-              sizeChartUrl: s.sizeChartUrl || null,
+              sizeChartUrl: s.sizeChart || null,
+              dimensions: s.dimensions ? {
+                  length: s.dimensions.length || null,
+                  width: s.dimensions.width || null,
+                  height: s.dimensions.height || null,
+                  unit: s.dimensions.unit || 'cm'
+              } : null,
           }));
           
           if (id) {
@@ -768,6 +774,12 @@ export class ProductsService {
       size: s.size,
       sortOrder: i,
       sizeChartUrl: s.sizeChart || null,
+      dimensions: s.dimensions ? {
+          length: s.dimensions.length || null,
+          width: s.dimensions.width || null,
+          height: s.dimensions.height || null,
+          unit: s.dimensions.unit || 'cm'
+      } : null,
     }));
     const mergedSizes = await this.mergeProductSizes(product, mappedSizes);
     product.sizes = mergedSizes;
@@ -958,14 +970,24 @@ export class ProductsService {
       return mergedColors;
   }
 
-  /**
-   * Merges incoming sizes with existing sizes, preserving IDs when possible.
-   * Only creates new entities for truly new sizes.
-   * Deletes sizes that were removed.
-   */
+  // ============================================================================
+  // Merges incoming sizes with existing sizes, preserving IDs when possible.
+  // Only creates new entities for truly new sizes.
+  // Deletes sizes that were removed.
+  // ============================================================================
   private async mergeProductSizes(
-      product: Product,
-      incomingSizes: Array<{ size: string; sizeChartUrl?: string; sortOrder?: number }>
+    product: Product,
+    incomingSizes: Array<{ 
+        size: string;
+        sizeChartUrl?: string;
+        sortOrder?: number;
+        dimensions?: {
+            length?: string | null;
+            width?: string | null;
+            height?: string | null;
+            unit?: 'cm' | 'in';
+        } | null;
+    }>
   ): Promise<ProductSize[]> {
     const existingSizes = product.sizes || [];
     const mergedSizes: ProductSize[] = [];
@@ -978,18 +1000,24 @@ export class ProductsService {
         );
 
         if (existingSize) {
-            // ✅ PRESERVE: Size already exists, keep the same entity (and ID)
-            // Update mutable properties
+            //  UPDATE: Preserve existing, update mutable fields INCLUDING dimensions
             existingSize.size = incomingSize.size; // In case of capitalization changes
             existingSize.sizeChartUrl = incomingSize.sizeChartUrl || existingSize.sizeChartUrl;
             existingSize.sortOrder = incomingSize.sortOrder ?? existingSize.sortOrder;
+
+            // ✅ FIX: Handle dimensions update
+            if (incomingSize.dimensions !== undefined) {
+                existingSize.dimensions = incomingSize.dimensions;
+            }
             mergedSizes.push(existingSize);
+
         } else {
-            // ✅ CREATE: This is a new size, create a new entity
+            // CREATE: New size with dimensions
             const newSize = new ProductSize();
             newSize.size = incomingSize.size;
             newSize.sizeChartUrl = incomingSize.sizeChartUrl || null;
             newSize.sortOrder = incomingSize.sortOrder ?? mergedSizes.length;
+            newSize.dimensions = incomingSize.dimensions || null;  // ✅ FIX: Include dimensions
             newSize.product = product;
             mergedSizes.push(newSize);
         }

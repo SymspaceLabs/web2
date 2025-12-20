@@ -28,7 +28,7 @@ import {
 import { useRouter } from "next/navigation"
 import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
 import { getBlogs, deleteBlog } from "@/api/blog"
-import { Blog } from "@/types/blog"
+import { Blog } from "@/types/blog.types"
 import { toast } from "sonner"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
 

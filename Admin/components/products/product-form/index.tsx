@@ -114,14 +114,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     isFinalSubmission: boolean,
     finalStatus: "active" | "draft" | "archived" = "draft"
   ) => {
-    const colorsForApi = data.selectedColors.map(color => ({
-      name: color.name,
-      code: color.code,
-    }))
-    const sizesForApi = data.selectedSizes.map(size => ({
-      size: size.size,
-      sizeChartUrl: size.sizeChartUrl || null,
-    }))
+
     // ✅ Build a lookup map: colorId -> colorCode
     const colorCodeMap = new Map<string, string>()
     data.selectedColors.forEach(color => {

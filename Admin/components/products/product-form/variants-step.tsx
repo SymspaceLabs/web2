@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { uploadImage } from "@/api/upload"
+import { ImageUploader } from "@/components/products/product-form/components/image-uploader"
 
 // Mock FormData type - replace with your actual type
 type FormData = {
@@ -96,7 +98,9 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     height: "",
     unit: "cm" as 'cm' | 'in',
     sizeChartUrl: ""
-  })
+  });
+  const [isUploadingSizeChart, setIsUploadingSizeChart] = useState(false)
+
   
   const [expandedColors, setExpandedColors] = useState<Set<string>>(new Set())
   
@@ -240,15 +244,20 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     return Math.round(profit * 100) / 100
   }
 
-  const handleSizeImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSizeImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      setNewSizeData(prev => ({ ...prev, sizeChartUrl: reader.result as string }))
+    setIsUploadingSizeChart(true)
+    
+    try {
+      const url = await uploadImage(file)
+      setNewSizeData(prev => ({ ...prev, sizeChartUrl: url }))
+    } catch (error) {
+      alert('Upload failed. Please try again.')
+    } finally {
+      setIsUploadingSizeChart(false)
     }
-    reader.readAsDataURL(file)
   }
 
   const openAddSizeModal = () => {
@@ -720,47 +729,17 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                 </select>
               </div>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="sizeChart">Size Chart Image (Optional)</Label>
-              <div className="flex items-center gap-3">
-                <label 
-                  htmlFor="sizeChart" 
-                  className="flex items-center gap-2 px-4 py-2 border rounded-md cursor-pointer hover:bg-muted"
-                >
-                  <Upload className="h-4 w-4" />
-                  <span className="text-sm">Upload Image</span>
-                  <input
-                    id="sizeChart"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleSizeImageUpload}
-                    className="hidden"
-                  />
-                </label>
-                {newSizeData.sizeChartUrl && (
-                  <span className="text-xs text-green-600 flex items-center gap-1">
-                    ✓ Image uploaded
-                  </span>
-                )}
-              </div>
-              {newSizeData.sizeChartUrl && (
-                <div className="mt-2 relative w-full h-40 border rounded-md overflow-hidden">
-                  <img 
-                    src={newSizeData.sizeChartUrl} 
-                    alt="Size chart preview" 
-                    className="w-full h-full object-contain"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setNewSizeData(prev => ({ ...prev, sizeChartUrl: "" }))}
-                    className="absolute top-2 right-2 p-1 bg-destructive text-white rounded-full hover:bg-destructive/90"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </div>
-              )}
-            </div>
+            <ImageUploader
+              label="Size Chart Image (Optional)"
+              description="Upload a size chart for this size"
+              currentImageUrl={newSizeData.sizeChartUrl}
+              onUploadComplete={(url) => setNewSizeData(prev => ({ ...prev, sizeChartUrl: url }))}
+              onRemove={() => setNewSizeData(prev => ({ ...prev, sizeChartUrl: "" }))}
+              uploadFunction={uploadImage}
+              maxSizeMB={5}
+              aspectRatio="auto"
+              showPreview={true}
+            />
           </div>
 
           <DialogFooter>

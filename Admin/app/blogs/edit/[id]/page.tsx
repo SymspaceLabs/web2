@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { BlogForm } from "@/components/blogs/blog-form"
 import { ProtectedLayout } from "@/components/protected-layout"
 import { getBlog } from "@/api/blog"
-import { Blog } from "@/types/blog"
+import { Blog } from "@/types/blog.types"
 
 export default function EditBlogClient() {
   const params = useParams()

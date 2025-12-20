@@ -145,23 +145,31 @@ export function mapProductColors(colorsDto: CreateProductColorDto[], product: Pr
     });
 }
 
-export function mapProductSizes(sizesDto: CreateProductSizeDto[], product: Product): ProductSize[] {
-    if (!sizesDto || sizesDto.length === 0) return [];
+export function mapProductSizes(
+  sizeDtos: Array<{ 
+    size: string; 
+    sizeChartUrl?: string | null; 
+    sortOrder?: number;
+    dimensions?: {
+      length?: string | null;
+      width?: string | null;
+      height?: string | null;
+      unit?: 'cm' | 'in';
+    } | null;
+  }>,
+  product: Product
+): ProductSize[] {
+  return sizeDtos.map((sizeDto, index) => {
+    const size = new ProductSize();
+    size.size = sizeDto.size;
+    size.sizeChartUrl = sizeDto.sizeChartUrl || null;
+    size.sortOrder = sizeDto.sortOrder !== undefined ? sizeDto.sortOrder : index;
     
-    return sizesDto.map((dto, i) => {
-        const productSize = new ProductSize();
-        
-        productSize.size = dto.size; 
-        
-        // ⭐ NEW: Assign the sizeChartUrl if it exists in the DTO
-        productSize.sizeChartUrl = dto.sizeChartUrl || null; 
-        
-        // Use the DTO's sortOrder if provided, otherwise use the array index
-        productSize.sortOrder = dto.sortOrder !== undefined ? dto.sortOrder : i;
-        
-        productSize.product = product;
-        
-        return productSize;
-    });
+    // ✅ FIX: Map dimensions
+    size.dimensions = sizeDto.dimensions || null;
+    
+    size.product = product;
+    return size;
+  });
 }
 

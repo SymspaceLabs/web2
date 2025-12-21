@@ -27,7 +27,6 @@ export default function EditProductClient() {
       setLoading(true)
       const data = await getProduct(productId)
       setProduct(data)
-      console.log('✅ Product loaded:', data)
     } catch (error) {
       console.error('Failed to load product:', error)
     } finally {
@@ -37,10 +36,8 @@ export default function EditProductClient() {
 
     // ✅ THIS IS THE CRITICAL FIX: Refetch handler
   const handleStepChange = async (): Promise<Product | void> => {
-    console.log('🔄 Refetching product after step change...')
     try {
       const freshData = await getProduct(productId)
-      console.log('✅ Fresh product data fetched:', freshData)
       
       // Update local state
       setProduct(freshData)

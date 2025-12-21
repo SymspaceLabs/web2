@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { BasicInfoStep } from "@/components/products/product-form/basic-info-step"
-import { VariantsStep } from "@/components/products/product-form/variants-step"
 import { MediaStep } from "@/components/products/product-form/media-step"
 import { ReviewStep } from "@/components/products/product-form/review-step"
+import { VariantsStep } from "@/components/products/product-form/variants-step"
+import { BasicInfoStep } from "@/components/products/product-form/basic-info-step"
 import { updateProduct, createProduct, updateProductVariants } from "@/api/product"
 
 // ✅ Import shared types instead of redefining them
@@ -164,6 +164,10 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         unit: size.dimensions.unit || 'cm'
       } : null,
       sizeChart: size.sizeChartUrl || null,
+      productWeight: size.productWeight ? {  // ✅ CORRECT - Separate field
+        value: size.productWeight.value,
+        unit: size.productWeight.unit
+      } : null
     }))
 
     // Build variants payload using your UpdateVariantStockDto structure
@@ -229,7 +233,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         if (currentStep === 2) {
           // ⭐ Use dedicated variants endpoint for Step 2
           const variantsPayload = buildPayload(2, updatedFormData, false);
-          console.log('🚀 Sending variants payload:', variantsPayload);
           await updateProductVariants(product.id, variantsPayload);
           
         } else {

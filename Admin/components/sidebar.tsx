@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { LayoutDashboard, Users, Package, LogOut, X, Store, Newspaper } from "lucide-react"
+import { LayoutDashboard, Users, Package, LogOut, X, Store, Newspaper, BriefcaseBusiness } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/context/auth-context"
 
@@ -11,6 +11,7 @@ const NAVIGATION = [
   { name: "Products", href: "/products", icon: Package },
   { name: "Sellers", href: "/sellers", icon: Store },
   { name: "Blogs", href: "/blogs", icon: Newspaper },
+  { name: "Jobs", href: "/jobs", icon: BriefcaseBusiness },
 ]
 
 export function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

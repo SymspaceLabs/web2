@@ -35,7 +35,6 @@ export default function CreateUserPage() {
 
     // Simulate API call: POST /users
     setTimeout(() => {
-      console.log("Creating user:", formData)
       setLoading(false)
       router.push("/users")
     }, 500)

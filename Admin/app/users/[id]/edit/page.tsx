@@ -34,7 +34,6 @@ export default function EditUserPage() {
 
     // Simulate API call: PUT /users/:id
     setTimeout(() => {
-      console.log("Updating user:", formData)
       setLoading(false)
       router.push("/users/1")
     }, 500)

@@ -16,7 +16,13 @@ import { ImageUploader } from "@/components/products/product-form/components/ima
 // Mock FormData type - replace with your actual type
 type FormData = {
   selectedColors: Array<{ id: string; name: string; code: string }>
-  selectedSizes: Array<{ id: string; size: string; dimensions?: any; sizeChartUrl?: string }>
+  selectedSizes: Array<{ 
+    id: string; 
+    size: string; 
+    dimensions?: any; 
+    sizeChartUrl?: string;
+    productWeight?: { value: number | null; unit: 'kg' | 'lbs' }
+  }>
   variants: VariantRow[]
   material?: string
 }
@@ -43,6 +49,10 @@ interface Size {
     height?: string
     unit?: 'cm' | 'in'
   }
+  productWeight?: {
+    value: number | null // ✅ Must be number, not string
+    unit: 'kg' | 'lbs'
+  } | null
   sizeChartUrl?: string
 }
 
@@ -55,6 +65,15 @@ interface VariantRow {
   salePrice: number
   cost: number
   colorHex?: string
+}
+
+// Helper function to convert weight units
+const convertWeight = (value: number, fromUnit: 'kg' | 'lbs', toUnit: 'kg' | 'lbs'): number => {
+  if (fromUnit === toUnit) return value
+  if (fromUnit === 'lbs' && toUnit === 'kg') {
+    return value * 0.453592 // lbs to kg
+  }
+  return value * 2.20462 // kg to lbs
 }
 
 export function VariantsStep({ formData, updateFormData, onNext, onBack }: VariantsStepProps) {
@@ -73,9 +92,10 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           id: s.id,
           value: s.size,
           dimensions: s.dimensions,
+          productWeight: s.productWeight || { value: null, unit: 'kg' },
           sizeChartUrl: s.sizeChartUrl
         }))
-      : [{ id: "1", value: "One Size" }]
+      : []
   )
   
   const [material, setMaterial] = useState(formData.material || "")
@@ -97,6 +117,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     width: "",
     height: "",
     unit: "cm" as 'cm' | 'in',
+    weightValue: "",
+    weightUnit: "kg" as 'kg' | 'lbs',
     sizeChartUrl: ""
   });
   const [isUploadingSizeChart, setIsUploadingSizeChart] = useState(false)
@@ -268,6 +290,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       width: "",
       height: "",
       unit: "cm",
+      weightValue: "",
+      weightUnit: "kg",
       sizeChartUrl: ""
     })
     setIsSizeModalOpen(true)
@@ -284,13 +308,38 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       width: size.dimensions?.width || "",
       height: size.dimensions?.height || "",
       unit: size.dimensions?.unit || "cm",
+      // ✅ FIX: Handle null productWeight properly
+      weightValue: size.productWeight?.value?.toString() || "",
+      weightUnit: size.productWeight?.unit || "kg",
       sizeChartUrl: size.sizeChartUrl || ""
     })
     setIsSizeModalOpen(true)
   }
 
+  // Handle weight unit change with auto-conversion
+  const handleWeightUnitChange = (newUnit: 'kg' | 'lbs') => {
+    const currentValue = parseFloat(newSizeData.weightValue)
+    
+    if (!isNaN(currentValue) && currentValue > 0) {
+      const convertedValue = convertWeight(currentValue, newSizeData.weightUnit, newUnit)
+      setNewSizeData(prev => ({
+        ...prev,
+        weightValue: convertedValue.toFixed(2),
+        weightUnit: newUnit
+      }))
+    } else {
+      setNewSizeData(prev => ({ ...prev, weightUnit: newUnit }))
+    }
+  }
+
   const handleAddSize = () => {
-    if (!newSizeData.name.trim()) return
+    if (!newSizeData.name.trim()) return;
+
+    // Convert weight to kg for storage (SI unit)
+    const weightValue = parseFloat(newSizeData.weightValue)
+    const weightInKg = !isNaN(weightValue) && weightValue > 0
+      ? convertWeight(weightValue, newSizeData.weightUnit, 'kg')
+      : null
 
     const newSizeObj: Size = {
       id: Date.now().toString(),
@@ -301,6 +350,11 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         height: newSizeData.height || undefined,
         unit: newSizeData.unit
       } : undefined,
+      // ✅ FIX: Ensure this matches the backend DTO structure
+      productWeight: weightInKg !== null ? {
+        value: weightInKg,
+        unit: 'kg' as const  // ✅ Always kg for storage
+      } : null,  // ✅ Explicitly null, not undefined
       sizeChartUrl: newSizeData.sizeChartUrl || undefined
     }
     
@@ -312,6 +366,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       width: "",
       height: "",
       unit: "cm",
+      weightValue: "",
+      weightUnit: "kg",
       sizeChartUrl: ""
     })
     setEditingSizeId(null)
@@ -320,6 +376,12 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
 
   const handleUpdateSize = () => {
     if (!newSizeData.name.trim() || !editingSizeId) return
+
+    // Convert weight to kg for storage
+    const weightValue = parseFloat(newSizeData.weightValue)
+    const weightInKg = !isNaN(weightValue) && weightValue > 0
+      ? convertWeight(weightValue, newSizeData.weightUnit, 'kg')
+      : null
 
     const updatedSizes = sizes.map(size => {
       if (size.id !== editingSizeId) return size
@@ -333,7 +395,11 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           height: newSizeData.height || undefined,
           unit: newSizeData.unit
         } : undefined,
-        sizeChartUrl: newSizeData.sizeChartUrl || undefined
+        // ✅ FIX: Match the structure exactly
+        productWeight: weightInKg !== null ? {
+          value: weightInKg,
+          unit: 'kg' as const
+        } : null
       }
     })
     
@@ -345,6 +411,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       width: "",
       height: "",
       unit: "cm",
+      weightValue: "",
+      weightUnit: "kg",
       sizeChartUrl: ""
     })
     setEditingSizeId(null)
@@ -412,27 +480,32 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
     
-    const stepTwoData: Partial<FormData> = {
-        variants: variants,
-        material: material,
-        selectedColors: colors.map(c => ({
-            id: c.id,
-            name: c.name,
-            code: c.hex, 
-        })),
-        selectedSizes: sizes.map(s => ({
-            id: s.id,
-            size: s.value,
-            dimensions: s.dimensions,
-            sizeChartUrl: s.sizeChartUrl
-        })),
-    }
+  //   const stepTwoData: Partial<FormData> = {
+  //       variants: variants,
+  //       material: material,
+  //       selectedColors: colors.map(c => ({
+  //           id: c.id,
+  //           name: c.name,
+  //           code: c.hex, 
+  //       })),
+  //       selectedSizes: sizes.map(s => ({
+  //           id: s.id,
+  //           size: s.value,
+  //           dimensions: s.dimensions,
+  //           sizeChartUrl: s.sizeChartUrl,
+  //           // ✅ FIX: Ensure productWeight is properly included
+  //           productWeight: s.productWeight ? {
+  //             value: s.productWeight.value,
+  //             unit: s.productWeight.unit
+  //           } : null  // ✅ Send null if not set
+  //       })),
+  //   }
     
-    await onNext(stepTwoData)
-  }
+  //   await onNext(stepTwoData)
+  // }
 
   const getSizeDimensions = (sizeValue: string): string => {
     const size = sizes.find(s => s.value === sizeValue)
@@ -441,6 +514,42 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     const { length, width, height, unit } = size.dimensions
     const parts = [length, width, height].filter(Boolean)
     return parts.length > 0 ? `${parts.join(" × ")} ${unit}` : ""
+  }
+
+  const getSizeWeight = (sizeValue: string): string => {
+    const size = sizes.find(s => s.value === sizeValue)
+    if (!size?.productWeight?.value) return ""
+    
+    return `${size.productWeight.value.toFixed(2)} kg`
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+        
+    const stepTwoData: Partial<FormData> = {
+        variants: variants,
+        material: material,
+        selectedColors: colors.map(c => ({
+            id: c.id,
+            name: c.name,
+            code: c.hex, 
+        })),
+        selectedSizes: sizes.map(s => {
+          const mappedSize = {
+            id: s.id,
+            size: s.value,
+            dimensions: s.dimensions,
+            sizeChartUrl: s.sizeChartUrl,
+            productWeight: s.productWeight ? {
+              value: s.productWeight.value,
+              unit: s.productWeight.unit
+            } : null
+          }
+          return mappedSize
+        }),
+    }
+        
+    await onNext(stepTwoData)
   }
 
   return (
@@ -465,7 +574,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
 
       <div className="border-t" />
 
-      {/* Colors Section - NEW MODAL BASED */}
+      {/* Colors Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <Label className="text-base font-medium">Colors</Label>
@@ -530,7 +639,6 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           </DialogHeader>
           
           <div className="space-y-4 py-4">
-            {/* Color Name */}
             <div className="space-y-2">
               <Label htmlFor="colorName">Color Name *</Label>
               <Input
@@ -542,7 +650,6 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
               />
             </div>
 
-            {/* Color Hex Code */}
             <div className="space-y-2">
               <Label>Color Code *</Label>
               <div className="flex items-center gap-3">
@@ -569,7 +676,6 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
               </div>
             </div>
 
-            {/* Preview */}
             <div className="space-y-2">
               <Label>Preview</Label>
               <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/20">
@@ -633,6 +739,9 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                         .join(" × ")} {size.dimensions.unit}
                     </span>
                   )}
+                  {size.productWeight?.value && (
+                    <span className="text-xs text-blue-600">⚖️ {size.productWeight.value.toFixed(2)} kg</span>
+                  )}
                   {size.sizeChartUrl && (
                     <span className="text-xs text-blue-600">📊 Chart attached</span>
                   )}
@@ -675,6 +784,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
             width: "",
             height: "",
             unit: "cm",
+            weightValue: "",
+            weightUnit: "kg",
             sizeChartUrl: ""
           })
         }
@@ -684,8 +795,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
             <DialogTitle>{isSizeEditMode ? 'Edit Size' : 'Add New Size'}</DialogTitle>
             <DialogDescription>
               {isSizeEditMode 
-                ? 'Update size details, dimensions, and size chart image.'
-                : 'Add a size with optional dimensions and size chart image.'}
+                ? 'Update size details, dimensions, weight, and size chart image.'
+                : 'Add a size with optional dimensions, weight, and size chart image.'}
             </DialogDescription>
           </DialogHeader>
           
@@ -729,6 +840,35 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                 </select>
               </div>
             </div>
+
+            {/* NEW: Product Weight Input */}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Product Weight (Optional)</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="Weight"
+                  value={newSizeData.weightValue}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, weightValue: e.target.value }))}
+                  className="flex-1"
+                />
+                <select
+                  value={newSizeData.weightUnit}
+                  onChange={(e) => handleWeightUnitChange(e.target.value as 'kg' | 'lbs')}
+                  className="px-3 py-2 rounded-md border bg-background text-sm w-20"
+                >
+                  <option value="kg">kg</option>
+                  <option value="lbs">lbs</option>
+                </select>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Weight will be stored in kg (SI unit). Current: {newSizeData.weightValue && !isNaN(parseFloat(newSizeData.weightValue)) 
+                  ? `${convertWeight(parseFloat(newSizeData.weightValue), newSizeData.weightUnit, 'kg').toFixed(2)} kg`
+                  : 'N/A'}
+              </p>
+            </div>
+
             <ImageUploader
               label="Size Chart Image (Optional)"
               description="Upload a size chart for this size"
@@ -755,6 +895,8 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                   width: "",
                   height: "",
                   unit: "cm",
+                  weightValue: "",
+                  weightUnit: "kg",
                   sizeChartUrl: ""
                 })
               }}
@@ -938,6 +1080,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                         const index = variants.findIndex(v => v.color === variant.color && v.size === variant.size)
                         const profit = calculateProfit(variant)
                         const dimensions = getSizeDimensions(variant.size)
+                        const weight = getSizeWeight(variant.size)
                         
                         return (
                           <TableRow key={key} className="hover:bg-muted/30">
@@ -949,6 +1092,9 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                                   <div className="text-xs text-muted-foreground font-mono">{variant.sku}</div>
                                   {dimensions && (
                                     <div className="text-xs text-muted-foreground">{dimensions}</div>
+                                  )}
+                                  {weight && (
+                                    <div className="text-xs text-blue-600">⚖️ {weight}</div>
                                   )}
                                 </div>
                               </div>

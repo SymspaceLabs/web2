@@ -9,6 +9,12 @@ export interface SizeDimensions {
   unit?: 'cm' | 'in';
 }
 
+// Type for productWeight in dimensions
+export interface ProductWeight {
+  value: number | null;
+  unit: 'kg' | 'lbs'; // Always stored as kg in database
+}
+
 @Entity()
 export class ProductSize {
   @PrimaryGeneratedColumn('uuid')
@@ -25,6 +31,9 @@ export class ProductSize {
 
   @Column({ type: 'json', nullable: true })
   dimensions: SizeDimensions | null;
+
+  @Column('json', { nullable: true })
+  productWeight: ProductWeight | null;
 
   @ManyToOne(() => Product, (product) => product.sizes, {
     onDelete: 'CASCADE',

@@ -1,4 +1,4 @@
-// src/utils/product.utils.ts
+// src/products/utils/product.utils.ts
 
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/create-product.dto';
@@ -12,6 +12,16 @@ import { CreateProductColorDto } from 'src/product-colors/dto/create-product-col
 import { CreateProductSizeDto } from 'src/product-sizes/dto/create-product-size.dto';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
+
+// ============================================================================
+// Helper function to convert weight units
+// ============================================================================
+function convertWeightToKg(value: number | null, unit: 'kg' | 'lbs'): number | null {
+  if (value === null || value === undefined) return null;
+  if (unit === 'kg') return value;
+  // Convert lbs to kg (1 lb = 0.453592 kg)
+  return value * 0.453592;
+}
 
 // --------------------------------------------------------------------------
 // Helper 1: Resolves Category Hierarchy
@@ -117,8 +127,6 @@ export function applyTagDefaults(productData: any, tagDefaults: any): void {
     });
 }
 
-
-
 export function mapProduct3DModels(modelsDto: CreateProduct3dModelDto[], product: Product): Product3DModel[] {
     if (!modelsDto || modelsDto.length === 0) return [];
 
@@ -145,6 +153,7 @@ export function mapProductColors(colorsDto: CreateProductColorDto[], product: Pr
     });
 }
 
+// ✅ UPDATED: Now handles productWeight with unit conversion
 export function mapProductSizes(
   sizeDtos: Array<{ 
     size: string; 
@@ -156,20 +165,41 @@ export function mapProductSizes(
       height?: string | null;
       unit?: 'cm' | 'in';
     } | null;
+    productWeight?: {
+      value: number | null;
+      unit: 'kg' | 'lbs';
+    } | null;
   }>,
   product: Product
 ): ProductSize[] {
-  return sizeDtos.map((sizeDto, index) => {
+
+  const result = sizeDtos.map((sizeDto, index) => {
     const size = new ProductSize();
     size.size = sizeDto.size;
     size.sizeChartUrl = sizeDto.sizeChartUrl || null;
     size.sortOrder = sizeDto.sortOrder !== undefined ? sizeDto.sortOrder : index;
     
-    // ✅ FIX: Map dimensions
+    // Map dimensions
     size.dimensions = sizeDto.dimensions || null;
+    
+    // ✅ Map productWeight and convert to kg (SI unit)
+    if (sizeDto.productWeight) {
+      const convertedValue = convertWeightToKg(
+        sizeDto.productWeight.value,
+        sizeDto.productWeight.unit
+      );
+      size.productWeight = {
+        value: convertedValue,
+        unit: 'kg'
+      };
+      
+    } else {
+      size.productWeight = null;
+    }
     
     size.product = product;
     return size;
   });
-}
 
+  return result;
+}

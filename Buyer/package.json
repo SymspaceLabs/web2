@@ -58,6 +58,7 @@
     "react-scroll-parallax": "^3.4.5",
     "react-slick": "^0.30.1",
     "react-test-renderer": "^18.3.1",
+    "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "sharp": "^0.33.2",
     "simplebar-react": "^3.2.4",

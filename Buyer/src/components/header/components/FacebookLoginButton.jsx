@@ -66,8 +66,6 @@ const FacebookSigninButton = () => {
 
       const data = await result.json();
 
-      console.log("Backend Response:", data);
-
       // Handle the response: save user info and app's access token
       handleAuthResponse(data.user, data.accessToken);
 

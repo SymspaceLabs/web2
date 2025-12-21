@@ -20,6 +20,8 @@ export class SizeDto {
   @IsOptional()
   @IsString()
   sizeChart?: string;
+  
+  productWeight: any;
 }
 
 export class VariantInputDto {

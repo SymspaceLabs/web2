@@ -26,87 +26,93 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
-import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
-import { getBlogs, deleteBlog } from "@/api/blog"
-import { Blog } from "@/types/blog.types"
+import { Search, Plus, Eye, Edit, Trash2, MoreVertical, MapPin, Briefcase } from "lucide-react"
+import { Job } from "@/types/job.types"
 import { toast } from "sonner"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
+import { deleteJob } from "@/api/job"
 
 const ITEMS_PER_PAGE = 10
 
-export default function BlogsPage() {
+export default function JobsPage() {
   const router = useRouter()
-  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-  const [tagFilter, setTagFilter] = useState<string>("all")
+  const [jobTypeFilter, setJobTypeFilter] = useState<string>("all")
+  const [remoteWorkFilter, setRemoteWorkFilter] = useState<string>("all")
   const [currentPage, setCurrentPage] = useState(1)
-  const [tags, setTags] = useState<string[]>([])
+  const [jobTypes, setJobTypes] = useState<string[]>([])
+  const [remoteWorkPolicies, setRemoteWorkPolicies] = useState<string[]>([])
   
   // Delete confirmation dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [blogToDelete, setBlogToDelete] = useState<Blog | null>(null)
+  const [jobToDelete, setJobToDelete] = useState<Job | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    async function fetchBlogs() {
+    async function fetchJobs() {
       try {
         setLoading(true)
-        const response = await authFetch(API_ENDPOINTS.blogs)
-        setBlogs(response)
+        const response = await authFetch(API_ENDPOINTS.jobs)
+        setJobs(response)
 
-        const uniqueTags = [...new Set(response.map((b: Blog) => b.tag).filter(Boolean))]
-        setTags(uniqueTags as string[])
+        // Extract unique job types and remote work policies
+        const uniqueJobTypes = [...new Set(response.map((j: Job) => j.jobType).filter(Boolean))]
+        const uniqueRemoteWork = [...new Set(response.map((j: Job) => j.remoteWorkPolicy).filter(Boolean))]
+        setJobTypes(uniqueJobTypes as string[])
+        setRemoteWorkPolicies(uniqueRemoteWork as string[])
       } catch (err) {
-        console.error("Error fetching blogs:", err)
-        setError("Failed to load blogs. Please try again.")
+        console.error("Error fetching jobs:", err)
+        setError("Failed to load jobs. Please try again.")
       } finally {
         setLoading(false)
       }
     }
 
-    fetchBlogs()
+    fetchJobs()
   }, [])
 
-  const filteredBlogs = useMemo(() => {
-    return blogs.filter((blog) => {
+  const filteredJobs = useMemo(() => {
+    return jobs.filter((job) => {
       const matchesSearch = 
-        blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        blog.author.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesTag = tagFilter === "all" || blog.tag === tagFilter
-      return matchesSearch && matchesTag
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesJobType = jobTypeFilter === "all" || job.jobType === jobTypeFilter
+      const matchesRemoteWork = remoteWorkFilter === "all" || job.remoteWorkPolicy === remoteWorkFilter
+      return matchesSearch && matchesJobType && matchesRemoteWork
     })
-  }, [searchTerm, tagFilter, blogs])
+  }, [searchTerm, jobTypeFilter, remoteWorkFilter, jobs])
 
-  const totalPages = Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE)
-  const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+  const totalPages = Math.ceil(filteredJobs.length / ITEMS_PER_PAGE)
+  const paginatedJobs = filteredJobs.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
-  const handleDeleteClick = (blog: Blog) => {
-    setBlogToDelete(blog)
+  const handleDeleteClick = (job: Job) => {
+    setJobToDelete(job)
     setDeleteDialogOpen(true)
   }
 
   const handleConfirmDelete = async () => {
-    if (!blogToDelete) return
+    if (!jobToDelete) return
 
     setIsDeleting(true)
     try {
-      await deleteBlog(blogToDelete.id)
+      await deleteJob(jobToDelete.id)
       
-      setBlogs((prev) => prev.filter((b) => b.id !== blogToDelete.id))
+      setJobs((prev) => prev.filter((j) => j.id !== jobToDelete.id))
       
-      toast.success("Blog deleted", {
-        description: `${blogToDelete.title} has been successfully deleted.`,
+      toast.success("Job deleted", {
+        description: `${jobToDelete.title} has been successfully deleted.`,
       })
       
       setDeleteDialogOpen(false)
-      setBlogToDelete(null)
+      setJobToDelete(null)
     } catch (error) {
-      console.error("Failed to delete blog:", error)
+      console.error("Failed to delete job:", error)
       
       toast.error("Delete failed", {
-        description: "Failed to delete the blog. Please try again.",
+        description: "Failed to delete the job. Please try again.",
       })
     } finally {
       setIsDeleting(false)
@@ -115,7 +121,7 @@ export default function BlogsPage() {
 
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false)
-    setBlogToDelete(null)
+    setJobToDelete(null)
   }
 
   const truncateText = (text: string, maxLength: number) => {
@@ -127,7 +133,7 @@ export default function BlogsPage() {
     return (
       <ProtectedLayout>
         <div className="flex items-center justify-center min-h-screen">
-          <p className="text-muted-foreground">Loading blogs...</p>
+          <p className="text-muted-foreground">Loading jobs...</p>
         </div>
       </ProtectedLayout>
     )
@@ -148,12 +154,12 @@ export default function BlogsPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Blog Management</h1>
-            <p className="text-muted-foreground mt-2">Manage all blog posts and articles</p>
+            <h1 className="text-3xl font-bold tracking-tight">Job Management</h1>
+            <p className="text-muted-foreground mt-2">Manage all job postings and opportunities</p>
           </div>
-          <Button onClick={() => router.push("/blogs/create")} className="gap-2">
+          <Button onClick={() => router.push("/jobs/create")} className="gap-2">
             <Plus className="h-4 w-4" />
-            Create Blog
+            Create Job
           </Button>
         </div>
 
@@ -161,7 +167,7 @@ export default function BlogsPage() {
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder="Search by title or author..."
+              placeholder="Search by title or location..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value)
@@ -171,20 +177,39 @@ export default function BlogsPage() {
             />
           </div>
           <Select
-            value={tagFilter}
+            value={jobTypeFilter}
             onValueChange={(v) => {
-              setTagFilter(v)
+              setJobTypeFilter(v)
               setCurrentPage(1)
             }}
           >
-            <SelectTrigger className="w-full md:w-40 !h-12">
-              <SelectValue placeholder="Filter by tag" />
+            <SelectTrigger className="w-full md:w-48 !h-12">
+              <SelectValue placeholder="Filter by job type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Tags</SelectItem>
-              {tags.map((tag) => (
-                <SelectItem key={tag} value={tag}>
-                  {tag}
+              <SelectItem value="all">All Job Types</SelectItem>
+              {jobTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={remoteWorkFilter}
+            onValueChange={(v) => {
+              setRemoteWorkFilter(v)
+              setCurrentPage(1)
+            }}
+          >
+            <SelectTrigger className="w-full md:w-48 !h-12">
+              <SelectValue placeholder="Filter by remote work" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Remote Policies</SelectItem>
+              {remoteWorkPolicies.map((policy) => (
+                <SelectItem key={policy} value={policy}>
+                  {policy}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -193,9 +218,9 @@ export default function BlogsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Blogs ({filteredBlogs.length})</CardTitle>
+            <CardTitle>Jobs ({filteredJobs.length})</CardTitle>
             <CardDescription>
-              Showing {paginatedBlogs.length} of {filteredBlogs.length} blog posts
+              Showing {paginatedJobs.length} of {filteredJobs.length} job postings
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -203,48 +228,46 @@ export default function BlogsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Blog</TableHead>
-                    <TableHead>Author</TableHead>
-                    <TableHead>Tag</TableHead>
-                    <TableHead>News Type</TableHead>
-                    <TableHead>Created</TableHead>
+                    <TableHead>Job Title</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Job Type</TableHead>
+                    <TableHead>Experience</TableHead>
+                    <TableHead>Remote Work</TableHead>
+                    <TableHead>Visa Sponsorship</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {paginatedBlogs.map((blog) => (
-                    <TableRow key={blog.id}>
+                  {paginatedJobs.map((job) => (
+                    <TableRow key={job.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="w-16 h-16 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
-                            <img 
-                              src={blog.image} 
-                              alt={blog.title}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.src = "https://via.placeholder.com/150?text=No+Image"
-                              }}
-                            />
+                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <Briefcase className="h-5 w-5 text-primary" />
                           </div>
                           <div className="max-w-md">
-                            <p className="font-medium">{truncateText(blog.title, 60)}</p>
-                            {blog.nickname && (
-                              <p className="text-xs text-muted-foreground mt-1">{truncateText(blog.nickname, 40)}</p>
-                            )}
+                            <p className="font-medium">{truncateText(job.title, 50)}</p>
+                            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {truncateText(job.location, 30)}
+                            </p>
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm">{blog.author}</TableCell>
+                      <TableCell className="text-sm">{job.location}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary">{blog.tag}</Badge>
+                        <Badge variant="secondary">{job.jobType}</Badge>
                       </TableCell>
+                      <TableCell className="text-sm">{job.experience}</TableCell>
                       <TableCell>
-                        <Badge variant={blog.newsType === 1 ? "default" : "outline"}>
-                          Type {blog.newsType}
+                        <Badge variant={job.remoteWorkPolicy === "Fully Remote" ? "default" : "outline"}>
+                          {job.remoteWorkPolicy}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-sm">
-                        {new Date(blog.createdAt).toLocaleDateString()}
+                      <TableCell>
+                        <Badge variant={job.visaSponsorship === "Yes" ? "default" : "secondary"}>
+                          {job.visaSponsorship}
+                        </Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -255,21 +278,21 @@ export default function BlogsPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem 
-                              onClick={() => router.push(`/blogs/${blog.id}`)}
+                              onClick={() => router.push(`/jobs/${job.id}`)}
                               className="cursor-pointer"
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               View
                             </DropdownMenuItem>
                             <DropdownMenuItem 
-                              onClick={() => router.push(`/blogs/edit/${blog.id}`)}
+                              onClick={() => router.push(`/jobs/edit/${job.id}`)}
                               className="cursor-pointer"
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem 
-                              onClick={() => handleDeleteClick(blog)}
+                              onClick={() => handleDeleteClick(job)}
                               className="text-destructive focus:text-destructive cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
@@ -293,7 +316,7 @@ export default function BlogsPage() {
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This will permanently delete <span className="font-semibold">{blogToDelete?.title}</span> and remove
+                This will permanently delete <span className="font-semibold">{jobToDelete?.title}</span> and remove
                 all associated data. This action cannot be undone.
               </AlertDialogDescription>
             </AlertDialogHeader>
@@ -312,7 +335,7 @@ export default function BlogsPage() {
                 ) : (
                   <>
                     <Trash2 className="h-4 w-4" />
-                    Delete Blog
+                    Delete Job
                   </>
                 )}
               </AlertDialogAction>

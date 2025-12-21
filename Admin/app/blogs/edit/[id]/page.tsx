@@ -25,7 +25,6 @@ export default function EditBlogClient() {
       setLoading(true)
       const data = await getBlog(blogId)
       setBlog(data)
-      console.log('✅ Blog loaded:', data)
     } catch (error) {
       console.error('Failed to load blog:', error)
     } finally {
@@ -35,10 +34,8 @@ export default function EditBlogClient() {
 
   // ✅ Refetch handler for real-time updates after save
   const handleBlogUpdate = async (): Promise<Blog | void> => {
-    console.log('🔄 Refetching blog after update...')
     try {
       const freshData = await getBlog(blogId)
-      console.log('✅ Fresh blog data fetched:', freshData)
       
       // Update local state
       setBlog(freshData)

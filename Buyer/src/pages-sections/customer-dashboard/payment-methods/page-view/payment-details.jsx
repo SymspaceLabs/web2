@@ -42,7 +42,6 @@ export default function PaymentDetailsPageView() {
   // Use useEffect to set mounted to true after the component mounts on the client
   useEffect(() => {
     setMounted(true);
-    console.log("PaymentDetailsPageView mounted on client.");
   }, []); // Empty dependency array ensures this runs only once after initial render
 
   // --- Card Brand Detection Logic ---
@@ -84,13 +83,10 @@ export default function PaymentDetailsPageView() {
 
   // Simple Luhn algorithm implementation (for basic card number validation)
   const luhnCheck = (num) => {
-    console.log("Luhn Check: Input num =", num);
 
     const cleanNum = num.replace(/\D/g, '');
-    console.log("Luhn Check: Cleaned num =", cleanNum);
 
     if (cleanNum.length === 0) {
-        console.log("Luhn Check: Cleaned num is empty, returning false.");
         return false;
     }
 
@@ -110,8 +106,6 @@ export default function PaymentDetailsPageView() {
       }
       sum += digit;
     }
-    console.log("Luhn Check: Final sum =", sum);
-    console.log("Luhn Check: Result (sum % 10 === 0) =", sum % 10 === 0);
     return sum % 10 === 0;
   };
 
@@ -328,7 +322,6 @@ export default function PaymentDetailsPageView() {
       }
 
       const result = await response.json();
-      console.log("Card details saved successfully:", result);
 
       showSnackbar("Card details saved successfully!", "success");
 

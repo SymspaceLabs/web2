@@ -20,6 +20,15 @@ export class SizeDimensionsDto {
   unit?: 'cm' | 'in';
 }
 
+class ProductWeightDto {
+  @IsOptional()
+  @IsNumber()
+  value?: number | null;
+
+  @IsEnum(['kg', 'lbs'])
+  unit: 'kg' | 'lbs'; // Frontend can send either, backend converts to kg
+}
+
 export class CreateProductSizeDto {
   @IsString()
   size: string;
@@ -36,4 +45,9 @@ export class CreateProductSizeDto {
   @Type(() => SizeDimensionsDto)
   @IsOptional()
   dimensions?: SizeDimensionsDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ProductWeightDto)
+  productWeight?: ProductWeightDto;
 }

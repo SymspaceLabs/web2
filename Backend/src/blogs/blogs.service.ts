@@ -118,8 +118,6 @@ export class BlogsService {
     let successCount = 0;
     let failureCount = 0;
 
-    console.log(`📦 Starting bulk upload of ${createBlogDtos.length} blogs...`);
-
     // Process each blog individually with error handling
     for (let i = 0; i < createBlogDtos.length; i++) {
       const blogDto = createBlogDtos[i];
@@ -132,7 +130,6 @@ export class BlogsService {
         });
 
         if (existingBlog) {
-          console.log(`⚠️  [${index}] Skipped: ${blogDto.title} (slug already exists)`);
           results.push({
             index,
             title: blogDto.title,
@@ -148,7 +145,6 @@ export class BlogsService {
         const blog = this.blogRepository.create(blogDto);
         const savedBlog = await this.blogRepository.save(blog);
 
-        console.log(`✅ [${index}] Success: ${savedBlog.title}`);
         results.push({
           index,
           title: savedBlog.title,
@@ -171,9 +167,6 @@ export class BlogsService {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`\n📊 Bulk upload completed in ${duration}ms`);
-    console.log(`   ✅ Success: ${successCount}`);
-    console.log(`   ❌ Failed: ${failureCount}`);
 
     return {
       totalProcessed: createBlogDtos.length,
@@ -202,8 +195,6 @@ export class BlogsService {
     let successCount = 0;
     let failureCount = 0;
 
-    console.log(`📦 Starting transactional bulk upload of ${createBlogDtos.length} blogs...`);
-
     // Start a transaction
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -224,7 +215,6 @@ export class BlogsService {
         const index = i + 1;
 
         if (existingSlugs.has(blogDto.slug)) {
-          console.log(`⚠️  [${index}] Skipped: ${blogDto.title} (slug already exists)`);
           results.push({
             index,
             title: blogDto.title,
@@ -239,7 +229,6 @@ export class BlogsService {
         const blog = queryRunner.manager.create(Blog, blogDto);
         const savedBlog = await queryRunner.manager.save(blog);
 
-        console.log(`✅ [${index}] Success: ${savedBlog.title}`);
         results.push({
           index,
           title: savedBlog.title,
@@ -252,7 +241,6 @@ export class BlogsService {
 
       // Commit transaction
       await queryRunner.commitTransaction();
-      console.log('✅ Transaction committed successfully');
     } catch (error) {
       // Rollback on error
       await queryRunner.rollbackTransaction();
@@ -271,9 +259,6 @@ export class BlogsService {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`\n📊 Transactional bulk upload completed in ${duration}ms`);
-    console.log(`   ✅ Success: ${successCount}`);
-    console.log(`   ❌ Failed: ${failureCount}`);
 
     return {
       totalProcessed: createBlogDtos.length,
@@ -300,7 +285,6 @@ export class BlogsService {
     let successCount = 0;
     let failureCount = 0;
 
-    console.log(`📦 Starting bulk upsert of ${createBlogDtos.length} blogs...`);
 
     for (let i = 0; i < createBlogDtos.length; i++) {
       const blogDto = createBlogDtos[i];
@@ -320,14 +304,12 @@ export class BlogsService {
           savedBlog = await this.blogRepository.save(existingBlog);
           action = 'Updated';
           
-          console.log(`🔄 [${index}] Updated: ${savedBlog.title}`);
         } else {
           // Create new blog
           const blog = this.blogRepository.create(blogDto);
           savedBlog = await this.blogRepository.save(blog);
           action = 'Created';
           
-          console.log(`✅ [${index}] Created: ${savedBlog.title}`);
         }
 
         results.push({
@@ -353,9 +335,6 @@ export class BlogsService {
     }
 
     const duration = Date.now() - startTime;
-    console.log(`\n📊 Bulk upsert completed in ${duration}ms`);
-    console.log(`   ✅ Success: ${successCount}`);
-    console.log(`   ❌ Failed: ${failureCount}`);
 
     return {
       totalProcessed: createBlogDtos.length,

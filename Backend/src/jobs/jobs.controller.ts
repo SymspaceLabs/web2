@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { JobsService } from './jobs.service';
+import { JobsService, BulkCreateResult } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { Job } from './entities/job.entity';
@@ -11,6 +11,11 @@ export class JobsController {
   @Post()
   create(@Body() createJobDto: CreateJobDto) {
     return this.jobsService.create(createJobDto);
+  }
+
+  @Post('bulk')
+  async bulkCreate(@Body() createJobDtos: CreateJobDto[]): Promise<BulkCreateResult> {
+    return this.jobsService.bulkCreate(createJobDtos);
   }
 
   @Get()

@@ -38,10 +38,7 @@ export const createProduct = async (productData) => {
     const endpoint = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
     
     // Fallback for local development if NEXT_PUBLIC_BACKEND_URL isn't set,
-    // assuming it defaults to http://localhost:3000 as seen in your image.
     const url = process.env.NEXT_PUBLIC_BACKEND_URL ? endpoint : 'http://localhost:3000/products';
-
-    console.log("--- API CALL: CREATE PRODUCT ---", url);
 
     const response = await fetch(url, {
       method: 'POST',

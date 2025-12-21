@@ -10,7 +10,6 @@ const AppleSigninButton = () => {
 
   // ✅ New state to store currentHost
   const [currentHost, setCurrentHost] = useState("");
-  console.log(currentHost);
 
   // ✅ This only runs on client, so window is safe
   useEffect(() => {

@@ -16,6 +16,10 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
-export default function CompanyPage({params}) {
-  return <CompanyPageView slug={params.slug} />;
+export default async function CompanyPage({params}) {
+  const { slug } = await params;
+
+  return (
+    <CompanyPageView slug={slug} />
+  );
 }

@@ -75,7 +75,6 @@ export class CreditCardsController {
     @Delete(':id')
     @UseGuards(AuthGuard('jwt'))
     async remove(@Param('id') id: string, @Req() req: Request) {
-        console.log("REQ.USER:", req.user); // Add this line
         const userId = (req.user as any)?.id;
         if (!userId) {
             throw new UnauthorizedException('User not authenticated.');
@@ -97,10 +96,6 @@ export class CreditCardsController {
         @Param('id') id: string
     ): Promise<CreditCard[]> {
         const userId = (req.user as any)?.id; // This is the userId that gets passed to the service
-        console.log('--- setDefault Request Debug ---');
-        console.log('Card ID from Param:', id);
-        console.log('User ID from JWT (req.user):', userId); // <<< THIS IS THE VALUE YOU NEED TO CHECK
-        console.log('--------------------------------');
 
         if (!userId) {
             throw new UnauthorizedException('User ID not found in request. This route requires authentication.');

@@ -873,7 +873,6 @@ export class AuthService {
 
     await this.authRepository.update(user.id, { refreshToken: token });
 
-    console.log('reslocal', user);
     return {
       user: {
         ...user,

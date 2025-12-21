@@ -43,7 +43,6 @@ export class PaypalController {
         // 1. Update your database with the successful payment (e.g., mark order as paid).
         // 2. Clear user's cart (if not already done on frontend).
         // 3. Redirect user to a success page.
-        console.log('Payment captured successfully on backend:', captureResult);
         res.redirect('/orders?paymentStatus=success'); // Redirect to frontend success page
       } else {
         console.error('PayPal capture was not completed:', captureResult);
@@ -58,7 +57,6 @@ export class PaypalController {
   // Add a route to handle cancel from PayPal
   @Get('cancel')
   handleCancel(@Res() res: Response) {
-    console.log('PayPal payment cancelled by user.');
     res.redirect('/checkout?paymentStatus=cancelled'); // Redirect to frontend cancel page
   }
 }

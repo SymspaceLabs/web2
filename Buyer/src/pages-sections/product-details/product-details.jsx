@@ -57,8 +57,6 @@ export default function ProductDetails({ product }) {
 
     // Check if stock is available
     if (availability && availability.stock === 0) {
-      // Optionally, show a message to the user
-      console.log("Out of stock!");
       return;
     }
 
@@ -81,7 +79,6 @@ export default function ProductDetails({ product }) {
 
     // Check against the current stock before dispatching
     if (availability && newQty > availability.stock) {
-      console.log(`Only ${availability.stock} items available.`);
       return;
     }
 

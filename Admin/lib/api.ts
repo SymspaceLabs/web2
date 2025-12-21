@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
     login: `${API_BASE_URL}/admin/auth/login`,
   },
   blogs: `${API_BASE_URL}/blogs`,
+  jobs: `${API_BASE_URL}/jobs`,
   user: (userId: string) => `${API_BASE_URL}/admin/users/${userId}`,
   product: (productId: string) => `${API_BASE_URL}/admin/products/${productId}`,
 }
@@ -59,7 +60,6 @@ export async function authFetch(endpoint: string, options?: RequestInit) {
 
 export async function fetchAPI(endpoint: string, options?: RequestInit) {
   try {
-    console.log("[v0] Fetching:", endpoint)
     const response = await fetch(endpoint, {
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,6 @@ export async function fetchAPI(endpoint: string, options?: RequestInit) {
     }
 
     const data = await response.json()
-    console.log("[v0] Response data:", data)
     return data
   } catch (error) {
     console.error("[v0] API fetch error:", error)

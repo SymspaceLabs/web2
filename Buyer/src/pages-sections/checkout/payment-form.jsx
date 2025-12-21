@@ -70,7 +70,6 @@ export default function PaymentForm({
 
     // --- Google Pay Script Loading & Initialization ---
     const loadGooglePayScript = () => {
-        console.log("Google Pay script loaded. Attempting to initialize client...");
         if (window.google && window.google.payments && window.google.payments.api) {
             const paymentsClient = new window.google.payments.api.PaymentsClient({
                 environment: 'TEST', // IMPORTANT: Use 'PRODUCTION' for live environment
@@ -104,11 +103,9 @@ export default function PaymentForm({
                 .then(function (response) {
                     if (response.result) {
                         setIsGooglePayReady(true);
-                        console.log("Google Pay is ready to pay!");
                         // showSnackbar("Google Pay is available!", "success"); // Removed to avoid too many snackbars on load
                     } else {
                         setIsGooglePayReady(false);
-                        console.log("Google Pay is NOT ready to pay. Reason:", response);
                         // showSnackbar("Google Pay is not available on this device/browser.", "warning"); // Removed
                     }
                 })
@@ -124,7 +121,6 @@ export default function PaymentForm({
 
     // --- Google Pay Button Click Handler ---
     const onGooglePayButtonClicked = () => {
-        console.log("Google Pay button clicked. Attempting to load payment data...");
         if (!googlePayClient) {
             console.error("Google Pay client not initialized. Cannot proceed with payment.");
             showSnackbar("Google Pay is not ready. Please refresh the page.", "error");
@@ -165,7 +161,6 @@ export default function PaymentForm({
 
         googlePayClient.loadPaymentData(paymentDataRequest)
             .then(function (paymentData) {
-                console.log("Payment Data received:", paymentData);
                 // Send paymentData.paymentMethodData.token to your backend for processing
                 processGooglePayPayment(paymentData);
             })
@@ -181,7 +176,6 @@ export default function PaymentForm({
 
     // --- Simulate sending Google Pay data to backend ---
     const processGooglePayPayment = async (paymentData) => {
-        console.log("Sending Google Pay payment data to backend...");
         try {
             // This is a placeholder. You would make an actual API call to your NestJS backend.
             // Example endpoint: /api/braintree/process-google-pay (if you set up a specific endpoint for it)
@@ -200,7 +194,6 @@ export default function PaymentForm({
             const result = await response.json();
 
             if (response.ok && result.success) {
-                console.log("Payment processed successfully by backend:", result);
                 showSnackbar("Google Pay payment successful!", "success");
                 if (onPaymentSuccess) onPaymentSuccess(result); // Call parent handler
             } else {
@@ -227,7 +220,6 @@ export default function PaymentForm({
         try {
             // Request payment method from the Drop-in UI
             const { nonce } = await braintreeInstance.requestPaymentMethod();
-            console.log("Braintree nonce received:", nonce);
 
             // Send nonce to your NestJS backend for server-side transaction
             const response = await fetch('/api/braintree/checkout', { // Your NestJS endpoint
@@ -246,7 +238,6 @@ export default function PaymentForm({
             const result = await response.json();
 
             if (response.ok && result.success) {
-                console.log("Braintree transaction successful:", result.transaction);
                 showSnackbar("Payment successful!", "success");
                 if (onPaymentSuccess) onPaymentSuccess(result.transaction); // Call parent handler
             } else {

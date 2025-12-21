@@ -8,6 +8,7 @@ import Section1 from "../section-1";
 import Section2 from "../section-2";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
+import { fetchCompanyBySlug } from "@/services/companyService";
 
 // ====================================================================
 
@@ -19,21 +20,7 @@ export default function CompanyPageView({ slug }) {
   useEffect(() => {
     const fetchCompanyDetails = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/companies/slug/${slug}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch company details");
-        }
-
-        const data = await response.json();
+        const data = await fetchCompanyBySlug(slug);
         setCompany(data); // Update state with fetched data
       } catch (error) {
         console.error("Error fetching company details:", error);

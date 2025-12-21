@@ -264,6 +264,10 @@ export class ProductsService {
                   height: s.dimensions.height || null,
                   unit: s.dimensions.unit || 'cm'
               } : null,
+              productWeight: s.productWeight ? {
+                  value: s.productWeight.value,
+                  unit: s.productWeight.unit || 'kg'
+              } : null,
           }));
           
           if (id) {
@@ -689,7 +693,7 @@ export class ProductsService {
     productId: string,
     dto: UpdateProductVariantsDto
   ): Promise<Product> {
-    
+      
     // ============================================
     // STEP 1: Load the product with all relations
     // ============================================
@@ -780,6 +784,10 @@ export class ProductsService {
           height: s.dimensions.height || null,
           unit: s.dimensions.unit || 'cm'
       } : null,
+      productWeight: s.productWeight ? {
+          value: s.productWeight.value,
+          unit: s.productWeight.unit
+      } : null
     }));
     const mergedSizes = await this.mergeProductSizes(product, mappedSizes);
     product.sizes = mergedSizes;
@@ -971,6 +979,16 @@ export class ProductsService {
   }
 
   // ============================================================================
+  // Helper function to convert weight to kg (SI unit) for storage
+  // ============================================================================
+  private convertWeightToKg(value: number | null, unit: 'kg' | 'lbs'): number | null {
+    if (value === null || value === undefined) return null;
+    if (unit === 'kg') return value;
+    // Convert lbs to kg (1 lb = 0.453592 kg)
+    return value * 0.453592;
+  }
+
+  // ============================================================================
   // Merges incoming sizes with existing sizes, preserving IDs when possible.
   // Only creates new entities for truly new sizes.
   // Deletes sizes that were removed.
@@ -987,6 +1005,10 @@ export class ProductsService {
             height?: string | null;
             unit?: 'cm' | 'in';
         } | null;
+        productWeight?: {
+          value: number | null;
+          unit: 'kg' | 'lbs';
+        } | null;
     }>
   ): Promise<ProductSize[]> {
     const existingSizes = product.sizes || [];
@@ -1000,30 +1022,62 @@ export class ProductsService {
         );
 
         if (existingSize) {
-            //  UPDATE: Preserve existing, update mutable fields INCLUDING dimensions
-            existingSize.size = incomingSize.size; // In case of capitalization changes
+            // ✅ UPDATE: Preserve existing, update mutable fields INCLUDING dimensions and weight
+            existingSize.size = incomingSize.size;
             existingSize.sizeChartUrl = incomingSize.sizeChartUrl || existingSize.sizeChartUrl;
             existingSize.sortOrder = incomingSize.sortOrder ?? existingSize.sortOrder;
 
-            // ✅ FIX: Handle dimensions update
+            // Update dimensions
             if (incomingSize.dimensions !== undefined) {
                 existingSize.dimensions = incomingSize.dimensions;
             }
+
+            // ✅ UPDATE productWeight (convert to kg)
+            if (incomingSize.productWeight !== undefined) {              
+                if (incomingSize.productWeight && incomingSize.productWeight.value !== null) {
+                    const convertedValue = this.convertWeightToKg(
+                        incomingSize.productWeight.value,
+                        incomingSize.productWeight.unit
+                    );
+                    existingSize.productWeight = {
+                        value: convertedValue,
+                        unit: 'kg'
+                    };
+                    
+                } else {
+                    existingSize.productWeight = null;
+                }
+            }
+
             mergedSizes.push(existingSize);
 
         } else {
-            // CREATE: New size with dimensions
+            // ✅ CREATE: New size with dimensions and weight
             const newSize = new ProductSize();
             newSize.size = incomingSize.size;
             newSize.sizeChartUrl = incomingSize.sizeChartUrl || null;
             newSize.sortOrder = incomingSize.sortOrder ?? mergedSizes.length;
-            newSize.dimensions = incomingSize.dimensions || null;  // ✅ FIX: Include dimensions
+            newSize.dimensions = incomingSize.dimensions || null;
+                        
+            if (incomingSize.productWeight && incomingSize.productWeight.value !== null) {
+                const convertedValue = this.convertWeightToKg(
+                    incomingSize.productWeight.value,
+                    incomingSize.productWeight.unit
+                );
+                newSize.productWeight = {
+                    value: convertedValue,
+                    unit: 'kg'
+                };
+            } else {
+                newSize.productWeight = null;
+            }
+            
             newSize.product = product;
             mergedSizes.push(newSize);
         }
     }
 
-    // ✅ DELETE: Find sizes that exist in DB but not in incoming data (user removed them)
+    // ✅ DELETE: Find sizes that exist in DB but not in incoming data
     const sizesToDelete = existingSizes.filter(
         existing => !incomingSizes.some(
             incoming => incoming.size.toLowerCase() === existing.size.toLowerCase()

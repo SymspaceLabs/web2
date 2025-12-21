@@ -176,7 +176,6 @@ export class CreditCardsService {
 
     this.creditCardRepository.merge(existingCard, updatedFields);
     const updatedCard = await this.creditCardRepository.save(existingCard);
-    console.log('Credit card updated:', updatedCard);
     return updatedCard;
   }
 
@@ -203,8 +202,6 @@ export class CreditCardsService {
       throw new NotFoundException(`Credit card with ID "${id}" could not be deleted.`);
     }
 
-    console.log(`Credit card with ID "${id}" removed.`);
-
     // After deletion, check if the removed card was the default and if there are other cards
     if (cardToRemove.isDefault) {
       const remainingCards = await this.creditCardRepository.find({
@@ -218,7 +215,6 @@ export class CreditCardsService {
         newDefaultCard.isDefault = true;
         newDefaultCard.updatedAt = new Date();
         await this.creditCardRepository.save(newDefaultCard);
-        console.log(`New default card set: ${newDefaultCard.id}`);
       }
     }
 
@@ -261,7 +257,6 @@ export class CreditCardsService {
    * @param userId The ID of the user.
    */
   private async unsetAllDefaultCards(userId: string): Promise<void> {
-    console.log(`Unsetting all default cards for user ${userId}`);
     await this.creditCardRepository.update(
       { userId: userId, isDefault: true }, // Filter by userId parameter
       { isDefault: false, updatedAt: new Date() }

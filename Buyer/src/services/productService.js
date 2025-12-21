@@ -8,7 +8,6 @@
  * @returns {Promise<Object>} A promise that resolves to the product data.
  */
 export const fetchProductById = async (id) => {
-    console.log(`[API CALL] Fetching product by ID: ${id}`);
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`);
         if (!response.ok) throw new Error("Failed to fetch product by ID");
@@ -50,7 +49,6 @@ export const createProduct = async (productData) => {
  * @returns {Promise<Object>} A promise that resolves to the updated product object.
  */
 export const updateProduct = async (id, updatedData) => {
-    console.log(`[API CALL] Updating product ${id} with data:`, updatedData);
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products/${id}`, {
             method: 'PUT', // Use PUT or PATCH based on your backend convention
@@ -136,7 +134,6 @@ export const fetchProducts = async (params = {}) => {
     // const queryString = new URLSearchParams(params).toString();
     const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products`;
     
-    console.log(`[API CALL] Fetching products from: ${url}`);
     
     try {
         const response = await fetch(url);

@@ -8,6 +8,7 @@ import { FlexBox, FlexCol, FlexColCenter } from "@/components/flex-box";
 import { styles } from "../page-view/styles";
 import { BoxLink } from "@/pages-sections/sessions/components";
 import { DateToString } from "@/services/formatDate";
+import rehypeRaw from "rehype-raw";
 
 export default function Section1({ article }) {
 
@@ -95,7 +96,7 @@ export default function Section1({ article }) {
             },
           }}
         >
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {formattedContent}
           </ReactMarkdown>
         </Box>

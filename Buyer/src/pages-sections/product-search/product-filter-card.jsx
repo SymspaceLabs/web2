@@ -88,12 +88,8 @@ const BrandFilter = ({ allBrands, selectedBrands, setSelectedBrands }) => (
 
 // Price Filter Component
 const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
-  // Debug: Log the received priceRange and priceLimits whenever the component renders
-  console.log("PriceFilter Render: priceRange =", priceRange, "priceLimits =", priceLimits);
-
   const handlePriceChange = (event, newValue) => {
     // newValue is an array [min, max] from the slider, or a custom array from the text fields.
-    console.log("handlePriceChange triggered with newValue:", newValue);
     // Ensure newValue is an array of two numbers before setting state.
     if (Array.isArray(newValue) && newValue.length === 2 && typeof newValue[0] === 'number' && typeof newValue[1] === 'number') {
       setPriceRange(newValue);
@@ -108,7 +104,6 @@ const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
     const newMin = Number(e.target.value) || 0; 
     // Create a new array to pass to setPriceRange
     const newRange = [newMin, priceRange[1]];
-    console.log("handleMinPriceChange: New range being set:", newRange);
     setPriceRange(newRange);
   };
 
@@ -117,13 +112,10 @@ const PriceFilter = ({ priceRange, setPriceRange, priceLimits }) => {
     const newMax = Number(e.target.value) || priceLimits[1]; 
     // Create a new array to pass to setPriceRange
     const newRange = [priceRange[0], newMax];
-    console.log("handleMaxPriceChange: New range being set:", newRange);
     setPriceRange(newRange);
   };
 
-  // Debug: Log when the slider is dragging (optional, but helpful)
   const handleSliderChangeCommitted = (event, newValue) => {
-    console.log("Slider change committed (finished drag/click):", newValue);
     // Note: The main onChange handler handles the updates during drag.
   };
 

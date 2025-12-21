@@ -52,7 +52,6 @@ export default function PaymentMethodsPageView() {
       }
 
       const paginatedResponse = await response.json(); // Expect paginated response object
-      console.log("Fetched paginated payment methods:", paginatedResponse);
 
       // Extract data and pagination metadata from the response
       const data = paginatedResponse.data;
@@ -150,8 +149,6 @@ export default function PaymentMethodsPageView() {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to delete card.");
       }
-
-      console.log(`Card with ID ${cardId} deleted successfully.`);
 
       // Re-fetch the list to update the UI
       await fetchCreditCards();

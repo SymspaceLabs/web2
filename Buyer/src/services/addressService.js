@@ -15,14 +15,12 @@ export const fetchAddressesByUserId = async (userId) => {
 // New function to fetch a single address by ID
 export const fetchAddressById = async (addressId) => {
     try {
-        // console.log(`Fetching single address: ${addressId}`);
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addresses/${addressId}`);
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Failed to fetch address details: ${errorData.message || response.statusText}`);
         }
         const data = await response.json();
-        // console.log("Fetched single address data:", data);
         return data;
     } catch (err) {
         console.error("Error fetching address details:", err);

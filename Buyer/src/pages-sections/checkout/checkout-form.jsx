@@ -31,7 +31,6 @@ import { AddressDialog } from "@/components/custom-dialog";
 // Function to add an address
 const addAddress = async (newAddressData) => {
     try {
-        // console.log("Adding new address:", newAddressData);
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addresses`, {
             method: "POST",
             headers: {
@@ -44,7 +43,6 @@ const addAddress = async (newAddressData) => {
             throw new Error(errorData.message || `Failed to add address: ${response.statusText}`);
         }
         const data = await response.json();
-        // console.log("Address added successfully:", data);
         return data;
     } catch (error) {
         console.error("Error adding address:", error);
@@ -55,7 +53,6 @@ const addAddress = async (newAddressData) => {
 // Function to update an address
 const updateAddress = async (addressId, updatedAddressData) => {
     try {
-        // console.log(`Updating address ${addressId} with data:`, updatedAddressData);
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/addresses/${addressId}`, {
             method: "PATCH", // Using PATCH for partial updates, change to PUT if your API expects full replacement
             headers: {
@@ -68,7 +65,6 @@ const updateAddress = async (addressId, updatedAddressData) => {
             throw new Error(errorData.message || `Failed to update address: ${response.statusText}`);
         }
         const data = await response.json();
-        // console.log("Address updated successfully:", data);
         return data;
     } catch (error) {
         console.error("Error updating address:", error);
@@ -182,16 +178,13 @@ export default function CheckoutForm({
         setFieldErrors({}); // Clear any previous field errors
         setModalError(null); // Clear any previous general errors
         setOpenAddressModal(true);
-        console.log("openAddressModal state set to:", true);
     }
 
     // Handles opening the modal for editing an existing address
     const onEditAddress = (address) => {
-        console.log("Edit Address button clicked. Opening modal for ID:", address.id);
         setAddressToEditId(address.id); // Set the ID for editing
         setOpenAddressModal(true);
         // Data will be fetched by the useEffect hook when openAddressModal becomes true and addressToEditId is set
-        console.log("openAddressModal state set to:", true);
     };
 
     // Opens the delete confirmation dialog
@@ -233,7 +226,6 @@ export default function CheckoutForm({
 
     // Handles closing the address modal
     const handleCloseAddressModal = () => {
-        console.log("Closing address modal.");
         setOpenAddressModal(false);
         setAddressToEditId(null); // Clear address ID when modal closes
         setAddressFormData({ // Reset form fields
@@ -247,7 +239,6 @@ export default function CheckoutForm({
         });
         setFieldErrors({}); // Clear field errors
         setModalError(null); // Clear general errors
-        console.log("openAddressModal state set to:", false);
     };
 
     // Handles changes to the address form fields and clears corresponding errors

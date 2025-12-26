@@ -6,18 +6,13 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductVariant } from 'src/product-variant/entities/product-variant.entity';
 import { Product3DModel } from 'src/product-3d-models/entities/product-3d-model.entity';
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
-import { Entity, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 export enum ProductStatus {
   ACTIVE = 'Active',
   DRAFT = 'Draft',
   INACTIVE = 'InActive',
-}
-
-export enum ProductType {
-  STATIC = 'Static',
-  DYNAMIC = 'Dynamic',
 }
 
 export enum ProductGender {
@@ -28,13 +23,6 @@ export enum ProductGender {
   UNISEX = 'unisex',
 }
 
-export interface ProductDimensions {
-  unit: string;
-  length: number | null;
-  width: number | null;
-  height: number | null;
-}
-
 @Entity('product')
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -43,15 +31,11 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ type: 'float', nullable: true })
-  price: number;
-
-  @Column({ type: 'float', nullable: true })
-  salePrice: number;
-
-  // Attribute
-  @Column({ type: 'float', nullable: true })
-  cost: number;
+  @ManyToOne(() => Company, (company) => company.products, {
+    onDelete: 'CASCADE', // Keep CASCADE as it was
+  })
+  @JoinColumn({ name: 'companyId' }) // Assuming 'companyId' foreign key column exists in Product table
+  company: Company;
 
   @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
   subcategoryItemId: string;
@@ -73,17 +57,8 @@ export class Product {
   @JoinColumn({ name: 'subcategoryItemChildId' }) // Links to the subcategoryItemChildId column
   subcategoryItemChild?: SubcategoryItemChild; // Marked as optional in TypeScript
 
-  @ManyToOne(() => Company, (company) => company.products, {
-    onDelete: 'CASCADE', // Keep CASCADE as it was
-  })
-  @JoinColumn({ name: 'companyId' }) // Assuming 'companyId' foreign key column exists in Product table
-  company: Company;
-
   @Column()
   slug: string;
-
-  @OneToMany(() => ProductImage, (image) => image.product, { cascade: true, eager: true })
-  images: ProductImage[];
 
   @Column({ type: 'text', nullable: true })
   description: string;
@@ -100,9 +75,6 @@ export class Product {
   })
   colors: ProductColor[];
 
-  @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true })
-  threeDModels: Product3DModel[];
-
   @Column({ type: 'text', nullable: true })
   sizeFit: string;
 
@@ -111,11 +83,14 @@ export class Product {
   })
   sizes: ProductSize[];
 
-  @Column({ nullable: true })
-  sizeChart: string;
-
   @OneToMany(() => ProductVariant, (variant) => variant.product, { cascade: true })
   variants: ProductVariant[];
+
+  @OneToMany(() => Product3DModel, (model) => model.product, { cascade: true, eager: true })
+  threeDModels: Product3DModel[];
+
+  @OneToMany(() => ProductImage, (image) => image.product, { cascade: true, eager: true })
+  images: ProductImage[];
 
   @Column({ 
     type: 'enum',
@@ -157,25 +132,7 @@ export class Product {
   @Column({ length: 10, default: 'USD' })
   currency: string;
 
-  @Column('json', { nullable: true }) 
-  productWeight: { unit: string; value: number | null };
-
-  @Column('json', { nullable: true }) 
-  dimensions: ProductDimensions;
-
   @Column({ nullable: true })
   productUrl?: string;
-
-  // Ensures default values are set before insertion
-  @BeforeInsert()
-  setDefaults() {
-    if (this.productWeight === undefined) {
-      this.productWeight = { unit: 'lbs', value: null }; 
-    }
-
-    if (this.dimensions === undefined) {
-      this.dimensions = { unit: 'cm', length: null, width: null, height: null };
-    }
-  }
 
 }

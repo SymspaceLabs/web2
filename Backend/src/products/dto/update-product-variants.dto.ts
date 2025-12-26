@@ -71,4 +71,8 @@ export class UpdateProductVariantsDto {
   @ValidateNested({ each: true })
   @Type(() => VariantInputDto)
   variants: VariantInputDto[];
+
+  @IsOptional()
+  @IsString()
+  material?: string;
 }

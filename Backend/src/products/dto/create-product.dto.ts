@@ -1,6 +1,5 @@
 import {
   IsString,
-  IsNumber,
   IsOptional,
   IsNotEmpty,
   IsArray,
@@ -11,43 +10,9 @@ import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
 import { ProductGender } from '../entities/product.entity';
-import { CreateProductModelDto } from 'src/product-models/dto/create-product-model.dto';
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
 import { CreateProductSizeDto } from 'src/product-sizes/dto/create-product-size.dto';
-
-// CreateProductDimensionsDto
-export class CreateProductDimensionsDto {
-    // Unit remains mandatory if dimensions object is provided
-    @IsString()
-    @IsNotEmpty()
-    unit: string; 
-
-    // FIX: Remove '?' marker to satisfy TypeScript's strict assignment to ProductDimensions.
-    // We keep @IsOptional() to allow the field to be omitted in the JSON body.
-    @IsNumber()
-    @IsOptional()
-    length: number | null; 
-
-    @IsNumber()
-    @IsOptional()
-    width: number | null;
-
-    @IsNumber()
-    @IsOptional()
-    height: number | null;
-}
-
-export class CreateProductWeightDto {
-    @IsString()
-    @IsNotEmpty()
-    unit: string;
-
-    @IsNumber()
-    @IsOptional()
-    value: number | null;
-}
-
 
 export class CreateProductDto {
   @IsString()
@@ -57,14 +22,6 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   description?: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  price: number;
-
-  @IsNumber()
-  @IsOptional()
-  salePrice?: number;
 
   @IsString()
   @IsOptional()
@@ -122,15 +79,5 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateProductDimensionsDto)
-  dimensions?: CreateProductDimensionsDto;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => CreateProductWeightDto)
-  productWeight?: CreateProductWeightDto;
 
 }

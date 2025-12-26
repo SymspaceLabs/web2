@@ -1,3 +1,6 @@
+// Products table
+// app/products/page.tsx
+
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
@@ -289,7 +292,7 @@ export default function ProductsPage() {
                 <TableBody>
                   {paginatedProducts.map((product) => (
                     <TableRow key={product.id}>
-                      <TableCell>
+                      <TableCell className="max-w-[200px] md:max-w-[300px]">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
                             <img 
@@ -301,7 +304,10 @@ export default function ProductsPage() {
                               }}
                             />
                           </div>
-                          <span className="font-medium">{product.name}</span>
+                          {/* Added 'truncate' and 'title' for hover visibility */}
+                          <span className="font-medium truncate" title={product.name}>
+                            {product.name}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{product.category}</TableCell>

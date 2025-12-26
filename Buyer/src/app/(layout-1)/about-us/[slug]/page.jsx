@@ -1,3 +1,7 @@
+// ==============================================================
+// Career Details Page
+// ==============================================================
+
 import CareerDetailsPageView from "@/pages-sections/career-details/page-view";
 
 export const metadata = {
@@ -10,6 +14,10 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
-export default function Careers({params}) {
-  return <CareerDetailsPageView jobId={params.slug} />
+export default async function Careers({params}) {
+  const { slug } = await params;
+  
+  return (
+    <CareerDetailsPageView jobId={slug} />
+  )
 }

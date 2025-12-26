@@ -4,6 +4,7 @@
 // Used In:
 // - Wish List
 // - Product Search Page
+// - Company Details Page
 // =======================================================
 
 import { Paragraph, Span } from "components/Typography";
@@ -13,13 +14,18 @@ import Link from "next/link";
 
 // =======================================================
 function ProductCard3(props) {
-  const {
-    product,
-    company = {}
-  } = props;
 
-  // Determine if a sale price exists and is less than the original price
-  const hasSale = product.salePrice > 0 && product.salePrice < product.price;
+  const { product } = props;
+
+  // Destructure the new price fields from the displayPrice object
+  const { 
+    minPrice, 
+    originalMinPrice, 
+    hasSale
+  } = product.displayPrice || {};
+
+  // Get company name from the nested company object in the response
+  const companyName = product.company?.entityName || "";
 
   return (
     <Link href={`/products/${product.slug}`} passHref>
@@ -41,14 +47,13 @@ function ProductCard3(props) {
       >
         <Box
           sx={{
-            height: 300,
+            height: 300, // This defines the total height of the image area
+            width: "100%", 
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            px: 4,
-            overflow: "hidden", // prevent image from overflowing on zoom
+            overflow: "hidden",
+            position: "relative", // Required for Next.js Image "fill"
             "&:hover .hover-image": {
-              transform: "scale(1.1)", // only image scales
+              transform: "scale(1.1)",
             },
           }}
         >
@@ -56,8 +61,8 @@ function ProductCard3(props) {
             className="hover-image"
             sx={{
               position: "relative",
-              width: 250,
-              height: 250,
+              width: "100%", // Changed from 250
+              height: "100%", // Changed from 250
               transition: "transform 0.3s ease-in-out",
             }}
           >
@@ -65,7 +70,8 @@ function ProductCard3(props) {
               src={product?.images[0]?.url}
               alt={product.name}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "cover" }} // Use "cover" to fill the entire box
+              // style={{ objectFit: "contain" }} // Use "contain" if you don't want to crop the image
             />
           </Box>
         </Box>
@@ -81,15 +87,15 @@ function ProductCard3(props) {
             {product.name}
           </Paragraph>
           <Paragraph fontSize={{ xs: 10, sm: 14 }}>
-            {company?.entityName}
+            {companyName}
           </Paragraph>
           
           <Paragraph fontWeight={600} color="primary">
             {/* Conditionally display price and sale price */}
-            {hasSale ? `$${product.salePrice}` : `$${product.price}`}
+            {hasSale ? `$${product.minPrice}` : `$${product.originalMinPrice}`}
             {hasSale && (
               <Span sx={{ textDecoration: 'line-through', color: 'grey', fontWeight: 400 }}>
-                &nbsp;${product.price}
+                &nbsp;${originalMinPrice}
               </Span>
             )}
           </Paragraph>

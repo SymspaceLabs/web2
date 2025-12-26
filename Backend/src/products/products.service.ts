@@ -18,6 +18,9 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { UpdateProductVariantsDto, VariantInputDto } from './dto/update-product-variants.dto';
 import { DisplayPrice } from './types/display-price.types';
+import { ProductDetailDto, ProductListItemDto } from './dto/product-response.dto';
+import { ProductMapper } from './utils/product-mappers';
+import { extractGranularCategory } from './utils/category-helpers';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -61,7 +64,6 @@ export class ProductsService {
           name,
           colors,
           sizes,
-          dimensions,
           subcategoryItem: subcategoryItemIdFromDto,
           subcategoryItemChild: subcategoryItemChildIdFromDto,
           gender,
@@ -158,22 +160,6 @@ export class ProductsService {
           if (name !== undefined) {
             product.name = name;
           }
-          
-          // Handle productWeight - set default if not provided
-          if (productData.productWeight !== undefined) {
-              product.productWeight = productData.productWeight;
-          } else if (!product.productWeight) {
-              // Only set default if the existing product also doesn't have it
-              product.productWeight = { unit: 'lbs', value: null };
-          }
-
-          // Handle dimensions - set default if not provided
-          if (dimensions !== undefined) {
-              product.dimensions = dimensions;
-          } else if (!product.dimensions) {
-              // Only set default if the existing product also doesn't have it
-              product.dimensions = { unit: 'cm', length: null, width: null, height: null };
-          }
 
           // After the dimensions handling, add:
           if (gender !== undefined) {
@@ -202,9 +188,6 @@ export class ProductsService {
           // 2. Ensure gender is an array of the correct enum type
           const finalGender = gender && typeof gender === 'string' ? gender : null;
 
-          const finalProductWeight = productData.productWeight ?? { unit: 'lbs', value: null };
-          const finalDimensions = dimensions ?? { unit: 'cm', length: null, width: null, height: null };
-
           // productData now includes all defaults merged above
           product = this.productRepository.create({
             ...productData,
@@ -220,9 +203,7 @@ export class ProductsService {
             colors: [],
             sizes: [],
             threeDModels: [],
-            gender: finalGender,
-            productWeight: finalProductWeight,
-            dimensions: finalDimensions,
+            gender: finalGender
           });
 
           // --- 3D Model Creation Logic ---
@@ -280,17 +261,6 @@ export class ProductsService {
       }
 
       let savedProduct: Product;
-
-      // Right before save, FORCE these values if they're still undefined
-      if (!product.productWeight || product.productWeight === undefined) {
-          console.warn('⚠️ productWeight was still undefined, forcing default');
-          product.productWeight = { unit: 'lbs', value: null };
-      }
-
-      if (!product.dimensions || product.dimensions === undefined) {
-          console.warn('⚠️ dimensions was still undefined, forcing default');
-          product.dimensions = { unit: 'cm', length: null, width: null, height: null };
-      }
       
       try {
         // Step 1: Save product (This saves all non-variant relations due to cascade)
@@ -342,10 +312,9 @@ export class ProductsService {
                     size: null,
                     // Copy other properties from the product or use defaults
                     stock: 0,
-                    price: savedProduct.salePrice || 0,
-                    salePrice: savedProduct.salePrice || 0,
-                    cost: savedProduct.cost || 0,
-                    material: savedProduct.material || '',
+                    price: 0,
+                    salePrice: 0,
+                    cost: 0,
                     product: productWithFreshRelations,
                 };
                 
@@ -404,30 +373,36 @@ export class ProductsService {
     ageGroups?: string[],
     companyId?: string,
   ) {
-    // 1. Build the base query for products
+    // Build query with CRITICAL joins for hierarchy
     const productsQuery = this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.company', 'company')
       .leftJoinAndSelect('product.images', 'images')
       .leftJoinAndSelect('product.colors', 'colors')
       .leftJoinAndSelect('product.sizes', 'sizes')
-      .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
-      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
-      .leftJoinAndSelect('subcategory.category', 'category')
-      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
       .leftJoinAndSelect('product.variants', 'variants')
       .leftJoinAndSelect('variants.color', 'variantColor') 
       .leftJoinAndSelect('variants.size', 'variantSize') 
       .leftJoinAndSelect('product.threeDModels', 'threeDModels')
+      
+      // ✅ CRITICAL: Proper joins for subcategoryItemChild hierarchy
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
+      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'childParentItem')
+      .leftJoinAndSelect('childParentItem.subcategory', 'childSubcategory')
+      .leftJoinAndSelect('childSubcategory.category', 'childCategory')
+      
+      // For products with only subcategoryItem
+      .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
+      .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category')
+      
       .orderBy('images.sortOrder', 'ASC');
 
-    // ⭐ NEW LOGIC: Apply Company ID Filter
+    // Apply filters (your existing logic)
     if (companyId) {
-      // Since we left-joined product.company as 'company', we filter on company.id
       productsQuery.andWhere('company.id = :companyId', { companyId });
     }
 
-    // 2. Apply the category, search term, and GENDER filters
     const filterAppliedButNoMatch = await this.applyCategoryFilters(
       productsQuery,
       categorySlug,
@@ -437,19 +412,15 @@ export class ProductsService {
     );
     
     this.applySearchTermFilter(productsQuery, searchTerm);
-
-    // Apply Gender Filter
+    
     if (genders && genders.length > 0) {
-      // Assuming you have an implementation for this helper function
-      this.applyGenderFilter(productsQuery, genders); 
+      this.applyGenderFilter(productsQuery, genders);
     }
 
-    // Apply Age Group Filter (UPDATED LOGIC)
     if (ageGroups && ageGroups.length > 0) {
-        this.applyAgeGroupFilter(productsQuery, ageGroups); 
+      this.applyAgeGroupFilter(productsQuery, ageGroups);
     }
 
-    // 3. Handle the "no match" scenario immediately
     if (filterAppliedButNoMatch) {
       return {
         products: [],
@@ -462,36 +433,35 @@ export class ProductsService {
       };
     }
 
-    // 4. Execute the main product query
-    // NOTE: Products must be cast to 'any' or an extended interface to include 'availability'
     const products: any[] = await productsQuery.getMany();
 
-    // 5. Post-process products (sorting images, and ADDING AVAILABILITY)
+    // Post-process products
     for (const product of products) {
       if (product.images) {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
 
-      // Calculate and add the 'availability' attribute
       product.availability = determineProductAvailability(product);
-
-      // Calculate display pricing
       product.displayPrice = this.calculateDisplayPrice(product);
+      
+      // ✅ ADD: granularCategory to each product
+      product.category = extractGranularCategory(product);
+      
+      // ✅ ADD: ar_type to response (you can remove this if you don't need it at top level)
+      // It's already in the product entity, this just makes it explicit
     }
 
-    // 6. Generate facets using the shared logic
-    // Assuming calculatePriceRange, getBrandsFacet, and getGendersFacet exist
+    // Generate facets
     const { min: minPrice, max: maxPrice } = await this.calculatePriceRange(products);
     const formattedBrands = await this.getBrandsFacet(products); 
     const formattedGenders = await this.getGendersFacet(products);
     const finalCategoryFacets = this.getCategoryFacets(products);
-    
-    // ⭐ UPDATED: Generates the list of available facets (e.g., ['In Stock', 'Out of Stock'])
     const { availabilities, colors } = this.getOtherFacets(products); 
 
-    // 7. Return the final result
+    const productDtos = products.map(p => ProductMapper.toListItemDto(p));
+
     return {
-      products,
+      products: productDtos,
       brands: formattedBrands,
       priceRange: { min: minPrice, max: maxPrice },
       category: finalCategoryFacets,
@@ -501,8 +471,9 @@ export class ProductsService {
     };
   }
 
+
   // FIND PRODUCT BY SLUG
-  async findBySlug(slug: string): Promise<Product> {
+  async findBySlug(slug: string): Promise<ProductDetailDto> {
     const product = await this.productRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.company', 'company')
@@ -545,8 +516,10 @@ export class ProductsService {
 
     // ✅ Calculate and attach display price
     (product as any).displayPrice = this.calculateDisplayPrice(product);
+    (product as any).availability = determineProductAvailability(product);
 
-    return product;
+    // ✅ Return clean DTO
+    return ProductMapper.toDetailDto(product);
   }
     
   // FIND ONE BY ID
@@ -599,15 +572,15 @@ export class ProductsService {
     
     // Fallback to product-level pricing if no variants
     if (variants.length === 0) {
-      const hasSale = !!product.salePrice && product.salePrice < product.price;
+      const hasSale = false;
       return {
-        minPrice: product.salePrice || product.price || 0,
-        maxPrice: product.salePrice || product.price || 0,
+        minPrice: 0,
+        maxPrice: 0,
         displayType: 'single',
-        formattedDisplay: this.formatPrice(product.salePrice || product.price || 0),
+        formattedDisplay: this.formatPrice(0),
         hasSale,
-        originalMinPrice: hasSale ? product.price : undefined,
-        originalMaxPrice: hasSale ? product.price : undefined,
+        originalMinPrice: undefined,
+        originalMaxPrice: undefined,
       };
     }
 
@@ -687,8 +660,7 @@ export class ProductsService {
     return `${symbol}${price.toFixed(2)}`;
   }
 
-  
-  // products.service.ts - FIXED VERSION
+  // Update Step 2 - Variant Details  
   async updateProductVariants(
     productId: string,
     dto: UpdateProductVariantsDto
@@ -706,6 +678,12 @@ export class ProductsService {
       throw new NotFoundException(`Product ${productId} not found`);
     }
 
+    // ============================================
+    // STEP 1.5: ✅ Update product-level material if provided
+    // ============================================
+    if (dto.material !== undefined) {
+      product.material = dto.material;
+    }
 
     // ============================================
     // STEP 2: Build lookup maps for incoming data
@@ -713,13 +691,11 @@ export class ProductsService {
     const incomingColorNames = new Set(dto.colors.map(c => c.name.toLowerCase()));
     const incomingSizeNames = new Set(dto.sizes.map(s => s.size.toLowerCase()));
     
-
     // ============================================
     // STEP 3: CRITICAL FIX - Clean up dependencies FIRST
     // ============================================
     
     // 3a. Identify colors being removed
-    const existingColorIds = new Set(product.colors.map(c => c.id));
     const colorsToRemoveIds = new Set<string>();
     
     for (const color of product.colors) {
@@ -793,7 +769,7 @@ export class ProductsService {
     product.sizes = mergedSizes;
 
     // ============================================
-    // STEP 6: Save product to persist colors/sizes and get real IDs
+    // STEP 6: Save product to persist material, colors, sizes
     // ============================================
     await this.productRepository.save(product);
 
@@ -888,7 +864,6 @@ export class ProductsService {
         newVariant.price = variantData.price;
         newVariant.salePrice = variantData.salePrice || 0;
         newVariant.cost = variantData.cost;
-        newVariant.material = productWithFreshIds.material || '';
 
         variantsToSave.push(newVariant);
       }
@@ -1317,10 +1292,9 @@ export class ProductsService {
                 existingVariantMap.delete(key); 
                 
                 // Update non-structural fields from the main product entity defaults (if needed)
-                existingVariant.price = product.price || existingVariant.price || 0;
-                existingVariant.salePrice = product.salePrice || existingVariant.salePrice || 0;
-                existingVariant.cost = product.cost || existingVariant.cost || 0;
-                existingVariant.material = product.material || existingVariant.material || '';
+                existingVariant.price = existingVariant.price || 0;
+                existingVariant.salePrice = existingVariant.salePrice || 0;
+                existingVariant.cost = existingVariant.cost || 0;
                 
                 variantsToSave.push(existingVariant);
             } else {
@@ -1333,11 +1307,10 @@ export class ProductsService {
                 newVariant.size = size;
 
                 // Assign default pricing/stock (these will be updated later by the frontend's dedicated variant update if modified)
-                newVariant.price = product.price || 0;
-                newVariant.salePrice = product.salePrice || 0; // Use product's sale price as default
-                newVariant.cost = product.cost || 0;
+                newVariant.price =  0;
+                newVariant.salePrice = 0; // Use product's sale price as default
+                newVariant.cost = 0;
                 newVariant.stock = 0;
-                newVariant.material = product.material || '';
                 
                 // Build a dynamic SKU.
                 const colorCodePart = color?.code || 'DEFAULT_C';

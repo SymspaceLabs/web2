@@ -23,8 +23,6 @@ import BreadcrumbNav from "./breadcrumb-nav";
 export default function ProductDetails({ product }) {
   const {
     id,
-    price,
-    salePrice,
     colors,
     sizes,
     name, 
@@ -55,8 +53,13 @@ export default function ProductDetails({ product }) {
       return;
     }
 
-    // Check if stock is available
-    if (availability && availability.stock === 0) {
+    // ✅ Add this check
+    if (!availability) {
+      console.error("Price information not loaded");
+      return;
+    }
+
+    if (availability.stock === 0) {
       return;
     }
 
@@ -85,7 +88,8 @@ export default function ProductDetails({ product }) {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: {
-        price,
+        price: availability?.price || 0,
+        salePrice: availability?.salePrice || null, 
         qty: newQty,
         name,
         imgUrl: matchingImage ? matchingImage.url : images[0].url,
@@ -93,7 +97,6 @@ export default function ProductDetails({ product }) {
         slug,
         selectedColor,
         selectedSize,
-        salePrice,
         sizes: sizes.map(size => ({
           label: size.size,
           value: size.id

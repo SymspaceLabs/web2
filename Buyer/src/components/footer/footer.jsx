@@ -2,14 +2,13 @@
 // Footer
 // ==============================================================
 
-import { Heading } from "./styles";
-import { FlexBetween, FlexCol } from "@/components/flex-box";
 import { LazyImage } from "@/components/lazy-image";
 import { Paragraph, H1 } from "@/components/Typography";
+import { FlexBetween, FlexCol } from "@/components/flex-box";
 import { Container, Divider, Grid, Box } from "@mui/material";
 
-import SocialLinks from "./components/social-links";
 import AboutLinks from "./components/about-links";
+import SocialLinks from "./components/social-links";
 import CustomerCareLinks from "./components/customer-care-links";
 
 export default function Footer() {

@@ -13,6 +13,7 @@ import { ProductsService } from './products.service';
 import { SearchResultResponse } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductVariantsDto } from './dto/update-product-variants.dto';
+import { ProductDetailDto } from './dto/product-response.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -82,7 +83,7 @@ export class ProductsController {
   }
 
   @Get('slug/:slug')
-  async getProductBySlug(@Param('slug') slug: string): Promise<Product> {
+  async getProductBySlug(@Param('slug') slug: string): Promise<ProductDetailDto> {
     return this.productsService.findBySlug(slug);
   }
 

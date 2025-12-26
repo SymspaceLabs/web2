@@ -5,7 +5,7 @@
 
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Upload, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -95,6 +95,28 @@ export function ColorImageSection({
     setDraggedImageId(null)
     setDropTargetId(null)
   }
+
+  // Inside ColorImageSection component, add this after sortedImages:
+  useEffect(() => {
+    console.log(`🎨 [COLOR SECTION: ${color.name}]`, {
+      colorId: color.id,
+      receivedImagesCount: images.length,
+      sortedImagesCount: sortedImages.length,
+      images: images.map(img => ({
+        id: img.id,
+        sortOrder: img.sortOrder,
+        isUploading: img.isUploading,
+        error: img.error,
+        url: img.url.substring(0, 50) + '...'
+      })),
+      sortedImages: sortedImages.map(img => ({
+        id: img.id,
+        sortOrder: img.sortOrder,
+        isUploading: img.isUploading,
+        error: img.error
+      }))
+    })
+  }, [images, sortedImages, color])
   
   return (
     <div 
@@ -143,21 +165,32 @@ export function ColorImageSection({
       {/* Images Grid */}
       {sortedImages.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {sortedImages.map((image, index) => (
-            <ImageCard
-              key={image.id}
-              image={image}
-              index={index}
-              onDelete={() => onDelete(image.id)}
-              onRetry={image.error ? () => onRetry(image.id) : undefined}
-              onDragStart={handleImageDragStart(image.id)}
-              onDragOver={handleImageDragOver(image.id)}
-              onDrop={handleImageDrop(image.id)}
-              onDragEnd={handleImageDragEnd}
-              isDragging={draggedImageId === image.id}
-              isDropTarget={dropTargetId === image.id}
-            />
-          ))}
+          {sortedImages.map((image, index) => {
+            
+            // Also add this debug right before the return statement:
+            console.log(`🖼️ [RENDER COLOR SECTION: ${color.name}]`, {
+              willRenderGrid: sortedImages.length > 0,
+              sortedImagesCount: sortedImages.length
+            })
+            return (
+              <ImageCard
+                key={image.id}
+                image={image}
+                index={index}
+                onDelete={() => onDelete(image.id)}
+                onRetry={image.error ? () => onRetry(image.id) : undefined}
+                onDragStart={handleImageDragStart(image.id)}
+                onDragOver={handleImageDragOver(image.id)}
+                onDrop={handleImageDrop(image.id)}
+                onDragEnd={handleImageDragEnd}
+                isDragging={draggedImageId === image.id}
+                isDropTarget={dropTargetId === image.id}
+              />
+            )
+          })
+          }
+          
+          
         </div>
       ) : (
         <div className={`flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-lg transition-colors ${

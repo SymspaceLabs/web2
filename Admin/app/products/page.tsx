@@ -38,14 +38,12 @@ interface APIProduct {
   id: string
   name: string
   description: string
-  price: number | null
-  category: string
+  displayPrice: { formattedDisplay: string }  
+  category:  { name: string }
   images: Array<{ url: string; id: string; sortOrder: number }>
   status: string
   variants: Array<{ stock: number; price: number }>
   company: { entityName: string; id: string }
-  subcategoryItem?: { name: string; id: string }
-  subcategoryItemChild?: { name: string; id: string }
   createdAt: string
 }
 
@@ -67,14 +65,14 @@ function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
   // Get the first image URL or use a placeholder
   const thumbnail = apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
   
-  // Get the most granular category - prefer subcategoryItemChild if available
-  const category = apiProduct.subcategoryItemChild?.name || apiProduct.subcategoryItem?.name || apiProduct.category || "Uncategorized"
+  // Get the most granular category
+  const category =  apiProduct.category?.name || "Uncategorized"
   
   // Get company name
   const company = apiProduct.company?.entityName || "Unknown"
   
   // Get price from variants if product price is null
-  const price = apiProduct.price ?? (apiProduct.variants?.[0]?.price || 0)
+  const price = apiProduct.displayPrice?.formattedDisplay || ""
   
   // Normalize status to lowercase
   const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"
@@ -312,7 +310,7 @@ export default function ProductsPage() {
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{product.category}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">{product.company}</TableCell>
-                      <TableCell>${product.price}</TableCell>
+                      <TableCell>{product.price}</TableCell>
                       <TableCell>
                         <Badge
                           variant={product.stock > 50 ? "default" : product.stock > 0 ? "secondary" : "destructive"}

@@ -23,6 +23,15 @@ export class ProductImageDto {
   sortOrder: number;
 }
 
+export class ProductModelDto {
+  id: string;
+  url: string;
+  colorCode?: string;
+  pivot?: any; // Define proper type based on your needs
+  format?: string;
+  boundingBox?: any; // Define proper type based on your needs
+}
+
 export class ProductColorDto {
   id: string;
   name: string;
@@ -76,6 +85,7 @@ export class ProductListItemDto {
   company: CompanyDto;
   category: any;
   
+  threeDModels: ProductModelDto[];
   images: ProductImageDto[];
   colors: ProductColorDto[];
   sizes: ProductSizeDto[];
@@ -91,10 +101,4 @@ export class ProductListItemDto {
 
 export class ProductDetailDto extends ProductListItemDto {
   variants: ProductVariantDto[];
-  threeDModels?: Array<{
-    id: string;
-    modelUrl: string;
-    textureUrl?: string;
-    thumbnailUrl?: string;
-  }>;
 }

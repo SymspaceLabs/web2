@@ -441,14 +441,11 @@ export class ProductsService {
         product.images.sort((a, b) => a.sortOrder - b.sortOrder);
       }
 
+      product.threeDModels = product.threeDModels;
       product.availability = determineProductAvailability(product);
       product.displayPrice = this.calculateDisplayPrice(product);
-      
-      // ✅ ADD: granularCategory to each product
       product.category = extractGranularCategory(product);
-      
-      // ✅ ADD: ar_type to response (you can remove this if you don't need it at top level)
-      // It's already in the product entity, this just makes it explicit
+
     }
 
     // Generate facets

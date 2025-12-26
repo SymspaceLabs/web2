@@ -3,7 +3,7 @@
 // Centralized mapping logic following DDD principles
 // ============================================================================
 
-import { CompanyDto, CategoryDto, ProductColorDto, ProductDetailDto, ProductImageDto, ProductListItemDto, ProductSizeDto, ProductVariantDto } from "../dto/product-response.dto";
+import { CompanyDto, ProductColorDto, ProductDetailDto, ProductImageDto, ProductListItemDto, ProductSizeDto, ProductVariantDto, ProductModelDto } from "../dto/product-response.dto";
 import { extractGranularCategory } from "./category-helpers";
 
 export class ProductMapper {
@@ -26,6 +26,7 @@ export class ProductMapper {
       category: extractGranularCategory(product),
       
       images: this.mapImages(product.images),
+      threeDModels: this.mapThreeDModels(product.threeDModels),
       colors: this.mapColors(product.colors),
       sizes: this.mapSizes(product.sizes),
       
@@ -40,8 +41,7 @@ export class ProductMapper {
   static toDetailDto(product: any): ProductDetailDto {
     return {
       ...this.toListItemDto(product),
-      variants: this.mapVariants(product.variants),
-      threeDModels: this.mapThreeDModels(product.threeDModels),
+      variants: this.mapVariants(product.variants)
     };
   }
 
@@ -109,12 +109,14 @@ export class ProductMapper {
     }));
   }
 
-  private static mapThreeDModels(models: any[]) {
+  private static mapThreeDModels(models: any[]) : ProductModelDto[] {
     return (models || []).map(m => ({
       id: m.id,
-      modelUrl: m.modelUrl,
-      textureUrl: m.textureUrl,
-      thumbnailUrl: m.thumbnailUrl,
+      url: m.url,
+      colorCode: m.colorCode,
+      pivot: m.pivot,
+      format: m.format,
+      boundingBox: m.boundingBox
     }));
   }
 }

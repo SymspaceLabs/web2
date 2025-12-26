@@ -26,29 +26,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { Search, Plus, Eye, Edit, Trash2, MoreVertical, Store } from "lucide-react"
-import { API_ENDPOINTS, authFetch } from "@/lib/api"
+import { getAllSellers, deleteSeller } from "@/api/seller"
+import { Seller } from "@/types/seller.types"
 import { toast } from "sonner"
-
-interface APISeller {
-  id: string
-  entityName: string
-  website: string | null
-  location: string | null
-  userId: string
-  slug: string
-  logo: string | null
-  isOnboardingFormFilled: boolean
-  user: {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    role: string
-    isVerified: boolean
-    createdAt: string
-  }
-  products: Array<{ id: string }>
-}
 
 interface UISeller {
   id: string
@@ -64,23 +44,23 @@ interface UISeller {
   createdAt: string
 }
 
-function mapAPISellerToUI(apiSeller: APISeller): UISeller {
-  const ownerName = `${apiSeller.user.firstName} ${apiSeller.user.lastName}`.trim() || "Unknown"
-  const logo = apiSeller.logo || "/placeholder-product.png"
-  const productsCount = apiSeller.products?.length || 0
+function mapSellerToUI(seller: Seller): UISeller {
+  const ownerName = `${seller.user.firstName} ${seller.user.lastName}`.trim() || "Unknown"
+  const logo = seller.logo || "/placeholder-product.png"
+  const productsCount = seller.products?.length || 0
 
   return {
-    id: apiSeller.id,
-    entityName: apiSeller.entityName || "Unknown",
+    id: seller.id,
+    entityName: seller.entityName || "Unknown",
     logo,
     ownerName,
-    email: apiSeller.user.email || "N/A",
-    location: apiSeller.location || "N/A",
-    website: apiSeller.website || "N/A",
+    email: seller.user.email || "N/A",
+    location: seller.location || "N/A",
+    website: seller.website || "N/A",
     productsCount,
-    isVerified: apiSeller.user.isVerified || false,
-    isOnboarded: apiSeller.isOnboardingFormFilled || false,
-    createdAt: new Date(apiSeller.user.createdAt).toLocaleDateString(),
+    isVerified: seller.user.isVerified || false,
+    isOnboarded: seller.isOnboardingFormFilled || false,
+    createdAt: new Date(seller.user.createdAt).toLocaleDateString(),
   }
 }
 
@@ -95,30 +75,27 @@ export default function SellersPage() {
   const [verifiedFilter, setVerifiedFilter] = useState<string>("all")
   const [currentPage, setCurrentPage] = useState(1)
   
-  // Delete confirmation dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [sellerToDelete, setSellerToDelete] = useState<UISeller | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    async function fetchSellers() {
-      try {
-        setLoading(true)
-        const response = await authFetch(API_ENDPOINTS.sellers)
-
-        const sellersData = Array.isArray(response) ? response : response.sellers || []
-        const mappedSellers = sellersData.map(mapAPISellerToUI)
-        setSellers(mappedSellers)
-      } catch (err) {
-        console.error("Error fetching sellers:", err)
-        setError("Failed to load sellers. Please try again.")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchSellers()
+    loadSellers()
   }, [])
+
+  const loadSellers = async () => {
+    try {
+      setLoading(true)
+      const data = await getAllSellers()
+      const mappedSellers = data.map(mapSellerToUI)
+      setSellers(mappedSellers)
+    } catch (err) {
+      console.error("Error fetching sellers:", err)
+      setError("Failed to load sellers. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const filteredSellers = useMemo(() => {
     return sellers.filter((seller) => {
@@ -149,10 +126,8 @@ export default function SellersPage() {
 
     setIsDeleting(true)
     try {
-      // Replace with your actual delete seller API call
-      // await deleteSeller(sellerToDelete.id)
+      await deleteSeller(sellerToDelete.id)
       
-      // Remove from local state
       setSellers((prev) => prev.filter((s) => s.id !== sellerToDelete.id))
       
       toast.success("Seller deleted", {

@@ -65,6 +65,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     description: product?.description || "",
     selectedColors: product?.colors || [],
     selectedSizes: product?.sizes || [],
+    material: product?.material || "",
     variants: product?.variants ? transformApiVariantsToFormVariants(product.variants) : [],
     images: product?.images?.map((img, i) => ({
       id: img.id || `img_init_${i}`,
@@ -186,14 +187,10 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       salePrice: variant.salePrice > 0 ? variant.salePrice : undefined,
       cost: variant.cost > 0 ? variant.cost : undefined,
       
-      // Material (from product level or variant level)
-      // material: data.material || undefined,
-      
-      // Dimensions (if applicable - from size)
-      // Note: This might be redundant if dimensions are on size level
     }))
 
     return {
+      material: data.material || undefined,
       colors: colorsForApi,
       sizes: sizesForApi,
       variants: variantsForApi,

@@ -90,6 +90,7 @@ export type Product = {
 }
 
 export type FormData = {
+  material: undefined
   name: string
   companyId?: string
   companyName?: string

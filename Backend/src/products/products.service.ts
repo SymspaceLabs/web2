@@ -1340,20 +1340,28 @@ export class ProductsService {
   /**
    * @function calculatePriceRange
    * @description Helper function to calculate the minimum and maximum effective prices
-   * from an array of products, prioritizing `salePrice` if available.
-   * @param {Array<Product>} products - An array of product objects.
+   * from an array of products by examining their variants' prices.
+   * @param {Array<Product>} products - An array of product objects with variants loaded.
    * @returns {{min: number, max: number}} An object containing the minimum and maximum effective prices.
    */
   private async calculatePriceRange(products: any[]): Promise<{ min: number; max: number; }> {
-    // Extract prices from products, prioritizing salePrice if it exists and is a number,
-    // otherwise use the regular price.
-    const prices = products.map(p =>
-      (typeof p.salePrice === 'number' && p.salePrice !== null) ? p.salePrice : p.price
-    ).filter(price => typeof price === 'number' && price !== null); // Ensure valid numbers for min/max
+    const allPrices: number[] = [];
+    
+    // Extract prices from all variants across all products
+    for (const product of products) {
+      if (product.variants && product.variants.length > 0) {
+        for (const variant of product.variants) {
+          // Use salePrice if available, otherwise use regular price
+          const effectivePrice = variant.salePrice || variant.price;
+          if (typeof effectivePrice === 'number' && effectivePrice > 0) {
+            allPrices.push(effectivePrice);
+          }
+        }
+      }
+    }
 
-    const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-    const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
-
+    const minPrice = allPrices.length > 0 ? Math.min(...allPrices) : 0;
+    const maxPrice = allPrices.length > 0 ? Math.max(...allPrices) : 0;
 
     return { min: minPrice, max: maxPrice };
   }

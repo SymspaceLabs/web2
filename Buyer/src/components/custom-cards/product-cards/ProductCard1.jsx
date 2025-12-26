@@ -3,20 +3,30 @@
 // --------------------------------------------------------------
 // Used In:
 // 1. Landing Page
-// 2. Marketplace
+// 2. Marketplace (Section 5)
 // =============================================================
 
 import Link from "next/link";
+import { currency } from "@/lib";
 import { Box } from "@mui/material";
 import { LazyImage } from "@/components/lazy-image";
-import { calculateDiscount, currency } from "@/lib";
 import { Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol } from "@/components/flex-box";
 
 
-const ProductCard1 = ({ product }) => {
-  // Determine if a sale price exists and is less than the original price
-  const hasSale = product.salePrice > 0 && product.salePrice < product.price;
+const ProductCard1 = (props) => {
+
+  const { product } = props;
+
+  // Destructure the new price fields from the displayPrice object
+  const { 
+    minPrice, 
+    originalMinPrice, 
+    hasSale
+  } = product.displayPrice || {};
+
+  // Get company name from the nested company object in the response
+  const companyName = product.company?.entityName || "";
 
   return (
     <Link href={`/products/${product.slug}`} style={{ width: "100%" }}>
@@ -49,7 +59,7 @@ const ProductCard1 = ({ product }) => {
           />
         </Box>
 
-        <Box sx={{ px: { xs: 1.5, sm: 4 }, pb: 4, flexGrow: 1 }}>
+        <Box sx={{ px: { xs: 1.5, sm: 4 }, py: 4, flexGrow: 1 }}>
           <Paragraph
             sx={{
               color: "#fff",
@@ -73,7 +83,7 @@ const ProductCard1 = ({ product }) => {
               textOverflow: "ellipsis",
             }}
           >
-            {product.company.entityName}
+            {companyName}
           </Paragraph>
 
           <FlexBox gap={1}>
@@ -85,7 +95,7 @@ const ProductCard1 = ({ product }) => {
                 fontWeight: 500,
               }}
             >
-              {hasSale ? currency(product.salePrice) : currency(product.price)}
+              {hasSale ? currency(minPrice) : currency(originalMinPrice)}
             </Paragraph>
             
             {/* Only show the original price with a strikethrough if a sale is active */}
@@ -98,7 +108,7 @@ const ProductCard1 = ({ product }) => {
                   textDecoration: "line-through",
                 }}
               >
-                {currency(product.price)}
+                {currency(originalMinPrice)}
               </Paragraph>
             )}
           </FlexBox>

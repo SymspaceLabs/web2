@@ -33,6 +33,24 @@ function deepEquals(a, b) {
     return false;
 }
 
+// Add this helper function at the top of the file
+function findCategoryIdBySlug(categoryTree, slug) {
+  if (!categoryTree || !slug) return null;
+  
+  for (const topLevel of categoryTree) {
+    // Check top level
+    if (topLevel.slug === slug) return topLevel.id;
+    
+    // Check children
+    if (topLevel.child) {
+      for (const child of topLevel.child) {
+        if (child.slug === slug) return child.id;
+      }
+    }
+  }
+  return null;
+}
+
 /**
  * Custom hook to manage product filtering logic and URL synchronization.
  * Price range, Gender, Brands, AND Colors are now managed purely client-side unless initial data changes.
@@ -85,7 +103,7 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
                 newState.priceRange = initialData.priceLimits; 
                 hasChanged = true;
             }
-            
+
             // Sync other lists/objects
             if (prevState.allProducts !== initialData.allProducts) {
                 newState.allProducts = initialData.allProducts;
@@ -124,34 +142,26 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
             const urlMaxPrice = parseFloat(searchParams.get("price_max"));
             
             const newPriceRangeFromURL = [
-                isNaN(urlMinPrice) ? defaultMin : Math.max(urlMinPrice, defaultMin),
-                isNaN(urlMaxPrice) ? defaultMax : Math.min(urlMaxPrice, defaultMax),
+            isNaN(urlMinPrice) ? defaultMin : Math.max(urlMinPrice, defaultMin),
+            isNaN(urlMaxPrice) ? defaultMax : Math.min(urlMaxPrice, defaultMax),
             ];
 
             const isLocalPriceDefault = deepEquals(prevState.priceRange, prevState.priceLimits);
             
             if (limitsChanged) {
-                if (!deepEquals(prevState.priceRange, newPriceRangeFromURL)) {
-                    newState.priceRange = newPriceRangeFromURL;
+            if (!deepEquals(prevState.priceRange, newPriceRangeFromURL)) {
+                newState.priceRange = newPriceRangeFromURL;
                     hasChanged = true;
-                }
+            }
             } 
             else if (isLocalPriceDefault && !deepEquals(prevState.priceRange, newPriceRangeFromURL)) {
-                newState.priceRange = newPriceRangeFromURL;
+            newState.priceRange = newPriceRangeFromURL;
                 hasChanged = true;
             }
 
-            // --- Brands Logic REMOVED FROM HERE (Local Only) ---
-            
-            // Availabilities logic (URL Synced - KEEP THIS)
-            // const urlAvailabilities = searchParams.getAll("availability");
-            // const newSelectedAvailabilities = urlAvailabilities.filter(avail => initialData.allAvailabilities?.includes(avail));
-            // if (!deepEquals(prevState.selectedAvailabilities, newSelectedAvailabilities)) {
-            //     newState.selectedAvailabilities = newSelectedAvailabilities;
-            //     hasChanged = true;
-            // }
-
-            // --- Colors Logic REMOVED FROM HERE (Local Only) ---
+            // ❌ REMOVE: Category filtering from URL slugs
+            // The backend already handles this, so we don't need to filter again
+            // Just keep checkedCategoryIds empty for the UI accordion
             
             return hasChanged ? newState : prevState;
         });
@@ -288,59 +298,6 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
         router.push(`${pathname}?${newUrlParams.toString()}`);
     }, [router, pathname]);
     
-    // --- NEW: Client-Side Product Filtering Logic ---
-
-    /**
-     * Memoized value to apply all client-side filters (Brands, Gender, Price Range, Colors) 
-     * to the product list.
-     */
-    const filteredProducts = useMemo(() => {
-        let products = filterState.allProducts || [];
-
-        // 1. Apply Brands Filter
-        const selectedBrandIds = filterState.selectedBrands.map(b => b.id);
-        if (selectedBrandIds.length > 0) {
-            products = products.filter(product => {
-                // Assumes product.company.id holds the brand ID
-                return selectedBrandIds.includes(product.company?.id); 
-            });
-        }
-
-        // 2. Apply Gender Filter
-        if (filterState.selectedGenders.length > 0) {
-            products = products.filter(product => 
-                filterState.selectedGenders.includes(product.gender)
-            );
-        }
-
-        // 3. Apply Price Range Filter
-        const [minPrice, maxPrice] = filterState.priceRange;
-        products = products.filter(product => {
-            const productPrice = product.salePrice !== null ? product.salePrice : product.price;
-            return productPrice >= minPrice && productPrice <= maxPrice;
-        });
-        
-        // --- Correction for Colors Filter (Assuming product.variants structure) ---
-        const selectedColorCodes = filterState.selectedColors.map(c => c.code);
-        if (selectedColorCodes.length > 0) {
-            products = products.filter(product => {
-                // Check if ANY of the product's variants' color codes are in the selected list.
-                // ASSUMPTION: product has a 'variants' array, and each variant has a 'color' object with a 'code'.
-                return product.variants.some(variant => 
-                    selectedColorCodes.includes(variant.color?.code)
-                );
-            });
-        }
-
-        return products;
-    }, [
-        filterState.allProducts, 
-        filterState.selectedBrands, 
-        filterState.selectedGenders, 
-        filterState.priceRange,
-        filterState.selectedColors // Dependency added
-    ]);
-
     // Return the filter state, functions, AND the new filtered product list.
     return { 
         filterState, 
@@ -351,6 +308,5 @@ export function useProductFilters(initialData, urlSearchParamsObj) {
         handleColorChange, // IMPORTANT: New handler for colors
         handleAvailabilityChange,
         handleResetAllFilters, 
-        filteredProducts 
     };
 }

@@ -16,16 +16,18 @@ import { useTitle } from "@/contexts/TitleContext";
 // ==============================================
 
 const SORT_OPTIONS = [
-  { label: "Relevance", value: "Relevance" },
-  { label: "Date", value: "Date" },
-  { label: "Price Low to High", value: "Price Low to High" },
-  { label: "Price High to Low", value: "Price High to Low" },
+  { label: "Relevance", value: "relevance" },
+  { label: "Latest", value: "latest" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
 ];
 
 const TopSortCard = ({
   totalProducts,
-  categoryDisplayName, // This now represents the specific category from useProductFilters
+  categoryDisplayName,
   genderDisplayName,
+  sortOption,
+  onSortChange 
 }) => {
   const [selectedOption, setSelectedOption] = useState(SORT_OPTIONS[0].value);
   const searchParams = useSearchParams(); // Use the hook directly here

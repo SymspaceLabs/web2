@@ -21,7 +21,6 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 // =============================================================
 
-
 export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleFavouriteOpen }) {
   const { state } = useCart();
   const cartList = state.cart;
@@ -33,6 +32,9 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  // ✅ UPDATED: Calculate total quantity using new 'quantity' field
+  const totalCartItems = cartList.reduce((acc, item) => acc + (item.quantity || 0), 0);
 
   const handleLogin = () => {
     toggleDialog();
@@ -63,8 +65,8 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
         </IconButton>
       </Badge>
 
-      {/* Shopping Cart Icon Button */}
-      <Badge badgeContent={cartList.reduce((acc, item) => acc + item.qty, 0)} color="primary">
+      {/* Shopping Cart Icon Button - ✅ UPDATED */}
+      <Badge badgeContent={totalCartItems} color="primary">
         <IconButton onClick={toggleCartOpen}>
           <PiShoppingCartSimpleBold color="#7D879C" />
         </IconButton>
@@ -74,7 +76,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
       <FlexBox
         sx={{
           position: "relative",
-          "&:hover .child-nav-item": { display: "block" }, // Ensure dropdown stays visible on hover
+          "&:hover .child-nav-item": { display: "block" },
           cursor: "pointer",
         }}
         onMouseEnter={() => setOpen(true)}
@@ -103,10 +105,10 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
               borderRadius: "8px",
               border: "1px solid white",
               "& .MuiMenuItem-root": {
-                color: "#fff", // Ensures text remains white
+                color: "#fff",
                 "&:hover": {
                   background: "linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)",
-                  color: "#fff !important", // Force white color on hover
+                  color: "#fff !important",
                 },
               },
             }}

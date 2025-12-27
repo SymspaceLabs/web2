@@ -1,13 +1,17 @@
-// src/components/ProductSearchPageView.js
+
+// =======================================
+// Product Search Page
+// src/components/product-search.js
+// =======================================
 
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Grid, Container, Box, useMediaQuery } from "@mui/material";
 
+import { useSearchParams } from "next/navigation";
 import { useProductData } from "@/hooks/useProductData";
 import { useProductFilters } from "@/hooks/useProductFilters";
-import { useSearchParams } from "next/navigation";
 import { useFilteredAndSortedProducts } from "@/hooks/useFilteredAndSortedProducts";
 
 import TopSortCard from "../top-sort-card";
@@ -39,6 +43,7 @@ export default function ProductSearchPageView() {
         setSortOption(event.target.value);
     }, []);
 
+    // Step 1:Fetches products from API
     const {
         allProducts,
         allBrands,
@@ -50,6 +55,8 @@ export default function ProductSearchPageView() {
         loading
     } = useProductData(paramsString); 
 
+
+    // Step 2: Manages filter state & applies some filters
     const {
         filterState,
         setFilterState,
@@ -69,6 +76,7 @@ export default function ProductSearchPageView() {
         searchParams
     );
 
+    // Step 3: Applies all filters again + sorting
     // Filter products based on filterState and sort them
     const displayedProducts = useFilteredAndSortedProducts(filterState, sortOption);
 
@@ -191,6 +199,19 @@ export default function ProductSearchPageView() {
         onClearAllFilters: handleResetAllFilters,
     }), [filterState, handleResetAllFilters, allProducts, handleFilterChange, setFilterState]);
 
+    useEffect(() => {
+        console.log('🔍 DEBUG INFO:', {
+            urlParams: paramsString,
+            totalProducts: allProducts.length,
+            filteredProducts: displayedProducts.length,
+            filterState: {
+            // checkedCategoryIds,
+            selectedBrands: filterState.selectedBrands,
+            priceRange: filterState.priceRange,
+            },
+            sampleProduct: allProducts[0],
+        });
+    }, [allProducts, displayedProducts, filterState, paramsString]);
 
     return (
         <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >
@@ -229,6 +250,8 @@ export default function ProductSearchPageView() {
                                 totalProducts={displayedProducts.length}
                                 categoryDisplayName={categoryDisplayName} 
                                 genderDisplayName={genderDisplayName}
+                                sortOption={sortOption} 
+                                onSortChange={handleSortChange}
                             />
                         </Box>
 

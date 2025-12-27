@@ -16,34 +16,11 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     // Start with a fresh copy of the product list
     let list = [...filterState.allProducts];
     
-    const checkedCategoryIds = filterState.checkedCategoryIds || [];
+    // ❌ REMOVE: Category filter - Backend already filtered by category
+    // The products we receive are already filtered by the URL params on the backend
     
     // =============================
-    // CATEGORY FILTER (FIXED) 🛠️
-    // =============================
-    if (checkedCategoryIds.length > 0) {
-      
-      // Convert checked filter IDs to a Set of strings for efficient lookup
-      const checkedIds = new Set(checkedCategoryIds.map(id => String(id)));
-      
-      list = list.filter(product => {
-        
-        // Use the most granular category ID available on the product object:
-        // 1. subcategoryItemChildId (leaf category)
-        // 2. subcategoryItemId (mid-level category, if no child exists)
-        // Ensure the ID is converted to a string for comparison
-        const productCategoryMatchId = String(
-            product.subcategoryItemChildId || product.subcategoryItemId || ''
-        );
-        
-        // Filter: Keep the product only if its granular ID is present in the checked filter IDs
-        return checkedIds.has(productCategoryMatchId);
-      });
-    }
-
-
-    // =============================
-    // BRAND FILTER
+    // BRAND FILTER (Client-side only)
     // =============================
     if (filterState.selectedBrands && filterState.selectedBrands.length > 0) {
       const brandIds = new Set(filterState.selectedBrands.map(b => b.id));
@@ -51,7 +28,7 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     }
 
     // =============================
-    // GENDER FILTER
+    // GENDER FILTER (Client-side only)
     // =============================
     if (filterState.selectedGenders && filterState.selectedGenders.length > 0) {
       const selectedGendersLower = new Set(
@@ -69,7 +46,7 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     }
 
     // =============================
-    // PRICE RANGE FILTER
+    // PRICE RANGE FILTER (Client-side only)
     // =============================
     if (filterState.priceRange && filterState.priceRange.length === 2) {
       list = list.filter(
@@ -77,21 +54,30 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
           const rawPrice = p.price;
           const rawSalePrice = p.salePrice;
           const effectivePrice = (typeof rawSalePrice === 'number' && rawSalePrice !== null) ? rawSalePrice : rawPrice;
+
+          // ✅ FIX: Handle products with price = 0 or null
+          // If price is 0 or not set, show the product (don't filter it out)
+          if (!effectivePrice && effectivePrice !== 0) return true;
           return (effectivePrice >= filterState.priceRange[0] && effectivePrice <= filterState.priceRange[1]);
         }
       );
+      console.log('🔍 After price filter:', list.length, 'products');
     } 
 
     // =============================
-    // AVAILABILITY FILTER
+    // AVAILABILITY FILTER (Client-side only)
     // =============================
+    // ✅ FIX: Only filter if user has explicitly selected availabilities
     if (filterState.selectedAvailabilities && filterState.selectedAvailabilities.length > 0) {
       const availSet = new Set(filterState.selectedAvailabilities);
       list = list.filter(p => p.availability && availSet.has(p.availability));
+      console.log('🔍 After availability filter:', list.length, 'products', 'Selected:', filterState.selectedAvailabilities);
+    } else {
+      console.log('🔍 Skipping availability filter (none selected)');
     }
 
     // =============================
-    // COLOR FILTER
+    // COLOR FILTER (Client-side only)
     // =============================
     if (filterState.selectedColors && filterState.selectedColors.length > 0) {
       const colorCodes = new Set(
@@ -107,6 +93,12 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     // =============================
     if (sortOption === "latest") {
       list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sortOption === "relevance") {
+      list.sort((a, b) => {
+        const priceA = (typeof a.salePrice === 'number' && a.salePrice !== null) ? a.salePrice : a.price;
+        const priceB = (typeof b.salePrice === 'number' && b.salePrice !== null) ? b.salePrice : b.price;
+        return priceA - priceB;
+      });
     } else if (sortOption === "price-asc") {
       list.sort((a, b) => {
         const priceA = (typeof a.salePrice === 'number' && a.salePrice !== null) ? a.salePrice : a.price;
@@ -121,13 +113,10 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
       });
     }
 
-    // =============================
-    // RETURN FINAL FILTERED LIST
-    // =============================
     return list;
   }, [
     filterState.allProducts,
-    filterState.checkedCategoryIds, 
+    // ❌ REMOVED: filterState.checkedCategoryIds - not needed anymore
     filterState.selectedBrands,
     filterState.selectedGenders,
     filterState.priceRange,

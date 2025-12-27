@@ -20,8 +20,8 @@ const ProductCard1 = (props) => {
 
   // Destructure the new price fields from the displayPrice object
   const { 
-    minPrice, 
-    originalMinPrice, 
+    salePrice, 
+    price, 
     hasSale
   } = product.displayPrice || {};
 
@@ -95,7 +95,7 @@ const ProductCard1 = (props) => {
                 fontWeight: 500,
               }}
             >
-              {hasSale ? currency(minPrice) : currency(originalMinPrice)}
+              {hasSale ? currency(salePrice) : currency(price)}
             </Paragraph>
             
             {/* Only show the original price with a strikethrough if a sale is active */}
@@ -108,7 +108,7 @@ const ProductCard1 = (props) => {
                   textDecoration: "line-through",
                 }}
               >
-                {currency(originalMinPrice)}
+                {currency(price)}
               </Paragraph>
             )}
           </FlexBox>

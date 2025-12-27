@@ -7,90 +7,48 @@ import PropTypes from "prop-types";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 /**
- * Helper function to create a clean slug from a string.
- * It converts the string to lowercase, removes commas and '&' symbols, and replaces spaces with dashes.
- * @param {string} name The string to convert into a slug.
- * @returns {string} The formatted slug.
- */
-const createSlug = (name) => {
-  if (typeof name !== 'string') {
-    return "";
-  }
-  return name.toLowerCase().replace(/[,&]/g, "").replace(/\s+/g, "-");
-};
-
-/**
  * Main helper function to get the full category path based on the product object.
- * It now correctly handles cases with and without a subcategoryItemChild.
+ * This now works with the parent chain structure from the API.
  * @param {object} product The product data object from the API.
- * @returns {Array<Object>} An array of breadcrumb objects with `name` and `href`.
+ * @returns {Array<Object>} An array of breadcrumb objects with `name`, `href`, and `depth`.
  */
 const getCategoryPath = (product) => {
   const path = [];
-  const { subcategoryItem, subcategoryItemChild } = product;
-
-  // Prioritize subcategoryItemChild if it exists
-  if (subcategoryItemChild) {
-    const { subcategoryItem: parentSubcategoryItem } = subcategoryItemChild;
-    const { subcategory } = parentSubcategoryItem;
-    const { category } = subcategory;
-    
-    // Add top-level category
-    if (category) {
-      path.push({
-        name: category.name,
-        href: `/products/search/all?category=${createSlug(category.name)}`
-      });
-    }
-
-    // Add subcategory
-    if (subcategory) {
-      path.push({
-        name: subcategory.name,
-        href: `/products/search/all?subcategory=${createSlug(subcategory.name)}`
-      });
-    }
-
-    // Add subcategory item
-    if (parentSubcategoryItem) {
-      path.push({
-        name: parentSubcategoryItem.name,
-        href: `/products/search/all?subcategoryItem=${createSlug(parentSubcategoryItem.name)}`
-      });
-    }
-
-    // Add the final subcategory item child
-    path.push({
-      name: subcategoryItemChild.name,
-      href: `/products/search/all?subcategoryItemChild=${createSlug(subcategoryItemChild.name)}`
-    });
-
-  } else if (subcategoryItem) { // Fallback to subcategoryItem if no subcategoryItemChild
-    const { subcategory } = subcategoryItem;
-    const { category } = subcategory;
-
-    // Add top-level category
-    if (category) {
-      path.push({
-        name: category.name,
-        href: `/products/search/all?category=${createSlug(category.name)}`
-      });
-    }
-
-    // Add subcategory
-    if (subcategory) {
-      path.push({
-        name: subcategory.name,
-        href: `/products/search/all?subcategory=${createSlug(subcategory.name)}`
-      });
-    }
-
-    // Add the final subcategory item
-    path.push({
-      name: subcategoryItem.name,
-      href: `/products/search/all?subcategoryItem=${createSlug(subcategoryItem.name)}`
-    });
+  
+  if (!product.category) {
+    return path;
   }
+
+  // Build the hierarchy by traversing up the parent chain
+  const hierarchy = [];
+  let currentCategory = product.category;
+  
+  while (currentCategory) {
+    hierarchy.unshift(currentCategory); // Add to beginning of array
+    currentCategory = currentCategory.parent;
+  }
+
+  // Convert hierarchy to breadcrumb path with appropriate query parameters
+  // Depth 0 = top level (category), Depth 1 = second level (subcategory), 
+  // Depth 2 = third level (subcategoryItem), Depth 3+ = fourth level (subcategoryItemChild)
+  hierarchy.forEach((cat, index) => {
+    const depth = index;
+    let queryParam = 'category'; // Default to category
+    
+    if (depth === 1) {
+      queryParam = 'subcategory';
+    } else if (depth === 2) {
+      queryParam = 'subcategoryItem';
+    } else if (depth >= 3) {
+      queryParam = 'subcategoryItem';
+    }
+    
+    path.push({
+      name: cat.name,
+      href: `/products/search/all?${queryParam}=${cat.slug}`,
+      depth: depth
+    });
+  });
 
   return path;
 };
@@ -105,46 +63,54 @@ export default function BreadcrumbNav({ product }) {
       <Link
         href="/products/search/all"
         style={{
-          color: 'text.secondary',
+          color: 'inherit',
           textDecoration: 'none',
-          '&:hover': {
-            color: 'text.primary',
-            fontWeight: 'bold',
-          },
         }}
       >
-        Home
-      </Link>
-    </Box>,
-  ];
-
-  categoryPath.slice(0, -1).forEach((item) => {
-    breadcrumbItems.push(
-      <Box key={item.name} sx={{ display: 'flex', alignItems: 'center' }}>
-        <Link
-          href={item.href}
-          style={{
+        <Typography
+          sx={{
             color: 'text.secondary',
-            textDecoration: 'none',
             '&:hover': {
               color: 'text.primary',
               fontWeight: 'bold',
             },
           }}
         >
-          {item.name}
+          Home
+        </Typography>
+      </Link>
+    </Box>,
+  ];
+
+  // Make all category items clickable, including the last one
+  categoryPath.forEach((item) => {
+    breadcrumbItems.push(
+      <Box key={item.name} sx={{ display: 'flex', alignItems: 'center' }}>
+        <Link
+          href={item.href}
+          style={{
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        >
+          <Typography
+            sx={{
+              color: 'text.secondary',
+              '&:hover': {
+                color: 'text.primary',
+                fontWeight: 'bold',
+              },
+            }}
+          >
+            {item.name}
+          </Typography>
         </Link>
       </Box>
     );
   });
 
-  if (lastItemName) {
-    breadcrumbItems.push(
-      <Typography key="last" color="text.primary" fontWeight="bold">
-        {lastItemName}
-      </Typography>
-    );
-  } else {
+  // If no categories, show "All Products" as the current page
+  if (categoryPath.length === 0) {
     breadcrumbItems.push(
       <Typography key="all-products" color="text.primary" fontWeight="bold">
         All Products
@@ -167,26 +133,11 @@ export default function BreadcrumbNav({ product }) {
 BreadcrumbNav.propTypes = {
   product: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    subcategoryItem: PropTypes.shape({
+    category: PropTypes.shape({
+      id: PropTypes.string,
       name: PropTypes.string,
-      subcategory: PropTypes.shape({
-        name: PropTypes.string,
-        category: PropTypes.shape({
-          name: PropTypes.string,
-        }),
-      }),
-    }),
-    subcategoryItemChild: PropTypes.shape({
-      name: PropTypes.string,
-      subcategoryItem: PropTypes.shape({
-        name: PropTypes.string,
-        subcategory: PropTypes.shape({
-          name: PropTypes.string,
-          category: PropTypes.shape({
-            name: PropTypes.string,
-          }),
-        }),
-      }),
+      slug: PropTypes.string,
+      parent: PropTypes.object, // Can be nested parent objects
     }),
   }).isRequired,
 };

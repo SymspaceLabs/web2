@@ -1,14 +1,12 @@
+// hooks/use-product.js
+
 import { useCallback, useState } from "react";
 import { useSnackbar } from "notistack";
 import useCart from "../../hooks/useCart";
+
 export default function useProduct(slug) {
-  const {
-    state,
-    dispatch
-  } = useCart();
-  const {
-    enqueueSnackbar
-  } = useSnackbar();
+  const { state, dispatch } = useCart();
+  const { enqueueSnackbar } = useSnackbar();
   const [openModal, setOpenModal] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const cartItem = state.cart.find(item => item.slug === slug);

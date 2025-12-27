@@ -10,7 +10,7 @@ import { Upload, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { ImageCard } from "./image-card"
-import type { Color, ImageWithLoading } from "@/types/media.types"
+import type { Color, ImageWithLoading } from "@/types/media.type"
 
 type ColorImageSectionProps = {
   color: Color

@@ -19,7 +19,7 @@ import {
 import { useRouter, useParams } from "next/navigation"
 import { ArrowLeft, Edit, Trash2, MapPin, Briefcase, Clock, Globe, Plane, MapPinned } from "lucide-react"
 import { getJobById, deleteJob } from "@/api/job"
-import { Job } from "@/types/job.types"
+import { Job } from "@/types/job.type"
 import { toast } from "sonner"
 
 export default function ViewJobPage() {

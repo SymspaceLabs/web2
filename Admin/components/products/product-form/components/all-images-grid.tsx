@@ -7,7 +7,7 @@
 import { useState } from "react"
 import { X, Loader2, AlertCircle, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { ImageWithLoading } from "@/types/media.types"
+import type { ImageWithLoading } from "@/types/media.type"
 
 type AllImagesGridProps = {
   images: ImageWithLoading[]

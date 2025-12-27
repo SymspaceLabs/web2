@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Edit, ExternalLink, Calendar, User, Tag } from "lucide-react"
 import { getBlog } from "@/api/blog"
-import { Blog } from "@/types/blog.types"
+import { Blog } from "@/types/blog.type"
 
 export default function ViewBlogPage() {
   const params = useParams()

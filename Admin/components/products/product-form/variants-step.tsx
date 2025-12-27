@@ -7,10 +7,10 @@ import { ArrowRight, Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { uploadImage } from "@/api/upload"
 import { ImageUploader } from "@/components/products/product-form/components/image-uploader"
 import { VariantsTable, useVariantsTable, type VariantRow, type Size } from "./components/variants-table"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 // ===== TYPE DEFINITIONS =====
 type FormData = {
@@ -20,7 +20,7 @@ type FormData = {
     size: string; 
     dimensions?: any; 
     sizeChartUrl?: string;
-    productWeight?: { value: number | null; unit: 'kg' | 'lbs' }
+    productWeight?: { value: number | null; unit: 'kg' | 'lbs' | 'oz' }
   }>
   variants: VariantRow[]
   material?: string
@@ -40,12 +40,26 @@ interface Color {
 }
 
 // ===== UTILITY FUNCTIONS =====
-const convertWeight = (value: number, fromUnit: 'kg' | 'lbs', toUnit: 'kg' | 'lbs'): number => {
+const convertWeight = (value: number, fromUnit: 'kg' | 'lbs' | 'oz', toUnit: 'kg' | 'lbs' | 'oz'): number => {
   if (fromUnit === toUnit) return value
-  if (fromUnit === 'lbs' && toUnit === 'kg') {
-    return value * 0.453592
+  
+  // Convert to kg first
+  let valueInKg: number
+  if (fromUnit === 'lbs') {
+    valueInKg = value * 0.453592
+  } else if (fromUnit === 'oz') {
+    valueInKg = value * 0.0283495
+  } else {
+    valueInKg = value
   }
-  return value * 2.20462
+  
+  // Convert from kg to target unit
+  if (toUnit === 'lbs') {
+    return valueInKg * 2.20462
+  } else if (toUnit === 'oz') {
+    return valueInKg * 35.274
+  }
+  return valueInKg
 }
 
 const generateVariants = (colors: Color[], sizes: Size[], existingVariants: VariantRow[]): VariantRow[] => {
@@ -121,9 +135,9 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     length: "",
     width: "",
     height: "",
-    unit: "cm" as 'cm' | 'in',
+    unit: "cm" as 'cm' | 'in' | 'mm',
     weightValue: "",
-    weightUnit: "kg" as 'kg' | 'lbs',
+    weightUnit: "kg" as 'kg' | 'lbs' | 'oz',
     sizeChartUrl: ""
   })
   
@@ -190,7 +204,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
   }, [])
 
   // ===== SIZE MANAGEMENT =====
-  const handleWeightUnitChange = useCallback((newUnit: 'kg' | 'lbs') => {
+  const handleWeightUnitChange = useCallback((newUnit: 'kg' | 'lbs' | 'oz') => {
     const currentValue = parseFloat(newSizeData.weightValue)
     
     if (!isNaN(currentValue) && currentValue > 0) {
@@ -531,10 +545,11 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                 />
                 <select
                   value={newSizeData.unit}
-                  onChange={(e) => setNewSizeData(prev => ({ ...prev, unit: e.target.value as 'cm' | 'in' }))}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, unit: e.target.value as 'cm' | 'in' | 'mm' }))}
                   className="px-3 py-2 rounded-md border bg-background text-sm"
                 >
                   <option value="cm">cm</option>
+                  <option value="mm">mm</option>
                   <option value="in">in</option>
                 </select>
               </div>
@@ -553,11 +568,12 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                 />
                 <select
                   value={newSizeData.weightUnit}
-                  onChange={(e) => handleWeightUnitChange(e.target.value as 'kg' | 'lbs')}
+                  onChange={(e) => handleWeightUnitChange(e.target.value as 'kg' | 'lbs' | 'oz')}
                   className="px-3 py-2 rounded-md border bg-background text-sm w-20"
                 >
                   <option value="kg">kg</option>
                   <option value="lbs">lbs</option>
+                  <option value="oz">oz</option>
                 </select>
               </div>
             </div>

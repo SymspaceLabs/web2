@@ -12,7 +12,7 @@ import { BasicInfoStep } from "@/components/products/product-form/basic-info-ste
 import { updateProduct, createProduct, updateProductVariants } from "@/api/product"
 
 // ✅ Import shared types instead of redefining them
-import type { Product, FormData } from "@/types/product"
+import type { Product, FormData } from "@/types/product.type"
 
 type ProductFormProps = {
   product?: Product

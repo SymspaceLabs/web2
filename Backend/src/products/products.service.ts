@@ -18,7 +18,7 @@ import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { UpdateProductVariantsDto, VariantInputDto } from './dto/update-product-variants.dto';
 import { DisplayPrice } from './types/display-price.types';
-import { ProductDetailDto, ProductListItemDto } from './dto/product-response.dto';
+import { ProductDetailDto } from './dto/product-response.dto';
 import { ProductMapper } from './utils/product-mappers';
 import { extractGranularCategory } from './utils/category-helpers';
 
@@ -561,23 +561,19 @@ export class ProductsService {
 
   // ======================================================
   // Calculates the display price for a product based on its variants
+  // Returns the cheapest variant's pricing information
   // @param product - Product entity with variants loaded
-  // @returns DisplayPrice object with formatting and pricing logic
+  // @returns DisplayPrice object with price, salePrice, and hasSale flag
   // ======================================================
   private calculateDisplayPrice(product: Product): DisplayPrice {
     const variants = product.variants || [];
     
-    // Fallback to product-level pricing if no variants
+    // Fallback to zero pricing if no variants
     if (variants.length === 0) {
-      const hasSale = false;
       return {
-        minPrice: 0,
-        maxPrice: 0,
-        displayType: 'single',
-        formattedDisplay: this.formatPrice(0),
-        hasSale,
-        originalMinPrice: undefined,
-        originalMaxPrice: undefined,
+        price: 0,
+        salePrice: 0,
+        hasSale: false,
       };
     }
 
@@ -585,66 +581,25 @@ export class ProductsService {
     const availableVariants = variants.filter(v => v.stock > 0);
     const variantsToUse = availableVariants.length > 0 ? availableVariants : variants;
 
-    // Extract current and original prices
-    const currentPrices = variantsToUse.map(v => v.salePrice || v.price).filter(p => p > 0);
-    const originalPrices = variantsToUse.map(v => v.price).filter(p => p > 0);
-    
-    if (currentPrices.length === 0) {
-      return {
-        minPrice: 0,
-        maxPrice: 0,
-        displayType: 'single',
-        formattedDisplay: 'Price not available',
-        hasSale: false,
-      };
+    // Find the variant with the cheapest effective price (salePrice or price)
+    let cheapestVariant = variantsToUse[0];
+    let cheapestEffectivePrice = cheapestVariant.salePrice || cheapestVariant.price;
+
+    for (const variant of variantsToUse) {
+      const effectivePrice = variant.salePrice || variant.price;
+      if (effectivePrice > 0 && effectivePrice < cheapestEffectivePrice) {
+        cheapestEffectivePrice = effectivePrice;
+        cheapestVariant = variant;
+      }
     }
 
-    const minPrice = Math.min(...currentPrices);
-    const maxPrice = Math.max(...currentPrices);
-    const originalMin = Math.min(...originalPrices);
-    const originalMax = Math.max(...originalPrices);
-    
-    // Check if any variant has a sale
-    const hasSale = variantsToUse.some(v => v.salePrice && v.salePrice < v.price);
-    
-    // Calculate price spread percentage
-    const priceSpread = minPrice > 0 ? ((maxPrice - minPrice) / minPrice) * 100 : 0;
-    
-    // Single price point
-    if (minPrice === maxPrice) {
-      return {
-        minPrice,
-        maxPrice,
-        displayType: 'single',
-        formattedDisplay: this.formatPrice(minPrice),
-        hasSale,
-        originalMinPrice: hasSale ? originalMin : undefined,
-        originalMaxPrice: hasSale ? originalMax : undefined,
-      };
-    }
-    
-    // Small price variance (< 10%) - show "From" pricing
-    if (priceSpread < 10) {
-      return {
-        minPrice,
-        maxPrice,
-        displayType: 'from',
-        formattedDisplay: `From ${this.formatPrice(minPrice)}`,
-        hasSale,
-        originalMinPrice: hasSale ? originalMin : undefined,
-        originalMaxPrice: hasSale ? originalMax : undefined,
-      };
-    }
-    
-    // Significant price range - show full range
+    // Check if the cheapest variant has a sale
+    const hasSale = cheapestVariant.salePrice > 0 && cheapestVariant.salePrice < cheapestVariant.price;
+
     return {
-      minPrice,
-      maxPrice,
-      displayType: 'range',
-      formattedDisplay: `${this.formatPrice(minPrice)} - ${this.formatPrice(maxPrice)}`,
+      price: cheapestVariant.price,
+      salePrice: cheapestVariant.salePrice || 0,
       hasSale,
-      originalMinPrice: hasSale ? originalMin : undefined,
-      originalMaxPrice: hasSale ? originalMax : undefined,
     };
   }
 

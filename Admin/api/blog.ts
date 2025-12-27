@@ -1,6 +1,6 @@
 // api/blog.ts
 import { authFetch, API_ENDPOINTS } from "@/lib/api"
-import { Blog, BlogFormData } from "@/types/blog.types"
+import { Blog, BlogFormData } from "@/types/blog.type"
 
 /**
  * Fetch all blogs from the API

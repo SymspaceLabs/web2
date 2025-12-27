@@ -17,24 +17,18 @@ import { Box, Drawer, Grid } from '@mui/material';
 // Services
 import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
 import BreadcrumbNav from "./breadcrumb-nav";
+import { useSnackbar } from "notistack";
 
 // ================================================================
 
 export default function ProductDetails({ product }) {
-  const {
-    id,
-    colors,
-    sizes,
-    name, 
-    images, 
-    slug
-  } = product || {};
+  const { id, colors } = product || {};
+  const { enqueueSnackbar } = useSnackbar();
 
   // State hooks for selected options and toggles
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState("");
   const [sizeError, setSizeError] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState("");
 
   const { state, dispatch } = useCart();
 
@@ -45,66 +39,50 @@ export default function ProductDetails({ product }) {
 
   // Updates the selected size
   const handleSizeSelect = (event) => setSelectedSize(event.target.value);
-
-  // Changes the cart amount based on user action
+ 
+  // ✅ NEW: Simplified Add to Cart
   const handleAddToCart = () => {
     if (!selectedSize) {
       setSizeError(true);
+      enqueueSnackbar("Please select a size", { variant: "warning" });
       return;
     }
 
-    // ✅ Add this check
-    if (!availability) {
-      console.error("Price information not loaded");
+    if (!availability || !availability.variantId) {
+      enqueueSnackbar("Product information not loaded", { variant: "error" });
       return;
     }
 
     if (availability.stock === 0) {
+      enqueueSnackbar("Product is out of stock", { variant: "error" });
       return;
     }
 
-    setSizeError(false);
-
-    // Find the image that matches the selected color code
-    const matchingImage = images.find(
-      (image) => image.colorCode === selectedColor.code
+    // Check current quantity in cart
+    const cartItem = state.cart.find(
+      item => item.variantId === availability.variantId
     );
+    const currentQty = cartItem ? cartItem.quantity : 0;
 
-    // Check if the item already exists in the cart (matching by id + color + size)
-    const existingItem = state.cart.find(
-      (item) =>
-        item.id === id &&
-        item.selectedColor.id === selectedColor.id &&
-        item.selectedSize === selectedSize
-    );
-
-    const newQty = existingItem ? existingItem.qty + 1 : 1;
-
-    // Check against the current stock before dispatching
-    if (availability && newQty > availability.stock) {
+    if (currentQty >= availability.stock) {
+      enqueueSnackbar(
+        `Maximum stock (${availability.stock}) already in cart`,
+        { variant: "warning" }
+      );
       return;
     }
 
+    // ✅ NEW: Dispatch with only variantId!
     dispatch({
-      type: "CHANGE_CART_AMOUNT",
+      type: "ADD_TO_CART",
       payload: {
-        price: availability?.price || 0,
-        salePrice: availability?.salePrice || null, 
-        qty: newQty,
-        name,
-        imgUrl: matchingImage ? matchingImage.url : images[0].url,
-        id,
-        slug,
-        selectedColor,
-        selectedSize,
-        sizes: sizes.map(size => ({
-          label: size.size,
-          value: size.id
-        })),
-        variant: selectedVariant,
-        stock: availability.stock, // Correctly added the stock attribute
+        variantId: availability.variantId,
+        quantity: 1,
       },
     });
+
+    setSizeError(false);
+    enqueueSnackbar(`${product.name} added to cart!`, { variant: "success" });
   };
 
   const toggleSidenav = () => setSidenavOpen(state => !state);
@@ -126,7 +104,6 @@ export default function ProductDetails({ product }) {
       try {
         const data = await fetchProductAvailability(id, selectedColor.id, selectedSize);
         setAvailability(data);
-        setSelectedVariant(data.variantId);
       } catch (err) {
         console.error("Error fetching availability", err);
         setAvailability({ stock: 0, status: "Error", statusColor: "error.main" }); // Set a default error state
@@ -155,14 +132,6 @@ export default function ProductDetails({ product }) {
       <Grid container spacing={3} justifyContent="space-around">
         
         { /* IMAGE GALLERY AREA (Left Column) */}
-        {/*
-          Apply position: sticky and top: X to the inner Box.
-          When the viewport scrolls, this Box will stick when its top
-          position reaches 100px from the top of the viewport.
-          It will stop sticking when the parent Grid item finishes scrolling.
-          The height is set to ensure it doesn't take up the full viewport height,
-          which could prevent the parent Grid container from scrolling properly.
-        */}
         <Grid item md={6} xs={12}>
           <Box sx={{ 
             position: 'sticky', 

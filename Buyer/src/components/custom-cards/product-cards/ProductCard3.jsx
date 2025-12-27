@@ -19,8 +19,8 @@ function ProductCard3(props) {
 
   // Destructure the new price fields from the displayPrice object
   const { 
-    minPrice, 
-    originalMinPrice, 
+    salePrice, 
+    price, 
     hasSale
   } = product.displayPrice || {};
 
@@ -71,7 +71,6 @@ function ProductCard3(props) {
               alt={product.name}
               fill
               style={{ objectFit: "cover" }} // Use "cover" to fill the entire box
-              // style={{ objectFit: "contain" }} // Use "contain" if you don't want to crop the image
             />
           </Box>
         </Box>
@@ -92,10 +91,10 @@ function ProductCard3(props) {
           
           <Paragraph fontWeight={600} color="primary">
             {/* Conditionally display price and sale price */}
-            {hasSale ? `$${product.minPrice}` : `$${product.originalMinPrice}`}
+            {hasSale ? `$${salePrice}` : `$${price}`}
             {hasSale && (
               <Span sx={{ textDecoration: 'line-through', color: 'grey', fontWeight: 400 }}>
-                &nbsp;${originalMinPrice}
+                &nbsp;${price}
               </Span>
             )}
           </Paragraph>

@@ -7,7 +7,7 @@ import { Upload, X, Loader2, Box } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { formatFileSize } from "@/utils/media.utils"
-import type { Color, ModelWithLoading } from "@/types/media.types"
+import type { Color, ModelWithLoading } from "@/types/media.type"
 
 type ColorModelSectionProps = {
   color: Color
@@ -56,7 +56,7 @@ export function ColorModelSection({
           <input
             ref={fileInputRef}
             type="file"
-            accept=".glb,.gltf"
+            accept=".glb,.fbx"
             onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])}
             className="hidden"
           />
@@ -67,7 +67,7 @@ export function ColorModelSection({
             className="w-full"
           >
             <Upload className="h-4 w-4 mr-2" />
-            Upload 3D Model (.glb, .gltf)
+            Upload 3D Model (.glb, .fbx)
           </Button>
         </div>
       ) : model.isUploading ? (

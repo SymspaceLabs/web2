@@ -16,12 +16,15 @@ import ProductPrice from "../product-price";
 import AddToCartButton from "./components/add-to-cart";
 import FavoriteButton from "./components/favorite-button"; // STYLED COMPONENT
 
+
+// ===========================================================
+
 const Wrapper = styled(Card)({
   width: "100%",
   overflow: "hidden",
   position: "relative",
   marginBottom: "1.25rem"
-}); // ===========================================================
+});
 
 // ===========================================================
 export default function ProductCard9(props) {
@@ -66,50 +69,36 @@ export default function ProductCard9(props) {
   };
 
   return <Wrapper>
-      {
-      /* PRODUCT FAVORITE BUTTON */
-    }
+      {/* PRODUCT FAVORITE BUTTON */}
       <FavoriteButton isFavorite={isFavorite} toggleFavorite={toggleFavorite} />
 
       <Grid container spacing={1}>
         <Grid item sm={3} xs={12}>
           <Box position="relative">
-            {
-            /* DISCOUNT PERCENT CHIP IF AVAILABLE */
-          }
+            {/* DISCOUNT PERCENT CHIP IF AVAILABLE */}
             <DiscountChip discount={off} />
 
-            {
-            /* PRODUCT IMAGE / THUMBNAIL */
-          }
+            {/* PRODUCT IMAGE / THUMBNAIL */}
             <Image src={imgUrl} alt={title} width="100%" />
           </Box>
         </Grid>
 
         <Grid item sm={9} xs={12}>
           <FlexBox flexDirection="column" justifyContent="center" height="100%" p={2}>
-            {
-            /* PRODUCT TITLE / NAME */
-          }
+            {/* PRODUCT TITLE / NAME */}
             <Link href={`/products/${slug}`}>
               <H5 fontWeight="600" my="0.5rem">
                 {title}
               </H5>
             </Link>
 
-            {
-            /* PRODUCT RATING / REVIEW  */
-          }
+            {/* PRODUCT RATING / REVIEW  */}
             <Rating size="small" value={rating} color="warn" readOnly />
 
-            {
-            /* PRODUCT PRICE */
-          }
+            {/* PRODUCT PRICE */}
             <ProductPrice price={price} discount={off} />
 
-            {
-            /* PRODUCT ADD TO CART BUTTON */
-          }
+            {/* PRODUCT ADD TO CART BUTTON */}
             <AddToCartButton quantity={cartItem?.qty} handleDecrement={handleDecrementQuantity} handleIncrement={handleIncrementQuantity} />
           </FlexBox>
         </Grid>

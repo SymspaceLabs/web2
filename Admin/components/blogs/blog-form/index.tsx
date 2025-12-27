@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { createBlog, updateBlog } from "@/api/blog"
-import { Blog, BlogFormData } from "@/types/blog.types"
+import { Blog, BlogFormData } from "@/types/blog.type"
 import { toast } from "sonner"
 import { uploadImage } from "@/api/upload"
 

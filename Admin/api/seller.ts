@@ -1,6 +1,6 @@
 // api/seller.ts
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
-import { Seller } from "@/types/seller.types"
+import { Seller } from "@/types/seller.type"
 
 export async function getSeller(id: string): Promise<Seller> {
   const response = await authFetch(`${API_ENDPOINTS.sellers}/${id}`)

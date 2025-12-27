@@ -3,13 +3,9 @@
 // ============================================================================
 
 export interface DisplayPrice {
-  minPrice: number;
-  maxPrice: number;
-  displayType: 'single' | 'range' | 'from';
-  formattedDisplay: string;
+  price: number;
+  salePrice: number;
   hasSale: boolean;
-  originalMinPrice?: number;
-  originalMaxPrice?: number;
 }
 
 export interface ProductWithDisplayPrice {

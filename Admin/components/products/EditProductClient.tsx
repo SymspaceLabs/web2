@@ -7,7 +7,7 @@ import { ProtectedLayout } from "@/components/protected-layout"
 import { Loader2 } from "lucide-react"
 
 // ✅ Import the shared Product type
-import type { Product } from "@/types/product"
+import type { Product } from "@/types/product.type"
 
 export function EditProductClient({ initialId }: { initialId: string }) {
   const [loading, setLoading] = useState(true)

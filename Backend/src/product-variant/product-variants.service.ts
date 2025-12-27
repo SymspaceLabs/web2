@@ -1,10 +1,39 @@
 // src/product-variants/product-variants.service.ts
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductVariant } from './entities/product-variant.entity';
 import { UpdateVariantStockDto } from './dto/update-variant-stock.dto';
 import { UpdateVariantDimensionsRequestDto } from './dto/update-variant-dimensions.dto';
+
+// ========================================
+// NEW: Response DTO for cart enrichment
+// ========================================
+export interface VariantDetailsForCartDto {
+  variantId: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  imageUrl: string;
+  price: number;
+  salePrice: number | null;
+  cost: number;
+  sku: string;
+  stock: number;
+  color: {
+    id: string;
+    code: string;
+    name: string;
+  } | null;
+  size: {
+    id: string;
+    label: string;
+  } | null;
+  sizes: Array<{
+    label: string;
+    value: string;
+  }>;
+}
 
 @Injectable()
 export class ProductVariantsService {
@@ -13,13 +42,10 @@ export class ProductVariantsService {
     private readonly variantRepo: Repository<ProductVariant>,
   ) {}
 
-    /**
-   * Fetches a specific product variant by its ID.
-   * Includes relations for product, color, and size.
-   * @param variantId The ID of the product variant.
-   * @returns The found ProductVariant entity.
-   * @throws {NotFoundException} if the variant is not found.
-   */
+  // ========================================
+  // EXISTING METHODS (unchanged)
+  // ========================================
+
   async getVariantById(variantId: string): Promise<ProductVariant> {
     const variant = await this.variantRepo.findOne({
       where: { id: variantId }
@@ -34,8 +60,8 @@ export class ProductVariantsService {
 
   async getVariantStocksByProduct(productId: string) {
     const variants = await this.variantRepo.find({
-      where: { product: { id: productId } }, // might fail if the relation isn't loaded
-      relations: ['product', 'color', 'size'], // include 'product' too
+      where: { product: { id: productId } },
+      relations: ['product', 'color', 'size'],
     });
   
     return variants.map(variant => ({
@@ -45,17 +71,14 @@ export class ProductVariantsService {
       color: variant.color?.name ?? null,
       size: variant.size?.size ?? null,
       sku: variant.sku ?? null,
-
-      //NEW ATTRIBUTES
-      salePrice : variant.salePrice,
-      productWeight : variant.productWeight,
-      dimensions : variant.dimensions,
-      sizeChart : variant.sizeChart,
-      sizeFit : variant.sizeFit,
+      salePrice: variant.salePrice,
+      productWeight: variant.productWeight,
+      dimensions: variant.dimensions,
+      sizeChart: variant.sizeChart,
+      sizeFit: variant.sizeFit,
     }));
   }
   
-  // Assuming UpdateVariantStockDto contains: 
   async updateStockForVariants(
     productId: string,
     updateList: UpdateVariantStockDto[],
@@ -63,7 +86,6 @@ export class ProductVariantsService {
     
     const results: { id: string; stock: number; sku: string }[] = [];
 
-    // Destructure all possible update fields from the DTO
     for (const { 
       id, 
       stock,
@@ -73,29 +95,23 @@ export class ProductVariantsService {
       material,
       dimensions, 
       productWeight, 
-      sizeChart, // New field from DTO
-      sizeFit    // New field from DTO
+      sizeChart,
+      sizeFit
     } of updateList) {
       
-      // 1. Load the variant along with its product relation
       const variant = await this.variantRepo.findOne({
         where: { id },
         relations: ['product'],
       });
 
-      // 2. Check existence and ownership
       if (!variant || variant.product.id !== productId) {
         throw new NotFoundException(
           `Variant with id ${id} for product ${productId} not found`,
         );
       }
       
-      // 3. Update all fields and save
-      
-      // Update stock (required in your DTO)
       variant.stock = stock; 
       
-      // 3a. Update Price Fields  <-- NEW PRICE LOGIC
       if (price !== undefined) {
         variant.price = price;
       }
@@ -104,47 +120,38 @@ export class ProductVariantsService {
         variant.salePrice = salePrice;
       }
 
-      // 2a. Handle NEW Field: cost
       if (cost !== undefined) {
         variant.cost = cost; 
       }
     
-      // 2b. Handle NEW Field: material
       if (material !== undefined) {
         variant.material = material;
       }
     
-      // 3b. Handle Partial JSON Updates (dimensions) (rest of the logic remains)
       if (dimensions !== undefined) {
-        // Merge existing dimensions with new dimensions, preserving existing fields not provided in the update.
         variant.dimensions = { 
           ...variant.dimensions, 
           ...dimensions 
         };
       }
       
-      // 3b. Handle Partial JSON Updates (productWeight)
       if (productWeight !== undefined) {
-        // Merge existing weight with new weight.
         variant.productWeight = { 
           ...variant.productWeight, 
           ...productWeight 
         };
       }
       
-      // 3c. Handle Optional Scalar Field Updates (sizeChart)
       if (sizeChart !== undefined) {
         variant.sizeChart = sizeChart;
       }
       
-      // 3d. Handle Optional Scalar Field Updates (sizeFit)
       if (sizeFit !== undefined) {
         variant.sizeFit = sizeFit;
       }
 
       await this.variantRepo.save(variant);
 
-      // 4. Include sku in the result
       results.push({
         id: variant.id,
         stock: variant.stock,
@@ -174,12 +181,10 @@ export class ProductVariantsService {
       );
     }
   
-    // Determine status and color
     let status = 'Out of stock';
     let statusColor = '#000';
   
     if (variant.stock >= 10) {
-      // When stock >=10, do not need show any message
       status = '';
       statusColor = '';
     } else if (variant.stock > 0 && variant.stock < 10) {
@@ -187,9 +192,6 @@ export class ProductVariantsService {
       statusColor = '#00B934';
     }
 
-    // ========================================
-    // NEW: Add pricing information
-    // ========================================
     const hasSale = 
       variant.salePrice !== null && 
       variant.salePrice > 0 && 
@@ -201,56 +203,145 @@ export class ProductVariantsService {
       available: variant.stock > 0,
       status,
       statusColor,
-      price: variant.price,           // Regular price
-      salePrice: variant.salePrice,   // Sale price (can be null)
-      cost: variant.cost,             // Cost (optional, for admin/internal use)
-      hasSale,                        // Boolean flag for convenience
-      sku: variant.sku,               // SKU for tracking
+      price: variant.price,
+      salePrice: variant.salePrice,
+      cost: variant.cost,
+      hasSale,
+      sku: variant.sku,
     };
   }
 
-    /**
-   * Updates the dimensions and size chart file for a single product variant.
-   * @param variantId The unique ID of the variant to update.
-   * @param updateData The data transfer object containing the new dimensions and file path.
-   * @returns The updated ProductVariant entity.
-   * @throws {NotFoundException} if the variant is not found.
-   */
   async updateVariantDimensions(
     variantId: string, 
     updateData: UpdateVariantDimensionsRequestDto
   ): Promise<ProductVariant> {
-    // 1. Load the variant
     const variant = await this.variantRepo.findOne({
       where: { id: variantId },
     });
 
-    // 2. Check existence
     if (!variant) {
       throw new NotFoundException(`Product Variant with ID "${variantId}" not found`);
     }
 
-    // 3. Update fields
     const { dimensions, sizeChartFile } = updateData;
 
-    // Handle Partial JSON Update for dimensions
     if (dimensions !== undefined) {
-      // Merge existing dimensions with new dimensions
       variant.dimensions = {
         ...variant.dimensions,
         ...dimensions,
       };
     }
 
-    // Handle Optional Scalar Field Update for sizeChart
     if (sizeChartFile !== undefined) {
-      // Assuming 'sizeChart' is the field name in your entity
       variant.sizeChart = sizeChartFile;
     }
 
-    // 4. Save and return the updated variant
     return this.variantRepo.save(variant);
   }
-  
-  
+
+  // ========================================
+  // NEW METHODS FOR CART ENRICHMENT
+  // ========================================
+
+  /**
+   * Fetch complete variant details for cart enrichment (single variant)
+   * @param variantId The variant ID to fetch
+   * @returns Complete variant details formatted for cart display
+   */
+  async getVariantDetailsForCart(variantId: string): Promise<VariantDetailsForCartDto> {
+    const variant = await this.variantRepo.findOne({
+      where: { id: variantId },
+      relations: [
+        'product',
+        'product.images',
+        'product.sizes',
+        'color',
+        'size'
+      ],
+    });
+
+    if (!variant) {
+      throw new NotFoundException(`Variant with ID "${variantId}" not found`);
+    }
+
+    return this.mapVariantToCartDto(variant);
+  }
+
+  /**
+   * Fetch complete variant details for multiple variants (bulk operation)
+   * More efficient than multiple single requests
+   * @param variantIds Array of variant IDs to fetch
+   * @returns Array of variant details in same order as input
+   */
+  async getVariantDetailsForCartBulk(variantIds: string[]): Promise<VariantDetailsForCartDto[]> {
+    if (!variantIds || variantIds.length === 0) {
+      return [];
+    }
+
+    const variants = await this.variantRepo.find({
+      where: { id: In(variantIds) },
+      relations: [
+        'product',
+        'product.images',
+        'product.sizes',
+        'color',
+        'size'
+      ],
+    });
+
+    // Create a map for quick lookup
+    const variantMap = new Map(variants.map(v => [v.id, v]));
+
+    // Return variants in the same order as requested IDs
+    return variantIds.map(id => {
+      const variant = variantMap.get(id);
+      if (!variant) {
+        console.warn(`Variant ${id} not found in bulk fetch`);
+        return null;
+      }
+      return this.mapVariantToCartDto(variant);
+    }).filter(Boolean) as VariantDetailsForCartDto[];
+  }
+
+  /**
+   * Helper method to map variant entity to cart DTO format
+   */
+  private mapVariantToCartDto(variant: ProductVariant): VariantDetailsForCartDto {
+    // Find the image that matches the variant's color
+    const matchingImage = variant.product.images?.find(
+      img => img.colorId === variant.color?.id
+    );
+
+    // Fallback to first image if no color match
+    const imageUrl = matchingImage?.url || variant.product.images?.[0]?.url || '';
+
+    // Map all available sizes for the product
+    const availableSizes = variant.product.sizes?.map(size => ({
+      label: size.size,
+      value: size.id,
+    })) || [];
+
+    return {
+      variantId: variant.id,
+      productId: variant.product.id,
+      productName: variant.product.name,
+      productSlug: variant.product.slug,
+      imageUrl,
+      price: variant.price,
+      salePrice: variant.salePrice,
+      cost: variant.cost,
+      sku: variant.sku,
+      stock: variant.stock,
+      color: variant.color ? {
+        id: variant.color.id,
+        code: variant.color.code,
+        name: variant.color.name,
+      } : null,
+      size: variant.size ? {
+        id: variant.size.id,
+        label: variant.size.size,
+      } : null,
+      sizes: availableSizes,
+    };
+  }
 }

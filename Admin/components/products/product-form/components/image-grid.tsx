@@ -6,7 +6,7 @@
 
 import { Upload, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { ImageWithLoading } from "@/types/media.types"
+import type { ImageWithLoading } from "@/types/media.type"
 
 type ImageGridProps = {
   images: ImageWithLoading[]

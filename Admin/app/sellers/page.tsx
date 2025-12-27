@@ -27,7 +27,7 @@ import {
 import { useRouter } from "next/navigation"
 import { Search, Plus, Eye, Edit, Trash2, MoreVertical, Store } from "lucide-react"
 import { getAllSellers, deleteSeller } from "@/api/seller"
-import { Seller } from "@/types/seller.types"
+import { Seller } from "@/types/seller.type"
 import { toast } from "sonner"
 
 interface UISeller {

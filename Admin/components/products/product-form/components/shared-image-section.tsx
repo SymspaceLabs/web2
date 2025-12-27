@@ -9,7 +9,7 @@ import { Upload, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { ImageCard } from "./image-card"
-import type { ImageWithLoading } from "@/types/media.types"
+import type { ImageWithLoading } from "@/types/media.type"
 
 type SharedImageSectionProps = {
   images: ImageWithLoading[]

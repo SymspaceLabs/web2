@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch"
 import { ArrowLeft, Save, Loader2, Upload, X } from "lucide-react"
 import { updateSeller } from "@/api/seller"
 import { uploadImage } from "@/api/upload"
-import { Seller } from "@/types/seller.types"
+import { Seller } from "@/types/seller.type"
 import { toast } from "sonner"
 
 interface SellerFormProps {

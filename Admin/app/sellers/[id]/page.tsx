@@ -6,7 +6,7 @@ import { useParams } from "next/navigation"
 import { SellerForm } from "@/components/sellers/seller-form"
 import { ProtectedLayout } from "@/components/protected-layout"
 import { getSeller } from "@/api/seller"
-import { Seller } from "@/types/seller.types"
+import { Seller } from "@/types/seller.type"
 
 export default function EditSellerPage() {
   const params = useParams()

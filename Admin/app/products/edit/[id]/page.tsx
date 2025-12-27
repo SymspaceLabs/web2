@@ -6,7 +6,7 @@ import { useParams, useSearchParams } from "next/navigation"
 import { ProductForm } from "@/components/products/product-form"
 import { ProtectedLayout } from "@/components/protected-layout"
 import { getProduct } from "@/api/product"
-import { Product } from "@/types/product"
+import { Product } from "@/types/product.type"
 
 export default function EditProductClient() {
   const params = useParams()

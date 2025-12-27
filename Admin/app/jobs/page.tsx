@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { Search, Plus, Eye, Edit, Trash2, MoreVertical, MapPin, Briefcase } from "lucide-react"
-import { Job } from "@/types/job.types"
+import { Job } from "@/types/job.type"
 import { toast } from "sonner"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
 import { deleteJob } from "@/api/job"

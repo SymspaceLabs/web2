@@ -15,7 +15,7 @@ export const uploadProductModel = async (
 
   // File type validation
   const fileNameLower = file.name.toLowerCase();
-  if (!fileNameLower.endsWith('.glb') && !fileNameLower.endsWith('.gltf')) {
+  if (!fileNameLower.endsWith('.glb') && !fileNameLower.endsWith('.fbx')) {
     throw new Error(`Invalid file type. Only .glb and .gltf files are supported.`);
   }
 

@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter, useParams } from "next/navigation"
 import { ArrowLeft, Save } from "lucide-react"
 import { getJobById, updateJob } from "@/api/job"
-import { Job } from "@/types/job.types"
+import { Job } from "@/types/job.type"
 import { toast } from "sonner"
 
 export default function EditJobPage() {

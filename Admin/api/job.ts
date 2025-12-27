@@ -1,7 +1,7 @@
 // @/api/job.ts
 
 import { authFetch, API_ENDPOINTS } from "@/lib/api";
-import { Job } from "@/types/job.types";
+import { Job } from "@/types/job.type";
 
 export async function getJobs(): Promise<Job[]> {
   return authFetch(API_ENDPOINTS.jobs)

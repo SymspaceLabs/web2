@@ -12,7 +12,7 @@ import type { FormData } from "@/components/products/product-form"
 import { uploadFileToBackend, validateImageFile } from "@/utils/media.utils"
 
 // Internal Imports
-import type { ImageWithLoading, ModelWithLoading } from "@/types/media.types"
+import type { ImageWithLoading, ModelWithLoading } from "@/types/media.type"
 import { ColorModelSection } from "./components/color-model-section"
 import { ColorImageSection } from "./components/color-image-section"
 import { SharedImageSection } from "./components/shared-image-section"

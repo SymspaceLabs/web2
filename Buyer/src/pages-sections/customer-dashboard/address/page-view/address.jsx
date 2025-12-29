@@ -182,7 +182,7 @@ export default function AddressPageView() {
         {allAddress.length > 10 &&
           <Pagination
             count={5}
-            onChange={data => console.log(data)}
+            onChange={() => {}} 
           />
         }
 

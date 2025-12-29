@@ -199,20 +199,6 @@ export default function ProductSearchPageView() {
         onClearAllFilters: handleResetAllFilters,
     }), [filterState, handleResetAllFilters, allProducts, handleFilterChange, setFilterState]);
 
-    useEffect(() => {
-        console.log('🔍 DEBUG INFO:', {
-            urlParams: paramsString,
-            totalProducts: allProducts.length,
-            filteredProducts: displayedProducts.length,
-            filterState: {
-            // checkedCategoryIds,
-            selectedBrands: filterState.selectedBrands,
-            priceRange: filterState.priceRange,
-            },
-            sampleProduct: allProducts[0],
-        });
-    }, [allProducts, displayedProducts, filterState, paramsString]);
-
     return (
         <Box sx={{ py: 5, background: "#FFF", pt:{xs:'100px', sm:'100px', md:'200px'} }} >
             <Container>

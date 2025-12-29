@@ -91,8 +91,6 @@ export const handlePayPalPaymentSuccessInternal = async ({
           discountAmount: guestData.discountAmount, // Included discountAmount from guest data
           subtotal
         };
-    console.log(payload);
-
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${endpoint}`, {
       method: "POST",

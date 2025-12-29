@@ -61,10 +61,7 @@ export function useProductData(paramsString) {
       .then(fetchedData => {
         // ✅ Apply normalization to products BEFORE setting state
         const normalizedProducts = fetchedData.products.map(normalizeCategoryIds);
-        
-        // 🔍 DEBUG: Check what we're getting
-        console.log('🔍 Normalized product sample:', normalizedProducts[0]);
-        
+                
         setData({
           allProducts: normalizedProducts,
           allBrands: fetchedData.brands,

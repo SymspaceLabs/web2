@@ -24,8 +24,6 @@ export default function OrderConfirmationPageView({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(orderId)
-
   useEffect(() => {
     const fetchOrder = async () => {
       if (!orderId) return;

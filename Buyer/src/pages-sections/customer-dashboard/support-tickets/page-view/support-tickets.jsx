@@ -26,6 +26,6 @@ export default function TicketsPageView({
       {
       /* PAGINATION AREA */
     }
-      <Pagination count={4} onChange={data => console.log(data)} />
+      <Pagination count={4} onChange={() => {}}  />
     </Fragment>;
 }

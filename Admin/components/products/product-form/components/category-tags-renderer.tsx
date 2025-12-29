@@ -1,269 +1,164 @@
-// components/products/product-form/components/category-tags-renderer.tsx
-import type React from "react"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { X } from "lucide-react"
 import type { TagDefinition } from "@/hooks/useCategoryTags"
 
 interface CategoryTagsRendererProps {
   tags: TagDefinition[]
   values: Record<string, any>
-  errors?: Record<string, string>
-  onChange: (tagKey: string, value: string | string[]) => void
+  errors: Record<string, string>
+  onChange: (tagKey: string, value: any) => void
 }
 
-/**
- * CategoryTagsRenderer Component
- * 
- * Dynamically renders category-specific tags based on the selected category's requirements.
- * Supports both single-select and multi-select tag types.
- * 
- * @example
- * ```tsx
- * <CategoryTagsRenderer
- *   tags={categoryTags}
- *   values={formData}
- *   errors={validationErrors}
- *   onChange={(key, value) => updateFormData({ [key]: value })}
- * />
- * ```
- */
-export function CategoryTagsRenderer({ 
-  tags, 
-  values, 
-  errors, 
-  onChange 
+export function CategoryTagsRenderer({
+  tags,
+  values,
+  errors,
+  onChange
 }: CategoryTagsRendererProps) {
-  // Don't render anything if there are no tags
-  if (!tags || tags.length === 0) {
-    return null
-  }
-
+  
   return (
     <div className="space-y-4">
-      {tags.map(tag => (
-        <div key={tag.key} className="space-y-2">
-          {tag.type === 'single' ? (
-            <SingleSelectTag
-              tag={tag}
-              value={values[tag.key]}
-              error={errors?.[tag.key]}
-              onChange={(value) => onChange(tag.key, value)}
-            />
-          ) : (
-            <MultiSelectTag
-              tag={tag}
-              value={values[tag.key] || []}
-              error={errors?.[tag.key]}
-              onChange={(value) => onChange(tag.key, value)}
-            />
-          )}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-/**
- * SingleSelectTag Component
- * 
- * Renders a single-select dropdown for tags that allow only one selection.
- * Commonly used for tags like 'age_group' where only one value makes sense.
- */
-interface SingleSelectTagProps {
-  tag: TagDefinition
-  value: string
-  error?: string
-  onChange: (value: string) => void
-}
-
-function SingleSelectTag({ 
-  tag, 
-  value, 
-  error, 
-  onChange 
-}: SingleSelectTagProps) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={tag.key}>
-        {tag.label}
-        {tag.required && <span className="text-destructive ml-1">*</span>}
-      </Label>
-      <Select value={value || ''} onValueChange={onChange}>
-        <SelectTrigger 
-          id={tag.key}
-          className={error ? 'border-destructive focus:ring-destructive' : ''}
-        >
-          <SelectValue placeholder={tag.placeholder || `Select ${tag.label.toLowerCase()}`} />
-        </SelectTrigger>
-        <SelectContent>
-          {tag.options.map(option => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {error && (
-        <p className="text-xs text-destructive mt-1">{error}</p>
-      )}
-    </div>
-  )
-}
-
-/**
- * MultiSelectTag Component
- * 
- * Renders a checkbox grid for tags that allow multiple selections.
- * Commonly used for tags like 'gender' where products can apply to multiple categories.
- */
-interface MultiSelectTagProps {
-  tag: TagDefinition
-  value: string[]
-  error?: string
-  onChange: (value: string[]) => void
-}
-
-function MultiSelectTag({ 
-  tag, 
-  value = [], 
-  error, 
-  onChange 
-}: MultiSelectTagProps) {
-  const handleToggle = (optionValue: string) => {
-    const newValue = value.includes(optionValue)
-      ? value.filter(v => v !== optionValue)
-      : [...value, optionValue]
-    onChange(newValue)
-  }
-
-  // Determine grid columns based on number of options
-  const gridCols = tag.options.length <= 3 ? 'grid-cols-1' : 'grid-cols-2'
-
-  return (
-    <div className="space-y-2">
-      <Label>
-        {tag.label}
-        {tag.required && <span className="text-destructive ml-1">*</span>}
-      </Label>
-      <div className={`grid ${gridCols} gap-3 p-3 border rounded-md ${error ? 'border-destructive' : 'border-input'}`}>
-        {tag.options.map(option => (
-          <div key={option.value} className="flex items-center space-x-2">
-            <Checkbox
-              id={`${tag.key}-${option.value}`}
-              checked={value.includes(option.value)}
-              onCheckedChange={() => handleToggle(option.value)}
-            />
-            <label
-              htmlFor={`${tag.key}-${option.value}`}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer select-none"
-            >
-              {option.label}
-            </label>
-          </div>
-        ))}
-      </div>
-      {error && (
-        <p className="text-xs text-destructive mt-1">{error}</p>
-      )}
-      {!error && tag.options.length > 2 && (
-        <p className="text-xs text-muted-foreground mt-1">
-          Select all that apply
-        </p>
-      )}
-    </div>
-  )
-}
-
-/**
- * Alternative: Compact Multi-Select with Badges (Optional)
- * 
- * This is an alternative rendering style that shows selected items as badges.
- * Uncomment and use if you prefer a more compact visual representation.
- */
-/*
-import { Badge } from "@/components/ui/badge"
-import { X } from "lucide-react"
-
-function MultiSelectTagWithBadges({ 
-  tag, 
-  value = [], 
-  error, 
-  onChange 
-}: MultiSelectTagProps) {
-  const handleToggle = (optionValue: string) => {
-    const newValue = value.includes(optionValue)
-      ? value.filter(v => v !== optionValue)
-      : [...value, optionValue]
-    onChange(newValue)
-  }
-
-  const handleRemove = (optionValue: string) => {
-    onChange(value.filter(v => v !== optionValue))
-  }
-
-  const getOptionLabel = (optionValue: string) => {
-    return tag.options.find(opt => opt.value === optionValue)?.label || optionValue
-  }
-
-  return (
-    <div className="space-y-2">
-      <Label>
-        {tag.label}
-        {tag.required && <span className="text-destructive ml-1">*</span>}
-      </Label>
-      
-      // Selected items as badges
-      {value.length > 0 && (
-        <div className="flex flex-wrap gap-2 p-2 border rounded-md bg-muted/30">
-          {value.map(val => (
-            <Badge 
-              key={val} 
-              variant="secondary"
-              className="flex items-center gap-1"
-            >
-              {getOptionLabel(val)}
-              <button
-                type="button"
-                onClick={() => handleRemove(val)}
-                className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
+      {tags.map((tag) => {
+        const rawValue = values[tag.key]
+        const error = errors[tag.key]
+        
+        // ✅ CRITICAL: Normalize value based on tag type
+        let normalizedValue: string | string[]
+        
+        if (tag.type === 'single') {
+          // ⚠️ THE BUG WAS HERE: Ensure it's ALWAYS a string (not undefined, not array)
+          if (rawValue === undefined || rawValue === null) {
+            normalizedValue = ''
+          } else if (Array.isArray(rawValue)) {
+            // Legacy data might have arrays - take first item
+            normalizedValue = rawValue.length > 0 ? String(rawValue[0]) : ''
+          } else {
+            normalizedValue = String(rawValue)
+          }
+          
+          console.log(`🔍 Single Select [${tag.key}]:`, {
+            rawValue,
+            normalizedValue,
+            type: typeof normalizedValue
+          })
+        } else {
+          // For multiple, ensure it's an array
+          normalizedValue = Array.isArray(rawValue) ? rawValue : []
+        }
+        
+        // ✅ Handle single select (like gender, age_group)
+        if (tag.type === 'single') {
+          return (
+            <div key={tag.key} className="space-y-2">
+              <Label htmlFor={tag.key}>
+                {tag.label}
+                {tag.required && <span className="text-destructive ml-1">*</span>}
+              </Label>
+              
+              <Select
+                value={normalizedValue as string}  // ✅ Cast to string for single select
+                onValueChange={(newValue) => {
+                  console.log(`🔄 Select Changed [${tag.key}]:`, newValue)
+                  onChange(tag.key, newValue)
+                }}
               >
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
-        </div>
-      )}
-      
-      // Checkbox options
-      <div className="grid grid-cols-2 gap-3 p-3 border rounded-md">
-        {tag.options.map(option => (
-          <div key={option.value} className="flex items-center space-x-2">
-            <Checkbox
-              id={`${tag.key}-${option.value}`}
-              checked={value.includes(option.value)}
-              onCheckedChange={() => handleToggle(option.value)}
-            />
-            <label
-              htmlFor={`${tag.key}-${option.value}`}
-              className="text-sm font-medium leading-none cursor-pointer"
-            >
-              {option.label}
-            </label>
-          </div>
-        ))}
-      </div>
-      
-      {error && (
-        <p className="text-xs text-destructive mt-1">{error}</p>
-      )}
+                <SelectTrigger 
+                  id={tag.key}
+                  className={error ? 'border-destructive cursor-pointer' : 'cursor-pointer'}
+                >
+                  <SelectValue placeholder={tag.placeholder || `Select ${tag.label.toLowerCase()}`} />
+                </SelectTrigger>
+                <SelectContent className="cursor-pointer">
+                  {tag.options.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              {error && (
+                <p className="text-xs text-destructive">{error}</p>
+              )}
+            </div>
+          )
+        }
+        
+        // ✅ Handle multiple select (like season, occasion)
+        if (tag.type === 'multiple') {
+          const selectedValues = normalizedValue as string[]
+          
+          return (
+            <div key={tag.key} className="space-y-2">
+              <Label htmlFor={tag.key}>
+                {tag.label}
+                {tag.required && <span className="text-destructive ml-1">*</span>}
+              </Label>
+              
+              <Select
+                value="" // Always empty for multi-select (used for adding items)
+                onValueChange={(newValue) => {
+                  if (!selectedValues.includes(newValue)) {
+                    onChange(tag.key, [...selectedValues, newValue])
+                  }
+                }}
+              >
+                <SelectTrigger 
+                  id={tag.key}
+                  className={error ? 'border-destructive' : ''}
+                >
+                  <SelectValue placeholder={tag.placeholder || `Select ${tag.label.toLowerCase()}`} />
+                </SelectTrigger>
+                <SelectContent>
+                  {tag.options.map((option) => (
+                    <SelectItem 
+                      key={option.value} 
+                      value={option.value}
+                      disabled={selectedValues.includes(option.value)}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              {/* Display selected values as badges */}
+              {selectedValues.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedValues.map((val) => {
+                    const option = tag.options.find(opt => opt.value === val)
+                    return (
+                      <Badge key={val} variant="secondary" className="pl-2 pr-1">
+                        {option?.label || val}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onChange(
+                              tag.key,
+                              selectedValues.filter(v => v !== val)
+                            )
+                          }}
+                          className="ml-1 hover:bg-muted rounded-full p-0.5"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    )
+                  })}
+                </div>
+              )}
+              
+              {error && (
+                <p className="text-xs text-destructive">{error}</p>
+              )}
+            </div>
+          )
+        }
+        
+        return null
+      })}
     </div>
   )
 }
-*/

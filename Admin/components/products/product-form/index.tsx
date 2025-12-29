@@ -63,6 +63,8 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     companyName: product?.company?.entityName || "",
     category: normalizeCategoryToString(product?.category),
     description: product?.description || "",
+    gender: typeof product?.gender === 'string' ? product.gender : '',
+    age_group: product?.age_group || '',
     selectedColors: product?.colors || [],
     selectedSizes: product?.sizes || [],
     material: product?.material || "",
@@ -144,9 +146,18 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         name: data.name,
         description: data.description,
         company: data.companyId,
-        // ⭐ Send the most granular category ID to the backend
         ...(data.categoryId && { subcategoryItem: data.categoryId })
       }
+      // ✅ ADD THESE CONDITIONALS:
+      if (data.age_group && data.age_group.trim() !== '') {
+        payload.age_group = data.age_group
+      }
+
+      // ✅ NEW CODE (replace the above with):
+      if (data.gender && typeof data.gender === 'string' && data.gender.trim() !== '') {
+        payload.gender = data.gender  // Sent as string
+      }
+
     }   // Step 2: Variants (Colors, Sizes, and Variant details)
   if (step === 2) {
     // Build color payload

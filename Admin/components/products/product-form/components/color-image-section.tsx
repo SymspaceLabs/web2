@@ -95,28 +95,6 @@ export function ColorImageSection({
     setDraggedImageId(null)
     setDropTargetId(null)
   }
-
-  // Inside ColorImageSection component, add this after sortedImages:
-  useEffect(() => {
-    console.log(`🎨 [COLOR SECTION: ${color.name}]`, {
-      colorId: color.id,
-      receivedImagesCount: images.length,
-      sortedImagesCount: sortedImages.length,
-      images: images.map(img => ({
-        id: img.id,
-        sortOrder: img.sortOrder,
-        isUploading: img.isUploading,
-        error: img.error,
-        url: img.url.substring(0, 50) + '...'
-      })),
-      sortedImages: sortedImages.map(img => ({
-        id: img.id,
-        sortOrder: img.sortOrder,
-        isUploading: img.isUploading,
-        error: img.error
-      }))
-    })
-  }, [images, sortedImages, color])
   
   return (
     <div 
@@ -166,12 +144,6 @@ export function ColorImageSection({
       {sortedImages.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {sortedImages.map((image, index) => {
-            
-            // Also add this debug right before the return statement:
-            console.log(`🖼️ [RENDER COLOR SECTION: ${color.name}]`, {
-              willRenderGrid: sortedImages.length > 0,
-              sortedImagesCount: sortedImages.length
-            })
             return (
               <ImageCard
                 key={image.id}

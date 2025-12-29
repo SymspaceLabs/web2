@@ -28,9 +28,7 @@ export default function ProfileEditForm({
     birth_date: yup.date().required("Birth date is required")
   });
 
-  const handleFormSubmit = async values => {
-    console.log(values);
-  };
+  const handleFormSubmit = async values => {};
 
   return <Formik onSubmit={handleFormSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
       {({

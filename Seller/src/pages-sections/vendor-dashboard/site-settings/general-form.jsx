@@ -19,9 +19,7 @@ const GeneralForm = () => {
     site_banner_text: ""
   };
 
-  const handleFormSubmit = async values => {
-    console.log(values);
-  };
+  const handleFormSubmit = async values => {};
 
   return <Formik onSubmit={handleFormSubmit} initialValues={initialValues} validationSchema={validationSchema}>
       {({

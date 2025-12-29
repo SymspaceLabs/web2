@@ -31,6 +31,6 @@ export default function AddressPageView({
       {
       /* PAGINATION AREA */
     }
-      <Pagination count={5} onChange={data => console.log(data)} />
+      <Pagination count={5} onChange={() => {}} />
     </Fragment>;
 }

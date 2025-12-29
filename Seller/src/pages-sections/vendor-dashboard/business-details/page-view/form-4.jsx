@@ -22,9 +22,7 @@ const ProductCreatePageView = () => {
     description: ""
   };
 
-  const handleFormSubmit = values => {
-    console.log(values);
-  };
+  const handleFormSubmit = values => {};
 
   return <Box py={4}>
 

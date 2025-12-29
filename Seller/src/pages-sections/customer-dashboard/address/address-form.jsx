@@ -19,9 +19,7 @@ export default function AddressForm({
     contact: yup.string().required("required")
   }); // HANDLE FORM SUBMIT
 
-  const handleSubmit = async values => {
-    console.log(values);
-  };
+  const handleSubmit = async values => {};
 
   return <Formik onSubmit={handleSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
       {({

@@ -25,7 +25,7 @@ export default function NavItemChild({
     isLeftOverflowing,
     isRightOverflowing
   } = useOverflowDetect();
-  const isActive = nav.child.flat().find(item => item.url === pathname); // console.log(isLeftOverflowing, isRightOverflowing);
+  const isActive = nav.child.flat().find(item => item.url === pathname);
 
   return (
     <ParentNav minWidth={200} active={isActive ? 1 : 0} onMouseEnter={checkOverflow}>

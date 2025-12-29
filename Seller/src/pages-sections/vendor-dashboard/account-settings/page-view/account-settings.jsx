@@ -33,9 +33,7 @@ const AccountSettingsPageView = () => {
     first_name: ""
   };
 
-  const handleFormSubmit = async values => {
-    console.log(values.city);
-  };
+  const handleFormSubmit = async values => {};
 
   return (
     <Box py={4}>

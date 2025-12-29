@@ -19,9 +19,7 @@ export default function MessageForm() {
   } = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: values => {
-      console.log(values);
-    }
+    onSubmit: values => {}
   });
   return <form onSubmit={handleSubmit}>
       <TextField rows={8} fullWidth multiline value={values.message} onBlur={handleChange} onChange={handleChange} placeholder="Write your message here..." helperText={touched.message && errors.message} error={Boolean(touched.message && errors.message)} sx={{

@@ -23,9 +23,7 @@ const FooterForm = () => {
     column_four_description: ""
   };
 
-  const handleFormSubmit = async values => {
-    console.log(values);
-  };
+  const handleFormSubmit = async values => {};
 
   return <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({

@@ -38,7 +38,10 @@ interface APIProduct {
   id: string
   name: string
   description: string
-  displayPrice: { formattedDisplay: string }  
+  displayPrice: {
+    price: string
+    formattedDisplay: string 
+}  
   category:  { name: string }
   images: Array<{ url: string; id: string; sortOrder: number }>
   status: string
@@ -48,6 +51,7 @@ interface APIProduct {
 }
 
 interface UIProduct {
+  displayPrice: any
   id: string
   name: string
   thumbnail: string
@@ -72,7 +76,7 @@ function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
   const company = apiProduct.company?.entityName || "Unknown"
   
   // Get price from variants if product price is null
-  const price = apiProduct.displayPrice?.formattedDisplay || ""
+  const price = apiProduct.displayPrice?.price || ""
   
   // Normalize status to lowercase
   const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"

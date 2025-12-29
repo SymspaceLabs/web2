@@ -72,12 +72,7 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
   }
 
   const processAndUploadFiles = async (files: FileList, colorId: string | null) => {
-    console.log('🔵 [UPLOAD START]', { 
-      fileCount: files.length, 
-      colorId,
-      timestamp: new Date().toISOString()
-    })
-    
+   
     const filesArray = Array.from(files)
     
     // Validate files first
@@ -88,7 +83,6 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
 
     const invalidFiles = validatedFiles.filter(f => !f.validation.valid)
     if (invalidFiles.length > 0) {
-      console.log('⚠️ [VALIDATION]', { invalidCount: invalidFiles.length })
       invalidFiles.forEach(({ file, validation }) => {
         toast({
           title: "Invalid File",
@@ -100,25 +94,17 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
 
     const validFiles = validatedFiles.filter(f => f.validation.valid).map(f => f.file)
     if (validFiles.length === 0) {
-      console.log('❌ [NO VALID FILES]')
       return
     }
 
-    console.log('✅ [VALIDATION PASSED]', { validFileCount: validFiles.length })
     setUploadStats({ success: 0, failed: 0, total: validFiles.length })
     
     // ✅ Create placeholder IDs ONCE before using them
     const timestamp = Date.now()
     const placeholderIds = validFiles.map((_, i) => `uploading-${timestamp}-${i}-${Math.random()}`)
-    console.log('🆔 [PLACEHOLDER IDS CREATED]', { ids: placeholderIds })
     
     // ✅ Create placeholders - FIXED: Use direct object update
     const existingImagesForColor = formData.images.filter(img => img.colorId === colorId)
-    console.log('🎨 [EXISTING IMAGES FOR COLOR]', {
-      colorId,
-      count: existingImagesForColor.length,
-      images: existingImagesForColor.map(img => ({ id: img.id, sortOrder: img.sortOrder }))
-    })
     
     const placeholderImages: ImageWithLoading[] = validFiles.map((file, index) => ({
       id: placeholderIds[index],
@@ -129,29 +115,9 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
       uploadProgress: 0,
       file: file,
     }))
-    
-    console.log('📸 [PLACEHOLDERS CREATED]', {
-      count: placeholderImages.length,
-      placeholders: placeholderImages.map(img => ({ 
-        id: img.id, 
-        colorId: img.colorId, 
-        sortOrder: img.sortOrder,
-        url: img.url.substring(0, 50) + '...'
-      }))
-    })
-    
+        
     const imagesWithPlaceholders = [...formData.images, ...placeholderImages]
-    console.log('📦 [ADDING PLACEHOLDERS TO STATE]', {
-      previousCount: formData.images.length,
-      newCount: imagesWithPlaceholders.length,
-      allImages: imagesWithPlaceholders.map(img => ({ 
-        id: img.id, 
-        colorId: img.colorId, 
-        sortOrder: img.sortOrder, 
-        isUploading: img.isUploading 
-      }))
-    })
-    
+
     updateFormData({ images: imagesWithPlaceholders })
 
     let successCount = 0
@@ -163,12 +129,6 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
       const file = validFiles[i]
       const placeholderId = placeholderIds[i]
       
-      console.log(`🚀 [UPLOAD ${i + 1}/${validFiles.length}]`, {
-        fileName: file.name,
-        placeholderId,
-        colorId
-      })
-
       try {
         const url = await uploadFileToBackend(file, (progress) => {
           // Update progress
@@ -179,32 +139,12 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
           )
           currentImages = updatedImages
           updateFormData({ images: updatedImages })
-          
-          console.log(`📊 [PROGRESS UPDATE ${progress}%]`, {
-            placeholderId,
-            currentProgress: progress
-          })
-        })
 
-        console.log(`✅ [UPLOAD COMPLETE]`, {
-          fileName: file.name,
-          url,
-          placeholderId
         })
 
         // ✅ Replace placeholder with actual image
         const placeholder = currentImages.find(img => img.id === placeholderId)
-        
-        console.log('🔍 [PLACEHOLDER FOUND]', {
-          found: !!placeholder,
-          placeholder: placeholder ? {
-            id: placeholder.id,
-            colorId: placeholder.colorId,
-            sortOrder: placeholder.sortOrder,
-            isUploading: placeholder.isUploading
-          } : null
-        })
-        
+                
         if (!placeholder) {
           console.error('❌ [PLACEHOLDER NOT FOUND]', { placeholderId })
           throw new Error('Placeholder not found')
@@ -218,39 +158,16 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
           isUploading: false,
         }
         
-        console.log('🆕 [NEW IMAGE CREATED]', {
-          newImageId: newImage.id,
-          url: newImage.url,
-          colorId: newImage.colorId,
-          sortOrder: newImage.sortOrder,
-          replacingId: placeholderId
-        })
-
         const updatedImages = currentImages.map(img =>
           img.id === placeholderId ? newImage : img
         )
         
-        console.log('🔄 [REPLACING PLACEHOLDER]', {
-          previousCount: currentImages.length,
-          newCount: updatedImages.length,
-          replacedCount: updatedImages.filter(img => img.id === newImage.id).length,
-          allImages: updatedImages.map(img => ({ 
-            id: img.id, 
-            colorId: img.colorId, 
-            sortOrder: img.sortOrder,
-            isUploading: img.isUploading,
-            hasUrl: !!img.url
-          }))
-        })
-
         currentImages = updatedImages
         updateFormData({ images: updatedImages })
         
         successCount++
         setUploadStats({ success: successCount, failed: failedCount, total: validFiles.length })
         
-        console.log(`✅ [SUCCESS ${successCount}/${validFiles.length}]`)
-
       } catch (error) {
         failedCount++
         setUploadStats({ success: successCount, failed: failedCount, total: validFiles.length })
@@ -271,13 +188,6 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         updateFormData({ images: updatedImages })
       }
     }
-
-    console.log('🏁 [UPLOAD BATCH COMPLETE]', {
-      total: validFiles.length,
-      successful: successCount,
-      failed: failedCount,
-      finalImageCount: currentImages.length
-    })
 
     // Show summary toast
     if (successCount > 0 && failedCount === 0) {
@@ -497,37 +407,6 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
   const isUploading = formData.images.some(img => img.isUploading) || models.some(m => m.isUploading)
   const hasErrors = formData.images.some(img => img.error)
 
-  useEffect(() => {
-    console.log('📋 [FORM DATA IMAGES CHANGED]', {
-      totalImages: formData.images.length,
-      byColor: formData.images.reduce((acc, img) => {
-        const key = img.colorId || 'shared'
-        acc[key] = (acc[key] || 0) + 1
-        return acc
-      }, {} as Record<string, number>),
-      allImages: formData.images.map(img => ({
-        id: img.id,
-        colorId: img.colorId,
-        sortOrder: img.sortOrder,
-        isUploading: img.isUploading,
-        error: img.error,
-        hasUrl: !!img.url,
-        urlPreview: img.url ? img.url.substring(0, 50) + '...' : 'no url'
-      }))
-    })
-  }, [formData.images])
-
-  useEffect(() => {
-    console.log('🎨 [SELECTED COLORS]', {
-      count: formData.selectedColors.length,
-      colors: formData.selectedColors.map(c => ({
-        id: c.id,
-        name: c.name,
-        code: c.code
-      }))
-    })
-  }, [formData.selectedColors])
-
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
@@ -639,18 +518,6 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
             ) : (
               <>
                 {formData.selectedColors.map((color) => {
-                  console.log('🔍 [RENDERING COLOR SECTIONS]', {
-                    viewMode,
-                    colorsCount: formData.selectedColors.length,
-                    colorsToRender: formData.selectedColors.map(color => ({
-                      colorId: color.id,
-                      colorName: color.name,
-                      imagesForThisColor: formData.images.filter(img => img.colorId === color.id).length,
-                      imageIds: formData.images.filter(img => img.colorId === color.id).map(img => img.id)
-                    }))
-                  })
-
-
                   return (
                     <ColorImageSection
                       key={color.id}

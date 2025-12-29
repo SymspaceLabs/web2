@@ -61,7 +61,6 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
           return (effectivePrice >= filterState.priceRange[0] && effectivePrice <= filterState.priceRange[1]);
         }
       );
-      console.log('🔍 After price filter:', list.length, 'products');
     } 
 
     // =============================
@@ -71,9 +70,6 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     if (filterState.selectedAvailabilities && filterState.selectedAvailabilities.length > 0) {
       const availSet = new Set(filterState.selectedAvailabilities);
       list = list.filter(p => p.availability && availSet.has(p.availability));
-      console.log('🔍 After availability filter:', list.length, 'products', 'Selected:', filterState.selectedAvailabilities);
-    } else {
-      console.log('🔍 Skipping availability filter (none selected)');
     }
 
     // =============================

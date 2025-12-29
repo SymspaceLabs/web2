@@ -145,8 +145,6 @@ const ProductCreatePageView = ({ productId='' }) => {
       description
     }
 
-    console.log(requestBody)
-
     try {
         const response = await createProductApi(requestBody);
         const newProductId = response.id; 

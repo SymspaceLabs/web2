@@ -33,10 +33,11 @@ export const ageGroups = [
  * Used for products with gender-specific designs or targeting
  */
 export const genders = [
-  { label: 'Male', value: 'male' },
-  { label: 'Female', value: 'female' },
-  { label: 'Unisex', value: 'unisex' },
-  { label: 'Non-Binary', value: 'non_binary' }
+  { label: 'Men', value: 'men' },
+  { label: 'Women', value: 'women' },
+  { label: 'Boys', value: 'boys' },
+  { label: 'Girls', value: 'girls' },
+  { label: 'Unisex', value: 'unisex' }
 ] as const;
 
 /**

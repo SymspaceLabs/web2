@@ -25,7 +25,6 @@ export default function OrderDetailsPageView({
 
   useEffect(() => {
     const fetchOrder = async () => {
-      console.log(orderId)
       if (!orderId) return;
 
       setLoading(true);

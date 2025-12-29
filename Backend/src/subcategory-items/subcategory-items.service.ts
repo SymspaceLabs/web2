@@ -45,14 +45,35 @@ export class SubcategoryItemsService {
     });
   }
 
-  async findOne(id: string): Promise<SubcategoryItem> {
-    const subcategoryItem = await this.subcategoryItemsRepository.findOne({
-      where: { id } 
+    /**
+   * Finds a subcategory record by ID, checking SubcategoryItem (Level 2)
+   * and SubcategoryItemChild (Level 3) entities.
+   * @param id The unique ID string.
+   * @returns The full found entity record.
+   */
+  async findOne(id: string): Promise<SubcategoryItem | SubcategoryItemChild> {
+    // 1. 🔍 Attempt to find the ID in the second level (SubcategoryItem)
+    const item = await this.subcategoryItemsRepository.findOne({
+      where: { id },
     });
-    if (!subcategoryItem) {
-      throw new NotFoundException(`SubcategoryItem with ID ${id} not found`);
+
+    if (item) {
+      // Found the item at the second level
+      return item;
     }
-    return subcategoryItem;
+
+    // 2. 🔍 If not found, attempt to find the ID in the third level (SubcategoryItemChild)
+    const childItem = await this.subcategoryItemChildRepository.findOne({
+      where: { id },
+    });
+
+    if (childItem) {
+      // Found the item at the third level
+      return childItem;
+    }
+
+    // 3. 🛑 If still not found, throw a 404 error
+    throw new NotFoundException(`Subcategory record with ID "${id}" not found in any level.`);
   }
 
   async update(

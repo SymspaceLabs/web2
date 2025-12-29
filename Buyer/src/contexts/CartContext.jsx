@@ -204,7 +204,6 @@ export default function CartProvider({ children }) {
             type: "INITIALIZE_CART",
             payload: parsed,
           });
-          console.log("✅ Loaded cart (new format):", parsed);
           return;
         } catch (e) {
           console.error("Failed to parse cart_v2 from localStorage", e);
@@ -216,7 +215,6 @@ export default function CartProvider({ children }) {
       if (storedCart) {
         try {
           const oldCart = JSON.parse(storedCart);
-          console.log("🔄 Migrating old cart format:", oldCart);
 
           // Migrate old format to new format
           const migratedCart = oldCart
@@ -242,7 +240,6 @@ export default function CartProvider({ children }) {
 
           // Save in new format
           localStorage.setItem("cart_v2", JSON.stringify(migratedCart));
-          console.log("✅ Migration complete:", migratedCart);
         } catch (e) {
           console.error("Failed to migrate cart from localStorage", e);
         }
@@ -254,7 +251,6 @@ export default function CartProvider({ children }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem("cart_v2", JSON.stringify(state.cart));
-      console.log("💾 Saved cart:", state.cart);
     }
   }, [state.cart]);
 

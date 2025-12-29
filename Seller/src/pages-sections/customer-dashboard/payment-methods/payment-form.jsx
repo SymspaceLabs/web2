@@ -19,9 +19,7 @@ export default function PaymentForm() {
     cvc: yup.string().required("required")
   });
 
-  const handleFormSubmit = async values => {
-    console.log(values);
-  };
+  const handleFormSubmit = async values => {() => {}};
 
   return <Formik onSubmit={handleFormSubmit} initialValues={INITIAL_VALUES} validationSchema={VALIDATION_SCHEMA}>
       {({

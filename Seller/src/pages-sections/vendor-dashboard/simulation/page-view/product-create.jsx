@@ -43,9 +43,7 @@ const ProductCreatePageView = () => {
     description: ""
   };
 
-  const handleFormSubmit = values => {
-    console.log(values);
-  };
+  const handleFormSubmit = values => {};
 
   return (
     <Box sx={{background: 'linear-gradient(180deg, rgba(62, 61, 69, 0.48) 0%, rgba(32, 32, 32, 0.64) 100%)', boxShadow: '0px 1px 24px -1px rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(12px)', borderRadius: '0 0 15px 15px', overflow:'hidden'}}>

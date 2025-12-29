@@ -45,9 +45,9 @@ export function useCategoryTags({
       },
       gender: {
         label: 'Gender',
-        type: 'multiple',
+        type: 'single', // ✅ CHANGED: from 'multiple' to 'single'
         required: true,
-        placeholder: 'Select applicable genders'
+        placeholder: 'Select gender'
       },
       season: {
         label: 'Season',

@@ -369,10 +369,6 @@ export const deleteProduct = async (id) => {
                 `Failed to delete product ${id}: ${response.status} ${response.statusText} - ${errorData.message || 'Unknown error'}`
             );
         }
-
-        // A successful DELETE request often returns a 204 No Content, 
-        // so we don't expect a body.
-        console.log(`[API SUCCESS] Product ID: ${id} successfully deleted.`);
         return;
 
     } catch (error) {

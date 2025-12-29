@@ -128,7 +128,12 @@ export const CATEGORIES_DATA = [
             optional_tags: ["color", "pattern"],
             tag_defaults: { ar_type: "body-tracking" },
           },
-          { id: "99f24302-3e28-4034-8c8d-4e2098d57864", name: "Trousers", slug: "trousers", mobileLevel2: "Bottoms" },
+          { 
+            id: "99f24302-3e28-4034-8c8d-4e2098d57864",
+            name: "Trousers",
+            slug: "trousers",
+            mobileLevel2: "Bottoms"
+          },
           {
             id: "b888c11c-b62d-4be4-9756-4151a05692f9",
             name: "Shorts",
@@ -721,7 +726,7 @@ export const CATEGORIES_DATA = [
             mobileLevel2: "",
             subcategoryItemChildren: [
               {
-                id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68",
+                id: "7c4e5b8f-2c3a-4e9d-9f6b-6c9a1f0d8e42",
                 name: "Gloves",
                 slug: "gloves",
                 mobileLevel3: "Gloves",

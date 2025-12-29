@@ -38,7 +38,6 @@ const FacebookSigninButton = () => {
 
   const handleFacebookResponse = async (response) => {
     try {
-      console.log("Facebook Signin Response:", response);
 
       // Extract `accessToken` from the response
       const { accessToken } = response.authResponse;

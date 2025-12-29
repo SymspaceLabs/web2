@@ -25,7 +25,7 @@ export default function OrdersPageView({
       {orders.map(order => <OrderRow order={order} key={order.id} />)}
 
       {/* ORDERS PAGINATION */}
-      <Pagination count={5} onChange={data => console.log(data)} />
+      <Pagination count={5} onChange={() => {}} />
     </Fragment>
   );
 }

@@ -548,7 +548,6 @@ export class AuthService {
 
     try {
       await this.authRepository.update(user.id, { refreshToken: accessToken });
-      console.log('[DEBUG] Auth repo updated with token.');
     } catch (authRepoError) {
       console.error('[ERROR] Auth repository update failed:', authRepoError);
     }

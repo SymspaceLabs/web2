@@ -12,37 +12,21 @@ const AppleSigninButton = () => {
   const [currentHost, setCurrentHost] = useState("");
 
   // ✅ This only runs on client, so window is safe
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     setCurrentHost(window.location.origin);
-
-  //     if (window.AppleID) {
-  //       window.AppleID.auth.init({
-  //         clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
-  //         scope: "email name",
-  //         redirectURI: process.env.NEXT_PUBLIC_APPLE_CALLBACK_URL, // or use currentHost
-  //         state: "state-value",
-  //         usePopup: true,
-  //       });
-  //     }
-  //   }
-  // }, []);
   useEffect(() => {
-    if (typeof window !== "undefined" && window.AppleID) {
-      window.AppleID.auth.init({
-        clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
-        scope: "email name",
-        // redirectURI: "https://www.symspacelabs.com/auth/apple/callback",
-        usePopup: true,
-      });
+    if (typeof window !== "undefined") {
+      setCurrentHost(window.location.origin);
+
+      if (window.AppleID) {
+        window.AppleID.auth.init({
+          clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
+          scope: "email name",
+          redirectURI: window.location.origin, // or use currentHost
+          state: "state-value",
+          usePopup: true,
+        });
+      }
     }
   }, []);
-
-  console.log(window.location.origin)
-  console.log(process.env.NEXT_PUBLIC_APPLE_CLIENT_ID)
-  console.log(process.env.NEXT_PUBLIC_APPLE_CALLBACK_URL)
-
-
 
   const handleAppleResponse = async (response) => {
     try {

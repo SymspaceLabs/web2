@@ -40,6 +40,7 @@ interface APIProduct {
   description: string
   displayPrice: {
     price: string
+    range: string
     formattedDisplay: string 
 }  
   category:  { name: string }
@@ -56,7 +57,7 @@ interface UIProduct {
   name: string
   thumbnail: string
   category: string
-  price: number
+  price: string
   stock: number
   company: string
   status: "active" | "draft" | "disabled"
@@ -76,7 +77,7 @@ function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
   const company = apiProduct.company?.entityName || "Unknown"
   
   // Get price from variants if product price is null
-  const price = apiProduct.displayPrice?.price || ""
+  const price = apiProduct.displayPrice?.range || ""
   
   // Normalize status to lowercase
   const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"
@@ -293,7 +294,7 @@ export default function ProductsPage() {
                 </TableHeader>
                 <TableBody>
                   {paginatedProducts.map((product) => (
-                    <TableRow key={product.id}>
+                    <TableRow key={product.id} >
                       <TableCell className="max-w-[200px] md:max-w-[300px]">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">

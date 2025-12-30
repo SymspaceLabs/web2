@@ -203,3 +203,32 @@ export function mapProductSizes(
 
   return result;
 }
+
+/**
+ * Formats a price range as a string
+ * @param minPrice - Minimum price
+ * @param maxPrice - Maximum price
+ * @param currency - Currency code (default: 'USD')
+ * @returns Formatted price range string (e.g., "$10-$100" or "$50" if min equals max)
+ */
+export function formatPriceRange(minPrice: number, maxPrice: number, currency: string = 'USD'): string {
+  const symbols = { USD: '$', EUR: '€', GBP: '£' };
+  const symbol = symbols[currency] || '$';
+  
+  // Handle null/undefined/invalid values
+  if (minPrice == null || maxPrice == null || isNaN(minPrice) || isNaN(maxPrice)) {
+    return `${symbol}0`;
+  }
+  
+  // Ensure non-negative values
+  const safeMin = Math.max(0, minPrice);
+  const safeMax = Math.max(0, maxPrice);
+  
+  // If min and max are the same, return a single price
+  if (safeMin === safeMax) {
+    return `${symbol}${safeMin.toFixed(2)}`;
+  }
+  
+  // Return the range
+  return `${symbol}${safeMin.toFixed(2)}-${symbol}${safeMax.toFixed(2)}`;
+}

@@ -6,6 +6,7 @@ export interface DisplayPrice {
   price: number;
   salePrice: number;
   hasSale: boolean;
+  range: string;
 }
 
 export interface ProductWithDisplayPrice {

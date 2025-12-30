@@ -1,3 +1,4 @@
+// checkout-cart-item.jsx
 // =========================================================
 // Cart Item used in 
 // - cart page
@@ -92,7 +93,7 @@ export default function CartItem({
               width: 20,
               height: 20,
               borderRadius: '50%',
-              background: selectedColor.code
+              background: selectedColor?.code
             }}
           />
           <H1 color="#000" mt={0.5}>

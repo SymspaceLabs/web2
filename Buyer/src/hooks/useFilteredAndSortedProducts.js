@@ -3,6 +3,27 @@
 import { useMemo } from "react";
 
 /**
+ * Helper function to check if a product matches any of the selected category IDs
+ * Traverses up the category hierarchy (category -> parent -> parent)
+ */
+function productMatchesCategory(product, categoryIds) {
+  if (!categoryIds || categoryIds.length === 0) return true;
+  if (!product.category) return false;
+  
+  let currentCategory = product.category;
+  
+  // Traverse up the category hierarchy
+  while (currentCategory) {
+    if (categoryIds.includes(String(currentCategory.id))) {
+      return true;
+    }
+    currentCategory = currentCategory.parent;
+  }
+  
+  return false;
+}
+
+/**
  * @function useFilteredAndSortedProducts
  * @description Custom React hook to apply client-side filters and sorting to an
  * already fetched product list.
@@ -16,8 +37,14 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     // Start with a fresh copy of the product list
     let list = [...filterState.allProducts];
     
-    // ❌ REMOVE: Category filter - Backend already filtered by category
-    // The products we receive are already filtered by the URL params on the backend
+    // =============================
+    // CATEGORY FILTER (Client-side)
+    // =============================
+    // Even though backend does initial filtering from URL,
+    // we need client-side filtering for the UI checkboxes
+    if (filterState.checkedCategoryIds && filterState.checkedCategoryIds.length > 0) {
+      list = list.filter(p => productMatchesCategory(p, filterState.checkedCategoryIds));
+    }
     
     // =============================
     // BRAND FILTER (Client-side only)
@@ -49,24 +76,28 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     // PRICE RANGE FILTER (Client-side only)
     // =============================
     if (filterState.priceRange && filterState.priceRange.length === 2) {
-      list = list.filter(
-        p => {
-          const rawPrice = p.price;
-          const rawSalePrice = p.salePrice;
-          const effectivePrice = (typeof rawSalePrice === 'number' && rawSalePrice !== null) ? rawSalePrice : rawPrice;
+      list = list.filter(p => {
+        // ✅ FIX: Use displayPrice object
+        const rawPrice = p.displayPrice?.price || 0;
+        const rawSalePrice = p.displayPrice?.salePrice || 0;
+        const hasSale = p.displayPrice?.hasSale || false;
+        
+        // Use sale price if it exists and is a valid sale
+        const effectivePrice = (hasSale && rawSalePrice > 0) ? rawSalePrice : rawPrice;
 
-          // ✅ FIX: Handle products with price = 0 or null
-          // If price is 0 or not set, show the product (don't filter it out)
-          if (!effectivePrice && effectivePrice !== 0) return true;
-          return (effectivePrice >= filterState.priceRange[0] && effectivePrice <= filterState.priceRange[1]);
-        }
-      );
+        // If price is 0 or not set, include the product
+        if (!effectivePrice && effectivePrice !== 0) return true;
+        
+        return (
+          effectivePrice >= filterState.priceRange[0] && 
+          effectivePrice <= filterState.priceRange[1]
+        );
+      });
     } 
 
     // =============================
     // AVAILABILITY FILTER (Client-side only)
     // =============================
-    // ✅ FIX: Only filter if user has explicitly selected availabilities
     if (filterState.selectedAvailabilities && filterState.selectedAvailabilities.length > 0) {
       const availSet = new Set(filterState.selectedAvailabilities);
       list = list.filter(p => p.availability && availSet.has(p.availability));
@@ -91,20 +122,32 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
       list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     } else if (sortOption === "relevance") {
       list.sort((a, b) => {
-        const priceA = (typeof a.salePrice === 'number' && a.salePrice !== null) ? a.salePrice : a.price;
-        const priceB = (typeof b.salePrice === 'number' && b.salePrice !== null) ? b.salePrice : b.price;
+        const priceA = (a.displayPrice?.hasSale && a.displayPrice?.salePrice) 
+          ? a.displayPrice.salePrice 
+          : a.displayPrice?.price || 0;
+        const priceB = (b.displayPrice?.hasSale && b.displayPrice?.salePrice) 
+          ? b.displayPrice.salePrice 
+          : b.displayPrice?.price || 0;
         return priceA - priceB;
       });
     } else if (sortOption === "price-asc") {
       list.sort((a, b) => {
-        const priceA = (typeof a.salePrice === 'number' && a.salePrice !== null) ? a.salePrice : a.price;
-        const priceB = (typeof b.salePrice === 'number' && b.salePrice !== null) ? b.salePrice : b.price;
+        const priceA = (a.displayPrice?.hasSale && a.displayPrice?.salePrice) 
+          ? a.displayPrice.salePrice 
+          : a.displayPrice?.price || 0;
+        const priceB = (b.displayPrice?.hasSale && b.displayPrice?.salePrice) 
+          ? b.displayPrice.salePrice 
+          : b.displayPrice?.price || 0;
         return priceA - priceB;
       });
     } else if (sortOption === "price-desc") {
       list.sort((a, b) => {
-        const priceA = (typeof a.salePrice === 'number' && a.salePrice !== null) ? a.salePrice : a.price;
-        const priceB = (typeof b.salePrice === 'number' && b.salePrice !== null) ? b.salePrice : b.price;
+        const priceA = (a.displayPrice?.hasSale && a.displayPrice?.salePrice) 
+          ? a.displayPrice.salePrice 
+          : a.displayPrice?.price || 0;
+        const priceB = (b.displayPrice?.hasSale && b.displayPrice?.salePrice) 
+          ? b.displayPrice.salePrice 
+          : b.displayPrice?.price || 0;
         return priceB - priceA;
       });
     }
@@ -112,7 +155,7 @@ export function useFilteredAndSortedProducts(filterState, sortOption) {
     return list;
   }, [
     filterState.allProducts,
-    // ❌ REMOVED: filterState.checkedCategoryIds - not needed anymore
+    filterState.checkedCategoryIds, // ✅ ADDED BACK: Needed for category filtering
     filterState.selectedBrands,
     filterState.selectedGenders,
     filterState.priceRange,

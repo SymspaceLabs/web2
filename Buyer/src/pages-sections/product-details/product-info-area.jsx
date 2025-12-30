@@ -1,5 +1,6 @@
+// product-infor-area.jsx
 import Link from "next/link";
-import styles from "./styles"; // Assuming styles are in the same folder
+import styles from "./styles";
 import { currency } from "@/lib";
 import { LazyImage } from "@/components/lazy-image";
 import { H1, Paragraph } from "@/components/Typography";
@@ -40,7 +41,6 @@ export default function ProductInfoArea({
     name,
     company,
     sizeFit,
-    sizeChart,
     displayPrice
   } = product || {};
 
@@ -54,21 +54,30 @@ export default function ProductInfoArea({
         current: availability.hasSale ? availability.salePrice : availability.price,
         original: availability.price,
         hasSale: availability.hasSale,
-        isVariantPrice: true
+        showRange: false
       };
     }
     
-    // Otherwise, show the base display price
+    // Otherwise, show the price range
     return {
-      current: displayPrice.minPrice,
-      original: displayPrice.originalMinPrice,
-      hasSale: displayPrice.hasSale,
-      isVariantPrice: false
+      range: displayPrice?.range || '$0',
+      hasSale: displayPrice?.hasSale || false,
+      showRange: true
     };
   };
 
   const priceInfo = getDisplayPrice();
 
+  // ========================================
+  // GET SIZE CHART URL FROM SELECTED SIZE
+  // ========================================
+  const getSelectedSizeChart = () => {
+    if (!selectedSize || !sizes) return null;
+    const selectedSizeObj = sizes.find(size => size.id === selectedSize);
+    return selectedSizeObj?.sizeChartUrl || null;
+  };
+
+  const sizeChartUrl = getSelectedSizeChart();
 
   return (
     <>
@@ -107,38 +116,31 @@ export default function ProductInfoArea({
             <CircularProgress size={20} />
           ) : (
             <>
-              {/* Current Price */}
-              <Paragraph sx={styles.price}>
-                {priceInfo.isVariantPrice 
-                  ? currency(priceInfo.current)
-                  : `${currency(priceInfo.current)}`
-                }
-              </Paragraph>
-
-              {/* Original Price (Strikethrough if on sale) */}
-              {priceInfo.hasSale && (
-                <Paragraph sx={styles.strikethrough}>
-                  {currency(priceInfo.original)}
+              {priceInfo.showRange ? (
+                // Show price range when no variant is selected
+                <Paragraph sx={styles.price}>
+                    {priceInfo.range}
                 </Paragraph>
-              )}
+              ) : (
+                // Show specific variant price when size is selected
+                <>
+                  {/* Current Price */}
+                  <Paragraph sx={styles.price}>
+                    {currency(priceInfo.current)}
+                  </Paragraph>
 
-              {/* Show price range when no variant selected and prices vary */}
-              {!priceInfo.isVariantPrice && 
-               displayPrice.minPrice !== displayPrice.maxPrice && (
-                <Paragraph 
-                  sx={{ 
-                    fontSize: 12, 
-                    color: 'text.secondary',
-                    fontStyle: 'italic'
-                  }}
-                >
-                  (${displayPrice.minPrice} - ${displayPrice.maxPrice})
-                </Paragraph>
+                  {/* Original Price (Strikethrough if on sale) */}
+                  {priceInfo.hasSale && (
+                    <Paragraph sx={styles.strikethrough}>
+                      {currency(priceInfo.original)}
+                    </Paragraph>
+                  )}
+                </>
               )}
             </>
           )}
 
-          {/* Availability Status */}
+          {/* Availability Status - only show when variant is selected */}
           {selectedColor && selectedSize && availability && availability.status && (
             <Box sx={styles.statusPill}>
               <H1 fontSize="14px" color={availability.statusColor}>
@@ -148,28 +150,6 @@ export default function ProductInfoArea({
           )}
         </FlexBox>
 
-        {/* PRICE & STOCK */}
-        {/* <FlexBox alignItems="center" gap={1} mb={2}>
-          <Paragraph sx={styles.price}>
-            {hasSale ? currency(salePrice) : currency(price)}
-          </Paragraph>
-          {hasSale && (
-            <Paragraph sx={styles.strikethrough}>{currency(price)}</Paragraph>
-          )}
-
-          {selectedColor && selectedSize && availability?.stock < 10 && (
-            <Box sx={styles.statusPill}>
-              <H1 fontSize="14px" color={availability?.statusColor}>
-                {loadingAvailability ? (
-                  <CircularProgress size={16} />
-                ) : (
-                  availability?.status
-                )}
-              </H1>
-            </Box>
-          )}
-        </FlexBox> */}
-
         {/* COLOR SELECTION */}
         <FlexCol gap={1} mb={2}>
           <Paragraph mb={1} fontSize="18px" color="#353535" sx={{ fontWeight: 600 }}>
@@ -177,7 +157,6 @@ export default function ProductInfoArea({
           </Paragraph>
           <FlexBox sx={{ gap: 1 }}>
             {colors.map((color) => {
-              // Determine if this specific pill is selected
               const isSelected = selectedColor?.id === color.id;
 
               return (
@@ -191,17 +170,12 @@ export default function ProductInfoArea({
                       textTransform: "none",
                       backgroundColor: "white",
                       color: "text.primary",
-                      
-                      // --- UPDATED BORDER LOGIC ---
                       border: "2px solid",
-                      borderColor: isSelected ? "#0366FE" : "#D1D5DB", // Blue if selected, Grey if not
-                      
+                      borderColor: isSelected ? "#0366FE" : "#D1D5DB",
                       "&:hover": {
                         backgroundColor: "white",
-                        borderColor: isSelected ? "#0366FE" : "#9CA3AF", // Darker grey on hover if not selected
+                        borderColor: isSelected ? "#0366FE" : "#9CA3AF",
                       },
-
-                      // Ensure the border stays visible in MUI buttons
                       "&.MuiButton-root": {
                         border: "2px solid",
                         borderColor: isSelected ? "#0366FE" : "#D1D5DB",
@@ -215,7 +189,6 @@ export default function ProductInfoArea({
                         gap: 0.5,
                       }}
                     >
-                      {/* The small color circle */}
                       <Box
                         sx={{
                           width: 10,
@@ -225,8 +198,6 @@ export default function ProductInfoArea({
                           border: "1px solid rgba(0, 0, 0, 0.1)",
                         }}
                       />
-                      
-                      {/* The color label */}
                       <Typography variant="body2" sx={{ fontWeight: 500 }}>
                         {color.name}
                       </Typography>
@@ -276,12 +247,14 @@ export default function ProductInfoArea({
           </Button>
         </FlexBox>
 
-        {/* SIZE CHART */}
-        <FlexBox justifyContent="flex-end">
-          <Button sx={styles.sizeChart} onClick={() => setOpenModal(true)}>
-            Size chart
-          </Button>
-        </FlexBox>
+        {/* SIZE CHART - Only show if selectedSize has a sizeChartUrl */}
+        {sizeChartUrl && (
+          <FlexBox justifyContent="flex-end">
+            <Button sx={styles.sizeChart} onClick={() => setOpenModal(true)}>
+              Size chart
+            </Button>
+          </FlexBox>
+        )}
 
         {/* ADD TO CART BUTTON */}
         <FlexBox alignItems="center" gap={{ xs: 2, sm: 3 }} py={1}>
@@ -327,14 +300,17 @@ export default function ProductInfoArea({
       />
       <SymAccordion title="Size and fit" content={sizeFit} />
 
-      <SymDialog dialogOpen={openModal} toggleDialog={() => setOpenModal(false)}>
-        <LazyImage
-          src={sizeChart}
-          width={500}
-          height={500}
-          alt="size-chart"
-        />
-      </SymDialog>
+      {/* SIZE CHART DIALOG - Only render if sizeChartUrl exists */}
+      {sizeChartUrl && (
+        <SymDialog dialogOpen={openModal} toggleDialog={() => setOpenModal(false)}>
+          <LazyImage
+            src={sizeChartUrl}
+            width={500}
+            height={500}
+            alt="size-chart"
+          />
+        </SymDialog>
+      )}
     </>
   );
 }

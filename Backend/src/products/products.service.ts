@@ -13,7 +13,7 @@ import { CreateProductImageDto } from 'src/product-images/dto/create-product-ima
 import { SubcategoryItem } from 'src/subcategory-items/entities/subcategory-item.entity';
 import { slugify, normalizeSearchText, determineProductAvailability } from './utils/utils';
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
-import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProductColors, mapProductSizes } from './utils/product.utils';
+import { resolveCategoryHierarchy, applyTagDefaults, mapProduct3DModels, mapProductColors, mapProductSizes, formatPriceRange } from './utils/product.utils';
 import { ProductColor } from 'src/product-colors/entities/product-color.entity';
 import { ProductSize } from 'src/product-sizes/entities/product-size.entity';
 import { UpdateProductVariantsDto, VariantInputDto } from './dto/update-product-variants.dto';
@@ -574,6 +574,7 @@ export class ProductsService {
         price: 0,
         salePrice: 0,
         hasSale: false,
+        range: '$0',
       };
     }
 
@@ -581,25 +582,51 @@ export class ProductsService {
     const availableVariants = variants.filter(v => v.stock > 0);
     const variantsToUse = availableVariants.length > 0 ? availableVariants : variants;
 
-    // Find the variant with the cheapest effective price (salePrice or price)
+    // Collect all valid prices
+    const validPrices: number[] = [];
     let cheapestVariant = variantsToUse[0];
-    let cheapestEffectivePrice = cheapestVariant.salePrice || cheapestVariant.price;
+    let cheapestEffectivePrice = Infinity;
 
     for (const variant of variantsToUse) {
       const effectivePrice = variant.salePrice || variant.price;
-      if (effectivePrice > 0 && effectivePrice < cheapestEffectivePrice) {
+      
+      // Skip invalid prices
+      if (!effectivePrice || effectivePrice <= 0) continue;
+      
+      validPrices.push(effectivePrice);
+      
+      // Track cheapest variant
+      if (effectivePrice < cheapestEffectivePrice) {
         cheapestEffectivePrice = effectivePrice;
         cheapestVariant = variant;
       }
     }
 
+    // Handle case where no valid prices exist
+    if (validPrices.length === 0) {
+      return {
+        price: cheapestVariant.price || 0,
+        salePrice: cheapestVariant.salePrice || 0,
+        hasSale: false,
+        range: '$0',
+      };
+    }
+
+    // Calculate min and max from valid prices
+    const minPrice = Math.min(...validPrices);
+    const maxPrice = Math.max(...validPrices);
+
     // Check if the cheapest variant has a sale
     const hasSale = cheapestVariant.salePrice > 0 && cheapestVariant.salePrice < cheapestVariant.price;
+
+    // Format the price range using the utility function
+    const range = formatPriceRange(minPrice, maxPrice);
 
     return {
       price: cheapestVariant.price,
       salePrice: cheapestVariant.salePrice || 0,
       hasSale,
+      range,
     };
   }
 

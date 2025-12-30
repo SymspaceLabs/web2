@@ -1,5 +1,6 @@
 "use client";
 
+// login-cart-buttons.jsx
 // =============================================================
 // Header Icons On the Right | Account Popover
 // =============================================================
@@ -25,6 +26,7 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
   const { state } = useCart();
   const cartList = state.cart;
 
+  // ✅ FIXED: Use new context structure
   const { state: favState } = useFavorites();
   
   const ICON_COLOR = { color: "grey.600" };
@@ -33,8 +35,11 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  // ✅ UPDATED: Calculate total quantity using new 'quantity' field
+  // Calculate total quantity using new 'quantity' field
   const totalCartItems = cartList.reduce((acc, item) => acc + (item.quantity || 0), 0);
+
+  // ✅ FIXED: Get favorites count from favoriteIds array
+  const totalFavorites = favState?.favoriteIds?.length || 0;
 
   const handleLogin = () => {
     toggleDialog();
@@ -58,14 +63,14 @@ export default function LoginCartButtons({ toggleDialog, toggleCartOpen, toggleF
 
   return (
     <FlexBox alignItems="center">
-      {/* Favorite Icon Button */}
-      <Badge badgeContent={favState.favorites.length} color="primary">
+      {/* Favorite Icon Button - ✅ FIXED */}
+      <Badge badgeContent={totalFavorites} color="primary">
         <IconButton onClick={toggleFavouriteOpen}>
           <FavoriteBorderIcon sx={ICON_COLOR} />
         </IconButton>
       </Badge>
 
-      {/* Shopping Cart Icon Button - ✅ UPDATED */}
+      {/* Shopping Cart Icon Button */}
       <Badge badgeContent={totalCartItems} color="primary">
         <IconButton onClick={toggleCartOpen}>
           <PiShoppingCartSimpleBold color="#7D879C" />

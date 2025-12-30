@@ -1,5 +1,7 @@
+// favorites/components/cart-item.jsx
+
 // ==============================================================
-// Cart Item
+// Cart Item with Dynamic Variant Pricing
 // ==============================================================
 
 import Link from "next/link";
@@ -8,82 +10,104 @@ import Close from "@mui/icons-material/Close";
 import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/lazy-image";
 import { useCart } from "@/hooks/useCart";
-import { currency } from "@/lib"; // CUSTOM DATA MODEL
+import { currency } from "@/lib";
 import { Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol, FlexColCenter } from "@/components/flex-box";
-import { Box, Button, CircularProgress } from "@mui/material"; // Import CircularProgress
+import { Box, Button, CircularProgress } from "@mui/material";
 import { SymColorDropdown, SymRoundedDropdown } from "@/components/custom-inputs";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { H1 } from "@/components/Typography";
 
 // Services
-import { fetchProductAvailability } from "@/services/productService"; // Adjust path if needed
+import { fetchProductAvailability } from "@/services/productService";
 
 // ==============================================================
 
-// Add 'mode' as an optional prop with a default value of 'light'
 export default function MiniCartItem({ item, mode = 'light' }) {
 
   const { state, dispatch } = useCart();
   const { dispatch: favoritesDispatch } = useFavorites();
 
-  const [selectedColor, setSelectedColor] = useState(item.colors?.[0] || null);
-  const [selectedSize, setSelectedSize] = useState(item.sizes?.[0]?.value || '');
-  const [currentVariantStock, setCurrentVariantStock] = useState(0); // State for current variant's stock
-  const [stockWarningMessage, setStockWarningMessage] = useState(''); // State for stock warning message
-  const [loadingAvailability, setLoadingAvailability] = useState(false); // New state for loading availability
-  const [displayImage, setDisplayImage] = useState(item.imgUrl); // 📸 NEW STATE: For dynamic image URL
-  const [loadingImage, setLoadingImage] = useState(false); // 📸 NEW STATE: For image loading spinner
+  // ✅ Initialize with saved variant if available, otherwise use first option
+  const [selectedColor, setSelectedColor] = useState(
+    item.selectedVariant?.color || item.colors?.[0] || null
+  );
+  const [selectedSize, setSelectedSize] = useState(
+    item.selectedVariant?.size?.value || item.sizes?.[0]?.value || ''
+  );
+  const [availability, setAvailability] = useState(null); // ✅ Store full availability data
+  const [stockWarningMessage, setStockWarningMessage] = useState('');
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
+  const [displayImage, setDisplayImage] = useState(item.imgUrl);
+  const [loadingImage, setLoadingImage] = useState(false);
 
   // Determine text color based on the 'mode' prop
   const textColor = mode === 'dark' ? '#000' : '#FFF';
-  const salePriceColor = mode === 'dark' ? '#000' : '#5B5B5B'; // Change sale price to black in dark mode too
+  const salePriceColor = mode === 'dark' ? '#000' : '#5B5B5B';
 
-  // Effect to update stock based on selected color and size using fetchProductAvailability
+  // ✅ Effect to fetch variant data including price and stock
   useEffect(() => {
     const checkAvailability = async () => {
-      // Clear any previous warning when selections change
       setStockWarningMessage('');
 
-      // Ensure product.id, selectedColor, and selectedSize are available and valid
       if (!item.id || !selectedColor || !selectedColor.value || !selectedSize) {
-        setCurrentVariantStock(0); // Reset stock if not all options are selected
+        setAvailability(null);
         if (!selectedSize) {
           setStockWarningMessage("Please select a size.");
         } else if (!selectedColor || !selectedColor.value) {
           setStockWarningMessage("Please select a color.");
         } else {
-          setStockWarningMessage(""); // Clear if all valid but initial state
+          setStockWarningMessage("");
         }
         return;
       }
 
-      setLoadingAvailability(true); // Set loading to true before fetching
+      setLoadingAvailability(true);
 
       try {
-        // Call the external fetchProductAvailability function
-        // Assuming fetchProductAvailability expects color.value and size.value as parameters
         const data = await fetchProductAvailability(item.id, selectedColor.id, selectedSize);
-        setCurrentVariantStock(data?.stock || 0); // Update stock with fetched data
+        setAvailability(data); // ✅ Store the full availability object
+        
         if (data?.stock === 0) {
           setStockWarningMessage("Out of Stock");
         } else {
-          setStockWarningMessage(""); // Clear warning if stock is available
+          setStockWarningMessage("");
         }
       } catch (err) {
         console.error("Error fetching availability for mini cart item:", err);
-        setCurrentVariantStock(0); // Set stock to 0 on error
+        setAvailability(null);
       } finally {
-        setLoadingAvailability(false); // Set loading to false after fetch completes
+        setLoadingAvailability(false);
       }
     };
 
     checkAvailability();
-  }, [item.id, selectedColor, selectedSize]); // Re-run when these dependencies change
+  }, [item.id, selectedColor, selectedSize]);
 
+  // ✅ Dynamic price calculation based on availability data
+  const getDisplayPrice = () => {
+    // If variant is selected and loaded, show exact variant price
+    if (availability && selectedColor && selectedSize) {
+      return {
+        current: availability.hasSale ? availability.salePrice : availability.price,
+        original: availability.price,
+        hasSale: availability.hasSale,
+        showOriginal: availability.hasSale
+      };
+    }
+    
+    // Fallback to item's base price
+    return {
+      current: item.salePrice || item.price,
+      original: item.price,
+      hasSale: item.salePrice && item.salePrice < item.price,
+      showOriginal: item.salePrice && item.salePrice < item.price
+    };
+  };
+
+  const priceInfo = getDisplayPrice();
 
   const handleAddToCart = () => {
-    // Basic validation before proceeding
     if (!selectedSize) {
       setStockWarningMessage("Please select a size.");
       return;
@@ -93,7 +117,6 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       return;
     }
 
-    // Check if the item already exists in the cart (matching by id + color + size)
     const existingItem = state.cart.find(
       (cartItem) =>
         cartItem.id === item.id &&
@@ -104,18 +127,19 @@ export default function MiniCartItem({ item, mode = 'light' }) {
     const currentCartQty = existingItem ? existingItem.qty : 0;
     const newQty = currentCartQty + 1;
 
-    // Check stock availability before adding to cart
+    const currentVariantStock = availability?.stock || 0;
+
     if (newQty > currentVariantStock) {
       setStockWarningMessage(`Only ${currentVariantStock} items of this variant are available.`);
-      return; // Prevent adding to cart if stock is insufficient
+      return;
     }
 
-    setStockWarningMessage(''); // Clear warning if successfully added
+    setStockWarningMessage('');
 
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: {
-        price: item.price,
+        price: availability?.price || item.price, // ✅ Use variant price
         qty: newQty,
         name: item.name,
         imgUrl: item.imgUrl,
@@ -127,54 +151,49 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           label: selectedColor.label
         },
         selectedSize,
-        salePrice: item.salePrice,
-        // Ensure sizes are passed correctly for the cart item structure
-        // Assuming item.sizes is already in the correct format for SymRoundedDropdown
+        salePrice: availability?.salePrice || item.salePrice, // ✅ Use variant sale price
         sizes: item.sizes,
-        stock: currentVariantStock, // ✅ ADDED: Include the stock attribute
+        stock: currentVariantStock,
       },
     });
 
-    // ❌ REMOVE FROM FAVORITES
     favoritesDispatch({
       type: "REMOVE_FAVORITE",
       payload: item.id,
     });
   };
 
-  // Function to handle removing the item from the cart
   const handleRemoveItem = () => {
+    // ✅ Use the stored favorite key for removal
     favoritesDispatch({
       type: "REMOVE_FAVORITE",
-      payload: item.id,
+      payload: item._favoriteKey || item.id, // Use composite key if available
     });
   };
 
-  // Determine if the "Add to cart" button should be disabled
-  // It's disabled if stock is 0, or if availability is still loading, or if color/size not selected
-  const isAddToCartDisabled = currentVariantStock === 0 || loadingAvailability || !selectedSize || !selectedColor?.value;
+  const isAddToCartDisabled = 
+    (availability?.stock === 0) || 
+    loadingAvailability || 
+    !selectedSize || 
+    !selectedColor?.value;
 
-  // 1️⃣ NEW useEffect to handle image change
+  // Handle image change based on selected color
   useEffect(() => {
     if (selectedColor && item.images && item.images.length > 0) {
-      setLoadingImage(true); // 🚀 Set loading to true when a new color is selected
+      setLoadingImage(true);
       const newImage = item.images.find(img => img.colorCode === selectedColor.value);
       if (newImage) {
         setDisplayImage(newImage.url);
         setLoadingImage(false);
       } else {
-        // Fallback to the default image if no match is found
         setDisplayImage(item.imgUrl);
-        setLoadingImage(false); // ✅ Add this line for a more robust fallback
+        setLoadingImage(false);
       }
     } else {
-      // If no color is selected, revert to the default image
       setDisplayImage(item.imgUrl);
-      setLoadingImage(false); // ✅ Add this line for initial state handling
+      setLoadingImage(false);
     }
-    
-  }, [selectedColor, item.images, item.imgUrl]); // Dependencies: selectedColor, and the item.images array
-
+  }, [selectedColor, item.images, item.imgUrl]);
 
   return (
     <FlexBox
@@ -190,12 +209,11 @@ export default function MiniCartItem({ item, mode = 'light' }) {
         minHeight: 100
       }}
     >
-
       {/* Product Image */}
       <FlexColCenter alignItems="center" sx={{ width: 100 }}>
         <Link href={`/products/${item.slug}`}>
-          {loadingImage ? ( // 🔄 Conditional rendering for image or spinner
-            <CircularProgress size={50} /> // Display a spinner while image loads
+          {loadingImage ? (
+            <CircularProgress size={50} />
           ) : (
             <LazyImage
               alt={item.name}
@@ -203,13 +221,12 @@ export default function MiniCartItem({ item, mode = 'light' }) {
               width={75}
               height={75}
               sx={{ width: 75, height: 75 }}
-              onLoad={() => setLoadingImage(false)} // 🚀 Set loading to false once the image has loaded
-              onError={() => setLoadingImage(false)} // Also set to false if there's an error
+              onLoad={() => setLoadingImage(false)}
+              onError={() => setLoadingImage(false)}
             />
           )}
         </Link>
       </FlexColCenter>
-
 
       {/* Product Info */}
       <FlexCol height="100%" maxWidth={150}>
@@ -219,13 +236,42 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           </Paragraph>
         </Link>
 
-        <FlexBox gap={2}>
-          <Paragraph  color={textColor} mt={0.5}>
-            {currency(item.salePrice)}
-          </Paragraph>
-          <Paragraph color={salePriceColor} sx={{ textDecoration: 'line-through' }} mt={0.5}>
-            {currency(item.price)}
-          </Paragraph>
+        {/* ✅ Show Saved Variant Info */}
+        {item.selectedVariant?.color && item.selectedVariant?.size && (
+          <Box sx={{ 
+            mt: 0.5, 
+            mb: 0.5,
+            py: 0.5, 
+            px: 1, 
+            background: 'rgba(48, 132, 255, 0.1)',
+            borderRadius: '4px',
+            border: '1px solid rgba(48, 132, 255, 0.3)'
+          }}>
+            <Paragraph fontSize="9px" color={textColor}>
+              Saved: {item.selectedVariant.color.label} / {item.selectedVariant.size.label}
+            </Paragraph>
+          </Box>
+        )}
+
+        {/* ✅ UPDATED: Dynamic Price Display with Loading State */}
+        <FlexBox gap={2} alignItems="center" mt={0.5}>
+          {loadingAvailability ? (
+            <CircularProgress size={16} />
+          ) : (
+            <>
+              <Paragraph color={textColor}>
+                {currency(priceInfo.current)}
+              </Paragraph>
+              {priceInfo.showOriginal && (
+                <Paragraph 
+                  color={salePriceColor} 
+                  sx={{ textDecoration: 'line-through' }}
+                >
+                  {currency(priceInfo.original)}
+                </Paragraph>
+              )}
+            </>
+          )}
         </FlexBox>
 
         {/* 2 Dropdowns side by side */}
@@ -246,6 +292,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           />
         </FlexBox>
       </FlexCol>
+
       <FlexCol
         sx={{ flex: 1 }}
         alignItems="flex-end"
@@ -256,12 +303,10 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           <Close fontSize="small" sx={{ color: textColor }} />
         </Button>
 
-        {/* ✅ Corrected Rendering Logic ✅ */}
-        {/* If loading, show the spinner. */}
+        {/* Stock Warning Display */}
         {loadingAvailability ? (
           <CircularProgress size={20} sx={{ mt: 0.5 }} />
         ) : (
-          // If not loading, but a warning exists, show the warning pill.
           stockWarningMessage && (
             <Box sx={styles.statusPill}>
               <H1 fontSize="8px" color="#000">
@@ -275,22 +320,22 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           <Button
             sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
             onClick={handleAddToCart}
+            disabled={isAddToCartDisabled}
           >
             Add to cart
           </Button>
         </FlexBox>
       </FlexCol>
-
     </FlexBox>
   );
 }
 
 const styles = {
-  btn : {
+  btn: {
     background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
     borderRadius: '80px',
     border: '2px solid #FFF',
-    color:'#FFF',
+    color: '#FFF',
     fontSize: 10,
     py: 1,
     px: 1.5,
@@ -303,11 +348,11 @@ const styles = {
     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
     borderRadius: '100px'
   },
-  disabledBtn : {
+  disabledBtn: {
     background: 'rgba(128, 128, 128, 0.55)',
     color: "#FFF",
     cursor: "not-allowed",
     pointerEvents: "none",
     border: "2px solid #FFF",
   }
-}
+};

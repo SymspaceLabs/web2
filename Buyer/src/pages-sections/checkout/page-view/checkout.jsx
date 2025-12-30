@@ -1,3 +1,4 @@
+// checkout/page-view/checkout.jsx
 "use client";
 
 // ======================================================
@@ -17,7 +18,7 @@ import { processCheckoutStep } from "@/services/checkoutProcessingService"; // N
 import { getPaymentSummaryButtonText, calculateTotalAmount } from "@/services/checkoutService";
 
 import Stepper from "../stepper";
-import CartItem from "../cart-item";
+import CartItem from "../checkout-cart-item";
 import PaymentForm from "../payment-form";
 import CheckoutForm from "../checkout-form";
 import PaymentSummary from "../payment-summary";

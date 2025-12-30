@@ -40,7 +40,7 @@ export default function ProductDetails({ product }) {
   // Updates the selected size
   const handleSizeSelect = (event) => setSelectedSize(event.target.value);
  
-  // ✅ NEW: Simplified Add to Cart
+  // Simplified Add to Cart
   const handleAddToCart = () => {
     if (!selectedSize) {
       setSizeError(true);

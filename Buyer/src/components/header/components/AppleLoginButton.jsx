@@ -32,11 +32,16 @@ const AppleSigninButton = () => {
       window.AppleID.auth.init({
         clientId: process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
         scope: "email name",
-        redirectURI: "https://www.symspacelabs.com/auth/apple/callback",
+        // redirectURI: "https://www.symspacelabs.com/auth/apple/callback",
         usePopup: true,
       });
     }
   }, []);
+
+  console.log(window.location.origin)
+  console.log(process.env.NEXT_PUBLIC_APPLE_CLIENT_ID)
+  console.log(process.env.NEXT_PUBLIC_APPLE_CALLBACK_URL)
+
 
 
   const handleAppleResponse = async (response) => {

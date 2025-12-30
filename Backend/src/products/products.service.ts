@@ -1592,7 +1592,7 @@ export class ProductsService {
     for (const product of products) {
       // Determine availability based on variants' stock
       const inStock = product.variants?.some(v => v.stock > 0);
-      const status = inStock ? 'In stock' : 'Out of stock';
+      const status = inStock ? 'In stock' : 'Sold Out';
       availabilitySet.add(status);
 
       // Collect all unique colors from the products

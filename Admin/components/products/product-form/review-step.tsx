@@ -1,6 +1,9 @@
+// product-form/review-step.tsx
+
 "use client"
 
-import { Edit2 } from "lucide-react"
+import { useState } from "react"
+import { Edit2, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { FormData } from "@/components/products/product-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,6 +16,8 @@ type ReviewStepProps = {
 }
 
 export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewStepProps) {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+
   const getCategoryDisplay = (category: FormData['category']): string => {
     if (!category) return "Not set"
     if (typeof category === 'string') return category
@@ -21,6 +26,71 @@ export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewSte
     }
     return "Not set"
   }
+
+  // Function to truncate HTML content
+  const getTruncatedDescription = (html: string, maxLength: number = 200) => {
+    if (!html) return { truncated: '', needsTruncation: false }
+    
+    // Create a temporary div to get text content
+    const temp = document.createElement('div')
+    temp.innerHTML = html
+    const text = temp.textContent || temp.innerText || ''
+    
+    // If text is short enough, no need to truncate
+    if (text.length <= maxLength) {
+      return { truncated: html, needsTruncation: false }
+    }
+
+    // Find truncation point
+    let charCount = 0
+    let truncatedHtml = ''
+    
+    const traverse = (node: Node): boolean => {
+      if (charCount >= maxLength) return false
+      
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent || ''
+        if (charCount + text.length > maxLength) {
+          truncatedHtml += text.substring(0, maxLength - charCount) + '...'
+          charCount = maxLength
+          return false
+        }
+        truncatedHtml += text
+        charCount += text.length
+        return true
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element
+        const tagName = element.tagName.toLowerCase()
+        
+        // Copy attributes
+        const attrs = Array.from(element.attributes)
+          .map(attr => `${attr.name}="${attr.value}"`)
+          .join(' ')
+        
+        truncatedHtml += attrs ? `<${tagName} ${attrs}>` : `<${tagName}>`
+        
+        for (let child of Array.from(node.childNodes)) {
+          if (!traverse(child)) {
+            truncatedHtml += `</${tagName}>`
+            return false
+          }
+        }
+        
+        truncatedHtml += `</${tagName}>`
+        return true
+      }
+      return true
+    }
+
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+    traverse(doc.body)
+    
+    return { truncated: truncatedHtml, needsTruncation: true }
+  }
+
+  const description = formData.description || ''
+  const { truncated, needsTruncation } = getTruncatedDescription(description)
 
   return (
     <div className="space-y-6">
@@ -47,8 +117,38 @@ export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewSte
             <p className="font-medium">{getCategoryDisplay(formData.category)}</p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Description</p>
-            <p className="font-medium">{formData.description || "Not set"}</p>
+            <p className="text-sm text-muted-foreground mb-1">Description</p>
+            {description ? (
+              <div className="space-y-2">
+                <div 
+                  className="font-medium prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ 
+                    __html: isDescriptionExpanded ? description : truncated 
+                  }}
+                />
+                {needsTruncation && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                    className="flex items-center gap-1 px-2 h-8 text-primary hover:text-primary -mt-1"
+                  >
+                    {isDescriptionExpanded ? (
+                      <>
+                        See less <ChevronUp className="h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        See more <ChevronDown className="h-4 w-4" />
+                      </>
+                    )}
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <p className="font-medium">Not set</p>
+            )}
           </div>
         </CardContent>
       </Card>

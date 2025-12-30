@@ -1,4 +1,6 @@
-// ===== FILE: product-form/components/variants-table.tsx =====
+// Product Variants Table
+// variants-table.tsx
+
 import React, { useState, useMemo, useCallback, memo } from "react"
 import { ChevronDown, MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -60,27 +62,32 @@ const formatCurrency = (value: number): string => {
 }
 
 /**
- * Calculate price range for a group of variants
+ * Calculate price range for a specific field in a group of variants
  * Returns formatted string like "RM 30.00 - 60.00" or "RM 50.00" if all same
- * 
- * Industry best practice: Always show the selling price (sale price if available, else regular price)
  */
-const calculatePriceRange = (variants: VariantRow[], currencySymbol: string = 'RM'): string => {
+const calculatePriceRange = (
+  variants: VariantRow[], 
+  field: 'price' | 'salePrice',
+  currencySymbol: string = 'USD'
+): string => {
   if (variants.length === 0) return `${currencySymbol} 0.00`
   
-  // Get effective prices (sale price takes precedence if set)
-  const prices = variants.map(v => v.salePrice > 0 ? v.salePrice : v.price)
+  // Get values from the specific field only
+  const values = variants.map(v => v[field] || 0).filter(v => v > 0)
   
-  const minPrice = Math.min(...prices)
-  const maxPrice = Math.max(...prices)
+  // If no values set, return placeholder
+  if (values.length === 0) return '-'
   
-  // If all prices are the same, show single price
-  if (minPrice === maxPrice) {
-    return `${currencySymbol} ${minPrice.toFixed(2)}`
+  const minValue = Math.min(...values)
+  const maxValue = Math.max(...values)
+  
+  // If all values are the same, show single value
+  if (minValue === maxValue) {
+    return `${currencySymbol} ${minValue.toFixed(2)}`
   }
   
-  // Show range if prices differ
-  return `${currencySymbol} ${minPrice.toFixed(2)} - ${maxPrice.toFixed(2)}`
+  // Show range if values differ
+  return `${currencySymbol} ${minValue.toFixed(2)} - ${maxValue.toFixed(2)}`
 }
 
 /**
@@ -178,7 +185,7 @@ BulkEditRow.displayName = 'BulkEditRow'
  * Color group header - Shows aggregated data for all variants of a color
  * 
  * KEY FEATURES (Shopify-inspired):
- * - Dynamic price range display
+ * - Dynamic price range display (separate for price and salePrice)
  * - Total stock indicator
  * - Bulk edit functionality
  * - Visual color indicator
@@ -207,8 +214,9 @@ const ColorGroupHeader = memo<{
   const [isCostEditing, setIsCostEditing] = useState(false)
   const [isSalePriceEditing, setIsSalePriceEditing] = useState(false)
   
-  // Calculate dynamic ranges
-  const priceRange = useMemo(() => calculatePriceRange(colorVariants), [colorVariants])
+  // Calculate dynamic ranges for each field separately
+  const priceRange = useMemo(() => calculatePriceRange(colorVariants, 'price'), [colorVariants])
+  const salePriceRange = useMemo(() => calculatePriceRange(colorVariants, 'salePrice'), [colorVariants])
   const totalStock = useMemo(() => calculateTotalStock(colorVariants), [colorVariants])
   
   return (
@@ -240,7 +248,7 @@ const ColorGroupHeader = memo<{
         </button>
       </TableCell>
       
-      {/* Price Range Column - Shopify Style */}
+      {/* Price Range Column - Shows price field only */}
       <TableCell>
         {isPriceEditing ? (
           <div className="flex gap-1">
@@ -290,7 +298,7 @@ const ColorGroupHeader = memo<{
         )}
       </TableCell>
       
-      {/* Sale Price Column */}
+      {/* Sale Price Column - Shows salePrice field only */}
       <TableCell>
         {isSalePriceEditing ? (
           <Input
@@ -321,13 +329,21 @@ const ColorGroupHeader = memo<{
           />
         ) : (
           <div 
-            className="h-9 px-3 py-2 rounded-md border bg-background hover:bg-muted/30 transition-colors flex items-center cursor-text"
+            className="relative group cursor-text"
             onClick={(e) => {
               e.stopPropagation()
               setIsSalePriceEditing(true)
             }}
           >
-            <span className="text-sm text-muted-foreground">Set sale price</span>
+            <div className="h-9 px-3 py-2 rounded-md border bg-muted/30 hover:bg-muted/50 transition-colors flex items-center justify-between">
+              <span className={`text-sm ${salePriceRange === '-' ? 'text-muted-foreground' : 'font-medium'}`}>
+                {salePriceRange === '-' ? 'Set sale price' : salePriceRange}
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+            </div>
           </div>
         )}
       </TableCell>
@@ -544,10 +560,10 @@ VariantRowComponent.displayName = 'VariantRowComponent'
 /**
  * VariantsTable - Enterprise-grade variants management table
  * 
- * NEW FEATURES (v2.0):
- * ✅ Dynamic price ranges at color-group level (Shopify-inspired)
- * ✅ Real-time range updates as prices change
- * ✅ Smart formatting (single price vs range)
+ * FEATURES (v2.1):
+ * ✅ Separate price ranges for price and salePrice columns
+ * ✅ Real-time range updates as values change
+ * ✅ Smart formatting (single value vs range)
  * ✅ Total stock aggregation per color
  * ✅ Enhanced visual hierarchy
  * 

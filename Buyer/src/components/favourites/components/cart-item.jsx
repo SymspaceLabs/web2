@@ -17,6 +17,7 @@ import { Box, Button, CircularProgress } from "@mui/material";
 import { SymColorDropdown, SymRoundedDropdown } from "@/components/custom-inputs";
 import { useFavorites } from "@/contexts/FavoritesContext";
 import { H1 } from "@/components/Typography";
+import { useSnackbar } from "notistack";
 
 // Services
 import { fetchProductAvailability } from "@/services/productService";
@@ -27,6 +28,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
 
   const { state, dispatch } = useCart();
   const { dispatch: favoritesDispatch } = useFavorites();
+  const { enqueueSnackbar } = useSnackbar();
 
   // ✅ Initialize with saved variant if available, otherwise use first option
   const [selectedColor, setSelectedColor] = useState(
@@ -107,59 +109,60 @@ export default function MiniCartItem({ item, mode = 'light' }) {
 
   const priceInfo = getDisplayPrice();
 
+  // ✅ UPDATED: Following product-details.jsx pattern
   const handleAddToCart = () => {
     if (!selectedSize) {
       setStockWarningMessage("Please select a size.");
+      enqueueSnackbar("Please select a size", { variant: "warning" });
       return;
     }
     if (!selectedColor || !selectedColor.value) {
       setStockWarningMessage("Please select a color.");
+      enqueueSnackbar("Please select a color", { variant: "warning" });
       return;
     }
 
-    const existingItem = state.cart.find(
-      (cartItem) =>
-        cartItem.id === item.id &&
-        cartItem.selectedColor?.value === selectedColor?.value &&
-        cartItem.selectedSize === selectedSize
+    if (!availability || !availability.variantId) {
+      enqueueSnackbar("Product information not loaded", { variant: "error" });
+      return;
+    }
+
+    if (availability.stock === 0) {
+      enqueueSnackbar("Product is out of stock", { variant: "error" });
+      return;
+    }
+
+    // Check current quantity in cart using variantId
+    const cartItem = state.cart.find(
+      cartItem => cartItem.variantId === availability.variantId
     );
+    const currentQty = cartItem ? cartItem.quantity : 0;
 
-    const currentCartQty = existingItem ? existingItem.qty : 0;
-    const newQty = currentCartQty + 1;
-
-    const currentVariantStock = availability?.stock || 0;
-
-    if (newQty > currentVariantStock) {
-      setStockWarningMessage(`Only ${currentVariantStock} items of this variant are available.`);
+    if (currentQty >= availability.stock) {
+      setStockWarningMessage(`Maximum stock (${availability.stock}) already in cart`);
+      enqueueSnackbar(
+        `Maximum stock (${availability.stock}) already in cart`,
+        { variant: "warning" }
+      );
       return;
     }
 
-    setStockWarningMessage('');
-
+    // ✅ NEW: Dispatch with only variantId and quantity (same as product-details.jsx)
     dispatch({
-      type: "CHANGE_CART_AMOUNT",
+      type: "ADD_TO_CART",
       payload: {
-        price: availability?.price || item.price, // ✅ Use variant price
-        qty: newQty,
-        name: item.name,
-        imgUrl: item.imgUrl,
-        images: item.images,
-        id: item.id,
-        slug: item.slug,
-        selectedColor: {
-          code: selectedColor.value,
-          label: selectedColor.label
-        },
-        selectedSize,
-        salePrice: availability?.salePrice || item.salePrice, // ✅ Use variant sale price
-        sizes: item.sizes,
-        stock: currentVariantStock,
+        variantId: availability.variantId,
+        quantity: 1,
       },
     });
 
+    setStockWarningMessage('');
+    enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" });
+
+    // Remove from favorites after successfully adding to cart
     favoritesDispatch({
       type: "REMOVE_FAVORITE",
-      payload: item.id,
+      payload: item._favoriteKey || item.id,
     });
   };
 
@@ -253,7 +256,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           </Box>
         )}
 
-        {/* ✅ UPDATED: Dynamic Price Display with Loading State */}
+        {/* ✅ Dynamic Price Display with Loading State */}
         <FlexBox gap={2} alignItems="center" mt={0.5}>
           {loadingAvailability ? (
             <CircularProgress size={16} />

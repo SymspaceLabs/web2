@@ -181,7 +181,7 @@ export class ProductVariantsService {
       );
     }
   
-    let status = 'Out of stock';
+    let status = 'Sold Out';
     let statusColor = '#000';
   
     if (variant.stock >= 10) {

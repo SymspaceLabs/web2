@@ -26,13 +26,13 @@ export function normalizeSearchText(text: string): string {
 }
 
 /**
- * Calculates 'In stock' or 'Out of Stock' based on variants' stock count.
+ * Calculates 'In stock' or 'Sold Out' based on variants' stock count.
  * NOTE: Assumes Product type has a 'variants' array, and each variant has a 'stock' property.
  */
 
 // --- Helper Constants (Define these outside the findAll method) ---
 const IN_STOCK = 'In stock';
-const OUT_OF_STOCK = 'Out of stock';
+const OUT_OF_STOCK = 'Sold Out';
 
 export function  determineProductAvailability (product: any): string  {
   // Check if the product has variants and if at least one variant's stock is > 0

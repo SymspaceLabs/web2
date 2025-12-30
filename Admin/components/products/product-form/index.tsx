@@ -1,3 +1,5 @@
+// product-form/index.tsx
+
 "use client"
 
 import { useState } from "react"

@@ -1,5 +1,7 @@
 "use client";
 // =======================================================
+// product-card-3.jsx
+// ProductCard3
 // Product Card 3
 // Used In:
 // - Wish List

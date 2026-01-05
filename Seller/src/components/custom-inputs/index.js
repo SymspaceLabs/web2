@@ -10,3 +10,4 @@ export { default as SymFileUploader } from "./SymFileUploader";
 export { default as SymImageUploader } from './SymImageUploader'
 export { default as SymPasswordInput } from "./SymPasswordInput";
 export { default as SymMultiSelectDropdown } from "./SymMultiSelectDropdown";
+export { default as CategorySelector } from "./CategorySelector";

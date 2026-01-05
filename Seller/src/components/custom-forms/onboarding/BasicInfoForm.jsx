@@ -4,7 +4,8 @@
 
 import countryList from '@/data/countryList';
 import { FlexBox } from '@/components/flex-box';
-import { SymDropdown, SymTextField, SymAutoComplete } from '@/components/custom-inputs';
+import { SymDropdown, SymTextField, SymAutoComplete, CategorySelector } from '@/components/custom-inputs';
+import { CATEGORIES_DATA } from '@/data/categoryMenus';
 
 // =========================================================
 
@@ -78,7 +79,15 @@ function BasicInfoForm ({
             {/* GMV || Category */}
             <FlexBox justifyContent="center" flexDirection={{xs:"column", sm:"row"}} gap={3} width="100%">
                 <SymDropdown title="Average Gross Merchandise Value (GMV)" value={gmv} placeholder="GMV" onChange={(e) => setGmv(e.target.value)} options={options.gmv}  toolTipText={toolTipText.gmv}  />
-                <SymDropdown title="Highest Performing Category" value={category} onChange={(e) => setCategory(e.target.value)} options={options.topPerformingCategory} />
+                {/* <SymDropdown title="Highest Performing Category" value={category} onChange={(e) => setCategory(e.target.value)} options={options.topPerformingCategory} /> */}
+                <CategorySelector
+                    title="Highest Performing Category"
+                    categories={CATEGORIES_DATA}
+                    value={category}
+                    onChange={(val) => setCategory(val)}
+                    error={false}
+                    placeholder="Select a category"
+                />
             </FlexBox>
 
         </FlexBox>

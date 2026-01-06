@@ -7,15 +7,24 @@ import { Edit2, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import type { FormData } from "@/components/products/product-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ThumbnailUploader } from "./components/thumbnail-uploader"
 
 type ReviewStepProps = {
   formData: FormData
   onBack: () => void
   onSubmit: (isDraft: boolean) => void
   jumpToStep: (step: number) => void
+  updateFormData: (data: Partial<FormData>) => void  // ✅ Add this prop
+
 }
 
-export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewStepProps) {
+export function ReviewStep({ 
+  formData, 
+  onBack, 
+  onSubmit, 
+  jumpToStep,
+  updateFormData  // ✅ Add this
+}: ReviewStepProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   const getCategoryDisplay = (category: FormData['category']): string => {
@@ -92,6 +101,13 @@ export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewSte
   const description = formData.description || ''
   const { truncated, needsTruncation } = getTruncatedDescription(description)
 
+  const handleThumbnailChange = (thumbnailId: string | null, thumbnailUrl?: string) => {
+    updateFormData({ 
+      thumbnailId,
+      thumbnailUrl 
+    })
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -99,6 +115,16 @@ export function ReviewStep({ formData, onBack, onSubmit, jumpToStep }: ReviewSte
         <p className="text-sm text-muted-foreground mb-6">Review all details before publishing your product</p>
       </div>
 
+       {/* ✅ ADD THUMBNAIL SELECTOR AS FIRST SECTION */}
+      <ThumbnailUploader
+        images={formData.images}
+        selectedThumbnailId={formData.thumbnailId || null}
+        thumbnailUrl={formData.thumbnailUrl}
+        onThumbnailChange={handleThumbnailChange}
+        colors={formData.selectedColors}
+      />
+
+      {/* Basic Information Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">Basic Information</CardTitle>

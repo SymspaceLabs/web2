@@ -90,6 +90,8 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       };
     }) || [],
     model3d: undefined,
+    thumbnailId: product?.thumbnail?.id || null,
+    thumbnailUrl: product?.thumbnail?.url || undefined,
   })
 
   const steps = [
@@ -215,7 +217,11 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       }
     } else if (step === 4 && isFinalSubmission) {
       return {
-        status: finalStatus
+        status: finalStatus,
+        thumbnailId: data.thumbnailId || null,
+        ...(data.thumbnailUrl && !data.thumbnailId && { 
+          thumbnailUrl: data.thumbnailUrl 
+        })
       }
     }
 
@@ -533,6 +539,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 onBack={handleBack}
                 onSubmit={handleSubmit}
                 jumpToStep={jumpToStep}
+                updateFormData={updateFormData}
               />
             )}
           </CardContent>

@@ -67,6 +67,7 @@ export class ProductsService {
           subcategoryItem: subcategoryItemIdFromDto,
           subcategoryItemChild: subcategoryItemChildIdFromDto,
           gender,
+          thumbnailId,
           ...productData
       } = dto;
 
@@ -165,6 +166,18 @@ export class ProductsService {
           if (gender !== undefined) {
               product.gender = gender;
           }
+
+          // ✅ Handle thumbnail assignment in UPDATE mode
+          if (thumbnailId !== undefined) {
+            if (thumbnailId === null) {
+              // Explicitly clear thumbnail
+              product.thumbnail = null;
+              product.thumbnailId = null;
+            } else {
+              // Validate and assign thumbnail
+              await this.validateAndSetThumbnail(product, thumbnailId);
+            }
+          }
           
       }
 
@@ -203,7 +216,8 @@ export class ProductsService {
             colors: [],
             sizes: [],
             threeDModels: [],
-            gender: finalGender
+            gender: finalGender,
+            thumbnailId: null, 
           });
 
           // --- 3D Model Creation Logic ---
@@ -222,7 +236,12 @@ export class ProductsService {
           await this.saveProductImages(product, images);
       }
 
-      // ✅ UPDATED: Colors Mapping - Use merge instead of replace
+      // ✅ Handle thumbnail for CREATE mode AFTER images are saved
+      if (!id && thumbnailId) {
+        await this.validateAndSetThumbnail(product, thumbnailId);
+      }
+
+      // Colors Mapping - Use merge instead of replace
       if (colors !== undefined) {
           if (id) {
               // UPDATE MODE: Merge to preserve existing IDs
@@ -233,7 +252,7 @@ export class ProductsService {
           }
       }
 
-      // ✅ UPDATED: Sizes Mapping - Use merge instead of replace
+      // Sizes Mapping - Use merge instead of replace
       if (sizes !== undefined) {
           const mappedSizeDtos = sizes.map((s, index) => ({
               size: s.size,
@@ -1221,6 +1240,32 @@ export class ProductsService {
       } else {
           query.andWhere('product.age_group IN (:...ageGroups)', { ageGroups });
       }
+  }
+
+  /**
+   * Validates that the thumbnail ID belongs to one of the product's images
+   * and sets it as the thumbnail.
+   */
+  private async validateAndSetThumbnail(
+    product: Product,
+    thumbnailId: string
+  ): Promise<void> {
+    // Check if the image exists and belongs to this product
+    const image = await this.productImageRepository.findOne({
+      where: { 
+        id: thumbnailId,
+        product: { id: product.id }
+      },
+    });
+
+    if (!image) {
+      throw new BadRequestException(
+        `Image with ID ${thumbnailId} not found or does not belong to this product`
+      );
+    }
+
+    product.thumbnail = image;
+    product.thumbnailId = thumbnailId;
   }
 
   // Reusable method to generate and save variants

@@ -38,6 +38,14 @@ export default function Section2() {
     getAllBlogs();
   }, []);
 
+  // Helper function to truncate title
+  const truncateTitle = (title) => {
+    if (title.length <= 50) {
+      return title;
+    }
+    return title.substring(0, 47) + "...";
+  };
+
   return (
     <Box sx={{ py: 3 }}>
       <Container>
@@ -144,7 +152,7 @@ export default function Section2() {
                                 maxWidth: "90%",
                               }}
                             >
-                              {item.title}
+                              {truncateTitle(item.title)}
                             </H1>
 
                           </Button>
@@ -214,7 +222,7 @@ export default function Section2() {
                           LinkComponent={Link}
                           href={item.shopUrl}
                         >
-                          {item.title}
+                          {truncateTitle(item.title)}
                         </Button>
                       </Box>
                     </Grid>

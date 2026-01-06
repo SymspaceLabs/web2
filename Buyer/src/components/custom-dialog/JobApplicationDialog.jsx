@@ -12,6 +12,7 @@ import { IconButton, Box, Button, Dialog, DialogActions, DialogContent, DialogTi
 
 import JobForm from '../custom-forms/JobForm';
 import CloseIcon from '@mui/icons-material/Close';
+import { uploadFile } from "@/services/uploadService";
 
 // =========================================================
 
@@ -41,25 +42,12 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
         setLoading(true);
     
         try {
-            let resumeUrls = [];
-    
-            // Step 1: Upload files one by one
-            for (const file of uploadedFile) {
-                const formData = new FormData();
-                formData.append("file", file);
-    
-                const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/image`, {
-                    method: "POST",
-                    body: formData,
-                });
-    
-                if (!uploadResponse.ok) {
-                    throw new Error("Failed to upload a file.");
-                }
-    
-                const { url } = await uploadResponse.json();
-                resumeUrls.push(url); // Collect the uploaded file URL
-            }
+            // Step 1: Upload files using the reusable service
+            const uploadPromises = uploadedFile.map(file => uploadFile(file));
+            const uploadResults = await Promise.all(uploadPromises);
+            
+            // Extract URLs from upload results
+            const resumeUrls = uploadResults.map(result => result.imageUrl);
     
             // Step 2: Construct the request body
             const requestBody = {
@@ -69,7 +57,7 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                 linkedInUrl,
                 role,
                 jobId: job.id,
-                resumeUrls, // Use the collected URLs
+                resumeUrls,
             };
     
             // Step 3: Submit the job application
@@ -88,27 +76,27 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
             showSnackbar("Application submitted successfully!", "success");
             onClose(); // Close dialog on success
         } catch (error) {
-            showSnackbar(error.message, "error");
+            showSnackbar(error.message || "An error occurred during submission.", "error");
         } finally {
             setLoading(false);
         }
     };    
 
     const buttonStyles = useMemo(() => ({
-    background: isValid
-        ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
-        : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
-    boxShadow: "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
-    backdropFilter: "blur(50px)",
-    borderRadius: "12px",
-    color: '#fff',
-    cursor: isValid ? 'pointer' : 'not-allowed',
-    pointerEvents: isValid ? 'auto' : 'none',
-    '&:hover': {
         background: isValid
             ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
             : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
-    },
+        boxShadow: "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
+        backdropFilter: "blur(50px)",
+        borderRadius: "12px",
+        color: '#fff',
+        cursor: isValid ? 'pointer' : 'not-allowed',
+        pointerEvents: isValid ? 'auto' : 'none',
+        '&:hover': {
+            background: isValid
+                ? "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)"
+                : "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)",
+        },
     }), [isValid]);
 
     useEffect(() => {
@@ -129,8 +117,8 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
             fullWidth
             PaperProps={{
                 style: {
-                    maxWidth: "650px", // Set custom max width here
-                    width: "100%", // Ensure responsiveness
+                    maxWidth: "650px",
+                    width: "100%",
                     backgroundColor: "rgba(63, 103, 166, 0.8)",
                     backdropFilter: 'blur(10px)',
                     borderRadius: '40px',
@@ -198,7 +186,7 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
                         size="large"
                         onClick={handleSubmit}
                         disabled={loading}
-                        >
+                    >
                         {loading ? 'Submitting...' : 'Submit'}
                     </Button>
                 </Box>
@@ -209,5 +197,3 @@ const JobApplicationDialog = ({ open, onClose, job }) => {
     
 
 export default JobApplicationDialog
-
-

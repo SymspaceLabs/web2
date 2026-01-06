@@ -8,7 +8,7 @@ import { styles } from "../page-view/styles";
 
 export default function Section1({job, toggleDialog}) {
   return (
-    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:9 }}>
+    <Container sx={{ width:'100%', display:'flex', flexDirection:'column', alignItems:'center', py:{ xs:10, sm:25 } }}>
       <Box sx={{ width:'100%' }}>
         {/* Breadcrumbs */}
         <Breadcrumbs aria-label="breadcrumb" sx={{ color: "#fff", fontSize: 14 }} separator="›">

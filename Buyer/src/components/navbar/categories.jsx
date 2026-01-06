@@ -1,6 +1,3 @@
-// src/components/categories.js
-
-
 import { NavLink } from "../nav-link";
 import { MenuItem } from "@mui/material";
 import { IoGrid } from "react-icons/io5";
@@ -14,7 +11,13 @@ import NavItemChild from "./nav-list/nav-item-child";
 import SymCard from "../custom-components/SymCard";
 import styled from "@mui/material/styles/styled";
 
-// ==========================================================
+// Helper function to get children based on level
+const getChildren = (item, level) => {
+  if (level === 1) return item.subcategories;
+  if (level === 2) return item.subcategoryItems;
+  if (level === 3) return item.subcategoryItemChildren;
+  return null;
+};
 
 export default function Categories({ isOpen, onClose, onToggle }) {
   return (
@@ -26,17 +29,24 @@ export default function Categories({ isOpen, onClose, onToggle }) {
 
 function NavigationList({ isOpen, onClose, onToggle }) {
   const renderNestedNav = (list = [], level = 0) => {
-    // This logic creates the nested list items within the flyout.
     return list.map(nav => {
-      // Base condition: Render final navigatable link item
-      if (nav.slug && !nav.child) {
-        // Correctly determine query parameter based on nesting level
-        const subcategoryItemQuery = level === 3 ? `?subcategoryItem=${nav.slug}` : `?subcategoryItem=${nav.slug}`;
-
+      const children = getChildren(nav, level);
+      
+      // If this item has children, render with flyout
+      if (children && children.length > 0) {
+        return (
+          <NavItemChild nav={nav} key={nav.id} level={level}>
+            {renderNestedNav(children, level + 1)}
+          </NavItemChild>
+        );
+      }
+      
+      // Otherwise, render as a final clickable link
+      if (nav.slug) {
         return (
           <NavLink
-            href={`/products/search/all${subcategoryItemQuery}`}
-            key={nav.name}
+            href={`/products/search/all?subcategoryItem=${nav.slug}`}
+            key={nav.id}
             sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" } }}
             onClick={onClose}
           >
@@ -47,15 +57,6 @@ function NavigationList({ isOpen, onClose, onToggle }) {
         );
       }
       
-      // Recursive condition: Render an item that has children (a sub-menu)
-      if (nav.child) {
-        // Use NavItemChild for all category levels that have sub-categories
-        return (
-          <NavItemChild nav={nav} key={nav.name} level={level} onClose={onClose} >
-            {renderNestedNav(nav.child, level + 1)}
-          </NavItemChild>
-        );
-      }
       return null;
     });
   };
@@ -65,7 +66,7 @@ function NavigationList({ isOpen, onClose, onToggle }) {
 
   return (
     <FlexBox gap={4} alignItems="center" position="relative" flexDirection="column">
-      {/* Main button with the hardcoded name */}
+      {/* Main button */}
       <CategoryMenuButton onClick={onToggle}>
         <IoGrid size="1.3em" color="#FFF" />
         <H1 color="#FFF">Categories</H1>
@@ -73,7 +74,6 @@ function NavigationList({ isOpen, onClose, onToggle }) {
       
       {/* Flyout Menu Container */}
       <ChildNavListWrapper className="child-nav-item" style={{ display: isOpen ? "block" : "none" }}>
-        {/* SymCard holds the list of top-level categories */}
         <SymCard elevation={3} sx={{ mt: 2.5, ml: 1, py: 1, minWidth: 280 }}>
           {flyoutContent}
         </SymCard>

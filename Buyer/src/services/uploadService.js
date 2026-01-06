@@ -6,7 +6,7 @@
  * @returns {Promise<{imageUrl: string}>} An object containing the public URL of the uploaded image.
  * @throws {Error} Throws an error if the upload fails or returns an invalid response.
  */
-export async function uploadFileToMinIO(fileObject) {
+export async function uploadFile(fileObject) {
   // Check if the environment variable is available
   const DEV_SERVER_URL = process.env.NEXT_PUBLIC_BACKEND_URL; 
 

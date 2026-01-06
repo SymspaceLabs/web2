@@ -8,13 +8,15 @@ import SymCard from "@/components/custom-components/SymCard";
 import useSettings from "@/hooks/useSettings";
 import { ParentNav, ParentNavItem } from "../styles";
 
-// ==============================================================
+// Helper function to get children based on level
+const getChildren = (item, level) => {
+  if (level === 1) return item.subcategories;
+  if (level === 2) return item.subcategoryItems;
+  if (level === 3) return item.subcategoryItemChildren;
+  return null;
+};
 
-export default function NavItemChild({
-  nav,
-  children,
-  level // The level prop is now accepted
-}) {
+export default function NavItemChild({ nav, children, level }) {
   const pathname = usePathname();
   const { settings } = useSettings();
   const {
@@ -24,7 +26,9 @@ export default function NavItemChild({
     isRightOverflowing
   } = useOverflowDetect();
 
-  const isActive = nav.child.flat().find(item => item.url === pathname);
+  // Check if any child matches the current path
+  const childrenArray = getChildren(nav, level) || [];
+  const isActive = childrenArray.some(item => item.slug && pathname.includes(item.slug));
 
   return (
     <ParentNav minWidth={200} active={isActive ? 1 : 0} onMouseEnter={checkOverflow}>
@@ -37,7 +41,7 @@ export default function NavItemChild({
         {settings.direction === "ltr" ? <ArrowRight fontSize="small" /> : <ArrowLeft fontSize="small" />}
       </MenuItem>
 
-      {/* The `children` prop already contains the recursively rendered items with the correct level */}
+      {/* The `children` prop contains the recursively rendered items */}
       <ParentNavItem ref={elementRef} left={isLeftOverflowing} right={isRightOverflowing} className="parent-nav-item">
         <SymCard elevation={3} sx={{ py: "0.5rem", minWidth: 180 }}>
           {children}

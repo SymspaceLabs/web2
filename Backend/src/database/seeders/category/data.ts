@@ -163,7 +163,7 @@ export const CATEGORIES_DATA = [
               { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", name: "Bracelets", slug: "bracelets", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", name: "Plated Jewelry", slug: "plated-jewelry", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "handtracking" } },
               { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", name: "Men's Watches", slug: "mens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
-              { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", name: "Women's Watches", slug: "womens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
+              { id: "019b909d-20f0-723b-a280-4cbe38cbd9e2", name: "Women's Watches", slug: "womens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
               { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", name: "Smartwatches", slug: "smartwatches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "c1e8b6a9-2f7d-4a3c-9b5e-6d0f8a4c2e71", name: "Watch Bands & Accessories", slug: "watch-bands-accessories", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
             ]
@@ -174,9 +174,9 @@ export const CATEGORIES_DATA = [
             slug: "headwear",
             mobileLevel2: "",
             subcategoryItemChildren: [
-              { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Hats", slug: "hats", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "019b909c-8068-76eb-96c4-4cd3b6a1480a", name: "Hats", slug: "hats", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "326dgf98-6ed4-5c0c-91c0-12b8f88g8ed9", name: "Caps", slug: "caps", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-              { id: "9fc437c1-640c-48d6-92d4-8e9b7b2c367b", name: "Beanies", slug: "beanies", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "019b909d-8c9a-71cb-87a6-d7b8246d47a0", name: "Beanies", slug: "beanies", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
             ]
           },
           {
@@ -186,9 +186,9 @@ export const CATEGORIES_DATA = [
             mobileLevel2: "",
             subcategoryItemChildren: [
               { id: "7c4e5b8f-2c3a-4e9d-9f6b-6c9a1f0d8e42", name: "Gloves", slug: "gloves", mobileLevel3: "Gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
-              { id: "d7c1a1c3-cda0-4686-bf84-e70241e383b3", name: "Scarves", slug: "scarves", mobileLevel3: "Scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "019b909d-be3c-705a-acc2-43c701dfb71d", name: "Scarves", slug: "scarves", mobileLevel3: "Scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", mobileLevel3: "Socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { id: "9c93e575-8e62-49de-a3d9-16b61c31be2d", name: "Ties", slug: "ties", mobileLevel3: "Ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "019b909e-7f5d-73b4-a0ab-61172a681785", name: "Ties", slug: "ties", mobileLevel3: "Ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ]
           },
           {
@@ -198,7 +198,7 @@ export const CATEGORIES_DATA = [
             mobileLevel2: "",
             subcategoryItemChildren: [
               { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", mobileLevel3: "Wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "horizontal-plane detection" } },
-              { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Belts", slug: "belts", mobileLevel3: "Belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "019b909c-cc81-723f-8b01-54a2179d5e93", name: "Belts", slug: "belts", mobileLevel3: "Belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
             ]
           }
         ]
@@ -500,13 +500,233 @@ export const CATEGORIES_DATA = [
             slug: "kitchen-dining",
             subcategoryItemChildren: [
               { id: "8b9c0d1e-2f3a-4b5c-6d7e-8f90a1b2c3d4", name: "Cookware", slug: "cookware", mobileLevel3:"Home Decor", tags_required: ["ar_type", "material"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
-               { id: "9c0d1e2f-3a4b-5c6d-7e8f-90a1b2c3d4e5", name: "Dinnerware", slug: "dinnerware", mobileLevel3:"Home Decor", tags_required: ["ar_type", "material"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
-               { id: "0d1e2f3a-4b5c-6d7e-8f90-a1b2c3d4e5f6", name: "Appliances", slug: "appliances", mobileLevel3:"Home Decor", mobileLevel3Name:"Kitchen Appliances", tags_required: ["ar_type", "indoor_outdoor", "material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-               { id: "1e2f3a4b-5c6d-7e8f-90a1-b2c3d4e5f60d", name: "Storage Containers", slug: "storage-containers", mobileLevel3:"Home Decor", mobileLevel3Name:"Kitchen Storage", tags_required: ["ar_type", "material"], tag_defaults: { "ar_type": "horizontal-plane detection" } }
+              { id: "9c0d1e2f-3a4b-5c6d-7e8f-90a1b2c3d4e5", name: "Dinnerware", slug: "dinnerware", mobileLevel3:"Home Decor", tags_required: ["ar_type", "material"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
+              { id: "0d1e2f3a-4b5c-6d7e-8f90-a1b2c3d4e5f6", name: "Appliances", slug: "appliances", mobileLevel3:"Home Decor", mobileLevel3Name:"Kitchen Appliances", tags_required: ["ar_type", "indoor_outdoor", "material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "1e2f3a4b-5c6d-7e8f-90a1-b2c3d4e5f60d", name: "Storage Containers", slug: "storage-containers", mobileLevel3:"Home Decor", mobileLevel3Name:"Kitchen Storage", tags_required: ["ar_type", "material"], tag_defaults: { "ar_type": "horizontal-plane detection" } }
             ],
           }
         ]
       },
+      {
+        id: "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+        name: "Rugs & Flooring",
+        slug: "rugs-flooring",
+        mobileLevel1:"Rugs & Flooring", // L1: Top level   
+        subcategoryItems: [
+          {
+            id: "3f2c9a7e-6b4d-4f1a-9c2e-1b8a5d7c4e90",
+            name: "Rugs",
+            slug: "rugs",
+            mobileLevel2: "Rugs",
+            subcategoryItemChildren : [
+              {
+                id: "019b909a-f257-712b-993c-ac5e3f773914",
+                name: "Area Rugs",
+                slug: "area-rugs",
+                mobileLevel2: "Rugs",  
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f90",
+                name: "Runner Rugs",
+                slug: "runner-rugs",
+                mobileLevel2: "Rugs",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "e5f6a7b8-c9d0-1e2f-3a4b-5c6d7e8f90a1",
+                name: "Outdoor Rugs",
+                slug: "outdoor-rugs",
+                mobileLevel2: "Rugs",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "weather_resistant", "uv_resistant", "backing", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "outdoor" }
+              },
+              {
+                id: "f6a7b8c9-d0e1-2f3a-4b5c-6d7e8f90a1b2",
+                name: "Kids Rugs",
+                slug: "kids-rugs",
+                mobileLevel2: "Rugs",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "non_slip", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "a7b8c9d0-e1f2-3a4b-5c6d-7e8f90a1b2c3",
+                name: "Other Rugs",
+                slug: "other-rugs",
+                mobileLevel2: "Rugs",
+                tags_required: ["ar_type", "indoor_outdoor", "material"],
+                optional_tags: ["size", "shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+            ]
+          },
+          {
+            id: "a8e1d3b4-2c7f-4a6e-b5d9-0f3c9e7a1b2d",
+            name: "Flooring",
+            slug: "flooring",
+            mobileLevel2: "Flooring",
+            subcategoryItemChildren: [
+              {
+                id: "b8c9d0e1-f2a3-4b5c-6d7e-8f90a1b2c3d4",
+                name: "Hardwood Flooring",
+                slug: "hardwood-flooring",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "color", "finish"],
+                optional_tags: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "species", "grade", "texture", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "c9d0e1f2-a3b4-5c6d-7e8f-90a1b2c3d4e5",
+                name: "Laminate Flooring",
+                slug: "laminate-flooring",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "color", "finish"],
+                optional_tags: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "water_resistant", "scratch_resistant", "texture", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "d0e1f2a3-b4c5-6d7e-8f90-a1b2c3d4e5f6",
+                name: "Vinyl Flooring",
+                slug: "vinyl-flooring",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "color", "installation_method"],
+                optional_tags: ["product_format", "wear_layer_mil", "overall_thickness", "plank_width", "plank_length", "tile_size", "waterproof", "water_resistant", "texture", "coverage_sqft", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "e1f2a3b4-c5d6-7e8f-90a1-b2c3d4e5f6a7",
+                name: "Tile Flooring",
+                slug: "tile-flooring",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "finish", "tile_size"],
+                optional_tags: ["tile_shape", "color", "pattern", "pei_rating", "slip_resistance", "water_resistant", "waterproof", "installation_method", "coverage_sqft", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "f2a3b4c5-d6e7-8f90-a1b2-c3d4e5f6a7b9",
+                name: "Carpet & Carpet Tiles",
+                slug: "carpet-and-carpet-tiles",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "color"],
+                optional_tags: ["pile_height", "carpet_style", "tile_size", "pattern", "stain_resistant", "installation_method", "coverage_sqft", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "a3b4c5d6-e7f8-90a1-b2c3-d4e5f6a7b8c9",
+                name: "Other Flooring",
+                slug: "other-flooring",
+                mobileLevel2: "Flooring",
+                tags_required: ["ar_type", "indoor_outdoor", "material"],
+                optional_tags: ["color", "finish", "installation_method", "coverage_sqft", "pattern", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+            ]
+          },
+          {
+            id: "c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f",
+            name: "Mats",
+            slug: "mats",
+            mobileLevel2: "Mats",
+            subcategoryItemChildren: [
+              {
+                id: "b4c5d6e7-f8a9-0b1c-2d3e-4f5a6b7c8d9e",
+                name: "Door Mats",
+                slug: "door-mats",
+                mobileLevel2: "Mats",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "non_slip", "weather_resistant", "washable", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "outdoor" }
+              },
+              {
+                id: "c5d6e7f8-a9b0-1c2d-3e4f-5a6b7c8d9e0f",
+                name: "Floor Mats",
+                slug: "floor-mats",
+                mobileLevel2: "Mats",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "room", "non_slip", "washable", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "d6e7f8a9-b0c1-2d3e-4f5a-6b7c8d9e0f1a",
+                name: "Bathroom Mats",
+                slug: "bathroom-mats",
+                mobileLevel2: "Mats",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "non_slip", "absorbency", "quick_dry", "washable", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "e7f8a9b0-c1d2-3e4f-5a6b-7c8d9e0f1a2b",
+                name: "Kitchen Mats",
+                slug: "kitchen-mats",
+                mobileLevel2: "Mats",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "color", "pattern", "anti_fatigue", "non_slip", "washable", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "f8a9b0c1-d2e3-4f5a-6b7c-8d9e0f1a2b3c",
+                name: "Other Mats",
+                slug: "other-mats",
+                mobileLevel2: "Mats",
+                tags_required: ["ar_type", "indoor_outdoor", "material"],
+                optional_tags: ["size", "shape", "color", "pattern", "room", "non_slip", "washable", "brand", "accessible"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+            ],
+          },          
+          {
+            id: "0c5e9f12-8a4b-4d6c-8e7f-21a3b9d4c5e6",
+            name: "Accessories",
+            slug: "accessories",
+            mobileLevel2: "Accessories",
+            subcategoryItemChildren: [
+              {
+                id: "a9b0c1d2-e3f4-5a6b-7c8d-9e0f1a2b3c4d",
+                name: "Rug Pads",
+                slug: "rug-pads",
+                mobileLevel2: "Accessories",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
+                optional_tags: ["shape", "thickness", "grip_level", "floor_type_compatibility", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "b0c1d2e3-f4a5-6b7c-8d9e-0f1a2b3c4d5e",
+                name: "Floor Underlayment",
+                slug: "floor-underlayment",
+                mobileLevel2: "Accessories",
+                tags_required: ["ar_type", "indoor_outdoor", "material"],
+                optional_tags: ["thickness", "soundproofing", "waterproof", "water_resistant", "floor_type_compatibility", "installation_method", "coverage_sqft", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "c1d2e3f4-a5b6-7c8d-9e0f-1a2b3c4d5e6f",
+                name: "Transition Strips",
+                slug: "transition-strips",
+                mobileLevel2: "Accessories",
+                tags_required: ["ar_type", "indoor_outdoor", "material", "color"],
+                optional_tags: ["finish", "profile_type", "floor_type_compatibility", "installation_method", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              },
+              {
+                id: "d2e3f4a5-b6c7-8d9e-0f1a-2b3c4d5e6f7a",
+                name: "Other Rugs & Flooring Accessories",
+                slug: "other-rugs-and-flooring-accessories",
+                mobileLevel2: "Accessories",
+                tags_required: ["ar_type", "indoor_outdoor", "material"],
+                optional_tags: ["size", "shape", "color", "finish", "floor_type_compatibility", "installation_method", "brand"],
+                tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
+              }
+            ],
+          }
+        ]
+      }
     ],
   },
 

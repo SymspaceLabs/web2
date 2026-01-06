@@ -3,8 +3,8 @@
 "use client";
 
 import { currency } from "@/lib";
-import { useEnrichedCart } from "@/hooks/useEnrichedCart";
 import { useRouter } from "next/navigation";
+import { useEnrichedCart } from "@/hooks/useEnrichedCart";
 import { Box, Divider, useMediaQuery, useTheme, CircularProgress } from "@mui/material";
 
 import Scrollbar from "@/components/scrollbar";

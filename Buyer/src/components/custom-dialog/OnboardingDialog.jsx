@@ -2,7 +2,7 @@
 // Onboarding Dialog - Optimized for Faster Loading with Fetch API
 // =========================================================
 
-"use client"; // <--- Add this line here
+"use client";
 
 import { useState, Suspense, lazy } from "react";
 import { useRouter } from 'next/navigation';

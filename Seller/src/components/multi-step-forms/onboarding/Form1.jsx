@@ -8,6 +8,28 @@ import { SymDivider } from '@/components/custom-inputs';
 import ContactForm from '@/components/custom-forms/onboarding/ContactForm';
 import BasicInfoForm from '@/components/custom-forms/onboarding/BasicInfoForm';
 import countryList from '@/data/countryList';
+import { CATEGORIES_DATA } from '@/data/categoryMenus';
+
+// =================================================================================
+
+// ✅ Add utility function at the top
+const findCategoryById = (categories, id, path = '', slugPath = '') => {
+  for (const cat of categories) {
+    const currentPath = path ? `${path} > ${cat.name}` : cat.name;
+    const currentSlugPath = slugPath ? `${slugPath}/${cat.slug}` : cat.slug;
+    
+    if (cat.id === id) {
+      return { ...cat, path: currentPath, slugPath: currentSlugPath };
+    }
+    
+    const searchIn = cat.subcategories || cat.subcategoryItems || cat.subcategoryItemChildren || [];
+    if (searchIn.length) {
+      const found = findCategoryById(searchIn, id, currentPath, currentSlugPath);
+      if (found) return found;
+    }
+  }
+  return null;
+};
 
 // =================================================================================
 
@@ -32,7 +54,7 @@ function Form1 ({
 
   const [zip, setZip] = useState(user?.company.zip);
   const [gmv, setGmv] = useState(user?.company.gmv || "");
-  const [category, setCategory] = useState(user?.company.category || "");
+  const [category, setCategory] = useState(null);
   const [businessPhone, setBusinessPhone] = useState(user?.company.businessPhone)
 
   // Basic Info
@@ -47,6 +69,18 @@ function Form1 ({
     const matchedCountry = countryList.find((item) => item.value === user?.company.country);
     setCountry(matchedCountry || null);
 
+    // ✅ Reconstruct category object from ID
+    let categoryObject = null;
+    if (user?.company.category) {
+      // Check if it's already an object or just an ID
+      if (typeof user.company.category === 'object') {
+        categoryObject = user.company.category;
+      } else {
+        // It's an ID string, find the full category
+        categoryObject = findCategoryById(CATEGORIES_DATA, user.company.category);
+      }
+    }
+
     // Company
     setEmail(user?.email || "");
     setEntityName(user?.company.entityName || "");
@@ -59,7 +93,7 @@ function Form1 ({
     setState(user?.company.state || "");
     setZip(user?.company.zip || "");
     setGmv(user?.company.gmv || "");
-    setCategory(user?.company.category  || "");
+    setCategory(categoryObject);
     setBusinessPhone(user?.company.businessPhone || "")
 
     // Basic Info
@@ -96,7 +130,7 @@ function Form1 ({
         country: country?.value || "",
         zip,
         gmv,
-        category,
+        category: category?.id || null,
         businessPhone,
       }
     });

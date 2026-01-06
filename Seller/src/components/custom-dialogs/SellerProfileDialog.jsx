@@ -89,7 +89,7 @@ const SellerProfileDialog = ({
                 const fileData = new FormData();
                 fileData.append("file", uploadedLogo[0]);
     
-                const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/image`, {
+                const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/file`, {
                     method: "POST",
                     body: fileData,
                 });

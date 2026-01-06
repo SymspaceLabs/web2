@@ -38,7 +38,7 @@ export default function Section4() {
             title="Generate 3d products with visible details"
             subTitle="Migrate your Entire Catalogue into a Centralized 3D Repository to market and gauge product demand prior to manufacturing"
             btnText="Get Started"
-            btnUrl="/"
+            btnUrl="/register"
             invert={false}
           >
             <SymGLTFViewer
@@ -53,7 +53,7 @@ export default function Section4() {
             title="3d product ad Videos"
             subTitle="Showcase unique product features through a wide array of video templates to choose from"
             btnText="Contact us"
-            btnUrl="/"
+            btnUrl="/contact-us"
             invert={true}
           >
             <video
@@ -76,7 +76,7 @@ export default function Section4() {
             title="augmented reality Integration"
             subTitle="Empower customers through an AR Trial Room experience for customers to confidently trial products, receive sizing recommendations, and checkout seamlessly"
             btnText="Learn More"
-            btnUrl="/"
+            btnUrl="/ar-app-simulation"
             invert={false}
           >
             <video

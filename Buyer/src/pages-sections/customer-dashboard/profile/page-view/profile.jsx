@@ -17,7 +17,7 @@ import Person from "@mui/icons-material/Person";
 import UserAnalytics from "../user-analytics";
 import { SymDashboardHeader } from "@/components/custom-components";
 
-import { uploadFileToMinIO } from "@/services/minioService";
+import { uploadFile } from "@/services/uploadService";
 
 // ===========================================================
 
@@ -185,7 +185,7 @@ export default function ProfilePageView({
         // 1. CONDITIONAL MINIO UPLOAD (Only if a new file is selected)
         if (selectedFile) {
             showSnackbar("Uploading new profile image...", "info");
-            const uploadResponse = await uploadFileToMinIO(selectedFile);
+            const uploadResponse = await uploadFile(selectedFile);
             
             if (uploadResponse?.imageUrl) {
                 finalAvatarUrl = uploadResponse.imageUrl;

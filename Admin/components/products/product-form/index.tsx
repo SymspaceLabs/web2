@@ -89,7 +89,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         fileSize: 0, // API doesn't provide file size
       };
     }) || [],
-    model3d: undefined,
+    model3d: undefined
   })
 
   const steps = [
@@ -533,6 +533,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 onBack={handleBack}
                 onSubmit={handleSubmit}
                 jumpToStep={jumpToStep}
+                updateFormData={updateFormData}
               />
             )}
           </CardContent>

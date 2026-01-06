@@ -77,7 +77,6 @@ export function useCategoryTags({
         const options = optionsMap[tagKey];
 
         if (!config || !options || options.length === 0) {
-          console.warn(`⚠️ Missing configuration or options for tag: ${tagKey}`);
           return null;
         }
 

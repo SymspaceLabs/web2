@@ -222,7 +222,7 @@ export class ProductsService {
           await this.saveProductImages(product, images);
       }
 
-      // ✅ UPDATED: Colors Mapping - Use merge instead of replace
+      // Colors Mapping - Use merge instead of replace
       if (colors !== undefined) {
           if (id) {
               // UPDATE MODE: Merge to preserve existing IDs
@@ -233,7 +233,7 @@ export class ProductsService {
           }
       }
 
-      // ✅ UPDATED: Sizes Mapping - Use merge instead of replace
+      // Sizes Mapping - Use merge instead of replace
       if (sizes !== undefined) {
           const mappedSizeDtos = sizes.map((s, index) => ({
               size: s.size,
@@ -1358,8 +1358,8 @@ export class ProductsService {
       const img = new ProductImage();
       img.url = imgDto.url;
       img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
-      img.colorId = imgDto.colorId || null; 
-      img.sortOrder = i;
+      img.colorId = imgDto.colorId || null;
+      img.sortOrder = imgDto.sortOrder !== undefined ? imgDto.sortOrder : i; // ✅ CRITICAL
       img.product = product; // Link the image to the product
       return img;
     });

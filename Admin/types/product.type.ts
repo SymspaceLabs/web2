@@ -180,7 +180,7 @@ export type FormData = {
     stock: number
     colorHex?: string  // For display purposes
   }>
-  
+
   // Media (Step 3)
   images: Array<{
     id: string
@@ -199,6 +199,7 @@ export type FormData = {
   }>
   
   model3d?: File  // For new uploads
+
 }
 
 // ✅ Type for API payloads

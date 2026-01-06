@@ -8,9 +8,9 @@ import { useState } from "react";
 import { LazyImage } from "@/components/lazy-image";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { ContactUsForm } from "@/components/custom-forms";
-import { SymButton } from "@/components/custom-components"; // Make sure SymButton exists and accepts 'loading' prop
+import { SymButton } from "@/components/custom-components";
 import { SocialLinks } from "@/components/footer/components";
-import { Box, Grid, Button, Container } from "@mui/material"; // Keep Button if needed elsewhere or remove if not.
+import { Box, Grid, Button, Container } from "@mui/material";
 import { H1, Paragraph, Span } from '@/components/Typography';
 
 import BoxLink from '@/pages-sections/sessions/components/box-link';
@@ -28,25 +28,24 @@ export default function Section1({
   const [topic, setTopic] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false); // NEW: State to track submission attempt
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const clearForm = () => {
     setFullName('');
     setEmail('');
     setTopic('');
     setMessage('');
-    setFormSubmitted(false); // NEW: Reset formSubmitted state when clearing the form
+    setFormSubmitted(false);
   }
 
   const handleSubmit = async () => {
-    setFormSubmitted(true); // NEW: Indicate that a submission attempt has occurred
+    setFormSubmitted(true);
 
-    // NEW: Perform immediate validation check
     const allFieldsFilled = fullName && email && topic && message;
 
     if (!allFieldsFilled) {
         showSnackbar("Please fill in all required fields.", "error");
-        return; // Prevent API call if form is not valid
+        return;
     }
 
     setLoading(true);
@@ -96,7 +95,7 @@ export default function Section1({
               </H1>
 
               <Paragraph fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{ xs: 14, sm: 16 }}>
-                We’re here to help. Why wait? Reach out today.
+                We're here to help. Why wait? Reach out today.
               </Paragraph>
 
             </Grid>
@@ -112,7 +111,7 @@ export default function Section1({
                 setTopic={setTopic}
                 message={message}
                 setMessage={setMessage}
-                formSubmitted={formSubmitted} // NEW: Pass the formSubmitted state
+                formSubmitted={formSubmitted}
               />
               {/* Submit Button */}
               <SymButton
@@ -143,12 +142,12 @@ export default function Section1({
             thank you for reaching out!
           </H1>
           <Paragraph fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{ xs: 14, sm: 16 }}>
-            We’re here to help. Why wait? Reach out today.
+            We're here to help. Why wait? Reach out today.
           </Paragraph>
           <Paragraph fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{ xs: 14, sm: 16 }}>
             In the mean time, check out our resources.
           </Paragraph>
-          <Button sx={{ mt:5, background:'#fff', color:'#000', borderRadius:'50px', px:4, py:2, width: { xs: "100%", sm: "auto" } }}>
+          <Button sx={styles.resourcesBtn}>
             Resources
           </Button>
           <Paragraph fontWeight={300} color="#fff" lineHeight={1.2} fontSize={{ xs: 14, sm: 16 }}>
@@ -180,5 +179,25 @@ const styles = {
     "&:hover": {
       background: "linear-gradient(90deg, #3084FF 0%, #1D4F99 100%)",
     },
+  },
+  resourcesBtn: {
+    textTransform:'lowercase',
+    mt: 5,
+    background: '#fff',
+    color: '#000',
+    borderRadius: '50px',
+    px: 4,
+    py: 2,
+    width: { xs: "100%", sm: "auto" },
+    fontWeight: 600,
+    fontSize: 16,
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    '&:hover': {
+      background: 'linear-gradient(135deg, #3084FF 0%, #1D4F99 100%)',
+      color: '#fff',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 8px 20px rgba(48, 132, 255, 0.4)',
+    }
   }
 }

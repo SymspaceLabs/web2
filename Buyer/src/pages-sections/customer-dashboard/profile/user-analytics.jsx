@@ -24,7 +24,7 @@ export default function UserAnalytics({
     title: user?.totalOrders !== undefined ? user.totalOrders.toString() : "0", // Use dynamic totalOrders
     subtitle: "All Orders"
   }, {
-    title: favState.favorites.length.toString() ,
+    title: favState?.favorites?.length.toString() ,
     subtitle: "Favorites"
   }, {
     title: "0",

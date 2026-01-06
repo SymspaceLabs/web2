@@ -136,8 +136,8 @@ export default function MobileHeader() {
             </IconButton>
           </FlexBetween>
           {/* CART ITEM LIST */}
-          <Box height={`calc(100vh - ${favState.favorites.length ? "207px" : "75px"})`}>
-            {favState.favorites.length > 0 ? <Scrollbar>
+          <Box height={`calc(100vh - ${favState?.favorites?.length ? "207px" : "75px"})`}>
+            {favState?.favorites?.length > 0 ? <Scrollbar>
               {favState.favorites.map(item => (
                 <MiniCartItem
                   item={item}

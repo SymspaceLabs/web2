@@ -14,8 +14,8 @@ type ReviewStepProps = {
   onBack: () => void
   onSubmit: (isDraft: boolean) => void
   jumpToStep: (step: number) => void
-  updateFormData: (data: Partial<FormData>) => void  // ✅ Add this prop
-
+  updateFormData: (data: Partial<FormData>) => void
+  onSaveThumbnail?: (reorderedImages: FormData['images']) => Promise<void> // ✅ NEW
 }
 
 export function ReviewStep({ 
@@ -23,9 +23,11 @@ export function ReviewStep({
   onBack, 
   onSubmit, 
   jumpToStep,
-  updateFormData  // ✅ Add this
+  updateFormData,
+  onSaveThumbnail // ✅ NEW
 }: ReviewStepProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [isSavingThumbnail, setIsSavingThumbnail] = useState(false) // ✅ NEW
 
   const getCategoryDisplay = (category: FormData['category']): string => {
     if (!category) return "Not set"
@@ -36,21 +38,17 @@ export function ReviewStep({
     return "Not set"
   }
 
-  // Function to truncate HTML content
   const getTruncatedDescription = (html: string, maxLength: number = 200) => {
     if (!html) return { truncated: '', needsTruncation: false }
     
-    // Create a temporary div to get text content
     const temp = document.createElement('div')
     temp.innerHTML = html
     const text = temp.textContent || temp.innerText || ''
     
-    // If text is short enough, no need to truncate
     if (text.length <= maxLength) {
       return { truncated: html, needsTruncation: false }
     }
 
-    // Find truncation point
     let charCount = 0
     let truncatedHtml = ''
     
@@ -71,7 +69,6 @@ export function ReviewStep({
         const element = node as Element
         const tagName = element.tagName.toLowerCase()
         
-        // Copy attributes
         const attrs = Array.from(element.attributes)
           .map(attr => `${attr.name}="${attr.value}"`)
           .join(' ')
@@ -101,11 +98,23 @@ export function ReviewStep({
   const description = formData.description || ''
   const { truncated, needsTruncation } = getTruncatedDescription(description)
 
-  const handleThumbnailChange = (thumbnailId: string | null, thumbnailUrl?: string) => {
-    updateFormData({ 
-      thumbnailId,
-      thumbnailUrl 
-    })
+  // ✅ UPDATED: Handle thumbnail change with auto-save
+  const handleThumbnailChange = async (reorderedImages: FormData['images']) => {
+    // Update local state immediately for responsive UI
+    updateFormData({ images: reorderedImages })
+    
+    // Save to backend if callback is provided
+    if (onSaveThumbnail) {
+      setIsSavingThumbnail(true)
+      try {
+        await onSaveThumbnail(reorderedImages)
+      } catch (error) {
+        console.error('Failed to save thumbnail:', error)
+        // Optionally show error toast here
+      } finally {
+        setIsSavingThumbnail(false)
+      }
+    }
   }
 
   return (
@@ -115,14 +124,19 @@ export function ReviewStep({
         <p className="text-sm text-muted-foreground mb-6">Review all details before publishing your product</p>
       </div>
 
-       {/* ✅ ADD THUMBNAIL SELECTOR AS FIRST SECTION */}
-      <ThumbnailUploader
-        images={formData.images}
-        selectedThumbnailId={formData.thumbnailId || null}
-        thumbnailUrl={formData.thumbnailUrl}
-        onThumbnailChange={handleThumbnailChange}
-        colors={formData.selectedColors}
-      />
+      {/* ✅ UPDATED: Show loading state during save */}
+      <div className="relative">
+        {isSavingThumbnail && (
+          <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
+            <div className="text-sm text-muted-foreground">Saving thumbnail...</div>
+          </div>
+        )}
+        <ThumbnailUploader
+          images={formData.images}
+          onThumbnailChange={handleThumbnailChange}
+          colors={formData.selectedColors}
+        />
+      </div>
 
       {/* Basic Information Card */}
       <Card>
@@ -179,6 +193,7 @@ export function ReviewStep({
         </CardContent>
       </Card>
 
+      {/* Variants Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">Variants & Inventory</CardTitle>
@@ -239,6 +254,7 @@ export function ReviewStep({
         </CardContent>
       </Card>
 
+      {/* Media Card */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">Media</CardTitle>
@@ -255,15 +271,23 @@ export function ReviewStep({
                 <span className="font-medium">{formData.images.length}</span>
               </p>
               <div className="grid grid-cols-4 gap-2">
-                {formData.images.slice(0, 4).map((image, index) => (
-                  <div key={index} className="aspect-square rounded border bg-muted overflow-hidden">
-                    <img
-                      src={image.url || "/placeholder.svg"}
-                      alt={`Preview ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
+                {formData.images
+                  .sort((a, b) => a.sortOrder - b.sortOrder)
+                  .slice(0, 4)
+                  .map((image, index) => (
+                    <div key={image.id} className="relative aspect-square rounded border bg-muted overflow-hidden">
+                      <img
+                        src={image.url || "/placeholder.svg"}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      {index === 0 && (
+                        <div className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded">
+                          Main
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
               {formData.images.length > 4 && (
                 <p className="text-xs text-muted-foreground">+{formData.images.length - 4} more images</p>

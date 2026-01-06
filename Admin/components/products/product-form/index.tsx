@@ -89,9 +89,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         fileSize: 0, // API doesn't provide file size
       };
     }) || [],
-    model3d: undefined,
-    thumbnailId: product?.thumbnail?.id || null,
-    thumbnailUrl: product?.thumbnail?.url || undefined,
+    model3d: undefined
   })
 
   const steps = [
@@ -217,11 +215,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       }
     } else if (step === 4 && isFinalSubmission) {
       return {
-        status: finalStatus,
-        thumbnailId: data.thumbnailId || null,
-        ...(data.thumbnailUrl && !data.thumbnailId && { 
-          thumbnailUrl: data.thumbnailUrl 
-        })
+        status: finalStatus
       }
     }
 

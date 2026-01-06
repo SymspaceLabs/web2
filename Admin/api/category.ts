@@ -57,8 +57,6 @@ export async function fetchSubcategoryDetailsById(
   // should handle UUID lookups
   const url = `${BACKEND_URL}/subcategory-items/${id}`;
 
-  console.log('📡 Fetching subcategory by ID:', url);
-
   try {
     const response = await fetch(url);
 
@@ -69,9 +67,7 @@ export async function fetchSubcategoryDetailsById(
     }
 
     const data: SubcategoryDetails = await response.json();
-    
-    console.log('✅ Subcategory details fetched by ID:', data);
-    
+       
     return data;
   } catch (error) {
     console.error(`❌ Error fetching subcategory by ID ${id}:`, error);

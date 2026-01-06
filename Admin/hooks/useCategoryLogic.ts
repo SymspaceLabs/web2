@@ -20,10 +20,7 @@ export function useCategoryLogic(
   const [hasLoadedInitialCategory, setHasLoadedInitialCategory] = useState(false);
 
   // ✅ CRITICAL FIX: Apply defaults ONLY if field is empty
-  const applyDefaultsIfEmpty = useCallback((defaults: Record<string, any>) => {
-    console.log('📋 Checking defaults:', defaults);
-    console.log('📋 Current formData:', formData);
-    
+  const applyDefaultsIfEmpty = useCallback((defaults: Record<string, any>) => {   
     Object.entries(defaults).forEach(([key, defaultValue]) => {
       const currentValue = formData[key];
       
@@ -40,11 +37,9 @@ export function useCategoryLogic(
           const stringValue = Array.isArray(defaultValue) 
             ? String(defaultValue[0] || '') 
             : String(defaultValue);
-          
-          console.log(`✅ Applying default for ${key}:`, stringValue);
+
           setFieldValue(key, stringValue);
         } else {
-          console.log(`✅ Applying default for ${key}:`, defaultValue);
           setFieldValue(key, defaultValue);
         }
       } else {
@@ -55,13 +50,11 @@ export function useCategoryLogic(
 
   // ✅ Handle category selection (user manually changes category)
   const handleCategorySelect = useCallback(async (category: any) => {
-    console.log('🎯 Category selected:', category);
     setIsCategoryLoading(true);
     setSelectedCategory(category);
     
     try {
       const details = await fetchSubcategoryDetailsById(category.id); // ✅ Use ID function
-      console.log('📦 Category details fetched:', details);
       
       setLocalSubcategoryDetails(details);
       setSubcategoryDetails(details);
@@ -92,7 +85,6 @@ export function useCategoryLogic(
         return;
       }
       
-      console.log('🔄 Loading initial category for:', subcategoryItemId);
       setIsCategoryLoading(true);
       
       try {

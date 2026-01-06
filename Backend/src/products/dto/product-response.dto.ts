@@ -87,6 +87,7 @@ export class ProductListItemDto {
   
   threeDModels: ProductModelDto[];
   images: ProductImageDto[];
+  thumbnail: string;
   colors: ProductColorDto[];
   sizes: ProductSizeDto[];
   

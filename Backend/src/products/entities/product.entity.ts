@@ -135,11 +135,4 @@ export class Product {
   @Column({ nullable: true })
   productUrl?: string;
 
-  @Column({ nullable: true })
-  thumbnailId: string;
-
-  @ManyToOne(() => ProductImage, { nullable: true })
-  @JoinColumn({ name: 'thumbnailId' })
-  thumbnail: ProductImage;
-
 }

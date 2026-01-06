@@ -67,7 +67,6 @@ export class ProductsService {
           subcategoryItem: subcategoryItemIdFromDto,
           subcategoryItemChild: subcategoryItemChildIdFromDto,
           gender,
-          thumbnailId,
           ...productData
       } = dto;
 
@@ -166,18 +165,6 @@ export class ProductsService {
           if (gender !== undefined) {
               product.gender = gender;
           }
-
-          // ✅ Handle thumbnail assignment in UPDATE mode
-          if (thumbnailId !== undefined) {
-            if (thumbnailId === null) {
-              // Explicitly clear thumbnail
-              product.thumbnail = null;
-              product.thumbnailId = null;
-            } else {
-              // Validate and assign thumbnail
-              await this.validateAndSetThumbnail(product, thumbnailId);
-            }
-          }
           
       }
 
@@ -216,8 +203,7 @@ export class ProductsService {
             colors: [],
             sizes: [],
             threeDModels: [],
-            gender: finalGender,
-            thumbnailId: null, 
+            gender: finalGender
           });
 
           // --- 3D Model Creation Logic ---
@@ -234,11 +220,6 @@ export class ProductsService {
       // Images: Replace images if provided in DTO
       if (images !== undefined) {
           await this.saveProductImages(product, images);
-      }
-
-      // ✅ Handle thumbnail for CREATE mode AFTER images are saved
-      if (!id && thumbnailId) {
-        await this.validateAndSetThumbnail(product, thumbnailId);
       }
 
       // Colors Mapping - Use merge instead of replace
@@ -1242,32 +1223,6 @@ export class ProductsService {
       }
   }
 
-  /**
-   * Validates that the thumbnail ID belongs to one of the product's images
-   * and sets it as the thumbnail.
-   */
-  private async validateAndSetThumbnail(
-    product: Product,
-    thumbnailId: string
-  ): Promise<void> {
-    // Check if the image exists and belongs to this product
-    const image = await this.productImageRepository.findOne({
-      where: { 
-        id: thumbnailId,
-        product: { id: product.id }
-      },
-    });
-
-    if (!image) {
-      throw new BadRequestException(
-        `Image with ID ${thumbnailId} not found or does not belong to this product`
-      );
-    }
-
-    product.thumbnail = image;
-    product.thumbnailId = thumbnailId;
-  }
-
   // Reusable method to generate and save variants
   private async generateVariants(product: Product, dto: CreateProductDto): Promise<ProductVariant[]> {
     
@@ -1403,8 +1358,8 @@ export class ProductsService {
       const img = new ProductImage();
       img.url = imgDto.url;
       img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
-      img.colorId = imgDto.colorId || null; 
-      img.sortOrder = i;
+      img.colorId = imgDto.colorId || null;
+      img.sortOrder = imgDto.sortOrder !== undefined ? imgDto.sortOrder : i; // ✅ CRITICAL
       img.product = product; // Link the image to the product
       return img;
     });

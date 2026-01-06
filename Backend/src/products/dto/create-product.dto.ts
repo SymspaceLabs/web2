@@ -80,8 +80,4 @@ export class CreateProductDto {
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
 
-  @IsOptional()
-  @IsString()
-  thumbnailId?: string;
-
 }

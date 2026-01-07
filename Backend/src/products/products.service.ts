@@ -1347,29 +1347,33 @@ export class ProductsService {
 
   // Add this new private helper function to your ProductsService class
   private async saveProductImages(product: Product, imageDtos: CreateProductImageDto[]): Promise<ProductImage[]> {
-    // If no image DTOs are provided, return an empty array
-    if (!imageDtos || imageDtos.length === 0) {
-      product.images = [];
-      return [];
-    }
-
-    // Create new ProductImage entities from the provided DTOs
+    let thumbnailSet = false;
+    
     const newImages = imageDtos.map((imgDto, i) => {
       const img = new ProductImage();
       img.url = imgDto.url;
-      img.colorCode = imgDto.colorCode; // CORRECT: Set the colorCode from the DTO
+      img.colorCode = imgDto.colorCode;
       img.colorId = imgDto.colorId || null;
-      img.sortOrder = imgDto.sortOrder !== undefined ? imgDto.sortOrder : i; // ✅ CRITICAL
-      img.product = product; // Link the image to the product
+      img.sortOrder = imgDto.sortOrder !== undefined ? imgDto.sortOrder : i;
+      
+      // Only first `isThumbnail: true` gets honored
+      if (imgDto.isThumbnail && !thumbnailSet) {
+        img.isThumbnail = true;
+        thumbnailSet = true;
+      } else {
+        img.isThumbnail = false;
+      }
+      
+      img.product = product;
       return img;
     });
 
-    // Assign the new array of images to the product entity.
-    // Assuming a cascade relationship (`cascade: true`), TypeORM will handle
-    // removing old images and creating new ones on save.
-    product.images = newImages;
+    // Fallback: If no thumbnail set, use first image
+    if (!thumbnailSet && newImages.length > 0) {
+      newImages[0].isThumbnail = true;
+    }
 
-    // The caller (upsert function) will handle the final product save.
+    product.images = newImages;
     return newImages;
   }
 

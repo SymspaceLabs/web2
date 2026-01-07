@@ -19,7 +19,7 @@ import { SharedImageSection } from "./components/shared-image-section"
 import { AllImagesGrid } from "./components/all-images-grid"
 
 // Services
-import { uploadProductModel } from "@/services/model-upload-service"
+import { uploadProductModel } from "@/utils/file-upload.utils"
 
 type MediaStepProps = {
   formData: FormData

@@ -3,11 +3,12 @@
 "use client"
 
 import { useState } from "react"
-import { Edit2, ChevronDown, ChevronUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { toast } from "@/components/ui/use-toast"
+import { Edit2, ChevronDown, ChevronUp } from "lucide-react"
 import type { FormData } from "@/components/products/product-form"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ThumbnailUploader } from "./components/thumbnail-uploader"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type ReviewStepProps = {
   formData: FormData
@@ -15,7 +16,8 @@ type ReviewStepProps = {
   onSubmit: (isDraft: boolean) => void
   jumpToStep: (step: number) => void
   updateFormData: (data: Partial<FormData>) => void
-  onSaveThumbnail?: (reorderedImages: FormData['images']) => Promise<void> // ✅ NEW
+  onSaveThumbnail?: (reorderedImages: FormData['images']) => Promise<void>
+  onNewImageUpload?: (file: File) => Promise<void>
 }
 
 export function ReviewStep({ 
@@ -24,10 +26,11 @@ export function ReviewStep({
   onSubmit, 
   jumpToStep,
   updateFormData,
-  onSaveThumbnail // ✅ NEW
+  onSaveThumbnail,
+  onNewImageUpload
 }: ReviewStepProps) {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
-  const [isSavingThumbnail, setIsSavingThumbnail] = useState(false) // ✅ NEW
+  const [isSavingThumbnail, setIsSavingThumbnail] = useState(false)
 
   const getCategoryDisplay = (category: FormData['category']): string => {
     if (!category) return "Not set"
@@ -98,23 +101,54 @@ export function ReviewStep({
   const description = formData.description || ''
   const { truncated, needsTruncation } = getTruncatedDescription(description)
 
-  // ✅ UPDATED: Handle thumbnail change with auto-save
-  const handleThumbnailChange = async (reorderedImages: FormData['images']) => {
-    // Update local state immediately for responsive UI
-    updateFormData({ images: reorderedImages })
-    
-    // Save to backend if callback is provided
+  // ✅ Handle thumbnail change with auto-save
+  const handleThumbnailChange = async (updatedImages: FormData['images']) => {
     if (onSaveThumbnail) {
       setIsSavingThumbnail(true)
       try {
-        await onSaveThumbnail(reorderedImages)
+        await onSaveThumbnail(updatedImages)
+        toast({
+          title: "Thumbnail updated",
+          description: "Your product thumbnail has been saved",
+        })
       } catch (error) {
         console.error('Failed to save thumbnail:', error)
-        // Optionally show error toast here
+        toast({
+          title: "Error",
+          description: "Failed to save thumbnail. Please try again.",
+          variant: "destructive"
+        })
       } finally {
         setIsSavingThumbnail(false)
       }
+    } else {
+      updateFormData({ images: updatedImages })
     }
+  }
+
+  // ✅ Validate thumbnail before submission
+  const handleSubmitWithValidation = (isDraft: boolean) => {
+    const hasThumbnail = formData.images.some(img => img.isThumbnail === true)
+    
+    // If publishing (not draft) and no thumbnail, show warning
+    if (!isDraft && !hasThumbnail) {
+      toast({
+        title: "⚠️ No thumbnail selected",
+        description: "Please select a product thumbnail before publishing. A thumbnail is required for product listings.",
+        variant: "destructive"
+      })
+      return
+    }
+    
+    // If draft mode and no thumbnail, show info but allow
+    if (isDraft && !hasThumbnail) {
+      toast({
+        title: "Saving as draft",
+        description: "Remember to select a thumbnail before publishing your product.",
+      })
+    }
+    
+    onSubmit(isDraft)
   }
 
   return (
@@ -124,7 +158,7 @@ export function ReviewStep({
         <p className="text-sm text-muted-foreground mb-6">Review all details before publishing your product</p>
       </div>
 
-      {/* ✅ UPDATED: Show loading state during save */}
+      {/* Thumbnail Uploader */}
       <div className="relative">
         {isSavingThumbnail && (
           <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg">
@@ -134,6 +168,7 @@ export function ReviewStep({
         <ThumbnailUploader
           images={formData.images}
           onThumbnailChange={handleThumbnailChange}
+          onNewImageUpload={onNewImageUpload}
           colors={formData.selectedColors}
         />
       </div>
@@ -274,18 +309,13 @@ export function ReviewStep({
                 {formData.images
                   .sort((a, b) => a.sortOrder - b.sortOrder)
                   .slice(0, 4)
-                  .map((image, index) => (
+                  .map((image) => (
                     <div key={image.id} className="relative aspect-square rounded border bg-muted overflow-hidden">
                       <img
                         src={image.url || "/placeholder.svg"}
-                        alt={`Preview ${index + 1}`}
+                        alt={`Preview`}
                         className="w-full h-full object-cover"
                       />
-                      {index === 0 && (
-                        <div className="absolute top-1 right-1 bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded">
-                          Main
-                        </div>
-                      )}
                     </div>
                   ))}
               </div>
@@ -304,15 +334,23 @@ export function ReviewStep({
         </CardContent>
       </Card>
 
+      {/* ✅ Updated buttons with validation */}
       <div className="flex justify-between pt-4">
         <Button type="button" variant="outline" onClick={onBack}>
           Back
         </Button>
         <div className="flex gap-3">
-          <Button type="button" variant="outline" onClick={() => onSubmit(true)}>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => handleSubmitWithValidation(true)}
+          >
             Save as Draft
           </Button>
-          <Button type="button" onClick={() => onSubmit(false)}>
+          <Button 
+            type="button" 
+            onClick={() => handleSubmitWithValidation(false)}
+          >
             Publish Product
           </Button>
         </div>

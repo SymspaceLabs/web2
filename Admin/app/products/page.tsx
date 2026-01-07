@@ -33,23 +33,26 @@ import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
 import { deleteProduct } from "@/api/product"
 import { toast } from "sonner"
+import { Product } from "@/types/product.type"
 
-interface APIProduct {
-  id: string
-  name: string
-  description: string
-  displayPrice: {
-    price: string
-    range: string
-    formattedDisplay: string 
-}  
-  category:  { name: string }
-  images: Array<{ url: string; id: string; sortOrder: number }>
-  status: string
-  variants: Array<{ stock: number; price: number }>
-  company: { entityName: string; id: string }
-  createdAt: string
-}
+
+// interface APIProduct {
+//   id: string
+//   name: string
+//   description: string
+//   displayPrice: {
+//     price: string
+//     range: string
+//     formattedDisplay: string 
+//   }
+//   thumbnail: string
+//   category: { name: string }
+//   images: Array<{ url: string; id: string; sortOrder: number }>
+//   status: string
+//   variants: Array<{ stock: number; price: number }>
+//   company: { entityName: string; id: string }
+//   createdAt: string
+// }
 
 interface UIProduct {
   displayPrice: any
@@ -64,11 +67,11 @@ interface UIProduct {
   createdAt: string
 }
 
-function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
+function mapAPIProductToUI(apiProduct: Product): UIProduct {
   const totalStock = apiProduct.variants?.reduce((sum, v) => sum + (v.stock || 0), 0) || 0
   
   // Get the first image URL or use a placeholder
-  const thumbnail = apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
+  const thumbnail = apiProduct.thumbnail ||apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
   
   // Get the most granular category
   const category =  apiProduct.category?.name || "Uncategorized"
@@ -83,7 +86,7 @@ function mapAPIProductToUI(apiProduct: APIProduct): UIProduct {
   const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"
 
   return {
-    id: apiProduct.id,
+    id: apiProduct.id || '',
     name: apiProduct.name,
     thumbnail,
     category,

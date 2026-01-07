@@ -4,31 +4,40 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowLeft, Check } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Stepper } from "@/components/ui/stepper"
 import { MediaStep } from "@/components/products/product-form/media-step"
 import { ReviewStep } from "@/components/products/product-form/review-step"
 import { VariantsStep } from "@/components/products/product-form/variants-step"
 import { BasicInfoStep } from "@/components/products/product-form/basic-info-step"
 import { updateProduct, createProduct, updateProductVariants } from "@/api/product"
 
-// ✅ Import shared types instead of redefining them
+// ✅ Import shared types
 import type { Product, FormData } from "@/types/product.type"
+import { toast } from "sonner"
+
+// ✅ Import optimized thumbnail utilities
+import { 
+  saveThumbnailToBackend, 
+  uploadNewThumbnail, 
+  transformApiImagesToFormImages 
+} from "@/utils/thumbnail.utils"
 
 type ProductFormProps = {
   product?: Product
-  initialStep?: number  // ✅ NEW: Support starting at different steps
-  onStepChange?: () => Promise<Product | void> // ✅ NEW: Add this prop
+  initialStep?: number
+  onStepChange?: () => Promise<Product | void>
 }
 
-// Re-export FormData for other components that import it from here
+// Re-export FormData for other components
 export type { FormData }
 
-// ✅ NEW: Helper function to transform API variants to form variants
+// ✅ Helper function to transform API variants to form variants
 const transformApiVariantsToFormVariants = (apiVariants: any[]) => {
   return apiVariants
-    .filter(v => v.color && v.size) // ✅ Only include variants with both color and size
+    .filter(v => v.color && v.size)
     .map(v => ({
       id: v.id,
       color: v.color.name,
@@ -42,12 +51,12 @@ const transformApiVariantsToFormVariants = (apiVariants: any[]) => {
     }))
 }
 
-export function ProductForm({ product, initialStep = 1, onStepChange  }: ProductFormProps) {
+export function ProductForm({ product, initialStep = 1, onStepChange }: ProductFormProps) {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState(initialStep)  // ✅ Use initialStep
+  const [currentStep, setCurrentStep] = useState(initialStep)
   const [loading, setLoading] = useState(false)
 
-  const isCreateMode = !product  // ✅ Clear flag to determine mode
+  const isCreateMode = !product
 
   // Helper to normalize category to string
   const normalizeCategoryToString = (category: any): string => {
@@ -71,22 +80,15 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     selectedSizes: product?.sizes || [],
     material: product?.material || "",
     variants: product?.variants ? transformApiVariantsToFormVariants(product.variants) : [],
-    images: product?.images?.map((img, i) => ({
-      id: img.id || `img_init_${i}`,
-      url: img.url,
-      colorId: img.colorId || null,
-      isPrimary: i === 0,
-      sortOrder: img.sortOrder ?? i
-    })) || [],
+    images: product?.images ? transformApiImagesToFormImages(product.images) : [],
     models: product?.threeDModels?.map((model, i) => {
-      // Find matching color by colorCode
       const matchingColor = product?.colors?.find(c => c.code === model.colorCode);
       return {
         id: model.id || `model_init_${i}`,
         colorId: matchingColor?.id || null,
         url: model.url,
         fileName: model.url.split('/').pop() || `model_${i}.glb`,
-        fileSize: 0, // API doesn't provide file size
+        fileSize: 0,
       };
     }) || [],
     model3d: undefined
@@ -119,27 +121,29 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     isFinalSubmission: boolean,
     finalStatus: "active" | "draft" | "archived" = "draft"
   ) => {
-
-    // ✅ Build a lookup map: colorId -> colorCode
+    // Build a lookup map: colorId -> colorCode
     const colorCodeMap = new Map<string, string>()
     data.selectedColors.forEach(color => {
       colorCodeMap.set(color.id, color.code)
     })
+
     const imagesForApi = data.images.map(img => ({
       url: img.url,
       colorId: img.colorId ?? null,
-      colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null
+      colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null,
+      sortOrder: img.sortOrder,
+      isThumbnail: img.isThumbnail ?? false
     }))
 
-    // ✅ Build 3D models payload with colorId and colorCode lookup
+    // Build 3D models payload
     const modelsForApi = (data.models || [])
-      .filter(model => model.colorId && model.url) // Only include models with both colorId and url
+      .filter(model => model.colorId && model.url)
       .map(model => ({
         url: model.url,
         colorId: model.colorId,
         colorCode: model.colorId ? colorCodeMap.get(model.colorId) ?? null : null
       }))
-      .filter(model => model.colorCode !== null) // Remove any models without valid color codes
+      .filter(model => model.colorCode !== null)
 
     let payload: any = { status: isFinalSubmission ? finalStatus : "draft" }
 
@@ -150,103 +154,141 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         company: data.companyId,
         ...(data.categoryId && { subcategoryItem: data.categoryId })
       }
-      // ✅ ADD THESE CONDITIONALS:
+      
       if (data.age_group && data.age_group.trim() !== '') {
         payload.age_group = data.age_group
       }
 
-      // ✅ NEW CODE (replace the above with):
       if (data.gender && typeof data.gender === 'string' && data.gender.trim() !== '') {
-        payload.gender = data.gender  // Sent as string
+        payload.gender = data.gender
       }
+    } else if (step === 2) {
+      const colorsForApi = data.selectedColors.map(color => ({
+        name: color.name,
+        code: color.code,
+      }))
 
-    }   // Step 2: Variants (Colors, Sizes, and Variant details)
-  if (step === 2) {
-    // Build color payload
-    const colorsForApi = data.selectedColors.map(color => ({
-      name: color.name,
-      code: color.code,
-    }))
+      const sizesForApi = data.selectedSizes.map(size => ({
+        size: size.size,
+        dimensions: size.dimensions ? {
+          length: size.dimensions.length ? parseFloat(size.dimensions.length) : null,
+          width: size.dimensions.width ? parseFloat(size.dimensions.width) : null,
+          height: size.dimensions.height ? parseFloat(size.dimensions.height) : null,
+          unit: size.dimensions.unit || 'cm'
+        } : null,
+        sizeChart: size.sizeChartUrl || null,
+        productWeight: size.productWeight ? {
+          value: size.productWeight.value,
+          unit: size.productWeight.unit
+        } : null
+      }))
 
-    // Build size payload  
-    const sizesForApi = data.selectedSizes.map(size => ({
-      size: size.size,
-      dimensions: size.dimensions ? {
-        length: size.dimensions.length ? parseFloat(size.dimensions.length) : null,
-        width: size.dimensions.width ? parseFloat(size.dimensions.width) : null,
-        height: size.dimensions.height ? parseFloat(size.dimensions.height) : null,
-        unit: size.dimensions.unit || 'cm'
-      } : null,
-      sizeChart: size.sizeChartUrl || null,
-      productWeight: size.productWeight ? {  // ✅ CORRECT - Separate field
-        value: size.productWeight.value,
-        unit: size.productWeight.unit
-      } : null
-    }))
+      const variantsForApi = data.variants.map(variant => ({
+        ...(variant.id && { id: variant.id }),
+        colorName: variant.color,
+        sizeName: variant.size,
+        sku: variant.sku,
+        stock: variant.stock,
+        price: variant.price > 0 ? variant.price : undefined,
+        salePrice: variant.salePrice > 0 ? variant.salePrice : undefined,
+        cost: variant.cost > 0 ? variant.cost : undefined,
+      }))
 
-    // Build variants payload using your UpdateVariantStockDto structure
-    const variantsForApi = data.variants.map(variant => ({
-      // If variant has an ID, it's an update; otherwise it's a create
-      ...(variant.id && { id: variant.id }),
-      
-      // Required fields
-      colorName: variant.color,  // Match color by name
-      sizeName: variant.size,    // Match size by name
-      sku: variant.sku,
-      stock: variant.stock,
-      
-      // Optional price fields
-      price: variant.price > 0 ? variant.price : undefined,
-      salePrice: variant.salePrice > 0 ? variant.salePrice : undefined,
-      cost: variant.cost > 0 ? variant.cost : undefined,
-      
-    }))
-
-    return {
-      material: data.material || undefined,
-      colors: colorsForApi,
-      sizes: sizesForApi,
-      variants: variantsForApi,
-    }
-  } else if (step === 3) {
+      return {
+        material: data.material || undefined,
+        colors: colorsForApi,
+        sizes: sizesForApi,
+        variants: variantsForApi,
+      }
+    } else if (step === 3) {
       return {
         images: imagesForApi,
         threeDModels: modelsForApi.length > 0 ? modelsForApi : undefined,
       }
     } else if (step === 4 && isFinalSubmission) {
       return {
-        status: finalStatus
+        status: finalStatus,
+        images: imagesForApi 
       }
     }
 
     return payload
   }
 
-  // ✅ CRITICAL FIX: Map old color IDs to new ones after refetch
+  // ✅ OPTIMIZED: Save thumbnail changes immediately
+  const handleSaveThumbnail = async (updatedImages: FormData['images']) => {
+    if (isCreateMode || !product?.id) {
+      updateFormData({ images: updatedImages })
+      return
+    }
+
+    try {
+      await saveThumbnailToBackend(product.id, updatedImages, formData.selectedColors)
+      updateFormData({ images: updatedImages })
+      console.log('✅ Thumbnail saved successfully')
+    } catch (error) {
+      console.error('❌ Failed to save thumbnail:', error)
+      throw error
+    }
+  }
+
+  // ✅ OPTIMIZED: Handle new image upload in thumbnail selector
+  const handleNewThumbnailUpload = async (file: File) => {
+    if (isCreateMode || !product?.id) {
+      toast({
+        title: "Cannot upload yet",
+        description: "Please save the product first before uploading thumbnail",
+        variant: "destructive"
+      })
+      return
+    }
+
+    try {
+      await uploadNewThumbnail(file, product.id, formData.images, formData.selectedColors)
+      
+      // Refetch product to get updated images
+      if (onStepChange) {
+        const freshProduct = await onStepChange()
+        if (freshProduct?.images) {
+          updateFormData({
+            images: transformApiImagesToFormImages(freshProduct.images)
+          })
+        }
+      }
+      
+      toast({
+        title: "Image uploaded",
+        description: "New thumbnail has been set successfully"
+      })
+    } catch (error) {
+      console.error('Failed to upload image:', error)
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive"
+      })
+      throw error
+    }
+  }
+
+  // ✅ Handle next step with color ID remapping
   const handleNext = async (values: Partial<FormData>) => {
     setLoading(true)
     try {
-      
-      // Merge the new values with existing formData
       const updatedFormData = { ...formData, ...values }
-      
-      // Update the state for UI consistency
       updateFormData(values)
 
       if (isCreateMode && currentStep === 1) {
         // CREATE MODE: First step creates product and routes to edit page
         const createPayload = buildPayload(1, updatedFormData, false)
         const response = await createProduct(createPayload)       
-        router.push(`/products/edit/${response.id}?step=2`) // Route to edit page with step 2
+        router.push(`/products/edit/${response.id}?step=2`)
       } else if (!isCreateMode) {
         // EDIT MODE
         if (currentStep === 2) {
-          // ⭐ Use dedicated variants endpoint for Step 2
           const variantsPayload = buildPayload(2, updatedFormData, false);
           await updateProductVariants(product.id, variantsPayload);
-          
         } else {
-          // Use regular update endpoint for other steps
           const payload = buildPayload(currentStep, updatedFormData, false);
           await updateProduct(product.id, payload);
         }     
@@ -256,7 +298,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
           const freshProduct = await onStepChange()
           
           if (freshProduct) {
-            // ✅ Update formData with fresh API data (real database IDs)
             const updates: Partial<FormData> = {}
 
             // Update colors with real IDs
@@ -278,15 +319,11 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
               updateFormData(updates);
             }
             
-            // ✅ STEP 2 → 3: Map old temporary color IDs to new database IDs
+            // STEP 2 → 3: Map old temporary color IDs to new database IDs
             if (freshProduct.colors && currentStep === 2) {
-              
-              // Build mapping: old temp ID → new UUID
               const colorMapping = new Map<string, string>()
               
-              // Match by name and code since temp IDs won't match
               formData.selectedColors.forEach(oldColor => {
-                
                 const matchingNewColor = freshProduct.colors.find(
                   newColor => newColor.name === oldColor.name && newColor.code === oldColor.code
                 )
@@ -296,11 +333,9 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 }
               })
               
-              
-              // Update colors with real IDs
               updates.selectedColors = freshProduct.colors
               
-              // ✅ CRITICAL: Remap existing images to use new color IDs
+              // Remap existing images to use new color IDs
               if (formData.images.length > 0) {
                 updates.images = formData.images.map(img => {
                   if (img.colorId && colorMapping.has(img.colorId)) {
@@ -312,7 +347,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 })
               }
 
-              // ✅ CRITICAL: Remap existing 3D models to use new color IDs
+              // Remap existing 3D models to use new color IDs
               if (formData.models && formData.models.length > 0) {
                 updates.models = formData.models.map(model => {
                   if (model.colorId && colorMapping.has(model.colorId)) {
@@ -330,28 +365,21 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
               updates.selectedSizes = freshProduct.sizes
             }
             
-            // Sync images from API (Step 3 only)
+            // Sync images with isThumbnail from API (Step 3)
             if (freshProduct.images && currentStep === 3) {
-              updates.images = freshProduct.images.map((img, i) => ({
-                id: img.id,
-                url: img.url,
-                colorId: img.colorId || null,
-                isPrimary: img.isPrimary ?? (i === 0),
-                sortOrder: img.sortOrder ?? i
-              }))
+              updates.images = transformApiImagesToFormImages(freshProduct.images)
             }
 
-            // ✅ Sync 3D models from API (Step 3 only)
+            // Sync 3D models from API (Step 3 only)
             if (freshProduct.threeDModels && currentStep === 3) {
               updates.models = freshProduct.threeDModels.map((model, i) => {
-                // Find matching color by colorCode
                 const matchingColor = freshProduct.colors?.find(c => c.code === model.colorCode);
                 return {
                   id: model.id || `model_${i}`,
                   colorId: matchingColor?.id || null,
                   url: model.url,
                   fileName: model.url.split('/').pop() || `model_${i}.glb`,
-                  fileSize: 0, // API doesn't provide file size
+                  fileSize: 0,
                 };
               });
             }
@@ -365,7 +393,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
         
         if (currentStep < 4) {
           const nextStep = currentStep + 1
-          // Update URL with new step
           router.push(`/products/edit/${product.id}?step=${nextStep}`)
           setCurrentStep(nextStep)
         }
@@ -379,26 +406,21 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     }
   }
 
-
-  // ✅ UPDATED: Back button with proper URL updates
   const handleBack = () => {
     if (currentStep > 1) {
       const prevStep = currentStep - 1
       setCurrentStep(prevStep)
       
-      // ✅ Update URL when going back (only in edit mode)
       if (!isCreateMode && product?.id) {
         router.push(`/products/edit/${product.id}?step=${prevStep}`)
       }
        
       scrollToTop()
     } else {
-      // Going back from step 1 returns to products list
       router.push("/products")
     }
   }
 
-  // ✅ UPDATED: Final submission
   const handleSubmit = async (isDraft: boolean) => {
     const finalStatus = isDraft ? "draft" : "active"
     setLoading(true)
@@ -407,7 +429,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       if (!isCreateMode && product?.id) {
         const payload = buildPayload(4, formData, true, finalStatus as "active" | "draft" | "archived")
         await updateProduct(product.id, payload)
-        
       }
       
       router.push("/products")
@@ -418,11 +439,9 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
     }
   }
 
-  // ✅ UPDATED: Jump to step with URL update
   const jumpToStep = async (step: number) => {
     setLoading(true)
     try {
-      // Save current progress before jumping
       if (!isCreateMode && product?.id) {
         const payload = buildPayload(currentStep, formData, false)
         await updateProduct(product.id, payload)
@@ -430,7 +449,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
       
       setCurrentStep(step)
       
-      // Update URL
       if (!isCreateMode && product?.id) {
         router.push(`/products/edit/${product.id}?step=${step}`)
       }
@@ -459,45 +477,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
           </p>
         </div>
 
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            {steps.map((step, index) => (
-              <div key={step.number} className="flex items-center flex-1">
-                <div className="flex flex-col items-center flex-1">
-                  <div
-                    className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors ${
-                      currentStep > step.number
-                        ? "bg-primary border-primary text-primary-foreground"
-                        : currentStep === step.number
-                          ? "border-primary text-primary"
-                          : "border-muted text-muted-foreground"
-                    }`}
-                  >
-                    {currentStep > step.number ? (
-                      <Check className="h-5 w-5" />
-                    ) : (
-                      <span className="text-sm font-semibold">{step.number}</span>
-                    )}
-                  </div>
-                  <span
-                    className={`text-xs mt-2 font-medium text-center ${
-                      currentStep >= step.number ? "text-foreground" : "text-muted-foreground"
-                    }`}
-                  >
-                    {step.name}
-                  </span>
-                </div>
-                {index < steps.length - 1 && (
-                  <div
-                    className={`h-0.5 flex-1 mx-2 transition-colors ${
-                      currentStep > step.number ? "bg-primary" : "bg-muted"
-                    }`}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <Stepper steps={steps} currentStep={currentStep} className="mb-8" />
 
         <Card>
           <CardContent className="p-6">
@@ -534,6 +514,8 @@ export function ProductForm({ product, initialStep = 1, onStepChange  }: Product
                 onSubmit={handleSubmit}
                 jumpToStep={jumpToStep}
                 updateFormData={updateFormData}
+                onSaveThumbnail={handleSaveThumbnail}
+                onNewImageUpload={handleNewThumbnailUpload}
               />
             )}
           </CardContent>

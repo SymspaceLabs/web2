@@ -36,4 +36,7 @@ export class ProductImage {
   })
   @Exclude()  // Exclude the 'product' relation from the response
   product: Product;
+
+  @Column({ default: false })
+  isThumbnail: boolean;
 }

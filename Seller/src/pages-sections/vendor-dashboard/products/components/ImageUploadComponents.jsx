@@ -75,15 +75,15 @@ export function DropZone({
 
 // Styled Box for the image container, to handle the primary image border
 export const ImageWrapper = styled(Box, {
-    shouldForwardProp: (prop) => prop !== 'isPrimary',
-})(({ isPrimary }) => ({
+    shouldForwardProp: (prop) => prop !== 'isThumbnail',
+})(({ isThumbnail }) => ({
     position: 'relative',
     width: 100,
     height: 100,
     borderRadius: '8px',
     overflow: 'hidden',
     cursor: 'grab',
-    border: isPrimary ? '2px solid black' : '2px solid transparent',
+    border: isThumbnail ? '2px solid black' : '2px solid transparent',
     transition: 'border 0.2s',
     '&:hover .delete-button': {
         opacity: 1,

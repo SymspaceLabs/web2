@@ -1,5 +1,5 @@
 // src/products/dto/create-product-image.dto.ts
-import { IsUrl, IsString, IsOptional, IsNumber } from 'class-validator';
+import { IsUrl, IsString, IsOptional, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateProductImageDto {
   @IsUrl()
@@ -16,4 +16,8 @@ export class CreateProductImageDto {
   @IsNumber()
   @IsOptional()
   sortOrder?: number;
+
+  @IsOptional()
+  @IsBoolean()
+  isThumbnail?: boolean;
 }

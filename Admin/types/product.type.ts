@@ -2,15 +2,18 @@
 // Shared types for product management
 
 export type Product = {
+  createdAt: string | number | Date
   id?: string
   name: string
   description: string
   price?: number
   stock?: number
   material?: string
+
+  // category: { name: string }
   
   // Category information
-  category?: string | {
+  category?: {
     id: string
     name: string
     code?: string
@@ -104,9 +107,11 @@ export type Product = {
     url: string
     colorId: string | null
     colorCode?: string | null
-    isPrimary?: boolean
+    isThumbnail?: boolean
     sortOrder?: number
   }>
+
+  thumbnail: string
   
   threeDModels?: Array<{
     id: string
@@ -126,6 +131,12 @@ export type Product = {
   gender?: string     // ✅ Single value (e.g., "male", "female", "unisex")
   season?: string[]   // Multiple values (e.g., ["summer", "spring"])
   occasion?: string[] // Multiple values (e.g., ["casual", "formal"])
+
+  displayPrice: {
+    price: string
+    range: string
+    formattedDisplay: string 
+  }
 }
 
 export type FormData = {
@@ -186,7 +197,7 @@ export type FormData = {
     id: string
     url: string
     colorId: string | null
-    isPrimary: boolean
+    isThumbnail: boolean
     sortOrder: number
   }>
   

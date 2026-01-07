@@ -26,7 +26,7 @@ export class ProductMapper {
       category: extractGranularCategory(product),
       
       images: this.mapImages(product.images),
-      thumbnail: product.images?.find(img => img.sortOrder === 0)?.url,
+      thumbnail: product.images?.find(img => img.isThumbnail)?.url || product.images?.[0]?.url,
       threeDModels: this.mapThreeDModels(product.threeDModels),
       colors: this.mapColors(product.colors),
       sizes: this.mapSizes(product.sizes),

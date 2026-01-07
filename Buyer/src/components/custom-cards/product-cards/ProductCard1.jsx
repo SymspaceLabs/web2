@@ -46,7 +46,7 @@ const ProductCard1 = (props) => {
             alt="product images"
             width={355}
             height={355}
-            src={product.images?.[0]?.url || "/placeholder.png"}
+            src={product?.thumbnail || product.images?.[0]?.url || "/placeholder.png"}
             style={{
               objectFit: "cover",
               objectPosition: "center",

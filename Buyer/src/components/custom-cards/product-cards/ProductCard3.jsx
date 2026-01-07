@@ -69,7 +69,7 @@ function ProductCard3(props) {
             }}
           >
             <Image
-              src={product?.images[0]?.url}
+              src={product?.thumbnail || product.images?.[0]?.url || "/placeholder.png"}
               alt={product.name}
               fill
               style={{ objectFit: "cover" }} // Use "cover" to fill the entire box

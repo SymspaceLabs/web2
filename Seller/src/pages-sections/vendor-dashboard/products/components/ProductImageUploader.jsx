@@ -48,8 +48,8 @@ const getImageUrl = (file) => {
 
 // Styled Box for the image container 
 const ImageWrapper = styled(Box, {
-    shouldForwardProp: (prop) => prop !== 'isPrimary' && prop !== 'isPlaceholder',
-})(({ isPrimary, isPlaceholder, theme }) => ({
+    shouldForwardProp: (prop) => prop !== 'isThumbnail' && prop !== 'isPlaceholder',
+})(({ isThumbnail, isPlaceholder, theme }) => ({
     position: 'relative',
     width: 150, 
     height: 150, 
@@ -58,7 +58,7 @@ const ImageWrapper = styled(Box, {
     cursor: isPlaceholder ? 'pointer' : 'grab', 
     border: isPlaceholder 
         ? `2px dashed ${theme.palette.grey[400]}` 
-        : (isPrimary ? `2px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.grey[300]}`),
+        : (isThumbnail ? `2px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.grey[300]}`),
     transition: 'border 0.2s',
     '&:hover .delete-button': {
         opacity: 1,
@@ -179,7 +179,7 @@ export const SortableItem = ({ file, fileIndex, selected, handleClick, handleFil
         zIndex: isDragging ? 20 : 1, // Elevate dragged item
     };
     
-    const isPrimary = fileIndex === 0;
+    const isThumbnail = fileIndex === 0;
     const imageUrl = getImageUrl(file);
 
     return (
@@ -189,7 +189,7 @@ export const SortableItem = ({ file, fileIndex, selected, handleClick, handleFil
             sx={{ p: 0.5, touchAction: 'none' }} // touchAction: 'none' helps with mobile dragging
         >
             <ImageWrapper 
-                isPrimary={isPrimary} 
+                isThumbnail={isThumbnail} 
                 sx={{ opacity: isDragging ? 0.7 : 1 }} 
                 onClick={() => handleClick && handleClick(fileIndex)}
                 

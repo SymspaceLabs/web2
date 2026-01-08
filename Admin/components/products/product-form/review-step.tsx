@@ -4,7 +4,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { Edit2, ChevronDown, ChevronUp } from "lucide-react"
 import type { FormData } from "@/components/products/product-form"
 import { ThumbnailUploader } from "./components/thumbnail-uploader"
@@ -107,16 +107,13 @@ export function ReviewStep({
       setIsSavingThumbnail(true)
       try {
         await onSaveThumbnail(updatedImages)
-        toast({
-          title: "Thumbnail updated",
+        toast.success("Thumbnail updated",{
           description: "Your product thumbnail has been saved",
         })
       } catch (error) {
         console.error('Failed to save thumbnail:', error)
-        toast({
-          title: "Error",
-          description: "Failed to save thumbnail. Please try again.",
-          variant: "destructive"
+        toast.error("Error", {
+          description: "Failed to save thumbnail. Please try again."
         })
       } finally {
         setIsSavingThumbnail(false)
@@ -132,18 +129,15 @@ export function ReviewStep({
     
     // If publishing (not draft) and no thumbnail, show warning
     if (!isDraft && !hasThumbnail) {
-      toast({
-        title: "⚠️ No thumbnail selected",
+      toast.error("⚠️ No thumbnail selected", {
         description: "Please select a product thumbnail before publishing. A thumbnail is required for product listings.",
-        variant: "destructive"
       })
       return
     }
     
     // If draft mode and no thumbnail, show info but allow
     if (isDraft && !hasThumbnail) {
-      toast({
-        title: "Saving as draft",
+      toast("Saving as draft",{
         description: "Remember to select a thumbnail before publishing your product.",
       })
     }

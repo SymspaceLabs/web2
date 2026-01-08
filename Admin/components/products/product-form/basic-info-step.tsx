@@ -110,6 +110,15 @@ export function BasicInfoStep({
       }
     }
 
+    // ✅ Dynamically collect all tag values (both required and optional)
+    const tagValues: Record<string, any> = {};
+    tags.forEach(tag => {
+      const value = formData[tag.key];
+      if (value !== undefined && value !== null && value !== '') {
+        tagValues[tag.key] = value;
+      }
+    });
+
     // ✅ Prepare step data
     const stepOneData: Partial<FormData> = {
       name: formData.name,
@@ -118,12 +127,7 @@ export function BasicInfoStep({
       description: formData.description,
       companyId: formData.companyId,
       companyName: formData.companyName,
-      // ✅ Include all tag values
-      ...(hasRequiredTags ? {
-        age_group: formData.age_group,
-        gender: formData.gender,
-        // Add other dynamic tags as needed
-      } : {})
+      ...tagValues  // ✅ Spread all tag values dynamically
     }
     
     onNext(stepOneData)

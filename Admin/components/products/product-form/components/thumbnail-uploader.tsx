@@ -3,7 +3,7 @@
 "use client"
 
 import { useState, useRef } from "react"
-import { Image, Check, Upload, X } from "lucide-react"
+import { Image, Check, Upload, X, Loader2 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -36,9 +36,26 @@ export function ThumbnailUploader({
 }: ThumbnailUploaderProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const currentThumbnail = getThumbnail(images)
+
+  // Simulate progress for visual feedback
+  const simulateProgress = () => {
+    setUploadProgress(0)
+    const interval = setInterval(() => {
+      setUploadProgress((prev) => {
+        if (prev >= 90) {
+          clearInterval(interval)
+          return 90
+        }
+        return prev + 10
+      })
+    }, 150)
+    return interval
+  }
 
   // ✅ Handle thumbnail selection
   const handleSelectImage = (imageId: string) => {
@@ -53,23 +70,66 @@ export function ThumbnailUploader({
     onThumbnailChange(updatedImages)
   }
 
-  // ✅ Handle new image upload
-  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file || !onNewImageUpload) return
+  // ✅ Handle file upload
+  const handleFileUpload = async (file: File) => {
+    if (!onNewImageUpload) return
 
     setIsUploading(true)
+    const progressInterval = simulateProgress()
+
     try {
       await onNewImageUpload(file)
-      setIsOpen(false)
+      clearInterval(progressInterval)
+      setUploadProgress(100)
+      
+      // Brief delay to show 100% before closing
+      setTimeout(() => {
+        setIsOpen(false)
+        setIsUploading(false)
+        setUploadProgress(0)
+      }, 500)
     } catch (error) {
+      clearInterval(progressInterval)
       console.error('Failed to upload image:', error)
-    } finally {
       setIsUploading(false)
-      // Reset input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      setUploadProgress(0)
+    }
+  }
+
+  // ✅ Handle new image upload from file input
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    await handleFileUpload(file)
+
+    // Reset input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  // ✅ Drag and drop handlers
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    const file = e.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+      await handleFileUpload(file)
     }
   }
 
@@ -85,10 +145,10 @@ export function ThumbnailUploader({
         <div className="flex items-start gap-4">
           {/* Thumbnail Preview */}
           <div
-            role="button" // Accessibility: Tells screen readers this acts like a button
-            tabIndex={0}  // Accessibility: Makes it focusable via keyboard
+            role="button"
+            tabIndex={0}
             onClick={() => setIsOpen(true)}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsOpen(true) }} // Keyboard support
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setIsOpen(true) }}
             className={cn(
               "w-40 h-40 rounded-lg border-2 overflow-hidden bg-muted flex items-center justify-center transition-all relative group cursor-pointer",
               currentThumbnail 
@@ -110,12 +170,11 @@ export function ThumbnailUploader({
                   </div>
                 </div>
 
-                {/* This inner button is now valid because it is inside a <div> */}
                 <button
                   type="button"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevents the outer div's onClick from firing
-                    handleClearThumbnail();
+                    e.stopPropagation()
+                    handleClearThumbnail()
                   }}
                   className="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 shadow-lg transition-colors z-10 cursor-pointer"
                   title="Clear thumbnail"
@@ -242,9 +301,20 @@ export function ThumbnailUploader({
                 )}
               </TabsContent>
 
-              {/* Tab 2: Upload New Image */}
+              {/* Tab 2: Upload New Image with Drag & Drop */}
               <TabsContent value="upload" className="mt-4">
-                <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center hover:border-primary transition-colors">
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={cn(
+                    "border-2 border-dashed rounded-lg p-12 text-center transition-all",
+                    isDragging 
+                      ? "border-primary bg-primary/5 scale-[1.02]" 
+                      : "border-muted-foreground/25 hover:border-primary",
+                    isUploading && "cursor-not-allowed opacity-75"
+                  )}
+                >
                   <input
                     ref={fileInputRef}
                     type="file"
@@ -253,24 +323,50 @@ export function ThumbnailUploader({
                     className="hidden"
                     disabled={isUploading || !onNewImageUpload}
                   />
-                  <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-sm font-medium mb-2">
-                    {isUploading ? 'Uploading...' : 'Click to upload a new thumbnail'}
-                  </p>
-                  <p className="text-xs text-muted-foreground mb-4">
-                    PNG, JPG or WEBP (max. 5MB)
-                  </p>
-                  <Button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploading || !onNewImageUpload}
-                  >
-                    {isUploading ? 'Uploading...' : 'Choose File'}
-                  </Button>
-                  {!onNewImageUpload && (
-                    <p className="text-xs text-orange-600 mt-4">
-                      ⚠️ Image upload handler not configured
-                    </p>
+                  
+                  {isUploading ? (
+                    <div className="space-y-4">
+                      <div className="relative">
+                        <Loader2 className="h-12 w-12 text-primary animate-spin mx-auto" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-xs font-bold text-primary">{uploadProgress}%</span>
+                        </div>
+                      </div>
+                      <p className="text-sm font-medium">Uploading...</p>
+                      <div className="w-full max-w-xs mx-auto">
+                        <div className="h-2 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary transition-all duration-300 ease-out"
+                            style={{ width: `${uploadProgress}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <Upload className={cn(
+                        "h-12 w-12 mx-auto mb-4 text-muted-foreground transition-all",
+                        isDragging && "text-primary animate-bounce"
+                      )} />
+                      <p className="text-sm font-medium mb-2">
+                        {isDragging ? 'Drop image here' : 'Drag & drop or click to upload'}
+                      </p>
+                      <p className="text-xs text-muted-foreground mb-4">
+                        PNG, JPG or WEBP (max. 5MB)
+                      </p>
+                      <Button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={isUploading || !onNewImageUpload}
+                      >
+                        Choose File
+                      </Button>
+                      {!onNewImageUpload && (
+                        <p className="text-xs text-orange-600 mt-4">
+                          ⚠️ Image upload handler not configured
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
               </TabsContent>

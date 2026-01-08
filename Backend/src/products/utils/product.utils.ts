@@ -26,106 +26,126 @@ function convertWeightToKg(value: number | null, unit: 'kg' | 'lbs'): number | n
 // --------------------------------------------------------------------------
 // Helper 1: Resolves Category Hierarchy
 // --------------------------------------------------------------------------
+/**
+ * Helper function to resolve category hierarchy and get tag defaults
+ * This is used in the upsert method to determine the correct category relationships
+ * 
+ * ⭐ FLEXIBLE LOOKUP: Checks both SubcategoryItem (Level 2) and SubcategoryItemChild (Level 3)
+ * when a single ID is provided, following the same pattern as findOneBySlug.
+ */
 export async function resolveCategoryHierarchy(
-    dto: CreateProductDto,
-    subcategoryItemRepository: Repository<SubcategoryItem>,
-    subcategoryItemChildRepository: Repository<SubcategoryItemChild>,
+  dto: any,
+  subcategoryItemRepository: any,
+  subcategoryItemChildRepository: any,
 ): Promise<{
-    finalSubcategoryItem: SubcategoryItem;
-    finalSubcategoryItemChild: SubcategoryItemChild | undefined;
-    tagDefaults: any;
+  finalSubcategoryItem: any;
+  finalSubcategoryItemChild: any;
+  tagDefaults: any;
 }> {
-    const { subcategoryItem: subcategoryItemIdFromDto, subcategoryItemChild: subcategoryItemChildIdFromDto } = dto;
+  let finalSubcategoryItem: any = undefined;
+  let finalSubcategoryItemChild: any = undefined;
+  let tagDefaults: any = {};
 
-    // Constraint: Ensure only one field is provided explicitly
-    if (subcategoryItemIdFromDto && subcategoryItemChildIdFromDto) {
-        throw new BadRequestException('Cannot provide both subcategoryItemId and subcategoryItemChildId. Please provide only one.');
+  const subcategoryItemIdFromDto = dto.subcategoryItem;
+  const subcategoryItemChildIdFromDto = dto.subcategoryItemChild;
+
+  // Prioritize child if provided
+  if (subcategoryItemChildIdFromDto) {
+    finalSubcategoryItemChild = await subcategoryItemChildRepository.findOne({
+      where: { id: subcategoryItemChildIdFromDto },
+      relations: ['subcategoryItem'],
+    });
+
+    if (!finalSubcategoryItemChild) {
+      throw new Error(`SubcategoryItemChild with ID ${subcategoryItemChildIdFromDto} not found`);
     }
 
-    let finalSubcategoryItem: SubcategoryItem | undefined;
-    let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
-    let tagDefaults: any = {};
-
-    // ----------------------------------------------------------------------
-    // Case 1: subcategoryItemChild is explicitly provided
-    // ----------------------------------------------------------------------
-    if (subcategoryItemChildIdFromDto) {
-        const subcategoryItemChild = await subcategoryItemChildRepository.findOne({
-            where: { id: subcategoryItemChildIdFromDto },
-            relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
-        });
-
-        if (!subcategoryItemChild) {
-            throw new NotFoundException(`Subcategory item child with ID ${subcategoryItemChildIdFromDto} not found.`);
-        }
-        finalSubcategoryItemChild = subcategoryItemChild;
-        finalSubcategoryItem = subcategoryItemChild.subcategoryItem;
-        tagDefaults = subcategoryItemChild.tag_defaults || {};
-    } 
+    finalSubcategoryItem = finalSubcategoryItemChild.subcategoryItem;
     
-    // ----------------------------------------------------------------------
-    // Case 2: subcategoryItem is provided (Dual Check Logic)
-    // ----------------------------------------------------------------------
-    else if (subcategoryItemIdFromDto) {
-        
-        // 1. ATTEMPT A: Check if the ID belongs to a SubcategoryItemChild
-        // This is the modification to satisfy the requirement: check child table first.
-        const childAsCandidate = await subcategoryItemChildRepository.findOne({
-            where: { id: subcategoryItemIdFromDto },
-            relations: ['subcategoryItem', 'subcategoryItem.subcategory', 'subcategoryItem.subcategory.category'],
-        });
+    // Get tag defaults from child (highest priority)
+    tagDefaults = finalSubcategoryItemChild.tagDefaults || {};
+  } 
+  // ⭐ FLEXIBLE LOOKUP: Check both levels when subcategoryItem is provided
+  else if (subcategoryItemIdFromDto) {
+    // 1. 🔍 First, try to find in SubcategoryItem (Level 2)
+    finalSubcategoryItem = await subcategoryItemRepository.findOne({
+      where: { id: subcategoryItemIdFromDto },
+    });
 
-        if (childAsCandidate) {
-            // Match found in the child table
-            finalSubcategoryItemChild = childAsCandidate;
-            finalSubcategoryItem = childAsCandidate.subcategoryItem; // Retrieve the parent via the relation
-            tagDefaults = childAsCandidate.tag_defaults || {};
+    if (finalSubcategoryItem) {
+      // Found at Level 2 - use its tag defaults
+      tagDefaults = finalSubcategoryItem.tagDefaults || {};
+    } else {
+      // 2. 🔍 If not found at Level 2, try SubcategoryItemChild (Level 3)
+      finalSubcategoryItemChild = await subcategoryItemChildRepository.findOne({
+        where: { id: subcategoryItemIdFromDto },
+        relations: ['subcategoryItem'],
+      });
 
-        } else {
-            // 2. ATTEMPT B: Check if the ID belongs to a SubcategoryItem (Parent)
-            const subcategoryItem = await subcategoryItemRepository.findOne({
-                where: { id: subcategoryItemIdFromDto },
-                relations: ['subcategory', 'subcategory.category'],
-            });
-
-            if (!subcategoryItem) {
-                // Not found in either table
-                throw new NotFoundException(`Category ID ${subcategoryItemIdFromDto} not found as a Subcategory Item OR Subcategory Item Child.`);
-            }
-
-            // Match found in the parent table
-            finalSubcategoryItem = subcategoryItem;
-            finalSubcategoryItemChild = undefined; // Explicitly set child to undefined
-            tagDefaults = subcategoryItem.tag_defaults || {};
-        }
+      if (finalSubcategoryItemChild) {
+        // Found at Level 3 - extract parent and use child's tag defaults
+        finalSubcategoryItem = finalSubcategoryItemChild.subcategoryItem;
+        tagDefaults = finalSubcategoryItemChild.tagDefaults || {};
+      } else {
+        // 3. 🛑 Not found in either level
+        throw new Error(
+          `Subcategory record with ID ${subcategoryItemIdFromDto} not found in SubcategoryItem or SubcategoryItemChild`
+        );
+      }
     }
+  }
 
-    // Final check to ensure a main category was resolved (important for new products)
-    if (!finalSubcategoryItem) {
-        throw new BadRequestException('Subcategory item could not be determined. Please provide valid IDs.');
-    }
-
-    return { finalSubcategoryItem, finalSubcategoryItemChild, tagDefaults };
+  return {
+    finalSubcategoryItem,
+    finalSubcategoryItemChild,
+    tagDefaults,
+  };
 }
 
 // --------------------------------------------------------------------------
 // Helper 2: Applies Tag Defaults
 // --------------------------------------------------------------------------
+/**
+ * Applies default values from subcategory tag configuration to product data.
+ * This ensures that required category tags have defaults if not provided.
+ * 
+ * @param productData - The product data object to apply defaults to
+ * @param tagDefaults - The tag defaults from subcategory configuration
+ */
 export function applyTagDefaults(productData: any, tagDefaults: any): void {
-    const relevantDefaults = {
-        ar_type: tagDefaults.ar_type,
-        indoor_outdoor: tagDefaults.indoor_outdoor,
-        accessible: tagDefaults.accessible,
-        gender: tagDefaults.gender,
-    };
+  if (!tagDefaults || typeof tagDefaults !== 'object') {
+    return;
+  }
 
-    // Apply default only if the DTO value (in productData) is missing (undefined)
-    Object.keys(relevantDefaults).forEach(key => {
-        if (productData[key] === undefined && relevantDefaults[key] !== undefined) {
-            productData[key] = relevantDefaults[key];
-        }
-    });
+  // List of all possible tag fields that can have defaults
+  const tagFields = [
+    // Existing fields
+    'age_group',
+    'gender',
+    'occasion',
+    'season',
+    'indoor_outdoor',
+    'material',
+    'style',
+    'ar_type',
+    
+    // NEW: Missing optional fields
+    'shape',
+    'pattern',
+    'pile_height',
+    'room_type',
+    'washable',
+    'backing_type',
+  ];
+
+  // Apply defaults only if the field is undefined in productData
+  for (const field of tagFields) {
+    if (productData[field] === undefined && tagDefaults[field] !== undefined) {
+      productData[field] = tagDefaults[field];
+    }
+  }
 }
+
 
 export function mapProduct3DModels(modelsDto: CreateProduct3dModelDto[], product: Product): Product3DModel[] {
     if (!modelsDto || modelsDto.length === 0) return [];

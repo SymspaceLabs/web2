@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Product } from './entities/product.entity';
-import { ProductsService } from './products.service';
+import { ProductsService, QueryContext } from './products.service';
 import { SearchResultResponse } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductVariantsDto } from './dto/update-product-variants.dto';
@@ -52,6 +52,8 @@ export class ProductsController {
     @Query('companyId') companyId?: string,
   ) {
 
+    const buyerContext: QueryContext = {};
+
     const subcategoryItemSlugsArray = Array.isArray(subcategoryItemSlugs) 
     ? subcategoryItemSlugs 
     : subcategoryItemSlugs ? [subcategoryItemSlugs] : undefined;
@@ -65,6 +67,7 @@ export class ProductsController {
         : ageGroups ? [ageGroups] : undefined; 
 
     return await this.productsService.findAll(
+      buyerContext,
       search,
       categorySlug,
       subcategorySlug,

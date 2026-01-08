@@ -5,6 +5,7 @@ import {
   IsArray,
   ValidateNested,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
@@ -60,8 +61,8 @@ export class CreateProductDto {
   sizeFit?: string;
 
   @IsArray()
-  @ValidateNested({ each: true }) // ⬅️ Tells class-validator to check each item
-  @Type(() => CreateProductSizeDto) // ⬅️ Tells class-transformer what class to use
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductSizeDto)
   @IsOptional()
   sizes?: CreateProductSizeDto[]; 
 
@@ -79,5 +80,60 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
+
+  // ============================================
+  // EXISTING OPTIONAL TAG FIELDS
+  // ============================================
+  @IsString()
+  @IsOptional()
+  occasion?: string;
+
+  @IsString()
+  @IsOptional()
+  season?: string;
+
+  @IsString()
+  @IsOptional()
+  age_group?: string;
+
+  @IsString()
+  @IsOptional()
+  ar_type?: string;
+
+  @IsString()
+  @IsOptional()
+  indoor_outdoor?: string;
+
+  @IsString()
+  @IsOptional()
+  material?: string;
+
+  @IsString()
+  @IsOptional()
+  style?: string;
+
+  @IsString()
+  @IsOptional()
+  shape?: string; // For rugs/mats: rectangle, square, round, oval, runner, hexagon, irregular
+
+  @IsString()
+  @IsOptional()
+  pattern?: string; // For decorative products: solid, striped, geometric, etc.
+
+  @IsString()
+  @IsOptional()
+  pile_height?: string; // For rugs/carpets: low, medium, high
+
+  @IsString()
+  @IsOptional()
+  room_type?: string; // For home products: living room, bedroom, bathroom, kitchen, hallway, office
+
+  @IsBoolean()
+  @IsOptional()
+  washable?: boolean; // Machine washable flag
+
+  @IsString()
+  @IsOptional()
+  backing_type?: string; // For rugs/mats: Non-slip, Rubber, Felt
 
 }

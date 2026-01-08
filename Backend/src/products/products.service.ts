@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from './entities/product.entity';
+import { Product, ProductStatus } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Company } from 'src/companies/entities/company.entity';
 import { Category } from 'src/categories/entities/category.entity';
@@ -21,6 +21,7 @@ import { DisplayPrice } from './types/display-price.types';
 import { ProductDetailDto } from './dto/product-response.dto';
 import { ProductMapper } from './utils/product-mappers';
 import { extractGranularCategory } from './utils/category-helpers';
+import { UserRole } from 'src/users/entities/user.entity';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -29,6 +30,13 @@ export interface SearchSuggestion {
   type: 'company' | 'product' | 'category' | 'subcategory-child';
   slug?: string;
   link?: string;
+}
+
+// Add this interface for context
+export interface QueryContext {
+  userRole?: UserRole;
+  userId?: string;
+  companyId?: string;
 }
 
 // Define the new, required structure for the API response
@@ -67,6 +75,20 @@ export class ProductsService {
           subcategoryItem: subcategoryItemIdFromDto,
           subcategoryItemChild: subcategoryItemChildIdFromDto,
           gender,
+          // Existing optional fields
+          occasion,
+          season,
+          age_group,
+          indoor_outdoor,
+          material,
+          style,
+          // NEW: Destructure the new optional fields
+          shape,
+          pattern,
+          pile_height,
+          room_type,
+          washable,
+          backing_type,
           ...productData
       } = dto;
 
@@ -149,8 +171,7 @@ export class ProductsService {
               }
           }
 
-          // Assign all other product data (including dimensions and defaulted tags)
-          // Object.assign(product, productData);
+          // Assign all product data (including new optional fields)
           Object.keys(productData).forEach(key => {
               if (productData[key] !== undefined) {
                   product[key] = productData[key];
@@ -165,6 +186,22 @@ export class ProductsService {
           if (gender !== undefined) {
               product.gender = gender;
           }
+
+        // Explicitly handle the optional fields if provided
+        if (shape !== undefined) product.shape = shape;
+        if (pattern !== undefined) product.pattern = pattern;
+        if (pile_height !== undefined) product.pile_height = pile_height;
+        if (room_type !== undefined) product.room_type = room_type;
+        if (washable !== undefined) product.washable = washable;
+        if (backing_type !== undefined) product.backing_type = backing_type;
+        
+        // Also handle existing optional fields explicitly
+        if (occasion !== undefined) product.occasion = occasion;
+        if (season !== undefined) product.season = season;
+        if (age_group !== undefined) product.age_group = age_group;
+        if (indoor_outdoor !== undefined) product.indoor_outdoor = indoor_outdoor;
+        if (material !== undefined) product.material = material;
+        if (style !== undefined) product.style = style;
           
       }
 
@@ -203,7 +240,21 @@ export class ProductsService {
             colors: [],
             sizes: [],
             threeDModels: [],
-            gender: finalGender
+            gender: finalGender,
+            // ✅ Explicitly set new optional fields
+            shape: shape || null,
+            pattern: pattern || null,
+            pile_height: pile_height || null,
+            room_type: room_type || null,
+            washable: washable || false,
+            backing_type: backing_type || null,
+            // Existing optional fields
+            occasion: occasion || null,
+            season: season || null,
+            age_group: age_group || null,
+            indoor_outdoor: indoor_outdoor || null,
+            material: material || null,
+            style: style || null,
           });
 
           // --- 3D Model Creation Logic ---
@@ -364,6 +415,7 @@ export class ProductsService {
    * @returns An object containing filtered products and facets.
    */
   async findAll(
+    context: QueryContext,
     searchTerm?: string,
     categorySlug?: string,
     subcategorySlug?: string,
@@ -384,19 +436,16 @@ export class ProductsService {
       .leftJoinAndSelect('variants.color', 'variantColor') 
       .leftJoinAndSelect('variants.size', 'variantSize') 
       .leftJoinAndSelect('product.threeDModels', 'threeDModels')
-      
-      // ✅ CRITICAL: Proper joins for subcategoryItemChild hierarchy
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
       .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'childParentItem')
       .leftJoinAndSelect('childParentItem.subcategory', 'childSubcategory')
       .leftJoinAndSelect('childSubcategory.category', 'childCategory')
-      
-      // For products with only subcategoryItem
       .leftJoinAndSelect('product.subcategoryItem', 'subcategoryItem')
       .leftJoinAndSelect('subcategoryItem.subcategory', 'subcategory')
       .leftJoinAndSelect('subcategory.category', 'category')
-      
       .orderBy('images.sortOrder', 'ASC');
+
+    this.applyStatusFilter(productsQuery, context);
 
     // Apply filters (your existing logic)
     if (companyId) {
@@ -557,6 +606,54 @@ export class ProductsService {
       message: 'Product has been deleted successfully',
       product,
     };
+  }
+
+   /**
+   * ⭐ NEW: Apply status filter based on user role
+   * 
+   * Role-based rules:
+   * - Buyers (no auth/regular users): Only see ACTIVE products
+   * - Sellers: See their own products (all statuses) + ACTIVE products from others
+   * - Admins: See all products regardless of status
+   */
+  private applyStatusFilter(
+    query: SelectQueryBuilder<Product>,
+    context: QueryContext,
+  ): void {
+    const { userRole, userId, companyId } = context;
+
+    // Case 1: No role/unauthenticated user (BUYER)
+    // Only show ACTIVE products
+    if (!userRole) {
+      query.andWhere('product.status = :status', { 
+        status: ProductStatus.ACTIVE 
+      });
+      return;
+    }
+
+    // Case 2: ADMIN or SUPER_ADMIN
+    // Show ALL products (no filter)
+    if (userRole === UserRole.ADMIN || userRole === UserRole.SUPER_ADMIN) {
+      return; // No filtering needed
+    }
+
+    // Case 3: SELLER
+    // Show: (own products with any status) OR (other products that are ACTIVE)
+    if (userRole === UserRole.SELLER && companyId) {
+      query.andWhere(
+        '(company.id = :companyId OR product.status = :activeStatus)',
+        { 
+          companyId,
+          activeStatus: ProductStatus.ACTIVE 
+        }
+      );
+      return;
+    }
+
+    // Case 4: Any other authenticated role (treat as buyer)
+    query.andWhere('product.status = :status', { 
+      status: ProductStatus.ACTIVE 
+    });
   }
 
   // ======================================================

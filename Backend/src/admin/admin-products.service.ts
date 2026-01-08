@@ -1,18 +1,39 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ProductsService } from 'src/products/products.service';
+import { ProductsService, QueryContext } from 'src/products/products.service';
+import { UserRole } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AdminProductsService {
   constructor(private readonly productsService: ProductsService) {}
 
-  /**
-   * Retrieves all user accounts in the system.
-   * NOTE: The controller ensures only Admins can call this.
+    /**
+   * Admins can see ALL products (including drafts and archived)
    */
-  async findAllProducts() {
-    // This is where you might call a method from your core UsersService
-    // that fetches ALL users, including sensitive data.
-    return this.productsService.findAll(); 
+  async findAllProducts(
+    searchTerm?: string,
+    categorySlug?: string,
+    subcategorySlug?: string,
+    subcategoryItemSlugs?: string[],
+    subcategoryItemChildSlug?: string,
+    genders?: string[],
+    ageGroups?: string[],
+    companyId?: string,
+  ) {
+    const adminContext: QueryContext = {
+      userRole: UserRole.ADMIN,
+    };
+
+    return this.productsService.findAll(
+      adminContext,
+      searchTerm,
+      categorySlug,
+      subcategorySlug,
+      subcategoryItemSlugs,
+      subcategoryItemChildSlug,
+      genders,
+      ageGroups,
+      companyId,
+    );
   }
 
   async findOneProduct(id: string) {

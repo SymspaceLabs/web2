@@ -10,9 +10,10 @@ import { Entity, Column, OneToMany, ManyToOne, JoinColumn, PrimaryGeneratedColum
 import { SubcategoryItemChild } from 'src/subcategory-item-child/entities/subcategory-item-child.entity';
 
 export enum ProductStatus {
-  ACTIVE = 'Active',
-  DRAFT = 'Draft',
-  INACTIVE = 'InActive',
+  ACTIVE = 'active',
+  DRAFT = 'draft',
+  INACTIVE = 'inactive',
+  ARCHIVED = 'archived',
 }
 
 export enum ProductGender {
@@ -102,6 +103,18 @@ export class Product {
   @OneToMany(() => Review, (review) => review.product)
   reviews: Review[];
 
+  @Column({ default: false })
+  accessible: boolean;
+
+  @Column({ default: false })
+  safety_certified: boolean;
+
+  @Column({ length: 10, default: 'USD' })
+  currency: string;
+
+  @Column({ nullable: true })
+  productUrl?: string;
+
   @Column({ nullable: true })
   occasion: string;
 
@@ -123,16 +136,26 @@ export class Product {
   @Column({ nullable: true })
   style: string;
 
-  @Column({ default: false })
-  accessible: boolean;
-
-  @Column({ default: false })
-  safety_certified: boolean;
-
-  @Column({ length: 10, default: 'USD' })
-  currency: string;
+  // ============================================
+  // NEW OPTIONAL FIELDS
+  // ============================================
 
   @Column({ nullable: true })
-  productUrl?: string;
+  shape: string; // e.g., 'rectangle', 'square', 'round', 'oval', 'runner', 'hexagon', 'irregular'
+
+  @Column({ nullable: true })
+  pattern: string; // e.g., 'solid', 'striped', 'geometric'
+
+  @Column({ nullable: true })
+  pile_height: string; // e.g., 'low', 'medium', 'high'
+
+  @Column({ nullable: true })
+  room_type: string; // e.g., 'living room', 'bedroom', 'bathroom', 'kitchen', 'hallway', 'office'
+
+  @Column({ default: false })
+  washable: boolean; // Machine washable flag
+
+  @Column({ nullable: true })
+  backing_type: string; // e.g., 'Non-slip', 'Rubber', 'Felt'
 
 }

@@ -525,7 +525,7 @@ export const CATEGORIES_DATA = [
                 slug: "area-rugs",
                 mobileLevel2: "Rugs",  
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type", "brand"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -534,7 +534,7 @@ export const CATEGORIES_DATA = [
                 slug: "runner-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type", "brand"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -543,7 +543,7 @@ export const CATEGORIES_DATA = [
                 slug: "outdoor-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "weather_resistant", "uv_resistant", "backing", "brand"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "weather_resistant", "uv_resistant", "backing_type", "brand"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "outdoor" }
               },
               {
@@ -552,7 +552,7 @@ export const CATEGORIES_DATA = [
                 slug: "kids-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room", "washable", "non_slip", "brand", "accessible"],
+                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "non_slip", "brand", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -561,7 +561,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["size", "shape", "color", "pattern", "pile_height", "style", "room", "washable", "backing", "brand", "accessible"],
+                optional_tags: ["size", "shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type", "brand", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
             ]
@@ -649,7 +649,7 @@ export const CATEGORIES_DATA = [
                 slug: "floor-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "room", "non_slip", "washable", "brand", "accessible"],
+                optional_tags: ["shape", "color", "pattern", "room_type", "non_slip", "washable", "brand", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -676,7 +676,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["size", "shape", "color", "pattern", "room", "non_slip", "washable", "brand", "accessible"],
+                optional_tags: ["size", "shape", "color", "pattern", "room_type", "non_slip", "washable", "brand", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
             ],

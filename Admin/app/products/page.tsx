@@ -35,25 +35,6 @@ import { deleteProduct } from "@/api/product"
 import { toast } from "sonner"
 import { Product } from "@/types/product.type"
 
-
-// interface APIProduct {
-//   id: string
-//   name: string
-//   description: string
-//   displayPrice: {
-//     price: string
-//     range: string
-//     formattedDisplay: string 
-//   }
-//   thumbnail: string
-//   category: { name: string }
-//   images: Array<{ url: string; id: string; sortOrder: number }>
-//   status: string
-//   variants: Array<{ stock: number; price: number }>
-//   company: { entityName: string; id: string }
-//   createdAt: string
-// }
-
 interface UIProduct {
   displayPrice: any
   id: string
@@ -68,7 +49,6 @@ interface UIProduct {
 }
 
 function mapAPIProductToUI(apiProduct: Product): UIProduct {
-  const totalStock = apiProduct.variants?.reduce((sum, v) => sum + (v.stock || 0), 0) || 0
   
   // Get the first image URL or use a placeholder
   const thumbnail = apiProduct.thumbnail ||apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
@@ -91,7 +71,7 @@ function mapAPIProductToUI(apiProduct: Product): UIProduct {
     thumbnail,
     category,
     price,
-    stock: totalStock,
+    stock: apiProduct.stock || 0,
     company,
     status,
     createdAt: new Date(apiProduct.createdAt).toLocaleDateString(),
@@ -327,7 +307,7 @@ export default function ProductsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={product.status === "active" ? "default" : "secondary"}>{product.status}</Badge>
+                        <Badge variant={product.status === "active" ? "default" : "secondary"} className="capitalize">{product.status}</Badge>
                       </TableCell>
                       <TableCell className="text-sm">{product.createdAt}</TableCell>
                       <TableCell className="text-right">

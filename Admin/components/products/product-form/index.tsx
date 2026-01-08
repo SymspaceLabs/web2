@@ -74,13 +74,35 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
     companyName: product?.company?.entityName || "",
     category: normalizeCategoryToString(product?.category),
     description: product?.description || "",
+    
+    // ✅ Standard tags
     gender: typeof product?.gender === 'string' ? product.gender : '',
     age_group: product?.age_group || '',
+    
+    // ✅ NEW: Include ALL optional tag fields from API
+    season: product?.season || '',
+    occasion: product?.occasion || '',
+    indoor_outdoor: product?.indoor_outdoor || '',
+    shape: product?.shape || '',
+    pattern: product?.pattern || '',
+    pile_height: product?.pile_height || '',
+    style: product?.style || '',
+    room_type: product?.room_type || '',
+    washable: product?.washable ?? false, // Boolean field
+    backing_type: product?.backing_type || '',
+    
+    // ✅ Colors, sizes, material
     selectedColors: product?.colors || [],
     selectedSizes: product?.sizes || [],
     material: product?.material || "",
+    
+    // ✅ Variants
     variants: product?.variants ? transformApiVariantsToFormVariants(product.variants) : [],
+    
+    // ✅ Images
     images: product?.images ? transformApiImagesToFormImages(product.images) : [],
+    
+    // ✅ 3D Models
     models: product?.threeDModels?.map((model, i) => {
       const matchingColor = product?.colors?.find(c => c.code === model.colorCode);
       return {
@@ -155,13 +177,28 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
         ...(data.categoryId && { subcategoryItem: data.categoryId })
       }
       
-      if (data.age_group && data.age_group.trim() !== '') {
-        payload.age_group = data.age_group
-      }
-
-      if (data.gender && typeof data.gender === 'string' && data.gender.trim() !== '') {
-        payload.gender = data.gender
-      }
+      // ✅ Dynamically include ALL tag fields
+      const tagFields = [
+        'age_group', 'gender', 'season', 'occasion',
+        'indoor_outdoor', 'shape', 'pattern', 'pile_height',
+        'style', 'room_type', 'washable', 'backing_type', 'material'
+      ]
+      
+      tagFields.forEach(field => {
+        const value = data[field]
+        
+        if (value !== undefined && value !== null && value !== '') {
+          if (typeof value === 'boolean') {
+            payload[field] = value
+          }
+          else if (typeof value === 'string' && value.trim() !== '') {
+            payload[field] = value
+          }
+          else if (Array.isArray(value) && value.length > 0) {
+            payload[field] = value
+          }
+        }
+      })
     } else if (step === 2) {
       const colorsForApi = data.selectedColors.map(color => ({
         name: color.name,
@@ -235,10 +272,8 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
   // ✅ OPTIMIZED: Handle new image upload in thumbnail selector
   const handleNewThumbnailUpload = async (file: File) => {
     if (isCreateMode || !product?.id) {
-      toast({
-        title: "Cannot upload yet",
-        description: "Please save the product first before uploading thumbnail",
-        variant: "destructive"
+      toast.error("Cannot upload yet", {
+        description: "Please save the product first before uploading thumbnail"
       })
       return
     }
@@ -256,16 +291,13 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
         }
       }
       
-      toast({
-        title: "Image uploaded",
+      toast.success("Image uploaded", {
         description: "New thumbnail has been set successfully"
       })
     } catch (error) {
       console.error('Failed to upload image:', error)
-      toast({
-        title: "Upload failed",
-        description: "Failed to upload image. Please try again.",
-        variant: "destructive"
+      toast.error("Upload failed", {
+        description: "Failed to upload image. Please try again."
       })
       throw error
     }

@@ -3,6 +3,8 @@
 // Clean separation of internal entities from API responses
 // ============================================================================
 
+import { ProductStatus } from "../entities/product.entity";
+
 export class CategoryDto {
   id: string;
   name: string;
@@ -84,13 +86,15 @@ export class ProductListItemDto {
   
   company: CompanyDto;
   category: any;
+  status?: ProductStatus;
   
   threeDModels: ProductModelDto[];
   images: ProductImageDto[];
   thumbnail: string;
   colors: ProductColorDto[];
   sizes: ProductSizeDto[];
-  
+  stock?: number;
+
   // Computed fields
   displayPrice: any;
   availability: 'in_stock' | 'out_of_stock' | 'low_stock';

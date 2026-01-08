@@ -7,7 +7,8 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
+
 import type { FormData } from "@/components/products/product-form"
 import { uploadFileToBackend, validateImageFile } from "@/utils/media.utils"
 
@@ -84,10 +85,8 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
     const invalidFiles = validatedFiles.filter(f => !f.validation.valid)
     if (invalidFiles.length > 0) {
       invalidFiles.forEach(({ file, validation }) => {
-        toast({
-          title: "Invalid File",
-          description: `${file.name}: ${validation.error}`,
-          variant: "destructive",
+        toast.error("Invalid File", {
+          description: `${file.name}: ${validation.error}`
         })
       })
     }
@@ -191,21 +190,16 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
 
     // Show summary toast
     if (successCount > 0 && failedCount === 0) {
-      toast({
-        title: "✓ Upload Complete",
-        description: `Successfully uploaded ${successCount} ${successCount === 1 ? 'image' : 'images'}.`,
+      toast.success("✓ Upload Complete", {
+        description: `Successfully uploaded ${successCount} ${successCount === 1 ? 'image' : 'images'}.`
       })
     } else if (successCount > 0 && failedCount > 0) {
-      toast({
-        title: "Partial Upload",
-        description: `${successCount} succeeded, ${failedCount} failed. You can retry failed uploads.`,
-        variant: "default",
+      toast.info("Partial Upload", {
+        description: `${successCount} succeeded, ${failedCount} failed. You can retry failed uploads.`
       })
     } else if (failedCount > 0) {
-      toast({
-        title: "Upload Failed",
-        description: `Failed to upload ${failedCount} ${failedCount === 1 ? 'image' : 'images'}. Please try again.`,
-        variant: "destructive",
+      toast.error("Upload Failed", {
+        description: `Failed to upload ${failedCount} ${failedCount === 1 ? 'image' : 'images'}. Please try again.`
       })
     }
   }
@@ -248,8 +242,7 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         )
       })
 
-      toast({
-        title: "✓ Upload Successful",
+      toast.success("✓ Upload Successful", {
         description: "Image uploaded successfully.",
       })
 
@@ -262,10 +255,8 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         )
       })
 
-      toast({
-        title: "Upload Failed",
+      toast.error("Upload Failed", {
         description: "Please try again.",
-        variant: "destructive",
       })
     }
   }
@@ -337,18 +328,15 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         m.id === placeholderModel.id ? newModel : m
       ))
 
-      toast({
-        title: "✓ Model Uploaded",
-        description: `${file.name} uploaded successfully.`,
+      toast.success("✓ Model Uploaded", {
+        description: `${file.name} uploaded successfully.`
       })
     } catch (error) {
       console.error("Model upload failed:", error)
       setModels(prev => prev.filter(m => m.id !== placeholderModel.id))
       
-      toast({
-        title: "Upload Failed",
-        description: error instanceof Error ? error.message : "Could not upload 3D model.",
-        variant: "destructive",
+      toast.error("Upload Failed", {
+        description: error instanceof Error ? error.message : "Could not upload 3D model."
       })
     }
   }
@@ -365,19 +353,15 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
     const errorImages = formData.images.filter(img => img.error)
 
     if (uploadingImages.length > 0) {
-      toast({
-        title: "Upload in Progress",
-        description: "Please wait for all images to finish uploading.",
-        variant: "default",
+      toast.info("Upload in Progress", {
+        description: "Please wait for all images to finish uploading."
       })
       return
     }
 
     if (errorImages.length > 0) {
-      toast({
-        title: "Upload Errors",
-        description: `${errorImages.length} ${errorImages.length === 1 ? 'image has' : 'images have'} failed to upload. Please retry or remove them.`,
-        variant: "destructive",
+      toast.error("Upload Errors", {
+        description: `${errorImages.length} ${errorImages.length === 1 ? 'image has' : 'images have'} failed to upload. Please retry or remove them.`
       })
       return
     }

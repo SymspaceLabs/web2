@@ -1,5 +1,6 @@
-// ============================================================================
 // utils/product-mappers.ts
+
+// ============================================================================
 // Centralized mapping logic following DDD principles
 // ============================================================================
 
@@ -30,9 +31,11 @@ export class ProductMapper {
       threeDModels: this.mapThreeDModels(product.threeDModels),
       colors: this.mapColors(product.colors),
       sizes: this.mapSizes(product.sizes),
+      stock: this.calculateTotalStock(product.variants),
       
       displayPrice: product.displayPrice,
       availability: product.availability,
+      status: product.status,
       
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
@@ -120,4 +123,17 @@ export class ProductMapper {
       boundingBox: m.boundingBox
     }));
   }
+
+  private static calculateTotalStock(variants: any[]): number {
+    if (!variants || variants.length === 0) {
+      return 0;
+    }
+    
+    return variants.reduce((total, variant) => {
+      const stock = variant.stock || 0;
+      return total + stock;
+    }, 0);
+  }
 }
+
+  

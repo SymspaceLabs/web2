@@ -1,9 +1,20 @@
 // src/hooks/useCategoryTags.ts
 import { useMemo } from 'react';
 
-export type TagType = 'age_group' | 'gender' | 'season' | 'occasion' | 
-  'indoor_outdoor' | 'shape' | 'pattern' | 
-  'pile_height' | 'style' | 'room_type' | 'washable' | 'backing_type';
+export type TagType =
+  | 'age_group'
+  | 'gender'
+  | 'season'
+  | 'occasion'
+  | 'indoor_outdoor'
+  | 'shape'
+  | 'pattern'
+  | 'pile_height'
+  | 'style'
+  | 'room_type'
+  | 'washable'
+  | 'backing_type'
+  | 'prescription';
 
 export interface TagDefinition {
   key: TagType;
@@ -48,13 +59,26 @@ export function useCategoryTags({
       season: {
         label: 'Season',
         type: 'multiple',
-        options: seasons,
+        options: [
+          { label: 'Winter', value: 'winter' },
+          { label: 'Summer', value: 'summer' },
+          { label: 'Spring', value: 'spring' },
+          { label: 'Fall', value: 'fall' },
+          { label: 'All Season', value: 'all-season' }
+        ],
         placeholder: 'Select applicable seasons'
       },
       occasion: {
         label: 'Occasion',
         type: 'multiple',
-        options: [],
+        options: [
+          { label: 'Formal', value: 'formal' },
+          { label: 'Casual', value: 'casual' },
+          { label: 'Party', value: 'party' },
+          { label: 'Sports', value: 'sports' },
+          { label: 'Business', value: 'business' },
+          { label: 'Wedding', value: 'wedding' }
+        ],
         placeholder: 'Select occasions'
       },
       indoor_outdoor: {
@@ -122,7 +146,18 @@ export function useCategoryTags({
         label: 'Washable',
         type: 'boolean',
         placeholder: 'Machine washable'
-      }
+      },
+      prescription: {
+        label: 'Prescription',
+        type: 'single',
+        options: [
+          { label: 'No Prescription', value: 'none' },
+          { label: 'Prescription Ready', value: 'ready' },
+          { label: 'Prescription Only', value: 'only' }
+        ],
+        placeholder: 'Select prescription support'
+      },
+
     };
 
     // Process required tags
@@ -140,8 +175,8 @@ export function useCategoryTags({
     }
 
     // Process optional tags
-    if (subcategoryDetails?.optional_tags && subcategoryDetails.optional_tags.length > 0) {
-      subcategoryDetails.optional_tags.forEach((tagKey: string) => {
+    if (subcategoryDetails?.tags_optional && subcategoryDetails.tags_optional.length > 0) {
+      subcategoryDetails.tags_optional.forEach((tagKey: string) => {
         const config = tagConfigs[tagKey as TagType];
         if (config) {
           allTags.push({

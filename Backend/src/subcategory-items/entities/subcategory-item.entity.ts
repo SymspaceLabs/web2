@@ -27,7 +27,7 @@ export class SubcategoryItem {
   tags_required: string[];
 
   @Column('simple-array', { nullable: true })
-  optional_tags: string[];
+  tags_optional: string[];
 
   @Column('json', { nullable: true })
   tag_defaults: Record<string, any>; 
@@ -46,7 +46,6 @@ export class SubcategoryItem {
   @Column({ nullable: true })
   mobileLevel2: string;
 
-  //NEW ATTRIBUTE
   @Column({ nullable: true })
   mobileLevel2Name: string;
 

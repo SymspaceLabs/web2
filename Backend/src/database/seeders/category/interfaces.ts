@@ -7,7 +7,7 @@ export interface SubcategoryItemChildSeedData {
   name: string;
   slug?: string;
   tags_required?: string[];
-  optional_tags?: string[];
+  tags_optional?: string[];
   tag_defaults?: { [key: string]: string };
 }
 
@@ -18,7 +18,7 @@ export interface SubcategoryItemSeedData {
   name: string;
   slug?: string;
   tags_required?: string[];
-  optional_tags?: string[];
+  tags_optional?: string[];
   tag_defaults?: { [key: string]: string };
   // This makes the nested children array optional
   subcategoryItemChildren?: SubcategoryItemChildSeedData[];

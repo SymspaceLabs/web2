@@ -5,7 +5,7 @@ export interface SubcategoryDetails {
   slug: string;
   subcategoryId: string;
   tags_required?: string[];
-  optional_tags?: string[];
+  tags_optional?: string[];
   tag_defaults?: Record<string, any>;
   mobileLevel2?: string;
   mobileLevel2Name?: string | null;

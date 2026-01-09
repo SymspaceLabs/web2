@@ -13,9 +13,9 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Fits",
         gender: ['Female', 'Kids'],
         subcategoryItems: [
-          { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", name: "Casual Dresses", slug: 'casual-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", name: "Formal Dresses", slug: 'formal-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", name: "Summer Dresses", slug: 'summer-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
+          { id: "cfed1f8d-4b9b-4553-92c5-dc2be01c38b7", name: "Casual Dresses", slug: 'casual-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "d47f23a4-1cf5-4a39-9b79-6cd25c7f462d", name: "Formal Dresses", slug: 'formal-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "c53f5378-e3b3-45b1-a129-e2c4067c8509", name: "Summer Dresses", slug: 'summer-dresses', mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern", "season"], tag_defaults: { ar_type: "body-tracking", gender: "women", season: "summer" } },
         ],
       },
       {
@@ -24,13 +24,13 @@ export const CATEGORIES_DATA = [
         slug: 'tops',
         mobileLevel1:"Fits",
         subcategoryItems: [
-          { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", name: "Blouses", slug: "blouses", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "9d826402-b7be-4329-97fc-bd64934eb233", name: "T-Shirts", slug: "t-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", name: "Sweaters", slug: "sweaters", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Cardigans", slug: "cardigans", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", name: "Casual Shirts", slug: "casual-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", name: "Dress Shirts", slug: "dress-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", name: "Polo Shirts", slug: "polo-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "7cd4a02e-becb-4865-aabb-b87a18dce2c0", name: "Blouses", slug: "blouses", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "9d826402-b7be-4329-97fc-bd64934eb233", name: "T-Shirts", slug: "t-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "f357256e-983f-46c7-a2f2-3f0d5ae5b348", name: "Sweaters", slug: "sweaters", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "1cb97a29-ec59-45c6-8a56-0a1e8f62e6d7", name: "Cardigans", slug: "cardigans", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "ada4f6d3-c1a2-4567-92b7-430226b3ca47", name: "Casual Shirts", slug: "casual-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "1de0fd99-62b6-4386-8c92-8ca4db389599", name: "Dress Shirts", slug: "dress-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "9c41b539-ec2c-4b49-91c2-6b8f18534c40", name: "Polo Shirts", slug: "polo-shirts", mobileLevel2:"Tops", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
         ],
       },
       {
@@ -40,16 +40,16 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Fits",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Jeans", slug: "jeans", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "e18d4a1b-bb01-4b19-87c2-f6be3e273d68", name: "Jeans", slug: "jeans", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
           { id: "99f24302-3e28-4034-8c8d-4e2098d57864", name: "Trousers", slug: "trousers", mobileLevel2:"Bottoms",  },
-          { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: "Shorts", slug: "shorts", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
-          { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", name: "Skirts", slug: "skirts", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking", gender: "women" }},
-          { id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2", name: "Pants", slug: "pants", mobileLevel2:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" }, 
+          { id: "b888c11c-b62d-4be4-9756-4151a05692f9", name: "Shorts", slug: "shorts", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "8f6db2a2-5ac9-4fa7-9802-d742c5f1a230", name: "Skirts", slug: "skirts", mobileLevel2:"Bottoms", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking", gender: "women" }},
+          { id: "d49a2804-0665-4b50-9d8e-1e7b423f26b2", name: "Pants", slug: "pants", mobileLevel2:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" }, 
             subcategoryItemChildren: [
-              { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", name: "Dress Pants", slug: "dress-pants", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", name: "Chinos", slug: "chinos", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", name: "Joggers", slug: "joggers", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-              { id: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", name: "Cargos", slug: "cargos", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "e8d641c8-c9f2-491a-96e0-0259b3c3c734", name: "Dress Pants", slug: "dress-pants", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "62b3d30b-d023-45a8-8e62-c1f03f3938b8", name: "Chinos", slug: "chinos", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "a6f8749c-f233-4f9e-a61f-b3a537f1e7d0", name: "Joggers", slug: "joggers", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "4d1a9e3f-67c8-47b2-8a9d-b84e1c28f3a5", name: "Cargos", slug: "cargos", mobileLevel3:"Bottoms", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ],
           },
         ]
@@ -61,12 +61,12 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Fits",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          { id: "aba0a755-cf5d-4657-b017-8d014a539d43", name: "Jackets", slug: "jackets", mobileLevel2: "Outerwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", name: "Coats", slug: "coats", mobileLevel2: "Outerwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", name: "Blazers", slug: "blazers", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
-          { id: "ef324850-c5c5-41d9-bc0f-f8b4b8f37a07", name: "Vests", slug: "vests", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
-          { id: "fde3b457-48a3-4e7c-9c19-43e1f53b738a", name: "Hoodies", slug: "hoodies", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], optional_tags: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
-          { id: "4a3b8f17-c5d7-4be9-b64e-29b5341d7905", name: "Suits", slug: "suits", mobileLevel2: "Suits", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "aba0a755-cf5d-4657-b017-8d014a539d43", name: "Jackets", slug: "jackets", mobileLevel2: "Outerwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "e66fd981-7ec0-4d34-b7fa-b4b682f96e30", name: "Coats", slug: "coats", mobileLevel2: "Outerwear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "5dbdf1d5-bbfc-402f-806d-e4d049500c7f", name: "Blazers", slug: "blazers", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
+          { id: "ef324850-c5c5-41d9-bc0f-f8b4b8f37a07", name: "Vests", slug: "vests", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" } },
+          { id: "fde3b457-48a3-4e7c-9c19-43e1f53b738a", name: "Hoodies", slug: "hoodies", mobileLevel2: "Outerwear", tags_required: [ "ar_type", "age_group", "gender", "season", "occasion", "material" ], tags_optional: ["color", "pattern"], tag_defaults: { "ar_type": "body-tracking" }},
+          { id: "4a3b8f17-c5d7-4be9-b64e-29b5341d7905", name: "Suits", slug: "suits", mobileLevel2: "Suits", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
         ]
       },
       {
@@ -76,15 +76,15 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Fits",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          { id: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", name: "Leggings", slug: "leggings", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", name: "Sport Bras", slug: "sport-bras", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", name: "Track Pants", slug: "track-pants", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "2df96d8f-b8f9-4711-8f89-f72f167e78da", name: "Workout Tops", slug: "workout-tops", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "d7424957-f23b-4c95-85c7-e318e91f9a56", name: "Yoga Pants", slug: "yoga-pants", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", name: "Sports Shorts", slug: "sports-shorts", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", name: "Joggers", slug: "joggers", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", name: "Sweatshirts", slug: "sweatshirts", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
-          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear", slug: "compression-wear", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "750f3a2d-2b19-4de3-b7b7-4f6b3f22e4d2", name: "Leggings", slug: "leggings", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "b543b93c-7d88-4b8d-ae5f-507b0cb11b7a", name: "Sport Bras", slug: "sport-bras", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "3c6814a9-b1c3-4a2f-8c74-9001daeea578", name: "Track Pants", slug: "track-pants", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "2df96d8f-b8f9-4711-8f89-f72f167e78da", name: "Workout Tops", slug: "workout-tops", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "d7424957-f23b-4c95-85c7-e318e91f9a56", name: "Yoga Pants", slug: "yoga-pants", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "36e0ab1f-f44d-4e3f-9785-1d2f8c3c4e9b", name: "Sports Shorts", slug: "sports-shorts", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "f32175e8-3401-4c53-8bd6-5b8cb2b2744a", name: "Joggers", slug: "joggers", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "e3b9c2e5-502d-430c-8e73-4f5ea6e82b3c", name: "Sweatshirts", slug: "sweatshirts", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "3d2e0cba-78f1-41c7-ae4b-0b8129b4e4cd", name: "Compression Wear", slug: "compression-wear", mobileLevel2: "Activewear", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
         ]
       },
       {
@@ -93,10 +93,10 @@ export const CATEGORIES_DATA = [
         slug: 'eyewear',
         mobileLevel1:"Eyewear",
         subcategoryItems: [
-          { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: "Prescription Glasses", slug: "prescription-glasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-          { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", name: "Sunglasses", slug: "sunglasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-          { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", name: "Blue Light Glasses", slug: "blue-light-glasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
-          { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", name: "Kids' Eyewear", slug: "kids-eyewear",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], optional_tags: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
+          { id: "e09b241e-4c16-4e74-b120-55e4b55e5e0a", name: "Prescription Glasses", slug: "prescription-glasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], tags_optional: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "7f2e0a43-2d39-4ec9-808f-47f1eb7385f7", name: "Sunglasses", slug: "sunglasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], tags_optional: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "f329c04d-1ef5-4db3-a37c-583e4a7c9f7b", name: "Blue Light Glasses", slug: "blue-light-glasses",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], tags_optional: ["frame_shape"], tag_defaults: { ar_type: "face-tracking" } },
+          { id: "2d1cfe2b-d69f-40b8-9061-0ec74c8f1b1b", name: "Kids' Eyewear", slug: "kids-eyewear",  mobileLevel2: "Eyewear", tags_required: ["ar_type", "age_group", "gender", "material"], tags_optional: ["frame_shape"], tag_defaults: { ar_type: "face-tracking", age_group: "kids" } },
         ]
       },
       {
@@ -106,11 +106,11 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Fits",
         gender: ["Female"],
         subcategoryItems: [
-          { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", name: "Bras", slug: "bras", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", name: "Panties", slug: "panties", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
-          { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", name: "Boxers", slug: "boxers", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
-          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", name: "Briefs", slug: "briefs", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
-          { id: "9b2e4f63-1c7a-4d0f-8e6b-5a3c92d1f4e8", name: "Sleepwear", slug: "sleepwear", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+          { id: "f5a7b94c-23d9-42e8-8375-b1a9f7e5d8c3", name: "Bras", slug: "bras", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "2d3202f1-5972-4a2e-bbdf-61af41769dc3", name: "Panties", slug: "panties", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "women" } },
+          { id: "7fae12d0-9635-43fb-aaf4-362ed92c1234", name: "Boxers", slug: "boxers", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+          { id: "83b2f5a7-d94f-481b-832e-7e3b94a2f8c1", name: "Briefs", slug: "briefs", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "body-tracking", gender: "men" } },
+          { id: "9b2e4f63-1c7a-4d0f-8e6b-5a3c92d1f4e8", name: "Sleepwear", slug: "sleepwear", mobileLevel2: "Intimates", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
         ]
       },
       {
@@ -120,14 +120,14 @@ export const CATEGORIES_DATA = [
         mobileLevel1:"Shoes",
         gender: ["Male", "Female", "Kids"],
         subcategoryItems: [
-          { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Sandals", slug: "sandals", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Flats", slug: "flats", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", name: "Heels", slug: "heels", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking", gender: "women" } },
-          { id: "8g3f1b54-3e40-5fd0-919g-58g2fc8496g8", name: "Boots", slug: "boots", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", name: "Sneakers", slug: "sneakers", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "3f7c8b8a-6e2c-4a9b-9d3a-1c2a6f4e8d91", name: "Athletic Shoes", slug: "athletic-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", name: "Formal Shoes", slug: "formal-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-          { id: "9b4f2e6c-1a7d-4f8e-b9a2-7c3d6f1e2a90", name: "Casual Shoes", slug: "casual-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "215cfe87-5dc3-4b9b-80b9-01a7e99f7dc8", name: "Sandals", slug: "sandals", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "87d4bc3f-1342-44c3-a8d7-8e7b9b24d9e7", name: "Flats", slug: "flats", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "3c7f41d2-4d88-42b6-8f5a-86b9f3d23eb9", name: "Heels", slug: "heels", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking", gender: "women" } },
+          { id: "8g3f1b54-3e40-5fd0-919g-58g2fc8496g8", name: "Boots", slug: "boots", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "c39f847b-f02e-4b7d-98f3-5f47e9d7c2b3", name: "Sneakers", slug: "sneakers", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "3f7c8b8a-6e2c-4a9b-9d3a-1c2a6f4e8d91", name: "Athletic Shoes", slug: "athletic-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "4d3b5c84-59f7-46b1-9a7f-3724d9b2f087", name: "Formal Shoes", slug: "formal-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+          { id: "9b4f2e6c-1a7d-4f8e-b9a2-7c3d6f1e2a90", name: "Casual Shoes", slug: "casual-shoes", mobileLevel2: "Shoes", tags_required: ["ar_type", "age_group", "gender", "season", "occasion", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
         ]
       },
       {
@@ -143,12 +143,12 @@ export const CATEGORIES_DATA = [
             slug: "bags",
             mobileLevel2: "",
             subcategoryItemChildren: [
-              { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" }},
+              { id: "52d6e93f-09cb-4861-82f9-7b14e9c5f2a7", name: "Handbags", slug: "handbags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], tags_optional: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" }},
               { id: "b3f2e1c4-d5a6-4b78-9e01-2f3c4a5b6d7e", name: "Backpacks", slug: "backpacks", mobileLevel3: "Bags", tags_required: [ "ar_type", "gender", "material", "indoor_outdoor" ], tag_defaults: { "ar_type": "horizontal-plane detection" } },
-              { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
-              { id: "f4e3d2c1-a5b6-7c8d-9e01-2a3b4c5d6e7f", name: "Shoulder Bags", slug: "shoulder-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } }, 
-              { id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", name: "Tote Bags", slug: "tote-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
-              { id: "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c", name: "Clutches", slug: "clutches", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], optional_tags: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } }
+              { id: "e9d8c7b6-5a4f-3e21-0c9b-8a7d6e5c4b3a", name: "Crossbody Bags", slug: "crossbody-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], tags_optional: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
+              { id: "f4e3d2c1-a5b6-7c8d-9e01-2a3b4c5d6e7f", name: "Shoulder Bags", slug: "shoulder-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], tags_optional: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } }, 
+              { id: "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d", name: "Tote Bags", slug: "tote-bags", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], tags_optional: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } },
+              { id: "6f7a8b9c-0d1e-2f3a-4b5c-6d7e8f9a0b1c", name: "Clutches", slug: "clutches", mobileLevel3: "Bags", tags_required: ["ar_type", "gender", "material"], tags_optional: ["indoor_outdoor"], tag_defaults: { "ar_type": "horizontal-plane detection" } }
             ]
           },
           {
@@ -159,11 +159,11 @@ export const CATEGORIES_DATA = [
             subcategoryItemChildren: [
               { id: "a43e7f92-5c87-49d3-9f72-3e5b947f81d2", name: "Earrings", slug: "earrings", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
               { id: "9c5b94b1-35ad-49bb-b118-8e8fc24abf80", name: "Necklaces", slug: "necklaces", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "face-tracking" } },
-              { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", name: "Rings", slug: "rings", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], optional_tags: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } },
+              { id: "83f4a75c-92d3-42a5-88f9-4e7c5b2f381a", name: "Rings", slug: "rings", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tags_optional: ["gemstone"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "8b24c7f9-83d5-4a2f-985c-7e4f3812b390", name: "Bracelets", slug: "bracelets", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "4f8b2c07-3e98-4d87-9c5a-5e9d437e8f3a", name: "Plated Jewelry", slug: "plated-jewelry", mobileLevel3: "Jewelry", tags_required: ["ar_type", "gender", "material", "safety_certified"], tag_defaults: { ar_type: "handtracking" } },
-              { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", name: "Men's Watches", slug: "mens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
-              { id: "019b909d-20f0-723b-a280-4cbe38cbd9e2", name: "Women's Watches", slug: "womens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
+              { id: "829dcb34-e7a9-4a5c-84f5-7381a2b3093f", name: "Men's Watches", slug: "mens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "men" } },
+              { id: "019b909d-20f0-723b-a280-4cbe38cbd9e2", name: "Women's Watches", slug: "womens-watches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "hand-tracking", gender: "women" } },
               { id: "e2b4f987-3218-403a-9024-c8d7b23f18a4", name: "Smartwatches", slug: "smartwatches", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
               { id: "c1e8b6a9-2f7d-4a3c-9b5e-6d0f8a4c2e71", name: "Watch Bands & Accessories", slug: "watch-bands-accessories", mobileLevel3: "Watches", tags_required: ["ar_type", "gender", "material"], tag_defaults: { ar_type: "hand-tracking" } },
             ]
@@ -174,9 +174,9 @@ export const CATEGORIES_DATA = [
             slug: "headwear",
             mobileLevel2: "",
             subcategoryItemChildren: [
-              { id: "019b909c-8068-76eb-96c4-4cd3b6a1480a", name: "Hats", slug: "hats", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-              { id: "326dgf98-6ed4-5c0c-91c0-12b8f88g8ed9", name: "Caps", slug: "caps", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-              { id: "019b909d-8c9a-71cb-87a6-d7b8246d47a0", name: "Beanies", slug: "beanies", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "019b909c-8068-76eb-96c4-4cd3b6a1480a", name: "Hats", slug: "hats", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "326dgf98-6ed4-5c0c-91c0-12b8f88g8ed9", name: "Caps", slug: "caps", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "019b909d-8c9a-71cb-87a6-d7b8246d47a0", name: "Beanies", slug: "beanies", mobileLevel3: "Headwear", tags_required: ["ar_type", "gender", "season", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
             ]
           },
           {
@@ -185,10 +185,10 @@ export const CATEGORIES_DATA = [
             slug: "seasonal-accessories",
             mobileLevel2: "",
             subcategoryItemChildren: [
-              { id: "7c4e5b8f-2c3a-4e9d-9f6b-6c9a1f0d8e42", name: "Gloves", slug: "gloves", mobileLevel3: "Gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
-              { id: "019b909d-be3c-705a-acc2-43c701dfb71d", name: "Scarves", slug: "scarves", mobileLevel3: "Scarves", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
-              { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", mobileLevel3: "Socks", tags_required: ["ar_type", "gender", "season", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
-              { id: "019b909e-7f5d-73b4-a0ab-61172a681785", name: "Ties", slug: "ties", mobileLevel3: "Ties", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "7c4e5b8f-2c3a-4e9d-9f6b-6c9a1f0d8e42", name: "Gloves", slug: "gloves", mobileLevel3: "Gloves", tags_required: ["ar_type", "gender", "season", "material", "safety_certified"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "hand-tracking" } },
+              { id: "019b909d-be3c-705a-acc2-43c701dfb71d", name: "Scarves", slug: "scarves", mobileLevel3: "Scarves", tags_required: ["ar_type", "gender", "season", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "face-tracking" } },
+              { id: "d5a8c4b1-8b21-4d37-9d7a-1f8e9c2b3d64", name: "Socks", slug: "socks", mobileLevel3: "Socks", tags_required: ["ar_type", "gender", "season", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "feet-tracking" } },
+              { id: "019b909e-7f5d-73b4-a0ab-61172a681785", name: "Ties", slug: "ties", mobileLevel3: "Ties", tags_required: ["ar_type", "gender", "material"], tags_optional: ["color", "pattern"], tag_defaults: { ar_type: "body-tracking" } },
             ]
           },
           {
@@ -197,8 +197,8 @@ export const CATEGORIES_DATA = [
             slug: "wallets-belts",
             mobileLevel2: "",
             subcategoryItemChildren: [
-              { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", mobileLevel3: "Wallets", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "horizontal-plane detection" } },
-              { id: "019b909c-cc81-723f-8b01-54a2179d5e93", name: "Belts", slug: "belts", mobileLevel3: "Belts", tags_required: ["ar_type", "gender", "material"], optional_tags: ["color"], tag_defaults: { ar_type: "body-tracking" } },
+              { id: "1db0843f-bbf5-4a4b-9082-1a81dc7bf934", name: "Wallets", slug: "wallets", mobileLevel3: "Wallets", tags_required: ["ar_type", "gender", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "horizontal-plane detection" } },
+              { id: "019b909c-cc81-723f-8b01-54a2179d5e93", name: "Belts", slug: "belts", mobileLevel3: "Belts", tags_required: ["ar_type", "gender", "material"], tags_optional: ["color"], tag_defaults: { ar_type: "body-tracking" } },
             ]
           }
         ]
@@ -218,7 +218,7 @@ export const CATEGORIES_DATA = [
         slug: "mobile-phones-accessories",
         mobileLevel1:"Electronics",
         subcategoryItems: [
-          { id: "d312a97f-2b27-4bfe-bf8d-5c1fdd5b1b79", name: "Smartphones", slug: "smartphones", mobileLevel2:"Phones",  tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+          { id: "d312a97f-2b27-4bfe-bf8d-5c1fdd5b1b79", name: "Smartphones", slug: "smartphones", mobileLevel2:"Phones",  tags_required: ["ar_type","indoor_outdoor","material"], tags_optional: ["brand"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "f23b7c69-dc3e-4f64-9ac4-8c48f6780ecb", name: "Cases & Covers", slug: "cases-covers", mobileLevel2:"Phones",  tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "56d49b33-5a6a-42d7-950d-505a9b0fdf62", name: "Screen Protectors", slug: "screen-protectors", mobileLevel2:"Phones",  tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "780a69a9-98b8-44d5-a8f9-c44bf9dcbf78", name: "Chargers & Cables", slug: "chargers-cables", mobileLevel2:"Phones",  tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
@@ -231,7 +231,7 @@ export const CATEGORIES_DATA = [
         slug: "computers-accessories",
         mobileLevel1:"Electronics",
         subcategoryItems: [
-          { id: "8b88334c-9531-42d9-a5fd-d4303d3c31a7", name: "Laptops", slug: "laptops", mobileLevel2:"Computers", tags_required: ["ar_type","indoor_outdoor","material"], optional_tags: ["brand"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+          { id: "8b88334c-9531-42d9-a5fd-d4303d3c31a7", name: "Laptops", slug: "laptops", mobileLevel2:"Computers", tags_required: ["ar_type","indoor_outdoor","material"], tags_optional: ["brand"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "5157a66a-e90e-4e5b-bf88-e76cf598cfbb", name: "Desktops", slug: "desktops", mobileLevel2:"Computers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "c8034c21-6254-4717-bc9e-e2d9bafc7032", name: "Monitors", slug: "monitors", mobileLevel2:"Computers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
           { id: "b5473b6b-4d3d-4987-b8a4-504bd650ff80", name: "Keyboards & Mice", slug: "keyboards-mice", mobileLevel2:"Computers", tags_required: ["ar_type","indoor_outdoor","material"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
@@ -296,12 +296,12 @@ export const CATEGORIES_DATA = [
             slug: "sofas",
             mobileLevel2:"Sofas",
             subcategoryItemChildren: [
-              { id: "02e69a1f-38e5-426d-beea-867380902c88", name: "Sectional Sofas", slug: "sectional-sofas", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
-              { id: "5402cd68-3d48-4adf-b5e5-1775d611e767", name: "Loveseats", slug: "loveseats", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
-              { id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de", name: "Recliners", slug: "recliners", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": true } },
-              { id: "3570bf56-db8d-423e-8321-c6451b4119c8", name: "Chesterfields", slug: "chesterfields", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "824d7240-6841-4ad5-97c7-3a0eb00762e6", name: "Sleeper Sofas", slug: "sleeper-sofas", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "5ca0908f-5324-4e72-84c2-6556aa4fa658", name: "Modular Sofas", slug: "modular-sofas", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "02e69a1f-38e5-426d-beea-867380902c88", name: "Sectional Sofas", slug: "sectional-sofas", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
+              { id: "5402cd68-3d48-4adf-b5e5-1775d611e767", name: "Loveseats", slug: "loveseats", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
+              { id: "e6c3f7e6-09b9-44fa-b8d3-dbeec64409de", name: "Recliners", slug: "recliners", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": true } },
+              { id: "3570bf56-db8d-423e-8321-c6451b4119c8", name: "Chesterfields", slug: "chesterfields", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "824d7240-6841-4ad5-97c7-3a0eb00762e6", name: "Sleeper Sofas", slug: "sleeper-sofas", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "5ca0908f-5324-4e72-84c2-6556aa4fa658", name: "Modular Sofas", slug: "modular-sofas", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -309,10 +309,10 @@ export const CATEGORIES_DATA = [
             name: "Chairs & Seating",
             slug: "chairs-seating",
             subcategoryItemChildren: [
-              { id: "6b0007fe-a568-4ac8-a662-93c33bb94b3e", name: "Accent Chairs", slug: "accent-chairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "da7cfa84-9557-44f8-a1af-baaea7ff1014", name: "Armchairs", slug: "armchairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "4cd717fc-85a7-4e2e-8461-41ba72569348", name: "Club Chairs", slug: "club-chairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "7e60b534-62ca-40cc-a56d-af450e8a40c3", name: "Ottomans & Poufs", slug: "ottomans-poufs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "6b0007fe-a568-4ac8-a662-93c33bb94b3e", name: "Accent Chairs", slug: "accent-chairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "da7cfa84-9557-44f8-a1af-baaea7ff1014", name: "Armchairs", slug: "armchairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "4cd717fc-85a7-4e2e-8461-41ba72569348", name: "Club Chairs", slug: "club-chairs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "7e60b534-62ca-40cc-a56d-af450e8a40c3", name: "Ottomans & Poufs", slug: "ottomans-poufs", mobileLevel3:"Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -320,9 +320,9 @@ export const CATEGORIES_DATA = [
             name: "Tables",
             slug: "tables",
             subcategoryItemChildren: [
-              { id: "d62fd072-d47d-4fa1-b31d-b1cc5b28ad90", name: "Coffee Tables", slug: "coffee-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "60920e79-6f97-45d3-abcb-dd88914e55f3", name: "End Tables", slug: "end-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "bf9d0e3a-ae29-4a0b-86bb-93d9cf1c730e", name: "Console Tables", slug: "console-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "d62fd072-d47d-4fa1-b31d-b1cc5b28ad90", name: "Coffee Tables", slug: "coffee-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "60920e79-6f97-45d3-abcb-dd88914e55f3", name: "End Tables", slug: "end-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "bf9d0e3a-ae29-4a0b-86bb-93d9cf1c730e", name: "Console Tables", slug: "console-tables",  mobileLevel3:"Tables", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -330,9 +330,9 @@ export const CATEGORIES_DATA = [
             name: "Media & Storage",
             slug: "media-storage",
             subcategoryItemChildren: [
-              { id: "17c8d78c-b19f-4f3f-bd45-482d0b0c5d11", name: "TV Stands", slug: "tv-stands", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "a0d92de3-59cd-4a07-8a56-f0f441045319", name: "Bookcases", slug: "bookcases", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "662737cf-8a24-4eb5-8e61-b2951908aa8d", name: "Storage Cabinets", slug: "storage-cabinets", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "17c8d78c-b19f-4f3f-bd45-482d0b0c5d11", name: "TV Stands", slug: "tv-stands", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "a0d92de3-59cd-4a07-8a56-f0f441045319", name: "Bookcases", slug: "bookcases", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "662737cf-8a24-4eb5-8e61-b2951908aa8d", name: "Storage Cabinets", slug: "storage-cabinets", mobileLevel3:"Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ],
           }
         ]
@@ -348,11 +348,11 @@ export const CATEGORIES_DATA = [
             name: "Beds",
             slug: "beds",
             subcategoryItemChildren: [
-              { id: "36a28079-9502-45b3-b0c2-0e9d2c0bcbd6", name: "Platform Beds", slug: "platform-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
-              { id: "21903dc8-ef6c-4a34-b221-47a8b4b4f637", name: "Upholstered Beds", slug: "upholstered-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
-              { id: "cb4b2b28-0b1c-4163-b9c8-8ccdd67a0236", name: "Canopy Beds", slug: "canopy-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "0d6158b7-2beb-4b0d-8583-18acb3338a4a", name: "Storage Beds", slug: "storage-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "5a15a4bf-8ef9-4113-ae4f-b9ede7178d1d", name: "Adjustable Beds", slug: "adjustable-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": true } }
+              { id: "36a28079-9502-45b3-b0c2-0e9d2c0bcbd6", name: "Platform Beds", slug: "platform-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
+              { id: "21903dc8-ef6c-4a34-b221-47a8b4b4f637", name: "Upholstered Beds", slug: "upholstered-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": false } },
+              { id: "cb4b2b28-0b1c-4163-b9c8-8ccdd67a0236", name: "Canopy Beds", slug: "canopy-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "0d6158b7-2beb-4b0d-8583-18acb3338a4a", name: "Storage Beds", slug: "storage-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "5a15a4bf-8ef9-4113-ae4f-b9ede7178d1d", name: "Adjustable Beds", slug: "adjustable-beds", mobileLevel3:"Beds", tags_required: ["ar_type", "indoor_outdoor", "material", "accessible"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor", "accessible": true } }
             ]
           },
           {
@@ -360,8 +360,8 @@ export const CATEGORIES_DATA = [
             name: "Dressers & Chests",
             slug: "dressers-chests",
             subcategoryItemChildren: [
-              { id: "f78bd691-cd05-4195-b38a-71065c914ea7", name: "6-Drawer Dressers", slug: "6-drawer-dressers",  mobileLevel3:"Dressers", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "db256369-53f5-4c2b-b1ea-e4c506fe3305", name: "Chests of Drawers", slug: "chests-of-drawers",  mobileLevel3:"Dressers", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "f78bd691-cd05-4195-b38a-71065c914ea7", name: "6-Drawer Dressers", slug: "6-drawer-dressers",  mobileLevel3:"Dressers", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "db256369-53f5-4c2b-b1ea-e4c506fe3305", name: "Chests of Drawers", slug: "chests-of-drawers",  mobileLevel3:"Dressers", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -369,8 +369,8 @@ export const CATEGORIES_DATA = [
             name: "Nightstands & Side Tables",
             slug: "nightstands-side-tables",
             subcategoryItemChildren: [
-              { id: "bceebfde-665b-4f5d-a4bc-55068dc10b1a", name: "Single Drawer Nightstands", slug: "single-drawer-nightstands", mobileLevel3:"Nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "5e9e56a3-5842-4f74-bc24-0ce6b08de3f3", name: "Double Drawer Nightstands", slug: "double-drawer-nightstands", mobileLevel3:"Nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "bceebfde-665b-4f5d-a4bc-55068dc10b1a", name: "Single Drawer Nightstands", slug: "single-drawer-nightstands", mobileLevel3:"Nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "5e9e56a3-5842-4f74-bc24-0ce6b08de3f3", name: "Double Drawer Nightstands", slug: "double-drawer-nightstands", mobileLevel3:"Nightstands", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -378,8 +378,8 @@ export const CATEGORIES_DATA = [
             name: "Wardrobes & Armoires",
             slug: "wardrobes-armoires",
             subcategoryItemChildren: [
-              { id: "d2e1bd8b-c009-45e3-b3d8-ff61b9f25c3d", name: "2-Door Wardrobes", slug: "2-door-wardrobes", mobileLevel3:"Wardrobe", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "95346994-dca3-4892-92b2-1a1c03c3112c", name: "Sliding Door Wardrobes", slug: "sliding-door-wardrobes", mobileLevel3:"Wardrobe", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "d2e1bd8b-c009-45e3-b3d8-ff61b9f25c3d", name: "2-Door Wardrobes", slug: "2-door-wardrobes", mobileLevel3:"Wardrobe", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "95346994-dca3-4892-92b2-1a1c03c3112c", name: "Sliding Door Wardrobes", slug: "sliding-door-wardrobes", mobileLevel3:"Wardrobe", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           }
         ]
@@ -395,9 +395,9 @@ export const CATEGORIES_DATA = [
             name: "Desks",
             slug: "desks",
             subcategoryItemChildren: [
-              { id: "9215688d-a05f-444e-ab96-c8ff54a2b504", name: "Writing Desks", slug: "writing-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "5a384129-b8f1-448b-b8ca-ac1fd66f7610", name: "Standing Desks", slug: "standing-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "d1f7b773-de48-44fc-9380-f6f9c8d9c7fd", name: "Executive Desks", slug: "executive-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "9215688d-a05f-444e-ab96-c8ff54a2b504", name: "Writing Desks", slug: "writing-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "5a384129-b8f1-448b-b8ca-ac1fd66f7610", name: "Standing Desks", slug: "standing-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "d1f7b773-de48-44fc-9380-f6f9c8d9c7fd", name: "Executive Desks", slug: "executive-desks", mobileLevel3:"Desks", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -405,9 +405,9 @@ export const CATEGORIES_DATA = [
             name: "Office Chairs",
             slug: "office-chairs",
             subcategoryItemChildren: [
-              { id: "f57a60c3-ec74-4f05-85d5-490885885851", name: "Ergonomic Chairs", slug: "ergonomic-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "983beb19-8289-4f4d-8282-0e6944bac291", name: "Task Chairs", slug: "task-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "5aad749a-08f4-42d7-a608-cd05e17a91d8", name: "Executive Chairs", slug: "executive-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "f57a60c3-ec74-4f05-85d5-490885885851", name: "Ergonomic Chairs", slug: "ergonomic-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "983beb19-8289-4f4d-8282-0e6944bac291", name: "Task Chairs", slug: "task-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "5aad749a-08f4-42d7-a608-cd05e17a91d8", name: "Executive Chairs", slug: "executive-chairs", mobileLevel3:"Office Chairs", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ]
           },
           {
@@ -415,8 +415,8 @@ export const CATEGORIES_DATA = [
             name: "Storage",
             slug: "storage",
             subcategoryItemChildren: [
-              { id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8", name: "Filing Cabinets", slug: "filing-cabinets", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b", name: "Bookcases & Shelving", slug: "bookcases-shelving", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "51ca1adb-7cfc-4861-ad68-fdf5440662e8", name: "Filing Cabinets", slug: "filing-cabinets", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "36e55d3e-6d5e-46d3-afa6-3942cf88181b", name: "Bookcases & Shelving", slug: "bookcases-shelving", mobileLevel3:"Office Storage", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } }
             ],
           }
         ]
@@ -432,10 +432,10 @@ export const CATEGORIES_DATA = [
             name: "Seating Sets",
             slug: "seating-sets",
             subcategoryItemChildren: [
-              { id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90", name: "Patio Sets", slug: "patio-sets", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-              { id: "c4752303-edf7-4a3a-914b-bf9968bca34d", name: "Sling Chairs", slug: "sling-chairs", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-              { id: "dae7d09f-cdae-4cf7-8d3b-b547fbf9550a", name: "Chaise Lounges", slug: "chaise-lounges", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-              { id: "34a71bfe-4388-4c2e-8a50-b7969e706387", name: "Adirondack Chairs", slug: "adirondack-chairs", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
+              { id: "3c71d8af-12bb-4dbf-b6c7-b7bb9f5cda90", name: "Patio Sets", slug: "patio-sets", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+              { id: "c4752303-edf7-4a3a-914b-bf9968bca34d", name: "Sling Chairs", slug: "sling-chairs", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+              { id: "dae7d09f-cdae-4cf7-8d3b-b547fbf9550a", name: "Chaise Lounges", slug: "chaise-lounges", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+              { id: "34a71bfe-4388-4c2e-8a50-b7969e706387", name: "Adirondack Chairs", slug: "adirondack-chairs", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
             ],
           },
           {
@@ -443,8 +443,8 @@ export const CATEGORIES_DATA = [
             name: "Tables",
             slug: "tables",
             subcategoryItemChildren: [
-              { id: "77867f34-14ce-4762-9dc5-ccafe10f52cb", name: "Dining Tables", slug: "dining-tables", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-              { id: "d0e1b2c3-4a5f-4b6c-8a7d-e9f0d1a2b3c4", name: "Bistro Tables", slug: "bistro-tables", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
+              { id: "77867f34-14ce-4762-9dc5-ccafe10f52cb", name: "Dining Tables", slug: "dining-tables", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+              { id: "d0e1b2c3-4a5f-4b6c-8a7d-e9f0d1a2b3c4", name: "Bistro Tables", slug: "bistro-tables", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
             ],
           },
           {
@@ -452,8 +452,8 @@ export const CATEGORIES_DATA = [
             name: "Shade & Shelter",
             slug: "shade-shelter",
             subcategoryItemChildren: [
-              { id: "a9b8c7d6-e5f4-4a3b-9d8c-7e6f5d4c3b2a", name: "Umbrellas", slug: "umbrellas", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-               { id: "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e", name: "Gazebos", slug: "gazebos", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
+              { id: "a9b8c7d6-e5f4-4a3b-9d8c-7e6f5d4c3b2a", name: "Umbrellas", slug: "umbrellas", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+               { id: "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e", name: "Gazebos", slug: "gazebos", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
             ],
           },
           {
@@ -461,8 +461,8 @@ export const CATEGORIES_DATA = [
             name: "Storage",
             slug: "outdoor-storage",
             subcategoryItemChildren: [
-              { id: "d9e8f7a6-b5c4-4d3e-9f0a-1b2c3d4e5f6a", name: "Deck Boxes", slug: "deck-boxes", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
-              { id: "e7f6d5a4-c3b2-4c1d-8e9f-0a1b2c3d4e5f", name: "Garden Sheds", slug: "garden-sheds", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
+              { id: "d9e8f7a6-b5c4-4d3e-9f0a-1b2c3d4e5f6a", name: "Deck Boxes", slug: "deck-boxes", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } },
+              { id: "e7f6d5a4-c3b2-4c1d-8e9f-0a1b2c3d4e5f", name: "Garden Sheds", slug: "garden-sheds", mobileLevel3:"Outdoor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "outdoor" } }
             ],
           }
         ]
@@ -478,10 +478,10 @@ export const CATEGORIES_DATA = [
             name: "Lighting",
             slug: "lighting",
             subcategoryItemChildren: [
-              { id: "1a2b3c4d-5e6f-7a8b-9c0d-e1f2a3b4c5d6", name: "Ceiling Fixtures", slug: "ceiling-fixtures", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e", name: "Wall Sconces", slug: "wall-sconces", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Table Lamps", slug: "table-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
-              { id: "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f90", name: "Floor Lamps", slug: "floor-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], optional_tags: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
+              { id: "1a2b3c4d-5e6f-7a8b-9c0d-e1f2a3b4c5d6", name: "Ceiling Fixtures", slug: "ceiling-fixtures", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e", name: "Wall Sconces", slug: "wall-sconces", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "vertical-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "3c4d5e6f-7a8b-9c0d-1e2f-3a4b5c6d7e8f", name: "Table Lamps", slug: "table-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } },
+              { id: "4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f90", name: "Floor Lamps", slug: "floor-lamps", mobileLevel3:"Home Decor", tags_required: ["ar_type", "indoor_outdoor", "material"], tags_optional: ["style"], tag_defaults: { "ar_type": "horizontal-plane detection", "indoor_outdoor": "indoor" } }
             ],
           },
           {
@@ -525,7 +525,7 @@ export const CATEGORIES_DATA = [
                 slug: "area-rugs",
                 mobileLevel2: "Rugs",  
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type"],
+                tags_optional: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -534,7 +534,7 @@ export const CATEGORIES_DATA = [
                 slug: "runner-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type"],
+                tags_optional: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -543,7 +543,7 @@ export const CATEGORIES_DATA = [
                 slug: "outdoor-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "weather_resistant", "uv_resistant", "backing_type"],
+                tags_optional: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "weather_resistant", "uv_resistant", "backing_type"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "outdoor" }
               },
               {
@@ -552,7 +552,7 @@ export const CATEGORIES_DATA = [
                 slug: "kids-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "non_slip", "accessible"],
+                tags_optional: ["shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "non_slip", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -561,7 +561,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-rugs",
                 mobileLevel2: "Rugs",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["size", "shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type", "accessible"],
+                tags_optional: ["size", "shape", "color", "pattern", "pile_height", "style", "room_type", "washable", "backing_type", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
             ]
@@ -578,7 +578,7 @@ export const CATEGORIES_DATA = [
                 slug: "hardwood-flooring",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "color", "finish"],
-                optional_tags: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "species", "grade", "texture"],
+                tags_optional: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "species", "grade", "texture"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -587,7 +587,7 @@ export const CATEGORIES_DATA = [
                 slug: "laminate-flooring",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "color", "finish"],
-                optional_tags: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "water_resistant", "scratch_resistant", "texture"],
+                tags_optional: ["plank_width", "plank_length", "thickness", "installation_method", "coverage_sqft", "water_resistant", "scratch_resistant", "texture"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -596,7 +596,7 @@ export const CATEGORIES_DATA = [
                 slug: "vinyl-flooring",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "color", "installation_method"],
-                optional_tags: ["product_format", "wear_layer_mil", "overall_thickness", "plank_width", "plank_length", "tile_size", "waterproof", "water_resistant", "texture", "coverage_sqft"],
+                tags_optional: ["product_format", "wear_layer_mil", "overall_thickness", "plank_width", "plank_length", "tile_size", "waterproof", "water_resistant", "texture", "coverage_sqft"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -605,7 +605,7 @@ export const CATEGORIES_DATA = [
                 slug: "tile-flooring",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "finish", "tile_size"],
-                optional_tags: ["tile_shape", "color", "pattern", "pei_rating", "slip_resistance", "water_resistant", "waterproof", "installation_method", "coverage_sqft"],
+                tags_optional: ["tile_shape", "color", "pattern", "pei_rating", "slip_resistance", "water_resistant", "waterproof", "installation_method", "coverage_sqft"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -614,7 +614,7 @@ export const CATEGORIES_DATA = [
                 slug: "carpet-and-carpet-tiles",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "color"],
-                optional_tags: ["pile_height", "carpet_style", "tile_size", "pattern", "stain_resistant", "installation_method", "coverage_sqft", "accessible"],
+                tags_optional: ["pile_height", "carpet_style", "tile_size", "pattern", "stain_resistant", "installation_method", "coverage_sqft", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -623,7 +623,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-flooring",
                 mobileLevel2: "Flooring",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["color", "finish", "installation_method", "coverage_sqft", "pattern", "accessible"],
+                tags_optional: ["color", "finish", "installation_method", "coverage_sqft", "pattern", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
             ]
@@ -640,7 +640,7 @@ export const CATEGORIES_DATA = [
                 slug: "door-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "non_slip", "weather_resistant", "washable"],
+                tags_optional: ["shape", "color", "pattern", "non_slip", "weather_resistant", "washable"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "outdoor" }
               },
               {
@@ -649,7 +649,7 @@ export const CATEGORIES_DATA = [
                 slug: "floor-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "room_type", "non_slip", "washable", "accessible"],
+                tags_optional: ["shape", "color", "pattern", "room_type", "non_slip", "washable", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -658,7 +658,7 @@ export const CATEGORIES_DATA = [
                 slug: "bathroom-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "non_slip", "absorbency", "quick_dry", "washable", "accessible"],
+                tags_optional: ["shape", "color", "pattern", "non_slip", "absorbency", "quick_dry", "washable", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -667,7 +667,7 @@ export const CATEGORIES_DATA = [
                 slug: "kitchen-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "color", "pattern", "anti_fatigue", "non_slip", "washable", "accessible"],
+                tags_optional: ["shape", "color", "pattern", "anti_fatigue", "non_slip", "washable", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -676,7 +676,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-mats",
                 mobileLevel2: "Mats",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["size", "shape", "color", "pattern", "room_type", "non_slip", "washable", "accessible"],
+                tags_optional: ["size", "shape", "color", "pattern", "room_type", "non_slip", "washable", "accessible"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
             ],
@@ -693,7 +693,7 @@ export const CATEGORIES_DATA = [
                 slug: "rug-pads",
                 mobileLevel2: "Accessories",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "size"],
-                optional_tags: ["shape", "thickness", "grip_level", "floor_type_compatibility"],
+                tags_optional: ["shape", "thickness", "grip_level", "floor_type_compatibility"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -702,7 +702,7 @@ export const CATEGORIES_DATA = [
                 slug: "floor-underlayment",
                 mobileLevel2: "Accessories",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["thickness", "soundproofing", "waterproof", "water_resistant", "floor_type_compatibility", "installation_method", "coverage_sqft"],
+                tags_optional: ["thickness", "soundproofing", "waterproof", "water_resistant", "floor_type_compatibility", "installation_method", "coverage_sqft"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -711,7 +711,7 @@ export const CATEGORIES_DATA = [
                 slug: "transition-strips",
                 mobileLevel2: "Accessories",
                 tags_required: ["ar_type", "indoor_outdoor", "material", "color"],
-                optional_tags: ["finish", "profile_type", "floor_type_compatibility", "installation_method"],
+                tags_optional: ["finish", "profile_type", "floor_type_compatibility", "installation_method"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               },
               {
@@ -720,7 +720,7 @@ export const CATEGORIES_DATA = [
                 slug: "other-rugs-and-flooring-accessories",
                 mobileLevel2: "Accessories",
                 tags_required: ["ar_type", "indoor_outdoor", "material"],
-                optional_tags: ["size", "shape", "color", "finish", "floor_type_compatibility", "installation_method"],
+                tags_optional: ["size", "shape", "color", "finish", "floor_type_compatibility", "installation_method"],
                 tag_defaults: { ar_type: "horizontal-plane detection", indoor_outdoor: "indoor" }
               }
             ],

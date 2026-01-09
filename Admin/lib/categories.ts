@@ -4,7 +4,7 @@ export type SubcategoryItemChild = {
   slug: string
   mobileLevel3?: string
   tags_required?: string[]
-  optional_tags?: string[]
+  tags_optional?: string[]
   tag_defaults?: Record<string, string>
 }
 
@@ -14,7 +14,7 @@ export type SubcategoryItem = {
   slug: string
   mobileLevel2?: string
   tags_required?: string[]
-  optional_tags?: string[]
+  tags_optional?: string[]
   tag_defaults?: Record<string, string>
   subcategoryItemChildren?: SubcategoryItemChild[]
 }

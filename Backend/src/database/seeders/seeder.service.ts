@@ -93,7 +93,7 @@ export class SeederService implements OnApplicationBootstrap {
               subcategory,
               // ✅ NEW: Add tag properties to SubcategoryItem
               tags_required: subcategoryItemData.tags_required,
-              optional_tags: subcategoryItemData.optional_tags,
+              tags_optional: subcategoryItemData.tags_optional,
               tag_defaults: subcategoryItemData.tag_defaults,
               mobileLevel2: subcategoryItemData.mobileLevel2,
               mobileLevel2Name: subcategoryItemData.mobileLevel2Name,
@@ -111,7 +111,7 @@ export class SeederService implements OnApplicationBootstrap {
                   slug: subcategoryItemChildData.slug,
                   subcategoryItem: subcategoryItem,
                   tags_required: subcategoryItemChildData.tags_required,
-                  optional_tags: subcategoryItemChildData.optional_tags,
+                  tags_optional: subcategoryItemChildData.tags_optional,
                   tag_defaults: subcategoryItemChildData.tag_defaults,
                   mobileLevel3: subcategoryItemChildData.mobileLevel3,
                   mobileLevel3Name: subcategoryItemChildData.mobileLevel3Name,

@@ -19,7 +19,7 @@ export class SubcategoryItemChild {
   tags_required: string[];
 
   @Column('simple-array', { nullable: true })
-  optional_tags: string[];
+  tags_optional: string[];
 
   @Column('json', { nullable: true })
   tag_defaults: { [key: string]: string };
@@ -37,7 +37,6 @@ export class SubcategoryItemChild {
   @Column({ nullable: true })
   mobileLevel3: string;
 
-  //NEW ATTRIBUTE
   @Column({ nullable: true })
   mobileLevel3Name: string;
 

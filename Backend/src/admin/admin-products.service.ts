@@ -18,6 +18,7 @@ export class AdminProductsService {
     genders?: string[],
     ageGroups?: string[],
     companyId?: string,
+    withVariants: boolean = false
   ) {
     const adminContext: QueryContext = {
       userRole: UserRole.ADMIN,
@@ -33,6 +34,7 @@ export class AdminProductsService {
       genders,
       ageGroups,
       companyId,
+      withVariants
     );
   }
 

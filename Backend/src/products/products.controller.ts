@@ -14,6 +14,7 @@ import { SearchResultResponse } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductVariantsDto } from './dto/update-product-variants.dto';
 import { ProductDetailDto } from './dto/product-response.dto';
+import { BulkImportDto, BulkImportResponseDto } from './dto/bulk-import.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -106,6 +107,14 @@ export class ProductsController {
   async getProductsByCompany(@Param('companyId') companyId: string): Promise<Product[]> {
     // Assuming ProductsService has a method to find products by company ID
     return this.productsService.findByCompany(companyId); 
+  }
+
+  // ============================================
+  // NEW: Bulk Import Endpoint
+  // ============================================
+  @Post('bulk')
+  async bulkImport(@Body() dto: BulkImportDto): Promise<BulkImportResponseDto> {
+    return this.productsService.bulkImportProducts(dto);
   }
 }
 

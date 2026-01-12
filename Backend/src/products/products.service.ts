@@ -1750,7 +1750,6 @@ export class ProductsService {
   // ============================================
   // Add this method to your ProductsService class
   // ============================================
-
   async bulkImportProducts(dto: BulkImportDto): Promise<BulkImportResponseDto> {
     const response: BulkImportResponseDto = {
       totalProcessed: 0,
@@ -1763,7 +1762,8 @@ export class ProductsService {
     };
 
     const firstCompany = await this.companiesRepository.findOne({
-      where: {} });
+      where: {} 
+    });
 
     if (!firstCompany) {
       throw new Error('No company found in the database. Please create at least one company first.');
@@ -1791,12 +1791,14 @@ export class ProductsService {
           }
         }
 
+        // Step 1: Create/Update the product (this auto-generates basic variants)
         const createDto = await this.transformProductionDataToDto(productData, firstCompany.id);
+        const savedProduct = await this.upsert(existingProduct?.id, createDto);
 
-        const savedProduct = await this.upsert(
-          existingProduct?.id,
-          createDto
-        );
+        // ⭐ Step 2: Update variants with the actual data from productData
+        if (productData.variants && productData.variants.length > 0) {
+          await this.updateVariantsFromProductionData(savedProduct.id, productData);
+        }
 
         if (existingProduct) {
           response.updated++;
@@ -1924,6 +1926,53 @@ export class ProductsService {
     };
 
     return payload;
+  }
+
+  // ⭐ NEW METHOD: Update variants with production data
+  private async updateVariantsFromProductionData(
+    productId: string,
+    productData: ProductionProductData
+  ): Promise<void> {
+    // Load the product with fresh IDs
+    const product = await this.productRepository.findOne({
+      where: { id: productId },
+      relations: ['colors', 'sizes', 'variants'],
+    });
+
+    if (!product || !productData.variants) {
+      return;
+    }
+
+    // Create maps for quick lookup
+    const colorMap = new Map(product.colors.map(c => [c.name.toLowerCase(), c]));
+    const sizeMap = new Map(product.sizes.map(s => [s.size.toLowerCase(), s]));
+
+    // Update each variant with the production data
+    for (const variantData of productData.variants) {
+      const color = colorMap.get(variantData.color.name.toLowerCase());
+      const size = sizeMap.get(variantData.size.size.toLowerCase());
+
+      if (!color || !size) {
+        console.warn(`⚠️ Variant not found: ${variantData.color.name}-${variantData.size.size}`);
+        continue;
+      }
+
+      // Find the matching variant
+      const variant = product.variants.find(
+        v => v.color?.id === color.id && v.size?.id === size.id
+      );
+
+      if (variant) {
+        // Update the variant with production data
+        variant.sku = variantData.sku;
+        variant.stock = variantData.stock;
+        variant.price = variantData.price;
+        variant.salePrice = variantData.salePrice || 0;
+        variant.cost = variantData.cost || 0;
+
+        await this.productVariantRepository.save(variant);
+      }
+    }
   }
 
 }

@@ -24,8 +24,6 @@ export class UploadController {
     };
   }
 
-
-
   /**
    * Upload file and convert to glTF (existing flow)
    */

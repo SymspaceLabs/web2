@@ -42,7 +42,7 @@ export interface ProductionProductData {
       max: number[];
       min: number[];
     };
-  }>;
+  }>;  
   colors: Array<{
     id: string;
     name: string;
@@ -70,6 +70,36 @@ export interface ProductionProductData {
   age_group?: string;
   indoor_outdoor?: string;
   style?: string;
+
+  // ⭐ ADD THIS: Variants property
+  variants?: Array<{
+    sku: string;
+    stock: number;
+    price: number;
+    salePrice?: number;
+    cost?: number;
+    color: {
+      id?: string;
+      name: string;
+      code: string;
+    };
+    size: {
+      id?: string;
+      size: string;
+      sortOrder?: number;
+      sizeChartUrl?: string;
+      dimensions?: {
+        unit: 'in' | 'cm';
+        width?: number | null;
+        height?: number | null;
+        length?: number | null;
+      } | null;
+      productWeight?: {
+        unit: 'kg' | 'lbs';
+        value: number;
+      } | null;
+    };
+  }>;
 }
 
 // ============================================

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from 'minio';
 import { Readable } from 'stream';
+import mime from 'mime-types';
 
 @Injectable()
 export class MinioService {
@@ -30,19 +31,35 @@ export class MinioService {
 
   async uploadFile(file: Express.Multer.File) {
     await this.ensureBucketExists();
-    await this.setBucketPolicy(); // ensure bucket is public
+    await this.setBucketPolicy();
 
-    const objectName = `${Date.now()}-${file.originalname.trim().replace(/\s+/g, '-')}`;
+    const extension = mime.extension(file.mimetype);
+    if (!extension) {
+      throw new Error(`Unsupported mime type: ${file.mimetype}`);
+    }
+
+    const safeName = file.originalname
+      .replace(/\.[^/.]+$/, '') // remove original extension
+      .trim()
+      .replace(/\s+/g, '-');
+
+    const objectName = `${Date.now()}-${safeName}.${extension}`;
     const stream = Readable.from(file.buffer);
 
-    await this.minioClient.putObject(this.bucketName, objectName, stream, file.size, {
-      'Content-Type': file.mimetype,
-    });
+    await this.minioClient.putObject(
+      this.bucketName,
+      objectName,
+      stream,
+      file.size,
+      {
+        'Content-Type': file.mimetype,
+      },
+    );
 
-    // Public URL
     const publicBaseUrl = this.configService.get<string>('MINIO_PUBLIC_BASE_URL');
     return `${publicBaseUrl}/${this.bucketName}/${objectName}`;
   }
+
 
 
   async getSignedUrl(objectName: string, expirySeconds = 3600) {

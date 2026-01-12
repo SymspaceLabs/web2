@@ -12,8 +12,9 @@ export class ProductMapper {
    * Maps internal Product entity to clean API response DTO
    * Follows the Single Responsibility Principle
    */
-  static toListItemDto(product: any): ProductListItemDto {
-    return {
+  static toListItemDto(product: any, variants?:boolean): ProductListItemDto {
+
+    const payload :any = {
       id: product.id,
       name: product.name,
       slug: product.slug,
@@ -39,7 +40,13 @@ export class ProductMapper {
       
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
-    };
+    }
+
+    if(variants){
+      payload.variants = this.mapVariants(product.variants)
+    }
+
+    return payload;
   }
 
   static toDetailDto(product: any): ProductDetailDto {

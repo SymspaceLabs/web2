@@ -22,6 +22,7 @@ import { ProductDetailDto } from './dto/product-response.dto';
 import { ProductMapper } from './utils/product-mappers';
 import { extractGranularCategory } from './utils/category-helpers';
 import { UserRole } from 'src/users/entities/user.entity';
+import { BulkImportDto, BulkImportResponseDto, ProductionProductData } from './dto/bulk-import.dto';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -424,6 +425,7 @@ export class ProductsService {
     genders?: string[],
     ageGroups?: string[],
     companyId?: string,
+    withVariants?: boolean
   ) {
     // Build query with CRITICAL joins for hierarchy
     const productsQuery = this.productRepository
@@ -504,7 +506,7 @@ export class ProductsService {
     const finalCategoryFacets = this.getCategoryFacets(products);
     const { availabilities, colors } = this.getOtherFacets(products); 
 
-    const productDtos = products.map(p => ProductMapper.toListItemDto(p));
+    const productDtos = products.map(p => ProductMapper.toListItemDto(p,withVariants));
 
     return {
       products: productDtos,
@@ -1743,6 +1745,185 @@ export class ProductsService {
         where: { company: { id: companyId } }, // Assuming 'company' is a relation
         relations: ['variants', 'images', 'colors', 'sizes'], 
     });
+  }
+
+  // ============================================
+  // Add this method to your ProductsService class
+  // ============================================
+
+  async bulkImportProducts(dto: BulkImportDto): Promise<BulkImportResponseDto> {
+    const response: BulkImportResponseDto = {
+      totalProcessed: 0,
+      created: 0,
+      updated: 0,
+      skipped: 0,
+      failed: 0,
+      results: [],
+      errors: [],
+    };
+
+    const firstCompany = await this.companiesRepository.findOne({
+      where: {} });
+
+    if (!firstCompany) {
+      throw new Error('No company found in the database. Please create at least one company first.');
+    }
+
+    for (const productData of dto.products) {
+      response.totalProcessed++;
+      
+      try {
+        const generatedSlug = `${slugify(firstCompany.entityName)}-${slugify(productData.name)}`;
+
+        const existingProduct = await this.productRepository.findOne({
+          where: { slug: generatedSlug },
+        });
+
+        if (existingProduct) {
+          if (dto.skipExisting && !dto.updateExisting) {
+            response.skipped++;
+            response.results.push({
+              slug: generatedSlug,
+              status: 'skipped',
+              productId: existingProduct.id,
+            });
+            continue;
+          }
+        }
+
+        const createDto = await this.transformProductionDataToDto(productData, firstCompany.id);
+
+        const savedProduct = await this.upsert(
+          existingProduct?.id,
+          createDto
+        );
+
+        if (existingProduct) {
+          response.updated++;
+          response.results.push({
+            slug: generatedSlug,
+            status: 'updated',
+            productId: savedProduct.id,
+          });
+        } else {
+          response.created++;
+          response.results.push({
+            slug: generatedSlug,
+            status: 'created',
+            productId: savedProduct.id,
+          });
+        }
+
+      } catch (error) {
+        response.failed++;
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        
+        response.results.push({
+          slug: productData.slug,
+          status: 'failed',
+          error: errorMessage,
+        });
+        
+        response.errors.push({
+          slug: productData.slug,
+          error: errorMessage,
+        });
+        
+        console.error(`Failed to import product ${productData.name}:`, error);
+      }
+    }
+
+    return response;
+  }
+
+  private async transformProductionDataToDto(
+    productData: ProductionProductData,
+    companyId: string
+  ): Promise<any> {
+    // 1. Find category hierarchy
+    let subcategoryItemId: string | undefined;
+    let subcategoryItemChildId: string | undefined;
+
+    if (productData.category) {
+      const categorySlug = productData.category.slug;
+      
+      const subcategoryItemChild = await this.subcategoryItemChildRepository.findOne({
+        where: { slug: categorySlug },
+      });
+      
+      if (subcategoryItemChild) {
+        subcategoryItemChildId = subcategoryItemChild.id;
+      } else {
+        const subcategoryItem = await this.subcategoryItemRepository.findOne({
+          where: { slug: categorySlug },
+        });
+        
+        if (subcategoryItem) {
+          subcategoryItemId = subcategoryItem.id;
+        }
+      }
+    }
+
+    // 2. Transform images
+    const images = productData.images?.map(img => ({
+      url: img.url,
+      colorCode: img.colorCode,
+    })) || [];
+
+    // 3. Transform colors
+    const colors = productData.colors?.map(color => ({
+      name: color.name,
+      code: color.code,
+    })) || [];
+
+    // 4. Transform sizes (IMPORTANT: Must be objects with 'size' property to match database schema)
+    const sizes = productData.sizes?.map(size => ({
+      size: size.size,
+      sortOrder: size.sortOrder || 0,
+      sizeChartUrl: size.sizeChart || null,
+    })) || [];
+
+    // 5. Transform 3D models
+    const threeDModels = productData.threeDModels?.map(model => ({
+      url: model.url,
+      colorCode: model.colorCode,
+    })) || [];
+
+    // 6. Build the payload
+    const payload = {
+      name: productData.name,
+      price: productData.displayPrice?.price || 0,
+      salePrice: productData.displayPrice?.salePrice || 0,
+      company: companyId,
+      subcategoryItem: subcategoryItemId,
+      subcategoryItemChild: subcategoryItemChildId,
+      description: productData.description || null,
+      status: productData.status || 'Draft',
+      composition: productData.material || null,
+      sizeFit: null,
+      sizeChart: productData.sizes?.[0]?.sizeChart || null,
+      gender: productData.gender || 'unisex',
+      ar_type: productData.ar_type || null,
+      material: productData.material || null,
+      age_group: productData.age_group || 'adult',
+      season: productData.season || 'all-season',
+      productWeight: productData.sizes?.[0]?.productWeight?.value || null,
+      productWeightUnit: productData.sizes?.[0]?.productWeight?.unit || 'kg',
+      occasion: productData.occasion || 'casual',
+      images,
+      colors,
+      sizes,
+      threeDModels,
+      shape: productData.shape,
+      pattern: productData.pattern,
+      pile_height: productData.pile_height,
+      room_type: productData.room_type,
+      washable: productData.washable,
+      backing_type: productData.backing_type,
+      style: productData.style,
+    };
+
+    return payload;
   }
 
 }

@@ -10,7 +10,7 @@ import {
 import { Type } from 'class-transformer';
 import { CreateProductColorDto } from 'src/product-colors/dto/create-product-color.dto';
 import { CreateProductVariantDto } from 'src/product-variant/dto/create-product-variant.dto';
-import { ProductGender } from '../entities/product.entity';
+import { ProductGender, ProductStatus } from '../entities/product.entity';
 import { CreateProductImageDto } from 'src/product-images/dto/create-product-image.dto';
 import { CreateProduct3dModelDto } from 'src/product-3d-models/dto/create-product-3d-model.dto';
 import { CreateProductSizeDto } from 'src/product-sizes/dto/create-product-size.dto';
@@ -69,7 +69,7 @@ export class CreateProductDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateProductVariantDto)
-  variants: CreateProductVariantDto[];
+  variants?: CreateProductVariantDto[];
 
   @IsOptional()
   @IsEnum(ProductGender)
@@ -80,6 +80,10 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateProduct3dModelDto)
   threeDModels?: CreateProduct3dModelDto[];
+
+  @IsString()
+  @IsOptional()
+  status?: ProductStatus;
 
   // ============================================
   // EXISTING OPTIONAL TAG FIELDS

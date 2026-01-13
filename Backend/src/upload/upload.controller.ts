@@ -1,4 +1,4 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MinioService } from '../minio/minio.service';
 import { UploadService } from './upload.service';
@@ -14,7 +14,9 @@ export class UploadController {
   @Post('file')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    if (!file) return { message: 'No file provided' };
+    if (!file) {
+      throw new BadRequestException('No file provided');
+    }
 
     const fileUrl = await this.minioService.uploadFile(file);
 
@@ -24,21 +26,4 @@ export class UploadController {
     };
   }
 
-  /**
-   * Upload file and convert to glTF (existing flow)
-   */
-  @Post()
-  @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    if (!file) {
-      return { message: 'No file provided' };
-    }
-
-    const convertedFile = await this.uploadService.convertToGltf(file.filename);
-
-    return {
-      message: 'File uploaded and converted successfully',
-      url: convertedFile,
-    };
-  }
 }

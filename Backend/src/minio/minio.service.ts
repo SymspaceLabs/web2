@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from 'minio';
 import { Readable } from 'stream';
-import mime from 'mime-types';
+import * as mime from 'mime-types';
 
 @Injectable()
 export class MinioService {
@@ -16,7 +16,7 @@ export class MinioService {
     this.minioClient = new Client({
       endPoint: this.configService.get<string>('MINIO_INTERNAL_ENDPOINT'),
       port: Number(this.configService.get<number>('MINIO_INTERNAL_PORT')),
-      useSSL: false, // SSL handled by Nginx
+      useSSL: false,
       accessKey: this.configService.get<string>('MINIO_ACCESS_KEY'),
       secretKey: this.configService.get<string>('MINIO_SECRET_KEY'),
     });
@@ -39,7 +39,7 @@ export class MinioService {
     }
 
     const safeName = file.originalname
-      .replace(/\.[^/.]+$/, '') // remove original extension
+      .replace(/\.[^/.]+$/, '')
       .trim()
       .replace(/\s+/g, '-');
 
@@ -60,8 +60,6 @@ export class MinioService {
     return `${publicBaseUrl}/${this.bucketName}/${objectName}`;
   }
 
-
-
   async getSignedUrl(objectName: string, expirySeconds = 3600) {
     const internalUrl = await this.minioClient.presignedGetObject(
       this.bucketName,
@@ -69,7 +67,6 @@ export class MinioService {
       expirySeconds,
     );
 
-    // Replace internal MinIO URL with public domain
     const publicBaseUrl = this.configService.get<string>(
       'MINIO_PUBLIC_BASE_URL',
     );
@@ -86,7 +83,7 @@ export class MinioService {
       Statement: [
         {
           Effect: 'Allow',
-          Principal: '*',               // anyone can read
+          Principal: '*',
           Action: ['s3:GetObject'],
           Resource: [`arn:aws:s3:::${this.bucketName}/*`],
         },
@@ -95,5 +92,4 @@ export class MinioService {
 
     await this.minioClient.setBucketPolicy(this.bucketName, JSON.stringify(policy));
   }
-
 }

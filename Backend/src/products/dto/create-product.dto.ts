@@ -138,6 +138,6 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  backing_type?: string; // For rugs/mats: Non-slip, Rubber, Felt
+  non_slip?: boolean; // For rugs/mats: Non-slip, Rubber, Felt
 
 }

@@ -48,9 +48,9 @@ export async function resolveCategoryHierarchy(
 
   const subcategoryItemIdFromDto = dto.subcategoryItem;
   const subcategoryItemChildIdFromDto = dto.subcategoryItemChild;
-
   // Prioritize child if provided
   if (subcategoryItemChildIdFromDto) {
+    
     finalSubcategoryItemChild = await subcategoryItemChildRepository.findOne({
       where: { id: subcategoryItemChildIdFromDto },
       relations: ['subcategoryItem'],
@@ -63,19 +63,26 @@ export async function resolveCategoryHierarchy(
     finalSubcategoryItem = finalSubcategoryItemChild.subcategoryItem;
     
     // Get tag defaults from child (highest priority)
-    tagDefaults = finalSubcategoryItemChild.tagDefaults || {};
+    tagDefaults = finalSubcategoryItemChild.tag_defaults || {};
+    
   } 
   // ⭐ FLEXIBLE LOOKUP: Check both levels when subcategoryItem is provided
   else if (subcategoryItemIdFromDto) {
-    // 1. 🔍 First, try to find in SubcategoryItem (Level 2)
+    
+    // 🐛 BUG FIX: Load tagDefaults relation
+    // The issue was here - we weren't selecting the tagDefaults column
     finalSubcategoryItem = await subcategoryItemRepository.findOne({
       where: { id: subcategoryItemIdFromDto },
+      // Note: tagDefaults should be a JSON column, not a relation
+      // If it's stored as JSON in the database, it should load automatically
     });
 
     if (finalSubcategoryItem) {
       // Found at Level 2 - use its tag defaults
-      tagDefaults = finalSubcategoryItem.tagDefaults || {};
+      tagDefaults = finalSubcategoryItem.tag_defaults || {};
+      
     } else {
+      
       // 2. 🔍 If not found at Level 2, try SubcategoryItemChild (Level 3)
       finalSubcategoryItemChild = await subcategoryItemChildRepository.findOne({
         where: { id: subcategoryItemIdFromDto },
@@ -85,9 +92,11 @@ export async function resolveCategoryHierarchy(
       if (finalSubcategoryItemChild) {
         // Found at Level 3 - extract parent and use child's tag defaults
         finalSubcategoryItem = finalSubcategoryItemChild.subcategoryItem;
-        tagDefaults = finalSubcategoryItemChild.tagDefaults || {};
+        tagDefaults = finalSubcategoryItemChild.tag_defaults  || {};
+        
       } else {
         // 3. 🛑 Not found in either level
+        console.error('❌ [resolveCategoryHierarchy] Not found in either level!');
         throw new Error(
           `Subcategory record with ID ${subcategoryItemIdFromDto} not found in SubcategoryItem or SubcategoryItemChild`
         );
@@ -103,7 +112,7 @@ export async function resolveCategoryHierarchy(
 }
 
 // --------------------------------------------------------------------------
-// Helper 2: Applies Tag Defaults
+// Helper 2: Applies Tag Defaults (Called from upsert method)
 // --------------------------------------------------------------------------
 /**
  * Applies default values from subcategory tag configuration to product data.
@@ -113,7 +122,9 @@ export async function resolveCategoryHierarchy(
  * @param tagDefaults - The tag defaults from subcategory configuration
  */
 export function applyTagDefaults(productData: any, tagDefaults: any): void {
+
   if (!tagDefaults || typeof tagDefaults !== 'object') {
+    console.warn('⚠️ [applyTagDefaults] No valid tagDefaults provided');
     return;
   }
 
@@ -135,15 +146,24 @@ export function applyTagDefaults(productData: any, tagDefaults: any): void {
     'pile_height',
     'room_type',
     'washable',
-    'backing_type',
+    'non_slip',
   ];
+
+  const appliedDefaults: any = {};
+  const skippedFields: any = {};
 
   // Apply defaults only if the field is undefined in productData
   for (const field of tagFields) {
     if (productData[field] === undefined && tagDefaults[field] !== undefined) {
       productData[field] = tagDefaults[field];
+      appliedDefaults[field] = tagDefaults[field];
+    } else if (productData[field] !== undefined) {
+      skippedFields[field] = `Already set: ${productData[field]}`;
+    } else if (tagDefaults[field] === undefined) {
+      skippedFields[field] = 'No default available';
     }
   }
+
 }
 
 

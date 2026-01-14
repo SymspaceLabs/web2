@@ -13,8 +13,6 @@ export async function fetchSubcategoryDetailsBySlug(
 ): Promise<SubcategoryDetails> {
   const url = `${BACKEND_URL}/subcategory-items/slug/${slug}`;
 
-  console.log('📡 Fetching subcategory details:', url);
-
   try {
     const response = await fetch(url);
 
@@ -27,9 +25,7 @@ export async function fetchSubcategoryDetailsBySlug(
 
     // ✅ Parse JSON response
     const data: SubcategoryDetails = await response.json();
-    
-    console.log('✅ Subcategory details fetched:', data);
-    
+        
     return data;
   } catch (error) {
     console.error(`❌ Error fetching subcategory ${slug}:`, error);

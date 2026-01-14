@@ -1,5 +1,6 @@
 // --- 1. Define necessary types (You might have these already in product-form.ts or a types file) ---
 
+import { API_ENDPOINTS, authFetch } from "@/lib/api";
 import { notFound } from "next/navigation";
 
 // Define the shape of the data that the API returns after a successful update
@@ -134,7 +135,6 @@ export async function getProduct(id: string) {
   return res.json()
 }
 
-
 /**
  * Updates an existing product on the backend API.
  * Sends a PATCH request to update the product data.
@@ -200,4 +200,27 @@ export async function updateProductVariants(productId: string, data: any) {
   }
 
   return response.json();
+}
+
+/**
+ * Bulk delete multiple products
+ */
+export async function bulkDeleteProducts(productIds: string[]): Promise<{
+  success: boolean
+  deletedCount: number
+  message: string
+}> {
+  const response = await authFetch(`${API_ENDPOINTS.products}/bulk-delete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ productIds }),
+  })
+  
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to delete products')
+  }
+  
+  return response
 }

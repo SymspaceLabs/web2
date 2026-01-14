@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BulkDeleteDto, BulkDeleteResponseDto } from 'src/products/dto/bulk-delete.dto';
 import { ProductsService, QueryContext } from 'src/products/products.service';
 import { UserRole } from 'src/users/entities/user.entity';
 
@@ -48,6 +49,15 @@ export class AdminProductsService {
     }
 
     return product;
+  }
+
+  /**
+   * Bulk delete multiple products by their IDs
+   * @param dto - Contains array of product IDs to delete
+   * @returns Response with deletion statistics
+   */
+  async bulkDeleteProducts(dto: BulkDeleteDto): Promise<BulkDeleteResponseDto> {
+    return this.productsService.bulkDeleteProducts(dto);
   }
 
 

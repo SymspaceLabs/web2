@@ -33,30 +33,30 @@ export class Product {
   name: string;
 
   @ManyToOne(() => Company, (company) => company.products, {
-    onDelete: 'CASCADE', // Keep CASCADE as it was
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'companyId' }) // Assuming 'companyId' foreign key column exists in Product table
+  @JoinColumn({ name: 'companyId' })
   company: Company;
 
-  @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item
+  @Column({ nullable: true })
   subcategoryItemId: string;
 
   @ManyToOne(() => SubcategoryItem, (subcategoryItem) => subcategoryItem.products, {
-    nullable: true, // This allows a product to not be linked to a subcategory item
-    onDelete: 'SET NULL', // Or 'CASCADE' if deleting subcategoryItem should delete products
+    nullable: true, 
+    onDelete: 'SET NULL',
   })
-  @JoinColumn({ name: 'subcategoryItemId' }) // Links to the subcategoryItemId column
+  @JoinColumn({ name: 'subcategoryItemId' })
   subcategoryItem: SubcategoryItem;
 
-  @Column({ nullable: true }) // Allow null if a product might not always have a subcategory item child
+  @Column({ nullable: true })
   subcategoryItemChildId: string;
 
   @ManyToOne(() => SubcategoryItemChild, (subcategoryItemChild) => subcategoryItemChild.products, {
-    nullable: true, // This allows a product to not be linked to a subcategory item child
-    onDelete: 'SET NULL', // Or 'CASCADE' if deleting subcategoryItemChild should delete products
+    nullable: true,
+    onDelete: 'SET NULL',
   })
-  @JoinColumn({ name: 'subcategoryItemChildId' }) // Links to the subcategoryItemChildId column
-  subcategoryItemChild?: SubcategoryItemChild; // Marked as optional in TypeScript
+  @JoinColumn({ name: 'subcategoryItemChildId' })
+  subcategoryItemChild?: SubcategoryItemChild;
 
   @Column()
   slug: string;
@@ -136,26 +136,28 @@ export class Product {
   @Column({ nullable: true })
   style: string;
 
-  // ============================================
-  // NEW OPTIONAL FIELDS
-  // ============================================
+  @Column({ nullable: true })
+  shape: string;
 
   @Column({ nullable: true })
-  shape: string; // e.g., 'rectangle', 'square', 'round', 'oval', 'runner', 'hexagon', 'irregular'
+  pattern: string;
 
   @Column({ nullable: true })
-  pattern: string; // e.g., 'solid', 'striped', 'geometric'
+  pile_height: string;
 
   @Column({ nullable: true })
-  pile_height: string; // e.g., 'low', 'medium', 'high'
-
-  @Column({ nullable: true })
-  room_type: string; // e.g., 'living room', 'bedroom', 'bathroom', 'kitchen', 'hallway', 'office'
+  room_type: string;
 
   @Column({ default: false })
-  washable: boolean; // Machine washable flag
+  washable: boolean;
 
-  @Column({ nullable: true })
-  backing_type: string; // e.g., 'Non-slip', 'Rubber', 'Felt'
+  // Removed this column
+  // @Column({ nullable: true })
+  // backing_type: string;
+
+  //Added this new column
+  @Column({ default: false })
+  non_slip: boolean;
+  
 
 }

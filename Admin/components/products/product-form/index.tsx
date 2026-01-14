@@ -89,7 +89,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
     style: product?.style || '',
     room_type: product?.room_type || '',
     washable: product?.washable ?? false, // Boolean field
-    backing_type: product?.backing_type || '',
+    non_slip: product?.non_slip ?? false,
     
     // ✅ Colors, sizes, material
     selectedColors: product?.colors || [],
@@ -181,7 +181,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
       const tagFields = [
         'age_group', 'gender', 'season', 'occasion',
         'indoor_outdoor', 'shape', 'pattern', 'pile_height',
-        'style', 'room_type', 'washable', 'backing_type', 'material'
+        'style', 'room_type', 'washable', 'non_slip', 'material'
       ]
       
       tagFields.forEach(field => {
@@ -262,7 +262,6 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
     try {
       await saveThumbnailToBackend(product.id, updatedImages, formData.selectedColors)
       updateFormData({ images: updatedImages })
-      console.log('✅ Thumbnail saved successfully')
     } catch (error) {
       console.error('❌ Failed to save thumbnail:', error)
       throw error

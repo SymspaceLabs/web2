@@ -23,6 +23,7 @@ import { ProductMapper } from './utils/product-mappers';
 import { extractGranularCategory } from './utils/category-helpers';
 import { UserRole } from 'src/users/entities/user.entity';
 import { BulkImportDto, BulkImportResponseDto, ProductionProductData } from './dto/bulk-import.dto';
+import { BulkDeleteDto, BulkDeleteResponseDto } from './dto/bulk-delete.dto';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -64,55 +65,53 @@ export class ProductsService {
   ) {}
   
   // CREATE & UPDATE PRODUCT
-  async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {
-    // 1. Destructure DTO  
+  async upsert(id: string | undefined, dto: CreateProductDto): Promise<Product> {   
+    // After destructuring
     const {
-          images,
-          threeDModels,
-          company,
-          name,
-          colors,
-          sizes,
-          subcategoryItem: subcategoryItemIdFromDto,
-          subcategoryItemChild: subcategoryItemChildIdFromDto,
-          gender,
-          // Existing optional fields
-          occasion,
-          season,
-          age_group,
-          indoor_outdoor,
-          material,
-          style,
-          // NEW: Destructure the new optional fields
-          shape,
-          pattern,
-          pile_height,
-          room_type,
-          washable,
-          backing_type,
-          ...productData
-      } = dto;
+      images,
+      threeDModels,
+      company,
+      name,
+      colors,
+      sizes,
+      subcategoryItem: subcategoryItemIdFromDto,
+      subcategoryItemChild: subcategoryItemChildIdFromDto,
+      gender,
+      occasion,
+      season,
+      age_group,
+      indoor_outdoor,
+      material,
+      style,
+      shape,
+      pattern,
+      pile_height,
+      room_type,
+      washable,
+      non_slip,
+      ...productData
+    } = dto;
 
-      let product: Product;
-      let finalSubcategoryItem: SubcategoryItem | undefined;
-      let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
-      let tagDefaults: any = {}; 
+    let product: Product;
+    let finalSubcategoryItem: SubcategoryItem | undefined;
+    let finalSubcategoryItemChild: SubcategoryItemChild | undefined;
+    let tagDefaults: any = {}; 
 
       // 2. Resolve Category Hierarchy and Get Defaults (using utility function)
       if (subcategoryItemIdFromDto || subcategoryItemChildIdFromDto) {
-          ({ finalSubcategoryItem, finalSubcategoryItemChild, tagDefaults } = await resolveCategoryHierarchy(
-              dto,
-              this.subcategoryItemRepository,
-              this.subcategoryItemChildRepository,
-          ));
+        ({ finalSubcategoryItem, finalSubcategoryItemChild, tagDefaults } = await resolveCategoryHierarchy(
+            dto,
+            this.subcategoryItemRepository,
+            this.subcategoryItemChildRepository,
+        ));
+
       } else if (!id) {
-          // New products must have a category ID
-          throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
+        // New products must have a category ID
+        throw new BadRequestException('Either subcategoryItemId or subcategoryItemChildId must be provided for new products.');
       }
 
       // 3. Apply Tag Defaults (using utility function)
       applyTagDefaults(productData, tagDefaults);
-
 
     // --------------------------------------------------------------------------
     // === UPDATE MODE ===
@@ -194,7 +193,7 @@ export class ProductsService {
         if (pile_height !== undefined) product.pile_height = pile_height;
         if (room_type !== undefined) product.room_type = room_type;
         if (washable !== undefined) product.washable = washable;
-        if (backing_type !== undefined) product.backing_type = backing_type;
+        if (non_slip !== undefined) product.non_slip = non_slip;
         
         // Also handle existing optional fields explicitly
         if (occasion !== undefined) product.occasion = occasion;
@@ -248,7 +247,7 @@ export class ProductsService {
             pile_height: pile_height || null,
             room_type: room_type || null,
             washable: washable || false,
-            backing_type: backing_type || null,
+            non_slip: non_slip || false,
             // Existing optional fields
             occasion: occasion || null,
             season: season || null,
@@ -256,6 +255,9 @@ export class ProductsService {
             indoor_outdoor: indoor_outdoor || null,
             material: material || null,
             style: style || null,
+
+            ar_type: productData.ar_type ?? null,
+            description: productData.description ?? null,
           });
 
           // --- 3D Model Creation Logic ---
@@ -522,79 +524,24 @@ export class ProductsService {
 
   // FIND PRODUCT BY SLUG
   async findBySlug(slug: string): Promise<ProductDetailDto> {
-    const product = await this.productRepository
-      .createQueryBuilder('product')
-      .leftJoinAndSelect('product.company', 'company')
-      .leftJoinAndSelect('product.images', 'images')
-      .leftJoinAndSelect('product.colors', 'colors')
-      .leftJoinAndSelect('product.sizes', 'sizes')
-      .leftJoinAndSelect('product.variants', 'variants')
-      .leftJoinAndSelect('product.threeDModels', 'threeDModels')
-      
-      // ====================================================================
-      // 1. JOINS FOR PRODUCTS WITH subcategoryItemChild (Current logic)
-      // ====================================================================
-      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
-      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'parentSubcategoryItem') // Rename alias to avoid conflict
-      .leftJoinAndSelect('parentSubcategoryItem.subcategory', 'parentSubcategory')
-      .leftJoinAndSelect('parentSubcategory.category', 'parentCategory')
-
-      // ====================================================================
-      // 2. JOINS FOR PRODUCTS WITH ONLY subcategoryItem (MISSING/CRITICAL FIX)
-      // This is a direct join to fetch the category path when no child exists.
-      // ====================================================================
-      .leftJoinAndSelect('product.subcategoryItem', 'directSubcategoryItem')
-      .leftJoinAndSelect('directSubcategoryItem.subcategory', 'directSubcategory')
-      .leftJoinAndSelect('directSubcategory.category', 'directCategory')
-      
-      .where('product.slug = :slug', { slug })
-      .getOne();
+    const product = await this.commonFetch('product.slug = :slug', { slug });
 
     if (!product) {
       throw new NotFoundException(`Product with slug ${slug} not found`);
     }
 
-    // Sort by sortOrder
-    if (product.sizes) {
-      product.sizes.sort((a, b) => a.sortOrder - b.sortOrder);
-    }
-    if (product.images) {
-      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
-    }
-
-    // ✅ Calculate and attach display price
-    (product as any).displayPrice = this.calculateDisplayPrice(product);
-    (product as any).availability = determineProductAvailability(product);
-
-    // ✅ Return clean DTO
-    return ProductMapper.toDetailDto(product);
+    return this.prepareProductDto(product);
   }
     
   // FIND ONE BY ID
-  async findOne(productId: string): Promise<Product> {
-    const product = await this.productRepository.findOne({
-      where: { id: productId },
-      // Updated relations to load the full hierarchy including subcategoryItemChild
-      relations: [
-        'company', 
-        'images', 
-        'colors', 
-        'sizes', 
-        'subcategoryItem', 
-        'subcategoryItemChild', 
-        'variants', 
-        'threeDModels',
-        'subcategoryItem.subcategory',
-        'subcategoryItem.subcategory.category',
-      ],
-
-    });
-
+  async findOne(id: string): Promise<ProductDetailDto> {
+    const product = await this.commonFetch('product.id = :id', { id });
+    
     if (!product) {
-      throw new NotFoundException(`Product with ID ${productId} not found`);
+      throw new NotFoundException(`Product with ID ${id} not found`);
     }
 
-    return product;
+    return this.prepareProductDto(product);
   }
   
   async remove(id: string): Promise<{ message: string; product: Product }> {
@@ -736,6 +683,50 @@ export class ProductsService {
     const symbols = { USD: '$', EUR: '€', GBP: '£' };
     const symbol = symbols[currency] || '$';
     return `${symbol}${price.toFixed(2)}`;
+  }
+
+  /**
+   * Shared Fetching Logic to ensure both ID and Slug queries
+   * return the exact same relation structure.
+   */
+  private async commonFetch(where: string, params: object): Promise<Product | null> {
+    return await this.productRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.company', 'company')
+      .leftJoinAndSelect('product.images', 'images')
+      .leftJoinAndSelect('product.colors', 'colors')
+      .leftJoinAndSelect('product.sizes', 'sizes')
+      .leftJoinAndSelect('product.variants', 'variants')
+      .leftJoinAndSelect('product.threeDModels', 'threeDModels')
+      // Hierarchy Joins
+      .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')
+      .leftJoinAndSelect('subcategoryItemChild.subcategoryItem', 'parentSubcategoryItem')
+      .leftJoinAndSelect('parentSubcategoryItem.subcategory', 'parentSubcategory')
+      .leftJoinAndSelect('parentSubcategory.category', 'parentCategory')
+      .leftJoinAndSelect('product.subcategoryItem', 'directSubcategoryItem')
+      .leftJoinAndSelect('directSubcategoryItem.subcategory', 'directSubcategory')
+      .leftJoinAndSelect('directSubcategory.category', 'directCategory')
+      .where(where, params)
+      .getOne();
+  }
+
+  /**
+   * Shared Transformation Logic
+   */
+  private prepareProductDto(product: Product): ProductDetailDto {
+    // Sort by sortOrder
+    if (product.sizes) {
+      product.sizes.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
+    if (product.images) {
+      product.images.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
+
+    // Calculate prices and availability
+    (product as any).displayPrice = this.calculateDisplayPrice(product);
+    (product as any).availability = determineProductAvailability(product);
+
+    return ProductMapper.toDetailDto(product);
   }
 
   // Update Step 2 - Variant Details  
@@ -1921,7 +1912,7 @@ export class ProductsService {
       pile_height: productData.pile_height,
       room_type: productData.room_type,
       washable: productData.washable,
-      backing_type: productData.backing_type,
+      non_slip: productData.non_slip,
       style: productData.style,
     };
 
@@ -1929,6 +1920,53 @@ export class ProductsService {
   }
 
   // ⭐ NEW METHOD: Update variants with production data
+  // private async updateVariantsFromProductionData(
+  //   productId: string,
+  //   productData: ProductionProductData
+  // ): Promise<void> {
+  //   // Load the product with fresh IDs
+  //   const product = await this.productRepository.findOne({
+  //     where: { id: productId },
+  //     relations: ['colors', 'sizes', 'variants'],
+  //   });
+
+  //   if (!product || !productData.variants) {
+  //     return;
+  //   }
+
+  //   // Create maps for quick lookup
+  //   const colorMap = new Map(product.colors.map(c => [c.name.toLowerCase(), c]));
+  //   const sizeMap = new Map(product.sizes.map(s => [s.size.toLowerCase(), s]));
+
+  //   // Update each variant with the production data
+  //   for (const variantData of productData.variants) {
+  //     const color = colorMap.get(variantData.color.name.toLowerCase());
+  //     const size = sizeMap.get(variantData.size.size.toLowerCase());
+
+  //     if (!color || !size) {
+  //       console.warn(`⚠️ Variant not found: ${variantData.color.name}-${variantData.size.size}`);
+  //       continue;
+  //     }
+
+  //     // Find the matching variant
+  //     const variant = product.variants.find(
+  //       v => v.color?.id === color.id && v.size?.id === size.id
+  //     );
+
+  //     if (variant) {
+  //       // Update the variant with production data
+  //       variant.sku = variantData.sku;
+  //       variant.stock = variantData.stock;
+  //       variant.price = variantData.price;
+  //       variant.salePrice = variantData.salePrice || 0;
+  //       variant.cost = variantData.cost || 0;
+
+  //       await this.productVariantRepository.save(variant);
+  //     }
+  //   }
+  // }
+  // ⭐ FIXED METHOD: Update variants with production data
+  // This now matches by color NAME and size NAME instead of IDs
   private async updateVariantsFromProductionData(
     productId: string,
     productData: ProductionProductData
@@ -1936,33 +1974,51 @@ export class ProductsService {
     // Load the product with fresh IDs
     const product = await this.productRepository.findOne({
       where: { id: productId },
-      relations: ['colors', 'sizes', 'variants'],
+      relations: ['colors', 'sizes', 'variants', 'variants.color', 'variants.size'],
     });
 
     if (!product || !productData.variants) {
+      console.warn(`⚠️ No product or variants found for ${productId}`);
       return;
     }
 
-    // Create maps for quick lookup
-    const colorMap = new Map(product.colors.map(c => [c.name.toLowerCase(), c]));
-    const sizeMap = new Map(product.sizes.map(s => [s.size.toLowerCase(), s]));
+    // ✅ FIX: Create maps using NAMES (not IDs) for matching
+    const colorMap = new Map(
+      product.colors.map(c => [c.name.toLowerCase().trim(), c])
+    );
+    const sizeMap = new Map(
+      product.sizes.map(s => [s.size.toLowerCase().trim(), s])
+    );
+
+    const variantsToUpdate: ProductVariant[] = [];
 
     // Update each variant with the production data
     for (const variantData of productData.variants) {
-      const color = colorMap.get(variantData.color.name.toLowerCase());
-      const size = sizeMap.get(variantData.size.size.toLowerCase());
+      const colorKey = variantData.color.name.toLowerCase().trim();
+      const sizeKey = variantData.size.size.toLowerCase().trim();
 
-      if (!color || !size) {
-        console.warn(`⚠️ Variant not found: ${variantData.color.name}-${variantData.size.size}`);
+      const color = colorMap.get(colorKey);
+      const size = sizeMap.get(sizeKey);
+
+      if (!color) {
+        console.warn(`⚠️ Color not found: "${variantData.color.name}" (looking for "${colorKey}")`);
+        console.warn(`   Available colors: ${Array.from(colorMap.keys()).join(', ')}`);
         continue;
       }
 
-      // Find the matching variant
+      if (!size) {
+        console.warn(`⚠️ Size not found: "${variantData.size.size}" (looking for "${sizeKey}")`);
+        console.warn(`   Available sizes: ${Array.from(sizeMap.keys()).join(', ')}`);
+        continue;
+      }
+
+      // ✅ FIX: Find the matching variant by comparing color and size entities
       const variant = product.variants.find(
         v => v.color?.id === color.id && v.size?.id === size.id
       );
 
       if (variant) {
+        
         // Update the variant with production data
         variant.sku = variantData.sku;
         variant.stock = variantData.stock;
@@ -1970,9 +2026,76 @@ export class ProductsService {
         variant.salePrice = variantData.salePrice || 0;
         variant.cost = variantData.cost || 0;
 
-        await this.productVariantRepository.save(variant);
+        variantsToUpdate.push(variant);
+      } else {
+        console.warn(`⚠️ Variant not found in database: ${colorKey}-${sizeKey}`);
+        console.warn(`   Product has ${product.variants.length} variants`);
       }
     }
+
+    // ✅ Batch save all updated variants
+    if (variantsToUpdate.length > 0) {
+      await this.productVariantRepository.save(variantsToUpdate);
+    } else {
+      console.warn(`⚠️ No variants were updated for product ${product.name}`);
+    }
   }
+
+  /**
+   * Bulk delete multiple products by their IDs
+   * @param dto - Contains array of product IDs to delete
+   * @returns Response with deletion statistics
+   */
+  async bulkDeleteProducts(dto: BulkDeleteDto): Promise<BulkDeleteResponseDto> {
+    const { productIds } = dto;
+    
+    const response: BulkDeleteResponseDto = {
+      success: false,
+      message: '',
+      deletedCount: 0,
+      requestedCount: productIds.length,
+      failedIds: [],
+      errors: [],
+    };
+
+    try {
+      // ============================================
+      // APPROACH 1: Simple bulk delete with TypeORM
+      // (Recommended for most cases)
+      // ============================================
+      const deleteResult = await this.productRepository.delete(productIds);
+      
+      response.deletedCount = deleteResult.affected || 0;
+      response.success = response.deletedCount > 0;
+      
+      if (response.deletedCount === productIds.length) {
+        response.message = `Successfully deleted all ${response.deletedCount} product(s)`;
+      } else if (response.deletedCount > 0) {
+        response.message = `Deleted ${response.deletedCount} of ${productIds.length} product(s)`;
+        // Some products may not exist - those that weren't found are "failed"
+        const deletedIds = productIds.slice(0, response.deletedCount);
+        response.failedIds = productIds.filter(id => !deletedIds.includes(id));
+      } else {
+        response.message = 'No products were deleted. Products may not exist.';
+        response.failedIds = productIds;
+      }
+
+      return response;
+
+    } catch (error) {
+      console.error('Bulk delete error:', error);
+      
+      response.success = false;
+      response.message = 'Failed to delete products';
+      response.failedIds = productIds;
+      response.errors = [{
+        id: 'bulk-operation',
+        error: error.message || 'Unknown error occurred'
+      }];
+      
+      throw new BadRequestException(response);
+    }
+  }
+
 
 }

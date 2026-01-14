@@ -15,6 +15,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductVariantsDto } from './dto/update-product-variants.dto';
 import { ProductDetailDto } from './dto/product-response.dto';
 import { BulkImportDto, BulkImportResponseDto } from './dto/bulk-import.dto';
+import { BulkDeleteDto, BulkDeleteResponseDto } from './dto/bulk-delete.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -115,6 +116,16 @@ export class ProductsController {
   @Post('bulk')
   async bulkImport(@Body() dto: BulkImportDto): Promise<BulkImportResponseDto> {
     return this.productsService.bulkImportProducts(dto);
+  }
+
+  // ============================================
+  // NEW: Bulk Delete Endpoint
+  // IMPORTANT: Must come BEFORE the company/:companyId route
+  // to avoid route conflicts
+  // ============================================
+  @Post('bulk-delete')
+  async bulkDelete(@Body() dto: BulkDeleteDto): Promise<BulkDeleteResponseDto> {
+    return this.productsService.bulkDeleteProducts(dto);
   }
 }
 

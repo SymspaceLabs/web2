@@ -13,6 +13,15 @@ import * as sharp from 'sharp';
 export class UploadController {
   constructor(private readonly minioService: MinioService) {}
 
+  private isPng(buffer: Buffer): boolean {
+    return (
+      buffer[0] === 0x89 &&
+      buffer[1] === 0x50 && // P
+      buffer[2] === 0x4e && // N
+      buffer[3] === 0x47    // G
+    );
+  }
+
   // =========================
   // 🔍 Format detection helpers
   // =========================
@@ -63,18 +72,32 @@ export class UploadController {
     let finalName = file.originalname;
     let detectedFormat = 'unknown';
 
-    // 🔍 Detect real format via header
+    // 🔍 1. Check for WebP Header (The "Scrutiny" Phase)
+    // If it has a RIFF/WEBP header, we convert it to JPEG even if the user named it .jpg or .png
     if (this.isWebP(file.buffer)) {
       detectedFormat = 'webp';
 
       // 🔄 Convert WebP → JPEG
       finalBuffer = await this.convertWebPToJpeg(file.buffer);
       finalMime = 'image/jpeg';
-      finalName = finalName.replace(/\.(jpg|jpeg|webp)$/i, '.jpg');
-    } else if (this.isJpeg(file.buffer)) {
+      finalName = finalName.replace(/\.(jpg|jpeg|webp|png)$/i, '.jpg');
+    } 
+    
+    // 🔍 2. Check for legitimate JPEG
+    else if (this.isJpeg(file.buffer)) {
       detectedFormat = 'jpeg';
       finalMime = 'image/jpeg';
-    } else {
+    }
+
+    // 🔍 3. Check for legitimate PNG (Accept and keep as PNG)
+    else if (this.isPng(file.buffer)) {
+      detectedFormat = 'png';
+      finalMime = 'image/png';
+      // No conversion needed, keep finalBuffer as is
+    }
+    
+    // ❌ 4. Reject everything else
+    else {
       throw new BadRequestException(
         'Unsupported or invalid image format. Only JPEG and WebP are allowed.',
       );
@@ -93,9 +116,9 @@ export class UploadController {
     const fileUrl = await this.minioService.uploadFile(normalizedFile);
 
     return {
-      message: 'File uploaded and normalized successfully',
+      message: 'File processed successfully',
       detectedFormat,
-      finalFormat: 'jpeg',
+      finalFormat: detectedFormat === 'webp' ? 'jpeg' : detectedFormat,
       url: fileUrl,
     };
   }

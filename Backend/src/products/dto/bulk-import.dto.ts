@@ -64,7 +64,7 @@ export interface ProductionProductData {
   pile_height?: string;
   room_type?: string;
   washable?: boolean;
-  backing_type?: string;
+  non_slip?: string;
   occasion?: string;
   season?: string;
   age_group?: string;

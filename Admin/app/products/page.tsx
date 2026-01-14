@@ -1,4 +1,3 @@
-// Products table
 // app/products/page.tsx
 
 "use client"
@@ -11,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Pagination } from "@/components/pagination"
 import {
   AlertDialog,
@@ -31,7 +31,7 @@ import {
 import { useRouter } from "next/navigation"
 import { Search, Plus, Eye, Edit, Trash2, MoreVertical } from "lucide-react"
 import { API_ENDPOINTS, authFetch } from "@/lib/api"
-import { deleteProduct } from "@/api/product"
+import { bulkDeleteProducts, deleteProduct } from "@/api/product"
 import { toast } from "sonner"
 import { Product } from "@/types/product.type"
 
@@ -49,20 +49,10 @@ interface UIProduct {
 }
 
 function mapAPIProductToUI(apiProduct: Product): UIProduct {
-  
-  // Get the first image URL or use a placeholder
   const thumbnail = apiProduct.thumbnail ||apiProduct.images?.[0]?.url || "https://via.placeholder.com/150?text=No+Image"
-  
-  // Get the most granular category
   const category =  apiProduct.category?.name || "Uncategorized"
-  
-  // Get company name
   const company = apiProduct.company?.entityName || "Unknown"
-  
-  // Get price from variants if product price is null
   const price = apiProduct.displayPrice?.range || ""
-  
-  // Normalize status to lowercase
   const status = (apiProduct.status?.toLowerCase() || "draft") as "active" | "draft" | "disabled"
 
   return {
@@ -75,6 +65,7 @@ function mapAPIProductToUI(apiProduct: Product): UIProduct {
     company,
     status,
     createdAt: new Date(apiProduct.createdAt).toLocaleDateString(),
+    displayPrice: apiProduct.displayPrice
   }
 }
 
@@ -91,10 +82,16 @@ export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [categories, setCategories] = useState<string[]>([])
   
+  // Multi-select state
+  const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set())
+  
   // Delete confirmation dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<UIProduct | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  
+  // Bulk delete dialog state
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false)
 
   useEffect(() => {
     async function fetchProducts() {
@@ -131,6 +128,32 @@ export default function ProductsPage() {
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE)
   const paginatedProducts = filteredProducts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
+  // Multi-select handlers
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      const allIds = new Set(paginatedProducts.map(p => p.id))
+      setSelectedProducts(allIds)
+    } else {
+      setSelectedProducts(new Set())
+    }
+  }
+
+  const handleSelectProduct = (productId: string, checked: boolean) => {
+    const newSelected = new Set(selectedProducts)
+    if (checked) {
+      newSelected.add(productId)
+    } else {
+      newSelected.delete(productId)
+    }
+    setSelectedProducts(newSelected)
+  }
+
+  const isAllSelected = paginatedProducts.length > 0 && 
+    paginatedProducts.every(p => selectedProducts.has(p.id))
+  
+  const isSomeSelected = paginatedProducts.some(p => selectedProducts.has(p.id)) && !isAllSelected
+
+  // Single delete handlers
   const handleDeleteClick = (product: UIProduct) => {
     setProductToDelete(product)
     setDeleteDialogOpen(true)
@@ -143,7 +166,6 @@ export default function ProductsPage() {
     try {
       await deleteProduct(productToDelete.id)
       
-      // Remove from local state
       setProducts((prev) => prev.filter((p) => p.id !== productToDelete.id))
       
       toast.success("Product deleted", {
@@ -166,6 +188,44 @@ export default function ProductsPage() {
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false)
     setProductToDelete(null)
+  }
+
+  // Bulk delete handlers
+  const handleBulkDeleteClick = () => {
+    if (selectedProducts.size === 0) return
+      setBulkDeleteDialogOpen(true)
+    }
+
+      const handleConfirmBulkDelete = async () => {
+      setIsDeleting(true)
+      const idsToDelete = Array.from(selectedProducts)
+      
+      try {
+        // Use the new bulk delete endpoint
+        const result = await bulkDeleteProducts(idsToDelete)
+        
+        // Remove from local state
+        setProducts((prev) => prev.filter((p) => !selectedProducts.has(p.id)))
+        
+        toast.success("Products deleted", {
+          description: result.message || `${result.deletedCount} product(s) have been successfully deleted.`,
+        })
+        
+        setSelectedProducts(new Set())
+        setBulkDeleteDialogOpen(false)
+      } catch (error) {
+        console.error("Failed to delete products:", error)
+        
+        toast.error("Delete failed", {
+          description: error instanceof Error ? error.message : "Failed to delete the products. Please try again.",
+        })
+      } finally {
+        setIsDeleting(false)
+      }
+    }
+
+  const handleCancelBulkDelete = () => {
+    setBulkDeleteDialogOpen(false)
   }
 
   if (loading) {
@@ -253,6 +313,25 @@ export default function ProductsPage() {
           </Select>
         </div>
 
+        {selectedProducts.size > 0 && (
+          <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">
+                {selectedProducts.size} product(s) selected
+              </span>
+            </div>
+            <Button 
+              variant="destructive" 
+              size="sm"
+              onClick={handleBulkDeleteClick}
+              className="gap-2"
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete Selected
+            </Button>
+          </div>
+        )}
+
         <Card>
           <CardHeader>
             <CardTitle>Products ({filteredProducts.length})</CardTitle>
@@ -265,6 +344,14 @@ export default function ProductsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={isAllSelected}
+                        onCheckedChange={handleSelectAll}
+                        aria-label="Select all"
+                        className={isSomeSelected ? "data-[state=checked]:bg-primary" : ""}
+                      />
+                    </TableHead>
                     <TableHead>Product</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Company</TableHead>
@@ -277,7 +364,14 @@ export default function ProductsPage() {
                 </TableHeader>
                 <TableBody>
                   {paginatedProducts.map((product) => (
-                    <TableRow key={product.id} >
+                    <TableRow key={product.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedProducts.has(product.id)}
+                          onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
+                          aria-label={`Select ${product.name}`}
+                        />
+                      </TableCell>
                       <TableCell className="max-w-[200px] md:max-w-[300px]">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -290,7 +384,6 @@ export default function ProductsPage() {
                               }}
                             />
                           </div>
-                          {/* Added 'truncate' and 'title' for hover visibility */}
                           <span className="font-medium truncate" title={product.name}>
                             {product.name}
                           </span>
@@ -352,6 +445,7 @@ export default function ProductsPage() {
           </CardContent>
         </Card>
 
+        {/* Single Delete Dialog */}
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -377,6 +471,39 @@ export default function ProductsPage() {
                   <>
                     <Trash2 className="h-4 w-4" />
                     Delete Product
+                  </>
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Bulk Delete Dialog */}
+        <AlertDialog open={bulkDeleteDialogOpen} onOpenChange={setBulkDeleteDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Multiple Products?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete <span className="font-semibold">{selectedProducts.size} product(s)</span> and remove
+                all associated data. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleCancelBulkDelete} disabled={isDeleting}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleConfirmBulkDelete}
+                disabled={isDeleting}
+                style={{ color: 'white' }}
+                className="bg-destructive hover:bg-destructive/90 gap-2"
+              >
+                {isDeleting ? (
+                  <>Deleting...</>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4" />
+                    Delete {selectedProducts.size} Products
                   </>
                 )}
               </AlertDialogAction>

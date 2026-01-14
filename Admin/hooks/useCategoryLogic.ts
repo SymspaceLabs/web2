@@ -42,8 +42,6 @@ export function useCategoryLogic(
         } else {
           setFieldValue(key, defaultValue);
         }
-      } else {
-        console.log(`⏭️ Skipping default for ${key} - already has value:`, currentValue);
       }
     });
   }, [formData, setFieldValue]);
@@ -80,7 +78,6 @@ export function useCategoryLogic(
       const subcategoryItemId = initialData.subcategoryItem?.slug;
       
       if (!subcategoryItemId) {
-        console.log('⏭️ No initial subcategory to load');
         setHasLoadedInitialCategory(true);
         return;
       }
@@ -90,15 +87,10 @@ export function useCategoryLogic(
       try {
         // Fetch the category details using the ID from the product
         const details = await fetchSubcategoryDetailsById(subcategoryItemId); // ✅ Use ID function
-        console.log('📦 Initial category details loaded:', details);
         
         setLocalSubcategoryDetails(details);
         setSubcategoryDetails(details);
-        
-        // ✅ CRITICAL: On initial load, DO NOT apply defaults
-        // The product already has its values from the API
-        console.log('✅ Initial category loaded - preserving existing values');
-        
+
       } catch (error) {
         console.error('❌ Failed to load initial category:', error);
       } finally {

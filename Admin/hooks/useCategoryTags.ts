@@ -13,7 +13,7 @@ export type TagType =
   | 'style'
   | 'room_type'
   | 'washable'
-  | 'backing_type'
+  | 'non_slip'
   | 'prescription';
 
 export interface TagDefinition {
@@ -137,9 +137,9 @@ export function useCategoryTags({
         ],
         placeholder: 'Select room type'
       },
-      backing_type: {
-        label: 'Backing Type',
-        type: 'text',
+      non_slip: {
+        label: 'Non slip',
+        type: 'boolean',
         placeholder: 'e.g., Non-slip, Rubber, Felt'
       },
       washable: {

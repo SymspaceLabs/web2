@@ -697,6 +697,11 @@ export class ProductsService {
       .leftJoinAndSelect('product.colors', 'colors')
       .leftJoinAndSelect('product.sizes', 'sizes')
       .leftJoinAndSelect('product.variants', 'variants')
+
+      // ✅ ADD THESE TWO LINES - Load color and size for each variant
+      .leftJoinAndSelect('variants.color', 'variantColor')
+      .leftJoinAndSelect('variants.size', 'variantSize')
+
       .leftJoinAndSelect('product.threeDModels', 'threeDModels')
       // Hierarchy Joins
       .leftJoinAndSelect('product.subcategoryItemChild', 'subcategoryItemChild')

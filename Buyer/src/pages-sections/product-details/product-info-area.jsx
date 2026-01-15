@@ -152,7 +152,7 @@ export default function ProductInfoArea({
 
         {/* COLOR SELECTION */}
         <FlexCol gap={1} mb={2}>
-          <Paragraph mb={1} fontSize="18px" color="#353535" sx={{ fontWeight: 600 }}>
+          <Paragraph mb={1} fontSize="14px" color="#353535" sx={{ fontWeight: 700 }}>
             SELECT COLOR
           </Paragraph>
           <FlexBox sx={{ gap: 1 }}>
@@ -191,8 +191,8 @@ export default function ProductInfoArea({
                     >
                       <Box
                         sx={{
-                          width: 10,
-                          height: 10,
+                          width: 18,
+                          height: 18,
                           borderRadius: "50%",
                           backgroundColor: color.code,
                           border: "1px solid rgba(0, 0, 0, 0.1)",
@@ -209,52 +209,67 @@ export default function ProductInfoArea({
           </FlexBox>
         </FlexCol>
 
-        {/* Size */}
-        <FlexBox gap={{ xs: 2, sm: 3 }} py={{ xs: 2 }}>
-          <FormControl sx={{ flexGrow: 1, width: "100%" }} error={sizeError}>
-            <Select
-              value={selectedSize}
-              onChange={handleSizeSelect}
-              fullWidth
-              displayEmpty
+        {/* SIZE SELECTION SECTION */}
+        <FlexCol mb={2} mt={1}>
+          {/* HEADER ROW: Title and Hyperlink */}
+          <FlexBox justifyContent="space-between" alignItems="center">
+            <Paragraph fontSize="14px" color="#353535" sx={{ fontWeight: 700 }}>
+              SELECT SIZE
+            </Paragraph>
+            <Typography
+              onClick={sizeChartUrl ? () => setOpenModal(true) : undefined}
               sx={{
-                borderRadius: { xs: "999px", sm: "6px" },
-                width: "100%",
-                height: "100%",
-                "& .MuiSelect-select": {
-                  borderRadius: "999px",
-                  padding: { xs: "15px 15px", sm: "20px 15px" },
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderRadius: "999px",
-                  borderColor: sizeError ? "red" : undefined,
-                  borderWidth: "2px",
-                },
+                fontSize: "14px",
+                fontWeight: 500,
+                textDecoration: "underline",
+                cursor: sizeChartUrl ? "pointer" : "not-allowed",
+                color: sizeChartUrl ? "#000" : "#9CA3AF",
+                pointerEvents: sizeChartUrl ? "auto" : "none",
+                "&:hover": sizeChartUrl
+                  ? { color: "#0366FE" }
+                  : {},
               }}
             >
-              <MenuItem value="" disabled>
-                <em>Select a size</em>
-              </MenuItem>
-              {sizes.map((size) => (
-                <MenuItem key={size.id} value={size.id}>
-                  {size.size}
+              View Size Chart
+            </Typography>
+          </FlexBox>
+          <FlexBox gap={{ xs: 2, sm: 3 }} py={{ xs: 2 }}>
+            <FormControl sx={{ flexGrow: 1, width: "100%" }} error={sizeError}>
+              <Select
+                value={selectedSize}
+                onChange={handleSizeSelect}
+                fullWidth
+                displayEmpty
+                sx={{
+                  borderRadius: { xs: "999px", sm: "6px" },
+                  width: "100%",
+                  height: "100%",
+                  "& .MuiSelect-select": {
+                    borderRadius: "999px",
+                    padding: { xs: "15px 15px", sm: "20px 15px" },
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderRadius: "999px",
+                    borderColor: sizeError ? "red" : undefined,
+                    borderWidth: "2px",
+                  },
+                }}
+              >
+                <MenuItem value="" disabled>
+                  <em>Select a size</em>
                 </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button sx={styles.personalised} onClick={() => setSidenavOpen(true)}>
-            Personalized Sizing
-          </Button>
-        </FlexBox>
-
-        {/* SIZE CHART - Only show if selectedSize has a sizeChartUrl */}
-        {sizeChartUrl && (
-          <FlexBox justifyContent="flex-end">
-            <Button sx={styles.sizeChart} onClick={() => setOpenModal(true)}>
-              Size chart
+                {sizes.map((size) => (
+                  <MenuItem key={size.id} value={size.id}>
+                    {size.size}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button sx={styles.personalised} onClick={() => setSidenavOpen(true)}>
+              Personalized Sizing
             </Button>
           </FlexBox>
-        )}
+        </FlexCol>
 
         {/* ADD TO CART BUTTON */}
         <FlexBox alignItems="center" gap={{ xs: 2, sm: 3 }} py={1}>

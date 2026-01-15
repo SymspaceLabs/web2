@@ -1,11 +1,12 @@
 // favorites/components/cart-item.jsx
 
 // ==============================================================
-// Cart Item with Dynamic Variant Pricing
+// Refactored Cart Item with Reference Design Patterns
 // ==============================================================
 
 import Link from "next/link";
 import Close from "@mui/icons-material/Close";
+import ShoppingCartOutlined from "@mui/icons-material/ShoppingCartOutlined";
 
 import { useState, useEffect } from "react";
 import { LazyImage } from "@/components/lazy-image";
@@ -13,10 +14,9 @@ import { useCart } from "@/hooks/useCart";
 import { currency } from "@/lib";
 import { Paragraph } from "@/components/Typography";
 import { FlexBox, FlexCol, FlexColCenter } from "@/components/flex-box";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import { SymColorDropdown, SymRoundedDropdown } from "@/components/custom-inputs";
 import { useFavorites } from "@/contexts/FavoritesContext";
-import { H1 } from "@/components/Typography";
 import { useSnackbar } from "notistack";
 
 // Services
@@ -25,7 +25,6 @@ import { fetchProductAvailability } from "@/services/productService";
 // ==============================================================
 
 export default function MiniCartItem({ item, mode = 'light' }) {
-
   const { state, dispatch } = useCart();
   const { dispatch: favoritesDispatch } = useFavorites();
   const { enqueueSnackbar } = useSnackbar();
@@ -37,16 +36,16 @@ export default function MiniCartItem({ item, mode = 'light' }) {
   const [selectedSize, setSelectedSize] = useState(
     item.selectedVariant?.size?.value || item.sizes?.[0]?.value || ''
   );
-  const [availability, setAvailability] = useState(null); // ✅ Store full availability data
+  const [availability, setAvailability] = useState(null);
   const [stockWarningMessage, setStockWarningMessage] = useState('');
   const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [displayImage, setDisplayImage] = useState(item.imgUrl);
   const [loadingImage, setLoadingImage] = useState(false);
 
-  // Determine text color based on the 'mode' prop
+  // Design constants from reference
   const textColor = mode === 'dark' ? '#000' : '#FFF';
-  const salePriceColor = mode === 'dark' ? '#000' : '#5B5B5B';
-
+  const salePriceColor = mode === 'dark' ? '#666' : '#999';
+  
   // ✅ Effect to fetch variant data including price and stock
   useEffect(() => {
     const checkAvailability = async () => {
@@ -55,11 +54,9 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       if (!item.id || !selectedColor || !selectedColor.value || !selectedSize) {
         setAvailability(null);
         if (!selectedSize) {
-          setStockWarningMessage("Please select a size.");
+          setStockWarningMessage("Select size");
         } else if (!selectedColor || !selectedColor.value) {
-          setStockWarningMessage("Please select a color.");
-        } else {
-          setStockWarningMessage("");
+          setStockWarningMessage("Select color");
         }
         return;
       }
@@ -68,7 +65,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
 
       try {
         const data = await fetchProductAvailability(item.id, selectedColor.id, selectedSize);
-        setAvailability(data); // ✅ Store the full availability object
+        setAvailability(data);
         
         if (data?.stock === 0) {
           setStockWarningMessage("Out of Stock");
@@ -76,7 +73,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
           setStockWarningMessage("");
         }
       } catch (err) {
-        console.error("Error fetching availability for mini cart item:", err);
+        console.error("Error fetching availability:", err);
         setAvailability(null);
       } finally {
         setLoadingAvailability(false);
@@ -86,9 +83,8 @@ export default function MiniCartItem({ item, mode = 'light' }) {
     checkAvailability();
   }, [item.id, selectedColor, selectedSize]);
 
-  // ✅ Dynamic price calculation based on availability data
+  // ✅ Dynamic price calculation
   const getDisplayPrice = () => {
-    // If variant is selected and loaded, show exact variant price
     if (availability && selectedColor && selectedSize) {
       return {
         current: availability.hasSale ? availability.salePrice : availability.price,
@@ -98,7 +94,6 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       };
     }
     
-    // Fallback to item's base price
     return {
       current: item.salePrice || item.price,
       original: item.price,
@@ -109,16 +104,9 @@ export default function MiniCartItem({ item, mode = 'light' }) {
 
   const priceInfo = getDisplayPrice();
 
-  // ✅ UPDATED: Following product-details.jsx pattern
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      setStockWarningMessage("Please select a size.");
-      enqueueSnackbar("Please select a size", { variant: "warning" });
-      return;
-    }
-    if (!selectedColor || !selectedColor.value) {
-      setStockWarningMessage("Please select a color.");
-      enqueueSnackbar("Please select a color", { variant: "warning" });
+    if (!selectedSize || !selectedColor?.value) {
+      enqueueSnackbar("Please select options", { variant: "warning" });
       return;
     }
 
@@ -132,22 +120,14 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       return;
     }
 
-    // Check current quantity in cart using variantId
-    const cartItem = state.cart.find(
-      cartItem => cartItem.variantId === availability.variantId
-    );
+    const cartItem = state.cart.find(c => c.variantId === availability.variantId);
     const currentQty = cartItem ? cartItem.quantity : 0;
 
     if (currentQty >= availability.stock) {
-      setStockWarningMessage(`Maximum stock (${availability.stock}) already in cart`);
-      enqueueSnackbar(
-        `Maximum stock (${availability.stock}) already in cart`,
-        { variant: "warning" }
-      );
+      enqueueSnackbar(`Maximum stock (${availability.stock}) already in cart`, { variant: "warning" });
       return;
     }
 
-    // ✅ NEW: Dispatch with only variantId and quantity (same as product-details.jsx)
     dispatch({
       type: "ADD_TO_CART",
       payload: {
@@ -156,10 +136,7 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       },
     });
 
-    setStockWarningMessage('');
     enqueueSnackbar(`${item.name} added to cart!`, { variant: "success" });
-
-    // Remove from favorites after successfully adding to cart
     favoritesDispatch({
       type: "REMOVE_FAVORITE",
       payload: item._favoriteKey || item.id,
@@ -167,18 +144,13 @@ export default function MiniCartItem({ item, mode = 'light' }) {
   };
 
   const handleRemoveItem = () => {
-    // ✅ Use the stored favorite key for removal
     favoritesDispatch({
       type: "REMOVE_FAVORITE",
-      payload: item._favoriteKey || item.id, // Use composite key if available
+      payload: item._favoriteKey || item.id,
     });
   };
 
-  const isAddToCartDisabled = 
-    (availability?.stock === 0) || 
-    loadingAvailability || 
-    !selectedSize || 
-    !selectedColor?.value;
+  const isAddToCartDisabled = (availability?.stock === 0) || loadingAvailability || !selectedSize || !selectedColor?.value;
 
   // Handle image change based on selected color
   useEffect(() => {
@@ -187,11 +159,10 @@ export default function MiniCartItem({ item, mode = 'light' }) {
       const newImage = item.images.find(img => img.colorCode === selectedColor.value);
       if (newImage) {
         setDisplayImage(newImage.url);
-        setLoadingImage(false);
       } else {
         setDisplayImage(item.imgUrl);
-        setLoadingImage(false);
       }
+      setLoadingImage(false);
     } else {
       setDisplayImage(item.imgUrl);
       setLoadingImage(false);
@@ -199,163 +170,239 @@ export default function MiniCartItem({ item, mode = 'light' }) {
   }, [selectedColor, item.images, item.imgUrl]);
 
   return (
-    <FlexBox
-      py={2}
-      px={2.5}
-      key={item.id}
-      gap={1}
-      justifyContent="space-between"
-      borderBottom="1px solid"
-      borderColor="divider"
+    <Box
       sx={{
-        alignItems: 'stretch',
-        minHeight: 100
+        position: 'relative',
+        mx: 2,
+        my: 1.5,
+        p: 2,
+        borderRadius: '20px',
+        background: mode === 'dark' 
+          ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 245, 0.95) 100%)'
+          : 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)',
+        backdropFilter: 'blur(10px)',
+        boxShadow: mode === 'dark'
+          ? '0 4px 20px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9)'
+          : '0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        border: mode === 'dark' 
+          ? '1px solid rgba(255, 255, 255, 0.8)'
+          : '1px solid rgba(255, 255, 255, 0.15)',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: mode === 'dark'
+            ? '0 8px 30px rgba(0, 0, 0, 0.12)'
+            : '0 8px 30px rgba(0, 0, 0, 0.2)',
+        }
       }}
     >
-      {/* Product Image */}
-      <FlexColCenter alignItems="center" sx={{ width: 100 }}>
-        <Link href={`/products/${item.slug}`}>
-          {loadingImage ? (
-            <CircularProgress size={50} />
-          ) : (
-            <LazyImage
-              alt={item.name}
-              src={displayImage}
-              width={75}
-              height={75}
-              sx={{ width: 75, height: 75 }}
-              onLoad={() => setLoadingImage(false)}
-              onError={() => setLoadingImage(false)}
-            />
-          )}
-        </Link>
-      </FlexColCenter>
-
-      {/* Product Info */}
-      <FlexCol height="100%" maxWidth={150}>
-        <Link href={`/products/${item.slug}`}>
-          <Paragraph color={textColor}>
-            {item.name}
-          </Paragraph>
-        </Link>
-
-        {/* ✅ Show Saved Variant Info */}
-        {item.selectedVariant?.color && item.selectedVariant?.size && (
-          <Box sx={{ 
-            mt: 0.5, 
-            mb: 0.5,
-            py: 0.5, 
-            px: 1, 
-            background: 'rgba(48, 132, 255, 0.1)',
-            borderRadius: '4px',
-            border: '1px solid rgba(48, 132, 255, 0.3)'
-          }}>
-            <Paragraph fontSize="9px" color={textColor}>
-              Saved: {item.selectedVariant.color.label} / {item.selectedVariant.size.label}
-            </Paragraph>
-          </Box>
-        )}
-
-        {/* ✅ Dynamic Price Display with Loading State */}
-        <FlexBox gap={2} alignItems="center" mt={0.5}>
-          {loadingAvailability ? (
-            <CircularProgress size={16} />
-          ) : (
-            <>
-              <Paragraph color={textColor}>
-                {currency(priceInfo.current)}
-              </Paragraph>
-              {priceInfo.showOriginal && (
-                <Paragraph 
-                  color={salePriceColor} 
-                  sx={{ textDecoration: 'line-through' }}
-                >
-                  {currency(priceInfo.original)}
-                </Paragraph>
-              )}
-            </>
-          )}
-        </FlexBox>
-
-        {/* 2 Dropdowns side by side */}
-        <FlexBox alignItems="center" gap={0.5} pt={1}>
-          <SymColorDropdown
-            value={selectedColor?.value || ''}
-            onChange={(e) => {
-              const selected = item.colors.find(c => c.value === e.target.value);
-              setSelectedColor(selected);
-            }}
-            options={item.colors}
-          />
-
-          <SymRoundedDropdown
-            value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value)}
-            options={item.sizes}
-          />
-        </FlexBox>
-      </FlexCol>
-
-      <FlexCol
-        sx={{ flex: 1 }}
-        alignItems="flex-end"
-        justifyContent="space-between"
-        gap={1}
+      {/* Close Button - Reference Style */}
+      <IconButton
+        onClick={handleRemoveItem}
+        sx={{
+          position: 'absolute',
+          top: 8,
+          right: 8,
+          width: 32,
+          height: 32,
+          background: mode === 'dark' 
+            ? 'rgba(0, 0, 0, 0.05)'
+            : 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          border: mode === 'dark'
+            ? '1px solid rgba(0, 0, 0, 0.1)'
+            : '1px solid rgba(255, 255, 255, 0.2)',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            background: mode === 'dark'
+              ? 'rgba(255, 0, 0, 0.1)'
+              : 'rgba(255, 255, 255, 0.2)',
+            transform: 'rotate(90deg)',
+          }
+        }}
       >
-        <Button sx={{ height: 28, width: 28 }} onClick={handleRemoveItem}>
-          <Close fontSize="small" sx={{ color: textColor }} />
-        </Button>
+        <Close fontSize="small" sx={{ color: textColor, fontSize: '18px' }} />
+      </IconButton>
 
-        {/* Stock Warning Display */}
-        {loadingAvailability ? (
-          <CircularProgress size={20} sx={{ mt: 0.5 }} />
-        ) : (
-          stockWarningMessage && (
-            <Box sx={styles.statusPill}>
-              <H1 fontSize="8px" color="#000">
-                {stockWarningMessage}
-              </H1>
+      <FlexBox gap={2.5} alignItems="center">
+        {/* Product Image - Reference Style */}
+        <FlexColCenter alignItems="center" sx={{ minWidth: 100 }}>
+          <Link href={`/products/${item.slug}`}>
+            <Box
+              sx={{
+                width: 90,
+                height: 90,
+                borderRadius: '16px',
+                background: mode === 'dark'
+                  ? 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'
+                  : 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                boxShadow: mode === 'dark'
+                  ? 'inset 0 2px 8px rgba(0, 0, 0, 0.05)'
+                  : 'inset 0 2px 8px rgba(0, 0, 0, 0.1)',
+                border: mode === 'dark'
+                  ? '1px solid rgba(0, 0, 0, 0.06)'
+                  : '1px solid rgba(255, 255, 255, 0.1)',
+                transition: 'transform 0.3s ease',
+                '&:hover': {
+                  transform: 'scale(1.05)',
+                }
+              }}
+            >
+              {loadingImage ? (
+                <CircularProgress size={24} />
+              ) : (
+                <LazyImage
+                  alt={item.name}
+                  src={displayImage}
+                  width={90}
+                  height={90}
+                  sx={{
+                    width: '100%', 
+                    height: '100%',
+                    objectFit: 'contain',
+                    borderRadius: '12px'
+                  }}
+                />
+              )}
             </Box>
-          )
-        )}
-        
-        <FlexBox alignItems="center" gap={1}>
-          <Button
-            sx={isAddToCartDisabled ? { ...styles.btn, ...styles.disabledBtn } : styles.btn}
-            onClick={handleAddToCart}
-            disabled={isAddToCartDisabled}
-          >
-            Add to cart
-          </Button>
-        </FlexBox>
-      </FlexCol>
-    </FlexBox>
+          </Link>
+        </FlexColCenter>
+
+        {/* Product Info */}
+        <FlexCol height="100%" flex={1} gap={0.5}>
+          <Link href={`/products/${item.slug}`}>
+            <Paragraph 
+              color={textColor}
+              sx={{
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                fontWeight: 600,
+                lineHeight: 1.3,
+                fontSize: '15px',
+                letterSpacing: '-0.01em'
+              }}
+            >
+              {item.name}
+            </Paragraph>
+          </Link>
+
+          {/* Price Section - Reference Style */}
+          <FlexBox gap={1.5} alignItems="center" mt={0.5}>
+            {loadingAvailability ? (
+              <CircularProgress size={14} />
+            ) : (
+              <>
+                <Typography 
+                  sx={{
+                    color: textColor,
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em'
+                  }}
+                >
+                  {currency(priceInfo.current)}
+                </Typography>
+                {priceInfo.showOriginal && (
+                  <Typography 
+                    sx={{
+                      color: salePriceColor,
+                      fontSize: '15px',
+                      textDecoration: 'line-through',
+                      fontWeight: 500
+                    }}
+                  >
+                    {currency(priceInfo.original)}
+                  </Typography>
+                )}
+              </>
+            )}
+          </FlexBox>
+
+          {/* Selection Dropdowns - Integrated into the design */}
+          <FlexBox alignItems="center" gap={1} pt={1}>
+            <SymColorDropdown
+              value={selectedColor?.value || ''}
+              onChange={(e) => {
+                const selected = item.colors.find(c => c.value === e.target.value);
+                setSelectedColor(selected);
+              }}
+              options={item.colors}
+              sx={{
+                height: 32,
+                borderRadius: '12px',
+                background: mode === 'dark' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)',
+                border: mode === 'dark' ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                color: textColor,
+                fontSize: '12px'
+              }}
+            />
+
+            <SymRoundedDropdown
+              value={selectedSize}
+              onChange={(e) => setSelectedSize(e.target.value)}
+              options={item.sizes}
+              sx={{
+                height: 32,
+                borderRadius: '12px',
+                background: mode === 'dark' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.1)',
+                border: mode === 'dark' ? '1px solid rgba(0,0,0,0.1)' : '1px solid rgba(255,255,255,0.2)',
+                color: textColor,
+                fontSize: '12px'
+              }}
+            />
+          </FlexBox>
+
+          {/* Add to Cart Action */}
+          <Box sx={{ mt: 1.5, display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Button
+              variant="contained"
+              disabled={isAddToCartDisabled}
+              onClick={handleAddToCart}
+              startIcon={!loadingAvailability && <ShoppingCartOutlined sx={{ fontSize: '16px !important' }} />}
+              sx={{
+                borderRadius: '12px',
+                fontWeight: 700,
+                fontSize: '13px',
+                py: 0.8,
+                px: 2,
+                background: isAddToCartDisabled 
+                  ? (mode === 'dark' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.1)')
+                  : 'linear-gradient(135deg, #0366FE 0%, #0052CC 100%)',
+                color: isAddToCartDisabled ? (mode === 'dark' ? '#999' : 'rgba(255,255,255,0.3)') : 'white',
+                boxShadow: isAddToCartDisabled ? 'none' : '0 4px 12px rgba(3, 102, 254, 0.3)',
+                '&:hover': {
+                  background: isAddToCartDisabled 
+                    ? 'none' 
+                    : 'linear-gradient(135deg, #0052CC 0%, #0366FE 100%)',
+                }
+              }}
+            >
+              {loadingAvailability ? <CircularProgress size={16} color="inherit" /> : 'Add to Cart'}
+            </Button>
+
+            {stockWarningMessage && (
+              <Typography 
+                sx={{ 
+                  fontSize: '11px', 
+                  fontWeight: 600, 
+                  color: '#FF4E4E',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em'
+                }}
+              >
+                {stockWarningMessage}
+              </Typography>
+            )}
+          </Box>
+        </FlexCol>
+      </FlexBox>
+    </Box>
   );
 }
-
-const styles = {
-  btn: {
-    background: 'linear-gradient(92.78deg, #3084FF 39.5%, #1D4F99 100%)',
-    borderRadius: '80px',
-    border: '2px solid #FFF',
-    color: '#FFF',
-    fontSize: 10,
-    py: 1,
-    px: 1.5,
-    minWidth: '115px'
-  },
-  statusPill: {
-    py: '5px',
-    px: '10px',
-    background: 'linear-gradient(94.91deg, #858585 0%, #FFFFFF 100%)',
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
-    borderRadius: '100px'
-  },
-  disabledBtn: {
-    background: 'rgba(128, 128, 128, 0.55)',
-    color: "#FFF",
-    cursor: "not-allowed",
-    pointerEvents: "none",
-    border: "2px solid #FFF",
-  }
-};

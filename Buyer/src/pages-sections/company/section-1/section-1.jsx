@@ -59,22 +59,34 @@ export default function Section1({ company }) {
         <FlexBox sx={{ flexDirection: {xs:'column', sm:'column', md:'row'}, gap:5, maxWidth:'1500px', width:'100%', mt: '-90px', p:5 }}>
 
         {/* SHOW LOGO ONLY WHEN EXIST */}
-        {company.logo && 
+        {company.logo && (
+          <Box
+            sx={{
+              width: 200,
+              height: 200,
+              borderRadius: '50%',
+              overflow: 'hidden',
+              margin: '0 auto',
+              border: '5px solid #FFF',
+              boxShadow: '0px 4px 23.3px 18px rgba(0, 0, 0, 0.25)',
+              backgroundColor: '#fff',
+              flexShrink: 0,
+            }}
+          >
             <LazyImage
               src={company.logo}
               alt="Company Logo"
-              width={500}
-              height={500}
-              sx={{
-                width: 200,
-                height: 200,
-                margin: '0 auto',
-                border: '5px solid #FFF',
-                borderRadius:'100px',
-                boxShadow: '0px 4px 23.3px 18px rgba(0, 0, 0, 0.25)'
+              width={200}
+              height={200}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
               }}
             />
-        }
+          </Box>
+        )}
+
           
 
           <FlexCol gap={5}>

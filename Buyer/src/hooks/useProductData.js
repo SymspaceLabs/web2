@@ -1,8 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
+/**
+ * Fetches all product data from the backend (no server-side pagination)
+ * 
+ * @param {string} paramsString - URL search parameters
+ * @returns {Object} Product data, loading state, and error
+ */
 export function useProductData(paramsString) {
   const [data, setData] = useState({
-    allProducts: [],
+    products: [],
     allBrands: [],
     priceLimits: [0, 300],
     category: [],
@@ -14,70 +20,89 @@ export function useProductData(paramsString) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setLoading(true);
-
-    const queryString = paramsString ? `?${paramsString}` : "";
-
-    // ✅ Helper function to normalize category IDs AND slugs
-    function normalizeCategoryIds(product) {
-      if (!product.category) {
-        return {
-          ...product,
-          subcategoryItemChildId: null,
-          subcategoryItemId: null,
-          subcategoryItemChildSlug: null,
-          subcategoryItemSlug: null,
-        };
-      }
-
-      const hierarchy = [];
-      let current = product.category;
-      
-      // Build hierarchy from deepest to root
-      while (current) {
-        hierarchy.push(current);
-        current = current.parent;
-      }
-      
+  /**
+   * Normalizes product category hierarchy for easier filtering
+   * Adds flattened category IDs and slugs to each product
+   */
+  const normalizeProduct = useCallback((product) => {
+    if (!product.category) {
       return {
         ...product,
-        // IDs for filtering by ID
-        subcategoryItemChildId: hierarchy[0]?.id || null,
-        subcategoryItemId: hierarchy[1]?.id || null,
-        // ✅ ADD: Slugs for filtering by URL params
-        subcategoryItemChildSlug: hierarchy[0]?.slug || null,
-        subcategoryItemSlug: hierarchy[1]?.slug || null,
+        categoryHierarchy: {
+          childId: null,
+          parentId: null,
+          childSlug: null,
+          parentSlug: null,
+        }
       };
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`, {
-        cache: "no-store",
-      })
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
-      })
-      .then(fetchedData => {
-        // ✅ Apply normalization to products BEFORE setting state
-        const normalizedProducts = fetchedData.products.map(normalizeCategoryIds);
-                
+    // Build hierarchy array from deepest child to root
+    const hierarchy = [];
+    let current = product.category;
+    while (current) {
+      hierarchy.push(current);
+      current = current.parent;
+    }
+    
+    return {
+      ...product,
+      categoryHierarchy: {
+        childId: hierarchy[0]?.id || null,
+        parentId: hierarchy[1]?.id || null,
+        childSlug: hierarchy[0]?.slug || null,
+        parentSlug: hierarchy[1]?.slug || null,
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const queryString = paramsString ? `?${paramsString}` : "";
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString}`,
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch products: ${response.status}`);
+        }
+
+        const fetchedData = await response.json();
+        
+        // Normalize all products
+        const normalizedProducts = (fetchedData.products || []).map(normalizeProduct);
+
         setData({
-          allProducts: normalizedProducts,
-          allBrands: fetchedData.brands,
-          priceLimits: [fetchedData.priceRange.min, fetchedData.priceRange.max],
-          category: fetchedData.category,
-          allGenders: fetchedData.genders?.map(g => g.toLowerCase()) || [],
+          products: normalizedProducts,
+          allBrands: fetchedData.brands || [],
+          priceLimits: [
+            fetchedData.priceRange?.min || 0,
+            fetchedData.priceRange?.max || 300
+          ],
+          category: fetchedData.category || [],
+          allGenders: (fetchedData.genders || []).map(g => g.toLowerCase()),
           allAvailabilities: fetchedData.availabilities || [],
           allColors: fetchedData.colors || [],
         });
-      })
-      .catch(err => {
+      } catch (err) {
         console.error("Failed to fetch product data:", err);
         setError(err.message);
-      })
-      .finally(() => setLoading(false));
-  }, [paramsString]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  return { ...data, loading, error };
+    fetchProducts();
+  }, [paramsString, normalizeProduct]);
+
+  return {
+    ...data,
+    loading,
+    error,
+  };
 }

@@ -25,10 +25,6 @@ export default function ProductsGridView({
           </Grid>
         ))}
       </Grid>
-
-      <FlexRowCenter flexWrap="wrap" mt={4}>
-        <Pagination count={Math.ceil(products.length / 10)} variant="outlined" color="primary" />
-      </FlexRowCenter>
     </Fragment>
   );
 }

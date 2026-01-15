@@ -156,7 +156,8 @@ export default function EmailBanner({title}) {
                       value={email}
                       onChange={handleEmailChange}
                       error={!!error}
-                      // helperText={error}
+                      autoComplete="off"
+                      name="email-subscription"
                       sx={{
                         width: "100%",
                         boxSizing: "border-box",

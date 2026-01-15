@@ -1,4 +1,7 @@
-// cart-item.jsx
+// =================================
+// mini-cart/cart-item.jsx
+// used in cart drawer
+// =================================
 
 import Link from "next/link";
 import Add from "@mui/icons-material/Add";

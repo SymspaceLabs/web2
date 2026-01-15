@@ -72,6 +72,7 @@ export class CompanyDto {
   id: string;
   entityName: string;
   slug: string;
+  description?: string;
 }
 
 export class ProductListItemDto {

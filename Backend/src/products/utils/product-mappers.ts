@@ -24,7 +24,7 @@ export class ProductMapper {
       ageGroup: product.ageGroup,
       ar_type : product.ar_type,
       
-      company: this.mapCompany(product.company),
+      company: this.mapCompanyList(product.company),
       category: extractGranularCategory(product),
       
       images: this.mapImages(product.images),
@@ -50,11 +50,35 @@ export class ProductMapper {
   }
 
   static toDetailDto(product: any): ProductDetailDto {
+      return {
+        ...this.toListItemDto(product),
+        company: this.mapCompanyDetail(product.company),
+        variants: this.mapVariants(product.variants),
+      };
+    }
+
+  private static mapCompanyList(company: any): CompanyDto {
+    if (!company) return null;
+
     return {
-      ...this.toListItemDto(product),
-      variants: this.mapVariants(product.variants)
+      id: company.id,
+      entityName: company.entityName,
+      slug: company.slug,
     };
   }
+
+  private static mapCompanyDetail(company: any): CompanyDto {
+    if (!company) return null;
+
+    return {
+      id: company.id,
+      entityName: company.entityName,
+      slug: company.slug,
+      description: company.description,
+    };
+  }
+
+
 
   /**
    * CRITICAL METHOD: Resolves the most granular category level

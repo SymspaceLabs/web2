@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
+import { calculateDisplayPrice } from 'src/products/utils/price-calculation.utils';
 
 @Injectable()
 export class CompaniesService {
@@ -29,7 +30,6 @@ export class CompaniesService {
     return companies;
   }
 
-  
   async findOne(id: string): Promise<Company> {
     const company = await this.companiesRepository.findOne({ where: { id } });
     if (!company) {
@@ -41,21 +41,23 @@ export class CompaniesService {
   async findBySlug(slug: string): Promise<Company | null> {
     const company = await this.companiesRepository.findOne({
       where: { slug },
-      relations: ['products', 'products.images'],
+      relations: ['products', 'products.images', 'products.variants'],
     });
   
     if (!company) {
       throw new NotFoundException(`Company with ID ${slug} not found`);
     }
   
-    // Sort each product's images by sortOrder
+    // ✅ Process each product to add displayPrice
     for (const product of company.products) {
       product.images.sort((a, b) => a.sortOrder - b.sortOrder);
+      
+      // Calculate displayPrice using ProductsService's private method
+      (product as any).displayPrice = calculateDisplayPrice(product);
     }
   
     return company;
   }
-  
 
   async update(
     id: string,

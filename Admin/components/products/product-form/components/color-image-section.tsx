@@ -1,11 +1,8 @@
-// ===================================
-// FILE: components/media/ColorImageSection.tsx
-// ===================================
-
+// components/media/ColorImageSection.tsx - FIXED VERSION
 
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { Upload, ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -53,7 +50,6 @@ export function ColorImageSection({
   const handleFileDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // Only set to false if leaving the section container
     if (e.currentTarget === e.target) {
       setIsDraggingFile(false)
     }
@@ -143,26 +139,21 @@ export function ColorImageSection({
       {/* Images Grid */}
       {sortedImages.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {sortedImages.map((image, index) => {
-            return (
-              <ImageCard
-                key={image.id}
-                image={image}
-                index={index}
-                onDelete={() => onDelete(image.id)}
-                onRetry={image.error ? () => onRetry(image.id) : undefined}
-                onDragStart={handleImageDragStart(image.id)}
-                onDragOver={handleImageDragOver(image.id)}
-                onDrop={handleImageDrop(image.id)}
-                onDragEnd={handleImageDragEnd}
-                isDragging={draggedImageId === image.id}
-                isDropTarget={dropTargetId === image.id}
-              />
-            )
-          })
-          }
-          
-          
+          {sortedImages.map((image, index) => (
+            <ImageCard
+              key={image.id}
+              image={image}
+              index={index}
+              onDelete={() => onDelete(image.id)}
+              onRetry={image.error ? () => onRetry(image.id) : undefined}
+              onDragStart={handleImageDragStart(image.id)}
+              onDragOver={handleImageDragOver(image.id)}
+              onDrop={handleImageDrop(image.id)}
+              onDragEnd={handleImageDragEnd}
+              isDragging={draggedImageId === image.id}
+              isDropTarget={dropTargetId === image.id}
+            />
+          ))}
         </div>
       ) : (
         <div className={`flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-lg transition-colors ${

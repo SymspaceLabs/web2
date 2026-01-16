@@ -27,18 +27,27 @@ export function buildColorCodeMap(selectedColors: FormData['selectedColors']): C
 
 /**
  * Transform images to API format with color codes
+ * ✅ UPDATED: Filter out generated IDs, only send real database IDs
  */
 export function transformImagesToApiFormat(
   images: FormData['images'],
   colorCodeMap: ColorCodeMap
 ) {
-  return images.map(img => ({
-    url: img.url,
-    colorId: img.colorId ?? null,
-    colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null,
-    sortOrder: img.sortOrder,
-    isThumbnail: img.isThumbnail ?? false
-  }))
+  return images.map(img => {
+    const isGeneratedId = img.id?.startsWith('api-img-') || 
+                          img.id?.startsWith('img-') || 
+                          img.id?.startsWith('uploading-')
+    
+    return {
+      // Only include id if it's a real database ID
+      ...(img.id && !isGeneratedId ? { id: img.id } : {}),
+      url: img.url,
+      colorId: img.colorId ?? null,
+      colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null,
+      sortOrder: img.sortOrder,
+      isThumbnail: img.isThumbnail ?? false
+    }
+  })
 }
 
 /**
@@ -80,13 +89,21 @@ export async function uploadNewThumbnail(
   }
   
   // Clear other thumbnails
-  const updatedImages = currentImages.map(img => ({
-    url: img.url,
-    colorId: img.colorId,
-    colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null,
-    sortOrder: img.sortOrder,
-    isThumbnail: false
-  }))
+  const updatedImages = currentImages.map(img => {
+    const isGeneratedId = img.id?.startsWith('api-img-') || 
+                          img.id?.startsWith('img-') || 
+                          img.id?.startsWith('uploading-')
+    
+    return {
+      // Only include id if it's a real database ID
+      ...(img.id && !isGeneratedId ? { id: img.id } : {}),
+      url: img.url,
+      colorId: img.colorId,
+      colorCode: img.colorId ? colorCodeMap.get(img.colorId) ?? null : null,
+      sortOrder: img.sortOrder,
+      isThumbnail: false
+    }
+  })
   
   // Build payload with new thumbnail
   const payload = {
@@ -100,10 +117,12 @@ export async function uploadNewThumbnail(
 
 /**
  * Transform API images to form format
+ * ✅ FIXED: Generate unique IDs for images without IDs
  */
 export function transformApiImagesToFormImages(apiImages: any[]): FormData['images'] {
   return apiImages.map((img, i) => ({
-    id: img.id,
+    // ✅ Generate unique ID if API doesn't provide one
+    id: img.id || `api-img-${Date.now()}-${i}-${Math.random().toString(36).substr(2, 9)}`,
     url: img.url,
     colorId: img.colorId || null,
     sortOrder: img.sortOrder ?? i,

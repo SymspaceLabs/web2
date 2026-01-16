@@ -33,6 +33,12 @@ const TopSortCard = ({
   const searchParams = useSearchParams(); // Use the hook directly here
   const { setTitle, setSlug } = useTitle(); // Get the setTitle function from context
 
+  // Helper function to turn "casual-dresses" into "Casual dresses"
+  const formatTitle = (str) => {
+    if (!str) return "";
+    const cleanStr = str.replace(/-/g, " "); // Replace hyphens with spaces
+    return cleanStr.charAt(0).toUpperCase() + cleanStr.slice(1).toLowerCase();
+  };
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -48,37 +54,23 @@ const TopSortCard = ({
 
     // 2. Check for specific subcategory/category parameters
     const subcategoryItemChild = searchParams.get('subcategoryItemChild');
-    if (subcategoryItemChild) {
-      return `for ${subcategoryItemChild.charAt(0).toUpperCase() + subcategoryItemChild.slice(1)}`;
-    }
+    if (subcategoryItemChild) return formatTitle(subcategoryItemChild);
 
     const subcategoryItem = searchParams.get('subcategoryItem');
-    if (subcategoryItem) {
-      return `for ${subcategoryItem.charAt(0).toUpperCase() + subcategoryItem.slice(1)}`;
-    }
+    if (subcategoryItem) return formatTitle(subcategoryItem);
 
     const subcategory = searchParams.get('subcategory');
-    if (subcategory) {
-      return `for ${subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}`;
-    }
+    if (subcategory) return formatTitle(subcategory);
 
     const category = searchParams.get('category');
-    if (category) {
-      return `for ${category.charAt(0).toUpperCase() + category.slice(1)}`;
-    }
+    if (category) return formatTitle(category);
 
-    // 3. Fallback to genderDisplayName and categoryDisplayName props
+    // 3. Fallback to gender and category props
     const parts = [];
-    if (genderDisplayName) {
-      parts.push(genderDisplayName);
-    }
-    // Only add categoryDisplayName if it's not empty,
-    // as it might be an empty string if no specific category was found by useProductFilters.
-    if (categoryDisplayName) {
-      parts.push(categoryDisplayName);
-    }
+    if (genderDisplayName) parts.push(genderDisplayName);
+    if (categoryDisplayName) parts.push(categoryDisplayName);
 
-    return parts.length > 0 ? `for ${parts.join(' and ')}` : '';
+    return parts.length > 0 ? parts.join(' and ') : '';
   }, [searchParams, genderDisplayName, categoryDisplayName]); // Dependencies for re-evaluation
 
   // Update the title in the context
@@ -99,7 +91,7 @@ const TopSortCard = ({
       gap={1}
     >
       <Paragraph color="grey.600">
-        Total {totalProducts} results {displayFilterText}
+        Total {totalProducts} results for {displayFilterText}
       </Paragraph>
 
       <FlexBox alignItems="center" gap={2}>

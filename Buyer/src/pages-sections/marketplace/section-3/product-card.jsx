@@ -10,7 +10,7 @@ export default function ProductCard({
   item
 }) {
   return (
-    <Link href={`/products/search/all?category=${item.slug}`} passHref>
+    <Link href={`/products?category=${item.slug}`} passHref>
       <Card
         sx={{
           ...styles.blogCard,

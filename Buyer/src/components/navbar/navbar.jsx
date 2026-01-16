@@ -57,7 +57,7 @@ export default function Navbar({
           <FlexBox justifyContent="space-between" width="80%">
             {categories.map((item, index)=> (
                 <StyledNavLink
-                  href={`/products/search/all?${item.slug}` }
+                  href={`/products?${item.slug}` }
                   key={index}
                   onClick={handleNavLinkClick} // Attach the new click handler here
                   sx={{

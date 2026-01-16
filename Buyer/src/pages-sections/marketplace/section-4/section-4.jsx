@@ -38,7 +38,7 @@ export default function Section4() {
 
         {/* Call-to-action button */}
         <FlexBox justifyContent="end" sx={{ mt: 5 }}>
-          <Button sx={styles.buttonLight} LinkComponent={Link} href="/products/search/all">
+          <Button sx={styles.buttonLight} LinkComponent={Link} href="/products">
             Shop By Category
           </Button>
         </FlexBox>
@@ -54,20 +54,20 @@ const categoryCards = [
     title: "T-shirts",
     image: "/assets/images/products/Men/shirt.png",
     slug: 't-shirts',
-    url: '/products/search/all?subcategoryItem=t-shirts'
+    url: '/products?subcategoryItem=t-shirts'
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",
     title: "Bottoms",
     image: "/assets/images/products/Men/pants.png",
     slug:'bottoms',
-    url: '/products/search/all?subcategory=bottoms'
+    url: '/products?subcategory=bottoms'
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Accessories",
     image: "/assets/images/products/Men/watch.png",
     slug:'accessories',
-    url: '/products/search/all?subcategory=accessories'
+    url: '/products?subcategory=accessories'
   },
 ];

@@ -32,7 +32,9 @@ export default function ProductInfoArea({
   handleBuyNow,
   setSidenavOpen,
   setOpenModal,
-  openModal
+  openModal,
+  colorDisplayText,
+  sizeDisplayText
 }) {
   const {
     colors,
@@ -72,9 +74,8 @@ export default function ProductInfoArea({
   // GET SIZE CHART URL FROM SELECTED SIZE
   // ========================================
   const getSelectedSizeChart = () => {
-    if (!selectedSize || !sizes) return null;
-    const selectedSizeObj = sizes.find(size => size.id === selectedSize);
-    return selectedSizeObj?.sizeChartUrl || null;
+    if (!selectedSize) return null;
+    return selectedSize?.sizeChartUrl || null;
   };
 
   const sizeChartUrl = getSelectedSizeChart();
@@ -152,8 +153,8 @@ export default function ProductInfoArea({
 
         {/* COLOR SELECTION */}
         <FlexCol gap={1} mb={2}>
-          <Paragraph mb={1} fontSize="14px" color="#353535" sx={{ fontWeight: 700 }}>
-            SELECT COLOR
+          <Paragraph mb={1} fontSize="14px" color="#353535">
+            COLOR: <span style={{ fontWeight: 700 }}>{selectedColor?.name || selectedColor?.code || 'Not selected'}</span>
           </Paragraph>
           <FlexBox sx={{ gap: 1 }}>
             {colors.map((color) => {
@@ -213,8 +214,8 @@ export default function ProductInfoArea({
         <FlexCol mb={2} mt={1}>
           {/* HEADER ROW: Title and Hyperlink */}
           <FlexBox justifyContent="space-between" alignItems="center">
-            <Paragraph fontSize="14px" color="#353535" sx={{ fontWeight: 700 }}>
-              SELECT SIZE
+            <Paragraph fontSize="14px" color="#353535">
+              SIZE: <span style={{ fontWeight: 700 }}>{selectedSize?.size  || ''}</span>
             </Paragraph>
             <Typography
               onClick={sizeChartUrl ? () => setOpenModal(true) : undefined}
@@ -236,7 +237,7 @@ export default function ProductInfoArea({
           <FlexBox gap={{ xs: 2, sm: 3 }} py={{ xs: 2 }}>
             <FormControl sx={{ flexGrow: 1, width: "100%" }} error={sizeError}>
               <Select
-                value={selectedSize}
+                value={selectedSize?.id || ""}
                 onChange={handleSizeSelect}
                 fullWidth
                 displayEmpty

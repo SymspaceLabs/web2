@@ -24,6 +24,7 @@ import { extractGranularCategory } from './utils/category-helpers';
 import { UserRole } from 'src/users/entities/user.entity';
 import { BulkImportDto, BulkImportResponseDto, ProductionProductData } from './dto/bulk-import.dto';
 import { BulkDeleteDto, BulkDeleteResponseDto } from './dto/bulk-delete.dto';
+import { calculateDisplayPrice } from './utils/price-calculation.utils';
 
 // Define a type for a single search suggestion result
 export interface SearchSuggestion {
@@ -496,7 +497,7 @@ export class ProductsService {
 
       product.threeDModels = product.threeDModels;
       product.availability = determineProductAvailability(product);
-      product.displayPrice = this.calculateDisplayPrice(product);
+      product.displayPrice = calculateDisplayPrice(product);
       product.category = extractGranularCategory(product);
 
     }
@@ -605,86 +606,6 @@ export class ProductsService {
     });
   }
 
-  // ======================================================
-  // Calculates the display price for a product based on its variants
-  // Returns the cheapest variant's pricing information
-  // @param product - Product entity with variants loaded
-  // @returns DisplayPrice object with price, salePrice, and hasSale flag
-  // ======================================================
-  private calculateDisplayPrice(product: Product): DisplayPrice {
-    const variants = product.variants || [];
-    
-    // Fallback to zero pricing if no variants
-    if (variants.length === 0) {
-      return {
-        price: 0,
-        salePrice: 0,
-        hasSale: false,
-        range: '$0',
-      };
-    }
-
-    // Filter out-of-stock variants (optional - remove if you want to show all prices)
-    const availableVariants = variants.filter(v => v.stock > 0);
-    const variantsToUse = availableVariants.length > 0 ? availableVariants : variants;
-
-    // Collect all valid prices
-    const validPrices: number[] = [];
-    let cheapestVariant = variantsToUse[0];
-    let cheapestEffectivePrice = Infinity;
-
-    for (const variant of variantsToUse) {
-      const effectivePrice = variant.salePrice || variant.price;
-      
-      // Skip invalid prices
-      if (!effectivePrice || effectivePrice <= 0) continue;
-      
-      validPrices.push(effectivePrice);
-      
-      // Track cheapest variant
-      if (effectivePrice < cheapestEffectivePrice) {
-        cheapestEffectivePrice = effectivePrice;
-        cheapestVariant = variant;
-      }
-    }
-
-    // Handle case where no valid prices exist
-    if (validPrices.length === 0) {
-      return {
-        price: cheapestVariant.price || 0,
-        salePrice: cheapestVariant.salePrice || 0,
-        hasSale: false,
-        range: '$0',
-      };
-    }
-
-    // Calculate min and max from valid prices
-    const minPrice = Math.min(...validPrices);
-    const maxPrice = Math.max(...validPrices);
-
-    // Check if the cheapest variant has a sale
-    const hasSale = cheapestVariant.salePrice > 0 && cheapestVariant.salePrice < cheapestVariant.price;
-
-    // Format the price range using the utility function
-    const range = formatPriceRange(minPrice, maxPrice);
-
-    return {
-      price: cheapestVariant.price,
-      salePrice: cheapestVariant.salePrice || 0,
-      hasSale,
-      range,
-    };
-  }
-
-  // ======================================================
-  // Formats price with currency symbol
-  // ======================================================
-  private formatPrice(price: number, currency: string = 'USD'): string {
-    const symbols = { USD: '$', EUR: '€', GBP: '£' };
-    const symbol = symbols[currency] || '$';
-    return `${symbol}${price.toFixed(2)}`;
-  }
-
   /**
    * Shared Fetching Logic to ensure both ID and Slug queries
    * return the exact same relation structure.
@@ -728,7 +649,7 @@ export class ProductsService {
     }
 
     // Calculate prices and availability
-    (product as any).displayPrice = this.calculateDisplayPrice(product);
+    (product as any).displayPrice = calculateDisplayPrice(product);
     (product as any).availability = determineProductAvailability(product);
 
     return ProductMapper.toDetailDto(product);

@@ -22,12 +22,12 @@ import { useSnackbar } from "notistack";
 // ================================================================
 
 export default function ProductDetails({ product }) {
-  const { id, colors } = product || {};
+  const { id, colors, sizes } = product || {};
   const { enqueueSnackbar } = useSnackbar();
 
   // State hooks for selected options and toggles
   const [selectedColor, setSelectedColor] = useState(colors[0]);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null); // Changed to object
   const [sizeError, setSizeError] = useState(false);
 
   const { state, dispatch } = useCart();
@@ -37,8 +37,12 @@ export default function ProductDetails({ product }) {
   // Updates the selected color
   const handleColorSelect = (color) => setSelectedColor(color);
 
-  // Updates the selected size
-  const handleSizeSelect = (event) => setSelectedSize(event.target.value);
+  // Updates the selected size - now handles object
+  const handleSizeSelect = (event) => {
+    const sizeId = event.target.value;
+    const sizeObj = sizes.find(size => size.id === sizeId);
+    setSelectedSize(sizeObj);
+  };
  
   // Simplified Add to Cart
   const handleAddToCart = () => {
@@ -102,7 +106,8 @@ export default function ProductDetails({ product }) {
       setLoadingAvailability(true);
 
       try {
-        const data = await fetchProductAvailability(id, selectedColor.id, selectedSize);
+        // Use selectedSize.id instead of selectedSize directly
+        const data = await fetchProductAvailability(id, selectedColor.id, selectedSize.id);
         setAvailability(data);
       } catch (err) {
         console.error("Error fetching availability", err);

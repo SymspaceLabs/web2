@@ -53,7 +53,7 @@ export default function SearchInput({ btn = true, mxWidth = "670px" }) {
     if (searchQuery) {
       // This is the generic action for the main search button
       router.push(
-        `/products/search/all?search=${encodeURIComponent(searchQuery)}`
+        `/products?search=${encodeURIComponent(searchQuery)}`
       );
       setOpen(false);
     }

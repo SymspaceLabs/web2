@@ -383,8 +383,22 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
     await onNext(stepThreeData)
   }
 
+  // Add this debugging to your removeImageById function
   const removeImageById = (imageId: string) => {
+
+    // Check for duplicate IDs
+    const idCounts = formData.images.reduce((acc, img) => {
+      acc[img.id] = (acc[img.id] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+    
+    const duplicates = Object.entries(idCounts).filter(([_, count]) => count > 1)
+    if (duplicates.length > 0) {
+      console.error('⚠️ DUPLICATE IDs FOUND:', duplicates)
+    }
+    
     const newImages = formData.images.filter(img => img.id !== imageId)
+    
     updateFormData({ images: newImages })
   }
 

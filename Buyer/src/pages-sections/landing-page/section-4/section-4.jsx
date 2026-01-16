@@ -72,7 +72,7 @@ export default function Section4() {
               }}
             >
               {categories.map((item,index) => (
-                <Link key={index} href={`/products/search/all?${item.slug}`} passHref sx={{ zIndex:1 }}>
+                <Link key={index} href={`/products?${item.slug}`} passHref sx={{ zIndex:1 }}>
                   {/* Product card */}
                   <FlexColCenter
                     sx={{
@@ -108,7 +108,7 @@ export default function Section4() {
               <Carousel ref={carouselRef} slidesToShow={isMobile? 3:6} responsive={responsive} arrows={false}>
                 {categories.map((item) => (
                   <motion.div key={item.id} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-                    <Link href={`/products/search/all?${item.slug}`}>
+                    <Link href={`/products?${item.slug}`}>
                       <FlexBox
                         sx={{
                           py: 5,

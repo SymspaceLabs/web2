@@ -1,9 +1,7 @@
-// ===== FILE: components/products/product-form/variants-step.tsx =====
-
 "use client"
 
 import React, { useState, useMemo, useCallback } from "react"
-import { ArrowRight, Plus, X } from "lucide-react"
+import { ArrowRight, Plus, X, GripVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,13 +12,14 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 
 // ===== TYPE DEFINITIONS =====
 type FormData = {
-  selectedColors: Array<{ id: string; name: string; code: string }>
+  selectedColors: Array<{ id: string; name: string; code: string; sortOrder: number }>
   selectedSizes: Array<{ 
     id: string; 
     size: string; 
     dimensions?: any; 
     sizeChartUrl?: string;
     productWeight?: { value: number | null; unit: 'kg' | 'lbs' | 'oz' }
+    sortOrder: number
   }>
   variants: VariantRow[]
   material?: string
@@ -37,6 +36,90 @@ interface Color {
   id: string
   name: string
   hex: string
+  sortOrder: number
+}
+
+interface SizeWithSort extends Size {
+  sortOrder: number
+}
+
+// ===== DRAGGABLE ITEM COMPONENT =====
+const DraggableItem = ({ 
+  item, 
+  index, 
+  onDragStart, 
+  onDragOver, 
+  onDrop, 
+  onDragEnd,
+  onEdit,
+  onRemove,
+  renderContent 
+}: {
+  item: any
+  index: number
+  onDragStart: (e: React.DragEvent, index: number) => void
+  onDragOver: (e: React.DragEvent, index: number) => void
+  onDrop: (e: React.DragEvent, index: number) => void
+  onDragEnd: () => void
+  onEdit: (id: string) => void
+  onRemove: (id: string) => void
+  renderContent: (item: any) => React.ReactNode
+}) => {
+  const [isDragging, setIsDragging] = useState(false)
+  const [isDragOver, setIsDragOver] = useState(false)
+
+  return (
+    <div
+      draggable
+      onDragStart={(e) => {
+        setIsDragging(true)
+        onDragStart(e, index)
+      }}
+      onDragEnd={() => {
+        setIsDragging(false)
+        setIsDragOver(false)
+        onDragEnd()
+      }}
+      onDragOver={(e) => {
+        e.preventDefault()
+        setIsDragOver(true)
+        onDragOver(e, index)
+      }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(e) => {
+        setIsDragOver(false)
+        onDrop(e, index)
+      }}
+      className={`group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background transition-all cursor-move
+        ${isDragging ? 'opacity-50 scale-95' : ''}
+        ${isDragOver ? 'border-primary border-2 scale-105' : 'hover:border-primary'}
+      `}
+    >
+      <GripVertical className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+      {renderContent(item)}
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+        <button 
+          type="button" 
+          onClick={() => onEdit(item.id)} 
+          className="text-muted-foreground hover:text-primary p-1"
+          title="Edit"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </button>
+        <button 
+          type="button" 
+          onClick={() => onRemove(item.id)} 
+          className="text-muted-foreground hover:text-destructive p-1"
+          title="Delete"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+    </div>
+  )
 }
 
 // ===== UTILITY FUNCTIONS =====
@@ -62,7 +145,7 @@ const convertWeight = (value: number, fromUnit: 'kg' | 'lbs' | 'oz', toUnit: 'kg
   return valueInKg
 }
 
-const generateVariants = (colors: Color[], sizes: Size[], existingVariants: VariantRow[]): VariantRow[] => {
+const generateVariants = (colors: Color[], sizes: SizeWithSort[], existingVariants: VariantRow[]): VariantRow[] => {
   if (colors.length === 0 || sizes.length === 0) {
     return []
   }
@@ -100,19 +183,21 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       ? formData.selectedColors.map(c => ({
           id: c.id,
           name: c.name,
-          hex: c.code
+          hex: c.code,
+          sortOrder: c.sortOrder ?? 0
         }))
       : []
   )
   
-  const [sizes, setSizes] = useState<Size[]>(
+  const [sizes, setSizes] = useState<SizeWithSort[]>(
     formData.selectedSizes.length > 0
       ? formData.selectedSizes.map(s => ({
           id: s.id,
           value: s.size,
           dimensions: s.dimensions,
           productWeight: s.productWeight || { value: null, unit: 'kg' },
-          sizeChartUrl: s.sizeChartUrl
+          sizeChartUrl: s.sizeChartUrl,
+          sortOrder: s.sortOrder ?? 0
         }))
       : []
   )
@@ -140,11 +225,25 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     weightUnit: "kg" as 'kg' | 'lbs' | 'oz',
     sizeChartUrl: ""
   })
+
+  // Drag state
+  const [draggedColorIndex, setDraggedColorIndex] = useState<number | null>(null)
+  const [draggedSizeIndex, setDraggedSizeIndex] = useState<number | null>(null)
   
   // ===== MEMOIZED VALUES =====
+  const sortedColors = useMemo(() => 
+    [...colors].sort((a, b) => a.sortOrder - b.sortOrder),
+    [colors]
+  )
+
+  const sortedSizes = useMemo(() => 
+    [...sizes].sort((a, b) => a.sortOrder - b.sortOrder),
+    [sizes]
+  )
+
   const variants = useMemo(() => 
-    generateVariants(colors, sizes, formData.variants),
-    [colors, sizes, formData.variants]
+    generateVariants(sortedColors, sortedSizes, formData.variants),
+    [sortedColors, sortedSizes, formData.variants]
   )
   
   const isColorEditMode = editingColorId !== null
@@ -157,6 +256,72 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     handleColorBulkUpdate,
     handleDeleteVariant
   } = useVariantsTable(variants, updateFormData)
+  
+  // ===== COLOR DRAG HANDLERS =====
+  const handleColorDragStart = useCallback((e: React.DragEvent, index: number) => {
+    setDraggedColorIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+  }, [])
+
+  const handleColorDragOver = useCallback((e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }, [])
+
+  const handleColorDrop = useCallback((e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault()
+    if (draggedColorIndex === null || draggedColorIndex === dropIndex) return
+
+    const newColors = [...sortedColors]
+    const [draggedItem] = newColors.splice(draggedColorIndex, 1)
+    newColors.splice(dropIndex, 0, draggedItem)
+
+    // Update sortOrder
+    const updatedColors = newColors.map((color, idx) => ({
+      ...color,
+      sortOrder: idx
+    }))
+
+    setColors(updatedColors)
+    setDraggedColorIndex(null)
+  }, [draggedColorIndex, sortedColors])
+
+  const handleColorDragEnd = useCallback(() => {
+    setDraggedColorIndex(null)
+  }, [])
+
+  // ===== SIZE DRAG HANDLERS =====
+  const handleSizeDragStart = useCallback((e: React.DragEvent, index: number) => {
+    setDraggedSizeIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+  }, [])
+
+  const handleSizeDragOver = useCallback((e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }, [])
+
+  const handleSizeDrop = useCallback((e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault()
+    if (draggedSizeIndex === null || draggedSizeIndex === dropIndex) return
+
+    const newSizes = [...sortedSizes]
+    const [draggedItem] = newSizes.splice(draggedSizeIndex, 1)
+    newSizes.splice(dropIndex, 0, draggedItem)
+
+    // Update sortOrder
+    const updatedSizes = newSizes.map((size, idx) => ({
+      ...size,
+      sortOrder: idx
+    }))
+
+    setSizes(updatedSizes)
+    setDraggedSizeIndex(null)
+  }, [draggedSizeIndex, sortedSizes])
+
+  const handleSizeDragEnd = useCallback(() => {
+    setDraggedSizeIndex(null)
+  }, [])
   
   // ===== COLOR MANAGEMENT =====
   const openAddColorModal = useCallback(() => {
@@ -186,10 +351,12 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         }
       ))
     } else {
+      const maxSortOrder = colors.length > 0 ? Math.max(...colors.map(c => c.sortOrder)) : -1
       const newColor: Color = {
         id: Date.now().toString(),
         name: newColorData.name.trim(),
         hex: newColorData.hex,
+        sortOrder: maxSortOrder + 1
       }
       setColors(prev => [...prev, newColor])
     }
@@ -197,7 +364,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     setNewColorData({ name: "", hex: "#000000" })
     setEditingColorId(null)
     setIsColorModalOpen(false)
-  }, [newColorData, isColorEditMode, editingColorId])
+  }, [newColorData, isColorEditMode, editingColorId, colors.length])
 
   const handleRemoveColor = useCallback((id: string) => {
     setColors(prev => prev.filter((c) => c.id !== id))
@@ -260,28 +427,43 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       ? convertWeight(weightValue, newSizeData.weightUnit, 'kg')
       : null
 
-    const sizeObject: Size = {
-      id: isSizeEditMode ? editingSizeId! : Date.now().toString(),
-      value: newSizeData.name.trim(),
-      dimensions: (newSizeData.length || newSizeData.width || newSizeData.height) ? {
-        length: newSizeData.length || undefined,
-        width: newSizeData.width || undefined,
-        height: newSizeData.height || undefined,
-        unit: newSizeData.unit
-      } : undefined,
-      productWeight: weightInKg !== null ? {
-        value: weightInKg,
-        unit: 'kg' as const
-      } : null,
-      sizeChartUrl: newSizeData.sizeChartUrl || undefined
-    }
-
     if (isSizeEditMode) {
       setSizes(prev => prev.map(size => 
-        size.id !== editingSizeId ? size : sizeObject
+        size.id !== editingSizeId ? size : {
+          ...size,
+          value: newSizeData.name.trim(),
+          dimensions: (newSizeData.length || newSizeData.width || newSizeData.height) ? {
+            length: newSizeData.length || undefined,
+            width: newSizeData.width || undefined,
+            height: newSizeData.height || undefined,
+            unit: newSizeData.unit
+          } : undefined,
+          productWeight: weightInKg !== null ? {
+            value: weightInKg,
+            unit: 'kg' as const
+          } : null,
+          sizeChartUrl: newSizeData.sizeChartUrl || undefined
+        }
       ))
     } else {
-      setSizes(prev => [...prev, sizeObject])
+      const maxSortOrder = sizes.length > 0 ? Math.max(...sizes.map(s => s.sortOrder)) : -1
+      const newSize: SizeWithSort = {
+        id: Date.now().toString(),
+        value: newSizeData.name.trim(),
+        dimensions: (newSizeData.length || newSizeData.width || newSizeData.height) ? {
+          length: newSizeData.length || undefined,
+          width: newSizeData.width || undefined,
+          height: newSizeData.height || undefined,
+          unit: newSizeData.unit
+        } : undefined,
+        productWeight: weightInKg !== null ? {
+          value: weightInKg,
+          unit: 'kg' as const
+        } : null,
+        sizeChartUrl: newSizeData.sizeChartUrl || undefined,
+        sortOrder: maxSortOrder + 1
+      }
+      setSizes(prev => [...prev, newSize])
     }
     
     setNewSizeData({
@@ -296,7 +478,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     })
     setEditingSizeId(null)
     setIsSizeModalOpen(false)
-  }, [newSizeData, isSizeEditMode, editingSizeId])
+  }, [newSizeData, isSizeEditMode, editingSizeId, sizes.length])
 
   const handleRemoveSize = useCallback((id: string) => {
     setSizes(prev => prev.filter((s) => s.id !== id))
@@ -309,12 +491,13 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
     const stepTwoData: Partial<FormData> = {
       variants: variants,
       material: material,
-      selectedColors: colors.map(c => ({
+      selectedColors: sortedColors.map(c => ({
         id: c.id,
         name: c.name,
-        code: c.hex, 
+        code: c.hex,
+        sortOrder: c.sortOrder
       })),
-      selectedSizes: sizes.map(s => ({
+      selectedSizes: sortedSizes.map(s => ({
         id: s.id,
         size: s.value,
         dimensions: s.dimensions,
@@ -322,12 +505,13 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
         productWeight: s.productWeight ? {
           value: s.productWeight.value,
           unit: s.productWeight.unit
-        } : null
+        } : null,
+        sortOrder: s.sortOrder
       })),
     }
     
     await onNext(stepTwoData)
-  }, [variants, material, colors, sizes, onNext])
+  }, [variants, material, sortedColors, sortedSizes, onNext])
 
   // ===== RENDER =====
   return (
@@ -335,7 +519,7 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
       {/* Header */}
       <div>
         <h2 className="text-xl font-semibold mb-2">Variants & Inventory</h2>
-        <p className="text-sm text-muted-foreground">Configure product colors, sizes, and inventory details</p>
+        <p className="text-sm text-muted-foreground">Configure product colors, sizes, and inventory details. Drag to reorder.</p>
       </div>
 
       {/* Material Field */}
@@ -363,37 +547,29 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           </Button>
         </div>
 
-        {colors.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {colors.map((color) => (
-              <div key={color.id} className="group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background hover:border-primary transition-colors">
-                <div className="w-4 h-4 rounded-full border flex-shrink-0" style={{ backgroundColor: color.hex }} />
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">{color.name}</span>
-                  <span className="text-xs text-muted-foreground font-mono">{color.hex}</span>
-                </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button 
-                    type="button" 
-                    onClick={() => openEditColorModal(color.id)} 
-                    className="text-muted-foreground hover:text-primary p-1"
-                    title="Edit color"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => handleRemoveColor(color.id)} 
-                    className="text-muted-foreground hover:text-destructive p-1"
-                    title="Delete color"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
+        {sortedColors.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {sortedColors.map((color, index) => (
+              <DraggableItem
+                key={color.id}
+                item={color}
+                index={index}
+                onDragStart={handleColorDragStart}
+                onDragOver={handleColorDragOver}
+                onDrop={handleColorDrop}
+                onDragEnd={handleColorDragEnd}
+                onEdit={openEditColorModal}
+                onRemove={handleRemoveColor}
+                renderContent={(color) => (
+                  <>
+                    <div className="w-4 h-4 rounded-full border flex-shrink-0" style={{ backgroundColor: color.hex }} />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">{color.name}</span>
+                      <span className="text-xs text-muted-foreground font-mono">{color.hex}</span>
+                    </div>
+                  </>
+                )}
+              />
             ))}
           </div>
         )}
@@ -466,43 +642,35 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
           </Button>
         </div>
 
-        {sizes.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {sizes.map((size) => (
-              <div key={size.id} className="group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background hover:border-primary transition-colors">
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">{size.value}</span>
-                  {size.dimensions && (
-                    <span className="text-xs text-muted-foreground">
-                      {[size.dimensions.length, size.dimensions.width, size.dimensions.height]
-                        .filter(Boolean)
-                        .join(" × ")} {size.dimensions.unit}
-                    </span>
-                  )}
-                  {size.productWeight?.value && (
-                    <span className="text-xs text-blue-600">⚖️ {size.productWeight.value.toFixed(2)} kg</span>
-                  )}
-                </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button 
-                    type="button" 
-                    onClick={() => openEditSizeModal(size.id)} 
-                    className="text-muted-foreground hover:text-primary p-1"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                    </svg>
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => handleRemoveSize(size.id)} 
-                    className="text-muted-foreground hover:text-destructive p-1"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
+        {sortedSizes.length > 0 && (
+          <div className="flex flex-col gap-2">
+            {sortedSizes.map((size, index) => (
+              <DraggableItem
+                key={size.id}
+                item={size}
+                index={index}
+                onDragStart={handleSizeDragStart}
+                onDragOver={handleSizeDragOver}
+                onDrop={handleSizeDrop}
+                onDragEnd={handleSizeDragEnd}
+                onEdit={openEditSizeModal}
+                onRemove={handleRemoveSize}
+                renderContent={(size) => (
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium">{size.value}</span>
+                    {size.dimensions && (
+                      <span className="text-xs text-muted-foreground">
+                        {[size.dimensions.length, size.dimensions.width, size.dimensions.height]
+                          .filter(Boolean)
+                          .join(" × ")} {size.dimensions.unit}
+                      </span>
+                    )}
+                    {size.productWeight?.value && (
+                      <span className="text-xs text-blue-600">⚖️ {size.productWeight.value.toFixed(2)} kg</span>
+                    )}
+                  </div>
+                )}
+              />
             ))}
           </div>
         )}
@@ -551,6 +719,153 @@ export function VariantsStep({ formData, updateFormData, onNext, onBack }: Varia
                   <option value="cm">cm</option>
                   <option value="mm">mm</option>
                   <option value="in">in</option>
+                  <option value="feet">feet</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Product Weight (Optional)</Label>
+              <div className="flex gap-2">
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="Weight"
+                  value={newSizeData.weightValue}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, weightValue: e.target.value }))}
+                  className="flex-1"
+                />
+                <select
+                  value={newSizeData.weightUnit}
+                  onChange={(e) => handleWeightUnitChange(e.target.value as 'kg' | 'lbs' | 'oz')}
+                  className="px-3 py-2 rounded-md border bg-background text-sm w-20"
+                >
+                  <option value="kg">kg</option>
+                  <option value="lbs">lbs</option>
+                  <option value="oz">oz</option>
+                </select>
+              </div>
+            </div>
+
+            <ImageUploader
+              label="Size Chart (Optional)"
+              currentImageUrl={newSizeData.sizeChartUrl}
+              onUploadComplete={(url) => setNewSizeData(prev => ({ ...prev, sizeChartUrl: url }))}
+              onRemove={() => setNewSizeData(prev => ({ ...prev, sizeChartUrl: "" }))}
+              uploadFunction={uploadImage}
+              maxSizeMB={5}
+            />
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => setIsColorModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleSaveColor} disabled={!newColorData.name.trim()}>
+              {isColorEditMode ? 'Update Color' : 'Add Color'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* <div className="border-t" /> */}
+
+      {/* Sizes Section */}
+      {/* <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <Label className="text-base font-medium">Sizes</Label>
+          <Button type="button" onClick={openAddSizeModal} variant="outline" size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Size
+          </Button>
+        </div>
+
+        {sizes.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {sizes.map((size) => (
+              <div key={size.id} className="group flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-background hover:border-primary transition-colors">
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">{size.value}</span>
+                  {size.dimensions && (
+                    <span className="text-xs text-muted-foreground">
+                      {[size.dimensions.length, size.dimensions.width, size.dimensions.height]
+                        .filter(Boolean)
+                        .join(" × ")} {size.dimensions.unit}
+                    </span>
+                  )}
+                  {size.productWeight?.value && (
+                    <span className="text-xs text-blue-600">⚖️ {size.productWeight.value.toFixed(2)} kg</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button 
+                    type="button" 
+                    onClick={() => openEditSizeModal(size.id)} 
+                    className="text-muted-foreground hover:text-primary p-1"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => handleRemoveSize(size.id)} 
+                    className="text-muted-foreground hover:text-destructive p-1"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div> */}
+
+      {/* Size Modal */}
+      <Dialog open={isSizeModalOpen} onOpenChange={setIsSizeModalOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>{isSizeEditMode ? 'Edit Size' : 'Add New Size'}</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Size Name *</Label>
+              <Input
+                placeholder="e.g., S, M, L, XL"
+                value={newSizeData.name}
+                onChange={(e) => setNewSizeData(prev => ({ ...prev, name: e.target.value }))}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Dimensions (Optional)</Label>
+              <div className="grid grid-cols-4 gap-2">
+                <Input
+                  placeholder="Length"
+                  value={newSizeData.length}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, length: e.target.value }))}
+                />
+                <Input
+                  placeholder="Width"
+                  value={newSizeData.width}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, width: e.target.value }))}
+                />
+                <Input
+                  placeholder="Height"
+                  value={newSizeData.height}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, height: e.target.value }))}
+                />
+                <select
+                  value={newSizeData.unit}
+                  onChange={(e) => setNewSizeData(prev => ({ ...prev, unit: e.target.value as 'cm' | 'in' | 'mm' }))}
+                  className="px-3 py-2 rounded-md border bg-background text-sm"
+                >
+                  <option value="cm">cm</option>
+                  <option value="mm">mm</option>
+                  <option value="in">in</option>
+                  <option value="feet">feet</option>
                 </select>
               </div>
             </div>

@@ -20,7 +20,7 @@ export default function SearchResult({ results }) {
         // route to the search results page using the slug as a filter.
         if (item.slug) {
             // Using 'subcategoryItem' as the query parameter as requested
-            return `/products/search/all?subcategoryItem=${item.slug}`;
+            return `/products?subcategoryItem=${item.slug}`;
         }
 
         // Fallback

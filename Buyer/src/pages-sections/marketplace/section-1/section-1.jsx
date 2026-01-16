@@ -36,7 +36,7 @@ export default function Section1() {
                   <br />
                   Homebound Convenience
                 </H2>
-                <Button sx={styles.buttonDark} LinkComponent={Link} href="/products/search/all">
+                <Button sx={styles.buttonDark} LinkComponent={Link} href="/products">
                   Shop By Category
                 </Button>
               </Box>

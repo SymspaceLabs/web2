@@ -45,7 +45,7 @@ function NavigationList({ isOpen, onClose, onToggle }) {
       if (nav.slug) {
         return (
           <NavLink
-            href={`/products/search/all?subcategoryItem=${nav.slug}`}
+            href={`/products?subcategoryItem=${nav.slug}`}
             key={nav.id}
             sx={{ "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.05)" } }}
             onClick={onClose}

@@ -39,7 +39,7 @@ export default function Section3() {
 
         {/* Call-to-action button aligned to the right */}
         <FlexBox justifyContent="end" sx={{ mt: 5 }}>
-          <Button sx={styles.buttonLight} LinkComponent={Link} href="/products/search/all">
+          <Button sx={styles.buttonLight} LinkComponent={Link} href="/products">
             Shop By Category
           </Button>
         </FlexBox>
@@ -58,20 +58,20 @@ const products = [
     title: "Dresses",
     image: "/assets/images/products/Women/dress.png",
     slug: "dresses",
-    url: "/products/search/all?subcategory=dresses"
+    url: "/products?subcategory=dresses"
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg2",
     title: "Tops",
     image: "/assets/images/products/Women/top.png",
     slug: "tops",
-    url: "/products/search/all?subcategory=tops"
+    url: "/products?subcategory=tops"
   },
   {
     id: "f54ee5db-ff89-4d86-ade8-86d949db7bg3",
     title: "Bottoms",
     image: "/assets/images/products/Women/bottom.png",
     slug: "bottoms",
-    url: "/products/search/all?subcategory=bottoms"
+    url: "/products?subcategory=bottoms"
   },
 ];

@@ -94,7 +94,7 @@ export default function Section7() {
 
                     {/* Contact Button */}
                     <FlexBox justifyContent="center"  py={3}>
-                      <Link href={`/products/search/all?tag=${data.slug}`}>
+                      <Link href={`/products?tag=${data.slug}`}>
                         <Button sx={styles.buttonLight}>
                           {data.btnText}
                         </Button>

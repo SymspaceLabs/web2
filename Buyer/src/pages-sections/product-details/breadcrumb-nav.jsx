@@ -45,7 +45,7 @@ const getCategoryPath = (product) => {
     
     path.push({
       name: cat.name,
-      href: `/products/search/all?${queryParam}=${cat.slug}`,
+      href: `/products?${queryParam}=${cat.slug}`,
       depth: depth
     });
   });
@@ -61,7 +61,7 @@ export default function BreadcrumbNav({ product }) {
   const breadcrumbItems = [
     <Box key="home" sx={{ display: 'flex', alignItems: 'center' }}>
       <Link
-        href="/products/search/all"
+        href="/products"
         style={{
           color: 'inherit',
           textDecoration: 'none',

@@ -32,7 +32,7 @@ export default function MobileCategoriesPageView() {
               isActive={selected.title === item.title}
               onClick={() => { 
                 if (item.children) setSelected(item);
-                else router.push(`/products/search/all?category=${item.slug}`);
+                else router.push(`/products?category=${item.slug}`);
 
               }}
             >

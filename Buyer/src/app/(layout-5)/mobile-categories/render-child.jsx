@@ -20,7 +20,7 @@ export default function renderChild(categories, parentTitle = "") {
     }
 
     return (
-      <Link href={`/products/search/all?category=${item.slug}`} key={i} className="link">
+      <Link href={`/products?category=${item.slug}`} key={i} className="link">
         {item.title}
       </Link>
     );

@@ -2,12 +2,12 @@
 "use client"
 
 import type React from "react"
-import { ArrowRight, Upload, Box, CheckCircle2, AlertCircle } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { ArrowRight, Upload, Box, CheckCircle2, AlertCircle } from "lucide-react"
 
 import type { FormData } from "@/components/products/product-form"
 import { uploadFileToBackend, validateImageFile } from "@/utils/media.utils"
@@ -293,53 +293,53 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
     updateFormData({ images: finalImages })
   }
 
-  const processAndUploadModel = async (file: File, colorId: string) => {
-    const placeholderModel: ModelWithLoading = {
-      id: `uploading-${Date.now()}`,
-      url: '',
-      colorId: colorId,
-      fileName: file.name,
-      fileSize: file.size,
-      isUploading: true,
-      uploadProgress: 0,
-    }
+  // const processAndUploadModel = async (file: File, colorId: string) => {
+  //   const placeholderModel: ModelWithLoading = {
+  //     id: `uploading-${Date.now()}`,
+  //     url: '',
+  //     colorId: colorId,
+  //     fileName: file.name,
+  //     fileSize: file.size,
+  //     isUploading: true,
+  //     uploadProgress: 0,
+  //   }
 
-    setModels(prev => [...prev.filter(m => m.colorId !== colorId), placeholderModel])
+  //   setModels(prev => [...prev.filter(m => m.colorId !== colorId), placeholderModel])
 
-    try {
-      const url = await uploadProductModel(file, (progress) => {
-        setModels(prev => prev.map(m =>
-          m.id === placeholderModel.id
-            ? { ...m, uploadProgress: progress }
-            : m
-        ))
-      })
+  //   try {
+  //     const url = await uploadProductModel(file, (progress) => {
+  //       setModels(prev => prev.map(m =>
+  //         m.id === placeholderModel.id
+  //           ? { ...m, uploadProgress: progress }
+  //           : m
+  //       ))
+  //     })
 
-      const newModel: ModelWithLoading = {
-        id: `model-${Date.now()}`,
-        url: url,
-        colorId: colorId,
-        fileName: file.name,
-        fileSize: file.size,
-        isUploading: false,
-      }
+  //     const newModel: ModelWithLoading = {
+  //       id: `model-${Date.now()}`,
+  //       url: url,
+  //       colorId: colorId,
+  //       fileName: file.name,
+  //       fileSize: file.size,
+  //       isUploading: false,
+  //     }
 
-      setModels(prev => prev.map(m =>
-        m.id === placeholderModel.id ? newModel : m
-      ))
+  //     setModels(prev => prev.map(m =>
+  //       m.id === placeholderModel.id ? newModel : m
+  //     ))
 
-      toast.success("✓ Model Uploaded", {
-        description: `${file.name} uploaded successfully.`
-      })
-    } catch (error) {
-      console.error("Model upload failed:", error)
-      setModels(prev => prev.filter(m => m.id !== placeholderModel.id))
+  //     toast.success("✓ Model Uploaded", {
+  //       description: `${file.name} uploaded successfully.`
+  //     })
+  //   } catch (error) {
+  //     console.error("Model upload failed:", error)
+  //     setModels(prev => prev.filter(m => m.id !== placeholderModel.id))
       
-      toast.error("Upload Failed", {
-        description: error instanceof Error ? error.message : "Could not upload 3D model."
-      })
-    }
-  }
+  //     toast.error("Upload Failed", {
+  //       description: error instanceof Error ? error.message : "Could not upload 3D model."
+  //     })
+  //   }
+  // }
 
   const removeModel = (colorId: string) => {
     setModels(prev => prev.filter(m => m.colorId !== colorId))
@@ -373,6 +373,7 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
         url: m.url,
         fileName: m.fileName,
         fileSize: m.fileSize,
+        texture: m.texture,
       }))
 
     const stepThreeData: Partial<FormData> = {
@@ -404,6 +405,103 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
 
   const isUploading = formData.images.some(img => img.isUploading) || models.some(m => m.isUploading)
   const hasErrors = formData.images.some(img => img.error)
+
+  // ✅ NEW: Handle texture upload for existing model
+  const uploadTexture = async (colorId: string, textureFile: File) => {
+    try {
+      // Upload texture to backend
+      const textureUrl = await uploadFileToBackend(textureFile, (progress) => {
+        // Optional: Show progress indicator
+        console.log(`Texture upload progress: ${progress}%`)
+      })
+
+      // Update the model with the texture URL
+      setModels(prev => prev.map(m =>
+        m.colorId === colorId
+          ? { ...m, texture: textureUrl }
+          : m
+      ))
+
+      toast.success("✓ Texture Uploaded", {
+        description: "Texture image uploaded successfully."
+      })
+    } catch (error) {
+      console.error("Texture upload failed:", error)
+      toast.error("Upload Failed", {
+        description: "Could not upload texture image."
+      })
+    }
+  }
+
+  // ✅ NEW: Delete texture from model
+  const deleteTexture = (colorId: string) => {
+    setModels(prev => prev.map(m =>
+      m.colorId === colorId
+        ? { ...m, texture: undefined }
+        : m
+    ))
+    
+    toast.success("Texture Removed", {
+      description: "Texture has been removed from the model."
+    })
+  }
+
+  // ✅ UPDATED: processAndUploadModel to handle optional texture
+  const processAndUploadModel = async (file: File, colorId: string, textureFile?: File) => {
+    const placeholderModel: ModelWithLoading = {
+      id: `uploading-${Date.now()}`,
+      url: '',
+      colorId: colorId,
+      fileName: file.name,
+      fileSize: file.size,
+      isUploading: true,
+      uploadProgress: 0,
+    }
+
+    setModels(prev => [...prev.filter(m => m.colorId !== colorId), placeholderModel])
+
+    try {
+      // Upload the 3D model
+      const url = await uploadProductModel(file, (progress) => {
+        setModels(prev => prev.map(m =>
+          m.id === placeholderModel.id
+            ? { ...m, uploadProgress: progress }
+            : m
+        ))
+      })
+
+      // ✅ NEW: Upload texture if provided
+      let textureUrl: string | undefined = undefined
+      if (textureFile) {
+        textureUrl = await uploadFileToBackend(textureFile, () => {})
+      }
+
+      const newModel: ModelWithLoading = {
+        id: `model-${Date.now()}`,
+        url: url,
+        colorId: colorId,
+        fileName: file.name,
+        fileSize: file.size,
+        isUploading: false,
+        texture: textureUrl,  // ✅ NEW: Include texture URL
+      }
+
+      setModels(prev => prev.map(m =>
+        m.id === placeholderModel.id ? newModel : m
+      ))
+
+      toast.success("✓ Model Uploaded", {
+        description: `${file.name} uploaded successfully.`
+      })
+    } catch (error) {
+      console.error("Model upload failed:", error)
+      setModels(prev => prev.filter(m => m.id !== placeholderModel.id))
+      
+      toast.error("Upload Failed", {
+        description: error instanceof Error ? error.message : "Could not upload 3D model."
+      })
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -566,6 +664,8 @@ export function MediaStep({ formData, updateFormData, onNext, onBack }: MediaSte
                 model={models.find(m => m.colorId === color.id) || null}
                 onUpload={(file) => processAndUploadModel(file, color.id)}
                 onDelete={() => removeModel(color.id)}
+                onTextureUpload={(textureFile) => uploadTexture(color.id, textureFile)}
+                onTextureDelete={() => deleteTexture(color.id)}
               />
             ))}
           </div>

@@ -158,6 +158,8 @@ export class Product {
   //Added this new column
   @Column({ default: false })
   non_slip: boolean;
+
+  
   
 
 }

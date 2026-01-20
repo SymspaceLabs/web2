@@ -111,6 +111,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
         url: model.url,
         fileName: model.url.split('/').pop() || `model_${i}.glb`,
         fileSize: 0,
+        texture: model.texture || undefined, 
       };
     }) || [],
     model3d: undefined
@@ -163,7 +164,8 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
       .map(model => ({
         url: model.url,
         colorId: model.colorId,
-        colorCode: model.colorId ? colorCodeMap.get(model.colorId) ?? null : null
+        colorCode: model.colorId ? colorCodeMap.get(model.colorId) ?? null : null,
+        texture: model.texture || null
       }))
       .filter(model => model.colorCode !== null)
 
@@ -411,6 +413,7 @@ export function ProductForm({ product, initialStep = 1, onStepChange }: ProductF
                   url: model.url,
                   fileName: model.url.split('/').pop() || `model_${i}.glb`,
                   fileSize: 0,
+                  texture: model.texture || undefined
                 };
               });
             }

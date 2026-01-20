@@ -18,10 +18,6 @@ export class Product3DModel {
     onDelete: 'CASCADE',
   })
   product: Product;
-
-  // -------------------------
-  // New Attributes
-  // -------------------------
   
   // Pivot is NOT NULL, so we use the @BeforeInsert hook to provide a default.
   @Column('json')
@@ -58,4 +54,8 @@ export class Product3DModel {
         this.format = 'glb';
     }
   }
+
+  // ✅ NEW: Texture image URL field
+  @Column({ nullable: true })
+  texture: string;
 }

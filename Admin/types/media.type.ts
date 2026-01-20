@@ -13,14 +13,24 @@ export type ImageWithLoading = {
   file?: File; // For retry functionality
 }
 
-export type ModelWithLoading = {
-  id: string;
-  url: string;
-  colorId: string | null;
-  fileName: string;
-  fileSize: number;
-  isUploading?: boolean;
-  uploadProgress?: number;
+export interface ModelWithLoading {
+  id: string
+  url: string
+  colorId: string | null
+  fileName: string
+  fileSize: number
+  isUploading?: boolean
+  uploadProgress?: number
+  texture?: string
+  textureUploading?: boolean
+  textureProgress?: number
+}
+
+export interface Model3D {
+  id?: string
+  url: string
+  colorCode?: string
+  texture?: string
 }
 
 export type Color = {

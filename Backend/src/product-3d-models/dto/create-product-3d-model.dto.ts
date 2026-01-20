@@ -42,5 +42,11 @@ export class CreateProduct3dModelDto {
   @IsObject()
   @ValidateNested()
   @Type(() => BoundingBoxDto) // IMPORTANT: Ensures nested validation and type casting
-  boundingBox: BoundingBoxDto; 
+  boundingBox: BoundingBoxDto;
+
+  // ✅ NEW: Optional texture field
+  @IsOptional()
+  @IsString()
+  texture?: string;
+
 }

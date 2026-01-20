@@ -151,7 +151,8 @@ export class ProductMapper {
       colorCode: m.colorCode,
       pivot: m.pivot,
       format: m.format,
-      boundingBox: m.boundingBox
+      boundingBox: m.boundingBox,
+      texture: m.texture,
     }));
   }
 

@@ -174,6 +174,7 @@ export function mapProduct3DModels(modelsDto: CreateProduct3dModelDto[], product
         const newModel = new Product3DModel();
         newModel.url = modelDto.url;
         newModel.colorCode = modelDto.colorCode || null;
+        newModel.texture = modelDto.texture || null;
         if (modelDto.pivot !== undefined) { newModel.pivot = modelDto.pivot; }
         if (modelDto.boundingBox !== undefined) { newModel.boundingBox = modelDto.boundingBox; }
         newModel.product = product;

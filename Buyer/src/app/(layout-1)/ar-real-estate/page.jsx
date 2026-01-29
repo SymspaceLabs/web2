@@ -2,7 +2,7 @@
 // AR Real Estate Page
 // =============================================================
 
-import StagingPageView from "@/pages-sections/staging/page-view";
+import ArRealEstatePageView from "@/pages-sections/ar-real-estate/page-view";
 
 // =============================================================
 
@@ -16,6 +16,6 @@ export const metadata = {
   keywords: ["e-commerce"]
 };
 
-export default function Staging() {
-  return <StagingPageView />;
+export default function ArRealEstate() {
+  return <ArRealEstatePageView />;
 }

@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { motion } from "framer-motion";
-import { styles } from "../page-view/styles";
-import { LazyImage } from '@/components/lazy-image';
-import { Box, Typography, Container } from '@mui/material';
-import { FlexColCenter, FlexBox } from "@/components/flex-box";
 import { H1 } from '@/components/Typography';
+import { styles } from "../page-view/styles";
+import { Box, Container } from '@mui/material';
+import { LazyImage } from '@/components/lazy-image';
+import { FlexColCenter, FlexBox } from "@/components/flex-box";
 
 export default function Section5() {
 

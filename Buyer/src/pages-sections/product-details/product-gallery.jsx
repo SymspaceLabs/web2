@@ -2,7 +2,7 @@
 // PART 1: Updated ProductGallery - Save Variant with Favorite
 // ==============================================================
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { FlexBox, FlexRowCenter } from '@/components/flex-box';
 import { IconButton, Box, useMediaQuery } from '@mui/material';
 import { LazyImage } from '@/components/lazy-image';

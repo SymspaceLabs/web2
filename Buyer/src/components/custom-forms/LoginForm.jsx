@@ -1,17 +1,14 @@
 import { FlexBox } from '../flex-box';
-import { SymPasswordInput, SymTextField, SymCheckbox } from '../custom-inputs';
+import { SymPasswordInput, SymTextField } from '../custom-inputs';
 import { Span } from '../Typography';
-import BoxLink from '@/pages-sections/sessions/components/box-link';
 import { FormControlLabel, Checkbox } from "@mui/material";
 import Link from 'next/link';
-import { fontSize } from '@/theme/typography';
 
 function LoginForm ({
     email,
     setEmail,
     password,
     setPassword,
-    isChecked,
     setIsChecked
 }) {
    

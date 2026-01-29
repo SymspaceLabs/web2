@@ -279,12 +279,18 @@ export class ProductsService {
 
       // Colors Mapping - Use merge instead of replace
       if (colors !== undefined) {
+        const mappedColorDtos = colors.map((c, index) => ({
+            name: c.name,
+            code: c.code,
+            sortOrder: c.sortOrder !== undefined ? c.sortOrder : index,
+        }));
+
           if (id) {
               // UPDATE MODE: Merge to preserve existing IDs
-              product.colors = await this.mergeProductColors(product, colors);
+              product.colors = await this.mergeProductColors(product, mappedColorDtos);
           } else {
               // CREATE MODE: Use the simple mapper since there are no existing colors
-              product.colors = mapProductColors(colors, product);
+              product.colors = mapProductColors(mappedColorDtos, product);
           }
       }
 
@@ -640,6 +646,11 @@ export class ProductsService {
    * Shared Transformation Logic
    */
   private prepareProductDto(product: Product): ProductDetailDto {
+    // Sort colors by sortOrder
+    if (product.colors) {
+      product.colors.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
+
     // Sort by sortOrder
     if (product.sizes) {
       product.sizes.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
@@ -903,30 +914,34 @@ export class ProductsService {
  */
   private async mergeProductColors(
       product: Product, 
-      incomingColors: Array<{ name: string; code: string }>
+      incomingColors: Array<{ name: string; code: string; sortOrder?: number }>
   ): Promise<ProductColor[]> {
       const existingColors = product.colors || [];
       const mergedColors: ProductColor[] = [];
 
       // Process each incoming color
-      for (const incomingColor of incomingColors) {
-          // Try to find existing color by BOTH name AND code (ensures exact match)
-          const existingColor = existingColors.find(
-              c => c.name.toLowerCase() === incomingColor.name.toLowerCase() && 
-                  c.code.toLowerCase() === incomingColor.code.toLowerCase()
-          );
+      for (let index = 0; index < incomingColors.length; index++) {
+        const incomingColor = incomingColors[index];
+
+        // Try to find existing color by BOTH name AND code (ensures exact match)
+        const existingColor = existingColors.find(
+            c => c.name.toLowerCase() === incomingColor.name.toLowerCase() && 
+                c.code.toLowerCase() === incomingColor.code.toLowerCase()
+        );
 
           if (existingColor) {
               // ✅ PRESERVE: Color already exists, keep the same entity (and ID)
               // Update properties in case of minor changes
               existingColor.name = incomingColor.name;
               existingColor.code = incomingColor.code;
+              existingColor.sortOrder = incomingColor.sortOrder !== undefined ? incomingColor.sortOrder : index;
               mergedColors.push(existingColor);
           } else {
               // ✅ CREATE: This is a new color, create a new entity
               const newColor = new ProductColor();
               newColor.name = incomingColor.name;
               newColor.code = incomingColor.code;
+              newColor.sortOrder = incomingColor.sortOrder !== undefined ? incomingColor.sortOrder : index;
               newColor.product = product;
               mergedColors.push(newColor);
           }
@@ -1790,9 +1805,10 @@ export class ProductsService {
     })) || [];
 
     // 3. Transform colors
-    const colors = productData.colors?.map(color => ({
+    const colors = productData.colors?.map((color,index) => ({
       name: color.name,
       code: color.code,
+      sortOrder: color.sortOrder !== undefined ? color.sortOrder : index,
     })) || [];
 
     // 4. Transform sizes (IMPORTANT: Must be objects with 'size' property to match database schema)

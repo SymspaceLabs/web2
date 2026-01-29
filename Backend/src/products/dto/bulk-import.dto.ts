@@ -47,6 +47,7 @@ export interface ProductionProductData {
     id: string;
     name: string;
     code: string;
+    sortOrder : number;
   }>;
   sizes: CreateProductSizeDto[];
   stock: number;

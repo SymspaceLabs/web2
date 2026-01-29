@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from "class-validator";
+import { IsInt, IsOptional, IsString } from "class-validator";
 
 export class CreateProductColorDto {
     @IsString()
@@ -8,4 +8,8 @@ export class CreateProductColorDto {
     @IsString()
     @IsOptional()
     code: string;
+
+    @IsInt()
+    @IsOptional()
+    sortOrder?: number;
 }

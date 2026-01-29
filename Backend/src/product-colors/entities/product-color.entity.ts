@@ -24,6 +24,10 @@ export class ProductColor {
     @IsString()
     code: string;
 
+    //NEW ATTRIBUTE
+    @Column({ type: 'int', default: 0 })
+    sortOrder: number;
+
     @ManyToOne(() => Product, (product) => product.colors, {
       onDelete: 'CASCADE',
     })

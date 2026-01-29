@@ -38,6 +38,7 @@ export class ProductColorDto {
   id: string;
   name: string;
   code: string;
+  sortOrder: number;
 }
 
 export class ProductSizeDto {

@@ -101,12 +101,18 @@ export class ProductMapper {
     }));
   }
 
+  /**
+   * Maps color DTOs to ProductColor entities with sortOrder support
+   * @param colorDtos - Array of color data with optional sortOrder
+   * @param product - The parent product entity
+   * @returns Array of ProductColor entities
+   */
   private static mapColors(colors: any[]): ProductColorDto[] {
-    return (colors || []).map(c => ({
+    return (colors || []).map((c,index) => ({
       id: c.id,
       name: c.name,
       code: c.code,
-      sortOrder: c.sortOrder
+      sortOrder: c.sortOrder !== undefined ? c.sortOrder : index
     }));
   }
 
@@ -133,6 +139,7 @@ export class ProductMapper {
         id: v.color.id,
         name: v.color.name,
         code: v.color.code,
+        sortOrder: v.color.sortOrder,
       } : undefined,
       size: v.size ? {
         id: v.size.id,

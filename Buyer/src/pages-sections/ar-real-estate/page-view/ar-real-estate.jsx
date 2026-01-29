@@ -15,7 +15,7 @@ import Section7 from "../section-7";
 
 // ==============================================================
 
-export default async function StagingPageView() {
+export default async function ArRealEstatePageView() {
   return (
     <Box sx={{ position:'relative', overflow:'hidden', background: '#1F1F1F' }}>
       {/* GRADIENT CIRCLES */}

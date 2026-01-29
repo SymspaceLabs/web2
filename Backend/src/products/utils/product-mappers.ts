@@ -106,6 +106,7 @@ export class ProductMapper {
       id: c.id,
       name: c.name,
       code: c.code,
+      sortOrder: c.sortOrder
     }));
   }
 

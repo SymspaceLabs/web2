@@ -18,7 +18,6 @@ export class ProductMapper {
       id: product.id,
       name: product.name,
       slug: product.slug,
-      description: product.description,
       material: product.material,
       gender: product.gender,
       ageGroup: product.ageGroup,
@@ -52,6 +51,7 @@ export class ProductMapper {
   static toDetailDto(product: any): ProductDetailDto {
       return {
         ...this.toListItemDto(product),
+        description: product.description,
         company: this.mapCompanyDetail(product.company),
         variants: this.mapVariants(product.variants),
       };

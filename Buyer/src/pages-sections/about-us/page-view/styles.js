@@ -24,6 +24,6 @@ export const styles = {
         '&:hover' : {
             background: '#000'
         }
-      }
+    }
     
 };

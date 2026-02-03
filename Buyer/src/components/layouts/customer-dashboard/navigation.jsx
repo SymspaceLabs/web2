@@ -17,9 +17,9 @@ import PeopleIcon from '@mui/icons-material/People';
 import StraightenIcon from '@mui/icons-material/Straighten';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
+// Icons
 import TuneIcon from '@mui/icons-material/Tune';
 import CreditCard from "@mui/icons-material/CreditCard";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import CustomerService from "@/icons/CustomerService"; // STYLED COMPONENTS
 import ShoppingBagOutlined from "@mui/icons-material/ShoppingBagOutlined"; // GLOBAL CUSTOM COMPONENTS
 

@@ -1,13 +1,13 @@
 // ==============================================================
-//   User Analytics
+// User Analytics
 // ==============================================================
 
 import { currency } from "@/lib"; // CUSTOM DATA MODEL
-import { FlexBetween, FlexBox, FlexCol } from "@/components/flex-box";
-import { Box, Card, Avatar, Typography, Button } from "@mui/material";
-import { H1, H3, Paragraph, Small } from "@/components/Typography";
-import { useFavorites } from "@/contexts/FavoritesContext";
+import { Box, Card, Button } from "@mui/material";
 import ProfilePicUpload from "./profile-pic-upload";
+import { useFavorites } from "@/contexts/FavoritesContext";
+import { H1, H3, Paragraph, Small } from "@/components/Typography";
+import { FlexBetween, FlexBox, FlexCol } from "@/components/flex-box";
 
 // ==============================================================
 export default function UserAnalytics({

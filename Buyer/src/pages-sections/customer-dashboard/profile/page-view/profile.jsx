@@ -8,10 +8,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FlexCol } from "@/components/flex-box";
 import { useAuth } from "@/contexts/AuthContext";
+import { fetchUserById } from "@/services/userService";
 import { useSnackbar } from "@/contexts/SnackbarContext";
 import { Card, Box, CircularProgress, useMediaQuery } from "@mui/material";
 import { ProfileForm, MeasurementForm, PreferenceForm } from "@/components/custom-forms";
-import { fetchUserById } from "@/services/userService";
 
 import Person from "@mui/icons-material/Person";
 import UserAnalytics from "../user-analytics";

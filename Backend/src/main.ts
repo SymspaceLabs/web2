@@ -16,7 +16,8 @@ async function bootstrap() {
       process.env.BUYER_URL,
       process.env.SELLER_URL,
       process.env.ADMIN_URL,
-      "https://symspacelabs.com"
+      "https://symspacelabs.com",
+      "https://festaging.symspacelabs.com"
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH',],

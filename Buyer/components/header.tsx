@@ -117,7 +117,7 @@ const USER_MENU_ITEMS = [
 ] as const;
 
 const LOGO = {
-  src: '/images/logos/logo.svg',
+  src: '/images/logos/Logo.svg',
   alt: 'Symspace Logo',
   width: 120,
   height: 40

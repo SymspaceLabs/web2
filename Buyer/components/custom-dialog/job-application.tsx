@@ -112,7 +112,7 @@ const JobApplicationDialog = ({ open, onClose, job }: JobApplicationDialogProps)
             "0px 8px 6px rgba(0, 0, 0, 0.05), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)",
         }}
         // Hide the default shadcn close button so we can render our own
-        hideCloseButton
+        showCloseButton={false}
       >
         {/* Header */}
         <DialogHeader className="relative px-6 pt-6 pb-0">

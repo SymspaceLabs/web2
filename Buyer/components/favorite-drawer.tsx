@@ -214,7 +214,7 @@ function MiniCartItem({ item, onRemove }: { item: FavoriteItem; onRemove: (key: 
       }
       setLoadingAvailability(true);
       try {
-        const data = await fetchProductAvailability(item.id, selectedColor.id, selectedSize);
+        const data = await fetchProductAvailability(item.id, selectedColor.id ?? '', selectedSize);
         setAvailability(data);
         setStockWarningMessage(data?.stock === 0 ? "Out of Stock" : "");
       } catch (err) {

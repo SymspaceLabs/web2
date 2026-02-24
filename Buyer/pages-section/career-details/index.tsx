@@ -56,7 +56,7 @@ export default function CareerDetailsPageView({ jobId }: { jobId: string }) {
       <div className="z-[1] w-full">
         <Section1 job={job} toggleDialog={toggleDialog} />
         <Section2 job={job} />
-        <Section3 toggleDialog={toggleDialog} />
+        <Section3 />
       </div>
 
       {dialogOpen && (

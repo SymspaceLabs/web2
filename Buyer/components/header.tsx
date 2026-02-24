@@ -527,12 +527,12 @@ export default function Header({
           _favoriteKey: fav._favoriteKey,
 
           // Normalize images: keep as-is (colorCode + url shape)
-          images: fav.images || [],
+          images: (fav as any).images || [],
 
           // Normalize colors: product API returns { id, name, code }
           // FavoritesDrawer ColorDropdown expects  { id, value, label }
           // value = hex code (used for backgroundColor + colorCode matching)
-          colors: (fav.colors || [])
+          colors: ((fav as any).colors || [])
             .filter(Boolean)
             .map((c: any) => ({
               id:    c.id    || c._id   || '',
@@ -543,7 +543,7 @@ export default function Header({
           // Normalize sizes: product API returns { id, size, sortOrder }
           // FavoritesDrawer SizeDropdown expects  { value, label }
           // value = size id (used for availability lookup)
-          sizes: (fav.sizes || [])
+          sizes: ((fav as any).sizes || [])
             .filter(Boolean)
             .map((s: any) => ({
               value: s.id    || s.value || '',

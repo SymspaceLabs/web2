@@ -60,7 +60,9 @@ const SymFileUploader = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="font-elemental text-white text-sm mb-0.5">{title}</label>
+      <label className="font-elemental lowercase text-white text-sm mb-0.5">
+        {title}
+      </label>
 
       {/* Hidden file input */}
       <input

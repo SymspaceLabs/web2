@@ -161,7 +161,7 @@ const JobApplicationDialog = ({ open, onClose, job }: JobApplicationDialogProps)
             onClick={handleSubmit}
             disabled={loading || !isValid}
             className={[
-              "w-full h-12 rounded-[12px] text-white text-base font-helvetica font-medium",
+              "w-full h-12 rounded-[12px] text-white text-base font-elemental lowercase",
               "transition-all duration-200",
               isValid && !loading
                 ? "cursor-pointer hover:opacity-90"

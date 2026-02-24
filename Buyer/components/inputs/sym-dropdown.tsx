@@ -1,5 +1,4 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import {
@@ -35,6 +34,13 @@ const SymDropdown: React.FC<SymDropdownProps> = ({
 }) => {
   const isOtherSelected = value?.startsWith('Other:');
 
+  // ── FIX: must be undefined (not "") for Radix to show placeholder ──
+  const selectValue = isOtherSelected
+    ? 'Other (please specify)'
+    : value !== ''
+    ? value
+    : undefined;
+
   const handleSelectChange = (selected: string) => {
     if (selected === 'Other (please specify)') {
       onChange({ target: { value: 'Other:' } });
@@ -45,41 +51,46 @@ const SymDropdown: React.FC<SymDropdownProps> = ({
 
   return (
     <div className="flex flex-col flex-1 min-w-[100px]">
-      <Label className="text-[12px] font-elemental text-white mb-2">
-        {title}
-      </Label>
+      <div className="flex items-center gap-2 mb-2">
+        <Label className="text-[12px] font-elemental lowercase text-white">
+          {title}
+        </Label>
+      </div>
 
       <Select
-        value={isOtherSelected ? 'Other (please specify)' : (value || undefined)}
+        value={selectValue}
         onValueChange={handleSelectChange}
         disabled={!isEdit}
       >
         <SelectTrigger
-          className={`
-            bg-black text-white border-gray-700 rounded-md h-[37px]
-            ${!value ? 'text-white/50' : ''}
-            ${error ? 'border-red-500 focus:ring-red-500' : ''}
-            [&_svg]:text-white
-          `}
+          className={[
+            "w-full h-auto data-[size=default]:h-auto py-3 px-3",
+            "bg-black border border-gray-700 rounded-md",
+            "font-helvetica text-sm",
+            "[&_svg]:text-white [&_svg]:opacity-100 [&_svg]:shrink-0",
+            "focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-0",
+            "disabled:cursor-not-allowed disabled:opacity-50",
+            !value ? "text-gray-400" : "text-white",
+            error ? "border-red-500" : "",
+          ].join(" ")}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
 
         <SelectContent className="bg-black text-white border-gray-700">
           {options.map((item) => (
-            <SelectItem 
-              key={item} 
+            <SelectItem
+              key={item}
               value={item}
-              className="text-white hover:bg-gray-800 focus:bg-gray-800"
+              className="text-white hover:bg-gray-800 focus:bg-gray-800 font-helvetica"
             >
               {item}
             </SelectItem>
           ))}
-
           {hasOthersOption && (
-            <SelectItem 
+            <SelectItem
               value="Other (please specify)"
-              className="text-white hover:bg-gray-800 focus:bg-gray-800"
+              className="text-white hover:bg-gray-800 focus:bg-gray-800 font-helvetica"
             >
               Other (please specify)
             </SelectItem>
@@ -88,9 +99,7 @@ const SymDropdown: React.FC<SymDropdownProps> = ({
       </Select>
 
       {error && helperText && (
-        <p className="text-sm text-red-500 mt-2 ml-1">
-          {helperText}
-        </p>
+        <p className="text-sm text-red-500 mt-1 ml-1">{helperText}</p>
       )}
 
       {hasOthersOption && isOtherSelected && (
@@ -100,7 +109,7 @@ const SymDropdown: React.FC<SymDropdownProps> = ({
           onChange={(e) =>
             onChange({ target: { value: `Other:${e.target.value}` } })
           }
-          className="mt-4 bg-black text-white border-gray-700 rounded-md placeholder:text-white/50"
+          className="mt-2 py-3 bg-black text-white border-gray-700 rounded-md placeholder:text-gray-400 font-helvetica"
         />
       )}
     </div>

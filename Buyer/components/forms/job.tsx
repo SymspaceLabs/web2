@@ -101,6 +101,7 @@ function JobForm({
           onChange={(e) => setRole(e.target.value)}
           options={["Option 1", "Option 2"]}
           isEdit={true}
+          placeholder="Select a role" 
         />
       </div>
 

@@ -53,7 +53,7 @@ export const SymPasswordInput: React.FC<SymPasswordInputProps> = ({
           onBlur={() => setTouched(true)}
           disabled={!isEdit}
           placeholder={placeholder}
-          className={`bg-black text-white border-gray-700 pr-10 ${
+          className={`bg-black text-white border-gray-700 pr-10 py-3  ${
             errorMessage ? 'border-red-500' : ''
           }`}
         />

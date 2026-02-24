@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import CareersPage from "."
+import CareersPage from "../../../pages-section/careers"
 
 export const metadata: Metadata = {
   title: "Careers - Symspace",

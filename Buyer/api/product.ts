@@ -150,9 +150,6 @@ export async function fetchVariantDetails(variantId: string) {
     
     const data = await response.json();
     
-    // Log the response to debug
-    console.log('🔍 Variant details API response:', data);
-    
     return data;
   } catch (error) {
     console.error("Error fetching variant details:", error);

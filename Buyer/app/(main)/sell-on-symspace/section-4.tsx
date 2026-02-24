@@ -54,7 +54,6 @@ export default function Section4() {
         </motion.div>
 
         {/* Section 2 */}
-        {/* Section 2 */}
         <motion.div
           variants={fadeInVariant}
           initial="hidden"

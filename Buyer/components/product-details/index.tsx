@@ -27,7 +27,10 @@ interface ProductDetailsProps {
   slug: string;
 }
 
-// Custom hook for product data
+// ─────────────────────────────────────────────
+// Custom hook: product data
+// ─────────────────────────────────────────────
+
 function useProductData(slug: string) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -52,7 +55,10 @@ function useProductData(slug: string) {
   return { product, loading, error }
 }
 
-// Custom hook for product availability
+// ─────────────────────────────────────────────
+// Custom hook: availability
+// ─────────────────────────────────────────────
+
 function useProductAvailability(
   productId: string | undefined,
   colorId: string | undefined,
@@ -88,12 +94,15 @@ function useProductAvailability(
         setLoading(false)
       }
     }
-
     checkAvailability()
   }, [productId, colorId, sizeId])
 
   return { availability, loading }
 }
+
+// ─────────────────────────────────────────────
+// Main component
+// ─────────────────────────────────────────────
 
 export default function ProductDetail({ slug }: ProductDetailsProps) {
   const { product, loading, error } = useProductData(slug)
@@ -181,12 +190,12 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
 
   const handleToggleFavorite = useCallback(() => {
     if (!product || !selectedColor || !selectedSize) return
-    
+
     favoritesDispatch({
       type: "TOGGLE_FAVORITE",
       payload: {
         id: product.id,
-        selectedColor: selectedColor, 
+        selectedColor: selectedColor,
         selectedSize: selectedSize.id,
         snapshot: {
           id: product.id,
@@ -197,17 +206,22 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
           stock: product.stock,
           selectedColor: selectedColor,
           selectedSize: selectedSize.id,
+          // ✅ FIX: include full arrays so FavoritesDrawer
+          // can render color + size dropdowns per item
+          colors: product.colors || [],
+          sizes: product.sizes || [],
+          images: product.images || [],
         }
       }
     })
   }, [product, selectedColor, selectedSize, favoritesDispatch])
 
-  const isCurrentlyFavorited = useMemo(() => 
+  const isCurrentlyFavorited = useMemo(() =>
     isFavorited(product?.id || '', selectedColor?.code, selectedSize?.id),
     [isFavorited, product?.id, selectedColor?.code, selectedSize?.id]
   )
 
-  // Loading state
+  // ── Loading ──────────────────────────────────
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -216,7 +230,7 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
     )
   }
 
-  // Error state
+  // ── Error ────────────────────────────────────
   if (error || !product) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center text-center p-4">
@@ -228,8 +242,10 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
     )
   }
 
+  // ── Main render ──────────────────────────────
   return (
     <div className="min-h-screen bg-background py-24">
+
       {/* Breadcrumb */}
       <div className="container mx-auto max-w-7xl px-4 py-4">
         <Breadcrumb>
@@ -269,10 +285,11 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
         </Breadcrumb>
       </div>
 
-      {/* Main Content */}
+      {/* Main content */}
       <main className="container mx-auto max-w-7xl px-4 pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Left Column - Image Gallery */}
+
+          {/* Left — Image Gallery */}
           <ProductGallery
             product={product}
             selectedColor={selectedColor}
@@ -280,7 +297,7 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
             onToggleFavorite={handleToggleFavorite}
           />
 
-          {/* Right Column - Product Info */}
+          {/* Right — Product Info */}
           <ProductInfoArea
             product={product}
             selectedColor={selectedColor}
@@ -303,17 +320,17 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
       {/* Sticky Mobile CTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 lg:hidden z-40">
         <div className="flex gap-3 max-w-lg mx-auto">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="flex-1"
             disabled={availability?.stock === 0 || loadingAvailability}
             onClick={handleAddToCart}
           >
             {availability?.stock === 0 ? 'Out of Stock' : 'Add To Cart'}
           </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
+          <Button
+            size="lg"
+            variant="outline"
             className="flex-1 bg-transparent"
             disabled={availability?.stock === 0 || loadingAvailability}
             onClick={handleBuyNow}
@@ -322,6 +339,7 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
           </Button>
         </div>
       </div>
+
     </div>
   )
 }

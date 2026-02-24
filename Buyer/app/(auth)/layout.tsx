@@ -287,7 +287,7 @@ export default function AuthLayout({
                 <a href={`${process.env.NEXT_PUBLIC_SELLER_URL}/register`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 rounded-xl text-white text-sm sm:text-lg font-helvetica text-center block"
+                  className="font-elemental lowercase w-full py-3 rounded-xl text-white text-sm sm:text-lg text-center block"
                   style={{
                     background: 'linear-gradient(225deg, #18C8FF 14.89%, #933FFE 85.85%)',
                     boxShadow: '0px 8px 6px rgba(0, 0, 0, 0.05), inset 0px -1px 1px rgba(255, 255, 255, 0.5), inset 2px 3px 3px -3px rgba(255, 255, 255, 0.6), inset 0px -1px 1px rgba(255, 255, 255, 0.25), inset 0px 1px 1px rgba(255, 255, 255, 0.25)'

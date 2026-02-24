@@ -105,7 +105,7 @@ export default function EmailBanner({ title }: EmailBannerProps) {
           {!showInput && (
             <Button
               onClick={handleBetaAccessClick}
-              className="flex items-center gap-4 text-white rounded-[50px] py-6 px-8 mt-8 bg-gradient-to-br from-[#18C8FF] to-[#933FFE] hover:opacity-90 h-auto"
+              className="flex items-center gap-4 text-white rounded-[50px] py-6 px-8 mt-8 bg-gradient-to-br from-[#18C8FF] to-[#933FFE] hover:opacity-90 h-auto cursor-pointer"
             >
               <span className="text-xs font-elemental lowercase">Beta Access</span>
               <div className="w-[35px] flex flex-col items-center justify-center">
@@ -134,7 +134,7 @@ export default function EmailBanner({ title }: EmailBannerProps) {
                   />
                   <Button
                     onClick={handleEmailSubmit}
-                    className={`font-elemental absolute right-[10px] top-1/2 -translate-y-1/2 ${
+                    className={`cursor-pointer font-elemental absolute right-[10px] top-1/2 -translate-y-1/2 ${
                       isSubmitted
                         ? "bg-white text-black hover:bg-gray-100"
                         : "bg-gradient-to-r from-[#666666] to-[#1D1D1D] text-white hover:from-[#888888] hover:to-[#2D2D2D]"

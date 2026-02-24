@@ -3,7 +3,7 @@
 import JSZip from 'jszip';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, Stage, useGLTF, useFBX, Html } from '@react-three/drei';
-import { Suspense, useState, useEffect, JSX } from 'react';
+import { Suspense, useState, useEffect, JSX, Component, ReactNode } from 'react';
 import { Group, Mesh, Material } from 'three';
 
 import { GLTFLoader, GLTF } from 'three/addons/loaders/GLTFLoader.js';
@@ -17,35 +17,70 @@ interface SymGLTFViewerProps {
   modelUrl: string;
 }
 
+// ============================================================================
+// ERROR BOUNDARY — catches 403s, missing files, and any Three.js crash
+// ============================================================================
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ModelErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): ErrorBoundaryState {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.warn('SymGLTFViewer: failed to load model —', error.message);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="w-full h-[50vh] flex flex-col items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5">
+          <svg className="w-10 h-10 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+          </svg>
+          <p className="text-white/30 text-sm font-elemental lowercase">3d model unavailable</p>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+// ============================================================================
+// MODEL
+// ============================================================================
+
 function Model({ url }: ModelProps): JSX.Element | null {
-  // Determine file type based on the URL extension
   const isZip = url.toLowerCase().endsWith('.zip');
   const isFBX = url.toLowerCase().endsWith('.fbx');
   const isGLTF = url.toLowerCase().endsWith('.gltf') || url.toLowerCase().endsWith('.glb');
 
-  // State to hold the loaded GLTF model from a ZIP file
   const [gltfFromZip, setGltfFromZip] = useState<GLTF | null>(null);
 
-  // Effect to handle loading ZIP files
   useEffect(() => {
-    // Only run this effect if the URL is a ZIP file
     if (!isZip) return;
 
     const loadZipAndModel = async (): Promise<void> => {
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error(`Failed to fetch ZIP: ${response.status} ${response.statusText}`);
         }
         const arrayBuffer = await response.arrayBuffer();
-
         const zip = await JSZip.loadAsync(arrayBuffer);
-        let modelFile: JSZip.JSZipObject | null = null;
 
-        // Try to find a .gltf or .glb file within the zip
         const gltfFiles = zip.file(/\.gltf$/i);
         const glbFiles = zip.file(/\.glb$/i);
-        modelFile = gltfFiles[0] || glbFiles[0];
+        const modelFile = gltfFiles[0] || glbFiles[0];
 
         if (modelFile) {
           const modelContent = await modelFile.async('arraybuffer');
@@ -63,56 +98,50 @@ function Model({ url }: ModelProps): JSX.Element | null {
     loadZipAndModel();
   }, [url, isZip]);
 
-  // Conditional rendering based on file type
   if (isZip) {
-    if (!gltfFromZip) {
-      return null;
-    }
+    if (!gltfFromZip) return null;
     return <primitive object={gltfFromZip.scene} scale={0.5} />;
   } else if (isFBX) {
-      const fbx = useLoader(FBXLoader, url) as Group;
+    const fbx = useLoader(FBXLoader, url) as Group;
 
-      useEffect(() => {
-        if (fbx) {
-          fbx.traverse((child) => {
-            if ((child as Mesh).isMesh) {
-              const mesh = child as Mesh;
-              // 1. Always compute normals for shading fixes
-              mesh.geometry.computeVertexNormals();
+    useEffect(() => {
+      if (fbx) {
+        fbx.traverse((child) => {
+          if ((child as Mesh).isMesh) {
+            const mesh = child as Mesh;
+            mesh.geometry.computeVertexNormals();
 
-              if (mesh.material) {
-                const material = mesh.material as Material & {
-                  isMeshStandardMaterial?: boolean;
-                  metalness?: number;
-                  roughness?: number;
-                };
+            if (mesh.material) {
+              const material = mesh.material as Material & {
+                isMeshStandardMaterial?: boolean;
+                metalness?: number;
+                roughness?: number;
+              };
 
-                // 2. Fix PBR-related darkness if model is using MeshStandardMaterial
-                if (material.isMeshStandardMaterial) {
-                  // Default values if they are missing in the FBX data
-                  material.metalness = material.metalness === undefined ? 0 : material.metalness;
-                  material.roughness = material.roughness === undefined ? 1 : material.roughness;
-                }
-                
-                // 3. Force update the material properties in the renderer
-                material.needsUpdate = true;
+              if (material.isMeshStandardMaterial) {
+                material.metalness = material.metalness === undefined ? 0 : material.metalness;
+                material.roughness = material.roughness === undefined ? 1 : material.roughness;
               }
+              material.needsUpdate = true;
             }
-          });
-        }
-      }, [fbx]);
+          }
+        });
+      }
+    }, [fbx]);
 
-      return <primitive object={fbx} scale={0.5} />;
-  }  else if (isGLTF) {
-    // Use useGLTF for direct GLTF/GLB files
+    return <primitive object={fbx} scale={0.5} />;
+  } else if (isGLTF) {
     const { scene } = useGLTF(url);
     return <primitive object={scene} scale={0.5} />;
   } else {
-    // Handle unsupported file types
     console.warn(`Unsupported model format for URL: ${url}`);
     return <Html center><p>Unsupported model format</p></Html>;
   }
 }
+
+// ============================================================================
+// LOADER
+// ============================================================================
 
 function Loader(): JSX.Element {
   return (
@@ -124,38 +153,27 @@ function Loader(): JSX.Element {
   );
 }
 
+// ============================================================================
+// MAIN EXPORT
+// ============================================================================
+
 export default function SymGLTFViewer({ modelUrl }: SymGLTFViewerProps): JSX.Element {
   return (
-    <div className="w-full h-[50vh]">
-      <Canvas camera={{ position: [0, 0, 150], fov: 45 }}>
-        
-        {/* 🌟 ENHANCED LIGHTING: Much higher intensities for maximum visibility 🌟 */}
-        
-        {/* 1. Ambient Light (Increased from 0.8 to 1.5 for better overall fill) */}
-        <ambientLight intensity={1.5} /> 
-        
-        {/* 2. Primary Directional Light (Increased from 3 to 5 for strong key light) */}
-        <directionalLight 
-          position={[5, 10, 5]} // Key light (front-top)
-          intensity={5} 
-          color="#ffffff"
-        />
+    <ModelErrorBoundary>
+      <div className="w-full h-[50vh]">
+        <Canvas camera={{ position: [0, 0, 150], fov: 45 }}>
+          <ambientLight intensity={1.5} />
+          <directionalLight position={[5, 10, 5]} intensity={5} color="#ffffff" />
+          <directionalLight position={[-5, 5, 10]} intensity={2} color="#cccccc" />
 
-        {/* 3. Secondary Fill Light (Added to reduce harsh shadows and boost overall brightness) */}
-        <directionalLight 
-          position={[-5, 5, 10]} // Fill light (back-side)
-          intensity={2} 
-          color="#cccccc" // Slightly softer color
-        />
-
-        <Suspense fallback={<Loader />}>
-          {/* Stage Environment (Increased from 0.6 to 1.2 to brighten reflections) */}
-          <Stage environment="city" intensity={1.2}>
-            <Model url={modelUrl} />
-          </Stage>
-        </Suspense>
-        <OrbitControls enableZoom={false} />
-      </Canvas>
-    </div>
+          <Suspense fallback={<Loader />}>
+            <Stage environment="city" intensity={1.2}>
+              <Model url={modelUrl} />
+            </Stage>
+          </Suspense>
+          <OrbitControls enableZoom={false} />
+        </Canvas>
+      </div>
+    </ModelErrorBoundary>
   );
 }

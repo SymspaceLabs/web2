@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useRouter } from 'next/navigation';
 import GlassBanner from "@/components/glass-banner";
 
-export default function Section2() {
+export default function Section3() {
   const router = useRouter();
   
   return (

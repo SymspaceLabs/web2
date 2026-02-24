@@ -147,7 +147,7 @@ const BlogCard = ({ blog }: BlogCardProps) => {
       <div className="flex justify-end pt-5 mt-auto">
         <button 
           onClick={() => router.push(`/press-releases/${blog.slug}`)}
-          className="text-[10px] px-6 py-2 bg-transparent border-2 border-white rounded-[50px] text-white font-normal shadow-[0px_4px_4px_rgba(0,0,0,0.25)] hover:bg-black transition-all duration-300"
+          className="font-elemental lowercase text-[10px] px-6 py-2 bg-transparent border-2 border-white rounded-[50px] text-white font-normal shadow-[0px_4px_4px_rgba(0,0,0,0.25)] hover:bg-black transition-all duration-300"
         >
           Read More
         </button>

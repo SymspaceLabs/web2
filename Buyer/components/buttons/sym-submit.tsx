@@ -19,9 +19,9 @@ export const SymSubmitButton: React.FC<SubmitButtonProps> = ({
 }) => {
   return (
     <Button
+      type="button" // ✅ Prevents native form submission / page reload
       onClick={onClick}
       disabled={!isValid || loading}
-      // Remove size prop entirely - control sizing via className
       style={{
         background: !isValid
           ? "linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(3, 102, 254, 0.1) 100%)"

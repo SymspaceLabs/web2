@@ -1,16 +1,16 @@
 "use client"
 
 // ==============================================================================
-// ProductInfoArea — Tailwind version, mirrors MUI design exactly
+// ProductInfoArea
 // ==============================================================================
 
 import Link from "next/link"
-import { useMemo, useState } from "react"
-import { Loader2, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useMemo, useState } from "react"
 import { Product } from "@/types/products"
-import { ProductColor, ProductSize } from "@/types/favorites"
 import { AvailabilityData } from "@/types/products"
+import { ProductColor, ProductSize } from "@/types/favorites"
+import { Loader2, ChevronDown, ChevronUp } from "lucide-react"
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 

@@ -34,9 +34,12 @@ export interface Product {
   gender?: string;
   createdAt: string;
   material?: string;
+  sizeFit?: string;
   company?: { 
     id: string | number;
-    entityName: string
+    entityName: string;
+    slug?: string;
+    description?: string;
   };
   category?: ProductCategory;
   displayPrice: {

@@ -108,7 +108,6 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
   const { product, loading, error } = useProductData(slug)
   const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null)
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null)
-  const [showFullDescription, setShowFullDescription] = useState(false)
   const [sizeError, setSizeError] = useState(false)
 
   const { availability, loading: loadingAvailability } = useProductAvailability(
@@ -211,7 +210,7 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
           colors: product.colors || [],
           sizes: product.sizes || [],
           images: product.images || [],
-        }
+        } as any
       }
     })
   }, [product, selectedColor, selectedSize, favoritesDispatch])
@@ -305,12 +304,14 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
             availability={availability}
             loadingAvailability={loadingAvailability}
             sizeError={sizeError}
-            showFullDescription={showFullDescription}
+            setSizeError={setSizeError}
             onColorSelect={handleColorSelect}
             onSizeSelect={handleSizeSelect}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
-            onToggleDescription={() => setShowFullDescription(!showFullDescription)}
+            onOpenSidenav={() => {}}
+            onOpenSizeChart={() => {}}
+            openModal={false}
           />
         </div>
       </main>

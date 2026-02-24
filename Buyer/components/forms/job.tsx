@@ -25,7 +25,7 @@ interface JobFormProps {
   comments: string;
   setComments: (v: string) => void;
   uploadedFile: File[];
-  setUploadedFile: (files: File[]) => void;
+  setUploadedFile: (files: File[] | ((prev: File[]) => File[])) => void;
   isAuthenticated: boolean;
 }
 

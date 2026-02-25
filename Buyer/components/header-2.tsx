@@ -484,7 +484,7 @@ function Categories({ isOpen, onClose, onToggle }: CategoriesProps) {
   return (
     <Button
       onClick={onToggle}
-      className="flex items-center justify-start gap-2 min-w-[200px] h-[44px] px-4 rounded-full bg-[#717171] text-white font-medium text-[15px] hover:bg-black hover:text-[#717171] transition-colors shadow-sm"
+      className="flex items-center justify-start gap-2 min-w-[200px] h-[44px] px-4 rounded-full bg-[#717171] text-white font-medium text-[15px] hover:bg-black transition-colors shadow-sm"
     >
       <Menu className="w-5 h-5" />
       <span className="lowercase tracking-wide font-elemental">Categories</span>

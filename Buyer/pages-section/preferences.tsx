@@ -63,19 +63,24 @@ export default function PreferencesPage({
           { credentials: "include" }
         );
 
+        // No preferences exist yet for this user — silently keep defaults
+        if (res.status === 404) return;
+
         if (!res.ok) throw new Error("Failed to fetch preferences");
 
         const data = await res.json();
+        const pref = data.preference; 
+
         setPreferences({
-          gender: data.gender,
-          styles: data.styles || [],
-          fits: data.fits || [],
-          colors: data.colors || [],
-          brands: data.brands || [],
-          tops: data.tops || [],
-          bottoms: data.bottoms || [],
-          outerwears: data.outerwears || [],
-          accessories: data.accessories || [],
+          gender: pref.gender,
+          styles: pref.styles || [],
+          fits: pref.fits || [],
+          colors: pref.colors || [],
+          brands: pref.brands || [],
+          tops: pref.tops || [],
+          bottoms: pref.bottoms || [],
+          outerwears: pref.outerwears || [],
+          accessories: pref.accessories || [],
         });
       } catch (error) {
         console.error("Error fetching preferences:", error);

@@ -1,4 +1,4 @@
-import ProductDetail from "@/components/product-details";
+import ProductDetail from "@/pages-section/product-details";
 
 interface PageProps {
   params: Promise<{ slug: string }>;

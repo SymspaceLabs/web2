@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function Measurement() {
-  return <PreferencesPage isEdit={false} />;
+  return <PreferencesPage />;
 }

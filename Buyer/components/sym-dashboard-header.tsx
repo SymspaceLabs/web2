@@ -20,6 +20,7 @@ import {
   LucideIcon,
   Menu
 } from "lucide-react";
+import { Button } from "./ui/button";
 
 // ==============================================================
 // Type Definitions
@@ -355,8 +356,8 @@ function SymDashboardHeader({
   loading = false,
 }: SymDashboardHeaderProps) {
   const HEADER_LINK = buttonText ? (
-    <button
-      className="font-elemental lowercase bg-gradient-to-r from-[#3084FF] to-[#1D4F99] text-white px-8 border-[3px] border-white rounded-xl hover:bg-gradient-to-r hover:from-[#666666] hover:to-[#000000] transition-all disabled:opacity-50 disabled:cursor-not-allowed py-2"
+    <Button
+      className="font-elemental lowercase bg-gradient-to-r from-[#3084FF] to-[#1D4F99] text-white px-8 border-[3px] border-white rounded-xl hover:bg-gradient-to-r hover:from-[#666666] hover:to-[#000000] transition-all disabled:opacity-50 disabled:cursor-not-allowed py-5"
       onClick={onClick}
       disabled={loading}
     >
@@ -365,7 +366,7 @@ function SymDashboardHeader({
       ) : (
         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mx-auto"></div>
       )}
-    </button>
+    </Button>
   ) : null;
 
   return (

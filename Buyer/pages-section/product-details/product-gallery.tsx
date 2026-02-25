@@ -5,24 +5,11 @@ import { useState, useMemo, useCallback, useEffect } from "react"
 import { Heart, ChevronLeft, ChevronRight, Box } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { Product } from "@/types/products"
+import { Product, ProductImage, ThreeDModel } from "@/types/products"
 import SymGLTFViewer from "@/components/sym-gltf-viewer"
 
-interface ThreeDModel {
-  url: string
-  colorCode?: string | null
-  colorId?: string | null
-}
-
-interface ProductImage {
-  url: string
-  colorCode?: string | null
-  colorId?: string | null
-  sortOrder?: number
-}
-
 interface ProductGalleryProps {
-  product: Product & { threeDModels?: ThreeDModel[]; images: ProductImage[] }
+  product: Product
   selectedColor: string | null  // hex string e.g. "#ff9ecd"
   isCurrentlyFavorited: boolean
   onToggleFavorite: () => void
@@ -35,7 +22,6 @@ export default function ProductGallery({
   onToggleFavorite,
 }: ProductGalleryProps) {
 
-  // Filter purely by colorCode — no fallback, no filename inference
   const filteredImages = useMemo<ProductImage[]>(() => {
     if (!product?.images?.length) return []
     if (!selectedColor) return product.images
@@ -194,7 +180,6 @@ export default function ProductGallery({
           )
         })}
 
-        {/* No images yet for this color */}
         {filteredImages.length === 0 && (
           <div className="size-16 sm:size-20 rounded-lg flex-shrink-0 border-2 border-dashed border-muted-foreground/20 flex items-center justify-center text-muted-foreground/40 text-[10px] text-center px-1">
             No images

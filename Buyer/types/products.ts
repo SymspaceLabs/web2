@@ -4,23 +4,41 @@ export interface ProductColor {
   id: string;
   name: string;
   code: string;
+  sortOrder?: number;
 }
 
 export interface ProductSize {
   id: string;
   size: string;
-  sizeChartUrl?: string;
+  sizeChartUrl?: string | null;
   dimensions?: {
     length: number;
     width: number;
     height: number;
   };
+  productWeight?: number | null;
 }
 
 export interface ProductImage {
   url: string;
-  colorId?: string;
+  colorId?: string | null;
+  colorCode?: string | null;  // ← added
+  sortOrder?: number;
   alt?: string;
+}
+
+export interface ThreeDModel {
+  id?: string;
+  url: string;
+  colorCode?: string | null;
+  colorId?: string | null;
+  format?: string;
+  pivot?: number[];
+  boundingBox?: {
+    max: number[];
+    min: number[];
+  };
+  texture?: string | null;
 }
 
 export interface Product {
@@ -32,10 +50,10 @@ export interface Product {
   stock: number;
   availability: string;
   gender?: string;
-  createdAt: string;
+  createdAt?: string;
   material?: string;
   sizeFit?: string;
-  company?: { 
+  company?: {
     id: string | number;
     entityName: string;
     slug?: string;
@@ -51,11 +69,18 @@ export interface Product {
   colors: ProductColor[];
   sizes: ProductSize[];
   images: ProductImage[];
-  variants: Array<{ 
+  threeDModels?: ThreeDModel[];   // ← added
+  variants: Array<{
     id: string;
     stock: number;
-    colorId: string;
-    sizeId: string;
+    price?: number;
+    salePrice?: number;
+    cost?: number | null;
+    sku?: string;
+    color?: ProductColor;
+    size?: ProductSize;
+    colorId?: string;
+    sizeId?: string;
   }>;
 }
 

@@ -15,7 +15,6 @@ import { toast } from "sonner"
 import { Product, AvailabilityData } from "@/types/products"
 import { ProductColor, ProductSize } from "@/types/favorites"
 import { fetchProductAvailability, fetchProductBySlug } from "@/api/product"
-import { enrichProductImages } from "@/utils/enrichProduct"   // ← NEW
 import ProductGallery from "./product-gallery"
 import ProductInfoArea from "./product-info-area"
 
@@ -23,9 +22,6 @@ interface ProductDetailsProps {
   slug: string
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Hook: load product and immediately enrich images with colorCode tags
-// ─────────────────────────────────────────────────────────────────────────────
 function useProductData(slug: string) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
@@ -35,12 +31,8 @@ function useProductData(slug: string) {
     const loadProduct = async () => {
       try {
         setLoading(true)
-        const raw = await fetchProductBySlug(slug)
-        // ✅ Enrich images with colorCode ONCE, right here.
-        // After this, every image has colorCode set correctly so
-        // the gallery can filter with a simple img.colorCode === selectedColor.
-        const enriched = enrichProductImages(raw)
-        setProduct(enriched)
+        const data = await fetchProductBySlug(slug)
+        setProduct(data)
         setError(null)
       } catch (err: any) {
         setError(err.message)
@@ -54,9 +46,6 @@ function useProductData(slug: string) {
   return { product, loading, error }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Hook: availability
-// ─────────────────────────────────────────────────────────────────────────────
 function useProductAvailability(
   productId: string | undefined,
   colorId: string | undefined,
@@ -83,9 +72,6 @@ function useProductAvailability(
   return { availability, loading }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Main component
-// ─────────────────────────────────────────────────────────────────────────────
 export default function ProductDetail({ slug }: ProductDetailsProps) {
   const { product, loading, error } = useProductData(slug)
   const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null)
@@ -99,7 +85,6 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
   const { dispatch: favoritesDispatch, isFavorited } = useFavorites()
   const { dispatch: cartDispatch, getCartItem }       = useCart()
 
-  // Default to first color + size on load — same as MUI useState(colors[0])
   useEffect(() => {
     if (!product) return
     if (product.colors?.length > 0 && !selectedColor) setSelectedColor(product.colors[0])
@@ -107,21 +92,21 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
   }, [product, selectedColor, selectedSize])
 
   const handleColorSelect = useCallback((color: ProductColor) => setSelectedColor(color), [])
-  const handleSizeSelect  = useCallback((size: ProductSize)   => { setSelectedSize(size); setSizeError(false) }, [])
+  const handleSizeSelect  = useCallback((size: ProductSize) => { setSelectedSize(size); setSizeError(false) }, [])
 
   const handleAddToCart = useCallback(() => {
-    if (!selectedSize)           { setSizeError(true); toast.error("Please select a size"); return }
-    if (!availability?.variantId){ toast.error("Product information not loaded"); return }
-    if (availability.stock === 0){ toast.error("Product is out of stock"); return }
+    if (!selectedSize)            { setSizeError(true); toast.error("Please select a size"); return }
+    if (!availability?.variantId) { toast.error("Product information not loaded"); return }
+    if (availability.stock === 0) { toast.error("Product is out of stock"); return }
     const qty = getCartItem(availability.variantId)?.quantity ?? 0
-    if (qty >= availability.stock){ toast.warning(`Maximum stock (${availability.stock}) already in cart`); return }
+    if (qty >= availability.stock) { toast.warning(`Maximum stock (${availability.stock}) already in cart`); return }
     cartDispatch({ type: "ADD_TO_CART", payload: { variantId: availability.variantId, quantity: 1 } })
     setSizeError(false)
     toast.success(`${product?.name} added to cart!`)
   }, [selectedSize, availability, getCartItem, cartDispatch, product?.name])
 
   const handleBuyNow = useCallback(() => {
-    if (!selectedSize){ setSizeError(true); toast.error("Please select a size"); return }
+    if (!selectedSize) { setSizeError(true); toast.error("Please select a size"); return }
     handleAddToCart()
     window.location.href = '/checkout'
   }, [selectedSize, handleAddToCart])
@@ -184,7 +169,6 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
       <main className="container mx-auto max-w-7xl px-4 pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
-          {/* Gallery — receives selectedColor.code (hex), same as MUI */}
           <ProductGallery
             product={product}
             selectedColor={selectedColor?.code ?? null}
@@ -192,7 +176,6 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
             onToggleFavorite={handleToggleFavorite}
           />
 
-          {/* Info */}
           <ProductInfoArea
             product={product}
             selectedColor={selectedColor}

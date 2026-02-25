@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePreferencesDto } from './dto/create-preference.dto';
 import { UpdatePreferencesDto } from './dto/update-preference.dto';
 import { Preference } from './entities/preference.entity';
@@ -86,20 +86,26 @@ export class PreferencesService {
 
   // Get a single measurement by id
   async findOneByUserId(userId: string) {
-    // Find the user by ID
     const user = await this.usersRepository.findOne({
       where: { id: userId },
     });
-  
+
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
-    // Find the measurement associated with the user
-    return await this.preferenceRepository.findOne({
+    const preference = await this.preferenceRepository.findOne({
       where: { user: { id: userId } },
     });
 
+    if (!preference) {
+      throw new NotFoundException(`No preferences found for user with ID ${userId}`);
+    }
+
+    return {
+      preference,
+      message: 'Preference information retrieved successfully',
+    };
   }
 
 

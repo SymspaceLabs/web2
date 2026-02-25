@@ -39,7 +39,7 @@ export class Preference {
   @ManyToOne(() => User, (user) => user.preference, { onDelete: 'CASCADE' })
   user: User; // Relationship to User entity
 
-  @Column()
-  gender: string; // Gender preference, can be 'male', 'female', or 'both'
+  @Column({ nullable: true })
+  gender: string;
 
 }

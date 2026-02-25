@@ -41,7 +41,9 @@ export class CreatePreferencesDto {
   @IsOptional()
   brands?: string[];
 
-  gender: string;
+  @IsOptional()
+  @IsString()
+  gender?: string;
 
   userId: number;
 }

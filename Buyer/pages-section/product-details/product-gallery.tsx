@@ -10,7 +10,7 @@ import SymGLTFViewer from "@/components/sym-gltf-viewer"
 
 interface ProductGalleryProps {
   product: Product
-  selectedColor: string | null  // hex string e.g. "#ff9ecd"
+  selectedColor: string | null
   isCurrentlyFavorited: boolean
   onToggleFavorite: () => void
 }

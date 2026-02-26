@@ -1,7 +1,7 @@
 // app/products/page.tsx
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import ProductSearchPageView from '@/components/product-search/product-search-page-view';
+import ProductSearchPageView from '@/pages-section/product-list/product-search-page-view';
 
 export const metadata = {
   title: 'Products | Your Store Name',

@@ -1,3 +1,5 @@
+import { Product } from "./products"
+
 export interface Company {
   id: string
   slug: string
@@ -13,5 +15,5 @@ export interface Company {
   twitter?: string
   youtube?: string
   facebook?: string
-  products: any[]
+  products?: Product[]
 }

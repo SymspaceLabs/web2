@@ -25,18 +25,23 @@ interface ProductCard1Props {
 // =============================================================
 
 const ProductCard1 = ({ product }: ProductCard1Props): JSX.Element => {
-  // Determine if a sale price exists and is less than the original price
-  const hasSale = product.displayPrice.salePrice && product.displayPrice.salePrice > 0 && product.displayPrice.salePrice < product.displayPrice.price;
+  const hasSale = product.displayPrice.salePrice 
+    && product.displayPrice.salePrice > 0 
+    && product.displayPrice.salePrice < product.displayPrice.price;
+
+  // Use thumbnail directly, fall back to first image url
+  const imageUrl = product.thumbnail || product.images?.[0]?.url || "/placeholder.png";
+  const imageAlt = product.images?.[0]?.altText || product.name;
 
   return (
     <Link href={`/products/${product.slug}`} className="w-full block font-helvetica">
       <div className="flex flex-col bg-white/10 rounded-xl mb-4 w-full h-full transition-colors duration-300 hover:bg-white/15">
         <div className="w-full">
           <Image
-            alt={product.images?.[0]?.alt || product.name}
+            alt={imageAlt}
             width={355}
             height={355}
-            src={product.images?.[0]?.url || "/placeholder.png"}
+            src={imageUrl}
             className="object-cover object-center w-full h-auto aspect-square rounded-t-xl"
           />
         </div>
@@ -50,12 +55,9 @@ const ProductCard1 = ({ product }: ProductCard1Props): JSX.Element => {
           </p>
 
           <div className="flex gap-2">
-            {/* Conditionally render the sale price and original price */}
             <p className="text-white text-[10px] sm:text-[17px] font-medium">
               {hasSale ? currency(product.displayPrice.salePrice!) : currency(product.displayPrice.price)}
             </p>
-            
-            {/* Only show the original price with a strikethrough if a sale is active */}
             {hasSale && (
               <p className="text-white/50 text-[10px] sm:text-[17px] font-medium line-through">
                 {currency(product.displayPrice.price)}

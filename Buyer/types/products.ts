@@ -25,6 +25,7 @@ export interface ProductImage {
   colorCode?: string | null;  // ← added
   sortOrder?: number;
   alt?: string;
+  altText?: string;
 }
 
 export interface ThreeDModel {
@@ -45,7 +46,7 @@ export interface Product {
   id: string;
   name: string;
   slug: string;
-  description: string;
+  description?: string;
   thumbnail: string;
   stock: number;
   availability: string;

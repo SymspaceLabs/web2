@@ -1,11 +1,11 @@
 // app/company/[slug]/company-details-page.tsx
 "use client"
 
-import { useEffect, useState } from "react"
-import { Loader2 } from "lucide-react"
 import Section1 from "./section-1"
-import Section2 from "./section-2"
+import Section2 from "./section-2";
+import { Loader2 } from "lucide-react"
 import { Company } from "@/types/company"
+import { useEffect, useState } from "react"
 
 // ====================================================================
 // Type Definitions

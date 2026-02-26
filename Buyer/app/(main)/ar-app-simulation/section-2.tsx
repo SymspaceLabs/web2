@@ -50,21 +50,21 @@ export default function Section2() {
                   alt="mobile screen 1"
                   width={250}
                   height={162.5}
-                  src="/images/ar-app-simulation/mobile-screens/mobile-screen-1.png"
+                  src="/images/ar-app-simulation/mobile-screen-1.png"
                   className="w-3/4 h-auto"
                 />
                 <Image
                   alt="mobile screen 2"
                   width={250}
                   height={162.5}
-                  src="/images/ar-app-simulation/mobile-screens/mobile-screen-2.png"
+                  src="/images/ar-app-simulation/mobile-screen-2.png"
                   className="w-3/4 h-auto"
                 />
                 <Image
                   alt="mobile screen 3"
                   width={250}
                   height={162.5}
-                  src="/images/ar-app-simulation/mobile-screens/mobile-screen-3.png"
+                  src="/images/ar-app-simulation/mobile-screen-3.png"
                   className="w-3/4 h-auto"
                 />
               </>
@@ -77,7 +77,7 @@ export default function Section2() {
                       alt="mobile screen 1"
                       width={250}
                       height={162.5}
-                      src="/images/ar-app-simulation/mobile-screens/mobile-screen-1.png"
+                      src="/images/ar-app-simulation/mobile-screen-1.png"
                       className="w-full h-auto"
                     />
                   </Parallax>
@@ -88,7 +88,7 @@ export default function Section2() {
                       alt="mobile screen 2"
                       width={250}
                       height={162.5}
-                      src="/images/ar-app-simulation/mobile-screens/mobile-screen-2.png"
+                      src="/images/ar-app-simulation/mobile-screen-2.png"
                       className="w-full h-auto"
                     />
                   </Parallax>
@@ -99,7 +99,7 @@ export default function Section2() {
                       alt="mobile screen 3"
                       width={250}
                       height={162.5}
-                      src="/images/ar-app-simulation/mobile-screens/mobile-screen-3.png"
+                      src="/images/ar-app-simulation/mobile-screen-3.png"
                       className="w-full h-auto"
                     />
                   </Parallax>

@@ -257,7 +257,7 @@ export default function Section2({ products, company, itemsPerPage = 12 }: Secti
       let cat = p.category
       while (cat) {
         if (cat.slug === slug) return true
-        cat = cat.parent ?? null
+        cat = cat.parent ?? undefined
       }
       return false
     })

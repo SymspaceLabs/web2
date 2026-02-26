@@ -8,27 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Company } from '@/types/company';
-
-interface DisplayPrice {
-  price: number;
-  salePrice?: number;
-  hasSale?: boolean;
-}
-
-interface ProductImage {
-  url: string;
-  alt?: string;
-}
-
-interface Product {
-  id: string | number;
-  slug: string;
-  name: string;
-  displayPrice?: DisplayPrice;
-  company?: Company;
-  images?: ProductImage[];
-  availability?: string;
-}
+import { Product } from '@/types/products';
 
 interface ProductCard3Props {
   product: Product;

@@ -88,7 +88,7 @@ export default function CompanyDetailsPage({ slug }: CompanyDetailsPageProps) {
   return (
     <div className="bg-white">
       <Section1 company={company} />
-      <Section2 products={company.products} company={company} />
+      <Section2 products={company.products ?? []} company={company} />
     </div>
   )
 }

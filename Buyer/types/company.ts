@@ -1,8 +1,8 @@
 import { Product } from "./products"
 
 export interface Company {
-  id: string
-  slug: string
+  id: string | number
+  slug?: string
   entityName: string
   description?: string
   logo?: string

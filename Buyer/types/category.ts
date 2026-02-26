@@ -16,4 +16,5 @@ export interface ProductCategory {
   id: string | number;
   name: string;
   parent?: ProductCategory;
+  slug: string;
 }

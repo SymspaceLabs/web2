@@ -5,12 +5,14 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { Company } from './entities/company.entity';
 import { calculateDisplayPrice } from 'src/products/utils/price-calculation.utils';
+import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class CompaniesService {
   constructor(
     @InjectRepository(Company)
     private companiesRepository: Repository<Company>,
+    private readonly productsService: ProductsService
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
@@ -38,25 +40,30 @@ export class CompaniesService {
     return company;
   }
 
-  async findBySlug(slug: string): Promise<Company | null> {
-    const company = await this.companiesRepository.findOne({
-      where: { slug },
-      relations: ['products', 'products.images', 'products.variants'],
-    });
-  
+  async findBySlug(slug: string): Promise<any> {
+    const company = await this.companiesRepository.findOne({ where: { slug } });
+
     if (!company) {
-      throw new NotFoundException(`Company with ID ${slug} not found`);
+      throw new NotFoundException(`Company with slug ${slug} not found`);
     }
-  
-    // ✅ Process each product to add displayPrice
-    for (const product of company.products) {
-      product.images.sort((a, b) => a.sortOrder - b.sortOrder);
-      
-      // Calculate displayPrice using ProductsService's private method
-      (product as any).displayPrice = calculateDisplayPrice(product);
-    }
-  
-    return company;
+
+    // Call the same findAll used by the products endpoint
+    const { products } = await this.productsService.findAll(
+      {}, // QueryContext - no auth context needed for public store
+      undefined, // searchTerm
+      undefined, // categorySlug
+      undefined, // subcategorySlug
+      undefined, // subcategoryItemSlugs
+      undefined, // subcategoryItemChildSlug
+      undefined, // genders
+      undefined, // ageGroups
+      company.id, // ← companyId filter
+    );
+
+    return {
+      ...company,
+      products,
+    };
   }
 
   async update(

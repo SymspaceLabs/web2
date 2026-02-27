@@ -4,7 +4,7 @@
 // Custom Multi-select Dropdown Input
 // ===============================================
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
@@ -54,25 +54,10 @@ const SymMultiSelectDropdown = ({
 
   const selected = Array.isArray(selectedValue) ? selectedValue : [];
 
-  // Derive the key used for selection from an option
-  const getKey = (option: Option): string => {
-    if (typeof option === "string") return option;
-    return isBrand || isColor ? option.id : option.id;
-  };
+  const getKey   = (option: Option): string => typeof option === "string" ? option : option.id;
+  const getLabel = (option: Option): string => typeof option === "string" ? option : option.label;
+  const getColor = (option: Option): string | undefined => typeof option !== "string" ? option.value : undefined;
 
-  // Derive the display label from an option
-  const getLabel = (option: Option): string => {
-    if (typeof option === "string") return option;
-    return option.label;
-  };
-
-  // Derive the color value (only for color options)
-  const getColor = (option: Option): string | undefined => {
-    if (typeof option !== "string") return option.value;
-    return undefined;
-  };
-
-  // Toggle an item in the selection
   const toggle = (key: string) => {
     if (!isEdit) return;
     const next = selected.includes(key)
@@ -81,7 +66,6 @@ const SymMultiSelectDropdown = ({
     handleChange(next);
   };
 
-  // Build the trigger display text
   const displayText =
     selected.length === 0
       ? "Select options"
@@ -114,8 +98,9 @@ const SymMultiSelectDropdown = ({
           </button>
         </PopoverTrigger>
 
+        {/* z-[1300] ensures the portal renders above the SideDrawer (z-[1201]) */}
         <PopoverContent
-          className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[180px]"
+          className="p-0 w-[var(--radix-popover-trigger-width)] min-w-[180px] z-[1300]"
           align="start"
           sideOffset={4}
         >
@@ -125,9 +110,9 @@ const SymMultiSelectDropdown = ({
               <CommandEmpty>No options found.</CommandEmpty>
               <CommandGroup>
                 {options.map((option) => {
-                  const key = getKey(option);
-                  const label = getLabel(option);
-                  const color = isColor ? getColor(option) : undefined;
+                  const key      = getKey(option);
+                  const label    = getLabel(option);
+                  const color    = isColor ? getColor(option) : undefined;
                   const isChecked = selected.includes(key);
 
                   return (
@@ -137,19 +122,15 @@ const SymMultiSelectDropdown = ({
                       onSelect={() => toggle(key)}
                       className="flex items-center gap-2 cursor-pointer"
                     >
-                      {/* Checkbox */}
                       <div
                         className={cn(
                           "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border border-primary",
-                          isChecked
-                            ? "bg-primary text-primary-foreground"
-                            : "opacity-50"
+                          isChecked ? "bg-primary text-primary-foreground" : "opacity-50"
                         )}
                       >
                         {isChecked && <Check className="h-3 w-3" />}
                       </div>
 
-                      {/* Color swatch + label */}
                       {isColor && color ? (
                         <div className="flex items-center gap-2">
                           <span

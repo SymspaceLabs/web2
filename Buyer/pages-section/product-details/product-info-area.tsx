@@ -21,7 +21,7 @@ function currency(val: number | undefined) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(val)
 }
 
-// ── Glassmorphic Accordion — separate from the card, same glass style ─────────
+// ── Glassmorphic Accordion ────────────────────────────────────────────────────
 
 function Accordion({ title, content }: { title: string; content?: string }) {
   const [open, setOpen] = useState(false)
@@ -132,13 +132,9 @@ export default function ProductInfoArea({
   const sizeChartUrl = selectedSize?.sizeChartUrl ?? null
 
   return (
-    // Outer wrapper — flex column, gap between card and accordions
-    // mirrors MUI: <> <FlexCol sx={productCard}>...</FlexCol> <SymAccordion/> </>
     <div className="flex flex-col gap-4">
 
-      {/* ══════════════════════════════════════════════════════════
-          GLASS CARD — productCard styles only, no accordions inside
-          ══════════════════════════════════════════════════════════ */}
+      {/* ══ GLASS CARD ══ */}
       <div
         className="flex flex-col gap-4 rounded-[30px] p-6 sm:p-10 box-border"
         style={{
@@ -240,6 +236,8 @@ export default function ProductInfoArea({
             </button>
           </div>
           <div className="flex gap-3 sm:gap-4 py-2 items-stretch">
+
+            {/* Size dropdown */}
             <div className="flex-1 relative">
               <select
                 value={selectedSize?.id ?? ""}
@@ -267,17 +265,36 @@ export default function ProductInfoArea({
                 <ChevronDown className="size-4" />
               </span>
             </div>
+
+            {/* ── Personalized Sizing button ───────────────────────────
+                Hover: blue gradient fill + glow, matching the Buy Now button
+                Uses inline onMouseEnter/Leave for precise style control,
+                consistent with the existing CTA button pattern in this file.
+            ─────────────────────────────────────────────────────────── */}
             <button
               onClick={onOpenSidenav}
-              className="flex-shrink-0 transition-colors hover:bg-black hover:text-white"
+              className="flex-shrink-0 cursor-pointer font-elemental lowercase relative overflow-hidden"
               style={{
-                padding: "15px 12px",
+                padding: "15px 14px",
                 border: "2px solid #000",
                 borderRadius: "50px",
-                fontSize: "10px",
+                fontSize: "13px",
                 color: "#000",
                 background: "transparent",
                 whiteSpace: "nowrap",
+                transition: "color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                const t = e.currentTarget
+                t.style.background  = "rgba(0,0,0,0.04)"
+                t.style.borderColor = "#555"
+                t.style.boxShadow   = "0px 2px 6px rgba(0,0,0,0.08)"
+              }}
+              onMouseLeave={(e) => {
+                const t = e.currentTarget
+                t.style.background  = "transparent"
+                t.style.borderColor = "#000"
+                t.style.boxShadow   = "none"
               }}
             >
               Personalized Sizing
@@ -351,9 +368,7 @@ export default function ProductInfoArea({
       </div>
       {/* ══ END GLASS CARD ══ */}
 
-      {/* ══════════════════════════════════════════════════════════
-          ACCORDIONS — siblings below the card, same as MUI
-          ══════════════════════════════════════════════════════════ */}
+      {/* ══ ACCORDIONS ══ */}
       <Accordion title="Product Details" content={description} />
       <Accordion title="Brand"           content={company?.description} />
       <Accordion title="Size and fit"    content={sizeFit} />

@@ -11,12 +11,17 @@ import {
 } from "@/components/ui/breadcrumb"
 import { useFavorites } from "@/contexts/FavoritesContext"
 import { useCart } from "@/contexts/CartContext"
+
 import { toast } from "sonner"
+import ProductTabs from "./product-tabs"
+import SideDrawer from "./side-drawer"
+import DrawerRight from "./drawer-right"
+
+import ProductGallery from "./product-gallery"
+import ProductInfoArea from "./product-info-area"
 import { Product, AvailabilityData } from "@/types/products"
 import { ProductColor, ProductSize } from "@/types/favorites"
 import { fetchProductAvailability, fetchProductBySlug } from "@/api/product"
-import ProductGallery from "./product-gallery"
-import ProductInfoArea from "./product-info-area"
 
 interface ProductDetailsProps {
   slug: string
@@ -77,6 +82,7 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
   const [selectedColor, setSelectedColor] = useState<ProductColor | null>(null)
   const [selectedSize, setSelectedSize]   = useState<ProductSize | null>(null)
   const [sizeError, setSizeError]         = useState(false)
+  const [sidenavOpen, setSidenavOpen]     = useState(false)   // 👈 new
 
   const { availability, loading: loadingAvailability } = useProductAvailability(
     product?.id, selectedColor?.id, selectedSize?.id,
@@ -188,14 +194,27 @@ export default function ProductDetail({ slug }: ProductDetailsProps) {
             onSizeSelect={handleSizeSelect}
             onAddToCart={handleAddToCart}
             onBuyNow={handleBuyNow}
-            onOpenSidenav={() => {}}
+            onOpenSidenav={() => setSidenavOpen(true)}   // 👈 wired up
             onOpenSizeChart={() => {}}
             openModal={false}
           />
         </div>
+
+        <ProductTabs
+          productId={product.id}
+          description={product.description}
+        />
       </main>
 
       <Separator />
+
+      {/* ── Personalized Sizing Drawer ── */}
+      <SideDrawer open={sidenavOpen} onClose={() => setSidenavOpen(false)}>
+        <DrawerRight
+          onClose={() => setSidenavOpen(false)}
+          headerTitle="personalized sizing"
+        />
+      </SideDrawer>
 
       {/* Sticky mobile CTA */}
       <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 lg:hidden z-40">
